@@ -1,0 +1,51 @@
+# Arquivos e diretórios do ambiente virtual Python
+__pycache__/
+*.pyc
+*.pyo
+pyenv/
+env/
+.venv/
+venv/
+__pypackages__/
+Lib/
+Scripts/
+*manage.py
+*pyvenv.cfg
+data
+
+
+# Banco de dados SQLite
+db.sqlite3
+
+# Arquivos de mídia (fotos, uploads, etc.)
+media/
+
+# Diretório de logs
+logs/
+
+# Arquivos de configuração locais (exemplos: settings.py locais, .env)
+*.pyc
+*.pyo
+*.db
+*.sqlite3
+*.log
+*.pot
+*.pyz
+
+# Arquivos de compilação Python
+*.pyc
+
+# Arquivos de dependências
+*.egg-info/
+dist/
+build/
+
+# Diretório de arquivos estáticos coletados
+staticfiles/
+
+# Arquivos do Docker
+docker-compose.yml
+Dockerfile.local
+
+# Diretório de migrações de banco de dados (opcional, se preferir não rastreá-las)
+# migrations/
