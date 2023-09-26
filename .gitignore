@@ -9,7 +9,7 @@ venv/
 __pypackages__/
 Lib/
 Scripts/
-*manage.py
+
 *pyvenv.cfg
 data
 
