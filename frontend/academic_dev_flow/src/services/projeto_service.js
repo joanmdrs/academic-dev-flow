@@ -1,4 +1,4 @@
-import api from "../api";
+import api from "./api";
 
 function criar_projeto(data) {
     api.post("/projetos/cadastrar", {
