@@ -20,5 +20,5 @@ from apps.projeto.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', ProjetoView.as_view(), name="anything")
+    path('projetos/cadastrar', ProjetoView.as_view(), name="anything")
 ]
