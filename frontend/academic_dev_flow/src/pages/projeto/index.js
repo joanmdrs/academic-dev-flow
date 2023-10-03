@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import 'react-notifications/lib/notifications.css';
 import criar_projeto from '../../services/projeto_service';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
+
 const STATUS_CHOICES = [
   { value: 'cancelado', label: 'Cancelado' },
   { value: 'em_andamento', label: 'Em andamento' },
