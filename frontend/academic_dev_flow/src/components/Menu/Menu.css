@@ -1,6 +1,6 @@
 .menu {
     background-color: #131428;
-    width: 200px;
+    width: 200px !important;
     height: 100vh;
     display: flex;
     flex-direction: column;
