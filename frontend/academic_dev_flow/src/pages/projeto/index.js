@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import 'react-notifications/lib/notifications.css';
 import criar_projeto from '../../services/projeto_service';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
+import Title from '../../components/Title/Title';
+import Search from '../../components/Search/Search';
+import Add from '../../components/Buttons/Add/Add';
+import Delete from '../../components/Buttons/Delete/Delete';
 
 const STATUS_CHOICES = [
   { value: 'cancelado', label: 'Cancelado' },
@@ -45,8 +49,19 @@ const MyForm = () => {
 
   return (
     <div>
+      <Title 
+        title="Cadastrar projeto" 
+        paragraph="Projetos > Cadastrar projetos"
+      />
+      <Add />
+      <Delete />
+      <Search name="BUSCAR PROJETO" />
+    
       <form onSubmit={handleSubmit}>
         <div>
+
+
+
           <label htmlFor="nome">Nome:</label>
           <input
             type="text"
@@ -102,7 +117,7 @@ const MyForm = () => {
           />
         </div>
         <div>
-          <button type="submit">Enviar</button>
+          <button>Enviar</button>
         </div>
       </form>
       <NotificationContainer />
