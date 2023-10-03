@@ -1,0 +1,32 @@
+.menu {
+    background-color: #131428;
+    width: 200px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    opacity: 0.94;
+  }
+
+  .menu .item-menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: baseline;
+  }
+  
+  .menu .item-menu img {
+    width: 35px;
+    margin-right: 10px;
+  }
+  
+  .menu .item-menu a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 18px;
+    margin-top: 5px;
+  }
+  
+  .menu .item-menu a:hover {
+    text-decoration: none;
+  }
+  

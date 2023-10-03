@@ -10,19 +10,7 @@ import MyForm from './pages/projeto';
 function Routes() {
   return (
     <BrowserRouter>
-        <div>
-        {/* Cabeçalho ou navegação com links para as rotas */}
-            <nav>
-            <ul>
-                <li>
-                <a href="/">Home</a>
-                </li>
-                <li>
-                <a href="/projetos">Projetos</a>
-                </li>
-            </ul>
-            </nav>
-        </div>
+       
         <Switch>
             <Route Component={MyForm} path='/projetos' exact/>
         </Switch>
