@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './styles.css';
 import 'react-notifications/lib/notifications.css';
 import criar_projeto from '../../services/projeto_service';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
@@ -32,6 +33,7 @@ const MyForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    
     criar_projeto(formValues).then(() => {
       console.log(formValues);
       NotificationManager.success("Projeto criado com sucesso !")
@@ -49,19 +51,22 @@ const MyForm = () => {
 
   return (
     <div>
+      
       <Title 
         title="Cadastrar projeto" 
         paragraph="Projetos > Cadastrar projetos"
       />
-      <Add />
-      <Delete />
+
+      <div className='add-and-delete'>
+        <Add />
+        <Delete />
+      </div>
+      
       <Search name="BUSCAR PROJETO" />
     
       <form onSubmit={handleSubmit}>
+
         <div>
-
-
-
           <label htmlFor="nome">Nome:</label>
           <input
             type="text"
@@ -71,6 +76,7 @@ const MyForm = () => {
             onChange={handleInputChange}
           />
         </div>
+
         <div>
           <label htmlFor="descricao">Descrição:</label>
           <textarea
@@ -80,8 +86,9 @@ const MyForm = () => {
             onChange={handleInputChange}
           />
         </div>
+
         <div>
-        <label htmlFor="status">Status:</label>
+          <label htmlFor="status">Status:</label>
           <select
             id="status"
             name="status"
@@ -96,6 +103,7 @@ const MyForm = () => {
             ))}
           </select>
         </div>
+
         <div>
           <label htmlFor="data_inicio">Data de Início:</label>
           <input
@@ -106,6 +114,7 @@ const MyForm = () => {
             onChange={handleInputChange}
           />
         </div>
+
         <div>
           <label htmlFor="data_fim">Data de Fim:</label>
           <input
@@ -116,10 +125,13 @@ const MyForm = () => {
             onChange={handleInputChange}
           />
         </div>
+
         <div>
-          <button>Enviar</button>
+          <button>Salvar</button>
         </div>
+
       </form>
+
       <NotificationContainer />
 
     </div>
