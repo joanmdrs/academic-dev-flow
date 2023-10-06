@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import './styles.css';
 import 'react-notifications/lib/notifications.css';
 import criar_projeto from '../../services/projeto_service';
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+import { Form, Input, Select, DatePicker, Button } from 'antd';
 import Title from '../../components/Title/Title';
 import Search from '../../components/Search/Search';
 import Add from '../../components/Buttons/Add/Add';
 import Delete from '../../components/Buttons/Delete/Delete';
+
+const { Option } = Select;
 
 const STATUS_CHOICES = [
   { value: 'cancelado', label: 'Cancelado' },
@@ -15,7 +18,6 @@ const STATUS_CHOICES = [
 ];
 
 const MyForm = () => {
-
   const initialValues = {
     nome: '',
     descricao: '',
@@ -25,33 +27,26 @@ const MyForm = () => {
   };
 
   const [formValues, setFormValues] = useState(initialValues);
-  
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+
+  const handleInputChange = (name, value) => {
     setFormValues({ ...formValues, [name]: value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    
-    criar_projeto(formValues).then(() => {
-      console.log(formValues);
-      NotificationManager.success("Projeto criado com sucesso !")
+  const handleSubmit = (values) => {
+    criar_projeto(values).then(() => {
+      console.log(values);
+      NotificationManager.success('Projeto criado com sucesso!');
       setTimeout(() => {
         document.location.reload();
       }, 2000);
-
     }).catch((error) => {
       console.log(error);
-      NotificationManager.error("Algo deu errado ! ");
+      NotificationManager.error('Algo deu errado!');
     });
-    
-    
   };
 
   return (
     <div>
-      
       <Title 
         title="Cadastrar projeto" 
         paragraph="Projetos > Cadastrar projetos"
@@ -64,76 +59,77 @@ const MyForm = () => {
       
       <Search name="BUSCAR PROJETO" />
     
-      <form onSubmit={handleSubmit}>
-
-        <div>
-          <label htmlFor="nome">Nome:</label>
-          <input
-            type="text"
-            id="nome"
+      <Form
+        className='form-projeto'
+        initialValues={initialValues}
+        onFinish={handleSubmit}
+      >
+        <Form.Item label="Nome" name="nome">
+          <Input
+            id="input-nome"
             name="nome"
             value={formValues.nome}
-            onChange={handleInputChange}
+            onChange={(e) => handleInputChange('nome', e.target.value)}
           />
-        </div>
+        </Form.Item>
 
-        <div>
-          <label htmlFor="descricao">Descrição:</label>
-          <textarea
-            id="descricao"
-            name="descricao"
-            value={formValues.descricao}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="status">Status:</label>
-          <select
+        <Form.Item label="Status" name="status">
+          <Select
             id="status"
             name="status"
             value={formValues.status}
-            onChange={handleInputChange}
+            className='field-select'
+            onChange={(value) => handleInputChange('status', value)}
           >
-            <option value="">Selecione um status</option>
+            <Option value=""></Option>
             {STATUS_CHOICES.map((option) => (
-              <option key={option.value} value={option.value}>
+              <Option key={option.value} value={option.value}>
                 {option.label}
-              </option>
+              </Option>
             ))}
-          </select>
-        </div>
+          </Select>
+        </Form.Item>
 
-        <div>
-          <label htmlFor="data_inicio">Data de Início:</label>
-          <input
-            type="datetime-local"
+        <Form.Item label="Data de Início" name="data_inicio">
+          <DatePicker
             id="data_inicio"
             name="data_inicio"
             value={formValues.data_inicio}
-            onChange={handleInputChange}
+            onChange={(date) => handleInputChange('data_inicio', date)}
+            showTime
+            format="YYYY-MM-DD HH:mm:ss"
           />
-        </div>
+        </Form.Item>
 
-        <div>
-          <label htmlFor="data_fim">Data de Fim:</label>
-          <input
-            type="datetime-local"
+        <Form.Item label="Data de Fim" name="data_fim">
+          <DatePicker
             id="data_fim"
             name="data_fim"
             value={formValues.data_fim}
-            onChange={handleInputChange}
+            onChange={(date) => handleInputChange('data_fim', date)}
+            showTime
+            format="YYYY-MM-DD HH:mm:ss"
           />
-        </div>
+        </Form.Item>
 
-        <div>
-          <button>Salvar</button>
-        </div>
+        <Form.Item label="Descrição" name="descricao">
+          <Input.TextArea
+            id="descricao"
+            name="descricao"
+            value={formValues.descricao}
+            className='field-textarea'
+            onChange={(e) => handleInputChange('descricao', e.target.value)}
+          />
+        </Form.Item>
 
-      </form>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Salvar
+          </Button>
+        </Form.Item>
+      </Form>
 
       <NotificationContainer />
-
     </div>
   );
 };
