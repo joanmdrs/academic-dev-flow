@@ -18,7 +18,9 @@ from django.contrib import admin
 from django.urls import path, include
 from apps.projeto.views import *
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('projetos/cadastrar', ProjetoView.as_view(), name="anything")
+    path('projetos/cadastrar/', CadastrarProjetoView.as_view(), name='cadastrar_projeto'),
+    path('projetos/buscar/', BuscarProjetosPorNomeView.as_view(), name='buscar_projetos_por_nome'),
 ]

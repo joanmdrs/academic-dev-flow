@@ -5,7 +5,7 @@ import { Button } from 'antd';
 
 const Search = (props) => {
     return (
-        <Button className="button-search" type="default" icon={<SearchOutlined />}>
+        <Button className="button-search" type="default" icon={<SearchOutlined />} onClick={props.onClick}>
             {props.name}
         </Button>
     );

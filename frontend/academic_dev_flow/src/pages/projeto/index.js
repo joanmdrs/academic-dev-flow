@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './styles.css';
 import 'react-notifications/lib/notifications.css';
-import criar_projeto from '../../services/projeto_service';
+import {criar_projeto, buscar_projetos_pelo_nome} from '../../services/projeto_service';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { Form, Input, Select, DatePicker, Button } from 'antd';
 import Title from '../../components/Title/Title';
 import Search from '../../components/Search/Search';
 import Add from '../../components/Buttons/Add/Add';
 import Delete from '../../components/Buttons/Delete/Delete';
+import ModalSearch from '../../components/Modal/Modal';
 
 const { Option } = Select;
 
@@ -27,9 +28,18 @@ const MyForm = () => {
   };
 
   const [formValues, setFormValues] = useState(initialValues);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handleInputChange = (name, value) => {
     setFormValues({ ...formValues, [name]: value });
+  };
+
+  const showModal = () => {
+    setModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setModalVisible(false);
   };
 
   const handleSubmit = (values) => {
@@ -40,7 +50,7 @@ const MyForm = () => {
         document.location.reload();
       }, 2000);
     }).catch((error) => {
-      console.log(error);
+      console.log("Algo não está funcionando como deveria, segue descrição do erro:", error);
       NotificationManager.error('Algo deu errado!');
     });
   };
@@ -57,7 +67,15 @@ const MyForm = () => {
         <Delete />
       </div>
       
-      <Search name="BUSCAR PROJETO" />
+      <Search name="BUSCAR PROJETO" onClick={showModal} />
+
+      <ModalSearch 
+        title="Buscar projeto" 
+        visible={modalVisible} 
+        onCancel={handleCancel} 
+        label="Nome do projeto"
+        name="name-projeto"
+      />
     
       <Form
         className='form-projeto'
