@@ -44,13 +44,12 @@ const MyForm = () => {
 
   const handleSubmit = (values) => {
     criar_projeto(values).then(() => {
-      console.log(values);
       NotificationManager.success('Projeto criado com sucesso!');
       setTimeout(() => {
         document.location.reload();
       }, 2000);
     }).catch((error) => {
-      console.log("Algo não está funcionando como deveria, segue descrição do erro:", error);
+      console.log("Algo deu errado !", error);
       NotificationManager.error('Algo deu errado!');
     });
   };

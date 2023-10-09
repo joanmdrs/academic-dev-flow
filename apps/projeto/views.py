@@ -6,7 +6,7 @@ from .models import Projeto
 from .serializers import ProjetoSerializer
 
 class CadastrarProjetoView(APIView):
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         serializer = ProjetoSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
@@ -14,7 +14,7 @@ class CadastrarProjetoView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class BuscarProjetosPorNomeView(APIView):
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         parametro = request.GET.get('name', None)
         print(parametro)
 
