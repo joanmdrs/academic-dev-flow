@@ -21,7 +21,10 @@ const ModalSearch = ({title, visible, onCancel, handleOk, label, name}) => {
         <Modal
             title={title}
             visible={visible}
-            onCancel={onCancel}
+            onCancel={() => {
+                onCancel()
+                setData([])
+            }}
             onOk={async () => {
                 const response = await buscar_projetos_pelo_nome(query)
                 setData(response.data)
