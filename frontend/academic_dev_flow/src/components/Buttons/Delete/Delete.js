@@ -2,9 +2,14 @@ import React from 'react';
 import { Button } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 
-const Delete = ({ onClick }) => {
+const Delete = ({onClick, disabled}) => {
     return (
-      <Button type="default" icon={<DeleteOutlined />} onClick={onClick} disabled>
+      <Button 
+        type='primary' 
+        icon={<DeleteOutlined />} 
+        onClick={onClick} 
+        disabled={disabled}
+        danger>
       </Button>
     );
   };

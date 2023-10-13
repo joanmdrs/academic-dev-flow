@@ -31,12 +31,17 @@ const MyForm = () => {
 
   const [formValues, setFormValues] = useState(initialValues);
   const [modalVisible, setModalVisible] = useState(false);
+  const [btnDelVisible, setBtnDelVisible] = useState(true);
   const [form] = Form.useForm();
   const { Option } = Select;
 
   const handleInputChange = (name, value) => {
     setFormValues({ ...formValues, [name]: value });
   };
+
+  const enableDelete = () => {
+    setBtnDelVisible(false)
+  }
 
   const showModal = () => {
     setModalVisible(true);
@@ -54,6 +59,7 @@ const MyForm = () => {
       { name: 'data_inicio', value: moment(record.data_inicio)},
       { name: 'data_fim', value: moment(record.data_fim)}
     ]);
+    enableDelete();
     handleCancel();
   }
 
@@ -69,6 +75,11 @@ const MyForm = () => {
     });
   };
 
+  const handleDelete = () => {
+    console.log("Excluir projeto");
+    document.location.reload();
+  }
+
   return (
     <div>
       <Title 
@@ -78,7 +89,7 @@ const MyForm = () => {
 
       <div className='add-and-delete'>
         <Add />
-        <Delete />
+        <Delete onClick={handleDelete} disabled={btnDelVisible}/>
       </div>
       
       <Search name="BUSCAR PROJETO" onClick={showModal} />
