@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import moment from 'moment'
 import './styles.css';
 import 'react-notifications/lib/notifications.css';
-import {criar_projeto, buscar_projetos_pelo_nome} from '../../services/projeto_service';
+import {criar_projeto} from '../../services/projeto_service';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { Form, Input, Select, DatePicker, Button } from 'antd';
 import Title from '../../components/Title/Title';
@@ -9,8 +10,9 @@ import Search from '../../components/Search/Search';
 import Add from '../../components/Buttons/Add/Add';
 import Delete from '../../components/Buttons/Delete/Delete';
 import ModalSearch from '../../components/Modal/Modal';
+import 'moment/locale/pt-br';
+moment.locale('pt-br');
 
-const { Option } = Select;
 
 const STATUS_CHOICES = [
   { value: 'cancelado', label: 'Cancelado' },
@@ -29,6 +31,8 @@ const MyForm = () => {
 
   const [formValues, setFormValues] = useState(initialValues);
   const [modalVisible, setModalVisible] = useState(false);
+  const [form] = Form.useForm();
+  const { Option } = Select;
 
   const handleInputChange = (name, value) => {
     setFormValues({ ...formValues, [name]: value });
@@ -41,6 +45,17 @@ const MyForm = () => {
   const handleCancel = () => {
     setModalVisible(false);
   };
+
+  const handleRowClick = (record) => {
+    form.setFields([
+      { name: 'nome', value: record.nome },
+      { name: 'descricao', value: record.descricao },
+      { name: 'status', value: record.status },
+      { name: 'data_inicio', value: moment(record.data_inicio)},
+      { name: 'data_fim', value: moment(record.data_fim)}
+    ]);
+    handleCancel();
+  }
 
   const handleSubmit = (values) => {
     criar_projeto(values).then(() => {
@@ -70,13 +85,15 @@ const MyForm = () => {
 
       <ModalSearch 
         title="Buscar projeto" 
-        visible={modalVisible} 
-        onCancel={handleCancel} 
+        open={modalVisible} 
+        onCancel={handleCancel}
+        handleRowClick={handleRowClick} 
         label="Nome do projeto"
         name="name-projeto"
       />
     
       <Form
+        form={form}
         className='form-projeto'
         initialValues={initialValues}
         onFinish={handleSubmit}

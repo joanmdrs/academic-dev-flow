@@ -14,7 +14,7 @@ class CadastrarProjetoView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class BuscarProjetosPorNomeView(APIView):
-    def get(self, request, id):
+    def get(self, request):
         parametro = request.GET.get('name', None)
         print(parametro)
 
@@ -28,7 +28,7 @@ class BuscarProjetosPorNomeView(APIView):
         return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
     
 class ExcluirProjetoView(APIView):
-    def delete(self, request):
+    def delete(self, request, id):
         projeto = get_object_or_404(Projeto, id = id)
         
         if projeto is not None:

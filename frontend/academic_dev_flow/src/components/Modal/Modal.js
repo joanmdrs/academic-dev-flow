@@ -1,26 +1,63 @@
 import React, { useState } from "react";
-import { Modal, Form, Input } from 'antd';
+import "./Modal.css"
+import { Modal, Form, Input, Divider, Table } from 'antd';
 import { buscar_projetos_pelo_nome } from "../../services/projeto_service";
-import { Divider, List, Typography } from 'antd';
+
 const { Item } = Form;
 
-
-const ModalSearch = ({title, visible, onCancel, handleOk, label, name}) => {
+const ModalSearch = ({title, open, label, name, onCancel, handleRowClick}) => {
 
 
     const [form] = Form.useForm();
     const [query, setQuery] = useState('');
     const [data, setData] = useState([])
 
+
+
     const handleQueryChange = (event) => {
         setQuery(event.target.value);
-      };
+    };
+
+
+
+    //A constante colums representa uma lista com objetos que definem quais dados do objeto dataSource devem ser exibidos.
+    // Além disso, o método render possui diversas propriedades, uma delas é o text que representa o valor da célula. Por outro lado, 
+    // o record é uma convenção que representa o objeto que está sendo renderizado naquela linha. 
+
+    const columns = [
+        {
+            title: 'Código',
+            key: 'codigo',
+            dataIndex: 'id', 
+        },
+        {
+            title: 'Nome',
+            dataIndex: 'nome',
+            key: 'nome',
+            render: (text, record) => (
+
+                <span
+                    style={{ color: 'blue', cursor: 'pointer'}}
+                    onClick = { () => {
+                        handleRowClick(record)
+                    }}
+                >
+                    {text}
+                </span>
+            ),
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+        },
+    ];
 
 
     return (
         <Modal
             title={title}
-            visible={visible}
+            open={open}
             onCancel={() => {
                 onCancel()
                 setData([])
@@ -43,17 +80,10 @@ const ModalSearch = ({title, visible, onCancel, handleOk, label, name}) => {
 
             {data.length > 0 ? (
                 <>
-                    <Divider orientation="left">Resultados</Divider>
-                    <List
-                    bordered
-                    dataSource={data}
-                    renderItem={(item) => (
-                        <List.Item>
-                        <Typography.Text mark></Typography.Text> {item.nome}
-                        </List.Item>
-                    )}
-                    />
-                </>
+                <Divider orientation="left">Resultados</Divider>
+                <Table dataSource={data} columns={columns} rowKey="id"/>
+              </>
+      
             ) : null}
 
             
