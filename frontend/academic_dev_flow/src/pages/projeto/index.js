@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import moment from 'moment'
 import './styles.css';
 import 'react-notifications/lib/notifications.css';
-import {criar_projeto, excluir_projeto} from '../../services/projeto_service';
+import {atualizar_projeto, criar_projeto, excluir_projeto} from '../../services/projeto_service';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { Form, Input, Select, DatePicker, Button } from 'antd';
 import Title from '../../components/Title/Title';
@@ -32,6 +32,7 @@ const MyForm = () => {
 
   const [formValues, setFormValues] = useState(initialValues);
   const [id, setId] = useState('');
+  const [actionForm, setActionForm] = useState('create')
   const [modalVisible, setModalVisible] = useState(false);
   const [btnDelVisible, setBtnDelVisible] = useState(true);
   const [form] = Form.useForm();
@@ -61,22 +62,36 @@ const MyForm = () => {
       { name: 'data_inicio', value: moment(record.data_inicio)},
       { name: 'data_fim', value: moment(record.data_fim)}
     ]);
+    setActionForm('update')
     setId(record.id);
-    console.log(id)
     enableDelete();
     handleCancel();
   }
 
   const handleSubmit = (values) => {
-    criar_projeto(values).then(() => {
-      NotificationManager.success('Projeto criado com sucesso!');
-      setTimeout(() => {
-        document.location.reload();
-      }, 2000);
-    }).catch((error) => {
-      console.log("Algo deu errado !", error);
-      NotificationManager.error('Algo deu errado!');
-    });
+
+    if(actionForm === 'create'){
+      criar_projeto(values).then(() => {
+        NotificationManager.success('Projeto criado com sucesso!');
+        setTimeout(() => {
+          document.location.reload();
+        }, 2000);
+      }).catch((error) => {
+        console.log("Algo deu errado !", error);
+        NotificationManager.error('Algo deu errado!');
+      });
+    } else if(actionForm === 'update'){
+      atualizar_projeto(id, values).then( () => {
+        NotificationManager.success('Projeto atualizado com sucesso!');
+        setTimeout(() => {
+          document.location.reload();
+        }, 2000);
+      }).catch((error) => {
+        console.log("Algo deu errado !", error);
+        NotificationManager.error('Algo deu errado!');
+      })
+    }
+    
   };
 
   const handleDelete = () => {

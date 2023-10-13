@@ -60,6 +60,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000", 
 ]
 
+APPEND_SLASH = False
+
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [

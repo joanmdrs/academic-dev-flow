@@ -29,3 +29,13 @@ export const excluir_projeto = (id) => {
         console.log("Erro ao excluir o projeto", error)
     }
 }
+
+export const atualizar_projeto = (id, data) => {
+    try {
+        const response = api.put(`/projetos/${encodeURIComponent(id)}/atualizar`, data);
+        return response
+    } catch (error) {
+        console.log('Erro ao atualizar o projeto', error)
+        
+    }
+}
