@@ -4,6 +4,8 @@ from rest_framework import status
 from django.http import HttpResponseNotAllowed, JsonResponse
 from .models import Projeto
 from .serializers import ProjetoSerializer
+from django.shortcuts import get_object_or_404
+
 
 class CadastrarProjetoView(APIView):
     def post(self, request):
@@ -30,7 +32,6 @@ class BuscarProjetosPorNomeView(APIView):
 class ExcluirProjetoView(APIView):
     def delete(self, request, id):
         projeto = get_object_or_404(Projeto, id = id)
-        
         if projeto is not None:
             projeto.delete()
             return Response(status=status.HTTP_204_NO_CONTENT);

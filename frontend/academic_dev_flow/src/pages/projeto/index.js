@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import moment from 'moment'
 import './styles.css';
 import 'react-notifications/lib/notifications.css';
-import {criar_projeto} from '../../services/projeto_service';
+import {criar_projeto, excluir_projeto} from '../../services/projeto_service';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { Form, Input, Select, DatePicker, Button } from 'antd';
 import Title from '../../components/Title/Title';
@@ -11,6 +11,7 @@ import Add from '../../components/Buttons/Add/Add';
 import Delete from '../../components/Buttons/Delete/Delete';
 import ModalSearch from '../../components/Modal/Modal';
 import 'moment/locale/pt-br';
+import Confirm from '../../components/Confirm/Confirm';
 moment.locale('pt-br');
 
 
@@ -30,6 +31,7 @@ const MyForm = () => {
   };
 
   const [formValues, setFormValues] = useState(initialValues);
+  const [id, setId] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [btnDelVisible, setBtnDelVisible] = useState(true);
   const [form] = Form.useForm();
@@ -59,6 +61,8 @@ const MyForm = () => {
       { name: 'data_inicio', value: moment(record.data_inicio)},
       { name: 'data_fim', value: moment(record.data_fim)}
     ]);
+    setId(record.id);
+    console.log(id)
     enableDelete();
     handleCancel();
   }
@@ -76,8 +80,15 @@ const MyForm = () => {
   };
 
   const handleDelete = () => {
-    console.log("Excluir projeto");
-    document.location.reload();
+    excluir_projeto(id).then(() => {
+      NotificationManager.success('Projeto excluído com sucesso!');
+      setTimeout(() => {
+        document.location.reload();
+      }, 2000);
+    }).catch((error) => {
+      console.log("Algo deu errado !", error);
+      NotificationManager.error('Algo deu errado!');
+    });
   }
 
   return (
@@ -89,7 +100,7 @@ const MyForm = () => {
 
       <div className='add-and-delete'>
         <Add />
-        <Delete onClick={handleDelete} disabled={btnDelVisible}/>
+        <Delete handleDelete={handleDelete} disabled={btnDelVisible}/>
       </div>
       
       <Search name="BUSCAR PROJETO" onClick={showModal} />
