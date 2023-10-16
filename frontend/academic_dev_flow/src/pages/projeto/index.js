@@ -11,7 +11,6 @@ import Add from '../../components/Buttons/Add/Add';
 import Delete from '../../components/Buttons/Delete/Delete';
 import ModalSearch from '../../components/Modal/Modal';
 import 'moment/locale/pt-br';
-import Confirm from '../../components/Confirm/Confirm';
 moment.locale('pt-br');
 
 
@@ -34,6 +33,7 @@ const MyForm = () => {
   const [id, setId] = useState('');
   const [actionForm, setActionForm] = useState('create')
   const [modalVisible, setModalVisible] = useState(false);
+  const [formVisible, setFormVisible] = useState(false);
   const [btnDelVisible, setBtnDelVisible] = useState(true);
   const [form] = Form.useForm();
   const { Option } = Select;
@@ -114,7 +114,7 @@ const MyForm = () => {
       />
 
       <div className='add-and-delete'>
-        <Add />
+        <Add onClick={ () => {setFormVisible(true)}} />
         <Delete handleDelete={handleDelete} disabled={btnDelVisible}/>
       </div>
       
@@ -129,76 +129,80 @@ const MyForm = () => {
         name="name-projeto"
       />
     
-      <Form
-        form={form}
-        className='form-projeto'
-        initialValues={initialValues}
-        onFinish={handleSubmit}
-      >
-        <Form.Item label="Nome" name="nome">
-          <Input
-            id="input-nome"
-            name="nome"
-            value={formValues.nome}
-            onChange={(e) => handleInputChange('nome', e.target.value)}
-          />
-        </Form.Item>
+      {formVisible && (
+        <Form
+          form={form}
+          className='form-projeto'
+          initialValues={initialValues}
+          onFinish={handleSubmit}
+          
+        >
+          <Form.Item label="Nome" name="nome">
+            <Input
+              id="input-nome"
+              name="nome"
+              value={formValues.nome}
+              onChange={(e) => handleInputChange('nome', e.target.value)}
+            />
+          </Form.Item>
 
-        <Form.Item label="Status" name="status">
-          <Select
-            id="status"
-            name="status"
-            value={formValues.status}
-            className='field-select'
-            onChange={(value) => handleInputChange('status', value)}
-          >
-            <Option value=""></Option>
-            {STATUS_CHOICES.map((option) => (
-              <Option key={option.value} value={option.value}>
-                {option.label}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
+          <Form.Item label="Status" name="status">
+            <Select
+              id="status"
+              name="status"
+              value={formValues.status}
+              className='field-select'
+              onChange={(value) => handleInputChange('status', value)}
+            >
+              <Option value=""></Option>
+              {STATUS_CHOICES.map((option) => (
+                <Option key={option.value} value={option.value}>
+                  {option.label}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
 
-        <Form.Item label="Data de Início" name="data_inicio">
-          <DatePicker
-            id="data_inicio"
-            name="data_inicio"
-            value={formValues.data_inicio}
-            onChange={(date) => handleInputChange('data_inicio', date)}
-            showTime
-            format="YYYY-MM-DD HH:mm:ss"
-          />
-        </Form.Item>
+          <Form.Item label="Data de Início" name="data_inicio">
+            <DatePicker
+              id="data_inicio"
+              name="data_inicio"
+              value={formValues.data_inicio}
+              onChange={(date) => handleInputChange('data_inicio', date)}
+              showTime
+              format="YYYY-MM-DD HH:mm:ss"
+            />
+          </Form.Item>
 
-        <Form.Item label="Data de Fim" name="data_fim">
-          <DatePicker
-            id="data_fim"
-            name="data_fim"
-            value={formValues.data_fim}
-            onChange={(date) => handleInputChange('data_fim', date)}
-            showTime
-            format="YYYY-MM-DD HH:mm:ss"
-          />
-        </Form.Item>
+          <Form.Item label="Data de Fim" name="data_fim">
+            <DatePicker
+              id="data_fim"
+              name="data_fim"
+              value={formValues.data_fim}
+              onChange={(date) => handleInputChange('data_fim', date)}
+              showTime
+              format="YYYY-MM-DD HH:mm:ss"
+            />
+          </Form.Item>
 
-        <Form.Item label="Descrição" name="descricao">
-          <Input.TextArea
-            id="descricao"
-            name="descricao"
-            value={formValues.descricao}
-            className='field-textarea'
-            onChange={(e) => handleInputChange('descricao', e.target.value)}
-          />
-        </Form.Item>
+          <Form.Item label="Descrição" name="descricao">
+            <Input.TextArea
+              id="descricao"
+              name="descricao"
+              value={formValues.descricao}
+              className='field-textarea'
+              onChange={(e) => handleInputChange('descricao', e.target.value)}
+            />
+          </Form.Item>
 
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Salvar
-          </Button>
-        </Form.Item>
-      </Form>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Salvar
+            </Button>
+          </Form.Item>
+        </Form>
+
+      )}
 
       <NotificationContainer />
     </div>

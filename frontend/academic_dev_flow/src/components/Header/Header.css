@@ -19,4 +19,13 @@
   .logo .icon {
     margin-left: 40px;
   }
+
+  .modules {
+    width: 5%;
+    margin-right: 20px;
+  }
   
+  .modules .icon {
+    font-size: 25px;
+    cursor: pointer;
+  }
