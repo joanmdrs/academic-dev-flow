@@ -1,0 +1,7 @@
+.component-title {
+    width: calc(100vw - 275px);
+    border-bottom: 1px solid gray;
+    padding-top: 20px;
+    padding-left: 20px;
+
+}
