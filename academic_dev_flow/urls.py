@@ -24,5 +24,6 @@ urlpatterns = [
     path('projetos/cadastrar/', CadastrarProjetoView.as_view(), name='cadastrar_projeto'),
     path('projetos/buscar/', BuscarProjetosPorNomeView.as_view(), name='buscar_projetos_por_nome'),
     path('projetos/<int:id>/excluir/', ExcluirProjetoView.as_view(), name='excluir_projeto'),
-    path('projetos/<int:id>/atualizar', AtualizarProjetoView.as_view(), name='atualizar_projeto')
+    path('projetos/<int:id>/atualizar/', AtualizarProjetoView.as_view(), name='atualizar_projeto')
 ]
+

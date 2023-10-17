@@ -38,8 +38,9 @@ class ExcluirProjetoView(APIView):
         else:
             return JsonResponse({'error': 'Recurso não encontrado'}, status=404);
 
+
 class AtualizarProjetoView(APIView):
-    def put(self, request, id):
+    def patch(self, request, id):
         projeto = Projeto.objects.get(pk=id)
         serializer = ProjetoSerializer(projeto, data=request.data)
         if serializer.is_valid(raise_exception=True):
