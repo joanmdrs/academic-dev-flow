@@ -84,5 +84,46 @@ Este documento descreve os User Stories criados a partir da Lista de Requisitos 
 |                 |                                   | 3. Preencha todos os campos obrigatórios e clique em gerar.      | O sistema abre uma nova aba com uma tabela com os dados cadastrais do projeto. | 
 
 
+### User Story US03 - Manter Fluxo de desenvolvimento 
+
+ > **Descrição:** O sistema deve possuir um módulo ou aba que permita gerenciar um fluxo de desenvolvimento de software. Este gerenciamento deve permitir que o usuário consiga visualizar fluxos de desenvolvimento já cadastrados previamente pelo administrador do sistema, como uma forma de templates. Além disso, este módulo deve permitir que o usuário consiga cadastrar novos modelos de fluxo de desenvolvimento, assim como editar e excluir caso seja necessário.
+
+
+|   #  | Requisitos Envolvidos |
+|------|------------------------
+| RF03 | Manter Fluxo de desenvolvimento
+
+|                           |              |
+| ------------------------- | -------------|
+| **Prioridade**            | Essencial    |
+| **Estimativa**            |              |
+| **Tempo Gasto (real):**   |              |
+| **Tamanho Funcional**     |              |
+| **Analista**              | Joan         |
+| **Desenvolvedor**         | Joan         |
+| **Revisor**               | Joan         |
+| **Testador**              | Joan         |
+
+**Testes de Aceitação (TA)**
+
+| **ID do Teste** | **Descrição** | **Critérios de Aceitação** | **Resultado Esperado** |
+|-----------------|---------------|----------------------------|------------------------|
+| **TA03.01**     | Criar um novo fluxo de desenvolvimento. Cenário em que o usuário preenche todos os campos corretamente. | 1. O usuário clica no botão com ícone de adição (adicionar). | O sistema exibe o formulário de criação do fluxo de desenvolvimento. |
+|                 |               | 2. O usuário preeche todos os campos obrigatórios e clica no botão salvar. | O fluxo é criado com sucesso e é exibido uma mensagem de confirmação para o usuário. |
+| **TA03.02**     | Criar um novo fluxo de desenvolvimento. Cenário em que o usuário não preenchou os campos corretamente. | 1. O usuário clica no botão com ícone de adição (adicionar). | O sistema exibe o formulário de criação do fluxo de desenvolvimento. |
+|                 |               | 2. O usuário esqueceu de preencher um ou mais campos e clica no botão salvar. | O sistema não cria o fluxo e exibe uma mensagem informando que algo deu errado. | 
+|                 |               | 3. O usuário não preeche os campos do formulário e clica no botão Salvar. | O sistema não cria o fluxo e exibe uma mensagem informando que algo deu errado. | 
+| **TA03.03**     | Editar informações de um novo fluxo. Cenário em que o usuário preenche todos os campos corretamente.    | 1. O usuário seleciona um fluxo de desenvolvimento existente. | O sistema exibe os detalhes do fluxo para o usuário. |
+|                 |               | 2. O usuário faz as alterações desejadas e permitidas e clica no botão de Salvar. As informações precisam está de acordo com os campos do formulário exigidos pelo formulário, assim como de acordo com as permissões. | O sistema atualiza as informações no banco de dados e exibe uma mensagem de confirmação para o usuário. |
+| **TA03.04**     | Editar informações de um novo fluxo. Cenário em que o usuário não preenche as informações corretamente.    | 1. O usuário seleciona um fluxo de desenvolvimento existente. | O sistema exibe os detalhes do fluxo para o usuário. |
+|                 |               | 2. O usuário apagou um dos campos do formulário e clica no botão salvar. | O sistema não atualiza as informações do fluxo e exibe uma mensagem informando que algo deu errado.|
+|                 |               | 3. O usuário preenche um campo incorretamente, por exemplo, um campo que esperava texto, o usuário informou números. | O sistema não atualiza as informações do fluxo e exibe uma mensagem informando que algo deu errado. |
+| **TA03.05**     | Editar informações de um fluxo que representa um template. | 1. O usuário seleciona um fluxo de desenvolvimento existente. | O sistema exibe os detalhes do fluxo para o usuário. Porém, o usuário já exibe uma mensagem informando que aquele fluxo de desenvolvimento não pode ser alterado, porque o mesmo se trata de um template. |
+| **TA03.03**     | Excluir um fluxo de desenvolvimento    | 1. Selecione um fluxo de desenvolvimento existente.              | O sistema exibe os detalhes do fluxo para o usuário. |
+|                 |                                        | 2. Se o projeto selecionado for um template. O mesmo não poderá ser excluído. | O sistema deve informar ao usuário que a exclusão do fluxo não será possível, pois o mesmo se trata de um 
+
+
+
+
 
 
