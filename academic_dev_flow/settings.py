@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'apps.projeto',
+    'apps.flow',
+    'apps.etapa',
 ]
 
 MIDDLEWARE = [

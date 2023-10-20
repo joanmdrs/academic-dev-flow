@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class FlowConfig(AppConfig):
+class EtapaConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.flow'
+    name = 'apps.etapa'
