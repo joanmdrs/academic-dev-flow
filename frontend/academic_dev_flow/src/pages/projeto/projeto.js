@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import moment from 'moment'
-import './styles.css';
+import './projeto.css';
 import 'react-notifications/lib/notifications.css';
 import {atualizar_projeto, criar_projeto, excluir_projeto} from '../../services/projeto_service';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
@@ -20,7 +20,7 @@ const STATUS_CHOICES = [
   { value: 'concluido', label: 'Concluído' },
 ];
 
-const MyForm = () => {
+const Projeto = () => {
   const initialValues = {
     nome: '',
     descricao: '',
@@ -209,4 +209,4 @@ const MyForm = () => {
   );
 };
 
-export default MyForm;
+export default Projeto;
