@@ -1,4 +1,5 @@
 from django.db import models
+from apps.flow.models import Flow
 
 class Etapa(models.Model):
     
@@ -12,3 +13,5 @@ class Etapa(models.Model):
     data_inicio = models.DateField("Data Início")
     data_fim = models.DateField("Data Fim")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES)
+    
+    flow = models.ForeignKey(Flow, on_delete=models.PROTECT)
