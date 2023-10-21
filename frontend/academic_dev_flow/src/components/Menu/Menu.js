@@ -1,19 +1,17 @@
 import React from 'react';
 import './Menu.css'; 
-import icon_projeto from "../../assets/icone-projeto.png"
-import icon_fluxo from "../../assets/icone-fluxo.png"
+import {HiOutlineClipboardList} from "react-icons/hi"
+import {DiScrum} from "react-icons/di"
 
 const Menu = () => {
   return (
     <div className="menu">
         <div className='item-menu'>
-            <img src={icon_projeto} alt='Ícone de Projeto'/>
-
+            <HiOutlineClipboardList className='icon' style={{ fontSize: '20px' }} />
             <a href="/projetos">Projetos</a>
         </div>
         <div className='item-menu'>
-            <img src={icon_fluxo} alt='Ícone de Projeto'/>
-
+            <DiScrum className='icon' style={{ fontSize: '25px' }} />
             <a href="/fluxos"> Fluxos</a>
         </div>
         

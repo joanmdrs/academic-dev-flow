@@ -9,17 +9,26 @@
     gap: 13px;
   }
 
+  .menu .item-menu .icon {
+    cursor: pointer;
+    color: #ffffff;
+    margin-top: 5px;
+  }
+
   .menu .item-menu {
     display: flex;
     flex-direction: row;
-    justify-content: baseline;
+    padding: 5px;
+    gap: 5px;
   }
-  
+
+
   .menu .item-menu img {
     width: 23px;
     height: 23px;
     margin-right: 10px;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    
+
   }
   
   .menu .item-menu a {
