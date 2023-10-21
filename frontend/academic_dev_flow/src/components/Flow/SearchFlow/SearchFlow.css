@@ -1,0 +1,13 @@
+.search-flow {
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+}
+
+.input-search-flow {
+    width: 70%;
+}
+
+.input-search-flow button {
+    background-color: #1677FF;
+}
