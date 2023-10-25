@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from apps.projeto.views import *
+from apps.flow.views import *
 
 
 urlpatterns = [
@@ -24,6 +25,7 @@ urlpatterns = [
     path('projetos/cadastrar/', CadastrarProjetoView.as_view(), name='cadastrar_projeto'),
     path('projetos/buscar/', BuscarProjetosPorNomeView.as_view(), name='buscar_projetos_por_nome'),
     path('projetos/<int:id>/excluir/', ExcluirProjetoView.as_view(), name='excluir_projeto'),
-    path('projetos/<int:id>/atualizar/', AtualizarProjetoView.as_view(), name='atualizar_projeto')
+    path('projetos/<int:id>/atualizar/', AtualizarProjetoView.as_view(), name='atualizar_projeto'),
+    path('fluxos/cadastrar/', CadastrarFluxoView.as_view(), name='cadastrar_fluxo' )
 ]
 
