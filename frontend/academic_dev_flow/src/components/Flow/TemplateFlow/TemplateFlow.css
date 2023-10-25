@@ -1,0 +1,41 @@
+.templates {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    width: min-content;
+    padding: 5px;
+    width: 100%;
+}
+
+.template-item {
+    padding: 10px;
+    padding-bottom: 20px;
+    border-radius: 20px;
+    transition: transform 0.5s ease;
+}
+
+.template-item:hover {
+    border: 1px solid #1677FF;
+    transform: scale(1.05);
+    color: #1677FF;
+}
+
+.templates .template-item button {
+    width: 120px;
+    height: 120px;
+    border: none;
+    border: 2px dashed gray;
+    border-radius: 20px;
+}
+
+.templates .template-item h4 {
+    margin-top: 5px;
+    text-align: center;
+    font-size: 15px;
+}
+
+.icon-gr-add {
+    font-size: 20px;
+}
