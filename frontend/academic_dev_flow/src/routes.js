@@ -2,8 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes as Switch, Route} from 'react-router-dom';
 import Projeto from './pages/projeto/projeto';
 import Flow from './pages/flow/flow';
-import AddFlow from './pages/flow/addFlow';
-import FlowSteps from './pages/flow/arq_aux';
+import FlowSteps from './pages/flow/FlowSteps';
 
 function Routes() {
   return (

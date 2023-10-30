@@ -1,0 +1,10 @@
+.form-add-flow {
+    height: auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.form-add-flow textarea {
+    height: 200px;
+}
