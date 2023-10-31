@@ -3,7 +3,8 @@
     flex-direction: column;
     align-items: center;
     min-width: calc(100% - 245px);
-    height: fit-content;
+    height: auto;
+    padding-bottom: 20px;
 }
 
 .fluxo {
@@ -29,3 +30,5 @@
 .form-add-flow textarea {
     height: 200px;
 }
+
+

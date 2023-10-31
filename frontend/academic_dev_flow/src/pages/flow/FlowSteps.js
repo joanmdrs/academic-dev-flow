@@ -1,22 +1,18 @@
 import React, { useState } from "react";
 import "./FlowSteps.css";
 import { Button, Steps} from 'antd';
-import FormFlow from "../../components/Flow/FormFlow/FormFlow";
+import FlowForm from "../../components/Flow/FlowForm/FlowForm";
 import EtapaForm from "../../components/Etapa/EtapaForm/EtapaForm";
-
+import FlowDetails from "../../components/Flow/FlowDetails/FlowDetails";
+import { FormProvider } from "../../components/Flow/FormProvider/FormProvider";
 
 const FlowSteps = () => {
-
-    const onFinish = () => {
-        console.log("Está funcionando !");
-    }
-
 
     const steps = [
         {
             title: "Fluxo",
             content: (
-               <FormFlow onFinish={onFinish}/>
+               <FlowForm />
             )
         },
         
@@ -26,9 +22,12 @@ const FlowSteps = () => {
                 <EtapaForm />
             )
         },
+        
         {
             title: "Finalizar",
-            content: "Content"
+            content: ( 
+                <FlowDetails />
+            )
         }
     ]
 
@@ -48,33 +47,36 @@ const FlowSteps = () => {
     }));
 
     return (
-        <div className="steps">
-            <Steps current={current} items={items} className="fluxo" />
-            <div className="content-step">{steps[current].content}</div>
-            <div>
-                {current < steps.length - 1 && (
-                <Button type="primary" onClick={() => next()}>
-                    Próximo
-                </Button>
-                )}
-                {current === steps.length - 1 && (
-                <Button type="primary" onClick={() => console.log('Processing complete!')}>
-                    Finalizar
-                </Button>
-                )}
-                {current > 0 && (
-                <Button
-                    style={{
-                    margin: '0 8px',
-                    }}
-                    onClick={() => prev()}
-                >
-                    Anterior
-                </Button>
-                )}
+        <FormProvider>
+       
+            <div className="steps">
+                <Steps current={current} items={items} className="fluxo" />
+                <div className="content-step">{steps[current].content}</div>
+                <div className="steps-buttons">
+                    {current < steps.length - 1 && (
+                    <Button type="primary" onClick={() => next()}>
+                        Próximo
+                    </Button>
+                    )}
+                    {current === steps.length - 1 && (
+                    <Button type="primary" onClick={() => console.log('Processing complete!')}>
+                        Finalizar
+                    </Button>
+                    )}
+                    {current > 0 && (
+                    <Button
+                        style={{
+                        margin: '0 8px',
+                        }}
+                        onClick={() => prev()}
+                    >
+                        Anterior
+                    </Button>
+                    )}
+                </div>
             </div>
-    </div>
-    )
+        </FormProvider>
+    );
 
 }
 
