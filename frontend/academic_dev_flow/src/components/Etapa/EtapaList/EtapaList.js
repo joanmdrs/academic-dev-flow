@@ -1,12 +1,13 @@
 import { Button, List } from "antd";
 import React from "react";
+import "./EtapaList.css";
 import { AiFillEdit } from "react-icons/ai";
 import { IoMdTrash } from "react-icons/io";
 
 const EtapaList = ({etapas}) => {
 
     return (
-        <div>
+        <div className="list-etapa">
             <List
                 size="small"
                 bordered
