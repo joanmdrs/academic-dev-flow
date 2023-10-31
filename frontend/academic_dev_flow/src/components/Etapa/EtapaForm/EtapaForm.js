@@ -16,14 +16,29 @@ const STATUS_CHOICES = [
 const EtapaForm = () => {
 
     const [etapas, setEtapas] = useState([]);
-
     const [form] = useForm();
+  
+    const addEtapa = () => {
+        form.validateFields().then((values) => {
 
+            if(values.nome !== undefined) {
+                console.log(values)
+                const novaEtapa = {
+                    ...values,
+                }
+    
+                setEtapas([...etapas, novaEtapa]);
+    
+                form.resetFields();
+            }
+            
+        })
+    }
     return (
         <div className="step-add-etapa">
-            <h3>Cadastro das etapas do fluxo de desenvolvimento</h3>
-            <div className="form-add-etapa">
-                <Form form={form}>
+            <div className="form-add-etapa" >
+                <h4>Cadastrar etapa</h4>
+                <Form form={form} layout="vertical">
                     <Form.Item name="nome" label="Nome">
                         <Input />
                     </Form.Item>
@@ -59,7 +74,7 @@ const EtapaForm = () => {
             </div>
 
             <div className="button-add-etapa">
-                <Button id="button-add-etapa">
+                <Button type="primary" id="button-add-etapa" onClick={addEtapa}>
                     <PlusOutlined />
                     Adicionar etapa
                 </Button>
