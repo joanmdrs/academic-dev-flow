@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import "./EtapaForm.css";
 import { useForm } from "antd/es/form/Form";
 import {Form, Input, Select, Button, } from "antd";
 import { PlusOutlined } from '@ant-design/icons';
 import EtapaList from "../EtapaList/EtapaList";
+import { useFormContext } from "../../Flow/FormProvider/FormProvider";
 
 const {Option} = Select
 
@@ -15,7 +16,8 @@ const STATUS_CHOICES = [
 
 const EtapaForm = () => {
 
-    const [etapas, setEtapas] = useState([]);
+    const { etapaDetails, setEtapaDetails } = useFormContext();
+
     const [form] = useForm();
   
     const addEtapa = () => {
@@ -27,7 +29,7 @@ const EtapaForm = () => {
                     ...values,
                 }
     
-                setEtapas([...etapas, novaEtapa]);
+                setEtapaDetails([...etapaDetails, novaEtapa]);
     
                 form.resetFields();
             }
@@ -79,8 +81,8 @@ const EtapaForm = () => {
                     Adicionar etapa
                 </Button>
 
-                {etapas.length > 0 && (
-                    <EtapaList etapas={etapas}/>
+                {etapaDetails.length > 0 && (
+                    <EtapaList etapas={etapaDetails}/>
                 )}
             </div>
         </div>
