@@ -52,12 +52,12 @@ const EtapaForm = () => {
         setEtapaDetails(novasEtapas);
     };
 
-    const onDeleteEtapaItem = (record) => {
+    const deleteEtapa = (record) => {
         const novaListaEtapas = etapaDetails.filter(etapa => etapa !== record);
         setEtapaDetails(novaListaEtapas);
     };
 
-    const onSetFieldsEtapaForm = (record, index) => {
+    const setFieldsEtapa = (record, index) => {
         form.setFields([
             { name: 'nome', value: record.nome },
             { name: 'descricao', value: record.descricao },
@@ -118,8 +118,8 @@ const EtapaForm = () => {
                 {etapaDetails.length > 0 && (
                     <EtapaList
                         etapas={etapaDetails}
-                        onSetFieldsEtapaForm={onSetFieldsEtapaForm}
-                        onDeleteEtapaItem={onDeleteEtapaItem}
+                        setFieldsEtapa={setFieldsEtapa}
+                        deleteEtapa={deleteEtapa}
                     />
                 )}
             </div>
