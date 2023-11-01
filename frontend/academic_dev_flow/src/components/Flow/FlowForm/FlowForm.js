@@ -12,8 +12,7 @@ const FlowForm = () => {
 
     const handleInputChange = () => {
         const values = form.getFieldValue();
-        
-    
+
         setFlowDetails({
             nome: values.nome,
             descricao: values.descricao
