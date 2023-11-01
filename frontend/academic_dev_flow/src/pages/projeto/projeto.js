@@ -62,6 +62,7 @@ const Projeto = () => {
       { name: 'data_inicio', value: moment(record.data_inicio)},
       { name: 'data_fim', value: moment(record.data_fim)}
     ]);
+    
     setActionForm('update')
     setId(record.id);
     enableDelete();
