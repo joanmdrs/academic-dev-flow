@@ -10,7 +10,7 @@ export const FormProvider = ({children}) => {
         descricao: "",
     });
 
-    const [etapaDetails, setEtapaDetails] = useState({});
+    const [etapaDetails, setEtapaDetails] = useState([]);
 
     return (
         <FormContext.Provider value={{ flowDetails, etapaDetails, setFlowDetails, setEtapaDetails }}>
