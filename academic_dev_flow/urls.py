@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from apps.projeto.views import *
 from apps.flow.views import *
+from apps.etapa.views import *
 
 
 urlpatterns = [
@@ -26,6 +27,9 @@ urlpatterns = [
     path('projetos/buscar/', BuscarProjetosPorNomeView.as_view(), name='buscar_projetos_por_nome'),
     path('projetos/<int:id>/excluir/', ExcluirProjetoView.as_view(), name='excluir_projeto'),
     path('projetos/<int:id>/atualizar/', AtualizarProjetoView.as_view(), name='atualizar_projeto'),
-    path('fluxos/cadastrar/', CadastrarFluxoView.as_view(), name='cadastrar_fluxo' )
+    path('fluxos/cadastrar/', CadastrarFluxoView.as_view(), name='cadastrar_fluxo' ),
+    path('etapas/cadastrar/', CadastrarEtapaView.as_view(), name='cadastrar_etapa'),
 ]
+
+
 
