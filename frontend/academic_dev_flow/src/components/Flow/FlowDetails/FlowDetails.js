@@ -7,8 +7,8 @@ const FlowDetails = () => {
 
     const {flowDetails} = useFormContext();
     const {etapaDetails} = useFormContext();
-    console.log("Fluxo", flowDetails);
-    console.log("Etapas: ", etapaDetails)
+
+    
     return (
         <div className="flow-details">
             <div className="flow-box">
