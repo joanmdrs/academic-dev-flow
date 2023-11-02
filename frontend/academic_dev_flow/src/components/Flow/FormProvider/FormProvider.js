@@ -12,8 +12,17 @@ export const FormProvider = ({children}) => {
 
     const [etapaDetails, setEtapaDetails] = useState([]);
 
+    
+
     return (
-        <FormContext.Provider value={{ flowDetails, etapaDetails, setFlowDetails, setEtapaDetails }}>
+        <FormContext.Provider 
+            value={{ 
+                flowDetails, 
+                etapaDetails, 
+                setFlowDetails, 
+                setEtapaDetails
+            }}
+        >
           {children}
         </FormContext.Provider>
     )

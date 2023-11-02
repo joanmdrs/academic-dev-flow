@@ -7,7 +7,8 @@ const FlowDetails = () => {
 
     const {flowDetails} = useFormContext();
     const {etapaDetails} = useFormContext();
-
+    console.log("Fluxo", flowDetails);
+    console.log("Etapas: ", etapaDetails)
     return (
         <div className="flow-details">
             <div className="flow-box">
@@ -20,7 +21,7 @@ const FlowDetails = () => {
             </div>
             <div className="etapa-box">
                 <h4>Etapas do fluxo</h4>
-                <EtapaList etapas={etapaDetails}/>
+                <EtapaList etapas={etapaDetails} />
             </div>
         </div>
     )

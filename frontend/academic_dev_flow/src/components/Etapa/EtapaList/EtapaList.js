@@ -4,7 +4,7 @@ import "./EtapaList.css";
 import { AiFillEdit } from "react-icons/ai";
 import { IoMdTrash } from "react-icons/io";
 
-const EtapaList = ({etapas, setFieldsEtapa, deleteEtapa }) => {
+const EtapaList = ({etapas, updateEtapa, deleteEtapa }) => {
 
     return (
         <div className="list-etapa">
@@ -17,7 +17,7 @@ const EtapaList = ({etapas, setFieldsEtapa, deleteEtapa }) => {
                         actions={
                             [ 
                                 <Button onClick={ () => {
-                                    setFieldsEtapa(item, index)
+                                    updateEtapa(item, index)
                                 }}> 
                                     <AiFillEdit />
                                 </Button>, 

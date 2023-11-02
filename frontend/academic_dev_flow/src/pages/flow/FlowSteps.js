@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./FlowSteps.css";
 import { Button, Steps} from 'antd';
 import FlowForm from "../../components/Flow/FlowForm/FlowForm";
-import EtapaForm from "../../components/Etapa/EtapaForm/EtapaForm";
+import EtapaStep from "../../components/Etapa/EtapaStep/EtapaStep";
 import FlowDetails from "../../components/Flow/FlowDetails/FlowDetails";
 import { FormProvider } from "../../components/Flow/FormProvider/FormProvider";
 
@@ -19,7 +19,7 @@ const FlowSteps = () => {
         {
             title: "Etapas",
             content: (
-                <EtapaForm />
+                <EtapaStep />
             )
         },
         

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./EtapaForm.css";
+import "./EtapaStep.css";
 import { useForm } from "antd/es/form/Form";
 import { Form, Input, Select, Button } from "antd";
 import { PlusOutlined } from '@ant-design/icons';
@@ -14,7 +14,7 @@ const STATUS_CHOICES = [
     { value: 'Concluída', label: 'Concluída' },
 ];
 
-const EtapaForm = () => {
+const EtapaStep = () => {
 
     const [form] = useForm();
     const { etapaDetails, setEtapaDetails } = useFormContext();
@@ -118,7 +118,7 @@ const EtapaForm = () => {
                 {etapaDetails.length > 0 && (
                     <EtapaList
                         etapas={etapaDetails}
-                        setFieldsEtapa={setFieldsEtapa}
+                        updateEtapa={setFieldsEtapa}
                         deleteEtapa={deleteEtapa}
                     />
                 )}
@@ -127,4 +127,4 @@ const EtapaForm = () => {
     );
 };
 
-export default EtapaForm;
+export default EtapaStep;
