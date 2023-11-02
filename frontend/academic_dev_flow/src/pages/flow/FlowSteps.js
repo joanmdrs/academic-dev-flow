@@ -5,7 +5,7 @@ import FlowForm from "../../components/Flow/FlowForm/FlowForm";
 import EtapaStep from "../../components/Etapa/EtapaStep/EtapaStep";
 import FlowDetails from "../../components/Flow/FlowDetails/FlowDetails";
 import { FormProvider } from "../../components/Flow/FormProvider/FormProvider";
-
+import ButtonSaveFlow from "../../components/Flow/ButtonSaveFlow/ButtonSaveFlow";
 const FlowSteps = () => {
 
     const steps = [
@@ -31,6 +31,7 @@ const FlowSteps = () => {
         }
     ]
 
+
     const [current, setCurrent] = useState(0);
 
     const next = () => {
@@ -45,13 +46,20 @@ const FlowSteps = () => {
         key: item.title,
         title: item.title,
     }));
+   
+    const saveFlow = (fluxo, etapas) => {
+        console.log(fluxo)
+    }
 
     return (
         <FormProvider>
-       
+
             <div className="steps">
-                <Steps current={current} items={items} className="fluxo" />
-                <div className="content-step">{steps[current].content}</div>
+                <Steps current={current} items={items} className="fluxo"/>
+                <div className="content-step">
+                    {steps[current].content}
+                </div>
+
                 <div className="steps-buttons">
                     {current < steps.length - 1 && (
                     <Button type="primary" onClick={() => next()}>
@@ -59,9 +67,7 @@ const FlowSteps = () => {
                     </Button>
                     )}
                     {current === steps.length - 1 && (
-                    <Button type="primary" onClick={() => console.log('Processing complete!')}>
-                        Finalizar
-                    </Button>
+                        <ButtonSaveFlow saveFlow={saveFlow}/>
                     )}
                     {current > 0 && (
                     <Button
