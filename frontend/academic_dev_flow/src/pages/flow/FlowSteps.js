@@ -6,6 +6,8 @@ import EtapaStep from "../../components/Etapa/EtapaStep/EtapaStep";
 import FlowDetails from "../../components/Flow/FlowDetails/FlowDetails";
 import { FormProvider } from "../../components/Flow/FormProvider/FormProvider";
 import ButtonSaveFlow from "../../components/Flow/ButtonSaveFlow/ButtonSaveFlow";
+import { criar_etapas } from "../../services/etapa_service";
+
 const FlowSteps = () => {
 
     const steps = [
@@ -48,14 +50,17 @@ const FlowSteps = () => {
     }));
    
     const saveFlow = (fluxo, etapas) => {
-        console.log(fluxo)
+        console.log(etapas)
+        criar_etapas(etapas)
     }
 
     return (
         <FormProvider>
 
             <div className="steps">
+
                 <Steps current={current} items={items} className="fluxo"/>
+
                 <div className="content-step">
                     {steps[current].content}
                 </div>
