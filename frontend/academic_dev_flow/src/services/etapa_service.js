@@ -1,6 +1,6 @@
 import api from "./api";
 
-export const criar_etapas = (etapas, flow_id) => {
+export const cadastrar_etapas = (etapas, flow_id) => {
 
     for (const etapa of etapas) {
         let data = {
