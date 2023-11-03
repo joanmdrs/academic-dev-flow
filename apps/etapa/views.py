@@ -4,12 +4,13 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.http import JsonResponse
 from .models import Etapa
+from apps.flow.models import Flow
 from .serializers import EtapaSerializer
 
 class CadastrarEtapaView(APIView):
     def post(self, request):
         data = request.data
-        flow_id = data.get('flow_id')  
+        flow_id = data.get('flow')  
         flow = Flow.objects.get(pk=flow_id)  
 
         etapa_data = {
@@ -18,8 +19,10 @@ class CadastrarEtapaView(APIView):
             'data_inicio': data['data_inicio'],
             'data_fim': data['data_fim'],
             'status': data['status'],
-            'flow': flow  
+            'flow': flow_id  
         }
+        
+        print(etapa_data)
 
         serializer = EtapaSerializer(data=etapa_data)
         if(serializer.is_valid(raise_exception=True)):
