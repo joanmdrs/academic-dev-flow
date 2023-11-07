@@ -3,7 +3,7 @@ import "./TemplateFlow.css";
 import { Button } from "antd";
 import {MdAdd} from 'react-icons/md';
 
-const TemplateFlow = () => {
+const TemplateFlow = ({fluxos}) => {
 
     const handleGoBack = () => {
         window.location.href = '/fluxos/novo';
@@ -17,6 +17,22 @@ const TemplateFlow = () => {
                 </Button>
                 <h4>Novo Fluxo</h4>
             </div>
+
+            
+            { fluxos.length > 0 && (
+                
+                <div className="flow-list">
+                    {fluxos.map((fluxo, index) => (
+                        <div className="flow-item"> {fluxo.nome}</div>
+                        
+                    ))}
+                </div>      
+            )}
+            
+
+          
+
+            
         </div>
     )
 }
