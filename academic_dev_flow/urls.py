@@ -28,6 +28,7 @@ urlpatterns = [
     path('projetos/<int:id>/excluir/', ExcluirProjetoView.as_view(), name='excluir_projeto'),
     path('projetos/<int:id>/atualizar/', AtualizarProjetoView.as_view(), name='atualizar_projeto'),
     path('fluxos/cadastrar/', CadastrarFluxoView.as_view(), name='cadastrar_fluxo' ),
+    path('fluxos/buscar/', BuscarFluxoView.as_view(), name='buscar_fluxo'),
     path('etapas/cadastrar/', CadastrarEtapaView.as_view(), name='cadastrar_etapa'),
 ]
 
