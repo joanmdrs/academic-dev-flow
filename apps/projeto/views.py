@@ -6,7 +6,6 @@ from .models import Projeto
 from .serializers import ProjetoSerializer
 from django.shortcuts import get_object_or_404
 
-
 class CadastrarProjetoView(APIView):
     def post(self, request):
         serializer = ProjetoSerializer(data=request.data)
