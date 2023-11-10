@@ -132,7 +132,7 @@ Este documento descreve os User Stories criados a partir da Lista de Requisitos 
 
 ### User Story US04 - Manter Cronograma/Plano de Iteração
 
- > **Descrição:** O sistema deve possuir um módulo que o usuário **Professor/Aluno** tenha permissão para: cadastrar um cronograma para o projeto que está trabalhando, assim como realizar mudanças no cronograma e excluir caso seja necessário. Para realizar o cadastro de um cronograma é necessário que já exista um projeto, os membros do projeto, assim como o fluxo de desenvolvimento a ser seguido. Dessa forma, ao cadastrar o cronograma, é possível definir as atividades e artefatos de cada etapa, os membros e suas funções. 
+ > **Descrição:** O sistema deve possuir um módulo que o usuário **Professor/Aluno** tenha permissão para: cadastrar um cronograma para o projeto que está trabalhando, assim como realizar mudanças no cronograma e excluir caso seja necessário. Para realizar o cadastro de um cronograma é necessário que já exista um projeto, os membros do projeto, assim como o fluxo de desenvolvimento a ser seguido. Dessa forma, ao cadastrar o cronograma, é possível definir as atividades e artefatos de cada etapa, os membros e suas funções.  
 
 |   #  | Requisitos Envolvidos |
 |------|------------------------
@@ -164,5 +164,58 @@ Este documento descreve os User Stories criados a partir da Lista de Requisitos 
 | **TA04.05**     | Excluir um cronograma. | 1. O usuário clica na opção cronograma no menu lateral esquerdo. | Se o cronograma já estiver criado, o sistema deve mostrar o cronograma em modo de visualização. Caso contrário deve ser exibido o formulário de cadastro do cronograma.  | 
 |                 |                        | 2. O usuário clica no ícone de Lixeira localizado na parte superior direita da tela. | Se o cronograma já estiver em andamento, o sistema deve impedir a exclusão do cronograma e informar que não é possível a exclusão devido o mesmo já está em andamento. Além disso, na mensagem deve constar uma orientação informando que para excluir o cronograma, é necessário atualizar as datas do cronograma, e o mesmo não deve conter tarefas vinculadas a ele. |
 
+### User Story US07 - Manter Membro
 
+ > **Descrição:** O sistema deve possuir uma área de membros que permita o **Professor** cadastrar os membros dos projetos. Além da permissão de realizar o cadastro, o sistema permitir realizar a alteração, a busca, a listagem e exclusão de membros. 
+>
+>
+> 
+|   #  | Requisitos Envolvidos |
+|------|------------------------
+| RF07 | Manter Membros
 
+|                           |              |
+| ------------------------- | -------------|
+| **Prioridade**            | Essencial    |
+| **Estimativa**            |              |
+| **Tempo Gasto (real):**   |              |
+| **Tamanho Funcional**     |              |
+| **Analista**              | Joan         |
+| **Desenvolvedor**         | Joan         |
+| **Revisor**               | Joan         |
+| **Testador**              | Joan         |
+
+**Testes de Aceitação (TA)**
+
+| **ID do Teste** | **Descrição** | **Critérios de Aceitação** | **Resultado Esperado** |
+|-----------------|---------------|----------------------------|------------------------|
+| **TA07.01**     | Cadastrar um membro no sistema. Cenário em que o usuário fornece os dados corretamente. | 1. O usuário clica na opção Área de Membros no menu lateral esquerdo. | O sistema deve redirecionar o usuário para uma página, onde é permitido, buscar, cadastrar, listar e excluir um membro. |
+|                 |               | 2. O usuário clica no ícone de adição. | O sistema deve exibir um formulário para cadastro de um membro. | 
+|                 |               | 3. O usuário preenche todos os campos de modo correto e clica no botão Salvar. | O sistema salva as informações no banco de dados, exibe uma mensagem de confirmação para o usuário e realiza um reload na página. |
+| **TA07.02**     | Cadastrar um membro no sistema. Cenário em que o usuário fornece os dados incorretamento. | 1. O usuário clica na opção Área de Membros no menu lateral esquerdo. | O sistema deve redirecionar o usuário para uma página, onde é permitido, buscar, cadastrar, listar e excluir um membro. |
+|                 |               | 2. O usuário clica no ícone de adição. | O sistema deve exibir um formulário para cadastro de um membro. | 
+|                 |               | 3. O usuário não preenche um dos campos, ou informa um valor em um formato diferente do esperado. | O sistema deve notificar o usuário que algo deu errado e destacar os campos que estão com problema. |
+| **TA07.03**     | Buscar um membro no sistema. Cenário em que as informações passadas pelo usuário existem na base de dados. | 1. O usuário clica no botão com o nome "BUSCAR MEMBRO" dentro da Área de Membros. | O sistema deve exibir um Modal com um campo de nome e outro de cpf para buscar o membro. |
+|                 |               | 2. O usuário passa as informações e clica em OK. | O sistema deve chamar a função de busca e consultar se existe um ou mais usuários que correspondem com aquelas informações. Caso existam, o sistema deve retornar estas informações para o frontend, o qual deve exibir para o usuário em formato de lista. |
+| **TA07.04**     | Buscar um membro no sistema. Cenário em que as informações passadas pelo usuário não existem na base de dados. | 1. O usuário clica no botão com o nome "BUSCAR MEMBRO" dentro da Área de Membros. | O sistema deve exibir um Modal com um campo de nome e outro de cpf para buscar o membro. |
+|                 |               | 2. O usuário passa as informações e clica em OK. | O sistema deve chamar a função de busca e consultar se existe um ou mais usuários que correspondem com aquelas informações. Caso não existam, o sistema deve informar que não existem membros que correspondem as informações passadas.
+| **TA07.05**     | Buscar um membro no sistema. Cenário em que o usuário não preenche as informações de busca. | 1. O usuário clica no botão com o nome "BUSCAR MEMBRO" dentro da Área de Membros. | O sistema deve exibir um Modal com um campo de nome e outro de cpf para buscar o membro. | 
+|                 |               | 2. O usuário não preenche as informações e clica em OK. | O sistema deve informar ao usuário que ele deve preencher as informações de busca. | 
+| **TA07.06**     | Editar as informações de um membro. Cenário em que o usuário realiza o processo corretamente. | 1. O usuário clica no botão com o nome "BUSCAR MEMBRO" dentro da Área de Membros. | O sistema deve exibir um Modal com um campo de nome e outro de cpf para buscar o membro. |
+|                 |               | 2. O usuário passa as informações e clica em OK. | O sistema deve chamar a função de busca e consultar se existe um ou mais usuários que correspondem com aquelas informações. Caso existam, o sistema deve retornar estas informações para o frontend, o qual deve exibir para o usuário em formato de lista. | 
+|                 |               | 3. O usuário seleciona na lista exibida qual o membro que ele deseja alterar. | O sistema deve preencher os campos do formulário de Membro com as informações do membro selecionado. | 
+|                 |               | 4. O usuário altera as informações necessárias de maneira correta e clica em Salvar. | O sistema altera as informações na base de dados e notifica ao usuário que a alteração foi feita com sucesso. |
+| **TA07.07**     | Editar as informações de um membro. Cenário em que o usuário realiza o processo incorretamente. | 1. O usuário clica no botão com o nome "BUSCAR MEMBRO" dentro da Área de Membros. | O sistema deve exibir um Modal com um campo de nome e outro de cpf para buscar o membro. |
+|                 |               | 2. O usuário passa as informações e clica em OK. | O sistema deve chamar a função de busca e consultar se existe um ou mais usuários que correspondem com aquelas informações. Caso existam, o sistema deve retornar estas informações para o frontend, o qual deve exibir para o usuário em formato de lista. | 
+|                 |               | 3. O usuário seleciona na lista exibida qual o membro que ele deseja alterar. | O sistema deve preencher os campos do formulário de Membro com as informações do membro selecionado. | 
+|                 |               | 4. O usuário apaga algumas das informações ou altera um campo com um valor de formato incorreto. | O sistema informa que algo deu errado e destaca os campos com problema. |
+| **TA07.08**     | Excluir um membro. Cenário em que o membro está vinculado a um projeto. | 1. O usuário clica no botão com o nome "BUSCAR MEMBRO" dentro da Área de Membros. | O sistema deve exibir um Modal com um campo de nome e outro de cpf para buscar o membro. |
+|                 |               | 2. O usuário passa as informações e clica em OK. | O sistema deve chamar a função de busca e consultar se existe um ou mais usuários que correspondem com aquelas informações. Caso existam, o sistema deve retornar estas informações para o frontend, o qual deve exibir para o usuário em formato de lista. | 
+|                 |               | 3. O usuário seleciona na lista exibida qual o membro que ele deseja excluir. | O sistema deve preencher os campos do formulário de Membro com as informações do membro selecionado. | 
+|                 |               | 4. O usuário clica no botão com ícone de Lixeira. | O sistema deve informar que o membro está vinculado há um projeto e o mesmo não poderá ser excluído. No entanto, deve informar que o mesmo poderá ser inativado e portanto não poderá vinculado a outros projetos, além de não conseguir manipular o sistema. O sistema deve perguntar se o usuário deseja realizar a inativação. Caso o usuário responda que sim, o sistema inativa altera o status de membro de "Ativo" para "Suspenso". |
+| **TA07.09**     | Excluir um membro. Cenário em que o membro não está vinculado a um projeto. | 1. O usuário clica no botão com o nome "BUSCAR MEMBRO" dentro da Área de Membros. | O sistema deve exibir um Modal com um campo de nome e outro de cpf para buscar o membro. |
+|                 |               | 2. O usuário passa as informações e clica em OK. | O sistema deve chamar a função de busca e consultar se existe um ou mais usuários que correspondem com aquelas informações. Caso existam, o sistema deve retornar estas informações para o frontend, o qual deve exibir para o usuário em formato de lista. | 
+|                 |               | 3. O usuário seleciona na lista exibida qual o membro que ele deseja excluir. | O sistema deve preencher os campos do formulário de Membro com as informações do membro selecionado. | 
+|                 |               | 4. O usuário clica no botão com ícone de Lixeira. | O sistema pergunta se o usuário deseja realmente excluir aquele membro. Caso haja a confirmação, o sistema exclui o membro da base de dados e confirma para o usuário a realização da operação. |
+| **TA07.10**     | Listar membros. | 1. O usuário clica na opção de listagem de membros. | O sistema redireciona o usuário para uma página de relatórios. Nesta página o usuário tem a opção de listar por projeto. |
+|                 |               | 2. O usuário informa o projeto que deseja realizar a listagem dos membros. | O sistema deve exibir uma lista de todos os membros vinculados a aquele projeto. |
