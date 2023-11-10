@@ -130,8 +130,39 @@ Este documento descreve os User Stories criados a partir da Lista de Requisitos 
 | **TA03.10**     | Buscar um fluxo de desenvolvimento. Cenário em que não existe um fluxo de desenvolvimento cujo nome corresponde a string de busca passada pelo usuário. | 1. O usuário clica na botão de busca "BUSCAR FLUXO DE DESENVOLVIMENTO". | O sistema exibe um Modal com um campo de busca para o usuário informar a string de busca. |
 |                 |                | 2. O usuário preenche o campo de busca e clica no botão de OK. | O sistema deve informar ao usuário que não foram encontrados resultados para sua busca. |
 
+### User Story US04 - Manter Cronograma/Plano de Iteração
 
+ > **Descrição:** O sistema deve possuir um módulo que o usuário **Professor/Aluno** tenha permissão para: cadastrar um cronograma para o projeto que está trabalhando, assim como realizar mudanças no cronograma e excluir caso seja necessário. Para realizar o cadastro de um cronograma é necessário que já exista um projeto, os membros do projeto, assim como o fluxo de desenvolvimento a ser seguido. Dessa forma, ao cadastrar o cronograma, é possível definir as atividades e artefatos de cada etapa, os membros e suas funções. 
 
+|   #  | Requisitos Envolvidos |
+|------|------------------------
+| RF04 | Manter Cronograma/Plano de Iterações
+
+|                           |              |
+| ------------------------- | -------------|
+| **Prioridade**            | Essencial    |
+| **Estimativa**            |              |
+| **Tempo Gasto (real):**   |              |
+| **Tamanho Funcional**     |              |
+| **Analista**              | Joan         |
+| **Desenvolvedor**         | Joan         |
+| **Revisor**               | Joan         |
+| **Testador**              | Joan         |
+
+**Testes de Aceitação (TA)**
+
+| **ID do Teste** | **Descrição** | **Critérios de Aceitação** | **Resultado Esperado** |
+|-----------------|---------------|----------------------------|------------------------|
+| **TA04.01**     | Criar o cronograma do projeto. Cenário em que o usuário faz tudo corretamente. | 1. O usuário clica na opção cronograma no menu lateral esquerdo. | O sistema deve redirecionar o usuário para uma tela de cadastro para criação do cronograma. |
+|                 |               | 2. O usuário preeche os campos corretamente e clica no botão Salvar. | O sistema deve salvar as informações fornecidas pelo usuário, exibir uma mensagem de confirmação pe depois exibir o cronograma do projeto no modo visualização. |
+| **TA04.02**     | Criar o cronograma do projeto. Cenário em que o usuário não preenche os campos de forma correta. | 1. O usuário clica na opção cronograma no menu lateral esquerdo. | O sistema deve redirecionar o usuário para uma tela de cadastro para criação do cronograma. | 
+|                 |                | 2. O usuário esquece um campo obrigatório ou coloca um valor diferente do esperado pelo campo, e clica no botão de salvar. | O sistema deve exibir uma mensagem de atenção, além de destacar os campos incorretos. |
+| **TA04.03**     | Visualizar o cronograma do projeto. | 1. O usuário clica na opção cronograma no menu lateral esquerdo. | Se o cronograma já estiver criado, o sistema deve mostrar o cronograma em modo de visualização. Caso contrário deve ser exibido o formulário de cadastro do cronograma.  | 
+| **TA04.04**     | Editar o cronograma do projeto. Cenário em que o cronograma já foi criado. | 1. O usuário clica na opção cronograma no menu lateral esquerdo. |  O sistema deve mostrar o cronograma em modo de visualização. | 
+|                 |                | 2. O usuário seleciona a iteração que ele deseja alterar e clica no botão de caneta ao lado do nome da iteração. | O sistema deve exibir as informações da iteração no formulário de cadastro da iteração. | 
+|                 |                | 3. O usuário altera as informações que deseja e clica no botão de salvar. | Caso o usuário tenha preenchido as informações corretamente, o sistema altera as informações da iteração e retorna para a parte de visualização do cronograma com os dados atualizados. Caso contrário, se o usuário preencher os dados incorretamente, o sistema deve exibir uma mensagem de atenção e informar os campos incorretos. | 
+| **TA04.05**     | Excluir um cronograma. | 1. O usuário clica na opção cronograma no menu lateral esquerdo. | Se o cronograma já estiver criado, o sistema deve mostrar o cronograma em modo de visualização. Caso contrário deve ser exibido o formulário de cadastro do cronograma.  | 
+|                 |                        | 2. O usuário clica no ícone de Lixeira localizado na parte superior direita da tela. | Se o cronograma já estiver em andamento, o sistema deve impedir a exclusão do cronograma e informar que não é possível a exclusão devido o mesmo já está em andamento. Além disso, na mensagem deve constar uma orientação informando que para excluir o cronograma, é necessário atualizar as datas do cronograma, e o mesmo não deve conter tarefas vinculadas a ele. |
 
 
 
