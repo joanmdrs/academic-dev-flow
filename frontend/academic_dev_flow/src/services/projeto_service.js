@@ -23,7 +23,7 @@ export const buscar_projetos_pelo_nome = async (query) => {
 
 export const excluir_projeto = (id) => {
     try {
-        const response = api.delete(`/projetos/${encodeURIComponent(id)}/excluir`);
+        const response = api.delete(`/projetos/${encodeURIComponent(id)}/excluir/`);
         return response;
     } catch (error) {
         console.log("Erro ao excluir o projeto", error)
@@ -32,7 +32,7 @@ export const excluir_projeto = (id) => {
 
 export const atualizar_projeto = (id, data) => {
     try {
-        const response = api.put(`/projetos/${encodeURIComponent(id)}/atualizar`, data);
+        const response = api.patch(`/projetos/${encodeURIComponent(id)}/atualizar/`, data);
         return response
     } catch (error) {
         console.log('Erro ao atualizar o projeto', error)
