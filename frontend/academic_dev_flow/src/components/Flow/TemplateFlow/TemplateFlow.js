@@ -2,6 +2,7 @@ import React from "react";
 import "./TemplateFlow.css";
 import { Button } from "antd";
 import {MdAdd} from 'react-icons/md';
+import {FcFolder} from 'react-icons/fc';
 
 const TemplateFlow = ({fluxos}) => {
 
@@ -23,7 +24,12 @@ const TemplateFlow = ({fluxos}) => {
                 
                 <div className="flow-list">
                     {fluxos.map((fluxo, index) => (
-                        <div className="flow-item"> {fluxo.nome}</div>
+                        <div className="flow-item"> 
+                            <Button>
+                                <FcFolder className="icon-folder"/>
+                            </Button>
+                            <h4>{fluxo.nome}</h4>
+                        </div>
                         
                     ))}
                 </div>      
