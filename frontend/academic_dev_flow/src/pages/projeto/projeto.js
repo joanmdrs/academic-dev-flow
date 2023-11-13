@@ -48,6 +48,7 @@ const Projeto = () => {
 
   const showModal = () => {
     setModalVisible(true);
+    setFormVisible(true);
   };
 
   const handleCancel = () => {
@@ -110,8 +111,8 @@ const Projeto = () => {
   return (
     <div>
       <Title 
-        title="Cadastrar projeto" 
-        paragraph="Projetos > Cadastrar projetos"
+        title="Projetos" 
+        paragraph="Projetos > Gerenciar projetos"
       />
 
       <div className='add-and-delete'>
