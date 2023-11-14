@@ -2,13 +2,15 @@ import React from "react";
 import "./TemplateFlow.css";
 import { Button } from "antd";
 import {MdAdd} from 'react-icons/md';
-import {FcFolder} from 'react-icons/fc';
+import {BsFolder2} from 'react-icons/bs';
+import { Link } from "react-router-dom";
 
 const TemplateFlow = ({fluxos}) => {
 
     const handleGoBack = () => {
         window.location.href = '/fluxos/novo';
     };
+
     return (
 
         <div className="templates">
@@ -26,7 +28,10 @@ const TemplateFlow = ({fluxos}) => {
                     {fluxos.map((fluxo, index) => (
                         <div className="flow-item"> 
                             <Button>
-                                <FcFolder className="icon-folder"/>
+                                <Link to={`/fluxos/visualizar/${fluxo.id}`}>
+                                    <BsFolder2 className="icon-folder"/>
+                                </Link>
+                                
                             </Button>
                             <h4>{fluxo.nome}</h4>
                         </div>
