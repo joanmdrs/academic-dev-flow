@@ -17,3 +17,13 @@ export const buscar_fluxo = async (query) => {
         console.log("Erro ao buscar dados:", error);
     }
 }
+
+export const buscar_fluxo_pelo_id =  async (flow_id) => {
+    try {
+        const response = await api.get(`fluxos/buscar/${encodeURIComponent(flow_id)}/`)
+        return response;
+    } catch (error) {
+        console.log("Erro ao buscar dados:", error)
+        
+    }
+}
