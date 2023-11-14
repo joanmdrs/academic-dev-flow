@@ -29,6 +29,7 @@ urlpatterns = [
     path('projetos/<int:id>/atualizar/', AtualizarProjetoView.as_view(), name='atualizar_projeto'),
     path('fluxos/cadastrar/', CadastrarFluxoView.as_view(), name='cadastrar_fluxo' ),
     path('fluxos/buscar/', BuscarFluxoView.as_view(), name='buscar_fluxo'),
+    path('fluxos/buscar/<int:flow_id>/', BuscarFluxoPeloIdView.as_view(), name='buscar_fluxo_pelo_id'),
     path('etapas/cadastrar/', CadastrarEtapaView.as_view(), name='cadastrar_etapa'),
 ]
 
