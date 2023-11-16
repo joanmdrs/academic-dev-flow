@@ -3,18 +3,23 @@ import "./ViewFlow.css";
 import { useParams } from 'react-router-dom';
 import { buscar_fluxo_pelo_id } from "../../../services/flow_service";
 import { Descriptions, Spin } from "antd";
+import { buscar_etapas_por_id_fluxo } from "../../../services/etapa_service";
 
 const ViewFlow = () => {
     const { id } = useParams();
     const [fluxo, setFluxo] = useState({});
+    const {etapas, setEtapas} = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         const handleFluxoPeloId = async () => {
             try {
-                const response = await buscar_fluxo_pelo_id(id);
-                setFluxo(response.data);
+                const fluxos = await buscar_fluxo_pelo_id(id);
+                const etapas = await buscar_etapas_por_id_fluxo(id);
+
+                setFluxo(fluxos.data);
+                setEtapas(etapas.data);
             } catch (error) {
                 setError(error.message || 'Ocorreu um erro ao buscar o fluxo.');
             } finally {
