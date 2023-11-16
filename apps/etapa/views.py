@@ -37,7 +37,7 @@ class BuscarEtapaPorIdFluxoView(APIView):
         parametro = request.GET.get('flow_id', None)
         
         if parametro is not None:
-            etapas = Etapa.objects.filter(nome__icontains=parametro)
+            etapas = Etapa.objects.filter(flow=parametro)
             
         else:
             etapas = None
