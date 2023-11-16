@@ -15,11 +15,14 @@ const ViewFlow = () => {
     useEffect(() => {
         const handleFluxoPeloId = async () => {
             try {
-                const fluxos = await buscar_fluxo_pelo_id(id);
-                const etapas = await buscar_etapas_por_id_fluxo(id);
+                const dados_fluxos = await buscar_fluxo_pelo_id(id);
+                const dados_etapas = await buscar_etapas_por_id_fluxo(id);
 
-                setFluxo(fluxos.data);
-                setEtapas(etapas.data);
+                setFluxo(dados_fluxos.data);
+                setEtapas(dados_etapas.data);
+
+                console.log(etapas)
+                
             } catch (error) {
                 setError(error.message || 'Ocorreu um erro ao buscar o fluxo.');
             } finally {
@@ -48,12 +51,16 @@ const ViewFlow = () => {
 
     return (
         <div className="view-flow-content">
-            <Descriptions title="Detalhes do fluxo">
-                <Descriptions.Item label="Nome do fluxo">{fluxo.nome}</Descriptions.Item>
-                <Descriptions.Item label="Descrição">{fluxo.descricao}</Descriptions.Item>
-            </Descriptions>
 
-            
+            <div className="flow-details">
+                <Descriptions title="Detalhes do fluxo">
+                    <Descriptions.Item label="Nome do fluxo">{fluxo.nome}</Descriptions.Item>
+                    <Descriptions.Item label="Descrição">{fluxo.descricao}</Descriptions.Item>
+                </Descriptions>
+            </div>
+            <div className="etapa-details">
+
+            </div>
 
         </div>
     );
