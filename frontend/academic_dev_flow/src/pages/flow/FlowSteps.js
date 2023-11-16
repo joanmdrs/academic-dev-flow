@@ -6,8 +6,9 @@ import EtapaStep from "../../components/Etapa/EtapaStep/EtapaStep";
 import FlowDetails from "../../components/Flow/FlowDetails/FlowDetails";
 import { FormProvider } from "../../components/Flow/FormProvider/FormProvider";
 import ButtonSaveFlow from "../../components/Flow/ButtonSaveFlow/ButtonSaveFlow";
-import { cadastrar_etapas, criar_etapas } from "../../services/etapa_service";
+import { cadastrar_etapas} from "../../services/etapa_service";
 import { cadastrar_fluxo } from "../../services/flow_service";
+import { NotificationContainer, NotificationManager } from "react-notifications";
 
 const FlowSteps = () => {
 
@@ -52,25 +53,39 @@ const FlowSteps = () => {
    
     const saveFlow = async (fluxo, etapas) => {
 
-        
-        if (fluxo !== undefined) {
-           let response_flow = await cadastrar_fluxo(fluxo);
-           console.log(response_flow.data)
-
-           if (response_flow.statusText === 'OK') {
-                
-                if (etapas !== undefined) {
-                    let response_etapa = await cadastrar_etapas(etapas, response_flow.data.id);
-                    console.log(response_etapa)
+        try {
+            if (!fluxo) {
+                console.log("Dados inválidos !");
+                return;
+            }
+    
+            const response_flow = await cadastrar_fluxo(fluxo)
+            console.log(response_flow.data);
+    
+            if (response_flow.status === 200) {
+                if (etapas) {
+                    try {
+                        await cadastrar_etapas(etapas, response_flow.data.id);
+            
+                        NotificationManager.success('Fluxo criado com sucesso!');
+                        setTimeout(() => {
+                            document.location.reload();
+                        }, 2000);
+                    } catch (error) {
+                        
+                        console.log("Algo deu errado ao cadastrar etapas!", error);
+                        NotificationManager.error('Algo deu errado ao cadastrar etapas!');
+                    }
                 } else {
-                    console.log("Impossível criar as etapas, chame a função de deletar o fluxo")
+                    console.log("Impossível criar as etapas, chame a função de deletar o fluxo");
                 }
-           } else {
-                
-                console.log("Deu errado !")
-           }
-        } else {
-            console.log("Dados inválidos !");
+            } else {
+                console.log("Deu errado ao cadastrar o fluxo!");
+                NotificationManager.error('Algo deu errado ao cadastrar o fluxo!');
+            }
+            
+        } catch (error) {
+            console.error("Ocorreu um erro:", error);
         }
     }
 
@@ -106,6 +121,7 @@ const FlowSteps = () => {
                     )}
                 </div>
             </div>
+            <NotificationContainer />
         </FormProvider>
     );
 
