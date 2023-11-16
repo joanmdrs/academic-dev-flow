@@ -32,3 +32,17 @@ class CadastrarEtapaView(APIView):
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class BuscarEtapaPorIdFluxoView(APIView):
+    def get(self, request):
+        parametro = request.GET.get('flow_id', None)
+        
+        if parametro is not None:
+            etapas = Etapa.objects.filter(nome__icontains=parametro)
+            
+        else:
+            etapas = None
+            
+        serializer = EtapaSerializer(etapas, many=True)
+        
+        return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+            
