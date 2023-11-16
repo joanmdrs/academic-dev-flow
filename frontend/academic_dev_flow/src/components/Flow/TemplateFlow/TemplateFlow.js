@@ -27,7 +27,7 @@ const TemplateFlow = ({fluxos}) => {
                 <div className="flow-list">
                     {fluxos.map((fluxo, index) => (
                         <div className="flow-item"> 
-                            <Button>
+                            <Button key={index}>
                                 <Link to={`/fluxos/visualizar/${fluxo.id}`}>
                                     <BsFolder2 className="icon-folder"/>
                                 </Link>
@@ -38,12 +38,7 @@ const TemplateFlow = ({fluxos}) => {
                         
                     ))}
                 </div>      
-            )}
-            
-
-          
-
-            
+            )}          
         </div>
     )
 }
