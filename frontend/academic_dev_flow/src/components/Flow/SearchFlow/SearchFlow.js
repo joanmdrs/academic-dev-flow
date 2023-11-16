@@ -9,7 +9,7 @@ const SearchFlow = ({buscar_fluxos}) => {
 
     const handleQueryChange = (event) => {
         setQuery(event.target.value);
-        console.log(query)
+        
     };
 
     return (

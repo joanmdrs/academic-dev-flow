@@ -21,7 +21,7 @@ const ViewFlow = () => {
                 setFluxo(dados_fluxos.data);
                 setEtapas(dados_etapas.data);
 
-                console.log(etapas)
+                
                 
             } catch (error) {
                 setError(error.message || 'Ocorreu um erro ao buscar o fluxo.');

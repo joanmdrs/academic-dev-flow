@@ -11,7 +11,6 @@ class CadastrarEtapaView(APIView):
     def post(self, request):
         data = request.data
         flow_id = data.get('flow')
-        print("Estou exibindo aqui:", flow_id)
 
         flow = Flow.objects.get(pk=flow_id)  
 

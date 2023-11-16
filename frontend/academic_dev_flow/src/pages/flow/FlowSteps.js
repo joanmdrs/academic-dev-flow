@@ -60,7 +60,6 @@ const FlowSteps = () => {
             }
     
             const response_flow = await cadastrar_fluxo(fluxo)
-            console.log(response_flow.data);
     
             if (response_flow.status === 200) {
                 if (etapas) {
