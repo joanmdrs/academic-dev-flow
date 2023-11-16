@@ -21,3 +21,14 @@ export const cadastrar_etapas = (etapas, flow_id) => {
 
     }
 }
+
+export const buscar_etapas_por_id_fluxo = async (flow_id) => {
+
+    try {
+        const response = await api.get(`etapas/buscar/?flow_id=${encodeURIComponent(flow_id)}`);
+        return response; 
+    } catch (error) {
+        console.log("Erro ao buscar dados: ", error);
+    }
+
+}
