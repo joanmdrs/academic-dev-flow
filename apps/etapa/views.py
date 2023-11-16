@@ -10,27 +10,24 @@ from .serializers import EtapaSerializer
 class CadastrarEtapaView(APIView):
     def post(self, request):
         data = request.data
-        flow_id = data.get('flow')  
+        flow_id = data.get('flow')
+        print("Estou exibindo aqui:", flow_id)
+
         flow = Flow.objects.get(pk=flow_id)  
 
-        etapa_data = {
-            'nome': data['nome'],
-            'descricao': data['descricao'],
-            'data_inicio': data['data_inicio'],
-            'data_fim': data['data_fim'],
-            'status': data['status'],
-            'flow': flow_id  
-        }
-        
-        print(etapa_data)
+        etapas_data = data.get('etapas', [])  # Obtém a lista de etapas do payload
 
-        serializer = EtapaSerializer(data=etapa_data)
-        if(serializer.is_valid(raise_exception=True)):
-            serializer.save()
-           
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        etapas_cadastradas = []  # Lista para armazenar as etapas cadastradas
+
+        for etapa_data in etapas_data:
+            etapa_data['flow'] = flow_id  # Adiciona o ID do fluxo a cada etapa
+            serializer = EtapaSerializer(data=etapa_data)
+            
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                etapas_cadastradas.append(serializer.data)
+
+        return Response(etapas_cadastradas, status=status.HTTP_201_CREATED)
 
 class BuscarEtapaPorIdFluxoView(APIView):
     def get(self, request):

@@ -1,24 +1,17 @@
 import api from "./api";
 
-export const cadastrar_etapas = (etapas, flow_id) => {
+export const cadastrar_etapas = async (etapas, flow_id) => {
 
-    for (const etapa of etapas) {
-        let data = {
-            nome: etapa.nome, 
-            descricao: etapa.descricao,
-            data_inicio: etapa.data_inicio,
-            data_fim: etapa.data_fim,
-            status: etapa.status,
-            flow: flow_id
-        }
+    let data = {
+        etapas: etapas,
+        flow: flow_id
+    }
+    try {
+        const response = await api.post('etapas/cadastrar/', data);
+        return response; 
 
-        try {
-            let response = api.post("/etapas/cadastrar/", data)
-            return response
-        } catch (error) {
-            console.log("Algo deu errado !", error);
-        }
-
+    } catch (error) {
+        console.error('Erro ao cadastrar etapas:', error);
     }
 }
 
