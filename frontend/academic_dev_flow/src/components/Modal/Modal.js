@@ -5,7 +5,7 @@ import { buscar_projetos_pelo_nome } from "../../services/projeto_service";
 
 const { Item } = Form;
 
-const ModalSearch = ({title, open, label, name, onCancel, handleRowClick}) => {
+const ModalSearch = ({open, title, label, name, onCancel, onOk, handleRowClick}, ) => {
 
 
     const [form] = Form.useForm();
@@ -63,8 +63,11 @@ const ModalSearch = ({title, open, label, name, onCancel, handleRowClick}) => {
                 setData([])
             }}
             onOk={async () => {
-                const response = await buscar_projetos_pelo_nome(query)
-                setData(response.data)
+                const response = await onOk(query)
+
+                if(response !== undefined) {
+                    setData(response.data)
+                }
             }}
         >
             <Form form={form} layout="vertical">

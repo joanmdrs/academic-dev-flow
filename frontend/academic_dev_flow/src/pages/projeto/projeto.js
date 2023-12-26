@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import moment from 'moment'
 import './projeto.css';
 import 'react-notifications/lib/notifications.css';
-import {atualizar_projeto, criar_projeto, excluir_projeto} from '../../services/projeto_service';
+import {atualizar_projeto, buscar_projetos_pelo_nome, criar_projeto, excluir_projeto} from '../../services/projeto_service';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { Form, Input, Select, DatePicker, Button } from 'antd';
 import Title from '../../components/Title/Title';
@@ -96,6 +96,7 @@ const Projeto = () => {
     
   };
 
+
   const handleDelete = () => {
     excluir_projeto(id).then(() => {
       NotificationManager.success('Projeto excluído com sucesso!');
@@ -106,6 +107,11 @@ const Projeto = () => {
       console.log("Algo deu errado !", error);
       NotificationManager.error('Algo deu errado!');
     });
+  }
+
+  const handleOk = (query) => {
+    const response = buscar_projetos_pelo_nome(query)
+    return response; 
   }
 
   return (
@@ -126,6 +132,7 @@ const Projeto = () => {
         title="Buscar projeto" 
         open={modalVisible} 
         onCancel={handleCancel}
+        onOk={handleOk}
         handleRowClick={handleRowClick} 
         label="Nome do projeto"
         name="name-projeto"
