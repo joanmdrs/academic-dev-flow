@@ -1,18 +1,18 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes as Switch, Route, BrowserRouter, Link } from 'react-router-dom';
-
-// Importe os componentes para cada rota
-//import Home from './components/Home';
-//import FormPage from './components/FormPage';
-//import NotFound from './components/NotFound';
-import MyForm from './pages/projeto';
+import { BrowserRouter, Routes as Switch, Route} from 'react-router-dom';
+import Projeto from './pages/projeto/projeto';
+import Flow from './pages/flow/flow';
+import FlowSteps from './pages/flow/FlowSteps';
+import ViewFlow from './components/Flow/ViewFlow/ViewFlow';
 
 function Routes() {
   return (
     <BrowserRouter>
-       
         <Switch>
-            <Route Component={MyForm} path='/projetos' exact/>
+            <Route Component={Projeto} path='/projetos' exact/>
+            <Route Component={Flow} path='/fluxos' exact/>
+            <Route Component={FlowSteps} path='/fluxos/novo' exact/>
+            <Route Component={ViewFlow} path='fluxos/visualizar/:id' exact/>
         </Switch>
         
     </BrowserRouter>

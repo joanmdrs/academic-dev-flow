@@ -3,5 +3,5 @@ from .models import Etapa
 
 class EtapaSerializer(serializers.ModelSerializer):
     class Meta: 
-        model = Projeto
+        model = Etapa
         fields = '__all__'

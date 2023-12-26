@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import moment from 'moment'
-import './styles.css';
+import './projeto.css';
 import 'react-notifications/lib/notifications.css';
 import {atualizar_projeto, criar_projeto, excluir_projeto} from '../../services/projeto_service';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
@@ -20,7 +20,7 @@ const STATUS_CHOICES = [
   { value: 'concluido', label: 'Concluído' },
 ];
 
-const MyForm = () => {
+const Projeto = () => {
   const initialValues = {
     nome: '',
     descricao: '',
@@ -48,6 +48,7 @@ const MyForm = () => {
 
   const showModal = () => {
     setModalVisible(true);
+    setFormVisible(true);
   };
 
   const handleCancel = () => {
@@ -62,6 +63,7 @@ const MyForm = () => {
       { name: 'data_inicio', value: moment(record.data_inicio)},
       { name: 'data_fim', value: moment(record.data_fim)}
     ]);
+    
     setActionForm('update')
     setId(record.id);
     enableDelete();
@@ -109,8 +111,8 @@ const MyForm = () => {
   return (
     <div>
       <Title 
-        title="Cadastrar projeto" 
-        paragraph="Projetos > Cadastrar projetos"
+        title="Projetos" 
+        paragraph="Projetos > Gerenciar projetos"
       />
 
       <div className='add-and-delete'>
@@ -209,4 +211,4 @@ const MyForm = () => {
   );
 };
 
-export default MyForm;
+export default Projeto;

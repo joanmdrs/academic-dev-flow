@@ -1,0 +1,32 @@
+.view-flow-content {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto
+}
+
+.spin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+    margin: 0 auto;
+}
+
+.spin-content {
+    padding: 50px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+}
+
+.flow-content {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+.etapa-content {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
