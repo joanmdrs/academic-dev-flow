@@ -4,7 +4,7 @@ import {FiMenu} from 'react-icons/fi';
 import {CgMenuGridO} from 'react-icons/cg';
 import logo_ufrn from "../../assets/logo-ufrn.png"
 
-const Header = () => {
+const MyHeader = () => {
   return (
     <div className="header">
       <div className="logo">
@@ -24,4 +24,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default MyHeader;
