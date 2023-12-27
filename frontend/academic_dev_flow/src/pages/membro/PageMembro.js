@@ -4,6 +4,8 @@ import Title from "../../components/Title/Title";
 import Search from "../../components/Search/Search";
 import ModalSearch from "../../components/Modal/Modal";
 import FormMembro from "../../components/Membro/FormMembro/FormMembro";
+import Add from "../../components/Buttons/Add/Add";
+import Delete from "../../components/Buttons/Delete/Delete";
 
 const PaginaMembro = () => {
 
@@ -28,6 +30,11 @@ const PaginaMembro = () => {
                 title='Membros'
                 paragraph='Membros > Gerenciar membros'
             />
+
+            <div className='add-and-delete'>
+                <Add onClick={ () => {setFormVisible(true)}} />
+                <Delete />
+            </div>
 
             <Search name="BUSCAR MEMBRO" onClick={showModal} />
 
