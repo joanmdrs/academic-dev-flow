@@ -2,8 +2,7 @@ import './App.css';
 import './App.css';
 import Routes from './routes';
 import Header from './components/Header/Header';
-import Menu from './components/Menu/Menu';
-
+import MyMenu from './components/Menu/Menu';
 
 function App() {
   return (
@@ -11,7 +10,7 @@ function App() {
       <div>
         <Header />
         <div className="content">
-          <Menu />
+          <MyMenu />
           <Routes />
         </div>
 
