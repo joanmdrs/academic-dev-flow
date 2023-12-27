@@ -12,16 +12,19 @@ const MyMenu = () => {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
-      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+      <Sider width={250} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
 
         <div className="demo-logo-vertical">
-          AcademicDevFlow
+          Academic Dev Flow
         </div>
 
         <Menu 
           theme="dark" 
           mode="inline" 
           defaultSelectedKeys={['projeto']}
+          style={{
+            marginTop: "20px"
+          }}
         >
           <Menu.Item key="projeto" icon={<HiOutlineClipboardList style={{ fontSize: '20px' }} />}>
             <a href="/projetos">Projeto</a>
