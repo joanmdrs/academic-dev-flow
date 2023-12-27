@@ -5,6 +5,7 @@ import Flow from './pages/flow/flow';
 import FlowSteps from './pages/flow/FlowSteps';
 import ViewFlow from './components/Flow/ViewFlow/ViewFlow';
 import PaginaMembro from './pages/membro/PageMembro';
+import FormMembro from './components/Membro/FormMembro/FormMembro';
 
 function Routes() {
   return (
@@ -14,7 +15,8 @@ function Routes() {
             <Route Component={Flow} path='/fluxos' exact/>
             <Route Component={FlowSteps} path='/fluxos/novo' exact/>
             <Route Component={ViewFlow} path='fluxos/visualizar/:id' exact/>
-            <Route Component={PaginaMembro} path='/membros' exact/>
+            <Route Component={FormMembro} path='/membros' exact/>
+        
         </Switch>
         
     </BrowserRouter>
