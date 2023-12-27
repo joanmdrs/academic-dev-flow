@@ -34,14 +34,18 @@ const MyMenu = () => {
             <a href="/fluxos">Fluxos</a>
           </Menu.Item>
 
-          <SubMenu key="membros" icon={<BiGroup style={{ fontSize: '20px' }} />} title="Membros">
+          <Menu.Item key="fluxos" icon={<BiGroup style={{ fontSize: '20px' }} />}>
+            <a href="/membros">Membros</a>
+          </Menu.Item>
+
+          {/* <SubMenu key="membros" icon={<BiGroup style={{ fontSize: '20px' }} />} title="Membros">
             <Menu.Item key="submenu-item-1">
               <a href="/membros/alunos">Alunos</a>
             </Menu.Item>
             <Menu.Item key="submenu-item-2">
               <a href="/membros/professores">Professores</a>
             </Menu.Item>
-          </SubMenu>
+          </SubMenu> */}
         </Menu>
       </Sider>
   );

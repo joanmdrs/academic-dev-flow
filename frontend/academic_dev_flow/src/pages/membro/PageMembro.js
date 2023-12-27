@@ -3,10 +3,12 @@ import "./PageMembro.css";
 import Title from "../../components/Title/Title";
 import Search from "../../components/Search/Search";
 import ModalSearch from "../../components/Modal/Modal";
+import FormMembro from "../../components/Membro/FormMembro/FormMembro";
 
 const PaginaMembro = () => {
 
     const [modalVisible, setModalVisible] = useState(false);
+    const [formVisible, setFormVisible] = useState(true);
 
     const showModal = () => {
         setModalVisible(true);
@@ -37,6 +39,8 @@ const PaginaMembro = () => {
                 onOk={handleOk}
                 open={modalVisible}
             />
+
+            {formVisible && <FormMembro />}
 
 
         </div>

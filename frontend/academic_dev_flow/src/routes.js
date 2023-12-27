@@ -15,7 +15,7 @@ function Routes() {
             <Route Component={Flow} path='/fluxos' exact/>
             <Route Component={FlowSteps} path='/fluxos/novo' exact/>
             <Route Component={ViewFlow} path='fluxos/visualizar/:id' exact/>
-            <Route Component={FormMembro} path='/membros' exact/>
+            <Route Component={PaginaMembro} path='/membros' exact/>
         
         </Switch>
         

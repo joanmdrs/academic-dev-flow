@@ -1,4 +1,4 @@
-import { Form, Input, Select, DatePicker, Button } from 'antd';
+import { Form, Input, Select, DatePicker, Button, Radio } from 'antd';
 import React, { useState } from "react";
 import "./FormMembro.css";
 
@@ -65,7 +65,7 @@ const FormMembro = () => {
             </Form.Item>
 
             <Form.Item 
-                label="sexo" 
+                label="Sexo" 
                 name="sexo" 
                 rules={[{ required: true, message: 'Por favor, selecione o sexo!' }]}
             >
@@ -93,6 +93,17 @@ const FormMembro = () => {
                 ]}
             >
                 <Input />
+            </Form.Item>
+
+            <Form.Item 
+                name="grupo"
+                label="Grupo"
+                rules={[{ required: true, message: 'Por favor, informe o grupo do membro!'}]}>
+
+                <Radio.Group>
+                    <Radio value="aluno"> Aluno </Radio>
+                    <Radio value="professor"> Professor </Radio>
+                </Radio.Group>
             </Form.Item>
 
             <Form.Item>
