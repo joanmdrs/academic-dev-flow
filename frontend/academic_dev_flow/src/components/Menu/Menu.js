@@ -1,35 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
+import './Menu.css';
 import { Menu } from 'antd';
 import {HiOutlineClipboardList} from "react-icons/hi"
 import {DiScrum} from "react-icons/di"
 import { BiGroup } from "react-icons/bi";
-import './Menu.css';
-
+import Sider from 'antd/es/layout/Sider';
 const { SubMenu } = Menu;
 
 const MyMenu = () => {
+
+  const [collapsed, setCollapsed] = useState(false);
+
   return (
-    <Menu theme="dark" mode="inline" defaultSelectedKeys={['projeto']}>
+      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
 
-      <Menu.Item key="projeto" icon={<HiOutlineClipboardList style={{ fontSize: '20px' }} />}>
-        <a href="/projetos">Projeto</a>
-      </Menu.Item>
+        <div className="demo-logo-vertical">
+          AcademicDevFlow
+        </div>
 
-      <Menu.Item key="fluxos" icon={<DiScrum style={{ fontSize: '25px' }} />}>
-        <a href="/fluxos">Fluxos</a>
-      </Menu.Item>
+        <Menu 
+          theme="dark" 
+          mode="inline" 
+          defaultSelectedKeys={['projeto']}
+        >
+          <Menu.Item key="projeto" icon={<HiOutlineClipboardList style={{ fontSize: '20px' }} />}>
+            <a href="/projetos">Projeto</a>
+          </Menu.Item>
 
-      <SubMenu key="membros" icon={<BiGroup style={{ fontSize: '20px' }} />} title="Membros">
-        <Menu.Item key="submenu-item-1">
-          <a href="/membros/submenu-item-1">Submenu Item 1</a>
-        </Menu.Item>
-        <Menu.Item key="submenu-item-2">
-          <a href="/membros/submenu-item-2">Submenu Item 2</a>
-        </Menu.Item>
-        {/* Adicione mais itens de submenu conforme necessário */}
-      </SubMenu>
+          <Menu.Item key="fluxos" icon={<DiScrum style={{ fontSize: '25px' }} />}>
+            <a href="/fluxos">Fluxos</a>
+          </Menu.Item>
 
-    </Menu>
+          <SubMenu key="membros" icon={<BiGroup style={{ fontSize: '20px' }} />} title="Membros">
+            <Menu.Item key="submenu-item-1">
+              <a href="/membros/alunos">Alunos</a>
+            </Menu.Item>
+            <Menu.Item key="submenu-item-2">
+              <a href="/membros/professores">Professores</a>
+            </Menu.Item>
+          </SubMenu>
+        </Menu>
+      </Sider>
   );
 };
 
