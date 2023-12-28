@@ -27,7 +27,7 @@ const MyMenu = () => {
           }}
         >
           <Menu.Item key="projeto" icon={<HiOutlineClipboardList style={{ fontSize: '20px' }} />}>
-            <a href="/projetos">Projeto</a>
+            <a href="/projetos">Projetos</a>
           </Menu.Item>
 
           <Menu.Item key="fluxos" icon={<DiScrum style={{ fontSize: '25px' }} />}>
