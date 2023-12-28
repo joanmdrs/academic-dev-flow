@@ -13,4 +13,6 @@ class Membro(models.Model):
     sexo = models.CharField(max_length=20, choices=STATUS_CHOICES)
     telefone = models.CharField(max_length=11)
     email = models.EmailField(max_length=200)
+    usuario = models.OneToOneField('Usuario', on_delete=models.CASCADE, related_name='membro', null=True, blank=True)
+
     
