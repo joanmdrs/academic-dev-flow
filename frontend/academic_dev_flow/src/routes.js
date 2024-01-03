@@ -5,7 +5,6 @@ import Flow from './pages/flow/flow';
 import FlowSteps from './pages/flow/FlowSteps';
 import ViewFlow from './components/Flow/ViewFlow/ViewFlow';
 import PaginaMembro from './pages/membro/PageMembro';
-import FormMembro from './components/Membro/FormMembro/FormMembro';
 
 function Routes() {
   return (

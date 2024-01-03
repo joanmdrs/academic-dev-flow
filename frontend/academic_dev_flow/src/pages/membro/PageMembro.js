@@ -3,9 +3,10 @@ import "./PageMembro.css";
 import Title from "../../components/Title/Title";
 import Search from "../../components/Search/Search";
 import ModalSearch from "../../components/Modal/Modal";
-import FormMembro from "../../components/Membro/FormMembro/FormMembro";
 import Add from "../../components/Buttons/Add/Add";
 import Delete from "../../components/Buttons/Delete/Delete";
+import FormMembro from "./FormMembro";
+
 
 const PaginaMembro = () => {
 

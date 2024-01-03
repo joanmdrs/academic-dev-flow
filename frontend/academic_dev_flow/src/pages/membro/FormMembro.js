@@ -7,6 +7,8 @@ const { TabPane } = Tabs;
 
 const FormMembro = () => {
 
+    // Constantes
+
     const initialValues = {
         nome: '',
         cpf: '',
@@ -22,6 +24,9 @@ const FormMembro = () => {
     const [formValues, setFormValues] = useState(initialValues);
     const [form] = Form.useForm();
 
+    // Funções de chamada
+
+    
       
     return (
         <Tabs defaultActiveKey="1" tabPosition={'left'}>
