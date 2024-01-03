@@ -7,7 +7,7 @@ from .models import Usuario
 from .serializers import UsuarioSerializer
 from django.shortcuts import get_object_or_404
 
-class CadastrarUsuarioVie(APIView):
+class CadastrarUsuarioView(APIView):
     def post(self, request):
         serializer = UsuarioSerializer(data=request.data)
         
