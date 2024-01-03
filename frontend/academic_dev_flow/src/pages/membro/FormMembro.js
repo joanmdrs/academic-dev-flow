@@ -1,6 +1,7 @@
 import { Form, Input, Select, DatePicker, Button, Radio, Tabs } from 'antd';
 import React, { useState } from "react";
 import "./FormMembro.css";
+import { criarMembro } from '../../services/membro_service';
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -21,10 +22,15 @@ const FormMembro = () => {
         grupo: ''
     };
     
-    const [formValues, setFormValues] = useState(initialValues);
     const [form] = Form.useForm();
 
     // Funções de chamada
+
+    const handleSubmit = async () => {
+
+        const dados_form = form.getFieldsValue();
+        await criarMembro(dados_form)
+    }
 
     
       
@@ -48,7 +54,6 @@ const FormMembro = () => {
                     <Form.Item 
                         label="Nome" 
                         name="nome"
-                        value={formValues.nome}
                         rules={[{ required: true, message: 'Por favor, insira o nome!' }]}
                     >
                         <Input/>
@@ -57,7 +62,6 @@ const FormMembro = () => {
                     <Form.Item 
                         label="CPF" 
                         name="cpf"
-                        value={formValues.cpf}
                         rules={[{ required: true, message: 'Por favor, insira o CPF!' }]}
                     >
                         <Input/>
@@ -65,12 +69,11 @@ const FormMembro = () => {
 
                     <Form.Item 
                         label="Data de Nascimento" 
-                        name="data-nascimento"
+                        name="data_nascimento"
                         rules={[{ required: true, message: 'Por favor, selecione a data de nascimento!' }]}
                     >
                         <DatePicker 
-                            format="DD/MM/YYYY" 
-                            value={formValues.data_nascimento}
+                            format="DD/MM/YYYY"
                         />
                     </Form.Item>
 
@@ -79,7 +82,7 @@ const FormMembro = () => {
                         name="sexo"
                         rules={[{ required: true, message: 'Por favor, selecione o sexo!' }]}
                     >
-                        <Select placeholder="Selecione o sexo" value={formValues.sexo}>
+                        <Select placeholder="Selecione o sexo">
                             <Option value="masculino">Masculino</Option>
                             <Option value="feminino">Feminino</Option>
                             <Option value="nao_informardo">Não informar</Option>
@@ -106,7 +109,6 @@ const FormMembro = () => {
                     <Form.Item
                         name="telefone"
                         label="Telefone"
-                        value={formValues.telefone}
                         rules={[{ required: true, message: 'Por favor, insira o telefone!' }]}
                     >
                         <Input />
@@ -115,7 +117,6 @@ const FormMembro = () => {
                     <Form.Item
                         name="email"
                         label="Email"
-                        value={formValues.email}
                         rules={[
                         { required: true, message: 'Por favor, insira o email!' },
                         { type: 'email', message: 'Por favor, insira um email válido!' },
@@ -142,18 +143,17 @@ const FormMembro = () => {
                     }}
                     
                 >
-                    <Form.Item name="usuario" label="Usuário" value={formValues.usuario}>
+                    <Form.Item name="usuario" label="Usuário">
                         <Input />
                     </Form.Item>
 
-                    <Form.Item name="senha" label="Senha" value={formValues.senha}>
+                    <Form.Item name="senha" label="Senha">
                         <Input />
                     </Form.Item>
 
                     <Form.Item 
                         name="grupo"
                         label="Grupo"
-                        value={formValues.grupo}
                         rules={[{ required: true, message: 'Por favor, informe o grupo do membro!'}]}
                     >
 
@@ -164,8 +164,11 @@ const FormMembro = () => {
                     </Form.Item>
 
                     <Form.Item>
-                        <Button type="primary" htmlType="submit">
-                        Salvar
+                        <Button 
+                            type="primary" 
+                            htmlType="submit" 
+                            onClick={ async () => await handleSubmit()}>
+                            Salvar
                         </Button>
                     </Form.Item> 
                 </Form>

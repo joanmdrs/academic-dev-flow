@@ -69,6 +69,7 @@ const Projeto = () => {
     enableDelete();
     handleCancel();
   }
+  
 
   const handleSubmit = (values) => {
 

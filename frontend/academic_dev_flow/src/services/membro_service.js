@@ -1,9 +1,19 @@
 import api from "./api"
 
-export const criarMembro = async (data) => {
+export const criarMembro = async (dados) => {
+
+    const dados_membro = {
+        nome: dados.nome,
+        cpf: dados.cpf,
+        data_nascimento: (dados.data_nascimento).format("YYYY-MM-DD"),
+        sexo: dados.sexo,
+        telefone: dados.telefone,
+        email: dados.email
+    }
+
     try {
-        let response = await api.post('membro/cadastrar/', {body: data})
-        return response
+        let resposta = await api.post('/membro/cadastrar/', dados_membro)
+        return resposta
         
     } catch (error) {
         console.error('Erro ao criar um membro:', error)
@@ -13,8 +23,8 @@ export const criarMembro = async (data) => {
 
 export const buscarMembroPeloNome = async (query) => {
     try {
-        let response = await api.get(`membro/buscar/?name=${encodeURIComponent(query)}`)
-        return response 
+        let resposta = await api.get(`membro/buscar/?name=${encodeURIComponent(query)}`)
+        return resposta 
 
     } catch (error) {
         console.error('Erro ao buscar o membro pelo nome:', error)
@@ -24,8 +34,8 @@ export const buscarMembroPeloNome = async (query) => {
 
 export const excluirMembro = async (id) => {
     try {
-        let response = await api.delete(`membro/excluir/${encodeURIComponent(id)}`)
-        return response
+        let resposta = await api.delete(`membro/excluir/${encodeURIComponent(id)}`)
+        return resposta
     } catch (error) {
         console.error('Erro ao excluir o membro', error)
         throw new Error('Falha ao excluir um membro. Por favor, tente novamente.')
@@ -34,8 +44,8 @@ export const excluirMembro = async (id) => {
 
 export const atualizarMembro = async (id, data) => {
     try {
-        let response = await api.patch(`membro/atualizar/${encodeURIComponent(id)}`, {body: data})
-        return response
+        let resposta = await api.patch(`membro/atualizar/${encodeURIComponent(id)}`, {body: data})
+        return resposta
     } catch (error) {
         console.error('Erro ao atualizar o membro', error)
         throw new Error('Falha ao atualizar um membro. Por favor, tente novamente.')
