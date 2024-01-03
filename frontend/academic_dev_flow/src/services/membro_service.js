@@ -32,9 +32,9 @@ export const excluirMembro = async (id) => {
     }
 }
 
-export const atualizarMembro = async (id) => {
+export const atualizarMembro = async (id, data) => {
     try {
-        let response = await api.patch(`membro/atualizar/${encodeURIComponent(id)}`)
+        let response = await api.patch(`membro/atualizar/${encodeURIComponent(id)}`, {body: data})
         return response
     } catch (error) {
         console.error('Erro ao atualizar o membro', error)
