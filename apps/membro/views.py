@@ -10,6 +10,8 @@ from django.shortcuts import get_object_or_404
 class CadastrarMembroView(APIView):
     def post(self, request):
         serializer = MembroSerializer(data=request.data)
+        
+        
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -27,7 +29,7 @@ class BuscarMembrosPorNomeView(APIView):
             
         serializer = MembroSerializer(membros, many=True)
         
-        return JsonResponse(serializar.data, safe=False, json_dumps_params={'ensure_ascii': False})
+        return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
     
 class ExcluirMembroView(APIView):
     def delete(self, request, id):
@@ -35,7 +37,7 @@ class ExcluirMembroView(APIView):
         
         if membro is not None:
             membro.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT);
+            return Response({"detail": "Membro excluído com sucesso"}, status=status.HTTP_204_NO_CONTENT);
     
         else:
             return JsonResponse({'error': 'Recurso não encontrado'}, status=404);

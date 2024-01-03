@@ -33,6 +33,7 @@ urlpatterns = [
     path('etapas/cadastrar/', CadastrarEtapaView.as_view(), name='cadastrar_etapa'),
     path('etapas/buscar/', BuscarEtapaPorIdFluxoView.as_view(), name='buscar_etapa_por_id_fluxo'),
     path('usuario/', include('apps.usuario.urls', namespace='usuario')),
+    path('membro/', include('apps.membro.urls', namespace='membro'))
 ]
 
 
