@@ -10,8 +10,7 @@ from django.shortcuts import get_object_or_404
 class CadastrarMembroView(APIView):
     def post(self, request):
         serializer = MembroSerializer(data=request.data)
-        
-        
+    
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)

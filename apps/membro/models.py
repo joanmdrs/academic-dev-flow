@@ -1,5 +1,4 @@
 from django.db import models
-from apps.usuario.models import Usuario
 
 class Membro(models.Model):
     
