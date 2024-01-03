@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views 
+from .views import *
 
 urlpatterns = [
     path('membros/cadastrar/', CadastrarMembroView.as_view(), name='cadastrar_membro'),
