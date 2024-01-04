@@ -1,28 +1,31 @@
-import React, { useState } from "react";
-import "./PaginaMembro.css";
-import Title from "../../components/Title/Title";
-import Search from "../../components/Search/Search";
-import ModalSearch from "../../components/Modal/Modal";
-import Add from "../../components/Buttons/Add/Add";
-import Delete from "../../components/Buttons/Delete/Delete";
-import { buscarMembroPeloNome, criarMembro } from "../../services/membro_service";
-import { Button, DatePicker, Form, Input, Radio, Select, Tabs } from "antd";
-import { buscarUsuarioPeloIdMembro, criarUsuario } from "../../services/usuario_service";
-import { NotificationManager } from "react-notifications";
+import React, { useState } from "react"
+import "./PaginaMembro.css"
+import Title from "../../components/Title/Title"
+import Search from "../../components/Search/Search"
+import ModalSearch from "../../components/Modal/Modal"
+import Add from "../../components/Buttons/Add/Add"
+import Delete from "../../components/Buttons/Delete/Delete"
+import { atualizarMembro, buscarMembroPeloNome, criarMembro } from "../../services/membro_service"
+import { Button, DatePicker, Form, Input, Radio, Select, Tabs } from "antd"
+import { atualizarUsuario, buscarUsuarioPeloIdMembro, criarUsuario } from "../../services/usuario_service"
+import { NotificationContainer, NotificationManager } from "react-notifications"
 import moment from 'moment'
-import 'moment/locale/pt-br';
-moment.locale('pt-br');
+import 'moment/locale/pt-br'
+moment.locale('pt-br')
 
-const { Option } = Select;
-const { TabPane } = Tabs;
+const { Option } = Select
+const { TabPane } = Tabs
 
 const PaginaMembro = () => {
 
     // Constantes 
 
-    const [form] = Form.useForm();
-    const [modalVisible, setModalVisible] = useState(false);
-    const [formVisible, setFormVisible] = useState(true);
+    const [form] = Form.useForm()
+    const [modalVisible, setModalVisible] = useState(false)
+    const [formVisible, setFormVisible] = useState(true)
+    const [actionForm, setActionForm] = useState('create')
+    const [id, setId] = useState("")
+
     const [valoresIniciais, setValoresIniciais] = useState({
         nome: "",
         cpf: "",
@@ -33,7 +36,7 @@ const PaginaMembro = () => {
         usuario: "",
         senha: "",
         grupo: "",
-      });
+    })
 
     const columns = [
         {
@@ -60,18 +63,17 @@ const PaginaMembro = () => {
             dataIndex: 'cpf',
             key: 'cpf',
         },
-    ];
+    ]
 
-
-    // Funções handle
+    // Funções de chamada
 
     const showModal = () => {
-        setModalVisible(true);
-    };
+        setModalVisible(true)
+    }
 
     const handleCancel = () => {
-        setModalVisible(false);
-    };
+        setModalVisible(false)
+    }
 
     const handleOk = async (dado) => {
         const resposta = await buscarMembroPeloNome(dado)
@@ -81,9 +83,7 @@ const PaginaMembro = () => {
     const handleRowClick = async (dados) => {
 
         const resposta = await buscarUsuarioPeloIdMembro(dados.id)
-        const dados_usuario = resposta.data
-        console.log(dados_usuario)
-        
+        const dados_usuario = resposta.data        
 
         form.setFields([
             { name: 'nome', value: dados.nome },
@@ -96,12 +96,13 @@ const PaginaMembro = () => {
             { name: 'senha', value: dados_usuario.senha },
             { name: 'grupo', value: dados_usuario.grupo}
         ])
+        setId(dados.id)
+        setActionForm('update')
+        handleCancel()
     }
 
-
-
-    const handleSubmit = async () => {
-        const dados_form = form.getFieldsValue();
+    const handleCreateMember = async () => {
+        const dados_form = form.getFieldsValue()
         const resposta_membro = await criarMembro(dados_form)
 
         if(resposta_membro.status === 200) {
@@ -109,7 +110,7 @@ const PaginaMembro = () => {
             const resposta_usuario = await criarUsuario(dados_form, resposta_membro.data.id)
 
             if(resposta_usuario.status === 200){
-                NotificationManager.success('Membro criado com sucesso!');
+                NotificationManager.success('Membro criado com sucesso!')
             } else {
                 NotificationManager.error('Ocorreu um problema, contate o suporte!')
                 // chamar a função de excluir membro
@@ -119,8 +120,35 @@ const PaginaMembro = () => {
         }
     }
 
+    const handleUpdateMember = async () => {
+        const dados_form = form.getFieldValue()
+        const resposta_membro = await atualizarMembro(dados_form, id)
+        
+        if (resposta_membro.status === 200) {
+            const resposta_usuario = await atualizarUsuario(dados_form, id)
+    
+            if (resposta_usuario.status === 200) {
+                NotificationManager.success('Informações atualizadas')
+            } else {
+                NotificationManager.error('Ocorreu um problema durante a operação, contate o suporte!')
+                // Lógica para reverter a atualização do membro se necessário
+            }
+        } else {
+            NotificationManager.error('Ocorreu um problema durante a operação, contate o suporte!')
+        }
+    }
+
+    const handleSubmit = async () => {
+        if (actionForm === 'create') {
+            await handleCreateMember()
+        } else if (actionForm === 'update') {
+            await handleUpdateMember()
+        }
+    }
+
     return (
         <div>
+           <NotificationContainer /> 
             <Title 
                 title='Membros'
                 paragraph='Membros > Gerenciar membros'
@@ -289,4 +317,4 @@ const PaginaMembro = () => {
     )
 }
 
-export default PaginaMembro;
+export default PaginaMembro

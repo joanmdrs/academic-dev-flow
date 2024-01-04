@@ -23,7 +23,7 @@ export const criarMembro = async (dados) => {
 
 export const buscarMembroPeloNome = async (dado) => {
     try {
-        let resposta = await api.get(`membro/buscar/?name=${encodeURIComponent(dado)}`)
+        let resposta = await api.get(`/membro/buscar/?name=${encodeURIComponent(dado)}`)
         return resposta 
 
     } catch (error) {
@@ -34,7 +34,7 @@ export const buscarMembroPeloNome = async (dado) => {
 
 export const excluirMembro = async (id) => {
     try {
-        let resposta = await api.delete(`membro/excluir/${encodeURIComponent(id)}`)
+        let resposta = await api.delete(`/membro/excluir/${encodeURIComponent(id)}`)
         return resposta
     } catch (error) {
         console.error('Erro ao excluir o membro', error)
@@ -42,9 +42,18 @@ export const excluirMembro = async (id) => {
     }
 }
 
-export const atualizarMembro = async (id, data) => {
+export const atualizarMembro = async (dados, id) => {
+    const dados_membro = {
+        nome: dados.nome,
+        cpf: dados.cpf,
+        data_nascimento: (dados.data_nascimento).format("YYYY-MM-DD"),
+        sexo: dados.sexo,
+        telefone: dados.telefone,
+        email: dados.email
+    }
+
     try {
-        let resposta = await api.patch(`membro/atualizar/${encodeURIComponent(id)}`, {body: data})
+        let resposta = await api.patch(`/membro/atualizar/${encodeURIComponent(id)}/`, dados_membro)
         return resposta
     } catch (error) {
         console.error('Erro ao atualizar o membro', error)

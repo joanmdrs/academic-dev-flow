@@ -53,7 +53,7 @@ class ExcluirUsuarioView(APIView):
     
 class AtualizarUsuarioView(APIView):
     def patch(self, request, id):
-        usuario = get_object_or_404(Usuario, id = id)
+        usuario = Usuario.objects.get(membro_id=id)
         
         if usuario is not None:
             serializer = UsuarioSerializer(usuario, data=request.data)

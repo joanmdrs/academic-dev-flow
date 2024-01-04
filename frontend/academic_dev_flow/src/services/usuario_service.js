@@ -6,7 +6,7 @@ export const criarUsuario = async (dados, id_membro) => {
         usuario : dados.usuario,
         senha : dados.senha, // Necessário encriptar a senha
         grupo: dados.grupo,
-        membro: id_membro
+        membro_id: id_membro
     }
     try {
         let response = await api.post('/usuario/cadastrar/', dados_usuario)
@@ -27,9 +27,15 @@ export const buscarUsuarioPeloIdMembro = async (id) => {
     }
 }
 
-export const atualizarUsuario = async (id, data) => {
+export const atualizarUsuario = async (dados, id_membro) => {
+
+    const dados_usuario = {
+        usuario : dados.usuario,
+        senha : dados.senha, // Necessário encriptar a senha
+        grupo: dados.grupo,
+    }
     try {
-        let response = await api.patch(`usuario/atualizar/${encodeURIComponent(id)}`, {body: data})
+        let response = await api.patch(`/usuario/atualizar/${encodeURIComponent(id_membro)}/`, dados_usuario)
         return response
     } catch (error) {
         console.error('Erro ao atualizar o usuário:', error)
