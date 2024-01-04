@@ -73,7 +73,7 @@ const ModalSearch = ({open, title, label, name, onCancel, onOk, handleRowClick},
             <Form form={form} layout="vertical">
                 <Item label={label} name={name} >
                     <Input
-                        name="nome_projeto"
+                        name={name}
                         placeholder={label}
                         value={query}
                         onChange={handleQueryChange}
