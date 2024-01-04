@@ -1,21 +1,93 @@
-import { Form, Input, Select, DatePicker, Button, Radio, Tabs } from 'antd';
-import React from "react";
-import "./FormMembro.css";
-import { criarMembro } from '../../services/membro_service';
-import { NotificationContainer, NotificationManager } from 'react-notifications';
-import 'react-notifications/lib/notifications.css';
-import { criarUsuario } from '../../services/usuario_service';
+import React, { useState } from "react";
+import "./PaginaMembro.css";
+import Title from "../../components/Title/Title";
+import Search from "../../components/Search/Search";
+import ModalSearch from "../../components/Modal/Modal";
+import Add from "../../components/Buttons/Add/Add";
+import Delete from "../../components/Buttons/Delete/Delete";
+import { buscarMembroPeloNome, criarMembro } from "../../services/membro_service";
+import { Button, DatePicker, Form, Input, Radio, Select, Tabs } from "antd";
+import { criarUsuario } from "../../services/usuario_service";
+import { NotificationManager } from "react-notifications";
+import moment from 'moment'
+import 'moment/locale/pt-br';
+moment.locale('pt-br');
 
 const { Option } = Select;
 const { TabPane } = Tabs;
 
-const FormMembro = ({valores_iniciais}) => {
+const PaginaMembro = () => {
 
-    // Constantes
-    
+    // Constantes 
+
     const [form] = Form.useForm();
+    const [modalVisible, setModalVisible] = useState(false);
+    const [formVisible, setFormVisible] = useState(true);
+    const [valoresIniciais, setValoresIniciais] = useState({
+        nome: "",
+        cpf: "",
+        data_nascimento: "",
+        sexo: "",
+        telefone: "",
+        email: "",
+        usuario: "",
+        senha: "",
+        grupo: "",
+      });
 
-    // Funções de chamada
+    const columns = [
+        {
+            title: 'Código',
+            key: 'codigo',
+            dataIndex: 'id', 
+        },
+        {
+            title: 'Nome',
+            dataIndex: 'nome',
+            key: 'nome',
+            render: (text, record) => (
+
+                <span
+                    style={{ color: 'blue', cursor: 'pointer'}}
+                    onClick={() => {handleRowClick(record)}}
+                >
+                    {text}
+                </span>
+            ),
+        },
+        {
+            title: 'CPF',
+            dataIndex: 'cpf',
+            key: 'cpf',
+        },
+    ];
+
+
+    // Funções handle
+
+    const showModal = () => {
+        setModalVisible(true);
+    };
+
+    const handleCancel = () => {
+        setModalVisible(false);
+    };
+
+    const handleOk = async (dado) => {
+        const resposta = await buscarMembroPeloNome(dado)
+        return resposta
+    }
+
+    const handleRowClick = (dados) => {
+        form.setFields([
+            { name: 'nome', value: dados.nome },
+            { name: 'cpf', value: dados.cpf },
+            { name: 'data_nascimento', value: moment(dados.data_nascimento)},
+            { name: 'sexo', value: dados.sexo },
+            { name: 'telefone', value: dados.telefone },
+            { name: 'email', value: dados.email },
+        ])
+    }
 
     const handleSubmit = async () => {
         const dados_form = form.getFieldsValue();
@@ -37,11 +109,31 @@ const FormMembro = ({valores_iniciais}) => {
     }
 
     return (
-
         <div>
+            <Title 
+                title='Membros'
+                paragraph='Membros > Gerenciar membros'
+            />
 
-            <NotificationContainer />
-            <Tabs defaultActiveKey="1" tabPosition={'left'}>
+            <div className='add-and-delete'>
+                <Add onClick={ () => {setFormVisible(true)}} />
+                <Delete />
+            </div>
+
+            <Search name="BUSCAR MEMBRO" onClick={showModal} />
+
+            <ModalSearch 
+                title="Buscar membro" 
+                label="Nome do membro"
+                name="name-membro"
+                onCancel={handleCancel}
+                onOk={handleOk}
+                open={modalVisible}
+                columns={columns}
+            />
+
+            {formVisible &&  (
+                <Tabs defaultActiveKey="1" tabPosition={'left'}>
                 <TabPane tab="Dados Pessoais" key="1">
                     <Form
                         form={form}
@@ -55,7 +147,7 @@ const FormMembro = ({valores_iniciais}) => {
                         style={{
                             maxWidth: 600,
                         }}
-                        initialValues={valores_iniciais}
+                        initialValues={valoresIniciais}
                     >
                         <Form.Item 
                             label="Nome" 
@@ -110,7 +202,7 @@ const FormMembro = ({valores_iniciais}) => {
                         style={{
                             maxWidth: 600,
                         }}
-                        initialValues={valores_iniciais}    
+                        initialValues={valoresIniciais}    
                     >
                         <Form.Item
                             name="telefone"
@@ -137,7 +229,7 @@ const FormMembro = ({valores_iniciais}) => {
                     <Form 
                         form={form}
                         className='form-membro'
-                        initialValues={valores_iniciais}
+                        initialValues={valoresIniciais}
                         labelCol={{
                             span: 10,
                         }}
@@ -181,10 +273,9 @@ const FormMembro = ({valores_iniciais}) => {
                 </TabPane>
             
             </Tabs>
+        )}
         </div>
-            
-       
-    );
+    )
 }
 
-export default FormMembro;
+export default PaginaMembro;

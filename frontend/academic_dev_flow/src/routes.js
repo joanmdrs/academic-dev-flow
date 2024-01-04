@@ -4,7 +4,7 @@ import Projeto from './pages/projeto/projeto';
 import Flow from './pages/flow/flow';
 import FlowSteps from './pages/flow/FlowSteps';
 import ViewFlow from './components/Flow/ViewFlow/ViewFlow';
-import PaginaMembro from './pages/membro/PageMembro';
+import PaginaMembro from './pages/membro/PaginaMembro';
 
 function Routes() {
   return (

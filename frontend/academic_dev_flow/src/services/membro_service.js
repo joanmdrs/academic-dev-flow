@@ -14,16 +14,16 @@ export const criarMembro = async (dados) => {
     try {
         let resposta = await api.post('/membro/cadastrar/', dados_membro)
         return resposta
-        
+
     } catch (error) {
         console.error('Erro ao criar um membro:', error)
         throw new Error('Falha ao criar um membro. Por favor, tente novamente.')   
     }
 }
 
-export const buscarMembroPeloNome = async (query) => {
+export const buscarMembroPeloNome = async (dado) => {
     try {
-        let resposta = await api.get(`membro/buscar/?name=${encodeURIComponent(query)}`)
+        let resposta = await api.get(`membro/buscar/?name=${encodeURIComponent(dado)}`)
         return resposta 
 
     } catch (error) {
