@@ -5,7 +5,7 @@ import Search from "../../components/Search/Search"
 import ModalSearch from "../../components/Modal/Modal"
 import Add from "../../components/Buttons/Add/Add"
 import Delete from "../../components/Buttons/Delete/Delete"
-import { atualizarMembro, buscarMembroPeloNome, criarMembro } from "../../services/membro_service"
+import { atualizarMembro, buscarMembroPeloNome, criarMembro, excluirMembro } from "../../services/membro_service"
 import { Button, DatePicker, Form, Input, Radio, Select, Tabs } from "antd"
 import { atualizarUsuario, buscarUsuarioPeloIdMembro, criarUsuario } from "../../services/usuario_service"
 import { NotificationContainer, NotificationManager } from "react-notifications"
@@ -146,6 +146,16 @@ const PaginaMembro = () => {
         }
     }
 
+    const handleDelete = async () => {
+        const resposta_membro = await excluirMembro(id)
+
+        if (resposta_membro.status === 204){
+            NotificationManager.success("Membro excluído com sucesso!")
+        } else {
+            NotificationManager.error("Falha na operação, contate o suporte!")
+        }
+    }
+
     return (
         <div>
            <NotificationContainer /> 
@@ -156,7 +166,7 @@ const PaginaMembro = () => {
 
             <div className='add-and-delete'>
                 <Add onClick={ () => {setFormVisible(true)}} />
-                <Delete />
+                <Delete handleDelete={handleDelete}/>
             </div>
 
             <Search name="BUSCAR MEMBRO" onClick={showModal} />

@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.http import HttpResponseNotAllowed, JsonResponse
 from .models import Membro
+from apps.usuario.models import Usuario
 from .serializers import MembroSerializer
 from django.shortcuts import get_object_or_404
 
@@ -38,8 +39,10 @@ class BuscarMembrosPorNomeView(APIView):
 class ExcluirMembroView(APIView):
     def delete(self, request, id):
         membro = get_object_or_404(Membro, id = id)
+        usuario = Usuario.objects.get(membro_id=id) 
         
-        if membro is not None:
+        if (membro is not None and usuario is not None):
+            usuario.delete()
             membro.delete()
             return Response({"detail": "Membro excluído com sucesso"}, status=status.HTTP_204_NO_CONTENT);
     

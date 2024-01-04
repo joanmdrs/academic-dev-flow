@@ -34,7 +34,7 @@ export const buscarMembroPeloNome = async (dado) => {
 
 export const excluirMembro = async (id) => {
     try {
-        let resposta = await api.delete(`/membro/excluir/${encodeURIComponent(id)}`)
+        let resposta = await api.delete(`/membro/excluir/${encodeURIComponent(id)}/`)
         return resposta
     } catch (error) {
         console.error('Erro ao excluir o membro', error)
