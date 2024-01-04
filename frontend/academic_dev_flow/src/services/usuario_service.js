@@ -1,8 +1,15 @@
 import api from "./api";
 
-export const criarUsuario = async (data) => {
+export const criarUsuario = async (dados, id_membro) => {
+
+    const dados_usuario = {
+        usuario : dados.usuario,
+        senha : dados.senha, // Necessário encriptar a senha
+        grupo: dados.grupo,
+        membro: id_membro
+    }
     try {
-        let response = await api.post('usuario/cadastrar/', {body: data})
+        let response = await api.post('usuario/cadastrar/', dados_usuario)
         return response
     } catch (error) {
         console.error('Erro ao cadastrar o usuário', error)
