@@ -9,7 +9,7 @@ export const criarUsuario = async (dados, id_membro) => {
         membro: id_membro
     }
     try {
-        let response = await api.post('usuario/cadastrar/', dados_usuario)
+        let response = await api.post('/usuario/cadastrar/', dados_usuario)
         return response
     } catch (error) {
         console.error('Erro ao cadastrar o usuário', error)
