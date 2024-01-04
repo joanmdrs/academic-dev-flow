@@ -7,7 +7,7 @@ import Add from "../../components/Buttons/Add/Add";
 import Delete from "../../components/Buttons/Delete/Delete";
 import { buscarMembroPeloNome, criarMembro } from "../../services/membro_service";
 import { Button, DatePicker, Form, Input, Radio, Select, Tabs } from "antd";
-import { criarUsuario } from "../../services/usuario_service";
+import { buscarUsuarioPeloIdMembro, criarUsuario } from "../../services/usuario_service";
 import { NotificationManager } from "react-notifications";
 import moment from 'moment'
 import 'moment/locale/pt-br';
@@ -78,7 +78,13 @@ const PaginaMembro = () => {
         return resposta
     }
 
-    const handleRowClick = (dados) => {
+    const handleRowClick = async (dados) => {
+
+        const resposta = await buscarUsuarioPeloIdMembro(dados.id)
+        const dados_usuario = resposta.data
+        console.log(dados_usuario)
+        
+
         form.setFields([
             { name: 'nome', value: dados.nome },
             { name: 'cpf', value: dados.cpf },
@@ -86,8 +92,13 @@ const PaginaMembro = () => {
             { name: 'sexo', value: dados.sexo },
             { name: 'telefone', value: dados.telefone },
             { name: 'email', value: dados.email },
+            { name: 'usuario', value: dados_usuario.usuario },
+            { name: 'senha', value: dados_usuario.senha },
+            { name: 'grupo', value: dados_usuario.grupo}
         ])
     }
+
+
 
     const handleSubmit = async () => {
         const dados_form = form.getFieldsValue();

@@ -19,7 +19,7 @@ export const criarUsuario = async (dados, id_membro) => {
 
 export const buscarUsuarioPeloIdMembro = async (id) => {
     try {
-        let resposta = await api.get(`/usuario/buscar/${encodeURIComponent(id)}`)
+        let resposta = await api.get(`/usuario/buscar_usuario/${encodeURIComponent(id)}/`)
         return resposta
     } catch (error) {
         console.error('Erro ao buscar o usuário', error)
