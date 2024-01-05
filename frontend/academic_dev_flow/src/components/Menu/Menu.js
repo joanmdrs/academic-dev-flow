@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Menu.css';
 import { Menu } from 'antd';
 import {HiOutlineClipboardList} from "react-icons/hi"
@@ -21,31 +21,45 @@ const MyMenu = () => {
         <Menu 
           theme="dark" 
           mode="inline" 
-          defaultSelectedKeys={['projeto']}
+          
           style={{
             marginTop: "20px"
           }}
         >
-          <Menu.Item key="projeto" icon={<HiOutlineClipboardList style={{ fontSize: '20px' }} />}>
+
+          <Menu.Item 
+            className='item-menu'
+            key="projeto" 
+            icon={<HiOutlineClipboardList 
+            style={{ fontSize: '20px'}}/>}
+         >
+
             <a href="/projetos">Projetos</a>
+
           </Menu.Item>
 
-          <Menu.Item key="fluxos" icon={<DiScrum style={{ fontSize: '25px' }} />}>
+          <Menu.Item 
+            className='item-menu'
+            key="fluxo" 
+            icon={<DiScrum 
+            style={{ fontSize: '25px' }}/>}
+          >
             <a href="/fluxos">Fluxos</a>
+            
           </Menu.Item>
 
-          <Menu.Item key="fluxos" icon={<BiGroup style={{ fontSize: '20px' }} />}>
+          <Menu.Item
+            className='item-menu' 
+            key="membro" 
+            icon={<BiGroup 
+            style={{ fontSize: '20px' }}/>}
+          >
+
             <a href="/membros">Membros</a>
+
           </Menu.Item>
 
-          {/* <SubMenu key="membros" icon={<BiGroup style={{ fontSize: '20px' }} />} title="Membros">
-            <Menu.Item key="submenu-item-1">
-              <a href="/membros/alunos">Alunos</a>
-            </Menu.Item>
-            <Menu.Item key="submenu-item-2">
-              <a href="/membros/professores">Professores</a>
-            </Menu.Item>
-          </SubMenu> */}
+         
         </Menu>
       </Sider>
   );

@@ -1,31 +1,51 @@
-import React, { useState } from "react"
-import "./PaginaMembro.css"
-import Title from "../../components/Title/Title"
-import Search from "../../components/Search/Search"
-import ModalSearch from "../../components/Modal/Modal"
-import Add from "../../components/Buttons/Add/Add"
-import Delete from "../../components/Buttons/Delete/Delete"
-import { atualizarMembro, buscarMembroPeloNome, criarMembro, excluirMembro } from "../../services/membro_service"
-import { Button, DatePicker, Form, Input, Radio, Select, Tabs } from "antd"
-import { atualizarUsuario, buscarUsuarioPeloIdMembro, criarUsuario } from "../../services/usuario_service"
-import { NotificationContainer, NotificationManager } from "react-notifications"
-import moment from 'moment'
-import 'moment/locale/pt-br'
-moment.locale('pt-br')
+import React, { useState, useEffect } from "react";
+import "./PaginaMembro.css";
+import Title from "../../components/Title/Title";
+import Search from "../../components/Search/Search";
+import ModalSearch from "../../components/Modal/Modal";
+import Add from "../../components/Buttons/Add/Add";
+import Delete from "../../components/Buttons/Delete/Delete";
+import {
+  atualizarMembro,
+  buscarMembroPeloNome,
+  criarMembro,
+  excluirMembro,
+} from "../../services/membro_service";
+import {
+  atualizarUsuario,
+  buscarUsuarioPeloIdMembro,
+  criarUsuario,
+} from "../../services/usuario_service";
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  Radio,
+  Select,
+  Tabs,
+} from "antd";
+import { NotificationContainer, NotificationManager } from "react-notifications";
+import moment from "moment";
+import "moment/locale/pt-br";
+import { recarregarPagina } from "../../services/utils";
+import HelpModal from "../../components/HelpModal/HelpModal";
+moment.locale("pt-br");
 
-const { Option } = Select
-const { TabPane } = Tabs
+const { Option } = Select;
+const { TabPane } = Tabs;
 
 const PaginaMembro = () => {
 
-    // Constantes 
 
-    const [form] = Form.useForm()
-    const [modalVisible, setModalVisible] = useState(false)
-    const [formVisible, setFormVisible] = useState(true)
-    const [actionForm, setActionForm] = useState('create')
-    const [id, setId] = useState("")
-
+    const [form] = Form.useForm();
+    const [modalVisible, setModalVisible] = useState(false);
+    const [formVisible, setFormVisible] = useState(false);
+    const [btnDelActive, setBtnDelActive] = useState(true);
+    const [btnAddActive, setBtnAddActive] = useState(false);
+    const [btnSearchActive, setBtnSearchActive] = useState(false);
+    const [actionForm, setActionForm] = useState("create");
+    const [id, setId] = useState("");
     const [valoresIniciais, setValoresIniciais] = useState({
         nome: "",
         cpf: "",
@@ -36,125 +56,161 @@ const PaginaMembro = () => {
         usuario: "",
         senha: "",
         grupo: "",
-    })
+    });
 
     const columns = [
         {
-            title: 'Código',
-            key: 'codigo',
-            dataIndex: 'id', 
+        title: "Código",
+        key: "codigo",
+        dataIndex: "id",
         },
         {
-            title: 'Nome',
-            dataIndex: 'nome',
-            key: 'nome',
-            render: (text, record) => (
-
-                <span
-                    style={{ color: 'blue', cursor: 'pointer'}}
-                    onClick={() => {handleRowClick(record)}}
-                >
-                    {text}
-                </span>
-            ),
+        title: "Nome",
+        dataIndex: "nome",
+        key: "nome",
+        render: (text, record) => (
+            <span
+            style={{ color: "blue", cursor: "pointer" }}
+            onClick={() => handleRowClick(record)}
+            >
+            {text}
+            </span>
+        ),
         },
         {
-            title: 'CPF',
-            dataIndex: 'cpf',
-            key: 'cpf',
+        title: "CPF",
+        dataIndex: "cpf",
+        key: "cpf",
         },
-    ]
+    ];
 
-    // Funções de chamada
+    useEffect(() => {
+        form.setFieldsValue(valoresIniciais);
+    }, [form, valoresIniciais]);
 
-    const showModal = () => {
-        setModalVisible(true)
-    }
 
-    const handleCancel = () => {
-        setModalVisible(false)
-    }
+    // Funções de chamada 
 
-    const handleOk = async (dado) => {
-        const resposta = await buscarMembroPeloNome(dado)
-        return resposta
-    }
+    const showModal = () => setModalVisible(true);
+    const handleCancel = () => setModalVisible(false);
+    const handleOk = async (dado) => await buscarMembroPeloNome(dado);
+
+    const handleClickBtnAdd = () => {
+        form.resetFields();
+        setActionForm("create");
+        setFormVisible(true);
+        setBtnSearchActive(true);
+        setBtnDelActive(true);
+        setBtnAddActive(true);
+    };
 
     const handleRowClick = async (dados) => {
+        const resposta_usuario = await buscarUsuarioPeloIdMembro(dados.id);
+        const dados_usuario = resposta_usuario.data;
 
-        const resposta = await buscarUsuarioPeloIdMembro(dados.id)
-        const dados_usuario = resposta.data        
+        form.setFieldsValue({
+        nome: dados.nome,
+        cpf: dados.cpf,
+        data_nascimento: moment(dados.data_nascimento),
+        sexo: dados.sexo,
+        telefone: dados.telefone,
+        email: dados.email,
+        usuario: dados_usuario.usuario,
+        senha: dados_usuario.senha,
+        grupo: dados_usuario.grupo,
+        });
 
-        form.setFields([
-            { name: 'nome', value: dados.nome },
-            { name: 'cpf', value: dados.cpf },
-            { name: 'data_nascimento', value: moment(dados.data_nascimento)},
-            { name: 'sexo', value: dados.sexo },
-            { name: 'telefone', value: dados.telefone },
-            { name: 'email', value: dados.email },
-            { name: 'usuario', value: dados_usuario.usuario },
-            { name: 'senha', value: dados_usuario.senha },
-            { name: 'grupo', value: dados_usuario.grupo}
-        ])
-        setId(dados.id)
-        setActionForm('update')
-        handleCancel()
-    }
+        setId(dados.id);
+        setActionForm("update");
+        handleCancel();
+        setFormVisible(true);
+        setBtnDelActive(false);
+    };
 
     const handleCreateMember = async () => {
-        const dados_form = form.getFieldsValue()
-        const resposta_membro = await criarMembro(dados_form)
+        const dados_form = form.getFieldsValue();
 
-        if(resposta_membro.status === 200) {
+        try {
+        const resposta_membro = await criarMembro(dados_form);
+        const resposta_usuario = await criarUsuario(
+            dados_form,
+            resposta_membro.data.id
+        );
 
-            const resposta_usuario = await criarUsuario(dados_form, resposta_membro.data.id)
-
-            if(resposta_usuario.status === 200){
-                NotificationManager.success('Membro criado com sucesso!')
-            } else {
-                NotificationManager.error('Ocorreu um problema, contate o suporte!')
-                // chamar a função de excluir membro
-            }
+        if (resposta_usuario.status === 200) {
+            NotificationManager.success("Membro criado com sucesso!");
         } else {
-            NotificationManager.error('Ocorreu um problema, contate o suporte !')
+            NotificationManager.error(
+            "Ocorreu um problema, contate o suporte!"
+            );
+            // chamar a função de excluir membro
         }
-    }
+        } catch (error) {
+        NotificationManager.error("Ocorreu um problema, contate o suporte!");
+        }
+    };
 
     const handleUpdateMember = async () => {
-        const dados_form = form.getFieldValue()
-        const resposta_membro = await atualizarMembro(dados_form, id)
-        
+        const dados_form = form.getFieldsValue();
+
+        try {
+        const resposta_membro = await atualizarMembro(dados_form, id);
+
         if (resposta_membro.status === 200) {
-            const resposta_usuario = await atualizarUsuario(dados_form, id)
-    
+            const resposta_usuario = await atualizarUsuario(dados_form, id);
+
             if (resposta_usuario.status === 200) {
-                NotificationManager.success('Informações atualizadas')
+            NotificationManager.success("Informações atualizadas");
             } else {
-                NotificationManager.error('Ocorreu um problema durante a operação, contate o suporte!')
-                // Lógica para reverter a atualização do membro se necessário
+            NotificationManager.error(
+                "Ocorreu um problema durante a operação, contate o suporte!"
+            );
+            // Lógica para reverter a atualização do membro se necessário
             }
         } else {
-            NotificationManager.error('Ocorreu um problema durante a operação, contate o suporte!')
+            NotificationManager.error(
+            "Ocorreu um problema durante a operação, contate o suporte!"
+            );
         }
-    }
+        } catch (error) {
+        NotificationManager.error(
+            "Ocorreu um problema durante a operação, contate o suporte!"
+        );
+        }
+    };
 
     const handleSubmit = async () => {
-        if (actionForm === 'create') {
-            await handleCreateMember()
-        } else if (actionForm === 'update') {
-            await handleUpdateMember()
+        try {
+        if (actionForm === "create") {
+            await handleCreateMember();
+        } else if (actionForm === "update") {
+            await handleUpdateMember();
         }
-    }
+
+        recarregarPagina();
+        } catch (error) {
+        console.error("Erro ao processar o formulário", error);
+        }
+    };
 
     const handleDelete = async () => {
-        const resposta_membro = await excluirMembro(id)
+        try {
+        const resposta_membro = await excluirMembro(id);
 
-        if (resposta_membro.status === 204){
-            NotificationManager.success("Membro excluído com sucesso!")
+        if (resposta_membro.status === 204) {
+            NotificationManager.success("Membro excluído com sucesso!");
         } else {
-            NotificationManager.error("Falha na operação, contate o suporte!")
+            NotificationManager.error(
+            "Falha na operação, contate o suporte!"
+            );
         }
-    }
+        } catch (error) {
+        console.error("Erro ao excluir o membro", error);
+        NotificationManager.error(
+            "Ocorreu um problema durante a operação, contate o suporte!"
+        );
+        }
+    };
 
     return (
         <div>
@@ -165,11 +221,11 @@ const PaginaMembro = () => {
             />
 
             <div className='add-and-delete'>
-                <Add onClick={ () => {setFormVisible(true)}} />
-                <Delete handleDelete={handleDelete}/>
+                <Add onClick={ () => {handleClickBtnAdd()}} disabled={btnAddActive}/>
+                <Delete handleDelete={handleDelete} disabled={btnDelActive}/>
             </div>
 
-            <Search name="BUSCAR MEMBRO" onClick={showModal} />
+            <Search name="BUSCAR MEMBRO" onClick={showModal} disabled={btnSearchActive}/>
 
             <ModalSearch 
                 title="Buscar membro" 
@@ -180,7 +236,7 @@ const PaginaMembro = () => {
                 open={modalVisible}
                 columns={columns}
             />
-
+            
             {formVisible &&  (
                 <Tabs defaultActiveKey="1" tabPosition={'left'}>
                 <TabPane tab="Dados Pessoais" key="1">

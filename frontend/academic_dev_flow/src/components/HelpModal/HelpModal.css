@@ -1,0 +1,12 @@
+.help-modal {
+    width: max-content;
+    height: fit-content;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #00BCD4;
+    color: #FFFFFF;
+    margin-left: 20px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+
+    
+}
