@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'apps.projeto',
     'apps.flow',
     'apps.etapa',
+    'apps.membro',
+    'apps.usuario'
 ]
 
 MIDDLEWARE = [

@@ -1,23 +1,68 @@
-import React from 'react';
-import './Menu.css'; 
+import React, { useEffect, useState } from 'react';
+import './Menu.css';
+import { Menu } from 'antd';
 import {HiOutlineClipboardList} from "react-icons/hi"
 import {DiScrum} from "react-icons/di"
+import { BiGroup } from "react-icons/bi";
+import Sider from 'antd/es/layout/Sider';
+const { SubMenu } = Menu;
 
-const Menu = () => {
+const MyMenu = () => {
+
+  const [collapsed, setCollapsed] = useState(false);
+
   return (
-    <div className="menu">
-        <div className='item-menu'>
-            <HiOutlineClipboardList className='icon' style={{ fontSize: '20px' }} />
+      <Sider width={250} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+
+        <div className="demo-logo-vertical">
+          Academic Dev Flow
+        </div>
+
+        <Menu 
+          theme="dark" 
+          mode="inline" 
+          
+          style={{
+            marginTop: "20px"
+          }}
+        >
+
+          <Menu.Item 
+            className='item-menu'
+            key="projeto" 
+            icon={<HiOutlineClipboardList 
+            style={{ fontSize: '20px'}}/>}
+         >
+
             <a href="/projetos">Projetos</a>
-        </div>
-        <div className='item-menu'>
-            <DiScrum className='icon' style={{ fontSize: '25px' }} />
-            <a href="/fluxos"> Fluxos</a>
-        </div>
-        
-      
-    </div>
+
+          </Menu.Item>
+
+          <Menu.Item 
+            className='item-menu'
+            key="fluxo" 
+            icon={<DiScrum 
+            style={{ fontSize: '25px' }}/>}
+          >
+            <a href="/fluxos">Fluxos</a>
+            
+          </Menu.Item>
+
+          <Menu.Item
+            className='item-menu' 
+            key="membro" 
+            icon={<BiGroup 
+            style={{ fontSize: '20px' }}/>}
+          >
+
+            <a href="/membros">Membros</a>
+
+          </Menu.Item>
+
+         
+        </Menu>
+      </Sider>
   );
 };
 
-export default Menu;
+export default MyMenu;

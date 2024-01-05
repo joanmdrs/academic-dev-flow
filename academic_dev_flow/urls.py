@@ -31,7 +31,9 @@ urlpatterns = [
     path('fluxos/buscar/', BuscarFluxoView.as_view(), name='buscar_fluxo'),
     path('fluxos/buscar/<int:flow_id>/', BuscarFluxoPeloIdView.as_view(), name='buscar_fluxo_pelo_id'),
     path('etapas/cadastrar/', CadastrarEtapaView.as_view(), name='cadastrar_etapa'),
-    path('etapas/buscar/', BuscarEtapaPorIdFluxoView.as_view(), name='buscar_etapa_por_id_fluxo')
+    path('etapas/buscar/', BuscarEtapaPorIdFluxoView.as_view(), name='buscar_etapa_por_id_fluxo'),
+    path('usuario/', include('apps.usuario.urls', namespace='usuario')),
+    path('membro/', include('apps.membro.urls', namespace='membro'))
 ]
 
 

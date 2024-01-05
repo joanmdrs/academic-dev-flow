@@ -1,23 +1,27 @@
 import './App.css';
 import './App.css';
 import Routes from './routes';
-import Header from './components/Header/Header';
-import Menu from './components/Menu/Menu';
+import MyHeader from './components/Header/Header';
+import MyMenu from './components/Menu/Menu';
+import { Layout } from 'antd';
+
 
 
 function App() {
   return (
 
-      <div>
-        <Header />
-        <div className="content">
-          <Menu />
-          <Routes />
-        </div>
-
-      </div>
+    <Layout style={{
+      minHeight: '100vh',
+    }}>
+      <MyMenu/>
+      <Layout>
+        <MyHeader/>
+        <Routes/>
+      </Layout>
+    </Layout>
+);
    
-    )
+
 }
 
 export default App;
