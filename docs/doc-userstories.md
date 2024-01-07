@@ -341,3 +341,47 @@ Este documento descreve os User Stories criados a partir da Lista de Requisitos 
 | **TA08.08**     | Excluir um artefato. Cenário em que o artefato não está vinculado a algum projeto. | 1. O usuário clica no item "Artefatos" disponível no Menu. | O sistema chama a página de gerenciamento dos artefatos do projeto. | 
 |                 |               | 2. O usuário clica no ícone de "lixeira". | O sistema verifica se aquele artefato está vinculado a algum projeto. Caso não exista esse vínculo, o sistema pergunta se o usuário deseja prosseguir com a operação. |
 |                 |               | 3. O usuário clica em "Ok". | O sistema exclui o artefato, exibe uma mensagem de confirmação e recarrega a página. |
+
+### User Story US08 - Manter Atividade - (MODO USUÁRIO)
+
+> **Descrição:** O sistema deve possuir um módulo que tanto o usuário **Professor**, quanto o usuário **Aluno** tenha permissão para: cadastrar, pesquisar, editar e excluir atividades. Os testes de aceitação descritos abaixo serão já no modo usuário. 
+
+
+|   #  | Requisitos Envolvidos |
+|------|------------------------
+| RF09 | Manter Atividade
+
+|                           |              |
+| ------------------------- | -------------|
+| **Prioridade**            | Essencial    |
+| **Estimativa**            |              |
+| **Tempo Gasto (real):**   |              |
+| **Tamanho Funcional**     |              |
+| **Analista**              | Joan         |
+| **Desenvolvedor**         | Joan         |
+| **Revisor**               | Joan         |
+| **Testador**              | Joan         |
+
+**Testes de Aceitação (TA)**
+
+| **ID do Teste** | **Descrição** | **Critérios de Aceitação** | **Resultado Esperado** |
+|-----------------|---------------|----------------------------|------------------------|
+| **TA09.01**     | Criar uma nova atividade. Cenário em que o usuário realiza o processo corretamente. | 1. O usuário clica no Projeto desejado, disponível na página inicial do seu perfil. | O sistema abre a Área de Trabalho do projeto. Esta Área de Trabalho tem um menu que contém uma opção "Atividades". | 
+|                 |               | 2. O usuário clica na opção "Atividades". | O sistema exibe um painel de colunas com todas as etapas do fluxo de desenvolvimento do projeto. | 
+|                 |               | 3. O usuário clica em alguma das colunas de etapas. | O sistema deve puxar um formulário da direita com os campos para cadastro da atividade. |
+|                 |               | 4. O usuário preenche corretamente os campos do formulário e clica em "SALVAR" ou pressiona a tecla "ENTER". | O sistema salva as informações e exibe uma mensagem sutil de confirmação. Após esse processo, o nome da tarefa ficará vísivel no corpo da etapa. |
+| **TA09.02**     | Criar uma nova atividade. Cenário em que o usuário realiza o processo incorretamente. | 1. O usuário clica no Projeto desejado, disponível na página inicial do seu perfil. | O sistema abre a Área de Trabalho do projeto. Esta Área de Trabalho tem um menu que contém uma opção "Atividades". | 
+|                 |               | 2. O usuário clica na opção "Atividades". | O sistema exibe um painel de colunas com todas as etapas do fluxo de desenvolvimento do projeto. | 
+|                 |               | 3. O usuário clica em alguma das colunas de etapas. | O sistema deve puxar um formulário da direita com os campos para cadastro da etapa. |
+|                 |               | 4. O usuário preenche incorretamente os campos do formulário e clica em "SALVAR" ou pressiona a tecla "ENTER". | O sistema não salva as informações e destaca os campos preenchidos incorretamente. |
+| **TA09.03**     | Editar uma atividade. Cenário em que o usuário realiza o processo corretamente. | 1. O usuário clica no Projeto desejado, disponível na página inicial do seu perfil. | O sistema abre a Área de Trabalho do projeto. Esta Área de Trabalho tem um menu que contém uma opção "Atividades". | 
+|                 |               | 2. O usuário clica na opção "Atividades". | O sistema exibe um painel de colunas com todas as etapas do fluxo de desenvolvimento do projeto e suas respectivas atividades. | 
+|                 |               | 3. O usuário clica em alguma das atividades cadastradas previamente. | O sistema deve puxar um banner da lateral direita com todas as informações disponíveis para editar. | 
+|                 |               | 4. O usuário realiza as mudanças desejadas e clica em "SALVAR". | O sistema salva as informações e exibe uma mensagem sutil de confirmação. | 
+| **TA09.04**     | Editar uma atividade. Cenário em que o usuário realiza o processo incorretamente. | 1. O usuário clica no Projeto desejado, disponível na página inicial do seu perfil. | O sistema abre a Área de Trabalho do projeto. Esta Área de Trabalho tem um menu que contém uma opção "Atividades". | 
+|                 |               | 2. O usuário clica na opção "Atividades". | O sistema exibe um painel de colunas com todas as etapas do fluxo de desenvolvimento do projeto e suas respectivas atividades. | 
+|                 |               | 3. O usuário clica em alguma das atividades cadastradas previamente. | O sistema deve puxar um banner da lateral direita com todas as informações disponíveis para editar. | 
+|                 |               | 4. O usuário realiza as mudanças desejadas, mas faz isso de maneira incorreta e clica em "SALVAR". | O sistema não salva as informações e destaca os campos que estão incorretos. |
+| **TA09.05**    | Excluir uma atividade. | 1. O usuário clica no Projeto desejado disponível na página Inicial do seu Perfil. | O sistema abre a Área de Trabalho do projeto. Esta Área de Trabalho tem um menu que contém uma opção "Atividades". | 
+|                 |               | 2. O usuário clica na opção "Atividades". | O sistema exibe um painel de colunas com todas as etapas do fluxo de desenvolvimento do projeto. | 
+|                 |               | 3. O usuário passa o mouse sob alguma das atividades cadastradas previamente e clica no ícone de "X". | O sistema pergunta se o usuário deseja prosseguir com o processo. Caso o usuário confirme, o sistema exclui aquela atividade e exibe uma mensagem sutil de confirmação. Caso o usuário cancele a operação, o sistema simplesmente cancela o processo. | 
