@@ -164,15 +164,14 @@ Este documento descreve os User Stories criados a partir da Lista de Requisitos 
 | **TA04.05**     | Excluir um cronograma. | 1. O usuário clica na opção cronograma no menu lateral esquerdo. | Se o cronograma já estiver criado, o sistema deve mostrar o cronograma em modo de visualização. Caso contrário deve ser exibido o formulário de cadastro do cronograma.  | 
 |                 |                        | 2. O usuário clica no ícone de Lixeira localizado na parte superior direita da tela. | Se o cronograma já estiver em andamento, o sistema deve impedir a exclusão do cronograma e informar que não é possível a exclusão devido o mesmo já está em andamento. Além disso, na mensagem deve constar uma orientação informando que para excluir o cronograma, é necessário atualizar as datas do cronograma, e o mesmo não deve conter tarefas vinculadas a ele. |
 
-### User Story US06 - Manter Membro
+
+### User Story US05 - Manter Membro
 
  > **Descrição:** O sistema deve possuir uma área de membros que permita o **Professor** cadastrar os membros dos projetos. Além da permissão de realizar o cadastro, o sistema permitir realizar a alteração, a busca, a listagem e exclusão de membros. 
->
->
-> 
+
 |   #  | Requisitos Envolvidos |
 |------|------------------------
-| RF06 | Manter Membros
+| RF05 | Manter Membros
 
 |                           |              |
 | ------------------------- | -------------|
@@ -189,46 +188,44 @@ Este documento descreve os User Stories criados a partir da Lista de Requisitos 
 
 | **ID do Teste** | **Descrição** | **Critérios de Aceitação** | **Resultado Esperado** |
 |-----------------|---------------|----------------------------|------------------------|
-| **TA06.01**     | Cadastrar um membro no sistema. Cenário em que o usuário fornece os dados corretamente. | 1. O usuário clica na opção Área de Membros no menu lateral esquerdo. | O sistema deve redirecionar o usuário para uma página, onde é permitido, buscar, cadastrar, listar e excluir um membro. |
+| **TA05.01**     | Cadastrar um membro no sistema. Cenário em que o usuário fornece os dados corretamente. | 1. O usuário clica na opção Área de Membros no menu lateral esquerdo. | O sistema deve redirecionar o usuário para uma página, onde é permitido, buscar, cadastrar, listar e excluir um membro. |
 |                 |               | 2. O usuário clica no ícone de adição. | O sistema deve exibir um formulário para cadastro de um membro. | 
 |                 |               | 3. O usuário preenche todos os campos de modo correto e clica no botão Salvar. | O sistema salva as informações no banco de dados, exibe uma mensagem de confirmação para o usuário e realiza um reload na página. |
-| **TA06.02**     | Cadastrar um membro no sistema. Cenário em que o usuário fornece os dados incorretamento. | 1. O usuário clica na opção Área de Membros no menu lateral esquerdo. | O sistema deve redirecionar o usuário para uma página, onde é permitido, buscar, cadastrar, listar e excluir um membro. |
+| **TA05.02**     | Cadastrar um membro no sistema. Cenário em que o usuário fornece os dados incorretamento. | 1. O usuário clica na opção Área de Membros no menu lateral esquerdo. | O sistema deve redirecionar o usuário para uma página, onde é permitido, buscar, cadastrar, listar e excluir um membro. |
 |                 |               | 2. O usuário clica no ícone de adição. | O sistema deve exibir um formulário para cadastro de um membro. | 
 |                 |               | 3. O usuário não preenche um dos campos, ou informa um valor em um formato diferente do esperado. | O sistema deve notificar o usuário que algo deu errado e destacar os campos que estão com problema. |
-| **TA06.03**     | Buscar um membro no sistema. Cenário em que as informações passadas pelo usuário existem na base de dados. | 1. O usuário clica no botão com o nome "BUSCAR MEMBRO" dentro da Área de Membros. | O sistema deve exibir um Modal com um campo de nome e outro de cpf para buscar o membro. |
+| **TA05.03**     | Buscar um membro no sistema. Cenário em que as informações passadas pelo usuário existem na base de dados. | 1. O usuário clica no botão com o nome "BUSCAR MEMBRO" dentro da Área de Membros. | O sistema deve exibir um Modal com um campo de nome e outro de cpf para buscar o membro. |
 |                 |               | 2. O usuário passa as informações e clica em OK. | O sistema deve chamar a função de busca e consultar se existe um ou mais usuários que correspondem com aquelas informações. Caso existam, o sistema deve retornar estas informações para o frontend, o qual deve exibir para o usuário em formato de lista. |
-| **TA06.04**     | Buscar um membro no sistema. Cenário em que as informações passadas pelo usuário não existem na base de dados. | 1. O usuário clica no botão com o nome "BUSCAR MEMBRO" dentro da Área de Membros. | O sistema deve exibir um Modal com um campo de nome e outro de cpf para buscar o membro. |
+| **TA05.04**     | Buscar um membro no sistema. Cenário em que as informações passadas pelo usuário não existem na base de dados. | 1. O usuário clica no botão com o nome "BUSCAR MEMBRO" dentro da Área de Membros. | O sistema deve exibir um Modal com um campo de nome e outro de cpf para buscar o membro. |
 |                 |               | 2. O usuário passa as informações e clica em OK. | O sistema deve chamar a função de busca e consultar se existe um ou mais usuários que correspondem com aquelas informações. Caso não existam, o sistema deve informar que não existem membros que correspondem as informações passadas.
-| **TA06.05**     | Buscar um membro no sistema. Cenário em que o usuário não preenche as informações de busca. | 1. O usuário clica no botão com o nome "BUSCAR MEMBRO" dentro da Área de Membros. | O sistema deve exibir um Modal com um campo de nome e outro de cpf para buscar o membro. | 
+| **TA05.05**     | Buscar um membro no sistema. Cenário em que o usuário não preenche as informações de busca. | 1. O usuário clica no botão com o nome "BUSCAR MEMBRO" dentro da Área de Membros. | O sistema deve exibir um Modal com um campo de nome e outro de cpf para buscar o membro. | 
 |                 |               | 2. O usuário não preenche as informações e clica em OK. | O sistema deve informar ao usuário que ele deve preencher as informações de busca. | 
-| **TA06.06**     | Editar as informações de um membro. Cenário em que o usuário realiza o processo corretamente. | 1. O usuário clica no botão com o nome "BUSCAR MEMBRO" dentro da Área de Membros. | O sistema deve exibir um Modal com um campo de nome e outro de cpf para buscar o membro. |
+| **TA05.06**     | Editar as informações de um membro. Cenário em que o usuário realiza o processo corretamente. | 1. O usuário clica no botão com o nome "BUSCAR MEMBRO" dentro da Área de Membros. | O sistema deve exibir um Modal com um campo de nome e outro de cpf para buscar o membro. |
 |                 |               | 2. O usuário passa as informações e clica em OK. | O sistema deve chamar a função de busca e consultar se existe um ou mais usuários que correspondem com aquelas informações. Caso existam, o sistema deve retornar estas informações para o frontend, o qual deve exibir para o usuário em formato de lista. | 
 |                 |               | 3. O usuário seleciona na lista exibida qual o membro que ele deseja alterar. | O sistema deve preencher os campos do formulário de Membro com as informações do membro selecionado. | 
 |                 |               | 4. O usuário altera as informações necessárias de maneira correta e clica em Salvar. | O sistema altera as informações na base de dados e notifica ao usuário que a alteração foi feita com sucesso. |
-| **TA06.06**     | Editar as informações de um membro. Cenário em que o usuário realiza o processo incorretamente. | 1. O usuário clica no botão com o nome "BUSCAR MEMBRO" dentro da Área de Membros. | O sistema deve exibir um Modal com um campo de nome e outro de cpf para buscar o membro. |
+| **TA05.07**     | Editar as informações de um membro. Cenário em que o usuário realiza o processo incorretamente. | 1. O usuário clica no botão com o nome "BUSCAR MEMBRO" dentro da Área de Membros. | O sistema deve exibir um Modal com um campo de nome e outro de cpf para buscar o membro. |
 |                 |               | 2. O usuário passa as informações e clica em OK. | O sistema deve chamar a função de busca e consultar se existe um ou mais usuários que correspondem com aquelas informações. Caso existam, o sistema deve retornar estas informações para o frontend, o qual deve exibir para o usuário em formato de lista. | 
 |                 |               | 3. O usuário seleciona na lista exibida qual o membro que ele deseja alterar. | O sistema deve preencher os campos do formulário de Membro com as informações do membro selecionado. | 
 |                 |               | 4. O usuário apaga algumas das informações ou altera um campo com um valor de formato incorreto. | O sistema informa que algo deu errado e destaca os campos com problema. |
-| **TA06.08**     | Excluir um membro. Cenário em que o membro está vinculado a um projeto. | 1. O usuário clica no botão com o nome "BUSCAR MEMBRO" dentro da Área de Membros. | O sistema deve exibir um Modal com um campo de nome e outro de cpf para buscar o membro. |
+| **TA05.08**     | Excluir um membro. Cenário em que o membro está vinculado a um projeto. | 1. O usuário clica no botão com o nome "BUSCAR MEMBRO" dentro da Área de Membros. | O sistema deve exibir um Modal com um campo de nome e outro de cpf para buscar o membro. |
 |                 |               | 2. O usuário passa as informações e clica em OK. | O sistema deve chamar a função de busca e consultar se existe um ou mais usuários que correspondem com aquelas informações. Caso existam, o sistema deve retornar estas informações para o frontend, o qual deve exibir para o usuário em formato de lista. | 
 |                 |               | 3. O usuário seleciona na lista exibida qual o membro que ele deseja excluir. | O sistema deve preencher os campos do formulário de Membro com as informações do membro selecionado. | 
 |                 |               | 4. O usuário clica no botão com ícone de Lixeira. | O sistema deve informar que o membro está vinculado há um projeto e o mesmo não poderá ser excluído. No entanto, deve informar que o mesmo poderá ser inativado e portanto não poderá vinculado a outros projetos, além de não conseguir manipular o sistema. O sistema deve perguntar se o usuário deseja realizar a inativação. Caso o usuário responda que sim, o sistema inativa altera o status de membro de "Ativo" para "Suspenso". |
-| **TA06.09**     | Excluir um membro. Cenário em que o membro não está vinculado a um projeto. | 1. O usuário clica no botão com o nome "BUSCAR MEMBRO" dentro da Área de Membros. | O sistema deve exibir um Modal com um campo de nome e outro de cpf para buscar o membro. |
+| **TA05.09**     | Excluir um membro. Cenário em que o membro não está vinculado a um projeto. | 1. O usuário clica no botão com o nome "BUSCAR MEMBRO" dentro da Área de Membros. | O sistema deve exibir um Modal com um campo de nome e outro de cpf para buscar o membro. |
 |                 |               | 2. O usuário passa as informações e clica em OK. | O sistema deve chamar a função de busca e consultar se existe um ou mais usuários que correspondem com aquelas informações. Caso existam, o sistema deve retornar estas informações para o frontend, o qual deve exibir para o usuário em formato de lista. | 
 |                 |               | 3. O usuário seleciona na lista exibida qual o membro que ele deseja excluir. | O sistema deve preencher os campos do formulário de Membro com as informações do membro selecionado. | 
 |                 |               | 4. O usuário clica no botão com ícone de Lixeira. | O sistema pergunta se o usuário deseja realmente excluir aquele membro. Caso haja a confirmação, o sistema exclui o membro da base de dados e confirma para o usuário a realização da operação. |
-| **TA06.10**     | Listar membros. | 1. O usuário clica na opção de listagem de membros. | O sistema redireciona o usuário para uma página de relatórios. Nesta página o usuário tem a opção de listar por projeto. |
+| **TA05.10**     | Listar membros. | 1. O usuário clica na opção de listagem de membros. | O sistema redireciona o usuário para uma página de relatórios. Nesta página o usuário tem a opção de listar por projeto. |
 |                 |               | 2. O usuário informa o projeto que deseja realizar a listagem dos membros. | O sistema deve exibir uma lista de todos os membros vinculados a aquele projeto. |
 
-### User Story US07 - Manter Equipe
+### User Story US06 - Manter Equipe
 
  > **Descrição:** No sistema, mais especificamente, na aba de projetos, deve haver uma aba para vincular os membros da equipe. Dessa forma, ao vincular os membros ao projeto, deve ser criado um objeto equipe que faz referência a aquele projeto. 
->
->
-> 
+
 |   #  | Requisitos Envolvidos |
 |------|------------------------
-| RF07 | Manter Equipe
+| RF06 | Manter Equipe
 
 |                           |              |
 | ------------------------- | -------------|
@@ -245,15 +242,51 @@ Este documento descreve os User Stories criados a partir da Lista de Requisitos 
 
 | **ID do Teste** | **Descrição** | **Critérios de Aceitação** | **Resultado Esperado** |
 |-----------------|---------------|----------------------------|------------------------|
-| **TA07.01**     | Cadastrar uma equipe no sistema. Cenário em que o usuário realiza os passos corretamente. | 1. O usuário clica na aba de Equipe dentro da área de projetos. | O sistema exibe uma tela onde é permitido o usuário buscar os membros, adicionar, excluir ou visualizar.|
+| **TA06.01**     | Cadastrar uma equipe no sistema. Cenário em que o usuário realiza os passos corretamente. | 1. O usuário clica na aba de Equipe dentro da área de projetos. | O sistema exibe uma tela onde é permitido o usuário buscar os membros, adicionar, excluir ou visualizar.|
 |                 |               | 2. O usuário clica no botão de "BUSCAR MEMBRO". | O sistema exibe o formulário de busca dos membros. | 
 |                 |               | 3. O usuário fornece as informações de busca e clica no botão "Ok". | O sistema realiza a busca e exibe os resultados para o usuário em formato de lista. |
 |                 |               | 4. O usuário clica em uma das opções de resultados disponíveis. | O sistema adiciona o membro a lista de membros da equipe. | 
 |                 |               | 5. O usuário realiza o mesmo processo acima descrito para vínculo dos outros membros. | O sistema adiciona os outros membros a lsita de membros da equipe. | 
 |                 |               | 6. O usuário clica na opção "SALVAR EQUIPE". | O sistema cria um objeto equipe no banco de dados e recarrega a página de projetos. |
-| **TA07.02**     | Excluir um membro da equipe no sistema. Cenário em que o membro possui tarefas atribuídas no projeto. | 1. O usuário clica na aba de Equipe dentro da área de projetos. | O sistema exibe uma tela onde é permitido o usuário buscar os membros, adicionar, excluir ou visualizar. Nesta tela, caso já exista uma lista de membros vinculados, haverá uma lista de membros, e em cada item haverá um botão de excluir e outro de visualizar as informações daquele membro.|
+| **TA06.02**     | Excluir um membro da equipe no sistema. Cenário em que o membro possui tarefas atribuídas no projeto. | 1. O usuário clica na aba de Equipe dentro da área de projetos. | O sistema exibe uma tela onde é permitido o usuário buscar os membros, adicionar, excluir ou visualizar. Nesta tela, caso já exista uma lista de membros vinculados, haverá uma lista de membros, e em cada item haverá um botão de excluir e outro de visualizar as informações daquele membro.|
 |                 |               | 2. O usuário clica no ícone de lixeira em algum dos items da lista de membros. | O sistema deve verificar se o membro possui tarefas vinculadas, caso haja, o sistema deve informar que não será possível a exclusão deste membro, pois o mesmo possui tarefas atribuídas a ele. Além disso, o sistema deve fornecer as seguintes orientações: "Como não é possível excluir o membro, o mesmo terá sua atividade inativada neste projeto, impedindo assim o seu acesso. |
-| **TA07.03**     | Excluir um membro da equipe. Cenário em que o membro não possui tarefas atribuídas no projeto. | 1. O usuário clica na aba de Equipe dentro da área de projetos. | O sistema exibe uma tela onde é permitido o usuário buscar os membros, adicionar, excluir ou visualizar. Nesta tela, caso já exista uma lista de membros vinculados, haverá uma lista de membros, e em cada item haverá um botão de excluir e outro de visualizar as informações daquele membro.|
+| **TA06.03**     | Excluir um membro da equipe. Cenário em que o membro não possui tarefas atribuídas no projeto. | 1. O usuário clica na aba de Equipe dentro da área de projetos. | O sistema exibe uma tela onde é permitido o usuário buscar os membros, adicionar, excluir ou visualizar. Nesta tela, caso já exista uma lista de membros vinculados, haverá uma lista de membros, e em cada item haverá um botão de excluir e outro de visualizar as informações daquele membro.|
 |                 |               | 2. O usuário clica no ícone de lixeira em algum dos items da lista de membros. | O sistema pergunta se deseja prosseguir com a ação, caso sim, o sistema exclui as informações que fazem referência entre aquele membro e aquele equipe no banco de dados, e atualiza a lista de membros da equipe do projeto. | 
-| **TA07.04**     | Visualizar as informações de um membro vinculado ao projeto. | 1. O usuário clica na aba de Equipe dentro da área de projetos. | O sistema exibe uma tela onde é permitido o usuário buscar os membros, adicionar, excluir ou visualizar. Nesta tela, caso já exista uma lista de membros vinculados, haverá uma lista de membros, e em cada item haverá um botão de excluir e outro de visualizar as informações daquele membro.| 
+| **TA06.04**     | Visualizar as informações de um membro vinculado ao projeto. | 1. O usuário clica na aba de Equipe dentro da área de projetos. | O sistema exibe uma tela onde é permitido o usuário buscar os membros, adicionar, excluir ou visualizar. Nesta tela, caso já exista uma lista de membros vinculados, haverá uma lista de membros, e em cada item haverá um botão de excluir e outro de visualizar as informações daquele membro.| 
 |                 |               | 2. O usuário clica no ícone de olho em alguns dos items da lista de membros. | O sistema adiciona um Card abaixo do item clicado com as informações referentes a aquele membro. Para remover o Card, basta clica no ícone de "X" no canto superior direito do Card. | 
+
+### User Story US07 - Manter Coordenador 
+
+ > **Descrição:** No sistema, mais especificamente, na aba de projetos, deve haver uma aba para vincular os membros da equipe. Nesta aba, além de vincular os membros do projeto do grupo "Aluno", também deve ser possível vincular um ou mais membros do grupo "Professor" que vão atuar no projeto como "Coordenadores". Assim como os "Alunos", os coordenadores são cadastrados na Área de Membros do sistema, para isso, no ato do cadastro deve ser informado que aquele membro é um "Professor". 
+
+|   #  | Requisitos Envolvidos |
+|------|------------------------
+| RF07 | Manter Coordenador
+
+|                           |              |
+| ------------------------- | -------------|
+| **Prioridade**            | Essencial    |
+| **Estimativa**            |              |
+| **Tempo Gasto (real):**   |              |
+| **Tamanho Funcional**     |              |
+| **Analista**              | Joan         |
+| **Desenvolvedor**         | Joan         |
+| **Revisor**               | Joan         |
+| **Testador**              | Joan         |
+
+**Testes de Aceitação (TA)**
+
+| **ID do Teste** | **Descrição** | **Critérios de Aceitação** | **Resultado Esperado** |
+|-----------------|---------------|----------------------------|------------------------|
+| **TA07.01**     | Vincular um coordenador a equipe do projeto. Cenário em que o usuário realiza todos os passos corretamente. | 1. O usuário clica na aba de Equipe dentro da área de projetos. | O sistema exibe uma tela onde é permitido o usuário buscar os membros/coordenadores, adicionar, excluir ou visualizar. Nesta aba, existe uma seção com a descrição "Coordenadores". | 
+|                 |               | 2. O usuário clica no botão com ícone de "+" dentro da seção de "Coordenadores". | O sistema exibe o formulário de busca dos membros do grupo "Professores". | 
+|                 |               | 3. O usuário fornece as informações de busca e clica no botão "Ok". | O sistema realiza a busca e exibe os resultados para o usuário em formato de lista. |
+|                 |               | 4. O usuário clica em uma das opções de resultados disponíveis. | O sistema adiciona o professor a lista de coordenadores do projeto. | 
+|                 |               | 5. O usuário realiza o mesmo processo acima descrito para vínculo de outros professores (caso necessário). | O sistema adiciona os outros professores a lista de coordenadores da equipe. | 
+|                 |               | 6. O usuário clica na opção "SALVAR". | Caso já exista membros vinculados ao projeto, significa que a entidade equipe já foi criada, e portanto, o sistema só precisa criar a referência entre membro - coordenador - equipe. Caso ainda não tenha membros vinculados ao projeto, o sistema irá criar a entidade equipe também. |
+| **TA07.02**     | Excluir um coordenador do projeto. Cenário em que o coordenador possui tarefas vinculadas ao projeto. | 1. O usuário clica na aba de Equipe dentro da área de projetos. | O sistema exibe uma tela onde é permitido o usuário buscar os membros/coordenadores, adicionar, excluir ou visualizar. Nesta tela, caso já exista coordenadores vinculados, haverá uma lista de coordenadores, e em cada item haverá um botão de excluir e outro de visualizar as informações daquele coordenador.|
+|                 |               | 2. O usuário clica no ícone de lixeira em algum dos items da lista de coordenadores. | O sistema deve verificar se o coordenador possui tarefas vinculadas, caso haja, o sistema deve informar que não será possível a exclusão deste coordenador, pois o mesmo possui tarefas vinculadas a ele. Além disso, o sistema deve fornecer as seguintes orientações: "Como não é possível excluir o coordenador, o mesmo terá sua atividade inativada neste projeto, impedindo assim o seu acesso". OBSERVAÇÃO: Este tipo de operação só pode ser feita pelo ADMINISTRADOR do sistema. |
+| **TA07.03**     | Excluir um coordenador do projeto. Cenário em que o coordenador não possui tarefas vinculadas ao projeto. | 1. O usuário clica na aba de Equipe dentro da área de projetos. | O sistema exibe uma tela onde é permitido o usuário buscar os membros/coordenadores, adicionar, excluir ou visualizar. Nesta tela, caso já exista coordenadores vinculados, haverá uma lista de coordenadores, e em cada item haverá um botão de excluir e outro de visualizar as informações daquele coordenador.|
+|                 |               | 2. O usuário clica no ícone de lixeira em algum dos items da lista de coordenadores. | O sistema pergunta se deseja prosseguir com a ação, caso sim, o sistema exclui as informações que fazem referência entre aquele coordenador e aquela equipe no banco de dados, e atualiza a lista de coordenadores da equipe do projeto. OBSERVAÇÃO: Este tipo de operação só pode ser feita pelo ADMINISTRADOR do sistema. |
+| **TA06.04**     | Visualizar as informações de um coordenador vinculado ao projeto. | 1. O usuário clica na aba de Equipe dentro da área de projetos. | O sistema exibe uma tela onde é permitido o usuário buscar os membros/coordenadores, adicionar, excluir ou visualizar. Nesta tela, caso já exista coordenadores vinculados, haverá uma lista de coordenadores, e em cada item haverá um botão de excluir e outro de visualizar as informações daquele coordenador.|
+|                 |               | 2. O usuário clica no ícone de olho em alguns dos items da lista de coordenadores. | O sistema adiciona um Card abaixo do item clicado com as informações referentes a aquele coordenador. Para remover o Card, basta clica no ícone de "X" no canto superior direito do Card. | 
