@@ -22,9 +22,9 @@ Este documento tem como objetivo descrever algumas características relacionadas
 | **RF02 - Manter Projeto:**           | O sistema deve permitir o cadastro, alteração, seleção, consulta e visualização dos projetos dos alunos. |
 | **RF03 - Manter Fluxo de desenvolvimento:** | O sistema deve permitir o cadastro, alteração e visualização de um novo fluxo de desenvolvimento para cada projeto. |
 | **RF04 - Manter Etapa:**             | O sistema deve permitir que no momento do cadastro do fluxo de desenvolvimento ou após a sua criação, seja possível vincular (cadastrar) as etapas do processo de desenvolvimento, assim como sua alteração, seleção, visualização e exclusão. |
-| **RF05 - Manter Membro:**            | O sistema deve permitir o cadastro de cada membro da equipe, assim como sua alteração, visualização e exclusão. |
-| **RF06 - Manter Equipe:**            | O sistema deve permitir o cadastro da equipes responsável pelo projeto, bem como sua alteração, visualização e exclusão. |
-| **RF07 - Manter Coordenador:**       | O sistema deve oferecer a opção de cadastrar um novo coordenador ou vários coordenadores para cada projeto, assim como permitir sua alteração, seleção e visualização. |
+| **RF05 - Manter Coordenador:**       | O sistema deve oferecer a opção de cadastrar um novo coordenador ou vários coordenadores para cada projeto, assim como permitir sua alteração, seleção e visualização. |
+| **RF06 - Manter Membro:**            | O sistema deve permitir o cadastro de cada membro da equipe, assim como sua alteração, visualização e exclusão. |
+| **RF07 - Manter Equipe:**            | O sistema deve permitir o cadastro da equipes responsável pelo projeto, bem como sua alteração, visualização e exclusão. |
 | **RF09 - Manter Artefato:**          | O sistema deve permitir o cadastro de artefatos para cada etapa do fluxo de desenvolvimento, assim como a alteração, seleção, visualização e exclusão dos artefatos. |
 | **RF10 - Manter Atividade:**         | O sistema deve permitir o cadastro, alteração, seleção, visualização e exclusão de atividades ao longo das etapas do projeto. |
 | **RF11 - Manter Plano de Iteração e Plano de \emph{Release:}** | O sistema deve permitir o cadastro, visualização, alteração e exclusão do plano de iteração e plano de release. |
