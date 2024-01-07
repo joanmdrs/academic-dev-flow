@@ -290,3 +290,54 @@ Este documento descreve os User Stories criados a partir da Lista de Requisitos 
 |                 |               | 2. O usuário clica no ícone de lixeira em algum dos items da lista de coordenadores. | O sistema pergunta se deseja prosseguir com a ação, caso sim, o sistema exclui as informações que fazem referência entre aquele coordenador e aquela equipe no banco de dados, e atualiza a lista de coordenadores da equipe do projeto. OBSERVAÇÃO: Este tipo de operação só pode ser feita pelo ADMINISTRADOR do sistema. |
 | **TA06.04**     | Visualizar as informações de um coordenador vinculado ao projeto. | 1. O usuário clica na aba de Equipe dentro da área de projetos. | O sistema exibe uma tela onde é permitido o usuário buscar os membros/coordenadores, adicionar, excluir ou visualizar. Nesta tela, caso já exista coordenadores vinculados, haverá uma lista de coordenadores, e em cada item haverá um botão de excluir e outro de visualizar as informações daquele coordenador.|
 |                 |               | 2. O usuário clica no ícone de olho em alguns dos items da lista de coordenadores. | O sistema adiciona um Card abaixo do item clicado com as informações referentes a aquele coordenador. Para remover o Card, basta clica no ícone de "X" no canto superior direito do Card. | 
+
+### User Story US08 - Manter Artefato  
+
+> **Descrição:** O sistema deve possuir um módulo que tanto o usuário **Professor**, quanto o usuário **Aluno** tenha permissão para: cadastrar, pesquisar, editar e excluir artefatos.
+
+|   #  | Requisitos Envolvidos |
+|------|------------------------
+| RF08 | Manter Artefato
+
+|                           |              |
+| ------------------------- | -------------|
+| **Prioridade**            | Essencial    |
+| **Estimativa**            |              |
+| **Tempo Gasto (real):**   |              |
+| **Tamanho Funcional**     |              |
+| **Analista**              | Joan         |
+| **Desenvolvedor**         | Joan         |
+| **Revisor**               | Joan         |
+| **Testador**              | Joan         |
+
+**Testes de Aceitação (TA)**
+
+| **ID do Teste** | **Descrição** | **Critérios de Aceitação** | **Resultado Esperado** |
+|-----------------|---------------|----------------------------|------------------------|
+| **TA08.01**     | Criar um novo artefato. Cenário em que o usuário realiza o processo corretamente. | 1. O usuário clica no item "Artefatos" disponível no Menu. | O sistema chama a página de cadastro dos artefatos do projeto. | 
+|                 |               | 2. O usuário clica no botão com ícone de "+". | O sistema exibe o formulário de cadastro do objeto Artefato. |
+|                 |               | 3. O usuário preenche todos os campos do formulário corretamente e clica em "SALVAR". | O sistema salva as informações no banco de dados, exibe uma mensagem de confirmação para o usuário e recarrega a página. |         
+| **TA08.02**     | Criar um novo artefato. Cenário em que o usuário não realiza o processo corretamente. | 1. O usuário clica no item "Artefatos" disponível no Menu. | O sistema chama a página de cadastro dos artefatos do projeto. | 
+|                 |               | 2. O usuário clica no botão com ícone de "+". | O sistema exibe o formulário de cadastro do objeto Artefato. |
+|                 |               | 3. O usuário esquece de preencher algum dos campos do formulário ou preenche algum campo com um formato de dado incorreto. | O sistema deve apontar o(s) campo(s) que apresentarão problema para o usuário e não salva as informações. |
+| **TA08.03**     | Buscar um artefato. Cenário em que as informações fornecidas pelo usuário correspondem a um objeto existente no banco de dados. | 1. O usuário clica no item "Artefatos" disponível no Menu. | O sistema chama a página de gerenciamento dos artefatos do projeto. |
+|                 |               | 2. O usuário clica na opção "BUSCAR ARTEFATO". | O sistema exibe um Modal com um formulário de busca. |
+|                 |               | 3. O usuário fornece as informações de busca e clica no botão de "Ok". | O sistema realiza a busca no banco de dados e exibe os resultados em formato de lista para o usuário.|
+| **TA08.04**     | Buscar um artefato. Cenário em que as informações fornecidas pelo usuário não correspondem a um objeto existente no banco de dados. | 1. O usuário clica no item "Artefatos" disponível no Menu. | O sistema chama a página de gerenciamento dos artefatos do projeto. |
+|                 |               | 2. O usuário clica na opção "BUSCAR ARTEFATO". | O sistema exibe um Modal com um formulário de busca. | 
+|                 |               | 3. O usuário fornece as informações de busca e clica no botão de "Ok". | O sistema realiza a busca no banco de dados e informa a seguinte mensagem: "Não foram encontrados resultados para esta busca." |
+| **TA08.05**     | Editar um artefato. Cenário em que o usuário realiza o processo corretamente. | 1. O usuário clica no item "Artefatos" disponível no Menu. | O sistema chama a página de gerenciamento dos artefatos do projeto. | 
+|                 |               | 2. O usuário clica na opção "BUSCAR ARTEFATO". | O sistema exibe um Modal com um formulário de busca. |
+|                 |               | 3. O usuário fornece as informações de busca e clica no botão de "Ok". | O sistema realiza a busca no banco de dados e exibe os resultados em formato de lista para o usuário.|
+|                 |               | 4. O usuário clica em algum dos items da lista. | O sistema chama o formulário de cadastro dos artefatos e preenche os campos com as informações do objeto clicado. |
+|                 |               | 5. O usuário altera os campos necessários e clica em "SALVAR". | O sistema salva as informações no banco de dados e exibe uma mensagem de confirmação. |
+| **TA08.06**     | Editar um artefato. Cenário em que o usuário realiza o processo incorretamente. | 1. O usuário clica no item "Artefatos" disponível no Menu. | O sistema chama a página de gerenciamento dos artefatos do projeto. | 
+|                 |               | 2. O usuário clica na opção "BUSCAR ARTEFATO". | O sistema exibe um Modal com um formulário de busca. |
+|                 |               | 3. O usuário fornece as informações de busca e clica no botão de "Ok". | O sistema realiza a busca no banco de dados e exibe os resultados em formato de lista para o usuário.|
+|                 |               | 4. O usuário clica em algum dos items da lista. | O sistema chama o formulário de cadastro dos artefatos e preenche os campos com as informações do objeto clicado. |
+|                 |               | 5. O usuário altera os campos de maneira incorreta e clica em "SALVAR". | O sistema indica os campos que foram preenchidos incorretamente e não salva as informações. |
+| **TA08.07**     | Excluir um artefato. Cenário em que o artefato está vinculado a algum projeto | 1. O usuário clica no item "Artefatos" disponível no Menu. | O sistema chama a página de gerenciamento dos artefatos do projeto. | 
+|                 |               | 2. O usuário clica no ícone de "lixeira". | O sistema verifica se aquele artefato está vinculado a algum projeto. Caso exista esse vínculo, o sistema deve informar que não é possível excluir o artefato. |
+| **TA08.08**     | Excluir um artefato. Cenário em que o artefato não está vinculado a algum projeto. | 1. O usuário clica no item "Artefatos" disponível no Menu. | O sistema chama a página de gerenciamento dos artefatos do projeto. | 
+|                 |               | 2. O usuário clica no ícone de "lixeira". | O sistema verifica se aquele artefato está vinculado a algum projeto. Caso não exista esse vínculo, o sistema pergunta se o usuário deseja prosseguir com a operação. |
+|                 |               | 3. O usuário clica em "Ok". | O sistema exclui o artefato, exibe uma mensagem de confirmação e recarrega a página. |
