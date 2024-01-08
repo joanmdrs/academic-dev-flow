@@ -1,0 +1,7 @@
+.botoes-de-acao {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+    padding: 20px;
+}

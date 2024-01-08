@@ -4,7 +4,12 @@ import { MdEdit } from "react-icons/md";
 
 const BotaoAtualizar = ({ onClick, disabled}) => {
     return (
-      <Button type="default" icon={<MdEdit />} onClick={onClick} disabled={disabled}>
+      <Button 
+        type="default" 
+        size="large"
+        icon={<MdEdit />} 
+        onClick={onClick} 
+        disabled={disabled}>
       </Button>
     );
   };

@@ -5,6 +5,7 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 const Delete = ({handleDelete, disabled}) => {
 
+
     const [modal, contextHolder] = Modal.useModal();
     const confirm = () => {
       modal.confirm({
@@ -21,7 +22,9 @@ const Delete = ({handleDelete, disabled}) => {
     return (
       <>
         <Button 
-          type='primary' 
+          type='primary'
+          className='botao-de-acao'
+          size='large'
           icon={<DeleteOutlined />} 
           onClick={confirm} 
           disabled={disabled}
