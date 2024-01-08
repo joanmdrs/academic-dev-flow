@@ -43,7 +43,7 @@ class AtualizarArtefatoView(APIView):
             artefato = Artefato.objects.get(pk=id)
             serializer = ArtefatoSerializer(artefato, data=request.data)
             
-            if serializer.is_valid(raise_expection=True):
+            if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
              
