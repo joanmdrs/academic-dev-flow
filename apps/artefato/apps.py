@@ -3,4 +3,4 @@ from django.apps import AppConfig
 
 class ArtefatoConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'artefato'
+    name = 'apps.artefato'
