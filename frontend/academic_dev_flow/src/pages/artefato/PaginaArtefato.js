@@ -5,6 +5,8 @@ import Delete from "../../components/Buttons/Delete/Delete";
 import Search from "../../components/Search/Search";
 import Title from "../../components/Title/Title";
 import FormBuscarArtefato from "../../components/Forms/FormBuscarArtefato/FormBuscarArtefato";
+import BotaoAtualizar from "../../components/Buttons/BotaoAtualizar/BotaoAtualizar";
+import "./PaginaArtefato.css";
 
 const PaginaArtefato = () => {
 
@@ -16,6 +18,12 @@ const PaginaArtefato = () => {
                 title='Artefatos'
                 paragraph='Artefatos > Gerenciar artefatos'
             />
+
+            <div className="botoes-de-acao">
+                <Add />
+                <BotaoAtualizar />
+                <Delete />
+            </div>
             <FormBuscarArtefato />
         </div>
 
