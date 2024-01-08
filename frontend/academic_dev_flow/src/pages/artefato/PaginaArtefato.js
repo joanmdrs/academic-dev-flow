@@ -4,6 +4,7 @@ import Add from "../../components/Buttons/Add/Add";
 import Delete from "../../components/Buttons/Delete/Delete";
 import Search from "../../components/Search/Search";
 import Title from "../../components/Title/Title";
+import FormBuscarArtefato from "../../components/Forms/FormBuscarArtefato/FormBuscarArtefato";
 
 const PaginaArtefato = () => {
 
@@ -15,6 +16,7 @@ const PaginaArtefato = () => {
                 title='Artefatos'
                 paragraph='Artefatos > Gerenciar artefatos'
             />
+            <FormBuscarArtefato />
         </div>
 
     )
