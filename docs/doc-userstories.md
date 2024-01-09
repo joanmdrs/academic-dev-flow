@@ -303,7 +303,7 @@ Este documento descreve os User Stories criados a partir da Lista de Requisitos 
 | ------------------------- | -------------|
 | **Prioridade**            | Essencial    |
 | **Estimativa**            |              |
-| **Tempo Gasto (real):**   |              |
+| **Tempo Gasto (real):**   | 1h (back-end)|
 | **Tamanho Funcional**     |              |
 | **Analista**              | Joan         |
 | **Desenvolvedor**         | Joan         |

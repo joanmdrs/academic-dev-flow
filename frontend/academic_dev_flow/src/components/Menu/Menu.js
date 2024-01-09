@@ -4,6 +4,7 @@ import { Menu } from 'antd';
 import {HiOutlineClipboardList} from "react-icons/hi"
 import {DiScrum} from "react-icons/di"
 import { BiGroup } from "react-icons/bi";
+import { SiAzureartifacts } from "react-icons/si";
 import Sider from 'antd/es/layout/Sider';
 const { SubMenu } = Menu;
 
@@ -57,6 +58,14 @@ const MyMenu = () => {
 
             <a href="/membros">Membros</a>
 
+          </Menu.Item>
+
+          <Menu.Item
+            className='item-menu'
+            key='artefato'
+            icon={<SiAzureartifacts style={{fontSize:'15px'}} />}
+          >
+            <a href='/artefatos'>Artefatos</a>
           </Menu.Item>
 
          
