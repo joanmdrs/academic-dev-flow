@@ -18,6 +18,10 @@ const PaginaArtefato = () => {
     const [mostrarFormulario, setMostrarFormulario] = useState(false);
     const [acaoForm, setAcaoForm] = useState("criar")
     const [dadosArtefatos, setDadosArtefatos] = useState([])
+    const [dadosFormulario, setDadosFormulario] = useState({id: "", nome: "", descricao: ""})
+    const [statusBotaoAdicionar, setStatusBotaoAdicionar] = useState(false);
+    const [statusBotaoEditar, setStatusBotaoEditar] = useState(true);
+    const [statusBotaoExcluir, setStatusBotaoExcluir] = useState(true)
 
     const colunas_tabela_artefatos = [
         {
@@ -37,15 +41,10 @@ const PaginaArtefato = () => {
         },
     ];
 
-    const mostrarFormularioAdicao = () => {
-        setMostrarFormulario(true);
-    };
-
     const handleListarArtefatos = async () => { 
         
         try {
             const resposta = await listarArtefatos()
-            console.log(resposta)
 
             if(resposta.status === 200) {
                 setDadosArtefatos(resposta.data)
@@ -53,14 +52,37 @@ const PaginaArtefato = () => {
                 NotificationManager.error("Ocorreu um problema durante a busca dos dados, contate o suporte!");
             }
         } catch (error) {
-            console.log(error)
+            NotificationManager.error("Ocorreu um problema durante a busca dos dados, contate o suporte!");
         }
     }
 
     useEffect(() => {
-        // Executar a função handleListarArtefatos uma vez a cada renderização
         handleListarArtefatos();
     }, []);
+
+    const handleCliqueLinhaTabelaArtefatos = (linha_dados) => {
+        setStatusBotaoEditar(false)
+        setDadosFormulario(linha_dados)
+        setStatusBotaoExcluir(false)
+    }
+
+    const handleCliqueBotaoAdicionar = () => {
+        setAcaoForm('criar')
+        setMostrarFormulario(true);
+    };
+
+    const handleCliqueBotaoEditar = () => {
+        setAcaoForm("atualizar")
+        setMostrarFormulario(true)
+    }
+
+    const handleCliqueBotaoVoltar = () => {
+        setMostrarFormulario(false)
+        setStatusBotaoAdicionar(false)
+        setStatusBotaoEditar(true)
+        setStatusBotaoExcluir(true)
+        setDadosFormulario({nome: "", descricao: ""})
+    }
 
     return (
         <div>
@@ -68,7 +90,11 @@ const PaginaArtefato = () => {
 
             {mostrarFormulario ? (
 
-                <PaginaCadastrarArtefato onCancel={() => setMostrarFormulario(false)} acaoForm={acaoForm}/>
+                <PaginaCadastrarArtefato 
+                    onCancel={handleCliqueBotaoVoltar} 
+                    acaoForm={acaoForm} 
+                    dados_linha={dadosFormulario}
+                />
 
             ) : (
                 <>
@@ -84,14 +110,18 @@ const PaginaArtefato = () => {
                             <BotaoFiltrar />
                         </div>
                         <div id="botao-adicionar-atualizar-deletar"> 
-                            <Add onClick={mostrarFormularioAdicao}/>
-                            <BotaoAtualizar />
-                            <Delete />
+                            <Add onClick={handleCliqueBotaoAdicionar} disabled={statusBotaoAdicionar}/>
+                            <BotaoAtualizar onClick={handleCliqueBotaoEditar} disabled={statusBotaoEditar}/>
+                            <Delete disabled={statusBotaoExcluir}/>
                         </div>
                     </div>
                     <FormBuscarArtefato />
 
-                    <ListaDeArtefatos colunas={colunas_tabela_artefatos} dados={dadosArtefatos}/>
+                    <ListaDeArtefatos 
+                        colunas={colunas_tabela_artefatos} 
+                        dados={dadosArtefatos} 
+                        onClickRow={handleCliqueLinhaTabelaArtefatos}
+                    />
                 </>
             )}
             
