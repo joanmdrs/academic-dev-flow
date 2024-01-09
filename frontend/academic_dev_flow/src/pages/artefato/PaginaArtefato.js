@@ -7,6 +7,7 @@ import Title from "../../components/Title/Title";
 import FormBuscarArtefato from "../../components/Forms/FormBuscarArtefato/FormBuscarArtefato";
 import BotaoAtualizar from "../../components/Buttons/BotaoAtualizar/BotaoAtualizar";
 import "./PaginaArtefato.css";
+import BotaoFiltrar from "../../components/Buttons/BotaoFiltrar/BotaoFiltrar";
 
 const PaginaArtefato = () => {
 
@@ -20,9 +21,14 @@ const PaginaArtefato = () => {
             />
 
             <div className="botoes-de-acao">
-                <Add />
-                <BotaoAtualizar />
-                <Delete />
+                <div id="botao-filtrar"> 
+                    <BotaoFiltrar />
+                </div>
+                <div id="botao-adicionar-atualizar-deletar"> 
+                    <Add />
+                    <BotaoAtualizar />
+                    <Delete />
+                </div>
             </div>
             <FormBuscarArtefato />
         </div>
