@@ -10,6 +10,7 @@ import "./PaginaArtefato.css";
 import BotaoFiltrar from "../../components/Buttons/BotaoFiltrar/BotaoFiltrar";
 import ListaDeArtefatos from "../../components/Listas/ListaDeArtefatos/ListaDeArtefatos";
 import PaginaCadastrarArtefato from "./PaginaCadastrarArtefato";
+import BotaoVoltar from "../../components/Buttons/BotaoVoltar/BotaoVoltar";
 
 const PaginaArtefato = () => {
 
@@ -60,6 +61,8 @@ const PaginaArtefato = () => {
                         title='Artefatos'
                         paragraph='Artefatos > Gerenciar artefatos'
                     />
+
+                   
 
                     <div className="botoes-de-acao">
                         <div id="botao-filtrar"> 
