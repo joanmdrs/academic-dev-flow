@@ -15,6 +15,7 @@ import BotaoVoltar from "../../components/Buttons/BotaoVoltar/BotaoVoltar";
 const PaginaArtefato = () => {
 
     const [mostrarFormulario, setMostrarFormulario] = useState(false);
+    const [acaoForm, setAcaoForm] = useState("criar")
 
     const colunas_tabela_artefatos = [
         {
@@ -53,7 +54,7 @@ const PaginaArtefato = () => {
 
             {mostrarFormulario ? (
 
-                <PaginaCadastrarArtefato onCancel={() => setMostrarFormulario(false)}/>
+                <PaginaCadastrarArtefato onCancel={() => setMostrarFormulario(false)} acaoForm={acaoForm}/>
 
             ) : (
                 <>

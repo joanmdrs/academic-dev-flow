@@ -2,7 +2,7 @@ import api from "./api";
 
 export const criarArtefato = async (dados) => {
 
-    const resposta = await api.post("/artefato/cadastrar/", {data: dados})
+    const resposta = await api.post('/artefato/cadastrar/', dados)
     return resposta
 }
 

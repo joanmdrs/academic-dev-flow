@@ -2,8 +2,37 @@ import { Button, Form, Input } from "antd";
 import React from "react";
 import Title from "../../components/Title/Title";
 import BotaoVoltar from "../../components/Buttons/BotaoVoltar/BotaoVoltar";
+import { useForm } from "antd/es/form/Form";
+import { criarArtefato } from "../../services/artefato_service";
+import { NotificationManager } from "react-notifications";
 
-const PaginaCadastrarArtefato = ({onCancel}) => {
+const PaginaCadastrarArtefato = ({onCancel, acaoForm, setAcaoForm}) => {
+
+    const [form] = Form.useForm();
+
+    const handleCriarArtefato = async () => {
+
+        const dados_form = form.getFieldsValue();
+
+        try {
+            const resposta = await criarArtefato(dados_form)
+
+            if(resposta.status === 200){
+                NotificationManager.success("Artefato criado com sucesso!");
+            } else {
+                NotificationManager.error("Ocorreu um problema, contate o suporte!");
+            }
+        } catch (error) {
+            NotificationManager.error("Ocorreu um problema, contate o suporte!");
+        }
+    }
+
+    const handleSubmeterFormulario = async () => {
+         
+        if (acaoForm === "criar") {
+            await handleCriarArtefato()
+        }
+    }
     return (
         <div> 
             <Title 
@@ -20,8 +49,8 @@ const PaginaCadastrarArtefato = ({onCancel}) => {
                     <h4>INCLUIR DISCIPLINA</h4>
                 </div>
 
-                <div>
-                    <Form layout="vertical">
+                <div> 
+                    <Form layout="vertical" form={form}>
                         <Form.Item 
                             label="Nome" 
                             name="nome"
@@ -44,7 +73,7 @@ const PaginaCadastrarArtefato = ({onCancel}) => {
                 </div>
 
                 <div style={{display: "flex", gap: "10px"}}>
-                    <Button type="primary">Salvar</Button>
+                    <Button type="primary" onClick = {handleSubmeterFormulario}>Salvar</Button>
         
                 </div>
             </div>
