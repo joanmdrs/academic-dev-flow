@@ -22,3 +22,8 @@ export const excluirArtefato = async (id) => {
     const resposta = await api.delete(`/artefato/excluir/${encodeURIComponent(id)}`)
     return resposta
 }
+
+export const listarArtefatos = async () => {
+    const resposta = await api.get('/artefato/listar/')
+    return resposta
+}

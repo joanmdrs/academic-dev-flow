@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { NotificationContainer } from "react-notifications";
+import React, { useEffect, useState } from "react";
+import { NotificationContainer, NotificationManager } from "react-notifications";
 import Add from "../../components/Buttons/Add/Add";
 import Delete from "../../components/Buttons/Delete/Delete";
 import Search from "../../components/Search/Search";
@@ -11,11 +11,13 @@ import BotaoFiltrar from "../../components/Buttons/BotaoFiltrar/BotaoFiltrar";
 import ListaDeArtefatos from "../../components/Listas/ListaDeArtefatos/ListaDeArtefatos";
 import PaginaCadastrarArtefato from "./PaginaCadastrarArtefato";
 import BotaoVoltar from "../../components/Buttons/BotaoVoltar/BotaoVoltar";
+import { listarArtefatos } from "../../services/artefato_service";
 
 const PaginaArtefato = () => {
 
     const [mostrarFormulario, setMostrarFormulario] = useState(false);
     const [acaoForm, setAcaoForm] = useState("criar")
+    const [dadosArtefatos, setDadosArtefatos] = useState([])
 
     const colunas_tabela_artefatos = [
         {
@@ -27,13 +29,6 @@ const PaginaArtefato = () => {
             title: "Nome",
             dataIndex: "nome",
             key: "nome",
-            render: (text, record) => (
-                <span
-                    style={{ color: "blue", cursor: "pointer" }}
-                >
-                {text}
-                </span>
-            ),
         },
         {
             title: "Descrição",
@@ -46,7 +41,26 @@ const PaginaArtefato = () => {
         setMostrarFormulario(true);
     };
 
+    const handleListarArtefatos = async () => { 
+        
+        try {
+            const resposta = await listarArtefatos()
+            console.log(resposta)
 
+            if(resposta.status === 200) {
+                setDadosArtefatos(resposta.data)
+            } else {
+                NotificationManager.error("Ocorreu um problema durante a busca dos dados, contate o suporte!");
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        // Executar a função handleListarArtefatos uma vez a cada renderização
+        handleListarArtefatos();
+    }, []);
 
     return (
         <div>
@@ -77,7 +91,7 @@ const PaginaArtefato = () => {
                     </div>
                     <FormBuscarArtefato />
 
-                    <ListaDeArtefatos colunas={colunas_tabela_artefatos} />
+                    <ListaDeArtefatos colunas={colunas_tabela_artefatos} dados={dadosArtefatos}/>
                 </>
             )}
             

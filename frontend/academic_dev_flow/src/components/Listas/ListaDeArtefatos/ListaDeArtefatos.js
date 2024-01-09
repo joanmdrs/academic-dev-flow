@@ -2,7 +2,7 @@ import { Table } from "antd";
 import React, { useState } from "react";
 import "./ListaDeArtefatos.css";
 
-const ListaDeArtefatos = ({colunas}) => {
+const ListaDeArtefatos = ({colunas, dados}) => {
 
     const [data, setData] = useState([])
 
@@ -12,7 +12,7 @@ const ListaDeArtefatos = ({colunas}) => {
                 <>
                     <Table 
                         className="tabela-lista-de-artefatos" 
-                        dataSource={data} 
+                        dataSource={dados} 
                         columns={colunas} 
                         rowKey="id"/>
                 </>
