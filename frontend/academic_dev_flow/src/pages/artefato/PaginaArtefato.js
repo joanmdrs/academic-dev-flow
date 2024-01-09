@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { NotificationContainer, NotificationManager } from "react-notifications";
 import Add from "../../components/Buttons/Add/Add";
 import Delete from "../../components/Buttons/Delete/Delete";
-import Search from "../../components/Search/Search";
 import Title from "../../components/Title/Title";
 import FormBuscarArtefato from "../../components/Forms/FormBuscarArtefato/FormBuscarArtefato";
 import BotaoAtualizar from "../../components/Buttons/BotaoAtualizar/BotaoAtualizar";
@@ -10,18 +9,19 @@ import "./PaginaArtefato.css";
 import BotaoFiltrar from "../../components/Buttons/BotaoFiltrar/BotaoFiltrar";
 import ListaDeArtefatos from "../../components/Listas/ListaDeArtefatos/ListaDeArtefatos";
 import PaginaCadastrarArtefato from "./PaginaCadastrarArtefato";
-import { excluirArtefato, listarArtefatos } from "../../services/artefato_service";
+import { buscarArtefatoPeloNome, excluirArtefato, listarArtefatos } from "../../services/artefato_service";
 import { recarregarPagina } from "../../services/utils";
 
 const PaginaArtefato = () => {
 
+    const [acaoForm, setAcaoForm] = useState("criar");
     const [mostrarFormulario, setMostrarFormulario] = useState(false);
-    const [acaoForm, setAcaoForm] = useState("criar")
-    const [dadosArtefatos, setDadosArtefatos] = useState([])
-    const [dadosLinhaListaArtefatos, setDadosLinhaListaArtefatos] = useState({id: "", nome: "", descricao: ""})
+    const [monstrarFormFiltrar, setMostrarFormFiltrar] = useState(false);
     const [statusBotaoAdicionar, setStatusBotaoAdicionar] = useState(false);
     const [statusBotaoEditar, setStatusBotaoEditar] = useState(true);
-    const [statusBotaoExcluir, setStatusBotaoExcluir] = useState(true)
+    const [statusBotaoExcluir, setStatusBotaoExcluir] = useState(true);
+    const [dadosArtefatos, setDadosArtefatos] = useState([]);
+    const [dadosLinhaListaArtefatos, setDadosLinhaListaArtefatos] = useState({id: "", nome: "", descricao: ""});
 
     const colunas_tabela_artefatos = [
         {
@@ -59,6 +59,27 @@ const PaginaArtefato = () => {
     useEffect(() => {
         handleListarArtefatos();
     }, []);
+
+    const handleCliqueBotaoFiltrar = () => {
+        setMostrarFormFiltrar((prevMostrarFormFiltrar) => !prevMostrarFormFiltrar);
+    }
+
+    const handleFiltrarArtefatos = async (parametro) => {
+
+        try {
+            const resposta = await buscarArtefatoPeloNome(parametro)
+
+            console.log(resposta)
+            if(resposta.status === 200) {
+                setDadosArtefatos(resposta.data)
+
+            } else {
+                NotificationManager.error("Ocorreu um problema, contate o suporte!");
+            }
+        } catch (error) {
+            NotificationManager.error("Ocorreu um problema, contate o suporte!");
+        }
+    }   
 
     const handleCliqueLinhaTabelaArtefatos = (linha_dados) => {
         setStatusBotaoEditar(false)
@@ -123,7 +144,7 @@ const PaginaArtefato = () => {
 
                     <div className="botoes-de-acao">
                         <div id="botao-filtrar"> 
-                            <BotaoFiltrar />
+                            <BotaoFiltrar onClick={handleCliqueBotaoFiltrar} />
                         </div>
                         <div id="botao-adicionar-atualizar-deletar"> 
                             <Add onClick={handleCliqueBotaoAdicionar} disabled={statusBotaoAdicionar}/>
@@ -131,7 +152,9 @@ const PaginaArtefato = () => {
                             <Delete onClick={handleCliqueBotaoExcluir} disabled={statusBotaoExcluir}/>
                         </div>
                     </div>
-                    <FormBuscarArtefato />
+
+                    {monstrarFormFiltrar && (<FormBuscarArtefato executeFuncao={handleFiltrarArtefatos}/>)}
+                    
 
                     <ListaDeArtefatos 
                         colunas={colunas_tabela_artefatos} 

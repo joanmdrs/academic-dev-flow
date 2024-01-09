@@ -6,7 +6,7 @@ export const criarArtefato = async (dados) => {
 }
 
 export const buscarArtefatoPeloNome =  async (parametro) => {
-    const resposta = await api.get(`/artefato/buscar/?name=${encodeURIComponent(parametro)}/`)
+    const resposta = await api.get(`/artefato/buscar/?name=${encodeURIComponent(parametro)}`)
     return resposta
 }
 
