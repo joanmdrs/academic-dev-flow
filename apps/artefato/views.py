@@ -53,7 +53,7 @@ class AtualizarArtefatoView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
     
 class ExcluirArtefatoView(APIView):
-    def delete(selg, request, id): 
+    def delete(self, request, id): 
         try: 
             artefato = Artefato.objects.get(pk=id)
             
@@ -66,3 +66,15 @@ class ExcluirArtefatoView(APIView):
             
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)        
+        
+class ListarArtefatosView(APIView): 
+    def get(self, request): 
+        try: 
+            artefatos = Artefato.objects.all()
+            
+            serializer = ArtefatoSerializer(artefatos, many=True) 
+            
+            return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})   
+
+        except Exception as e: 
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
