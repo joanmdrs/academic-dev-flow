@@ -10,15 +10,15 @@ import "./PaginaArtefato.css";
 import BotaoFiltrar from "../../components/Buttons/BotaoFiltrar/BotaoFiltrar";
 import ListaDeArtefatos from "../../components/Listas/ListaDeArtefatos/ListaDeArtefatos";
 import PaginaCadastrarArtefato from "./PaginaCadastrarArtefato";
-import BotaoVoltar from "../../components/Buttons/BotaoVoltar/BotaoVoltar";
-import { listarArtefatos } from "../../services/artefato_service";
+import { excluirArtefato, listarArtefatos } from "../../services/artefato_service";
+import { recarregarPagina } from "../../services/utils";
 
 const PaginaArtefato = () => {
 
     const [mostrarFormulario, setMostrarFormulario] = useState(false);
     const [acaoForm, setAcaoForm] = useState("criar")
     const [dadosArtefatos, setDadosArtefatos] = useState([])
-    const [dadosFormulario, setDadosFormulario] = useState({id: "", nome: "", descricao: ""})
+    const [dadosLinhaListaArtefatos, setDadosLinhaListaArtefatos] = useState({id: "", nome: "", descricao: ""})
     const [statusBotaoAdicionar, setStatusBotaoAdicionar] = useState(false);
     const [statusBotaoEditar, setStatusBotaoEditar] = useState(true);
     const [statusBotaoExcluir, setStatusBotaoExcluir] = useState(true)
@@ -62,7 +62,7 @@ const PaginaArtefato = () => {
 
     const handleCliqueLinhaTabelaArtefatos = (linha_dados) => {
         setStatusBotaoEditar(false)
-        setDadosFormulario(linha_dados)
+        setDadosLinhaListaArtefatos(linha_dados)
         setStatusBotaoExcluir(false)
     }
 
@@ -76,12 +76,28 @@ const PaginaArtefato = () => {
         setMostrarFormulario(true)
     }
 
+    const handleCliqueBotaoExcluir = async () => {
+
+        try {
+            const resposta = await excluirArtefato(dadosLinhaListaArtefatos.id)
+
+            if(resposta.status === 204) {
+                NotificationManager.success("Artefato excluído com sucesso!");
+                recarregarPagina();
+        } else {
+            NotificationManager.error("Ocorreu um problema, contate o suporte!");
+        }
+        } catch (error) {
+            NotificationManager.error("Ocorreu um problema, contate o suporte!");
+        }
+    }
+
     const handleCliqueBotaoVoltar = () => {
         setMostrarFormulario(false)
         setStatusBotaoAdicionar(false)
         setStatusBotaoEditar(true)
         setStatusBotaoExcluir(true)
-        setDadosFormulario({nome: "", descricao: ""})
+        setDadosLinhaListaArtefatos({id: "", nome: "", descricao: ""})
     }
 
     return (
@@ -93,7 +109,7 @@ const PaginaArtefato = () => {
                 <PaginaCadastrarArtefato 
                     onCancel={handleCliqueBotaoVoltar} 
                     acaoForm={acaoForm} 
-                    dados_linha={dadosFormulario}
+                    dados_linha={dadosLinhaListaArtefatos}
                 />
 
             ) : (
@@ -112,7 +128,7 @@ const PaginaArtefato = () => {
                         <div id="botao-adicionar-atualizar-deletar"> 
                             <Add onClick={handleCliqueBotaoAdicionar} disabled={statusBotaoAdicionar}/>
                             <BotaoAtualizar onClick={handleCliqueBotaoEditar} disabled={statusBotaoEditar}/>
-                            <Delete disabled={statusBotaoExcluir}/>
+                            <Delete onClick={handleCliqueBotaoExcluir} disabled={statusBotaoExcluir}/>
                         </div>
                     </div>
                     <FormBuscarArtefato />
