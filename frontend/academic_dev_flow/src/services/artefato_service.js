@@ -14,12 +14,12 @@ export const buscarArtefatoPeloNome =  async (parametro) => {
 
 export const atualizarArtefato = async (dados, id) => {
 
-    const resposta = await api.patch(`/artefato/atualizar/${encodeURIComponent(id)}`, {data: dados})
+    const resposta = await api.patch(`/artefato/atualizar/${encodeURIComponent(id)}/`, dados)
     return resposta
 }
 
 export const excluirArtefato = async (id) => {
-    const resposta = await api.delete(`/artefato/excluir/${encodeURIComponent(id)}`)
+    const resposta = await api.delete(`/artefato/excluir/${encodeURIComponent(id)}/`)
     return resposta
 }
 
