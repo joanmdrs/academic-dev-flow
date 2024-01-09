@@ -1,24 +1,50 @@
 import { Button, Form, Input } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Title from "../../components/Title/Title";
 import BotaoVoltar from "../../components/Buttons/BotaoVoltar/BotaoVoltar";
-import { useForm } from "antd/es/form/Form";
-import { criarArtefato } from "../../services/artefato_service";
+import { atualizarArtefato, criarArtefato } from "../../services/artefato_service";
 import { NotificationManager } from "react-notifications";
+import { recarregarPagina } from "../../services/utils";
 
-const PaginaCadastrarArtefato = ({onCancel, acaoForm, setAcaoForm}) => {
+const PaginaCadastrarArtefato = ({onCancel, acaoForm, dados_linha}) => {
 
     const [form] = Form.useForm();
+    
+    useEffect(() => {
+        form.setFieldsValue(dados_linha);
+    }, []);
 
-    const handleCriarArtefato = async () => {
-
-        const dados_form = form.getFieldsValue();
+    const handleCriarArtefato = async (dados) => {
 
         try {
-            const resposta = await criarArtefato(dados_form)
+            const resposta = await criarArtefato(dados)
 
             if(resposta.status === 200){
                 NotificationManager.success("Artefato criado com sucesso!");
+                recarregarPagina()
+            } else {
+                NotificationManager.error("Ocorreu um problema, contate o suporte!");
+            }
+        } catch (error) {
+            NotificationManager.error("Ocorreu um problema, contate o suporte!");
+        }
+    }
+
+    const handleAtualizarArtefato = async (dados) => {
+        
+        const dados_atualizados = { 
+            nome: dados.nome, 
+            descricao: dados.descricao
+        }
+
+        const id_artefato = dados_linha.id
+        
+        try {
+            const resposta = await atualizarArtefato(dados_atualizados, id_artefato)
+
+            if(resposta.status === 200) {
+                NotificationManager.success("Artefato atualizado com sucesso!");
+                recarregarPagina()
             } else {
                 NotificationManager.error("Ocorreu um problema, contate o suporte!");
             }
@@ -28,11 +54,17 @@ const PaginaCadastrarArtefato = ({onCancel, acaoForm, setAcaoForm}) => {
     }
 
     const handleSubmeterFormulario = async () => {
-         
+
+        const dados_form = form.getFieldsValue();
+
         if (acaoForm === "criar") {
-            await handleCriarArtefato()
+            await handleCriarArtefato(dados_form)
+
+        } else if (acaoForm === "atualizar") {
+            await handleAtualizarArtefato(dados_form)
         }
     }
+
     return (
         <div> 
             <Title 
