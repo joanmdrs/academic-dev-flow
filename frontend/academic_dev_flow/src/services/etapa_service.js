@@ -1,27 +1,17 @@
 import api from "./api";
 
-export const cadastrar_etapas = async (etapas, flow_id) => {
+export const criarEtapas = async (etapas, fluxo_id) => {
 
-    let data = {
+    let dados = {
         etapas: etapas,
-        flow: flow_id
+        fluxo: fluxo_id
     }
-    try {
-        const response = await api.post('etapas/cadastrar/', data);
-        return response; 
-
-    } catch (error) {
-        console.error('Erro ao cadastrar etapas:', error);
-    }
+    const resposta = await api.post('etapa/cadastrar/', dados);
+    return resposta; 
 }
 
-export const buscar_etapas_por_id_fluxo = async (flow_id) => {
-
-    try {
-        const response = await api.get(`etapas/buscar/?flow_id=${encodeURIComponent(flow_id)}`);
-        return response; 
-    } catch (error) {
-        console.log("Erro ao buscar dados: ", error);
-    }
+export const buscarEtapasPeloIdFluxo = async (fluxo_id) => {
+    const resposta = await api.get(`etapa/buscar/?fluxo_id=${encodeURIComponent(fluxo_id)}`);
+    return resposta; 
 
 }
