@@ -5,49 +5,49 @@ import { buscar_projetos_pelo_nome } from "../../services/projeto_service";
 
 const { Item } = Form;
 
-const ModalSearch = ({open, title, label, name, onCancel, onOk, columns}) => {
+const ModalSearch = ({status, titulo, label, nome, onCancel, onOk, colunas}) => {
 
 
     const [form] = Form.useForm();
-    const [query, setQuery] = useState('');
-    const [data, setData] = useState([])
+    const [parametro, setParametro] = useState('');
+    const [dados, setDados] = useState([])
 
-    const handleQueryChange = (event) => {
-        setQuery(event.target.value);
+    const handleAlterarParametro = (event) => {
+        setParametro(event.target.value);
     };
 
     return (
         <Modal
-            title={title}
-            open={open}
+            title={titulo}
+            open={status}
             onCancel={() => {
                 onCancel()
-                setData([])
+                setDados([])
             }}
             onOk={async () => {
                 // A função onOk(query) é responsável por buscar os dados por meio da query
-                const response = await onOk(query)
+                const response = await onOk(parametro)
 
                 if(response !== undefined) {
-                    setData(response.data)
+                    setDados(response.data)
                 }
             }}
         >
             <Form form={form} layout="vertical">
-                <Item label={label} name={name} >
+                <Item label={label} name={nome} >
                     <Input
-                        name={name}
+                        name={nome}
                         placeholder={label}
-                        value={query}
-                        onChange={handleQueryChange}
+                        value={parametro}
+                        onChange={handleAlterarParametro}
                     />
                 </Item>
             </Form>
 
-            {data.length > 0 ? (
+            {dados.length > 0 ? (
                 <>
                 <Divider orientation="left">Resultados</Divider>
-                <Table dataSource={data} columns={columns} rowKey="id"/>
+                <Table dataSource={dados} columns={colunas} rowKey="id"/>
               </>
       
             ) : null}
