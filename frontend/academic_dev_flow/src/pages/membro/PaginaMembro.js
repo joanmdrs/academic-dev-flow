@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./PaginaMembro.css";
-import Title from "../../components/Title/Title";
-import Search from "../../components/Search/Search";
-import ModalSearch from "../../components/Modal/Modal";
-import Add from "../../components/Buttons/Add/Add";
-import Delete from "../../components/Buttons/Delete/Delete";
+import Titulo from "../../components/Titulo/Titulo";
+import BotaoBuscar from "../../components/Botoes/BotaoBuscar/BotaoBuscar";
+import BotaoAdicionar from "../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
+import BotaoExcluir from "../../components/Botoes/BotaoExcluir/BotaoExcluir";
+import ModalBusca from "../../components/Modal/Modal";
+
 import {
   atualizarMembro,
   buscarMembroPeloNome,
@@ -29,7 +30,6 @@ import { NotificationContainer, NotificationManager } from "react-notifications"
 import moment from "moment";
 import "moment/locale/pt-br";
 import { recarregarPagina } from "../../services/utils";
-import HelpModal from "../../components/HelpModal/HelpModal";
 moment.locale("pt-br");
 
 const { Option } = Select;
@@ -215,26 +215,26 @@ const PaginaMembro = () => {
     return (
         <div>
            <NotificationContainer /> 
-            <Title 
-                title='Membros'
-                paragraph='Membros > Gerenciar membros'
+            <Titulo 
+                titulo='Membros'
+                paragrafo='Membros > Gerenciar membros'
             />
 
             <div className='add-and-delete'>
-                <Add onClick={ () => {handleClickBtnAdd()}} disabled={btnAddActive}/>
-                <Delete handleDelete={handleDelete} disabled={btnDelActive}/>
+                <BotaoAdicionar funcao={ () => {handleClickBtnAdd()}} status={btnAddActive}/>
+                <BotaoExcluir funcao={handleDelete} status={btnDelActive}/>
             </div>
 
-            <Search name="BUSCAR MEMBRO" onClick={showModal} disabled={btnSearchActive}/>
+            <BotaoBuscar nome="BUSCAR MEMBRO" funcao={showModal} status={btnSearchActive}/>
 
-            <ModalSearch 
-                title="Buscar membro" 
+            <ModalBusca 
+                titulo="Buscar membro" 
                 label="Nome do membro"
                 name="name-membro"
                 onCancel={handleCancel}
                 onOk={handleOk}
-                open={modalVisible}
-                columns={columns}
+                status={modalVisible}
+                colunas={columns}
             />
             
             {formVisible &&  (

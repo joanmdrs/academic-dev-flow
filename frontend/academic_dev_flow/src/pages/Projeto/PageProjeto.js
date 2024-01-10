@@ -6,13 +6,12 @@ import {atualizarProjeto, buscarProjetoPeloNome, criarProjeto, excluirProjeto} f
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { Form, Input, Select, DatePicker, Button } from 'antd';
 import Titulo from '../../components/Titulo/Titulo';
-import BotaoFiltrar from '../../components/Botoes/BotaoFiltrar/BotaoFiltrar';
 import BotaoAdicionar from '../../components/Botoes/BotaoAdicionar/BotaoAdicionar';
 import BotaoExcluir from '../../components/Botoes/BotaoExcluir/BotaoExcluir';
+import BotaoBuscar from '../../components/Botoes/BotaoBuscar/BotaoBuscar';
 import ModalBusca from '../../components/Modal/Modal';
 import 'moment/locale/pt-br';
 import { recarregarPagina } from '../../services/utils';
-import BotaoBuscar from '../../components/Botoes/BotaoBuscar/BotaoBuscar';
 moment.locale('pt-br');
 
 
@@ -31,6 +30,25 @@ const PageProjeto = () => {
     data_inicio: '',
     data_fim: '',
   };
+
+  const COLUNAS_MODAL = [
+    {
+        title: "Código",
+        key: "codigo",
+        dataIndex: "id",
+    },
+    {
+        title: "Nome",
+        dataIndex: "nome",
+        key: "nome",
+    },
+    {
+        title: "Descrição",
+        dataIndex: "descricao",
+        key: "descricao",
+    },
+  ];
+  
 
   const [valoresForm, setValoresForm] = useState(VALORES_INICIAIS);
   const [idProjeto, setIdProjeto] = useState('');
@@ -148,15 +166,14 @@ const PageProjeto = () => {
       />
 
       <div className='add-and-delete'>
-        <BotaoAdicionar funcao={setIsFormVisivel(true)} status={isBotaoAdicionarVisivel}/>
+        <BotaoAdicionar funcao={() => setIsFormVisivel(true)} status={isBotaoAdicionarVisivel}/>
         <BotaoExcluir funcao={handleExcluirProjeto} status={isBotaoExcluirVisivel}/>
       </div>
       
-      <BotaoBuscar funcao={handleMostrarModal} status={isBotaoBuscarVisivel}/>
-      
+      <BotaoBuscar nome="BUSCAR PROJETO" funcao={handleMostrarModal} status={isBotaoBuscarVisivel}/>
 
       <ModalBusca 
-
+        colunas={COLUNAS_MODAL}
         titulo="Buscar projeto" 
         status={isModalVisivel} 
         onCancel={handleFecharModal}
@@ -237,12 +254,12 @@ const PageProjeto = () => {
             </Button>
           </Form.Item>
         </Form>
-
       )}
 
       <NotificationContainer />
     </div>
   );
-};
+
+}
 
 export default PageProjeto;

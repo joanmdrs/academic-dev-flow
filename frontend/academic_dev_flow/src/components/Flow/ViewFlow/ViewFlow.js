@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./ViewFlow.css";
 import { useParams } from 'react-router-dom';
-import { buscar_fluxo_pelo_id } from "../../../services/flow_service";
-import { Badge, Descriptions, Spin } from "antd";
-import { buscar_etapas_por_id_fluxo } from "../../../services/etapa_service";
+import { buscarFluxoPeloId } from "../../../services/fluxo_service";
+import { Descriptions, Spin } from "antd";
+import { buscarEtapasPeloIdFluxo } from "../../../services/etapa_service";
 
 const ViewFlow = () => {
     const { id } = useParams();
@@ -15,8 +15,8 @@ const ViewFlow = () => {
     useEffect(() => {
         const handleFluxoPeloId = async () => {
             try {
-                const dados_fluxos = await buscar_fluxo_pelo_id(id);
-                const dados_etapas = await buscar_etapas_por_id_fluxo(id);
+                const dados_fluxos = await buscarFluxoPeloId(id);
+                const dados_etapas = await buscarEtapasPeloIdFluxo(id);
 
                 setFluxo(dados_fluxos.data);
                 setEtapas(dados_etapas.data);

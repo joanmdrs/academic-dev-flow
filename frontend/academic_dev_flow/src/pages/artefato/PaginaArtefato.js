@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { NotificationContainer, NotificationManager } from "react-notifications";
-import Add from "../../components/Buttons/Add/Add";
-import Delete from "../../components/Buttons/Delete/Delete";
-import Title from "../../components/Title/Title";
+import BotaoAdicionar from "../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
+import BotaoExcluir from "../../components/Botoes/BotaoExcluir/BotaoExcluir";
+import Titulo from "../../components/Titulo/Titulo";
 import FormBuscarArtefato from "../../components/Forms/FormBuscarArtefato/FormBuscarArtefato";
-import BotaoAtualizar from "../../components/Buttons/BotaoAtualizar/BotaoAtualizar";
+import BotaoAtualizar from "../../components/Botoes/BotaoAtualizar/BotaoAtualizar";
 import "./PaginaArtefato.css";
-import BotaoFiltrar from "../../components/Buttons/BotaoFiltrar/BotaoFiltrar";
+import BotaoFiltrar from "../../components/Botoes/BotaoFiltrar/BotaoFiltrar";
 import ListaDeArtefatos from "../../components/Listas/ListaDeArtefatos/ListaDeArtefatos";
 import PaginaCadastrarArtefato from "./PaginaCadastrarArtefato";
 import { buscarArtefatoPeloNome, excluirArtefato, listarArtefatos } from "../../services/artefato_service";
@@ -135,9 +135,9 @@ const PaginaArtefato = () => {
 
             ) : (
                 <>
-                    <Title 
-                        title='Artefatos'
-                        paragraph='Artefatos > Gerenciar artefatos'
+                    <Titulo
+                        titulo='Artefatos'
+                        paragrafo='Artefatos > Gerenciar artefatos'
                     />
 
                    
@@ -147,9 +147,9 @@ const PaginaArtefato = () => {
                             <BotaoFiltrar onClick={handleCliqueBotaoFiltrar} />
                         </div>
                         <div id="botao-adicionar-atualizar-deletar"> 
-                            <Add onClick={handleCliqueBotaoAdicionar} disabled={statusBotaoAdicionar}/>
-                            <BotaoAtualizar onClick={handleCliqueBotaoEditar} disabled={statusBotaoEditar}/>
-                            <Delete onClick={handleCliqueBotaoExcluir} disabled={statusBotaoExcluir}/>
+                            <BotaoAdicionar funcao={handleCliqueBotaoAdicionar} status={statusBotaoAdicionar}/>
+                            <BotaoAtualizar funcao={handleCliqueBotaoEditar} status={statusBotaoEditar}/>
+                            <BotaoExcluir funcao={handleCliqueBotaoExcluir} status={statusBotaoExcluir}/>
                         </div>
                     </div>
 

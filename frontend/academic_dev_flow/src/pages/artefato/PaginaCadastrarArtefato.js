@@ -1,7 +1,7 @@
 import { Button, Form, Input } from "antd";
 import React, { useEffect, useState } from "react";
-import Title from "../../components/Title/Title";
-import BotaoVoltar from "../../components/Buttons/BotaoVoltar/BotaoVoltar";
+import Titulo from "../../components/Titulo/Titulo";
+import BotaoVoltar from "../../components/Botoes/BotaoVoltar/BotaoVoltar";
 import { atualizarArtefato, criarArtefato } from "../../services/artefato_service";
 import { NotificationManager } from "react-notifications";
 import { recarregarPagina } from "../../services/utils";
@@ -67,9 +67,9 @@ const PaginaCadastrarArtefato = ({onCancel, acaoForm, dados_linha}) => {
 
     return (
         <div> 
-            <Title 
-                title='Artefatos'
-                paragraph='Artefatos > Cadastrar artefatos'
+            <Titulo 
+                titulo='Artefatos'
+                paragrafo='Artefatos > Cadastrar artefatos'
             />
 
             <div className="form-box"> 

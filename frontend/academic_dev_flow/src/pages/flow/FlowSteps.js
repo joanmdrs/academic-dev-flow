@@ -6,8 +6,8 @@ import EtapaStep from "../../components/Etapa/EtapaStep/EtapaStep";
 import FlowDetails from "../../components/Flow/FlowDetails/FlowDetails";
 import { FormProvider } from "../../components/Flow/FormProvider/FormProvider";
 import ButtonSaveFlow from "../../components/Flow/ButtonSaveFlow/ButtonSaveFlow";
-import { cadastrar_etapas} from "../../services/etapa_service";
-import { cadastrar_fluxo } from "../../services/flow_service";
+import { criarEtapas} from "../../services/etapa_service";
+import { criarFluxo } from "../../services/fluxo_service";
 import { NotificationContainer, NotificationManager } from "react-notifications";
 
 const FlowSteps = () => {
@@ -59,12 +59,12 @@ const FlowSteps = () => {
                 return;
             }
     
-            const response_flow = await cadastrar_fluxo(fluxo)
+            const response_flow = await criarFluxo(fluxo)
     
             if (response_flow.status === 200) {
                 if (etapas) {
                     try {
-                        await cadastrar_etapas(etapas, response_flow.data.id);
+                        await criarEtapas(etapas, response_flow.data.id);
             
                         NotificationManager.success('Fluxo criado com sucesso!');
                         setTimeout(() => {
