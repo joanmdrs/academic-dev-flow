@@ -5,7 +5,7 @@ import { buscar_projetos_pelo_nome } from "../../services/projeto_service";
 
 const { Item } = Form;
 
-const ModalSearch = ({status, titulo, label, nome, onCancel, onOk, colunas}) => {
+const ModalBusca = ({status, titulo, label, name, onCancel, onOk, colunas}) => {
 
 
     const [form] = Form.useForm();
@@ -34,9 +34,9 @@ const ModalSearch = ({status, titulo, label, nome, onCancel, onOk, colunas}) => 
             }}
         >
             <Form form={form} layout="vertical">
-                <Item label={label} name={nome} >
+                <Item label={label} name={name} >
                     <Input
-                        name={nome}
+                        name={name}
                         placeholder={label}
                         value={parametro}
                         onChange={handleAlterarParametro}
@@ -58,4 +58,4 @@ const ModalSearch = ({status, titulo, label, nome, onCancel, onOk, colunas}) => 
     )
 }
 
-export default ModalSearch
+export default ModalBusca;
