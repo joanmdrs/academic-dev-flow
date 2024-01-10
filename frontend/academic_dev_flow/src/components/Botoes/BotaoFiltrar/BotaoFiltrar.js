@@ -2,15 +2,15 @@ import { Button } from "antd";
 import React from "react";
 import { FaFilter } from "react-icons/fa";
 
-const BotaoFiltrar = ({onClick, disabled}) => {
+const BotaoFiltrar = ({funcao, status}) => {
 
     return (
         <Button 
             type="default" 
             size="large"
             icon={<FaFilter />}
-            onClick={onClick} 
-            disabled={disabled}>
+            onClick={funcao} 
+            disabled={status}>
         </Button>
         
     )

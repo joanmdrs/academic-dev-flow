@@ -3,7 +3,7 @@ import React from "react";
 import { IoMdArrowBack } from "react-icons/io";
 import "./BotaoVoltar.css";
 
-const BotaoVoltar = ({onClick}) => {
+const BotaoVoltar = ({funcao}) => {
 
     return (
         <Button 
@@ -11,7 +11,7 @@ const BotaoVoltar = ({onClick}) => {
             type="default" 
             size="large"
             icon={<IoMdArrowBack />}
-            onClick={onClick}
+            onClick={funcao}
             
         >
         </Button>

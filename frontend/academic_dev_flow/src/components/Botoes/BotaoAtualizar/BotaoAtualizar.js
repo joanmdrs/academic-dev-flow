@@ -2,14 +2,14 @@ import { Button } from "antd";
 import React from "react";
 import { MdEdit } from "react-icons/md";
 
-const BotaoAtualizar = ({ onClick, disabled}) => {
+const BotaoAtualizar = ({ funcao, status}) => {
     return (
       <Button 
         type="default" 
         size="large"
         icon={<MdEdit />} 
-        onClick={onClick} 
-        disabled={disabled}>
+        onClick={funcao} 
+        disabled={status}>
       </Button>
     );
   };

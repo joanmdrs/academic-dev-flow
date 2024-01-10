@@ -1,19 +1,19 @@
 import React from 'react';
 import { Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import "./Add.css";
+import "./BotaoAdicionar.css";
 
-const Add = ({ onClick, disabled}) => {
+const BotaoAdicionar = ({ funcao, status}) => {
     return (
       <Button 
         className='botao-adicionar'
         size="large"
         type="default" 
         icon={<PlusOutlined />} 
-        onClick={onClick} 
-        disabled={disabled}>
+        onClick={funcao} 
+        disabled={status}>
       </Button>
     );
   };
   
-  export default Add;
+  export default BotaoAdicionar;

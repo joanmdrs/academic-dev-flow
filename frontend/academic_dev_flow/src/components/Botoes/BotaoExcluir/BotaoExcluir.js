@@ -3,7 +3,7 @@ import { Button, Modal } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 
-const Delete = ({onClick, disabled}) => {
+const BotaoExcluir = ({funcao, status}) => {
 
 
     const [modal, contextHolder] = Modal.useModal();
@@ -14,7 +14,7 @@ const Delete = ({onClick, disabled}) => {
         content: 'Deseja prosseguir com esta ação ?',
         okText: 'Ok',
         onOk: () => {
-          onClick()
+          funcao()
         }
       });
     }
@@ -27,7 +27,7 @@ const Delete = ({onClick, disabled}) => {
           size='large'
           icon={<DeleteOutlined />} 
           onClick={confirm} 
-          disabled={disabled}
+          disabled={status}
           danger>
         </Button>
         {contextHolder}
@@ -36,4 +36,4 @@ const Delete = ({onClick, disabled}) => {
     );
   };
   
-  export default Delete;
+  export default BotaoExcluir;
