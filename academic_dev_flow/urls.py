@@ -16,15 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from apps.projeto.views import *
-from apps.etapa.views import *
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('projeto/', include('apps.projeto.urls', namespace='projeto')),
-    path('usuario/', include('apps.usuario.urls', namespace='usuario')),
+    path('fluxo/', include('apps.fluxo.urls', namespace=fluxo)),
+    path('etapa/', include('apps.etapa.urls', namespace=etapa)),
     path('membro/', include('apps.membro.urls', namespace='membro')),
+    path('usuario/', include('apps.usuario.urls', namespace='usuario')),
     path('artefato/', include('apps.artefato.urls', namespace='artefato'))
 ]
 
