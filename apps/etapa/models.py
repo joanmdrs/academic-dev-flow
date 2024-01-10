@@ -1,5 +1,5 @@
 from django.db import models
-from apps.flow.models import Flow
+from apps.fluxo.models import Fluxo
 
 class Etapa(models.Model):
     
@@ -14,4 +14,4 @@ class Etapa(models.Model):
     data_fim = models.DateField("Data Fim")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES)
     
-    flow = models.ForeignKey(Flow, on_delete=models.PROTECT)
+    fluxo = models.ForeignKey(Fluxo, on_delete=models.PROTECT)

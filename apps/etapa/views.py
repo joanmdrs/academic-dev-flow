@@ -4,22 +4,22 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.http import JsonResponse
 from .models import Etapa
-from apps.flow.models import Flow
+from apps.fluxo.models import Fluxo
 from .serializers import EtapaSerializer
 
 class CadastrarEtapaView(APIView):
     def post(self, request):
         data = request.data
-        flow_id = data.get('flow')
+        fluxo_id = data.get('fluxo')
 
-        flow = Flow.objects.get(pk=flow_id)  
+        fluxo = Fluxo.objects.get(pk=fluxo_id)  
 
         etapas_data = data.get('etapas', [])  # Obtém a lista de etapas do payload
 
         etapas_cadastradas = []  # Lista para armazenar as etapas cadastradas
 
         for etapa_data in etapas_data:
-            etapa_data['flow'] = flow_id  # Adiciona o ID do fluxo a cada etapa
+            etapa_data['fluxo'] = fluxo_id  # Adiciona o ID do fluxo a cada etapa
             serializer = EtapaSerializer(data=etapa_data)
             
             if serializer.is_valid(raise_exception=True):
@@ -30,10 +30,10 @@ class CadastrarEtapaView(APIView):
 
 class BuscarEtapaPorIdFluxoView(APIView):
     def get(self, request):
-        parametro = request.GET.get('flow_id', None)
+        parametro = request.GET.get('fluxo_id', None)
         
         if parametro is not None:
-            etapas = Etapa.objects.filter(flow=parametro)
+            etapas = Etapa.objects.filter(fluxo=parametro)
             
         else:
             etapas = None
