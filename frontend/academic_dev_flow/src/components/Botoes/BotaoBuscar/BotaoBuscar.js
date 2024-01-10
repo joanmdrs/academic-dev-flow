@@ -1,19 +1,19 @@
 import React from "react";
-import './Search.css';
+import './BotaoBuscar.css';
 import { SearchOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 
-const Search = (props) => {
+const BotaoBuscar = ({funcao, status, nome}) => {
     return (
         <Button 
-            className="button-search" 
+            className="botao-buscar" 
             type="default" 
             icon={<SearchOutlined />} 
-            onClick={props.onClick}
-            disabled={props.disabled}>
-            {props.name}
+            onClick={funcao}
+            disabled={status}>
+            {nome}
         </Button>
     );
 }
 
-export default Search;
+export default BotaoBuscar;
