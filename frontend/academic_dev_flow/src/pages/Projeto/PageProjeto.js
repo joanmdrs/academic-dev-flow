@@ -37,7 +37,7 @@ const PageProjeto = () => {
         key: "nome",
         render:(text, record) => (
           <span 
-            style={{color: 'blue'}}
+            style={{color: 'blue', cursor: 'pointer'}}
             onClick={() => {handleCliqueLinha(record)}}
           >
             {text}
@@ -100,6 +100,7 @@ const PageProjeto = () => {
     form.resetFields()
     setIsBotaoExcluirVisivel(true)
     setIsBotaoBuscarVisivel(true)
+    setIsBotaoAdicionarVisivel(true)
   }
   
   const handleCriarProjeto = async (dados) => {

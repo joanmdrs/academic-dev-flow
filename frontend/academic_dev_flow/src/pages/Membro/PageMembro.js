@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./PaginaMembro.css";
+import "./PageMembro.css";
 import Titulo from "../../components/Titulo/Titulo";
 import BotaoBuscar from "../../components/Botoes/BotaoBuscar/BotaoBuscar";
 import BotaoAdicionar from "../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
@@ -31,21 +31,10 @@ import moment from "moment";
 import "moment/locale/pt-br";
 moment.locale("pt-br");
 
-const { Option } = Select;
-const { TabPane } = Tabs;
 
-const PaginaMembro = () => {
+const PageMembro = () => {
 
-
-    const [form] = Form.useForm();
-    const [modalVisible, setModalVisible] = useState(false);
-    const [formVisible, setFormVisible] = useState(false);
-    const [btnDelActive, setBtnDelActive] = useState(true);
-    const [btnAddActive, setBtnAddActive] = useState(false);
-    const [btnSearchActive, setBtnSearchActive] = useState(false);
-    const [actionForm, setActionForm] = useState("create");
-    const [id, setId] = useState("");
-    const [valoresIniciais, setValoresIniciais] = useState({
+    const VALORES_INICIAIS = {
         nome: "",
         cpf: "",
         data_nascimento: "",
@@ -55,9 +44,9 @@ const PaginaMembro = () => {
         usuario: "",
         senha: "",
         grupo: "",
-    });
+    }
 
-    const columns = [
+    const COLUNAS_MODAL = [
         {
         title: "Código",
         key: "codigo",
@@ -69,8 +58,8 @@ const PaginaMembro = () => {
         key: "nome",
         render: (text, record) => (
             <span
-            style={{ color: "blue", cursor: "pointer" }}
-            onClick={() => handleRowClick(record)}
+                style={{ color: "blue", cursor: "pointer" }}
+                onClick={() => handleCliqueLinha(record)}
             >
             {text}
             </span>
@@ -83,131 +72,140 @@ const PaginaMembro = () => {
         },
     ];
 
+    const { Option } = Select;
+    const { TabPane } = Tabs;
+
+    const [acaoForm, setAcaoForm] = useState("criar");
+    const [idMembro, setIdMembro] = useState("");
+    const [form] = Form.useForm();
+
+    const [isModalVisivel, setIsModalVisivel] = useState(false);
+    const [isFormVisivel, setIsFormVisivel] = useState(false);
+    const [isBotaoExcluirVisivel, setIsBotaoExcluirVisivel] = useState(true);
+    const [isBotaoAdicionarVisivel, setIsBotaoAdicionarVisivel] = useState(false);
+    const [isBotaoBuscarVisivel, setIsBotaoBuscarVisivel] = useState(false);
+    
+
+    
+
     useEffect(() => {
-        form.setFieldsValue(valoresIniciais);
-    }, [form, valoresIniciais]);
+        form.setFieldsValue(VALORES_INICIAIS);
+    }, [form, VALORES_INICIAIS]);
 
 
     // Funções de chamada 
 
-    const showModal = () => setModalVisible(true);
-    const handleCancel = () => setModalVisible(false);
-    const handleOk = async (dado) => await buscarMembroPeloNome(dado);
+    const handleExibirModal = () => setIsModalVisivel(true);
+    const handleFecharModal = () => setIsModalVisivel(false);
 
-    const handleClickBtnAdd = () => {
+    const handleBuscarMembro = async (parametro) => {
+        try {
+            const resposta = await buscarMembroPeloNome(parametro);
+            if(resposta.status !== 200){
+                NotificationManager.error("Ocorreu um problema ao buscar os dados, contate o suporte!")
+            } else {
+            return resposta
+            }
+        } catch (error) {
+            NotificationManager.error("Ocorreu um problema ao buscar os dados, contate o suporte!")
+        } 
+    }
+
+    const handleCliqueBotaoAdicionar = () => {
         form.resetFields();
-        setActionForm("create");
-        setFormVisible(true);
-        setBtnSearchActive(true);
-        setBtnDelActive(true);
-        setBtnAddActive(true);
+        setAcaoForm("criar");
+        setIsFormVisivel(true);
+        setIsBotaoBuscarVisivel(true);
+        setIsBotaoExcluirVisivel(true);
+        setIsBotaoAdicionarVisivel(true);
     };
 
-    const handleRowClick = async (dados) => {
+    const handleCliqueLinha = async (dados) => {
         const resposta_usuario = await buscarUsuarioPeloIdMembro(dados.id);
         const dados_usuario = resposta_usuario.data;
 
         form.setFieldsValue({
-        nome: dados.nome,
-        cpf: dados.cpf,
-        data_nascimento: moment(dados.data_nascimento),
-        sexo: dados.sexo,
-        telefone: dados.telefone,
-        email: dados.email,
-        usuario: dados_usuario.usuario,
-        senha: dados_usuario.senha,
-        grupo: dados_usuario.grupo,
+            nome: dados.nome,
+            cpf: dados.cpf,
+            data_nascimento: moment(dados.data_nascimento),
+            sexo: dados.sexo,
+            telefone: dados.telefone,
+            email: dados.email,
+            usuario: dados_usuario.usuario,
+            senha: dados_usuario.senha,
+            grupo: dados_usuario.grupo,
         });
-
-        setId(dados.id);
-        setActionForm("update");
-        handleCancel();
-        setFormVisible(true);
-        setBtnDelActive(false);
+        handleFecharModal();
+        setIdMembro(dados.id);
+        setAcaoForm("atualizar");
+        setIsFormVisivel(true);
+        setIsBotaoExcluirVisivel(false);
     };
 
-    const handleCreateMember = async () => {
-        const dados_form = form.getFieldsValue();
+    const handleCriarMembro = async () => {
 
+        const dados_form = form.getFieldValue();
         try {
-        const resposta_membro = await criarMembro(dados_form);
-        const resposta_usuario = await criarUsuario(
-            dados_form,
-            resposta_membro.data.id
-        );
+            const resposta_membro = await criarMembro(dados_form);
 
-        if (resposta_usuario.status === 200) {
-            NotificationManager.success("Membro criado com sucesso!");
-        } else {
-            NotificationManager.error(
-            "Ocorreu um problema, contate o suporte!"
-            );
-            // chamar a função de excluir membro
-        }
-        } catch (error) {
-        NotificationManager.error("Ocorreu um problema, contate o suporte!");
-        }
-    };
+            if(resposta_membro.status === 200){
+                const resposta_usuario = await criarUsuario(dados_form, resposta_membro.data.id)
 
-    const handleUpdateMember = async () => {
-        const dados_form = form.getFieldsValue();
-
-        try {
-        const resposta_membro = await atualizarMembro(dados_form, id);
-
-        if (resposta_membro.status === 200) {
-            const resposta_usuario = await atualizarUsuario(dados_form, id);
-
-            if (resposta_usuario.status === 200) {
-            NotificationManager.success("Informações atualizadas");
-            } else {
-            NotificationManager.error(
-                "Ocorreu um problema durante a operação, contate o suporte!"
-            );
-            // Lógica para reverter a atualização do membro se necessário
+                if(resposta_usuario.status === 200){
+                    NotificationManager.success("Membro criado com sucesso!");
+                    recarregarPagina()
+                } else {
+                    NotificationManager.error("Ocorreu um problema, contate o suporte!");
+                }
             }
-        } else {
-            NotificationManager.error(
-            "Ocorreu um problema durante a operação, contate o suporte!"
-            );
-        }
         } catch (error) {
-        NotificationManager.error(
-            "Ocorreu um problema durante a operação, contate o suporte!"
-        );
+            NotificationManager.error("Ocorreu um problema, contate o suporte!");
         }
     };
 
-    const handleSubmit = async () => {
-        try {
-        if (actionForm === "create") {
-            await handleCreateMember();
-        } else if (actionForm === "update") {
-            await handleUpdateMember();
-        }
+    const handleAtualizarMembro = async () => {
+        const dados_form = form.getFieldsValue();
 
-        recarregarPagina();
+        try {
+            const resposta_membro = await atualizarMembro(dados_form, idMembro);
+
+            if (resposta_membro.status === 200) {
+                const resposta_usuario = await atualizarUsuario(dados_form, idMembro);
+
+                if (resposta_usuario.status === 200) {
+                    NotificationManager.success("Membro atualizado com sucesso!");
+                    recarregarPagina()
+                } else {
+                    NotificationManager.error("Ocorreu um problema durante a operação, contate o suporte!");
+                }
+            } else {
+                NotificationManager.error("Ocorreu um problema durante a operação, contate o suporte!");
+            }
         } catch (error) {
-        console.error("Erro ao processar o formulário", error);
+            NotificationManager.error("Ocorreu um problema durante a operação, contate o suporte!");
         }
     };
 
-    const handleDelete = async () => {
-        try {
-        const resposta_membro = await excluirMembro(id);
-
-        if (resposta_membro.status === 204) {
-            NotificationManager.success("Membro excluído com sucesso!");
-        } else {
-            NotificationManager.error(
-            "Falha na operação, contate o suporte!"
-            );
+    const handleSubmeterForm = async () => {
+        if(acaoForm === "criar"){
+            await handleCriarMembro()
+        } else if(acaoForm === "atualizar"){
+            await handleAtualizarMembro()
         }
+    };
+
+    const handleExcluirMembro = async () => {
+        try {
+            const resposta_membro = await excluirMembro(idMembro);
+
+            if (resposta_membro.status === 204) {
+                NotificationManager.success("Membro excluído com sucesso!");
+                recarregarPagina()
+            } else {
+                NotificationManager.error("Falha na operação, contate o suporte!");
+            }
         } catch (error) {
-        console.error("Erro ao excluir o membro", error);
-        NotificationManager.error(
-            "Ocorreu um problema durante a operação, contate o suporte!"
-        );
+            NotificationManager.error("Ocorreu um problema durante a operação, contate o suporte!");
         }
     };
 
@@ -220,23 +218,23 @@ const PaginaMembro = () => {
             />
 
             <div className='add-and-delete'>
-                <BotaoAdicionar funcao={ () => {handleClickBtnAdd()}} status={btnAddActive}/>
-                <BotaoExcluir funcao={handleDelete} status={btnDelActive}/>
+                <BotaoAdicionar funcao={handleCliqueBotaoAdicionar} status={isBotaoAdicionarVisivel}/>
+                <BotaoExcluir funcao={handleExcluirMembro} status={isBotaoExcluirVisivel}/>
             </div>
 
-            <BotaoBuscar nome="BUSCAR MEMBRO" funcao={showModal} status={btnSearchActive}/>
+            <BotaoBuscar nome="BUSCAR MEMBRO" funcao={handleExibirModal} status={isBotaoBuscarVisivel}/>
 
             <ModalDeBusca 
                 titulo="Buscar membro" 
                 label="Nome do membro"
                 name="name-membro"
-                onCancel={handleCancel}
-                onOk={handleOk}
-                status={modalVisible}
-                colunas={columns}
+                onCancel={handleFecharModal}
+                onOk={handleBuscarMembro}
+                status={isModalVisivel}
+                colunas={COLUNAS_MODAL}
             />
             
-            {formVisible &&  (
+            {isFormVisivel &&  (
                 <Tabs defaultActiveKey="1" tabPosition={'left'}>
                 <TabPane tab="Dados Pessoais" key="1">
                     <Form
@@ -251,7 +249,7 @@ const PaginaMembro = () => {
                         style={{
                             maxWidth: 600,
                         }}
-                        initialValues={valoresIniciais}
+                        initialValues={VALORES_INICIAIS}
                     >
                         <Form.Item 
                             label="Nome" 
@@ -306,7 +304,7 @@ const PaginaMembro = () => {
                         style={{
                             maxWidth: 600,
                         }}
-                        initialValues={valoresIniciais}    
+                        initialValues={VALORES_INICIAIS}    
                     >
                         <Form.Item
                             name="telefone"
@@ -333,7 +331,7 @@ const PaginaMembro = () => {
                     <Form 
                         form={form}
                         className='form-membro'
-                        initialValues={valoresIniciais}
+                        initialValues={VALORES_INICIAIS}
                         labelCol={{
                             span: 10,
                         }}
@@ -369,7 +367,7 @@ const PaginaMembro = () => {
                             <Button 
                                 type="primary" 
                                 htmlType="submit" 
-                                onClick={ async () => await handleSubmit()}>
+                                onClick={handleSubmeterForm}>
                                 Salvar
                             </Button>
                         </Form.Item> 
@@ -382,4 +380,4 @@ const PaginaMembro = () => {
     )
 }
 
-export default PaginaMembro
+export default PageMembro;

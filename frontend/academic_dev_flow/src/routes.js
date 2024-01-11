@@ -3,10 +3,10 @@ import { BrowserRouter, Routes as Switch, Route} from 'react-router-dom';
 import Flow from './pages/flow/flow';
 import FlowSteps from './pages/flow/FlowSteps';
 import ViewFlow from './components/Flow/ViewFlow/ViewFlow';
-import PaginaMembro from './pages/membro/PaginaMembro';
 import Home from './pages/home/Home';
 import PaginaArtefato from './pages/artefato/PaginaArtefato';
 import PageProjeto from './pages/Projeto/PageProjeto';
+import PageMembro from './pages/Membro/PageMembro';
 
 function Routes() {
   return (
@@ -17,7 +17,7 @@ function Routes() {
             <Route Component={Flow} path='/fluxos' exact/>
             <Route Component={FlowSteps} path='/fluxos/novo' exact/>
             <Route Component={ViewFlow} path='fluxos/visualizar/:id' exact/>
-            <Route Component={PaginaMembro} path='/membros' exact/>
+            <Route Component={PageMembro} path='/membros' exact/>
             <Route Component={PaginaArtefato} path='/artefatos' exact/>
         
         </Switch>
