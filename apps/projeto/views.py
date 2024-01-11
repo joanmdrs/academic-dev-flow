@@ -25,15 +25,15 @@ class BuscarProjetosPorNomeView(APIView):
 
             if parametro is not None:
                 projetos = Projeto.objects.filter(nome__icontains=parametro)
+
             else:
                 projetos = Projeto.objects.all()
 
-            if not projetos:
-                return Response({'message': 'Nenhum projeto encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+            if not projetos: 
+                return Response({'message': 'Nenhum projeto encontrado.', 'results': []}, status=status.HTTP_200_OK)
 
             serializer = ProjetoSerializer(projetos, many=True)
-
-            return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+            return Response({'message': 'Projetos encontrados com sucesso.', 'results': serializer.data}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
