@@ -144,6 +144,7 @@ const PageProjeto = () => {
 
       if (resposta.status === 204){
         NotificationManager.success('Projeto excluído com sucesso!');
+        recarregarPagina()
       } else {
         NotificationManager.error("Ocorreu um problema, contate o suporte!");
       }
