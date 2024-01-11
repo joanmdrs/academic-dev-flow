@@ -4,8 +4,7 @@ import Titulo from "../../components/Titulo/Titulo";
 import BotaoBuscar from "../../components/Botoes/BotaoBuscar/BotaoBuscar";
 import BotaoAdicionar from "../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
 import BotaoExcluir from "../../components/Botoes/BotaoExcluir/BotaoExcluir";
-import ModalBusca from "../../components/Modal/Modal";
-
+import ModalDeBusca from "../../components/Modal/ModalDeBusca";
 import {
   atualizarMembro,
   buscarMembroPeloNome,
@@ -17,6 +16,7 @@ import {
   buscarUsuarioPeloIdMembro,
   criarUsuario,
 } from "../../services/usuario_service";
+import { recarregarPagina } from "../../services/utils";
 import {
   Button,
   DatePicker,
@@ -29,7 +29,6 @@ import {
 import { NotificationContainer, NotificationManager } from "react-notifications";
 import moment from "moment";
 import "moment/locale/pt-br";
-import { recarregarPagina } from "../../services/utils";
 moment.locale("pt-br");
 
 const { Option } = Select;
@@ -227,7 +226,7 @@ const PaginaMembro = () => {
 
             <BotaoBuscar nome="BUSCAR MEMBRO" funcao={showModal} status={btnSearchActive}/>
 
-            <ModalBusca 
+            <ModalDeBusca 
                 titulo="Buscar membro" 
                 label="Nome do membro"
                 name="name-membro"
