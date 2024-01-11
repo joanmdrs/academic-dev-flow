@@ -17,12 +17,6 @@ moment.locale('pt-br');
 
 const PageProjeto = () => {
 
-  const STATUS_CHOICES = [
-    { value: 'cancelado', label: 'Cancelado' },
-    { value: 'em_andamento', label: 'Em andamento' },
-    { value: 'concluido', label: 'Concluído' },
-  ];
-
   const VALORES_INICIAIS = {
     nome: '',
     descricao: '',
@@ -77,7 +71,6 @@ const PageProjeto = () => {
 
   const handleMostrarModal = () => {
     setIsModalVisivel(true);
-    setIsFormVisivel(true);
   };
 
   const handleFecharModal = () => {
@@ -85,18 +78,28 @@ const PageProjeto = () => {
   };
 
   const handleCliqueLinha = (record) => {
+
     form.setFields([
       { name: 'nome', value: record.nome },
       { name: 'descricao', value: record.descricao },
       { name: 'status', value: record.status },
-      { name: 'data_inicio', value: moment(record.data_inicio)},
-      { name: 'data_fim', value: moment(record.data_fim)}
+      { name: 'data_inicio', value: moment(record.data_inicio, 'YYYY-MM-DD')},
+      { name: 'data_fim',  value: moment(record.data_fim, 'YYYY-MM-DD')}
     ]);
     
     setAcaoForm('atualizar')
+    setIsFormVisivel(true)
     setIdProjeto(record.id);
     setIsBotaoExcluirVisivel(false);
     handleFecharModal()
+  }
+
+  const handleCliqueBotaoAdicionar = () => {
+    setAcaoForm('criar')
+    setIsFormVisivel(true)
+    form.resetFields()
+    setIsBotaoExcluirVisivel(true)
+    setIsBotaoBuscarVisivel(true)
   }
   
   const handleCriarProjeto = async (dados) => {
@@ -174,7 +177,7 @@ const PageProjeto = () => {
       />
 
       <div className='add-and-delete'>
-        <BotaoAdicionar funcao={() => setIsFormVisivel(true)} status={isBotaoAdicionarVisivel}/>
+        <BotaoAdicionar funcao={handleCliqueBotaoAdicionar} status={isBotaoAdicionarVisivel}/>
         <BotaoExcluir funcao={handleExcluirProjeto} status={isBotaoExcluirVisivel}/>
       </div>
       
@@ -214,34 +217,39 @@ const PageProjeto = () => {
               value={valoresForm.status}
               className='field-select'
               onChange={(value) => handleAlteracoesInput('status', value)} 
+              placeholder="selecione"
             >
-              <Option value="">Selecione</Option>
               <Option value="cancelado">Cancelado</Option>
               <Option value="em_andamento">Em andamento</Option>
               <Option value="concluido">Concluído</Option>
             </Select>
           </Form.Item>
 
-          <Form.Item label="Data de Início" name="data_inicio">
-            <DatePicker
-              id="data_inicio"
-              name="data_inicio"
-              className='data-inicio'
-              value={valoresForm.data_inicio}
-              onChange={(date) => handleAlteracoesInput('data_inicio', date)}
-              format="YYYY-MM-DD"
-            />
-          </Form.Item>
+          <div style={{display: 'flex'}}>
+            <Form.Item label="Data de Início" name="data_inicio" >
+              <DatePicker
+                id="data_inicio"
+                name="data_inicio"
+                className='date-picker'
+                placeholder='00/00/0000'
+                value={valoresForm.data_inicio}
+                onChange={(date) => handleAlteracoesInput('data_inicio', date)}
+                format="DD/MM/YYYY"
+              />
+            </Form.Item>
 
-          <Form.Item label="Data de Fim" name="data_fim">
-            <DatePicker
-              id="data_fim"
-              name="data_fim"
-              value={valoresForm.data_fim}
-              onChange={(date) => handleAlteracoesInput('data_fim', date)}
-              format="YYYY-MM-DD"
-            />
-          </Form.Item>
+            <Form.Item label="Data de Fim" name="data_fim">
+              <DatePicker
+                id="data_fim"
+                name="data_fim"
+                className='date-picker'
+                placeholder='00/00/0000'
+                value={valoresForm.data_fim}
+                onChange={(date) => handleAlteracoesInput('data_fim', date)}
+                format="DD/MM/YYYY"
+              />
+            </Form.Item>
+          </div>
 
           <Form.Item label="Descrição" name="descricao">
             <Input.TextArea

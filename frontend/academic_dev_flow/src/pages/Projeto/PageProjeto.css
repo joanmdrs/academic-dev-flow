@@ -25,4 +25,11 @@
 
 .field-select {
     width: 200px !important;
+} 
+
+.date-picker {
+    display: flex;
+    height: 40px !important;
+    padding-top: 15px;
+
 }
