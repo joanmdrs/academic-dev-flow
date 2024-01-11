@@ -9,7 +9,7 @@ import Titulo from '../../components/Titulo/Titulo';
 import BotaoAdicionar from '../../components/Botoes/BotaoAdicionar/BotaoAdicionar';
 import BotaoExcluir from '../../components/Botoes/BotaoExcluir/BotaoExcluir';
 import BotaoBuscar from '../../components/Botoes/BotaoBuscar/BotaoBuscar';
-import ModalBusca from '../../components/Modal/Modal';
+import ModalDeBusca from '../../components/Modal/ModalDeBusca';
 import 'moment/locale/pt-br';
 import { recarregarPagina } from '../../services/utils';
 moment.locale('pt-br');
@@ -41,6 +41,14 @@ const PageProjeto = () => {
         title: "Nome",
         dataIndex: "nome",
         key: "nome",
+        render:(text, record) => (
+          <span 
+            style={{color: 'blue'}}
+            onClick={() => {handleCliqueLinha(record)}}
+          >
+            {text}
+          </span>
+         )
     },
     {
         title: "Descrição",
@@ -108,7 +116,7 @@ const PageProjeto = () => {
 
   const handleAtualizarProjeto = async (dados, id) => {
     try {
-      const resposta = await atualizarProjeto(dados)
+      const resposta = await atualizarProjeto(dados, id)
       
       if(resposta.status === 200){
         NotificationManager.success('Projeto atualizado com sucesso!');
@@ -147,7 +155,6 @@ const PageProjeto = () => {
   const handleBuscarProjeto = async (parametro) => {
     try {
       const resposta = await buscarProjetoPeloNome(parametro)
-
       if(resposta.status !== 200){
         NotificationManager.error("Ocorreu um problema ao buscar os dados, contate o suporte!")
       } else {
@@ -172,7 +179,7 @@ const PageProjeto = () => {
       
       <BotaoBuscar nome="BUSCAR PROJETO" funcao={handleMostrarModal} status={isBotaoBuscarVisivel}/>
 
-      <ModalBusca 
+      <ModalDeBusca 
         colunas={COLUNAS_MODAL}
         titulo="Buscar projeto" 
         status={isModalVisivel} 
@@ -205,14 +212,12 @@ const PageProjeto = () => {
               name="status"
               value={valoresForm.status}
               className='field-select'
-              onChange={(value) => handleAlteracoesInput('status', value)}
+              onChange={(value) => handleAlteracoesInput('status', value)} 
             >
-              <Option value=""></Option>
-              {STATUS_CHOICES.map((option) => (
-                <Option key={option.value} value={option.value}>
-                  {option.label}
-                </Option>
-              ))}
+              <Option value="">Selecione</Option>
+              <Option value="cancelado">Cancelado</Option>
+              <Option value="em_andamento">Em andamento</Option>
+              <Option value="concluido">Concluído</Option>
             </Select>
           </Form.Item>
 
@@ -220,10 +225,10 @@ const PageProjeto = () => {
             <DatePicker
               id="data_inicio"
               name="data_inicio"
+              className='data-inicio'
               value={valoresForm.data_inicio}
               onChange={(date) => handleAlteracoesInput('data_inicio', date)}
-              showTime
-              format="YYYY-MM-DD HH:mm:ss"
+              format="YYYY-MM-DD"
             />
           </Form.Item>
 
@@ -233,8 +238,7 @@ const PageProjeto = () => {
               name="data_fim"
               value={valoresForm.data_fim}
               onChange={(date) => handleAlteracoesInput('data_fim', date)}
-              showTime
-              format="YYYY-MM-DD HH:mm:ss"
+              format="YYYY-MM-DD"
             />
           </Form.Item>
 
