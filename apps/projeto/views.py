@@ -28,6 +28,9 @@ class BuscarProjetosPorNomeView(APIView):
             else:
                 projetos = Projeto.objects.all()
 
+            if not projetos:
+                return Response({'message': 'Nenhum projeto encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+
             serializer = ProjetoSerializer(projetos, many=True)
 
             return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
