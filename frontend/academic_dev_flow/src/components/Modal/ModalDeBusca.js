@@ -11,6 +11,7 @@ const ModalDeBusca = ({status, titulo, label, name, onCancel, onOk, colunas}) =>
     const [form] = Form.useForm();
     const [parametro, setParametro] = useState('');
     const [dados, setDados] = useState([])
+    const [hasResposta, setHasResposta] = useState(false)
 
     const handleAlterarParametro = (event) => {
         setParametro(event.target.value);
@@ -22,11 +23,14 @@ const ModalDeBusca = ({status, titulo, label, name, onCancel, onOk, colunas}) =>
             open={status}
             onCancel={() => {
                 onCancel()
+                setHasResposta(false)
                 setDados([])
+
             }}
             onOk={async () => {
                 // A função onOk(query) é responsável por buscar os dados por meio da query
                 const resposta = await onOk(parametro)
+                setHasResposta(true)
                 if(resposta.status === 200) {
                     setDados(resposta.data.results)
                 } else {
@@ -45,13 +49,19 @@ const ModalDeBusca = ({status, titulo, label, name, onCancel, onOk, colunas}) =>
                 </Item>
             </Form>
 
-            {dados.length > 0 ? (
+            {hasResposta ? (
                 <>
-                    <Divider orientation="left">Resultados</Divider>
-                    <Table dataSource={dados} columns={colunas} rowKey="id" />
+                    {hasResposta && dados.length > 0 ? (
+                        <>
+                            <Divider orientation="left">Resultados</Divider>
+                            <Table dataSource={dados} columns={colunas} rowKey="id" />
+                        </>
+                    ) : 
+                        <div> Nenhum resultado encontrado </div>
+                    }
+                    
                 </>
-      
-            ) : <div>Nenhum resultado encontrado</div>
+            ) : null
         }
 
             
