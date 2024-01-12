@@ -22,11 +22,14 @@ import {
   DatePicker,
   Form,
   Input,
-  Radio,
+  Tooltip,
   Select,
   Tabs,
 } from "antd";
 import { NotificationContainer, NotificationManager } from "react-notifications";
+import { QuestionCircleOutlined } from '@ant-design/icons';
+
+import InputMask from 'react-input-mask';
 import moment from "moment";
 import "moment/locale/pt-br";
 moment.locale("pt-br");
@@ -43,7 +46,7 @@ const PageMembro = () => {
         email: "",
         usuario: "",
         senha: "",
-        grupo: "",
+        grupo: ""
     }
 
     const COLUNAS_MODAL = [
@@ -256,7 +259,7 @@ const PageMembro = () => {
                             name="nome"
                             rules={[{ required: true, message: 'Por favor, insira o nome!' }]}
                         >
-                            <Input/>
+                            <Input placeholder="Ex.: João "/>
                         </Form.Item>
 
                         <Form.Item 
@@ -264,7 +267,9 @@ const PageMembro = () => {
                             name="cpf"
                             rules={[{ required: true, message: 'Por favor, insira o CPF!' }]}
                         >
-                            <Input/>
+                            <InputMask mask="999.999.999-99" maskChar={null}>
+                            {() => <Input placeholder="Ex.: 999.999.999-99"/>}
+                            </InputMask>
                         </Form.Item>
 
                         <Form.Item 
@@ -272,17 +277,20 @@ const PageMembro = () => {
                             name="data_nascimento"
                             rules={[{ required: true, message: 'Por favor, selecione a data de nascimento!' }]}
                         >
-                            <DatePicker 
-                                format="DD/MM/YYYY"
-                            />
+                             <InputMask mask="99/99/9999" maskChar={null}>
+                            {() => <Input placeholder="00/00/0000" />}
+                            </InputMask>
+                           
                         </Form.Item>
 
                         <Form.Item 
                             label="Sexo" 
                             name="sexo"
+                            placeholder="Selecione o sexo"
                             rules={[{ required: true, message: 'Por favor, selecione o sexo!' }]}
                         >
-                            <Select placeholder="Selecione o sexo">
+                            <Select>
+                            
                                 <Option value="masculino">Masculino</Option>
                                 <Option value="feminino">Feminino</Option>
                                 <Option value="nao_informardo">Não informar</Option>
@@ -311,7 +319,9 @@ const PageMembro = () => {
                             label="Telefone"
                             rules={[{ required: true, message: 'Por favor, insira o telefone!' }]}
                         >
-                            <Input />
+                            <InputMask mask="(99) 99999-9999" maskChar={null}>
+                            {() => <Input placeholder="Ex.: (84) 99999-9999"/>}
+                            </InputMask>
                         </Form.Item>
 
                         <Form.Item
@@ -322,7 +332,7 @@ const PageMembro = () => {
                             { type: 'email', message: 'Por favor, insira um email válido!' },
                             ]}
                         >
-                            <Input />
+                            <Input placeholder="Ex.: nome@gmail.com"/>
                         </Form.Item>
                     </Form>
                 </TabPane>
@@ -344,10 +354,14 @@ const PageMembro = () => {
                         
                     >
                         <Form.Item name="usuario" label="Usuário">
-                            <Input />
+                            <Input placeholder="Ex.: usuario"/>
                         </Form.Item>
 
-                        <Form.Item name="senha" label="Senha">
+                        <Form.Item
+                            name="senha"
+                            label="Senha"
+                        >
+                            
                             <Input />
                         </Form.Item>
 
@@ -357,10 +371,10 @@ const PageMembro = () => {
                             rules={[{ required: true, message: 'Por favor, informe o grupo do membro!'}]}
                         >
 
-                            <Radio.Group>
-                                <Radio value="aluno"> Aluno </Radio>
-                                <Radio value="professor"> Professor </Radio>
-                            </Radio.Group>
+                           <Select>
+                                <Option value="aluno">Aluno</Option>
+                                <Option value="professor">Professor</Option>
+                           </Select>
                         </Form.Item>
 
                         <Form.Item>

@@ -218,8 +218,8 @@ const PageProjeto = () => {
               value={valoresForm.status}
               className='field-select'
               onChange={(value) => handleAlteracoesInput('status', value)} 
-              placeholder="selecione"
             >
+              <Option value="">Selecione uma opção</Option>
               <Option value="cancelado">Cancelado</Option>
               <Option value="em_andamento">Em andamento</Option>
               <Option value="concluido">Concluído</Option>
