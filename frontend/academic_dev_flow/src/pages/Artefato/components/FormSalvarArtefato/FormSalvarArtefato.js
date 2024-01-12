@@ -1,10 +1,10 @@
 import { Button, Form, Input } from "antd";
 import React, { useEffect, useState } from "react";
-import Titulo from "../../components/Titulo/Titulo";
-import BotaoVoltar from "../../components/Botoes/BotaoVoltar/BotaoVoltar";
-import { atualizarArtefato, criarArtefato } from "../../services/artefato_service";
+import Titulo from "../../../../components/Titulo/Titulo";
+import BotaoVoltar from "../../../../components/Botoes/BotaoVoltar/BotaoVoltar";
+import { atualizarArtefato, criarArtefato } from "../../../../services/artefato_service";
 import { NotificationManager } from "react-notifications";
-import { recarregarPagina } from "../../services/utils";
+import { recarregarPagina } from "../../../../services/utils";
 
 const PaginaCadastrarArtefato = ({onCancel, acaoForm, dados_linha}) => {
 
