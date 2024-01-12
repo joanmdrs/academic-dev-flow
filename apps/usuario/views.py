@@ -4,6 +4,7 @@ from rest_framework import status
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from .serializers import UsuarioSerializer
+from .models import Usuario
 
 class CadastrarUsuarioView(APIView):
     def post(self, request):
