@@ -1,8 +1,8 @@
+import moment from "moment";
 import api from "./api"
 
 export const criarMembro = async (dados) => {
 
-    const moment = require('moment');
     const dataString = dados.data_nascimento;
     const dataMoment = moment(dataString, 'DD/MM/YYYY');
     const dataFormatada = dataMoment.format('YYYY-MM-DD');
@@ -17,7 +17,7 @@ export const criarMembro = async (dados) => {
     }
 
     console.log(dados_membro)
-    
+
     const resposta = await api.post('/membro/cadastrar/', dados_membro)
     return resposta
 }
@@ -33,10 +33,15 @@ export const excluirMembro = async (id) => {
 }
 
 export const atualizarMembro = async (dados, id) => {
+
+    const dataString = dados.data_nascimento;
+    const dataMoment = moment(dataString, 'DD/MM/YYYY');
+    const dataFormatada = dataMoment.format('YYYY-MM-DD');
+
     const dados_membro = {
         nome: dados.nome,
         cpf: dados.cpf,
-        data_nascimento: (dados.data_nascimento).format("YYYY-MM-DD"),
+        data_nascimento: dataFormatada,
         sexo: dados.sexo,
         telefone: dados.telefone,
         email: dados.email

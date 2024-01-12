@@ -87,14 +87,6 @@ const PageMembro = () => {
     const [isBotaoExcluirVisivel, setIsBotaoExcluirVisivel] = useState(true);
     const [isBotaoAdicionarVisivel, setIsBotaoAdicionarVisivel] = useState(false);
     const [isBotaoBuscarVisivel, setIsBotaoBuscarVisivel] = useState(false);
-    
-
-    
-
-    useEffect(() => {
-        form.setFieldsValue(VALORES_INICIAIS);
-    }, [form, VALORES_INICIAIS]);
-
 
     // Funções de chamada 
 
@@ -130,7 +122,7 @@ const PageMembro = () => {
         form.setFieldsValue({
             nome: dados.nome,
             cpf: dados.cpf,
-            data_nascimento: moment(dados.data_nascimento),
+            data_nascimento: moment(dados.data_nascimento).format('DD/MM/YYYY'),
             sexo: dados.sexo,
             telefone: dados.telefone,
             email: dados.email,
