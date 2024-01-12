@@ -24,3 +24,10 @@ code {
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     background-color: #FFFFFF;
 }
+
+.date-picker {
+  display: flex;
+  height: 40px !important;
+  padding-top: 15px;
+
+}
