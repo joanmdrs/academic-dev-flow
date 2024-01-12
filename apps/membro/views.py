@@ -33,9 +33,12 @@ class BuscarMembrosPorNomeView(APIView):
             else:
                 membros = Membro.objects.all()
                 
+            if not membros: 
+                return Response({'message': 'Nenhum membro encontrado.', 'results': []}, status=status.HTTP_200_OK)
+
             serializer = MembroSerializer(membros, many=True)
-            
-            return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+            return Response({'message': 'Membros encontrados com sucesso.', 'results': serializer.data}, status=status.HTTP_200_OK)
+                
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
