@@ -4,9 +4,9 @@ import Flow from './pages/flow/flow';
 import FlowSteps from './pages/flow/FlowSteps';
 import ViewFlow from './components/Flow/ViewFlow/ViewFlow';
 import Home from './pages/home/Home';
-import PaginaArtefato from './pages/artefato/PaginaArtefato';
 import PageProjeto from './pages/Projeto/PageProjeto';
 import PageMembro from './pages/Membro/PageMembro';
+import PageArtefato from './pages/Artefato/PageArtefato';
 
 function Routes() {
   return (
@@ -18,7 +18,7 @@ function Routes() {
             <Route Component={FlowSteps} path='/fluxos/novo' exact/>
             <Route Component={ViewFlow} path='fluxos/visualizar/:id' exact/>
             <Route Component={PageMembro} path='/membros' exact/>
-            <Route Component={PaginaArtefato} path='/artefatos' exact/>
+            <Route Component={PageArtefato} path='/artefatos' exact/>
         
         </Switch>
         

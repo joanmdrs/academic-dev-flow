@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./ModalDeBusca.css"
 import { Modal, Form, Input, Divider, Table } from 'antd';
-import { buscar_projetos_pelo_nome } from "../../services/projeto_service";
 
 const { Item } = Form;
 

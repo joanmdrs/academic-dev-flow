@@ -1,17 +1,17 @@
 import { Button, Form, Input } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Titulo from "../../../../components/Titulo/Titulo";
 import BotaoVoltar from "../../../../components/Botoes/BotaoVoltar/BotaoVoltar";
 import { atualizarArtefato, criarArtefato } from "../../../../services/artefato_service";
 import { NotificationManager } from "react-notifications";
 import { recarregarPagina } from "../../../../services/utils";
 
-const PaginaCadastrarArtefato = ({onCancel, acaoForm, dados_linha}) => {
+const FormSalvarArtefato = ({acaoBotaoVoltar, acaoForm, dadosLinhaListaArtefatos}) => {
 
     const [form] = Form.useForm();
     
     useEffect(() => {
-        form.setFieldsValue(dados_linha);
+        form.setFieldsValue(dadosLinhaListaArtefatos);
     }, []);
 
     const handleCriarArtefato = async (dados) => {
@@ -37,7 +37,7 @@ const PaginaCadastrarArtefato = ({onCancel, acaoForm, dados_linha}) => {
             descricao: dados.descricao
         }
 
-        const id_artefato = dados_linha.id
+        const id_artefato = dadosLinhaListaArtefatos.id
         
         try {
             const resposta = await atualizarArtefato(dados_atualizados, id_artefato)
@@ -74,7 +74,7 @@ const PaginaCadastrarArtefato = ({onCancel, acaoForm, dados_linha}) => {
 
             <div className="form-box"> 
                 <div> 
-                    <BotaoVoltar onClick={onCancel} />
+                    <BotaoVoltar funcao={acaoBotaoVoltar} />
                 </div>
 
                 <div> 
@@ -114,4 +114,4 @@ const PaginaCadastrarArtefato = ({onCancel, acaoForm, dados_linha}) => {
     )
 }
 
-export default PaginaCadastrarArtefato;
+export default FormSalvarArtefato;

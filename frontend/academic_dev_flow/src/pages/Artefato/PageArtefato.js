@@ -3,27 +3,28 @@ import { NotificationContainer, NotificationManager } from "react-notifications"
 import BotaoAdicionar from "../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
 import BotaoExcluir from "../../components/Botoes/BotaoExcluir/BotaoExcluir";
 import Titulo from "../../components/Titulo/Titulo";
-import FormBuscarArtefato from "../../components/Forms/FormBuscarArtefato/FormBuscarArtefato";
+import FormBuscarArtefato from "./components/FormBuscarArtefato/FormBuscarArtefato";
 import BotaoAtualizar from "../../components/Botoes/BotaoAtualizar/BotaoAtualizar";
-import "./PaginaArtefato.css";
+import "./PageArtefato.css";
 import BotaoFiltrar from "../../components/Botoes/BotaoFiltrar/BotaoFiltrar";
-import ListaDeArtefatos from "../../components/Listas/ListaDeArtefatos/ListaDeArtefatos";
-import PaginaCadastrarArtefato from "./PaginaCadastrarArtefato";
+import ListaDeArtefatos from "./components/ListaDeArtefatos/ListaDeArtefatos";
+import FormSalvarArtefato from "./components/FormSalvarArtefato/FormSalvarArtefato"
 import { buscarArtefatoPeloNome, excluirArtefato, listarArtefatos } from "../../services/artefato_service";
 import { recarregarPagina } from "../../services/utils";
 
-const PaginaArtefato = () => {
+const PageArtefato = () => {
 
     const [acaoForm, setAcaoForm] = useState("criar");
-    const [mostrarFormulario, setMostrarFormulario] = useState(false);
-    const [monstrarFormFiltrar, setMostrarFormFiltrar] = useState(false);
-    const [statusBotaoAdicionar, setStatusBotaoAdicionar] = useState(false);
-    const [statusBotaoEditar, setStatusBotaoEditar] = useState(true);
-    const [statusBotaoExcluir, setStatusBotaoExcluir] = useState(true);
+    const [isFormVisivel, setIsFormVisivel] = useState(false);
+    const [isFormFiltrarVisivel, setIsFormFiltrarVisivel] = useState(false);
+    const [isBotaoAdicionarVisivel, setIsBotaoAdicionarVisivel] = useState(false);
+    const [isBotaoEditarVisivel, setIsBotaoEditarVisivel] = useState(true);
+    const [isBotaoExcluirVisivel, setIsBotaoExcluirVisivel] = useState(true);
+
     const [dadosArtefatos, setDadosArtefatos] = useState([]);
     const [dadosLinhaListaArtefatos, setDadosLinhaListaArtefatos] = useState({id: "", nome: "", descricao: ""});
 
-    const colunas_tabela_artefatos = [
+    const COLUNAS_LISTA = [
         {
             title: "Código",
             key: "codigo",
@@ -61,7 +62,7 @@ const PaginaArtefato = () => {
     }, []);
 
     const handleCliqueBotaoFiltrar = () => {
-        setMostrarFormFiltrar((prevMostrarFormFiltrar) => !prevMostrarFormFiltrar);
+        setIsFormFiltrarVisivel((prevIsFormFiltrarVisivel) => !prevIsFormFiltrarVisivel);
     }
 
     const handleFiltrarArtefatos = async (parametro) => {
@@ -69,7 +70,6 @@ const PaginaArtefato = () => {
         try {
             const resposta = await buscarArtefatoPeloNome(parametro)
 
-            console.log(resposta)
             if(resposta.status === 200) {
                 setDadosArtefatos(resposta.data)
 
@@ -81,20 +81,20 @@ const PaginaArtefato = () => {
         }
     }   
 
-    const handleCliqueLinhaTabelaArtefatos = (linha_dados) => {
-        setStatusBotaoEditar(false)
-        setDadosLinhaListaArtefatos(linha_dados)
-        setStatusBotaoExcluir(false)
+    const handleCliqueLinhaTabelaArtefatos = (dados) => {
+        setIsBotaoEditarVisivel(false)
+        setDadosLinhaListaArtefatos(dados)
+        setIsBotaoExcluirVisivel(false)
     }
 
     const handleCliqueBotaoAdicionar = () => {
         setAcaoForm('criar')
-        setMostrarFormulario(true);
+        setIsFormVisivel(true);
     };
 
     const handleCliqueBotaoEditar = () => {
         setAcaoForm("atualizar")
-        setMostrarFormulario(true)
+        setIsFormVisivel(true)
     }
 
     const handleCliqueBotaoExcluir = async () => {
@@ -114,10 +114,11 @@ const PaginaArtefato = () => {
     }
 
     const handleCliqueBotaoVoltar = () => {
-        setMostrarFormulario(false)
-        setStatusBotaoAdicionar(false)
-        setStatusBotaoEditar(true)
-        setStatusBotaoExcluir(true)
+        console.log("Estou sendo chamado")
+        setIsFormVisivel(false)
+        setIsBotaoAdicionarVisivel(false)
+        setIsBotaoEditarVisivel(true)
+        setIsBotaoExcluirVisivel(true)
         setDadosLinhaListaArtefatos({id: "", nome: "", descricao: ""})
     }
 
@@ -125,12 +126,12 @@ const PaginaArtefato = () => {
         <div>
             <NotificationContainer />
 
-            {mostrarFormulario ? (
+            {isFormVisivel ? (
 
-                <PaginaCadastrarArtefato 
-                    onCancel={handleCliqueBotaoVoltar} 
+                <FormSalvarArtefato 
+                    acaoBotaoVoltar={handleCliqueBotaoVoltar} 
                     acaoForm={acaoForm} 
-                    dados_linha={dadosLinhaListaArtefatos}
+                    dadosLinhaListaArtefatos={dadosLinhaListaArtefatos}
                 />
 
             ) : (
@@ -144,20 +145,20 @@ const PaginaArtefato = () => {
 
                     <div className="botoes-de-acao">
                         <div id="botao-filtrar"> 
-                            <BotaoFiltrar onClick={handleCliqueBotaoFiltrar} />
+                            <BotaoFiltrar funcao={handleCliqueBotaoFiltrar}  />
                         </div>
                         <div id="botao-adicionar-atualizar-deletar"> 
-                            <BotaoAdicionar funcao={handleCliqueBotaoAdicionar} status={statusBotaoAdicionar}/>
-                            <BotaoAtualizar funcao={handleCliqueBotaoEditar} status={statusBotaoEditar}/>
-                            <BotaoExcluir funcao={handleCliqueBotaoExcluir} status={statusBotaoExcluir}/>
+                            <BotaoAdicionar funcao={handleCliqueBotaoAdicionar} status={isBotaoAdicionarVisivel}/>
+                            <BotaoAtualizar funcao={handleCliqueBotaoEditar} status={isBotaoEditarVisivel}/>
+                            <BotaoExcluir funcao={handleCliqueBotaoExcluir} status={isBotaoExcluirVisivel}/>
                         </div>
                     </div>
 
-                    {monstrarFormFiltrar && (<FormBuscarArtefato executeFuncao={handleFiltrarArtefatos}/>)}
+                    {isFormFiltrarVisivel && (<FormBuscarArtefato executeFuncao={handleFiltrarArtefatos}/>)}
                     
 
                     <ListaDeArtefatos 
-                        colunas={colunas_tabela_artefatos} 
+                        colunas={COLUNAS_LISTA} 
                         dados={dadosArtefatos} 
                         onClickRow={handleCliqueLinhaTabelaArtefatos}
                     />
@@ -169,4 +170,4 @@ const PaginaArtefato = () => {
     )
 }
 
-export default PaginaArtefato;
+export default PageArtefato;

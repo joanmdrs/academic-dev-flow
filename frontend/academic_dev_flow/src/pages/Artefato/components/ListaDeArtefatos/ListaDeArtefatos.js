@@ -15,8 +15,8 @@ const ListaDeArtefatos = ({colunas, dados, onClickRow}) => {
                         dataSource={dados} 
                         columns={colunas} 
                         rowKey="id"
-                        onRow={(linha_dados) => ({
-                            onClick: () => onClickRow(linha_dados),
+                        onRow={(dados) => ({
+                            onClick: () => onClickRow(dados),
                           })}
                         />
                 </>
