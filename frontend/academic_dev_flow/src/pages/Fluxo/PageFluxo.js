@@ -1,28 +1,33 @@
 import React, { useState } from "react";
-import "./flow.css";
 import Titulo from "../../components/Titulo/Titulo";
-import SearchFlow from "../../components/Flow/SearchFlow/SearchFlow";
-import TemplateFlow from "../../components/Flow/TemplateFlow/TemplateFlow";
 import { buscarFluxoPeloNome } from "../../services/fluxo_service";
+import InputBuscarFluxo from "./components/InputBuscarFluxo/InputBuscarFluxo";
+import BotaoNovoFluxo from "./components/BotaoNovoFluxo/BotaoNovoFluxo";
+import EtapasCriarFluxo from "./components/EtapasCriarFluxo/EtapasCriarFluxo";
 
 const PageFluxo = () => {
 
-    const [fluxos, setFluxos] = useState([])
+    const [hasDadosFluxo, setHasDadosFluxo] = useState([])
+    const [isFormVisivel, setIsFormVisivel] = useState(true)
 
-    const handleSearchFlow = async (query) => {
-        const response = await buscarFluxoPeloNome(query);
-        setFluxos(response.data)
+    const handleBuscarFluxo = async (parametro) => {
+        const response = await buscarFluxoPeloNome(parametro);
+        setHasDadosFluxo(response.data)
     }
 
     return (
-        <div className="flow">
-        
+
+        <div>
             < Titulo 
                 titulo="Fluxos de Desenvolvimento" 
-                paragrafo=""
+                paragrafo="Gerenciar os fluxos de desenvolvimento"
             />
-            <SearchFlow buscar_fluxos = {handleSearchFlow} />
-            <TemplateFlow fluxos={fluxos}/>
+            { isFormVisivel ? (
+                <EtapasCriarFluxo />
+            ) : (<div> </div>)
+
+            }
+           
         </div>
     )
 
