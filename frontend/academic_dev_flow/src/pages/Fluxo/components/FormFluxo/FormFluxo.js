@@ -1,5 +1,4 @@
 import React from "react";
-import "./FlowForm.css";
 import {Form, Input, } from "antd";
 import { useFormContext } from "../../context/Provider/FormProvider";
 
@@ -20,7 +19,7 @@ const FormFluxo = () => {
     
     return (
         <div className="form-box">
-            <h4>Cadastrar fluxo</h4>
+            <h4>CADASTRAR FLUXO</h4>
             <Form
                 name="myForm"
                 layout="vertical"
