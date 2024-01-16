@@ -1,0 +1,15 @@
+.component-detalhar-fluxo p {
+    border: 1px solid #D9D9D9;
+    padding: 10px;
+    border-radius: 5px;
+    transition: 500ms ;
+}
+
+.component-detalhar-fluxo p:hover {
+    border: 1px solid #1677FF;
+}
+
+.component-detalhar-fluxo h5 {
+    font-weight: 400;
+}
+
