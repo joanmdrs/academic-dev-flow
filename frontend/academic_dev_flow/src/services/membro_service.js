@@ -16,8 +16,6 @@ export const criarMembro = async (dados) => {
         email: dados.email
     }
 
-    console.log(dados_membro)
-
     const resposta = await api.post('/membro/cadastrar/', dados_membro)
     return resposta
 }

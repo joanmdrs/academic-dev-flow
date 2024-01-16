@@ -22,7 +22,7 @@ const PageArtefato = () => {
     const [isBotaoExcluirVisivel, setIsBotaoExcluirVisivel] = useState(true);
 
     const [dadosArtefatos, setDadosArtefatos] = useState([]);
-    const [dadosLinhaListaArtefatos, setDadosLinhaListaArtefatos] = useState({id: "", nome: "", descricao: ""});
+    const [dadosArtefatoSelecionado, setDadosArtefatoSelecionado] = useState({id: "", nome: "", descricao: ""});
 
     const COLUNAS_LISTA = [
         {
@@ -83,7 +83,7 @@ const PageArtefato = () => {
 
     const handleCliqueLinhaTabelaArtefatos = (dados) => {
         setIsBotaoEditarVisivel(false)
-        setDadosLinhaListaArtefatos(dados)
+        setDadosArtefatoSelecionado(dados)
         setIsBotaoExcluirVisivel(false)
     }
 
@@ -100,7 +100,7 @@ const PageArtefato = () => {
     const handleCliqueBotaoExcluir = async () => {
 
         try {
-            const resposta = await excluirArtefato(dadosLinhaListaArtefatos.id)
+            const resposta = await excluirArtefato(dadosArtefatoSelecionado.id)
 
             if(resposta.status === 204) {
                 NotificationManager.success("Artefato excluído com sucesso!");
@@ -114,12 +114,11 @@ const PageArtefato = () => {
     }
 
     const handleCliqueBotaoVoltar = () => {
-        console.log("Estou sendo chamado")
         setIsFormVisivel(false)
         setIsBotaoAdicionarVisivel(false)
         setIsBotaoEditarVisivel(true)
         setIsBotaoExcluirVisivel(true)
-        setDadosLinhaListaArtefatos({id: "", nome: "", descricao: ""})
+        setDadosArtefatoSelecionado({id: "", nome: "", descricao: ""})
     }
 
     return (
@@ -131,7 +130,7 @@ const PageArtefato = () => {
                 <FormSalvarArtefato 
                     acaoBotaoVoltar={handleCliqueBotaoVoltar} 
                     acaoForm={acaoForm} 
-                    dadosLinhaListaArtefatos={dadosLinhaListaArtefatos}
+                    dadosLinhaListaArtefatos={dadosArtefatoSelecionado}
                 />
 
             ) : (
