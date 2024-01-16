@@ -3,6 +3,7 @@ import "./FormEtapa.css";
 import { Form, Input, Select, Button } from "antd";
 import { useFormContext } from "../../../Fluxo/context/Provider/FormProvider";
 import ListaEtapas from "../ListaEtapas/ListaEtapas";
+import { MdAdd } from "react-icons/md";
 
 const { Option } = Select;
 
@@ -64,45 +65,54 @@ const FormEtapa = () => {
 
     return (
         <div className="">
-            <div className="form-box">
-                <h4>Cadastrar etapa</h4>
+            <div className="form-box component-form-etapa">
+                <h4> INCLUIR ETAPA </h4>
                 <Form form={form} layout="vertical">
-                    <Form.Item name="nome" label="Nome">
-                        <Input />
-                    </Form.Item>
+                    <div className="input-nome-e-descricao">
+                        <Form.Item name="nome" label="Nome">
+                            <Input />
+                        </Form.Item>
 
-                    <Form.Item name="descricao" label="Descrição">
-                        <Input.TextArea rows={4} />
-                    </Form.Item>
+                        <Form.Item name="descricao" label="Descrição">
+                            <Input.TextArea rows={6} />
+                        </Form.Item>
+                    </div>
 
-                    <Form.Item name="data_inicio" label="Data Início">
-                        <Input type="date" />
-                    </Form.Item>
+                    <div>
+                        <Form.Item name="data_inicio" label="Data Início">
+                            <Input type="date" />
+                        </Form.Item>
 
-                    <Form.Item name="data_fim" label="Data Fim">
-                        <Input type="date" />
-                    </Form.Item>
+                        <Form.Item name="data_fim" label="Data Fim">
+                            <Input type="date" />
+                        </Form.Item>
 
-                    <Form.Item name="status" label="Status">
-                        <Select id="status" name="status">
-                            <Option value=""></Option>
-                            <Option value="Cancelada">Cancelada</Option>
-                            <Option value="Em andamento">Em andamento</Option>
-                            <Option value="Concluída">Concluída</Option>
-                        </Select>
-                    </Form.Item>
+                        <Form.Item name="status" label="Status">
+                            <Select id="status" name="status">
+                                <Option value=""></Option>
+                                <Option value="Cancelada">Cancelada</Option>
+                                <Option value="Em andamento">Em andamento</Option>
+                                <Option value="Concluída">Concluída</Option>
+                            </Select>
+                        </Form.Item>
+                        
+                    </div>
+                    
                 </Form>
-            </div>
-
-            <div>
-                <Button type="primary" onClick={handleSalvarEtapas}> Salvar </Button>
+                <Button type="primary" onClick={handleSalvarEtapas} className="botao-adicionar-etapa"> 
+                    <MdAdd size="15px" />
+                    Adicionar 
+                </Button>
 
                 {hasDadosEtapas.length > 0 && (
-                    <ListaEtapas 
-                        dadosEtapas={hasDadosEtapas} 
-                        funcaoBotaoEditar={handleAlterarCamposForm}
-                        funcaoBotaoExcluir={handleExcluirEtapa} 
-                    />
+                    <React.Fragment>
+                        <ListaEtapas 
+                            dadosEtapas={hasDadosEtapas} 
+                            funcaoBotaoEditar={handleAlterarCamposForm}
+                            funcaoBotaoExcluir={handleExcluirEtapa} 
+                        />
+                    </React.Fragment>
+                    
                 )}
             </div>
         </div>

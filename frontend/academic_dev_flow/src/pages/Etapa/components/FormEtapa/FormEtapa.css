@@ -1,13 +1,24 @@
-.step-add-etapa {
+.component-form-etapa form {
+    width: 100%;
     display: flex;
-    flex-direction: row;
-    gap: 20px;
+    gap: 30px;
+    align-items: flex-start;
 }
 
-.button-add-etapa {
-    margin: 30px;
+
+
+.input-nome-e-descricao {
+    width: 70%;
 }
 
-.button-add-etapa button {
-    border-radius: 30px ;
+.input-nome-e-descricao input {
+    width: 100%;
 }
+
+.botao-adicionar-etapa {
+    max-width: fit-content;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+}
+
