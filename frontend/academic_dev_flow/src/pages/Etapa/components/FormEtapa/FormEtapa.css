@@ -1,0 +1,13 @@
+.step-add-etapa {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.button-add-etapa {
+    margin: 30px;
+}
+
+.button-add-etapa button {
+    border-radius: 30px ;
+}
