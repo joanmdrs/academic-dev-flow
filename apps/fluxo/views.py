@@ -48,3 +48,15 @@ class BuscarFluxoPeloIdView(APIView):
             return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class ListarFluxos(APIView):
+    def get(self, request):
+        try:
+            fluxos = Fluxo.objects.all()
+            
+            serializer = FluxoSerializer(fluxos, many=True) 
+            
+            return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})   
+        except Exception as e: 
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            

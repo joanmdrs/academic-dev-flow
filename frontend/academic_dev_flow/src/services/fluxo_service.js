@@ -14,3 +14,8 @@ export const buscarFluxoPeloId =  async (fluxo_id) => {
     const resposta = await api.get(`fluxo/buscar/${encodeURIComponent(fluxo_id)}/`)
     return resposta
 }
+
+export const listarFluxos = async () => {
+    const resposta = await api.get('fluxo/listar/')
+    return resposta
+}
