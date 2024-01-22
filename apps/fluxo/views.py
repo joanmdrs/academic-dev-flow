@@ -41,14 +41,32 @@ class BuscarFluxoPeloIdView(APIView):
     def get(self, request, fluxo_id):
         try:
             fluxo = get_object_or_404(Fluxo, pk=fluxo_id)
-            print(fluxo)
             
             serializer = FluxoSerializer(fluxo, many=False)
             
             return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
+       
+class AtualizarFluxoView(APIView):
+    def patch(self, request, fluxo_id): 
+        try: 
+            
+            fluxo = Fluxo.objects.get(pk=fluxo_id) 
+            
+            serializer = FluxoSerializer(fluxo, data=request.data)
+            
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+    
+        except Exception as e: 
+             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+         
+         
+     
 class ListarFluxosView(APIView):
     def get(self, request):
         try:
