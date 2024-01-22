@@ -1,6 +1,6 @@
 import React from "react";
 import { Empty } from "antd";
-import "./DetalharFluxo.css";
+import "./ViewDetalhesFluxo.css";
 import { useFormContext } from "../../context/Provider/FormProvider";
 
 const DetalharFluxo = () => {

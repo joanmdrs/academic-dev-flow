@@ -1,8 +1,8 @@
 import React from "react";
 import {Form, Input, } from "antd";
-import { useFormContext } from "../../context/Provider/FormProvider";
+import { useFormContext } from "../../../context/Provider/FormProvider";
 
-const FormFluxo = () => {
+const TabFormFluxo = () => {
 
     const { setHasDadosFluxo } = useFormContext();
 
@@ -38,4 +38,4 @@ const FormFluxo = () => {
     
 }
 
-export default FormFluxo;
+export default TabFormFluxo;

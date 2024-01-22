@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import "./FormEtapa.css";
 import { Form, Input, Select, Button } from "antd";
-import { useFormContext } from "../../../Fluxo/context/Provider/FormProvider";
-import ListaEtapas from "../ListaEtapas/ListaEtapas";
+import { useFormContext } from "../../../context/Provider/FormProvider";
 import { MdAdd } from "react-icons/md";
+import ViewDetalhesEtapas from "../../ViewDetalhesEtapas/ViewDetalhesEtapas";
 
 const { Option } = Select;
 
-const FormEtapa = () => {
+const TabFormEtapa = () => {
 
     const [form] = Form.useForm()
 
@@ -64,7 +64,7 @@ const FormEtapa = () => {
     };
 
     return (
-        <div className="">
+        <div>
             <div className="form-box component-form-etapa">
                 <h4> INCLUIR ETAPA </h4>
                 <Form form={form} layout="vertical">
@@ -106,7 +106,7 @@ const FormEtapa = () => {
 
                 {hasDadosEtapas.length > 0 && (
                     <React.Fragment>
-                        <ListaEtapas 
+                        <ViewDetalhesEtapas 
                             dadosEtapas={hasDadosEtapas} 
                             funcaoBotaoEditar={handleAlterarCamposForm}
                             funcaoBotaoExcluir={handleExcluirEtapa} 
@@ -119,4 +119,4 @@ const FormEtapa = () => {
     );
 };
 
-export default FormEtapa;
+export default TabFormEtapa;

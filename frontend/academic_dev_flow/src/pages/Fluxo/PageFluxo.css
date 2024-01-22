@@ -1,0 +1,8 @@
+.div-input-buscar-fluxo-e-botao-novo-fluxo {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    margin: 0 auto;
+    margin-top: 30px;
+}
+

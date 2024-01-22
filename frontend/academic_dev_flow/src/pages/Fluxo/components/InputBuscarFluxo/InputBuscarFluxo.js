@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Input } from 'antd';
 const { Search } = Input;
 
-const InputBuscarFluxo = ({buscarFluxo}) => {
+const InputBuscarFluxo = ({funcao}) => {
 
     const [hasParametro, setHasParametro ] = useState('');
 
@@ -21,7 +21,7 @@ const InputBuscarFluxo = ({buscarFluxo}) => {
                 }}
                 onChange={handleAlterarParametroBusca}
                 onSearch= { async () => {
-                    await buscarFluxo(hasParametro)
+                    await funcao(hasParametro)
                 }}
             />
         </div>

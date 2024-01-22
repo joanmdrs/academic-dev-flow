@@ -1,11 +1,11 @@
 import { Button, Empty } from "antd";
 import React from "react";
-import "./ListaEtapas.css";
+import "./ViewDetalhesEtapas.css";
 import { AiFillEdit } from "react-icons/ai";
 import { IoMdTrash } from "react-icons/io";
-import { useFormContext } from "../../../Fluxo/context/Provider/FormProvider";
+import { useFormContext } from "../../context/Provider/FormProvider";
 
-const ListaEtapas = ({ funcaoBotaoEditar, funcaoBotaoExcluir }) => {
+const ViewDetalhesEtapas = ({ funcaoBotaoEditar, funcaoBotaoExcluir }) => {
   const { hasDadosEtapas } = useFormContext();
 
   if (!hasDadosEtapas || hasDadosEtapas.length === 0) {
@@ -49,4 +49,4 @@ const ListaEtapas = ({ funcaoBotaoEditar, funcaoBotaoExcluir }) => {
   );
 };
 
-export default ListaEtapas;
+export default ViewDetalhesEtapas;
