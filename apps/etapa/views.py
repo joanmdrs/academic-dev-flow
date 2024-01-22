@@ -12,22 +12,15 @@ class CadastrarEtapaView(APIView):
         try:
             data = request.data
             fluxo_id = data.get('fluxo')
+            fluxo = Fluxo.objects.get(pk=fluxo_id)
 
-            fluxo = Fluxo.objects.get(pk=fluxo_id)  
+            data['fluxo'] = fluxo_id  # Adiciona o ID do fluxo à etapa
+            serializer = EtapaSerializer(data=data)
 
-            etapas_data = data.get('etapas', [])  # Obtém a lista de etapas do payload
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
 
-            etapas_cadastradas = []  # Lista para armazenar as etapas cadastradas
-
-            for etapa_data in etapas_data:
-                etapa_data['fluxo'] = fluxo_id  # Adiciona o ID do fluxo a cada etapa
-                serializer = EtapaSerializer(data=etapa_data)
-                
-                if serializer.is_valid(raise_exception=True):
-                    serializer.save()
-                    etapas_cadastradas.append(serializer.data)
-
-            return Response(etapas_cadastradas, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -48,3 +41,18 @@ class BuscarEtapaPorIdFluxoView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
+class AtualizarEtapaView(APIView): 
+    def patch(self, request, id):
+        try: 
+            
+            etapa = Etapa.objects.get(pk=id)
+            serializer = EtapaSerializer(etapa, data=request.data)
+            
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+             
+        except Exception as e: 
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
