@@ -6,7 +6,7 @@ export const criarFluxo = async (dados) => {
 }
 
 export const buscarFluxoPeloNome = async (parametro) => {
-    const resposta = await api.get(`/fluxo/buscar/?name_flow=${encodeURIComponent(parametro)}`)
+    const resposta = await api.get(`/fluxo/buscar/?name_fluxo=${encodeURIComponent(parametro)}`)
     return resposta
 }
 

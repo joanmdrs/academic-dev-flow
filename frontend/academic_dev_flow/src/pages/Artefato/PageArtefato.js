@@ -154,8 +154,7 @@ const PageArtefato = () => {
                     </div>
 
                     {isFormFiltrarVisivel && (<FormBuscarArtefato executeFuncao={handleFiltrarArtefatos}/>)}
-                    
-
+                
                     <ListaDeArtefatos 
                         colunas={COLUNAS_LISTA} 
                         dados={dadosArtefatos} 
