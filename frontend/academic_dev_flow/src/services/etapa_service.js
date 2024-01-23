@@ -13,19 +13,25 @@ export const criarEtapa = async (dadosEtapa, fluxoId) => {
     return resposta; 
 }
 
+export const buscarEtapaPeloNome = async (nomeEtapa) => {
+    const resposta = await api.get(`etapa/buscar/nome/?nome=${encodeURIComponent(nomeEtapa)}`)
+    return resposta
+}
+
 export const buscarEtapasPeloIdFluxo = async (fluxoId) => {
     const resposta = await api.get(`etapa/buscar/?fluxo_id=${encodeURIComponent(fluxoId)}`);
     return resposta; 
 }
 
-export const atualizarEtapa = async (dadosEtapa, idEtapa, idFluxo) => {
+export const listarEtapas = async () => {
+    const resposta = await api.get(`etapa/listar/`);
+    return resposta
+}
+
+export const atualizarEtapa = async (dadosEtapa, idEtapa) => {
     const dados = {
         nome: dadosEtapa.nome,
         descricao: dadosEtapa.descricao,
-        status: dadosEtapa.status,
-        data_inicio: dadosEtapa.data_inicio,
-        data_fim: dadosEtapa.data_fim,
-        fluxo: idFluxo
     }
     const resposta = await api.patch(`etapa/atualizar/${encodeURIComponent(idEtapa)}/`, dados)
     return resposta 

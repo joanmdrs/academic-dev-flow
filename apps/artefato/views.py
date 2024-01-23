@@ -29,6 +29,7 @@ class BuscarArtefatoPorNomeView(APIView):
             else:
                 artefatos = Artefato.objects.all()    
                 
+                
             serializer = ArtefatoSerializer(artefatos, many=True) 
             
             return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})   

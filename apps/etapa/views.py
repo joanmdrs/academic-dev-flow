@@ -9,30 +9,32 @@ from .serializers import EtapaSerializer
 
 class CadastrarEtapaView(APIView):
     def post(self, request):
-    
         try:
-            dados = request.data
-            fluxo_id = dados.get('fluxo')
-            # Verifica se o fluxo existe
-            fluxo = Fluxo.objects.get(pk=fluxo_id)
-
-            if fluxo is not None:
-                
-                serializer = EtapaSerializer(data=dados)
-
-                if serializer.is_valid(raise_exception=True):
-                    serializer.save()
-                    return Response(serializer.data, status=status.HTTP_200_OK)
-                
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)        
-                
-            return Response({'error': 'O fluxo especificado não existe.'}, status=status.HTTP_404_NOT_FOUND)
-
-        except fluxo.DoesNotExist:
-            return Response({'error': 'O fluxo especificado não existe.'}, status=status.HTTP_404_NOT_FOUND)
+            serializer = EtapaSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)        
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+class BuscarEtapaPeloNome(APIView):
+    def get(self, request):
+        try:
+            parametro = request.GET.get('nome', None)
+            if parametro is not None: 
+                etapas = Etapa.objects.filter(nome__icontains=parametro)
+            else:
+                etapas = Etapa.objects.all()    
+                
+            serializer = EtapaSerializer(etapas, many=True) 
+            
+            return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})   
+            
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
 class BuscarEtapaPorIdFluxoView(APIView):
     def get(self, request):
         try:
