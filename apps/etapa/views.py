@@ -49,6 +49,15 @@ class BuscarEtapaPorIdFluxoView(APIView):
             return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class ListarEtapasView(APIView):
+    def get(self, request):
+        try: 
+            etapas = Etapa.objects.all()
+            serializer = EtapaSerializer(etapas, many=True) 
+            return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})  
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
 class AtualizarEtapaView(APIView): 
     def patch(self, request, id):
