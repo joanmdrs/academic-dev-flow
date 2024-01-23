@@ -1,0 +1,7 @@
+.tabela-lista-de-dados {
+    margin: 20px;
+}
+
+.tabela-lista-de-dados td  {
+    cursor: pointer;
+}
