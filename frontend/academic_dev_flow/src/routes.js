@@ -5,6 +5,7 @@ import PageProjeto from './pages/Projeto/PageProjeto';
 import PageFluxo from './pages/Fluxo/PageFluxo';
 import PageMembro from './pages/Membro/PageMembro';
 import PageArtefato from './pages/Artefato/PageArtefato';
+import PageEtapa from './pages/Etapa/PageEtapa';
 
 function Routes() {
   return (
@@ -13,6 +14,7 @@ function Routes() {
             <Route Component={Home} path='/' exact/>
             <Route Component={PageProjeto} path='/projetos' exact/>
             <Route Component={PageFluxo} path='/fluxos' exact/>
+            <Route Component={PageEtapa} path='etapas' exact/>
             <Route Component={PageMembro} path='/membros' exact/>
             <Route Component={PageArtefato} path='/artefatos' exact/>
         
