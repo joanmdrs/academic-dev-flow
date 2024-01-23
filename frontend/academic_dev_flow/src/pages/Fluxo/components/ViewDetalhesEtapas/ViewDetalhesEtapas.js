@@ -14,8 +14,8 @@ const ViewDetalhesEtapas = ({ funcaoBotaoEditar, funcaoBotaoExcluir }) => {
 
   return (
     <div className="component-lista-etapas">
-      {hasDadosEtapas.map((etapa, id) => (
-        <div key={id} className="item-etapa">
+      {hasDadosEtapas.map((etapa, index) => (
+        <div key={index} className="item-etapa">
           <div className="campo-item-etapa">
             <h5> Nome: </h5>
             <p> {etapa.nome} </p>
@@ -40,8 +40,8 @@ const ViewDetalhesEtapas = ({ funcaoBotaoEditar, funcaoBotaoExcluir }) => {
           </div>
           <div className="campo-item-etapa botoes-acao">
             <h5> Ações </h5>
-            <Button icon={<AiFillEdit />} onClick={() => funcaoBotaoEditar(etapa)}> Editar</Button>
-            <Button icon={<IoMdTrash />} onClick={() => funcaoBotaoExcluir(etapa)}> Excluir </Button>
+            <Button icon={<AiFillEdit />} onClick={() => funcaoBotaoEditar(etapa, index)}> Editar</Button>
+            <Button icon={<IoMdTrash />} onClick={() => funcaoBotaoExcluir(etapa.id)}> Excluir </Button>
           </div>
         </div>
       ))}

@@ -7,10 +7,9 @@ export const useFormContext = () => useContext(FormContext);
 export const FormProvider = ({children}) => {
 
     const [hasDadosFluxo, setHasDadosFluxo] = useState({});
-
     const [hasDadosEtapas, setHasDadosEtapas] = useState([]);
-
-    const [acaoForm, setAcaoForm] = useState('criar')
+    const [acaoFormFluxo, setAcaoFormFluxo] = useState('criar')
+    const [acaoFormEtapa, setAcaoFormEtapa] = useState('criar')
 
     return (
         <FormContext.Provider 
@@ -19,8 +18,10 @@ export const FormProvider = ({children}) => {
                 hasDadosEtapas,
                 setHasDadosFluxo, 
                 setHasDadosEtapas,
-                acaoForm,
-                setAcaoForm
+                acaoFormFluxo, 
+                acaoFormEtapa, 
+                setAcaoFormFluxo,
+                setAcaoFormEtapa
             }}
         >
           {children}

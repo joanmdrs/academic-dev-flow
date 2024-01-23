@@ -1,18 +1,28 @@
 import React from "react";
 import { Button } from "antd";
 import {MdAdd} from 'react-icons/md';
+import { useFormContext } from "../../context/Provider/FormProvider";
 
-const BotaoNovoFluxo = ({funcao}) => {
+const BotaoNovoFluxo = ({funcaoMostrarForm}) => {
+
+    const {setAcaoFormFluxo, setAcaoFormEtapa} = useFormContext()
+    
+    const handleCliqueBotaoNovoFluxo = () => {
+        funcaoMostrarForm()
+        setAcaoFormFluxo('criar')
+        setAcaoFormEtapa('criar')
+
+    }
 
     return (
 
         <div>
             <Button 
-                onClick={funcao} 
+                onClick={handleCliqueBotaoNovoFluxo} 
                 type="primary" 
                 style={{
                     marginTop: "20px",
-                    padding: "30px",
+                    padding: "25px",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",

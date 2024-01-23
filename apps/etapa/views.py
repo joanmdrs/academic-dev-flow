@@ -9,18 +9,27 @@ from .serializers import EtapaSerializer
 
 class CadastrarEtapaView(APIView):
     def post(self, request):
+    
         try:
-            data = request.data
-            fluxo_id = data.get('fluxo')
+            dados = request.data
+            fluxo_id = dados.get('fluxo')
+            # Verifica se o fluxo existe
             fluxo = Fluxo.objects.get(pk=fluxo_id)
 
-            data['fluxo'] = fluxo_id  # Adiciona o ID do fluxo à etapa
-            serializer = EtapaSerializer(data=data)
+            if fluxo is not None:
+                
+                serializer = EtapaSerializer(data=dados)
 
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
+                if serializer.is_valid(raise_exception=True):
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+                
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)        
+                
+            return Response({'error': 'O fluxo especificado não existe.'}, status=status.HTTP_404_NOT_FOUND)
 
+        except fluxo.DoesNotExist:
+            return Response({'error': 'O fluxo especificado não existe.'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -44,15 +53,31 @@ class BuscarEtapaPorIdFluxoView(APIView):
 class AtualizarEtapaView(APIView): 
     def patch(self, request, id):
         try: 
-            
+            print(id)
             etapa = Etapa.objects.get(pk=id)
+            print(etapa)
             serializer = EtapaSerializer(etapa, data=request.data)
             
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
              
         except Exception as e: 
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+class ExcluirEtapaView(APIView):
+    def delete(self, request, id): 
+        try:
+            etapa = Etapa.objects.get(pk=id)
+            
+            if etapa is not None:
+                etapa.delete()
+                return Response({'detail': 'Etapa excluída com sucesso!'}, status=status.HTTP_204_NO_CONTENT)
+            
+            else: 
+                return Response({'error': 'Objeto não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 

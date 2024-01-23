@@ -1,55 +1,65 @@
 import React, { useState } from "react";
-import "./FormEtapa.css";
+import "./TabFormEtapa.css";
 import { Form, Input, Select, Button } from "antd";
 import { useFormContext } from "../../../context/Provider/FormProvider";
 import { MdAdd } from "react-icons/md";
 import ViewDetalhesEtapas from "../../ViewDetalhesEtapas/ViewDetalhesEtapas";
-
-const { Option } = Select;
+import { NotificationManager } from "react-notifications";
+import { atualizarEtapa, criarEtapa, excluirEtapa } from "../../../../../services/etapa_service";
 
 const TabFormEtapa = () => {
 
+    // Variáveis 
+
+    const { Option } = Select;
+
     const [form] = Form.useForm()
 
-    const { hasDadosEtapas, setHasDadosEtapas } = useFormContext();
-    const [ hasIndiceEtapa, setHasIndiceEtapa] = useState(null);
+    const { 
+        hasDadosFluxo, 
+        hasDadosEtapas, 
+        setHasDadosEtapas, 
+        acaoFormEtapa,
+        setAcaoFormEtapa
+    } = useFormContext();
+
+    const [ hasIndiceEtapa, setHasIndiceEtapa] = useState(null); // utilizada para saber o indice da etapa 
+    const [ isIdEtapaAtualizar, setIsIdEtapaAtualizar] = useState(null) // variável utilizada para saber o id da etapa a ser atualizada
 
 
-    const handleCadastrarEtapa = (valores) => {
+    // Funções
+
+    const handleAdicionarEtapaNaLista = async (valores) => {
         const novaEtapa = {
             ...valores,
         };
-        setHasDadosEtapas([...hasDadosEtapas, novaEtapa]);
+        await setHasDadosEtapas([...hasDadosEtapas, novaEtapa]);
     };
 
-    const handleAtualizarEtapa = (indice, valores) => {
+    const handleAtualizarEtapaDaLista = async (valores) => {
         const etapaAtualizada = {
-            ...hasDadosEtapas[indice],
+            ...hasDadosEtapas[hasIndiceEtapa],
             ...valores,
         };
         const novasEtapas = [...hasDadosEtapas];
-        novasEtapas[indice] = etapaAtualizada;
-        hasDadosEtapas(novasEtapas);
+        novasEtapas[hasIndiceEtapa] = etapaAtualizada;
+        await setHasDadosEtapas(novasEtapas);
     };
 
-
-    const handleSalvarEtapas = () => {
-        const valores = form.getFieldsValue()
-        if (valores.nome !== undefined) {
-            if (hasIndiceEtapa === null) {
-                handleCadastrarEtapa(valores)
-            } else {
-                handleAtualizarEtapa(hasIndiceEtapa, valores);
-                setHasIndiceEtapa(null); 
-            }
-            form.resetFields();
+    const handleSalvarEtapaNaLista = async (valores) => {
+        if (hasIndiceEtapa === null) {
+            await handleAdicionarEtapaNaLista(valores)
+        } else {
+            await handleAtualizarEtapaDaLista(valores);
+            setHasIndiceEtapa(null); 
         }
+        form.resetFields();
     };
 
-    const handleExcluirEtapa = (dados) => {
-        const novaListaEtapas = hasDadosEtapas.filter(etapa => etapa !== dados);
-        setHasDadosEtapas(novaListaEtapas);
-    };
+    const handleRemoverEtapaDaLista = async (idEtapa) => {
+        
+    
+    }
 
     const handleAlterarCamposForm = (dados, indice) => {
         form.setFields([
@@ -59,8 +69,69 @@ const TabFormEtapa = () => {
             { name: 'data_fim', value: dados.data_fim },
             { name: 'status', value: dados.status }
         ]);
-
+        setIsIdEtapaAtualizar(dados.id)
+        setAcaoFormEtapa('atualizar')
         setHasIndiceEtapa(indice);
+    };
+
+    const handleCriarEtapa = async () => {
+        try {
+            const dadosForm = form.getFieldsValue()
+            const idFluxo = hasDadosFluxo.id
+            const resposta = await criarEtapa(dadosForm, idFluxo)
+
+            if(resposta.status === 200){
+                handleSalvarEtapaNaLista(resposta.data)
+                NotificationManager.success("Etapa vinculada ao fluxo!")
+            } else {
+                NotificationManager.error("Falha ao vincular a etapa ao fluxo, contate o suporte!")
+            }
+        } catch (error) {
+            NotificationManager.error('Ocorreu um problema durante a operação, contate o suporte!');
+        }
+
+    }
+
+    const handleAtualizarEtapa = async () => {
+        try {
+            const dadosForm = form.getFieldsValue()
+            const idEtapa = isIdEtapaAtualizar
+            const idFluxo = hasDadosFluxo.id
+            const resposta = await atualizarEtapa(dadosForm, idEtapa, idFluxo)
+
+            if(resposta.status === 200){
+                handleSalvarEtapaNaLista(resposta.data)
+                setAcaoFormEtapa('criar')
+                NotificationManager.success("Etapa atualizada com sucesso!")
+            } else {
+                NotificationManager.error("Falha ao atualizar os dados da etapa, contate o suporte!")
+            }
+        } catch (error) {
+            NotificationManager.error('Ocorreu um problema durante a operação, contate o suporte!');
+        }
+    }
+
+    const handleSubmeterForm = async () => {
+        if (acaoFormEtapa === 'criar'){
+            await handleCriarEtapa();
+        } else if(acaoFormEtapa === 'atualizar'){
+            await handleAtualizarEtapa();
+        }
+    }
+
+    const handleExcluirEtapa = async (idEtapa) => {
+        try {
+            const resposta = await excluirEtapa(idEtapa)
+
+            if (resposta.status === 204){
+                await handleRemoverEtapaDaLista(idEtapa)
+                NotificationManager.success('Etapa excluída com sucesso!')
+            } else {
+                NotificationManager.error('Falha ao tentar excluir a etapa, contate o suporte!')
+            }
+        } catch (error) {
+            NotificationManager.error('Ocorreu um problema durante a operação, contate o suporte!');
+        }
     };
 
     return (
@@ -99,9 +170,9 @@ const TabFormEtapa = () => {
                     </div>
                     
                 </Form>
-                <Button type="primary" onClick={handleSalvarEtapas} className="botao-adicionar-etapa"> 
+                <Button type="primary" className="botao-adicionar-etapa" onClick={handleSubmeterForm}> 
                     <MdAdd size="15px" />
-                    Adicionar 
+                    Adicionar etapa
                 </Button>
 
                 {hasDadosEtapas.length > 0 && (

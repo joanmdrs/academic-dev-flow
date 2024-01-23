@@ -15,8 +15,8 @@ export const buscarFluxoPeloId =  async (fluxo_id) => {
     return resposta
 }
 
-export const atualizarFluxo = async (fluxo_id, dados) => {
-    const resposta = await api.patch(`fluxo/atualizar/${encodeURIComponent(fluxo_id)}/`, dados)
+export const atualizarFluxo = async (dadosFluxo, idFluxo) => {
+    const resposta = await api.patch(`fluxo/atualizar/${encodeURIComponent(idFluxo)}/`, dadosFluxo)
     return resposta
 
 }

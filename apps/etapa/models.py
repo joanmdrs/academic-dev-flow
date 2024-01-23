@@ -10,8 +10,3 @@ class Etapa(models.Model):
     )
     nome = models.CharField(max_length=200)
     descricao = models.TextField()
-    data_inicio = models.DateField("Data Início")
-    data_fim = models.DateField("Data Fim")
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
-    
-    fluxo = models.ForeignKey(Fluxo, on_delete=models.PROTECT)

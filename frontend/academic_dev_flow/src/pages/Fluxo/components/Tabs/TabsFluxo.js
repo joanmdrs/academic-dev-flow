@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { Tabs } from 'antd';
-import FormFluxo from "./TabFormFluxo/TabFormFluxo";
-import FormEtapa from "./TabFormEtapa/TabFormEtapa";
+import TabFormFluxo from './TabFormFluxo/TabFormFluxo';
+import TabFormEtapa from './TabFormEtapa/TabFormEtapa';
+import TabFinalizar from "./TabFinalizar/TabFinalizar";
 import { NotificationContainer } from "react-notifications";
-import { FormProvider } from "../../context/Provider/FormProvider";
-import ViewDetalhesFluxoEtapas from "./TabFinalizar/TabFinalizar";
 import BotaoVoltar from "../../../../components/Botoes/BotaoVoltar/BotaoVoltar"
 
 
@@ -24,26 +23,27 @@ const TabsFluxo = ({funcaoBotaoVoltar}) => {
   
   
   return (
-    <FormProvider>
-      <div className="component-etapas-criar-fluxo">
+      <React.Fragment>
+        <div className="component-etapas-criar-fluxo">
         <div style={{margin: "20px"}}> 
           <BotaoVoltar funcao={funcaoBotaoVoltar}/>
         </div>
         <Tabs activeKey={current} onChange={setCurrent} className="fluxo" tabPosition="left">
           <TabPane tab="Fluxo" key="1">
-            <FormFluxo />
+            <TabFormFluxo />
           </TabPane>
           <TabPane tab="Etapas" key="2">
-            <FormEtapa />
+            <TabFormEtapa />
           </TabPane>
-          <TabPane tab="Detalhes" key="3">
-            <ViewDetalhesFluxoEtapas />
+          <TabPane tab="Finalizar" key="3">
+            <TabFinalizar />
           </TabPane>
         </Tabs>
-        
-      </div>
-      <NotificationContainer />
-    </FormProvider>
+          
+        </div>
+        <NotificationContainer />
+      </React.Fragment>
+      
   );
 }
 

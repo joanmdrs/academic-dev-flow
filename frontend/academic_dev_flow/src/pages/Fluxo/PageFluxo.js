@@ -7,29 +7,12 @@ import BotaoNovoFluxo from "./components/BotaoNovoFluxo/BotaoNovoFluxo";
 import TabsFluxo from "./components/Tabs/TabsFluxo";
 import ListaDeFluxos from "./components/ListaDeFluxos/ListaDeFluxos";
 import { NotificationManager } from "react-notifications";
+import { FormProvider } from "./context/Provider/FormProvider";
 
 const PageFluxo = () => {
 
     const [hasDadosFluxo, setHasDadosFluxo] = useState([])
     const [isFormVisivel, setIsFormVisivel] = useState(false)
-
-    const COLUNAS_LISTA = [
-        {
-            title: "Código",
-            key: "codigo",
-            dataIndex: "id",
-        },
-        {
-            title: "Nome",
-            dataIndex: "nome",
-            key: "nome",
-        },
-        {
-            title: "Descrição",
-            dataIndex: "descricao",
-            key: "descricao",
-        },
-    ];
 
     const handleListarFluxos = async () => { 
         
@@ -56,34 +39,34 @@ const PageFluxo = () => {
         setHasDadosFluxo(resposta.data)
     }
 
-    const handleCliqueBotaoNovoFluxo = () => {
+    const handleExibirForm = () => {
         setIsFormVisivel(true)
     }
 
-    const handleCliqueBotaoVoltar = () => {
+    const handleFecharForm = () => {
         setIsFormVisivel(false)
     }
 
     return (
 
-        <div>
+        <FormProvider>
             < Titulo 
                 titulo="Fluxos de Desenvolvimento" 
                 paragrafo="Gerenciar fluxos de desenvolvimento"
             />
 
             { isFormVisivel ? (
-                <TabsFluxo funcaoBotaoVoltar={handleCliqueBotaoVoltar}/>
+                <TabsFluxo funcaoBotaoVoltar={handleFecharForm}/>
             ) : (
 
                 <React.Fragment>
                     <div className="div-input-buscar-fluxo-e-botao-novo-fluxo">
                         <InputBuscarFluxo  funcao={handleBuscarFluxo}/>
-                        <BotaoNovoFluxo funcao={handleCliqueBotaoNovoFluxo} />
+                        <BotaoNovoFluxo funcaoMostrarForm={handleExibirForm} />
                     </div>  
                     
                     <div> 
-                        <ListaDeFluxos dados={hasDadosFluxo} colunas={COLUNAS_LISTA}/>
+                        <ListaDeFluxos dados={hasDadosFluxo} funcaoExibirForm={handleExibirForm}/>
                     </div>
 
                 </React.Fragment>
@@ -91,9 +74,7 @@ const PageFluxo = () => {
                 
             )}
 
-         
-           
-        </div>
+        </FormProvider>
     )
 
 }

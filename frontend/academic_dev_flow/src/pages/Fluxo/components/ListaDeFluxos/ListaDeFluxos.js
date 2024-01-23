@@ -5,9 +5,15 @@ import { FcWorkflow } from "react-icons/fc";
 import { MdEdit } from "react-icons/md";
 import { DeleteOutlined } from '@ant-design/icons';
 import { AiOutlineFileSearch } from "react-icons/ai";
+import { useFormContext } from "../../context/Provider/FormProvider"; 
+import { buscarEtapasPeloIdFluxo } from "../../../../services/etapa_service";
 
 
-const ListaDeFluxos = ({dados}) => {
+const ListaDeFluxos = ({dados, funcaoExibirForm}) => {
+
+    const {setAcaoForm} = useFormContext()
+    const {setHasDadosFluxo} = useFormContext()
+    const {setHasDadosEtapas} = useFormContext()
 
     const limitarTamanhoDescricao = (descricao, limite) => {
         if (descricao.length > limite) {
@@ -15,6 +21,21 @@ const ListaDeFluxos = ({dados}) => {
         }
         return descricao;
     };
+
+    const handleCliqueBotaoEditar = async (item) => {
+        funcaoExibirForm()
+        setAcaoForm('atualizar')
+
+        console.log(item)
+
+        const etapas = await buscarEtapasPeloIdFluxo(item.id)
+        console.log(etapas.data)
+
+        setHasDadosFluxo(item)
+        setHasDadosEtapas(etapas.data)
+    }
+
+
     
     return (
         <div className="component-lista-de-fluxos"> 
@@ -29,7 +50,7 @@ const ListaDeFluxos = ({dados}) => {
                         description={limitarTamanhoDescricao(item.descricao, 100)}
                     />
                     <div className="botoes-acao">
-                        <Button><MdEdit /></Button>
+                        <Button onClick={() => handleCliqueBotaoEditar(item)}><MdEdit /></Button>
                         <Button><AiOutlineFileSearch/></Button>
                     </div>
                     

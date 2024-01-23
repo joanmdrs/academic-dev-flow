@@ -40,7 +40,7 @@ class BuscarFluxoView(APIView):
 class BuscarFluxoPeloIdView(APIView):
     def get(self, request, fluxo_id):
         try:
-            fluxo = get_object_or_404(Fluxo, pk=fluxo_id)
+            fluxo = Fluxo.objects.get(pk=fluxo_id)
             
             serializer = FluxoSerializer(fluxo, many=False)
             
