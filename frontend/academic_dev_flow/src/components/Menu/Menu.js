@@ -49,6 +49,16 @@ const MyMenu = () => {
             
           </Menu.Item>
 
+          <Menu.Item 
+            className='item-menu'
+            key="fluxo" 
+            icon={<DiScrum 
+            style={{ fontSize: '25px' }}/>}
+          >
+            <a href='/etapas'>Etapas</a>
+
+          </Menu.Item>
+
           <Menu.Item
             className='item-menu' 
             key="membro" 
