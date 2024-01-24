@@ -1,0 +1,35 @@
+.tab-vincular-etapas {
+    border-radius: 5px;
+    margin: 20px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.tab-vincular-etapas-content {
+    margin-top: -40px;
+}
+.tab-vincular-etapas-header,
+.tab-vincular-etapas-content,
+.tab-vincular-etapas-footer {
+    padding: 20px;
+}
+
+.button-adicionar-etapas,
+.button-remover-selecionados,
+.button-vincular-etapas,
+.button-cancelar-vincular-etapas {
+    margin-right: 10px;
+    color: #FFFFFF;
+    padding-right: 20px;
+    padding-left: 20px;
+    font-size: 13px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.button-vincular-etapas {
+    background-color: #43A047;
+}
+
+.tab-vincular-etapas-content table {
+    margin-top: 20px;
+    font-size: 13px !important;
+}
