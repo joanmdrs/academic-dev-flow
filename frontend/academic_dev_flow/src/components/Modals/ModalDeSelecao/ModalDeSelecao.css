@@ -1,0 +1,23 @@
+.modal-footer {
+    border-top: 1px solid #d9d9d9;
+    padding-top: 20px;
+}
+
+
+.modal-botoes-filtrar-limpar button,
+.modal-footer button {
+    padding-left: 20px ;
+    padding-right: 20px ;
+    margin-right: 10px;
+    font-size: 13px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.modal-selecao-tabela table {
+    font-size: 12px;
+}
+
+.modal-selecao-tabela table th {
+    color: #828282;
+    font-weight: 400;
+}

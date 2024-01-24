@@ -53,7 +53,7 @@ const ModalDeBusca = ({status, titulo, label, name, onCancel, onOk, colunas}) =>
                     {hasResposta && dados.length > 0 ? (
                         <>
                             <Divider orientation="left">Resultados</Divider>
-                            <Table dataSource={dados} columns={colunas} rowKey="id" />
+                            <Table className="component-tabela-modal" dataSource={dados} columns={colunas} rowKey="id" />
                         </>
                     ) : 
                         <div> Nenhum resultado encontrado </div>
