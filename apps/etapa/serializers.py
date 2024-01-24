@@ -5,3 +5,4 @@ class EtapaSerializer(serializers.ModelSerializer):
     class Meta: 
         model = Etapa
         fields = '__all__'
+        
