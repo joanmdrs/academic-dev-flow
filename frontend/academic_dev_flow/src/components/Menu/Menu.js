@@ -5,7 +5,10 @@ import {HiOutlineClipboardList} from "react-icons/hi"
 import {DiScrum} from "react-icons/di"
 import { BiGroup } from "react-icons/bi";
 import { SiAzureartifacts } from "react-icons/si";
+import { BsBarChartSteps } from "react-icons/bs";
 import Sider from 'antd/es/layout/Sider';
+import { RiFlowChart } from "react-icons/ri";
+
 const { SubMenu } = Menu;
 
 const MyMenu = () => {
@@ -39,25 +42,19 @@ const MyMenu = () => {
 
           </Menu.Item>
 
-          <Menu.Item 
+          <SubMenu 
             className='item-menu'
-            key="fluxo" 
-            icon={<DiScrum 
-            style={{ fontSize: '25px' }}/>}
+            key="processo"
+            icon={<RiFlowChart style={{ fontSize: '20px' }} />}
+            title="Processos"
           >
+            <Menu.Item key="fluxo" icon={<DiScrum size="25px"/>}>
             <a href="/fluxos">Fluxos</a>
-            
-          </Menu.Item>
-
-          <Menu.Item 
-            className='item-menu'
-            key="fluxo" 
-            icon={<DiScrum 
-            style={{ fontSize: '25px' }}/>}
-          >
-            <a href='/etapas'>Etapas</a>
-
-          </Menu.Item>
+            </Menu.Item>
+            <Menu.Item key="etapa" icon={<BsBarChartSteps size="15px"/>}>
+              <a href="/etapas">Etapas</a>
+            </Menu.Item>
+          </SubMenu>
 
           <Menu.Item
             className='item-menu' 

@@ -6,10 +6,13 @@
   color: #FFFFFF;
   text-align: center;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
-
-
 }
 
 .item-menu:hover {
   background-color: #1677FF !important;
+}
+
+.sub-item-menu:hover {
+  color: #1677FF !important;
+
 }
