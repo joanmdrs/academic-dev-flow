@@ -1,27 +1,19 @@
 import React, { useState } from "react";
 import { Tabs } from 'antd';
 import TabFormFluxo from './TabFormFluxo/TabFormFluxo';
-import TabFormEtapa from './TabFormEtapa/TabFormEtapa';
 import { NotificationContainer } from "react-notifications";
 import BotaoVoltar from "../../../../components/Botoes/BotaoVoltar/BotaoVoltar"
 import TabVincularEtapas from "./TabVincularEtapas/TabVincularEtapas";
+import { useFormContext } from "../../context/Provider/FormProvider";
+import TabFinalizarFluxo from "./TabFinalizarFluxo/TabFinalizarFluxo";
 
 
 const { TabPane } = Tabs;
 
 const TabsFluxo = ({funcaoBotaoVoltar}) => {
-
-  const [current, setCurrent] = useState("1");
-
-  const next = () => {
-    setCurrent((prev) => (parseInt(prev, 10) + 1).toString());
-  };
-
-  const prev = () => {
-    setCurrent((prev) => (parseInt(prev, 10) - 1).toString());
-  };
   
-  
+  const {current, setCurrent} = useFormContext();
+
   return (
       <React.Fragment>
         <div className="component-etapas-criar-fluxo">
@@ -34,6 +26,9 @@ const TabsFluxo = ({funcaoBotaoVoltar}) => {
           </TabPane>
           <TabPane tab="Vincular etapas" key="2">
             <TabVincularEtapas />
+          </TabPane>
+          <TabPane tab="Finalizar" key="3">
+            <TabFinalizarFluxo />
           </TabPane>
         </Tabs>
           

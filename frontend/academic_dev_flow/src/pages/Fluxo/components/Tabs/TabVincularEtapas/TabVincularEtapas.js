@@ -10,9 +10,9 @@ import { vincularEtapaFluxo } from "../../../../../services/fluxo_etapa_service"
 
 const TabVincularEtapas = () => {
 
-    const {hasDadosFluxo} = useFormContext()
+    const {hasDadosFluxo, setCurrent} = useFormContext()
     const [isModalVisivel, setIsModalVisivel] = useState(false)
-    const [hasDadosEtapas, setHasDadosEtapas] = useState([])
+    const {hasDadosEtapas, setHasDadosEtapas} = useFormContext()
     const [elementosSelecionados, setElementosSelecionados] = useState([])
 
     const COLUNAS_MODAL = [
@@ -104,28 +104,7 @@ const TabVincularEtapas = () => {
     const handleExibirModal = () => setIsModalVisivel(true);
 
     const handleFecharModal = () => setIsModalVisivel(false);
-
-    const handleCliqueBotaoCancelar = () => {
-    }
-
-    const handleCliqueBotaoVincular = async () => {
-      
-      try {
-        const idFluxo = hasDadosFluxo.id
-        const dadosEtapas = hasDadosEtapas
-        const resposta = await vincularEtapaFluxo(idFluxo, dadosEtapas)
-
-        if(resposta.status === 200) {
-          NotificationManager.success("Etapas vinculadas com sucesso !")
-        } else {
-          NotificationManager.error("Falha ao vincular as etapas ao fluxo, contate o suporte!")
-        }
-      } catch (error) {
-        console.error("Ocorreu um erro:", error);
-        NotificationManager.error('Ocorreu um problema durante a operação, contate o suporte!'); 
-      }
-    }
-
+    
     const handleCliqueBotaoRemoverSelecionados = () => {
       const novaListaEtapas = hasDadosEtapas.filter((etapa) => !elementosSelecionados.some((elemento) => elemento.id === etapa.id));
       setHasDadosEtapas(novaListaEtapas);
@@ -189,17 +168,13 @@ const TabVincularEtapas = () => {
 
           </div>
 
-          <div className="tab-vincular-etapas-footer"> 
-            <Button 
-              className="button-vincular-etapas"
-              onClick={handleCliqueBotaoVincular}
-            > VINCULAR </Button>
-
-            <Button 
-              type="primary" 
-              danger 
-              className="button-cancelar-vincular-etapas"
-            > CANCELAR </Button>
+          <div className="tab-vincular-etapas-footer">
+            <Button onClick={() => setCurrent("1")}> 
+                Voltar
+            </Button>
+            <Button type="primary" onClick={() => setCurrent("3")}> 
+                Avançar
+            </Button>
           </div>
             
         </div>

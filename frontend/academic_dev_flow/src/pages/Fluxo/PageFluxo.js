@@ -4,7 +4,7 @@ import Titulo from "../../components/Titulo/Titulo";
 import { buscarFluxoPeloNome, listarFluxos } from "../../services/fluxo_service";
 import InputBuscarFluxo from "./components/InputBuscarFluxo/InputBuscarFluxo";
 import BotaoNovoFluxo from "./components/BotaoNovoFluxo/BotaoNovoFluxo";
-import TabsFluxo from "./components/Tabs/TabsFluxo";
+import TabsFluxo from "./components/Tabs/Tabs";
 import ListaDeFluxos from "./components/ListaDeFluxos/ListaDeFluxos";
 import { NotificationManager } from "react-notifications";
 import { FormProvider } from "./context/Provider/FormProvider";

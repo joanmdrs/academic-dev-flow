@@ -14,9 +14,7 @@
 }
 
 .button-adicionar-etapas,
-.button-remover-selecionados,
-.button-vincular-etapas,
-.button-cancelar-vincular-etapas {
+.button-remover-selecionados {
     margin-right: 10px;
     color: #FFFFFF;
     padding-right: 20px;
@@ -25,9 +23,12 @@
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
-.button-vincular-etapas {
-    background-color: #43A047;
+.tab-vincular-etapas-footer {
+    display: flex;
+    justify-content: space-between;
 }
+
+
 
 .tab-vincular-etapas-content table {
     margin-top: 20px;
