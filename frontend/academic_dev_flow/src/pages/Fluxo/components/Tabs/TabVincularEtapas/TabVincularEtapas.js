@@ -1,19 +1,18 @@
 import React, { useState } from "react";
 import "./TabVincularEtapas.css";
-import BotaoBuscar from "../../../../../components/Botoes/BotaoBuscar/BotaoBuscar";
-import BotaoAdicionar from "../../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
-import BotaoExcluir from "../../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
 import ModalDeSelecao from "../../../../../components/Modals/ModalDeSelecao/ModalDeSelecao";
 import { buscarEtapaPeloNome } from "../../../../../services/etapa_service";
 import { NotificationManager } from "react-notifications";
-import { Button, Checkbox, Input, Table } from "antd";
-
+import { Button, Input, Table } from "antd";
+import { useFormContext } from "../../../context/Provider/FormProvider"
+import { vincularEtapaFluxo } from "../../../../../services/fluxo_etapa_service";
 
 
 const TabVincularEtapas = () => {
 
+    const {hasDadosFluxo} = useFormContext()
     const [isModalVisivel, setIsModalVisivel] = useState(false)
-    const [etapasSelecionadas, setEtapasSelecionadas] = useState([])
+    const [hasDadosEtapas, setHasDadosEtapas] = useState([])
     const [elementosSelecionados, setElementosSelecionados] = useState([])
 
     const COLUNAS_MODAL = [
@@ -33,19 +32,16 @@ const TabVincularEtapas = () => {
         title: 'Código',
         dataIndex: 'id',
         key: 'codigo',
-        // Adicione o tipo de dado se possível (por exemplo, number)
       },
       {
         title: 'Nome',
         dataIndex: 'nome',
         key: 'nome',
-        // Adicione o tipo de dado se possível (por exemplo, string)
       },
       {
         title: 'Descrição',
         dataIndex: 'descricao',
         key: 'descricao',
-        // Adicione o tipo de dado se possível (por exemplo, string)
       },
     ];
 
@@ -83,13 +79,13 @@ const TabVincularEtapas = () => {
     const handleEtapaSelecionada = (checked, record) => {
 
       if(checked) {
-        const etapaNaoExiste = !etapasSelecionadas.some((e) => e.id === record.id);
+        const etapaNaoExiste = !hasDadosEtapas.some((e) => e.id === record.id);
         if (etapaNaoExiste) {
-            setEtapasSelecionadas([...etapasSelecionadas, record]);
+            setHasDadosEtapas([...hasDadosEtapas, record]);
           }
       } else {
-        const novaLista = etapasSelecionadas.filter((e) => e.id !== record.id);
-        setEtapasSelecionadas(novaLista);
+        const novaLista = hasDadosEtapas.filter((e) => e.id !== record.id);
+        setHasDadosEtapas(novaLista);
       }
     };
 
@@ -110,16 +106,29 @@ const TabVincularEtapas = () => {
     const handleFecharModal = () => setIsModalVisivel(false);
 
     const handleCliqueBotaoCancelar = () => {
-
     }
 
-    const handleCliqueBotaoVincular = () => {
+    const handleCliqueBotaoVincular = async () => {
+      
+      try {
+        const idFluxo = hasDadosFluxo.id
+        const dadosEtapas = hasDadosEtapas
+        const resposta = await vincularEtapaFluxo(idFluxo, dadosEtapas)
 
+        if(resposta.status === 200) {
+          NotificationManager.success("Etapas vinculadas com sucesso !")
+        } else {
+          NotificationManager.error("Falha ao vincular as etapas ao fluxo, contate o suporte!")
+        }
+      } catch (error) {
+        console.error("Ocorreu um erro:", error);
+        NotificationManager.error('Ocorreu um problema durante a operação, contate o suporte!'); 
+      }
     }
 
-    const handleRemoverSelecionados = () => {
-      const novaListaEtapas = etapasSelecionadas.filter((etapa) => !elementosSelecionados.some((elemento) => elemento.id === etapa.id));
-      setEtapasSelecionadas(novaListaEtapas);
+    const handleCliqueBotaoRemoverSelecionados = () => {
+      const novaListaEtapas = hasDadosEtapas.filter((etapa) => !elementosSelecionados.some((elemento) => elemento.id === etapa.id));
+      setHasDadosEtapas(novaListaEtapas);
       setElementosSelecionados([]); // Limpa a lista de elementos selecionados
     };
 
@@ -154,25 +163,43 @@ const TabVincularEtapas = () => {
           </div>
 
           <div className="tab-vincular-etapas-content">
+
             <h4> ETAPAS A SEREM VINCULADAS </h4>
-            <Button className="button-adicionar-etapas" type="primary" onClick={handleExibirModal}> ADICIONAR ETAPAS </Button>
+
+            <Button 
+              className="button-adicionar-etapas" 
+              type="primary" 
+              onClick={handleExibirModal}
+            > ADICIONAR ETAPAS </Button>
+            
             <Button 
               className="button-remover-selecionados" 
               type="primary" 
               danger 
               disabled={elementosSelecionados.length === 0}
-              onClick={handleRemoverSelecionados
-            }> REMOVER SELECIONADOS </Button>
+              onClick={handleCliqueBotaoRemoverSelecionados}
+            > REMOVER SELECIONADOS </Button>
+
+
             <Table 
-              dataSource={etapasSelecionadas}
+              dataSource={hasDadosEtapas}
               columns={COLUNAS_TABELA}
               rowKey="id"
             />
+
           </div>
 
           <div className="tab-vincular-etapas-footer"> 
-            <Button className="button-vincular-etapas"> VINCULAR </Button>
-            <Button type="primary" danger className="button-cancelar-vincular-etapas"> CANCELAR </Button>
+            <Button 
+              className="button-vincular-etapas"
+              onClick={handleCliqueBotaoVincular}
+            > VINCULAR </Button>
+
+            <Button 
+              type="primary" 
+              danger 
+              className="button-cancelar-vincular-etapas"
+            > CANCELAR </Button>
           </div>
             
         </div>

@@ -1,6 +1,15 @@
 import api from "./api";
 
-export const vincularEtapaFluxo = (dados) => {
+export const vincularEtapaFluxo = (idFluxo, dadosEtapas) => {
+
+    const dados = dadosEtapas.map(etapa => ({
+        fluxo: idFluxo,
+        etapa: etapa.id,
+    }));
+
+    console.log(dados)
+
+
     const resposta = api.post("fluxo_etapa/cadastrar/", dados)
     return resposta 
 }
