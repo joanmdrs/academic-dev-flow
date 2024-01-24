@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Tabs } from 'antd';
 import TabFormFluxo from './TabFormFluxo/TabFormFluxo';
 import TabFormEtapa from './TabFormEtapa/TabFormEtapa';
-import TabFinalizar from "./TabFinalizar/TabFinalizar";
 import { NotificationContainer } from "react-notifications";
 import BotaoVoltar from "../../../../components/Botoes/BotaoVoltar/BotaoVoltar"
+import TabVincularEtapas from "./TabVincularEtapas/TabVincularEtapas";
 
 
 const { TabPane } = Tabs;
@@ -29,14 +29,11 @@ const TabsFluxo = ({funcaoBotaoVoltar}) => {
           <BotaoVoltar funcao={funcaoBotaoVoltar}/>
         </div>
         <Tabs activeKey={current} onChange={setCurrent} className="fluxo" tabPosition="left">
-          <TabPane tab="Fluxo" key="1">
+          <TabPane tab="Dados do fluxo" key="1">
             <TabFormFluxo />
           </TabPane>
-          <TabPane tab="Etapas" key="2">
-            <TabFormEtapa />
-          </TabPane>
-          <TabPane tab="Finalizar" key="3">
-            <TabFinalizar />
+          <TabPane tab="Vincular etapas" key="2">
+            <TabVincularEtapas />
           </TabPane>
         </Tabs>
           

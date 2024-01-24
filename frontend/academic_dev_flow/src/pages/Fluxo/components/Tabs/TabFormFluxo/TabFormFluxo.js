@@ -60,19 +60,21 @@ const TabFormFluxo = () => {
     }
 
     return (
-        <div className="form-box">
+        <div className="form-box" style={{
+            maxWidth: 800
+        }}>
             <h4>CADASTRAR FLUXO</h4>
             <Form
                 name="myForm"
                 layout="vertical"
-                form = {form}
+                form = {form}               
             >
                 <Form.Item name="nome" label="Nome">
-                    <Input />
+                    <Input placeholder="Ex.: Modelo Scrum"/>
                 </Form.Item>
 
                 <Form.Item name="descricao" label="Descrição">
-                    <Input.TextArea style={{height: '200px'}}/>
+                    <Input.TextArea style={{height: '150px'}} placeholder="Este fluxo de desenvolvimento ..." />
                 </Form.Item>
 
                 <Button type="primary" onClick={handleSubmeterForm}> 

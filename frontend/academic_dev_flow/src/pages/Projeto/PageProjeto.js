@@ -9,7 +9,7 @@ import Titulo from '../../components/Titulo/Titulo';
 import BotaoAdicionar from '../../components/Botoes/BotaoAdicionar/BotaoAdicionar';
 import BotaoExcluir from '../../components/Botoes/BotaoExcluir/BotaoExcluir';
 import BotaoBuscar from '../../components/Botoes/BotaoBuscar/BotaoBuscar';
-import ModalDeBusca from '../../components/Modal/ModalDeBusca';
+import ModalDeBusca from '../../components/Modals/ModalDeBusca/ModalDeBusca';
 import 'moment/locale/pt-br';
 import { recarregarPagina } from '../../services/utils';
 moment.locale('pt-br');

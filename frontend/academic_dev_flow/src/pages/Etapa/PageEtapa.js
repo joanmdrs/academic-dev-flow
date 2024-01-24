@@ -5,7 +5,7 @@ import BotaoAdicionar from "../../components/Botoes/BotaoAdicionar/BotaoAdiciona
 import BotaoExcluir from "../../components/Botoes/BotaoExcluir/BotaoExcluir";
 import BotaoAtualizar from "../../components/Botoes/BotaoAtualizar/BotaoAtualizar";
 import BotaoFiltrar from "../../components/Botoes/BotaoFiltrar/BotaoFiltrar";
-import ListaDados from "../../components/Listas/ListaDados";
+import ListaDados from "../../components/Listas/ListaDados/ListaDados";
 import FormSalvarEtapa from "./components/FormSalvarEtapa/FormSalvarEtapa";
 import { recarregarPagina } from "../../services/utils";
 import { buscarEtapaPeloNome, excluirEtapa, listarEtapas } from "../../services/etapa_service";
@@ -68,9 +68,8 @@ const PageEtapa = () => {
 
         try {
             const resposta = await buscarEtapaPeloNome(parametro)
-
             if(resposta.status === 200) {
-                setDadosEtapas(resposta.data)
+                setDadosEtapas(resposta.data.results)
 
             } else {
                 NotificationManager.error("Ocorreu um problema, contate o suporte!");
@@ -139,8 +138,6 @@ const PageEtapa = () => {
                         titulo='Etapas'
                         paragrafo='Etapas > Gerenciar etapas'
                     />
-
-                   
 
                     <div className="botoes-de-acao">
                         <div id="botao-filtrar"> 
