@@ -1,12 +1,12 @@
 import React from "react";
 import { FormProvider } from "../../context/Provider/FormProvider";
-import TabsFluxo from "../../components/Tabs/Tabs";
+import TabsCriarFluxo from "../../components/TabsCriarFluxo/TabsCriarFluxo";
 
 const ScreenCadastrarFluxo = () => {
 
     return (
         <FormProvider>
-            <TabsFluxo />
+            <TabsCriarFluxo />
         </FormProvider>
     )
 }

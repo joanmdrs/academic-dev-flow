@@ -16,8 +16,10 @@
 }
 
 .tab-finalizar-fluxo-content p {
-    border-bottom: 1px solid #1677FF;
+    border: 1px solid #BDBDBD;
+    border-radius: 5px;
     padding: 10px;
+
 }
 
 .tab-finalizar-fluxo-content table {

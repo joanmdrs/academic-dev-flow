@@ -1,7 +1,7 @@
 import React from "react";
 import "./TabFinalizarFluxo.css";
 import { useFormContext } from "../../../context/Provider/FormProvider";
-import { Button, Table } from "antd";
+import { Button, Empty, Table } from "antd";
 import { vincularEtapaFluxo } from "../../../../../services/fluxo_etapa_service";
 import { NotificationManager } from "react-notifications";
 import { criarFluxo } from "../../../../../services/fluxo_service";
@@ -34,6 +34,8 @@ const TabFinalizarFluxo = () => {
         hasDadosEtapas,
         setCurrent
     } = useFormContext()
+
+
 
     const handleCriarFluxo = async () => {
         try {
@@ -81,13 +83,23 @@ const TabFinalizarFluxo = () => {
                 
             </div>
             <div className="tab-finalizar-fluxo-content"> 
-                <div className="div-dados-fluxo"> 
-                    <h5> DADOS DO FLUXO</h5>
-                    <h4> Nome: </h4>
-                    <p> {hasDadosFluxo.nome} </p>
-                    <h4> Descrição: </h4>
-                    <p> {hasDadosFluxo.descricao} </p>
-                </div>
+            <div className="div-dados-fluxo">
+                { (hasDadosFluxo.nome === undefined || hasDadosFluxo.descricao === undefined) ? 
+                    ( 
+                        <React.Fragment>
+                            <h5> DADOS DO FLUXO</h5>
+                            <h4> Nome: </h4>
+                            <p> {hasDadosFluxo.nome} </p>
+                            <h4> Descrição: </h4>
+                            <p> {hasDadosFluxo.descricao} </p>
+                        </React.Fragment>
+                    )
+
+                    : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                }
+            </div>
+                
+                
 
                 <div className="div-dados-etapas"> 
                     <h5> DADOS DE ETAPAS </h5>
