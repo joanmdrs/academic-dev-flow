@@ -3,29 +3,38 @@ import "./TabVincularEtapas.css";
 import ModalDeSelecao from "../../../../../components/Modals/ModalDeSelecao/ModalDeSelecao";
 import { buscarEtapaPeloNome } from "../../../../../services/etapa_service";
 import { NotificationManager } from "react-notifications";
-import { Button, Input, Table } from "antd";
+import { Button, Input, Table, Checkbox } from "antd";
 import { useFormContext } from "../../../context/Provider/FormProvider"
-import { vincularEtapaFluxo } from "../../../../../services/fluxo_etapa_service";
 
 
 const TabVincularEtapas = () => {
 
-    const {hasDadosFluxo, setCurrent} = useFormContext()
+    const {setCurrent} = useFormContext()
     const [isModalVisivel, setIsModalVisivel] = useState(false)
     const {hasDadosEtapas, setHasDadosEtapas} = useFormContext()
     const [elementosSelecionados, setElementosSelecionados] = useState([])
+    const [isChecked, setIsChecked] = useState(false);
+    const [isTurn, setIsTurn] = useState("modal")
 
     const COLUNAS_MODAL = [
       {
-        title: (<Input type="checkbox" style={{ transform: "scale(0.5)" }}/>),
+        title: (
+          <Input 
+            type="checkbox"
+            className="checkbox-mestre-modal" 
+            onChange={() => handleSelecionarTodosModal()} 
+            style={{ transform: "scale(0.4)" }}/>),
+            
         dataIndex: 'selecionar',
         key: 'selecionar',
-        align: 'left',
+        align: 'center',
         render: (_, record) => (
           <Input 
-            type="checkbox" 
-            onChange={(event) => handleEtapaSelecionada(event.target.checked, record)} 
-            style={{ transform: "scale(0.5)" }}/>
+            type="checkbox"
+            value={JSON.stringify(record)}
+            className="checkbox-item-modal"
+            onChange={(event) => handleSelecionarItemModal(event.target.checked, record)}
+            style={{ transform: "scale(0.4)" }}/>
         ),
       },
       {
@@ -47,14 +56,23 @@ const TabVincularEtapas = () => {
 
     const COLUNAS_TABELA = [
       {
-        title: (<Input type="checkbox" style={{ transform: "scale(0.5)" }}/>),
+        title: (
+          <Input 
+            type="checkbox" 
+            onChange={() => handleSelecionarTodosTable()}
+            className="checkbox-mestre-table"
+            style={{ transform: "scale(0.5)"}}
+          />
+        ),
         dataIndex: 'selecionar',
         key: 'selecionar',
         align: 'left',
         render: (_, record) => (
           <Input 
-            type="checkbox" 
-            onChange={(event) => handleLinhaTabelaSelecionada(event.target.checked, record)}
+            type="checkbox"
+            value={JSON.stringify(record)}
+            className="checkbox-item-table"
+            onChange={(event) => handleSelecionarItemTable(event.target.checked, record)}
             style={{ transform: "scale(0.5)" }}/>
         ),
       },
@@ -76,20 +94,86 @@ const TabVincularEtapas = () => {
       },
     ];
 
-    const handleEtapaSelecionada = (checked, record) => {
+    const handleSelecionarTodosModal = () => {
+      const checkboxItems = document.getElementsByClassName('checkbox-item-modal');
+      const checkboxMestre = document.getElementsByClassName('checkbox-mestre-modal')
 
-      if(checked) {
-        const etapaNaoExiste = !hasDadosEtapas.some((e) => e.id === record.id);
-        if (etapaNaoExiste) {
-            setHasDadosEtapas([...hasDadosEtapas, record]);
-          }
+      if (isChecked === false ) {
+        setIsChecked(true)
+        checkboxMestre[0].checked = true
+        setHasDadosEtapas([]);
+        for (let i = 0; i < checkboxItems.length; i++) {
+          checkboxItems[i].checked = true;
+          let elemento = JSON.parse(checkboxItems[i].value);
+          setHasDadosEtapas((prevValues) => [...prevValues, elemento]);
+        }
       } else {
-        const novaLista = hasDadosEtapas.filter((e) => e.id !== record.id);
-        setHasDadosEtapas(novaLista);
-      }
-    };
+        setIsChecked(false)
+        checkboxMestre[0].checked = false
+        for (let i = 0; i < checkboxItems.length; i++) {
+          checkboxItems[i].checked = false;
+        }
 
-    const handleLinhaTabelaSelecionada = (checked, record) => {
+        setHasDadosEtapas([]);
+      }
+  };
+    
+  const handleSelecionarItemModal = (checked, record) => {
+    
+    const checkboxItems = document.getElementsByClassName('checkbox-item-modal');
+    const checkboxMestre = document.getElementsByClassName('checkbox-mestre-modal')
+  
+    if (checked) {
+      const etapaNaoExiste = !hasDadosEtapas.some((e) => e.id === record.id);
+      if (etapaNaoExiste) {
+        setHasDadosEtapas([...hasDadosEtapas, record]);
+      }
+    } else {
+      const novaLista = hasDadosEtapas.filter((e) => e.id !== record.id);
+      setHasDadosEtapas(novaLista);
+    }
+  
+    const todasEtapasMarcadas = checkboxItems.length > 0 && [...checkboxItems].every((el) => el.checked);
+  
+    setIsChecked(todasEtapasMarcadas);
+    checkboxMestre[0].indeterminate = !todasEtapasMarcadas && hasDadosEtapas.length > 0;
+    checkboxMestre[0].checked = todasEtapasMarcadas;
+  };
+  
+
+    const handleSelecionarTodosTable = () => {
+
+      const checkboxItems = document.getElementsByClassName('checkbox-item-table');
+      const checkboxMestre = document.getElementsByClassName('checkbox-mestre-table')
+
+      if (isChecked === false) {
+        setIsChecked(true)
+        checkboxMestre[0].checked = true
+        setElementosSelecionados([]);
+        for (let i = 0; i < checkboxItems.length; i++) {
+          checkboxItems[i].checked = true;
+          let elemento = JSON.parse(checkboxItems[i].value);
+          setElementosSelecionados((prevValues) => [...prevValues, elemento]);
+        }
+      } else {
+        setIsChecked(false)
+        checkboxMestre[0].checked = false
+        for (let i = 0; i < checkboxItems.length; i++) {
+          checkboxItems[i].checked = false;
+        }
+
+        setElementosSelecionados([]);
+      }
+
+      console.log(elementosSelecionados)
+
+    }
+
+
+    const handleSelecionarItemTable = (checked, record) => {
+
+      const checkboxItems = document.getElementsByClassName('checkbox-item-table')
+      const checkboxMestre = document.getElementsByClassName('checkbox-mestre-table')
       if(checked) {
         const etapaNaoExiste = !elementosSelecionados.some((e) => e.id === record.id);
         if (etapaNaoExiste) {
@@ -99,16 +183,32 @@ const TabVincularEtapas = () => {
         const novaLista = elementosSelecionados.filter((e) => e.id !== record.id);
         setElementosSelecionados(novaLista);
       }
+
+      const todasEtapasMarcadas = checkboxItems.length > 0 && [...checkboxItems].every((el) => el.checked);
+  
+      setIsChecked(todasEtapasMarcadas);
+      checkboxMestre[0].indeterminate = !todasEtapasMarcadas && elementosSelecionados.length > 0;
+      checkboxMestre[0].checked = todasEtapasMarcadas;
     }
 
-    const handleExibirModal = () => setIsModalVisivel(true);
+    const handleCliqueBotaoAdicionarEtapas = () => {
+      setIsModalVisivel(true);
+      setIsTurn('modal')
+      setIsChecked(false)
+    }
 
-    const handleFecharModal = () => setIsModalVisivel(false);
+    const handleCliqueBotaoFechar = () => {
+      setIsModalVisivel(false)
+      setIsTurn('table')
+      setIsChecked(false)
+    }
     
     const handleCliqueBotaoRemoverSelecionados = () => {
       const novaListaEtapas = hasDadosEtapas.filter((etapa) => !elementosSelecionados.some((elemento) => elemento.id === etapa.id));
       setHasDadosEtapas(novaListaEtapas);
-      setElementosSelecionados([]); // Limpa a lista de elementos selecionados
+      setElementosSelecionados([]);
+      const checkboxMestre = document.getElementsByClassName('checkbox-mestre-table')
+      checkboxMestre[0].checked = false
     };
 
     const handleBuscarEtapa = async (parametro) => {
@@ -134,7 +234,7 @@ const TabVincularEtapas = () => {
                 titulo="Buscar etapa" 
                 label="Nome da etapa"
                 name="name-etapa"
-                onCancel={handleFecharModal}
+                onCancel={handleCliqueBotaoFechar}
                 onOk={handleBuscarEtapa}
                 status={isModalVisivel}
                 colunas={COLUNAS_MODAL}
@@ -148,7 +248,7 @@ const TabVincularEtapas = () => {
             <Button 
               className="button-adicionar-etapas" 
               type="primary" 
-              onClick={handleExibirModal}
+              onClick={handleCliqueBotaoAdicionarEtapas}
             > ADICIONAR ETAPAS </Button>
             
             <Button 

@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import "./ModalDeSelecao.css";
-import { Modal, Form, Input, Divider, Table, Button } from "antd";
+import { Modal, Form, Input, Table, Button } from "antd";
 
 const { Item } = Form;
 
-const ModalDeSelecao = ({ status, titulo, label, name, onCancel, onOk, colunas, linhasSelecionadas }) => {
-
+const ModalDeSelecao = ({ status, titulo, label, name, onCancel, onOk, colunas }) => {
   const [form] = Form.useForm();
   const [parametro, setParametro] = useState('');
   const [dados, setDados] = useState([]);
@@ -15,29 +14,27 @@ const ModalDeSelecao = ({ status, titulo, label, name, onCancel, onOk, colunas, 
     setParametro(event.target.value);
   };
 
-  const handleCliqueBotaoSelecionar = () => {
-    handleCliqueBotaoFechar()
-  }
-
   const handleCliqueBotaoFechar = () => {
     onCancel();
     setHasResposta(false);
     setDados([]);
-  }
+  };
 
   const handleCliqueBotaoFiltrar = async () => {
     const resposta = await onOk(parametro);
     setHasResposta(true);
     if (resposta.status === 200) {
-        setDados(resposta.data.results);
+      setDados(resposta.data.results);
     } else {
-        setDados([]);
+      setDados([]);
     }
-  }
+  };
 
   const handleCliqueBotaoLimpar = () => {
-    form.resetFields()
-  }
+    form.resetFields();
+  };
+
+
 
   return (
     <Modal
@@ -45,9 +42,13 @@ const ModalDeSelecao = ({ status, titulo, label, name, onCancel, onOk, colunas, 
       open={status} 
       footer={[
         <div key="customFooter" className="modal-footer">
-            <Button key="selecionar" style={{backgroundColor: "#43A047", color: "#FFFFFF"}}> SELECIONAR </Button>,
-            <Button key="fechar" onClick={handleCliqueBotaoFechar}> FECHAR </Button>,  
-        </div>
+          <Button key="selecionar" style={{ backgroundColor: "#43A047", color: "#FFFFFF" }}>
+            SELECIONAR
+          </Button>
+          <Button key="fechar" onClick={handleCliqueBotaoFechar}>
+            FECHAR
+          </Button>
+        </div>,
       ]}
     >
       <Form form={form} layout="vertical">
@@ -60,8 +61,12 @@ const ModalDeSelecao = ({ status, titulo, label, name, onCancel, onOk, colunas, 
           />
         </Item>
         <Item className="modal-botoes-filtrar-limpar">
-            <Button type="primary" onClick={handleCliqueBotaoFiltrar}> FILTRAR </Button>
-            <Button type="default" onClick={handleCliqueBotaoLimpar}> LIMPAR </Button>
+          <Button type="primary" onClick={handleCliqueBotaoFiltrar}>
+            FILTRAR
+          </Button>
+          <Button type="default" onClick={handleCliqueBotaoLimpar}>
+            LIMPAR
+          </Button>
         </Item>
       </Form>
 
@@ -77,7 +82,7 @@ const ModalDeSelecao = ({ status, titulo, label, name, onCancel, onOk, colunas, 
               />
             </>
           ) : (
-            <div> Nenhum resultado encontrado </div>
+            <div>Nenhum resultado encontrado</div>
           )}
         </>
       ) : null}

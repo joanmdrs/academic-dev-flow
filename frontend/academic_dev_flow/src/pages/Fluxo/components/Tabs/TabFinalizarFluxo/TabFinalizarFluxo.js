@@ -43,7 +43,6 @@ const TabFinalizarFluxo = () => {
             if (resposta.status === 200) {
                 setHasDadosFluxo(resposta.data);
                 NotificationManager.success('Fluxo criado com sucesso!');
-                // Chamar handleVincularEtapas apenas se a criação do fluxo for bem-sucedida
                 await handleVincularEtapas(resposta.data.id)
                 recarregarPagina()
             } else {
@@ -53,10 +52,6 @@ const TabFinalizarFluxo = () => {
             console.error("Ocorreu um erro:", error);
             NotificationManager.error('Ocorreu um problema durante a operação, contate o suporte!');
         }
-    }
-    
-    const handleFinalizar = async () => {
-        await handleCriarFluxo();
     }
 
     const handleVincularEtapas = async (idFluxo) => {
@@ -108,7 +103,7 @@ const TabFinalizarFluxo = () => {
                 <Button onClick={() => setCurrent("2")}> 
                     Voltar
                 </Button>
-                <Button type="primary" onClick={handleFinalizar} > 
+                <Button type="primary" onClick={handleCriarFluxo} > 
                     Finalizar
                 </Button>
             </div>

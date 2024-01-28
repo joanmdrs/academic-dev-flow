@@ -5,12 +5,11 @@ import { useFormContext } from "../../context/Provider/FormProvider";
 
 const BotaoNovoFluxo = ({funcaoMostrarForm}) => {
 
-    const {setAcaoFormFluxo, setAcaoFormEtapa} = useFormContext()
+    const {setAcaoFormFluxo} = useFormContext()
     
     const handleCliqueBotaoNovoFluxo = () => {
         funcaoMostrarForm()
         setAcaoFormFluxo('criar')
-        setAcaoFormEtapa('criar')
 
     }
 
