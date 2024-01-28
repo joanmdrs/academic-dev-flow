@@ -55,24 +55,18 @@ const PageFluxo = () => {
                 paragrafo="Gerenciar fluxos de desenvolvimento"
             />
 
-            { isFormVisivel ? (
-                <TabsFluxo funcaoBotaoVoltar={handleFecharForm}/>
-            ) : (
+            
 
-                <React.Fragment>
-                    <div className="div-input-buscar-fluxo-e-botao-novo-fluxo">
-                        <InputBuscarFluxo  funcao={handleBuscarFluxo}/>
-                        <BotaoNovoFluxo funcaoMostrarForm={handleExibirForm} />
-                    </div>  
-                    
-                    <div> 
-                        <ListaDeFluxos dados={hasDadosFluxo} funcaoExibirForm={handleExibirForm}/>
-                    </div>
-
-                </React.Fragment>
-
+            <React.Fragment>
+                <div className="div-input-buscar-fluxo-e-botao-novo-fluxo">
+                    <InputBuscarFluxo  funcao={handleBuscarFluxo}/>
+                </div>  
                 
-            )}
+                <div> 
+                    <ListaDeFluxos dados={hasDadosFluxo} funcaoExibirForm={handleExibirForm}/>
+                </div>
+
+            </React.Fragment>
 
         </FormProvider>
     )

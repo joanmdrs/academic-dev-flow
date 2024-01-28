@@ -4,7 +4,7 @@ import TabFormFluxo from './TabFormFluxo/TabFormFluxo';
 import { NotificationContainer } from "react-notifications";
 import BotaoVoltar from "../../../../components/Botoes/BotaoVoltar/BotaoVoltar"
 import TabVincularEtapas from "./TabVincularEtapas/TabVincularEtapas";
-import { useFormContext } from "../../context/Provider/FormProvider";
+import { FormProvider, useFormContext } from "../../context/Provider/FormProvider";
 import TabFinalizarFluxo from "./TabFinalizarFluxo/TabFinalizarFluxo";
 
 
@@ -14,7 +14,7 @@ const TabsFluxo = ({funcaoBotaoVoltar}) => {
   
   const {current, setCurrent} = useFormContext();
 
-  return (
+  return (    
       <React.Fragment>
         <div className="component-etapas-criar-fluxo">
         <div style={{margin: "20px"}}> 

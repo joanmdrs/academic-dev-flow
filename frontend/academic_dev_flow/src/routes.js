@@ -6,21 +6,21 @@ import PageFluxo from './pages/Fluxo/PageFluxo';
 import PageMembro from './pages/Membro/PageMembro';
 import PageArtefato from './pages/Artefato/PageArtefato';
 import PageEtapa from './pages/Etapa/PageEtapa';
+import ScreenCadastrarFluxo from './pages/Fluxo/screens/ScreenCadastrarFluxo/ScreenCadastrarFluxo';
 
 function Routes() {
   return (
-    <BrowserRouter>
         <Switch>
             <Route Component={Home} path='/' exact/>
             <Route Component={PageProjeto} path='/projetos' exact/>
-            <Route Component={PageFluxo} path='/fluxos' exact/>
-            <Route Component={PageEtapa} path='etapas' exact/>
+            <Route Component={ScreenCadastrarFluxo} path='/fluxos/cadastrar' exact/>
+            <Route Component={PageFluxo} path='/fluxos/planilha' exact/>
+            <Route Component={PageEtapa} path='/etapas' exact/>
             <Route Component={PageMembro} path='/membros' exact/>
             <Route Component={PageArtefato} path='/artefatos' exact/>
         
         </Switch>
         
-    </BrowserRouter>
 
   );
 }
