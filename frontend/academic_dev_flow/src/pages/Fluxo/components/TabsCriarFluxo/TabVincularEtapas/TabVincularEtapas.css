@@ -4,10 +4,6 @@
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
-input:indeterminate + label {
-    background: lime;
-  }
-
 .tab-vincular-etapas-content {
     margin-top: -40px;
 }

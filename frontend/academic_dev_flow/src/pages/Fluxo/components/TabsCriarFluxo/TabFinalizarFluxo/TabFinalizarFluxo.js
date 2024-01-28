@@ -84,19 +84,15 @@ const TabFinalizarFluxo = () => {
             </div>
             <div className="tab-finalizar-fluxo-content"> 
             <div className="div-dados-fluxo">
-                { (hasDadosFluxo.nome === undefined || hasDadosFluxo.descricao === undefined) ? 
-                    ( 
-                        <React.Fragment>
-                            <h5> DADOS DO FLUXO</h5>
-                            <h4> Nome: </h4>
-                            <p> {hasDadosFluxo.nome} </p>
-                            <h4> Descrição: </h4>
-                            <p> {hasDadosFluxo.descricao} </p>
-                        </React.Fragment>
-                    )
-
-                    : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                }
+            
+                <React.Fragment>
+                    <h5> DADOS DO FLUXO</h5>
+                    <h4> Nome: </h4>
+                    <p> {hasDadosFluxo.nome} </p>
+                    <h4> Descrição: </h4>
+                    <p> {hasDadosFluxo.descricao} </p>
+                </React.Fragment>
+               
             </div>
                 
                 

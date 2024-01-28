@@ -1,7 +1,7 @@
-.tabela-lista-de-dados {
-    margin: 20px;
+.component-tabela-lista-de-dados table {
+    font-size: 13px;
 }
 
-.tabela-lista-de-dados td  {
-    cursor: pointer;
-}
+.component-tabela-lista-de-dados table th:first-child {
+    width: 70px;
+} 

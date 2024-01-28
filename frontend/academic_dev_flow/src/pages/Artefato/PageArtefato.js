@@ -105,9 +105,9 @@ const PageArtefato = () => {
             if(resposta.status === 204) {
                 NotificationManager.success("Artefato excluído com sucesso!");
                 recarregarPagina();
-        } else {
-            NotificationManager.error("Ocorreu um problema, contate o suporte!");
-        }
+            } else {
+                NotificationManager.error("Ocorreu um problema, contate o suporte!");
+            }
         } catch (error) {
             NotificationManager.error("Ocorreu um problema, contate o suporte!");
         }

@@ -23,12 +23,12 @@ const BotaoExcluir = ({funcao, status}) => {
       <>
         <Button 
           type='primary'
-          className='botao-de-acao'
+          className='botao-acao'
           size='large'
           icon={<DeleteOutlined />} 
           onClick={confirm} 
           disabled={status}
-          danger>
+          style={{backgroundColor: '#C62828'}}>
         </Button>
         {contextHolder}
       </>

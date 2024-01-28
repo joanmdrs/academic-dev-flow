@@ -1,0 +1,23 @@
+.div-input-buscar-fluxo {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    margin: 0 auto;
+    margin-top: 30px;
+}
+
+.div-botoes-interacao-fluxo {
+    display: flex;
+    gap: 10px;
+    margin: 0 auto;
+    width: 70%;
+    margin-top: 30px;
+}
+
+.div-tabela-lista-fluxos {
+    width: 70%;
+    margin: 0 auto;
+    margin-top: 30px;
+
+}
+
