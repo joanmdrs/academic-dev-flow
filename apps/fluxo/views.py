@@ -64,7 +64,25 @@ class AtualizarFluxoView(APIView):
     
         except Exception as e: 
              return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-         
+
+class ExcluirFluxoView(APIView):
+    def delete(self, request, fluxo_id):
+        
+        try: 
+            
+            fluxo = Fluxo.objects.get(pk=fluxo_id)
+            
+            if fluxo is not None: 
+                fluxo.delete()
+                return Response({'detail': 'Fluxo excluído com sucesso!'}, status=status.HTTP_204_NO_CONTENT)
+            
+            else: 
+                return Response({'error': 'Objeto não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
+            
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)  
+    
+    
 class ListarFluxosView(APIView):
     def get(self, request):
         try:

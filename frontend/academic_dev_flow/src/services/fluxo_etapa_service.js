@@ -1,19 +1,21 @@
 import api from "./api";
 
-export const vincularEtapaFluxo = (idFluxo, dadosEtapas) => {
+export const vincularEtapaFluxo = async (idFluxo, dadosEtapas) => {
 
     const dados = dadosEtapas.map(etapa => ({
         fluxo: idFluxo,
         etapa: etapa.id,
     }));
-
-    console.log(dados)
-
-
-    const resposta = api.post("fluxo_etapa/cadastrar/", dados)
+    const resposta = await api.post("fluxo_etapa/cadastrar/", dados)
     return resposta 
 }
 
-export const removerVinculoEtapaFluxo = (id) => {
-    const resposta = api.delete(`fluxo_etapa/excluir/${encodeURIComponent(id)}/`)
+export const buscarVinculoPeloIdFluxo = async (idFluxo) => {
+    const resposta = await api.get(`fluxo_etapa/buscar/${encodeURIComponent(idFluxo)}/`)
+    return resposta
+}
+
+export const removerVinculoEtapasFluxo = async (idFluxo) => {
+    const resposta = await api.delete(`fluxo_etapa/excluir/${encodeURIComponent(idFluxo)}/`)
+    return resposta
 }

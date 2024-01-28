@@ -18,7 +18,11 @@ export const buscarFluxoPeloId =  async (fluxo_id) => {
 export const atualizarFluxo = async (dadosFluxo, idFluxo) => {
     const resposta = await api.patch(`fluxo/atualizar/${encodeURIComponent(idFluxo)}/`, dadosFluxo)
     return resposta
+}
 
+export const excluirFluxo = async (idFluxo) => {
+    const resposta = await api.delete(`fluxo/excluir/${encodeURIComponent(idFluxo)}/`)
+    return resposta
 }
 
 export const listarFluxos = async () => {
