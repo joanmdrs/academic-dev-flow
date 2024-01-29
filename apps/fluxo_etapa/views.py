@@ -9,7 +9,7 @@ from .serializers import FluxoEtapaSerializer
 class CadastrarFluxoEtapaView(APIView):
     def post(self, request):
         try:
-            serializer = FluxoEtapaSerializer(data=request.data, many=True)
+            serializer = FluxoEtapaSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
@@ -34,21 +34,39 @@ class BuscarFluxoEtapaPeloIdFluxoView(APIView):
 
         except Exception as e: 
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-class ExcluirFluxoEtapaView(APIView):
-    def delete(self, request, idFluxo, idEtapa):
-        try:
-            objeto = FluxoEtapa.objects.get(fluxo=idFluxo, etapa=idEtapa)
+        
+class AtualizarEtapaFluxoView(APIView):
+    def patch(self, request, id): 
+        try: 
             
-            objeto.delete()
+            fluxoEtapa = FluxoEtapa.objects.get(id=id) 
+            
+            serializer = FluxoEtapaSerializer(fluxoEtapa, data=request.data)
+            
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+    
+        except Exception as e: 
+             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
 
-            return Response({'message': 'Objeto excluído com sucesso!'}, status=status.HTTP_204_NO_CONTENT)
-
-        except FluxoEtapa.DoesNotExist:
-            return Response({'error': 'Objeto não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
-
+class ExcluirEtapaFluxoView(APIView):
+    def delete(self, request, id):
+        try:
+            fluxoEtapa = FluxoEtapa.objects.get(pk=id)
+            
+            if fluxoEtapa is not None: 
+                fluxoEtapa.delete()
+                return Response({'detail': 'Relacionamento entre fluxo e etapa excluído com sucesso!'}, status=status.HTTP_204_NO_CONTENT)
+            
+            else: 
+                return Response({'error': 'Objeto não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
+            
         except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)  
         
 class ExcluirFluxoEtapasView(APIView):
     def delete(self, request, idFluxo):

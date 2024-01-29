@@ -38,20 +38,13 @@ class BuscarEtapaPeloNomeView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-class BuscarEtapaPorIdFluxoView(APIView):
-    def get(self, request):
+class BuscarEtapaPeloIdView(APIView):
+    def get(self, request, id):
         try:
-            parametro = request.GET.get('fluxo_id', None)
-            
-            if parametro is not None:
-                etapas = Etapa.objects.filter(fluxo=parametro)
-                
-            else:
-                etapas = None
-                
-            serializer = EtapaSerializer(etapas, many=True)
-            
+            etapa = Etapa.objects.get(pk=id)
+            serializer = EtapaSerializer(etapa, many=False)
             return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+ 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
