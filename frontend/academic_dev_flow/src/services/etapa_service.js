@@ -18,6 +18,11 @@ export const buscarEtapaPeloNome = async (nomeEtapa) => {
     return resposta
 }
 
+export const buscarEtapaPeloId = async (idEtapa) => {
+    const resposta = await api.get(`etapa/buscar/${encodeURIComponent(idEtapa)}/`)
+    return resposta
+}
+
 export const buscarEtapasPeloIdFluxo = async (fluxoId) => {
     const resposta = await api.get(`etapa/buscar/?fluxo_id=${encodeURIComponent(fluxoId)}`);
     return resposta; 

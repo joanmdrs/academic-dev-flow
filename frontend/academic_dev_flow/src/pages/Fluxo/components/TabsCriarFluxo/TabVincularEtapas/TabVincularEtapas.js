@@ -1,284 +1,276 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./TabVincularEtapas.css";
-import ModalDeSelecao from "../../../../../components/Modals/ModalDeSelecao/ModalDeSelecao";
-import { buscarEtapaPeloNome } from "../../../../../services/etapa_service";
 import { NotificationManager } from "react-notifications";
-import { Button, Input, Table, Checkbox } from "antd";
-import { useFormContext } from "../../../context/Provider/FormProvider"
+import { Button, Input, Table, Form, Select } from "antd";
+import { useFormContext } from "../../../context/Provider/FormProvider";
+import { listarFluxos } from "../../../../../services/fluxo_service";
+import { buscarEtapaPeloId, buscarEtapasPorFluxo } from "../../../../../services/etapa_service";
+import BotaoAdicionar from "../../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
+import BotaoExcluir from "../../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
+import ModalVincularEtapa from "../../ModalVincularEtapa/ModalVincularEtapa";
+import { atualizarEtapaFluxo, atualizarEtapasFluxo, listarEtapasPorFluxo, removerEtapaFluxo, vincularEtapaFluxo } from "../../../../../services/fluxo_etapa_service";
+import ListaDados from "../../../../../components/Listas/ListaDados/ListaDados";
 
+const { Option } = Select;
 
 const TabVincularEtapas = () => {
 
-    const {setCurrent} = useFormContext()
-    const [isModalVisivel, setIsModalVisivel] = useState(false)
-    const {hasDadosEtapas, setHasDadosEtapas} = useFormContext()
-    const [elementosSelecionados, setElementosSelecionados] = useState([])
-    const [isChecked, setIsChecked] = useState(false);
-    const [isTurn, setIsTurn] = useState("modal")
+  const [etapasVinculadas, setEtapasVinculadas] = useState([])
+  const [fluxos, setFluxos] = useState([]);
+  const [fluxoSelecionado, setFluxoSelecionado] = useState(null);
+  const {hasDadosFluxo, setHasDadosFluxo} = useFormContext()
+  const [isModalVisivel, setIsModalVisivel] = useState(false)
+  const [isBotaoExcluirVisivel, setIsBotaoExcluirVisivel] = useState(true)
+  const [hasEtapaExcluir, setHasEtapaExcluir] = useState(null)
 
-    const COLUNAS_MODAL = [
-      {
-        title: (
-          <Input 
-            type="checkbox"
-            className="checkbox-mestre-modal" 
-            onChange={() => handleSelecionarTodosModal()} 
-            style={{ transform: "scale(0.4)" }}/>),
-            
-        dataIndex: 'selecionar',
-        key: 'selecionar',
-        align: 'center',
-        render: (_, record) => (
-          <Input 
-            type="checkbox"
-            value={JSON.stringify(record)}
-            className="checkbox-item-modal"
-            onChange={(event) => handleSelecionarItemModal(event.target.checked, record)}
-            style={{ transform: "scale(0.4)" }}/>
-        ),
-      },
-      {
-        title: 'Código',
-        dataIndex: 'id',
-        key: 'codigo',
-      },
-      {
-        title: 'Nome',
-        dataIndex: 'nome',
-        key: 'nome',
-      },
-      {
-        title: 'Descrição',
-        dataIndex: 'descricao',
-        key: 'descricao',
-      },
-    ];
-
-    const COLUNAS_TABELA = [
-      {
-        title: (
-          <Input 
-            type="checkbox" 
-            onChange={() => handleSelecionarTodosTable()}
-            className="checkbox-mestre-table"
-            style={{ transform: "scale(0.5)"}}
-          />
-        ),
-        dataIndex: 'selecionar',
-        key: 'selecionar',
-        align: 'left',
-        render: (_, record) => (
-          <Input 
-            type="checkbox"
-            value={JSON.stringify(record)}
-            className="checkbox-item-table"
-            onChange={(event) => handleSelecionarItemTable(event.target.checked, record)}
-            style={{ transform: "scale(0.5)" }}/>
-        ),
-      },
-      {
-        title: 'Código',
-        dataIndex: 'id',
-        key: 'codigo',
-      },
-      {
-        title: 'Nome',
-        dataIndex: 'nome',
-        key: 'nome',
-      },
-      {
-        title: 'Descrição',
-        dataIndex: 'descricao',
-        key: 'descricao',
-
-      },
-    ];
-
-    const handleSelecionarTodosModal = () => {
-      const checkboxItems = document.getElementsByClassName('checkbox-item-modal');
-      const checkboxMestre = document.getElementsByClassName('checkbox-mestre-modal')
-
-      if (isChecked === false ) {
-        setIsChecked(true)
-        checkboxMestre[0].checked = true
-        setHasDadosEtapas([]);
-        for (let i = 0; i < checkboxItems.length; i++) {
-          checkboxItems[i].checked = true;
-          let elemento = JSON.parse(checkboxItems[i].value);
-          setHasDadosEtapas((prevValues) => [...prevValues, elemento]);
-        }
-      } else {
-        setIsChecked(false)
-        checkboxMestre[0].checked = false
-        for (let i = 0; i < checkboxItems.length; i++) {
-          checkboxItems[i].checked = false;
-        }
-
-        setHasDadosEtapas([]);
-      }
-  };
-    
-  const handleSelecionarItemModal = (checked, record) => {
-    
-    const checkboxItems = document.getElementsByClassName('checkbox-item-modal');
-    const checkboxMestre = document.getElementsByClassName('checkbox-mestre-modal')
-  
-    if (checked) {
-      const etapaNaoExiste = !hasDadosEtapas.some((e) => e.id === record.id);
-      if (etapaNaoExiste) {
-        setHasDadosEtapas([...hasDadosEtapas, record]);
-      }
-    } else {
-      const novaLista = hasDadosEtapas.filter((e) => e.id !== record.id);
-      setHasDadosEtapas(novaLista);
-    }
-  
-    const todasEtapasMarcadas = checkboxItems.length > 0 && [...checkboxItems].every((el) => el.checked);
-  
-    setIsChecked(todasEtapasMarcadas);
-    checkboxMestre[0].indeterminate = !todasEtapasMarcadas && hasDadosEtapas.length > 0;
-    checkboxMestre[0].checked = todasEtapasMarcadas;
-  };
-  
-
-    const handleSelecionarTodosTable = () => {
-
-      const checkboxItems = document.getElementsByClassName('checkbox-item-table');
-      const checkboxMestre = document.getElementsByClassName('checkbox-mestre-table')
-
-      if (isChecked === false) {
-        setIsChecked(true)
-        checkboxMestre[0].checked = true
-        setElementosSelecionados([]);
-        for (let i = 0; i < checkboxItems.length; i++) {
-          checkboxItems[i].checked = true;
-          let elemento = JSON.parse(checkboxItems[i].value);
-          setElementosSelecionados((prevValues) => [...prevValues, elemento]);
-        }
-      } else {
-        setIsChecked(false)
-        checkboxMestre[0].checked = false
-        for (let i = 0; i < checkboxItems.length; i++) {
-          checkboxItems[i].checked = false;
-        }
-
-        setElementosSelecionados([]);
-      }
-
-      console.log(elementosSelecionados)
-
-    }
-
-
-    const handleSelecionarItemTable = (checked, record) => {
-
-      const checkboxItems = document.getElementsByClassName('checkbox-item-table')
-      const checkboxMestre = document.getElementsByClassName('checkbox-mestre-table')
-      if(checked) {
-        const etapaNaoExiste = !elementosSelecionados.some((e) => e.id === record.id);
-        if (etapaNaoExiste) {
-            setElementosSelecionados([...elementosSelecionados, record]);
+  const COLUNAS_TABELA = [
+    { title: "ID", dataIndex: "id", key: "id" },
+    { title: "Nome", dataIndex: "nome", key: "nome" },
+    {
+      title: "Situação",
+      dataIndex: "status",
+      key: "situacao",
+      editable: true,
+      render: (text, record) => (
+        <Select
+          value={text} // Use the state value initially, then update
+          onChange={(value) => handleChange(value, record, "status")}
+        >
+          <Option value="Em andamento">Em andamento</Option>
+          <Option value="Concluída">Concluída</Option>
+          <Option value="Cancelada">Cancelada</Option>
+        </Select>
+      ),
+    },
+    {
+      title: "Data de início",
+      dataIndex: "data_inicio",
+      key: "data_inicio",
+      editable: true,
+      render: (text, record) => (
+        <Input
+          type="date"
+          value={text} 
+          onChange={(e) =>
+            handleChange(e.target.value, record, "data_inicio")
           }
-      } else {
-        const novaLista = elementosSelecionados.filter((e) => e.id !== record.id);
-        setElementosSelecionados(novaLista);
-      }
+        />
+      ),
+    },
+    {
+      title: "Data de término",
+      dataIndex: "data_fim",
+      key: "data_fim",
+      editable: true,
+      render: (text, record) => (
+        <Input
+          type="date"
+          value={text} 
+          onChange={(e) => handleChange(e.target.value, record, "data_fim")}
+        />
+      ),
+    },
+  ];
 
-      const todasEtapasMarcadas = checkboxItems.length > 0 && [...checkboxItems].every((el) => el.checked);
+  const handleExibirModal = () => setIsModalVisivel(true)
+  const handleFecharModal = () =>  setIsModalVisivel(false)
+
   
-      setIsChecked(todasEtapasMarcadas);
-      checkboxMestre[0].indeterminate = !todasEtapasMarcadas && elementosSelecionados.length > 0;
-      checkboxMestre[0].checked = todasEtapasMarcadas;
-    }
 
-    const handleCliqueBotaoAdicionarEtapas = () => {
-      setIsModalVisivel(true);
-      setIsTurn('modal')
-      setIsChecked(false)
-    }
-
-    const handleCliqueBotaoFechar = () => {
-      setIsModalVisivel(false)
-      setIsTurn('table')
-      setIsChecked(false)
-    }
-    
-    const handleCliqueBotaoRemoverSelecionados = () => {
-      const novaListaEtapas = hasDadosEtapas.filter((etapa) => !elementosSelecionados.some((elemento) => elemento.id === etapa.id));
-      setHasDadosEtapas(novaListaEtapas);
-      setElementosSelecionados([]);
-      const checkboxMestre = document.getElementsByClassName('checkbox-mestre-table')
-      checkboxMestre[0].checked = false
+  const handleChange = async (value, record, dataIndex) => {
+    const dados = {
+      fluxo: record.fluxo,
+      etapa: record.etapa, 
+      [dataIndex]: value,
     };
 
-    const handleBuscarEtapa = async (parametro) => {
-        try {
-            const resposta = await buscarEtapaPeloNome(parametro);
-            if(resposta.status !== 200){
-                NotificationManager.error("Ocorreu um problema ao buscar os dados, contate o suporte!")
-            } else {
-                return resposta
-            }
-        } catch (error) {
-            NotificationManager.error("Ocorreu um problema ao buscar os dados, contate o suporte!")
-        } 
+    try {
+      await atualizarEtapaFluxo(dados, record.id);
+      const updatedEtapas = etapasVinculadas.map((etapa) =>
+        etapa.id === record.id ? { ...etapa, [dataIndex]: value } : etapa
+      );
+      setEtapasVinculadas(updatedEtapas);
+
+    } catch (error) {
+      console.error("Erro ao atualizar etapa de fluxo:", error);
     }
+  };
 
-    return (
-        <div className="tab-vincular-etapas">
+  const handleListarFluxos = async () => {
+    try {
+      const resposta = await listarFluxos();
 
-          <div className="tab-vincular-etapas-header"> 
-            <h4>VINCULAR ETAPAS </h4>
+      if (resposta.status === 200) {
+        setFluxos(resposta.data);
+      } else {
+        NotificationManager.error(
+          "Ocorreu um problema durante a busca dos dados, contate o suporte!"
+        );
+      }
+    } catch (error) {
+      NotificationManager.error(
+        "Ocorreu um problema durante a busca dos dados, contate o suporte!"
+      );
+    }
+  };
+
+  const handleListarEtapasPorFluxo = async (idFluxo) => {
+    try {
+      const resposta = await listarEtapasPorFluxo(idFluxo);
+
+      if (resposta.status === 200) {
+        const etapasVinculadas = resposta.data 
+
+        if (etapasVinculadas.length === 0) {
+          setEtapasVinculadas([])
+
+        } else {
+
+          const promisesEtapas = etapasVinculadas.map(async (fluxoEtapa) => {
+            const respostaEtapa = await buscarEtapaPeloId(fluxoEtapa.etapa);
+            return {
+              id: fluxoEtapa.id,
+              fluxo: fluxoEtapa.fluxo,
+              etapa: fluxoEtapa.etapa,
+              nome: respostaEtapa.data.nome,
+              descricao: respostaEtapa.data.descricao,
+              status: fluxoEtapa.status,
+              data_inicio: fluxoEtapa.data_inicio,
+              data_fim: fluxoEtapa.data_fim,
+            };
+          });
   
-            <ModalDeSelecao 
-                titulo="Buscar etapa" 
-                label="Nome da etapa"
-                name="name-etapa"
-                onCancel={handleCliqueBotaoFechar}
-                onOk={handleBuscarEtapa}
-                status={isModalVisivel}
-                colunas={COLUNAS_MODAL}
-            />
-          </div>
+          const etapasResolvidas = await Promise.all(promisesEtapas);
+          
+          setEtapasVinculadas(etapasResolvidas);
+        }
 
-          <div className="tab-vincular-etapas-content">
+      } else {
+        NotificationManager.error(
+          "Ocorreu um problema durante a busca dos dados, contate o suporte!"
+        );
+      }
+    } catch (error) {
+      NotificationManager.error(
+        "Ocorreu um problema durante a busca dos dados, contate o suporte!"
+      );
+    }
+  };
+  
+  const handleFluxoChange = async (value) => {
+    setFluxoSelecionado(value);
+    const fluxo = JSON.parse(value)
+    setHasDadosFluxo(fluxo)
+    await handleListarEtapasPorFluxo(fluxo.id)
+  };
 
-            <h4> ETAPAS A SEREM VINCULADAS </h4>
+  const handleVincularEtapa = async (dados) => {
+    try {
+      const resposta = await vincularEtapaFluxo(dados)
 
-            <Button 
-              className="button-adicionar-etapas" 
-              type="primary" 
-              onClick={handleCliqueBotaoAdicionarEtapas}
-            > ADICIONAR ETAPAS </Button>
-            
-            <Button 
-              className="button-remover-selecionados" 
-              type="primary" 
-              danger 
-              disabled={elementosSelecionados.length === 0}
-              onClick={handleCliqueBotaoRemoverSelecionados}
-            > REMOVER SELECIONADOS </Button>
+      if (resposta.status === 200) {
+        NotificationManager.success("Etapa vinculada com sucesso ! ")
+        await handleListarEtapasPorFluxo(resposta.data.fluxo)
+      } else {
+        NotificationManager.error("Falha ao vincular etapa ao fluxo, contate o suporte !")
+      }
+    } catch (error) {
+      NotificationManager.error('Ocorreu um erro durante a operação, contate o suporte!')
+    }
+  }
+
+  const handleExcluirEtapa = async () => {
+
+    try {
+      const idEtapa = hasEtapaExcluir
+      const resposta = await removerEtapaFluxo(idEtapa)
+
+      if (resposta.status === 204) {
+        const etapasAtualizadas = etapasVinculadas.filter((etapa) => etapa.id !== idEtapa);
+        setEtapasVinculadas(etapasAtualizadas);
+
+        NotificationManager.success("Etapa desvinculada do fluxo com sucesso!");
+      } else {
+        NotificationManager.error("Falha ao desvincular a etapa do fluxo, contate o suporte!")
+      }
+    } catch (error) {
+      NotificationManager.error('Ocorreu um erro durante a operação, contate o suporte!')
+    }
+  }
 
 
-            <Table 
-              dataSource={hasDadosEtapas}
-              columns={COLUNAS_TABELA}
-              rowKey="id"
-            />
 
-          </div>
 
-          <div className="tab-vincular-etapas-footer">
-            <Button onClick={() => setCurrent("1")}> 
-                Voltar
-            </Button>
-            <Button type="primary" onClick={() => setCurrent("3")}> 
-                Avançar
-            </Button>
-          </div>
-            
-        </div>
-    )
-}
+  const handleAtivarBotaoExcluir = (dados) => {
 
-export default TabVincularEtapas
+    const idEtapaExcluir = dados.id
+    setHasEtapaExcluir(idEtapaExcluir)
+    setIsBotaoExcluirVisivel(false);
+
+  }
+
+
+  useEffect(() => {
+    handleListarFluxos();
+  }, []);
+
+  return (
+    <div className="tab-vincular-etapas form-box">
+      <div className="form-selecionar-fluxo">
+        <Form layout="vertical">
+          <Form.Item label="Fluxo">
+            <Select
+              style={{ width: "50%" }}
+              onChange={handleFluxoChange}
+              value={fluxoSelecionado}
+            >
+              {fluxos.map((fluxo) => (
+                <Option key={fluxo.id} value={JSON.stringify(fluxo)}>
+                  {fluxo.nome}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Form>
+      </div>
+
+      
+
+      <div className="tabela-etapas-vinculadas">
+
+        {
+          fluxoSelecionado !== null ? 
+          (
+            <React.Fragment>
+              <div className="div-botoes-acao-vincular-etapas"> 
+                <BotaoAdicionar funcao={handleExibirModal} />
+                <BotaoExcluir funcao={handleExcluirEtapa} status={isBotaoExcluirVisivel} />
+              </div>
+
+              <ModalVincularEtapa 
+                open={isModalVisivel} 
+                onCancel={handleFecharModal}
+                onSave={handleVincularEtapa}
+                
+                />
+
+              <ListaDados 
+                colunas={COLUNAS_TABELA}
+                dados={etapasVinculadas}
+                onClickRow={handleAtivarBotaoExcluir}
+              />
+            </React.Fragment>
+          
+          )
+
+          : null
+        }
+        
+      </div>
+
+      <div></div>
+    </div>
+  );
+};
+
+export default TabVincularEtapas;

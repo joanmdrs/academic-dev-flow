@@ -1,36 +1,20 @@
-.tab-vincular-etapas {
-    border-radius: 5px;
-    margin: 20px;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+.table-etapas-vinculadas {
+    width: 100%;
 }
 
-.tab-vincular-etapas-content {
-    margin-top: -40px;
-}
-.tab-vincular-etapas-header,
-.tab-vincular-etapas-content,
-.tab-vincular-etapas-footer {
-    padding: 20px;
-}
-
-.button-adicionar-etapas,
-.button-remover-selecionados {
-    margin-right: 10px;
-    color: #FFFFFF;
-    padding-right: 20px;
-    padding-left: 20px;
-    font-size: 13px;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-}
-
-.tab-vincular-etapas-footer {
+.div-botoes-acao-vincular-etapas {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
+    gap: 10px;
+    margin: 20px;
 }
 
+.table-etapas-vinculadas table {
+    width: 100%;
+    font-size: 13px;
+}
 
-
-.tab-vincular-etapas-content table {
-    margin-top: 20px;
-    font-size: 13px !important;
+.table-etapas-vinculadas table span,
+.table-etapas-vinculadas table input {
+    font-size: 13px;
 }
