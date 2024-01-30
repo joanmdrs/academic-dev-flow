@@ -16,7 +16,7 @@ const TabsProjeto = () => {
             paragrafo="Administração > Gerenciar projetos"
           />
           <Tabs
-            style={{marginTop: "30px"}} 
+            style={{marginTop: "30px", padding: "20px"}} 
             activeKey={current} 
             onChange={setCurrent} 
             className="form-box"
