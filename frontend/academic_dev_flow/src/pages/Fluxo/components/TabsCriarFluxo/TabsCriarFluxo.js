@@ -6,6 +6,8 @@ import BotaoVoltar from "../../../../components/Botoes/BotaoVoltar/BotaoVoltar"
 import TabVincularEtapas from "./TabVincularEtapas/TabVincularEtapas";
 import { useFormContext } from "../../context/Provider/FormProvider";
 import TabFinalizarFluxo from "./TabFinalizarFluxo/TabFinalizarFluxo";
+import "./TabsCriarFluxo.css";
+import Titulo from "../../../../components/Titulo/Titulo";
 
 
 const { TabPane } = Tabs;
@@ -16,24 +18,24 @@ const TabsCriarFluxo = ({funcaoBotaoVoltar}) => {
 
   return (    
       <React.Fragment>
-        <div className="component-etapas-criar-fluxo">
-        <div style={{margin: "20px"}}> 
-          <BotaoVoltar funcao={funcaoBotaoVoltar}/>
-        </div>
-        <Tabs activeKey={current} onChange={setCurrent} className="fluxo" tabPosition="left">
-          <TabPane tab="Dados do fluxo" key="1">
+        <Titulo 
+          titulo="Fluxos de desenvolvimento"
+          paragrafo="Fluxos > Gerenciar fluxos"
+        />
+        <Tabs
+          style={{marginTop: "30px"}} 
+          activeKey={current} 
+          onChange={setCurrent} 
+          className="form-box"
+        >
+          <TabPane tab="GERENCIAR FLUXOS" key="1">
             <TabFormFluxo />
           </TabPane>
-          <TabPane tab="Vincular etapas" key="2">
+          <TabPane tab="ETAPAS DO FLUXO" key="2">
             <TabVincularEtapas />
           </TabPane>
-          <TabPane tab="Finalizar" key="3">
-            <TabFinalizarFluxo />
-          </TabPane>
         </Tabs>
-          
-        </div>
-        <NotificationContainer />
+
       </React.Fragment>
       
   );
