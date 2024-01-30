@@ -1,0 +1,34 @@
+.component-tabs-projeto form label,
+.component-tabs-projeto form input {
+    font-size: 13px !important;
+}
+
+.tabs-projeto {
+    font-size: 13px;
+}
+
+.tabs-projeto .ant-tabs-nav {
+    display: flex;
+    width: 100%;
+  }
+  
+.tabs-projeto .ant-tabs-nav-list {
+    width: 100%;
+}
+
+.tabs-projeto .ant-tabs-tab {
+    width: 300px;
+    justify-content: center;
+    text-align: center;
+}
+
+.tabs-projeto-footer-botoes {
+    margin-left: 20px;
+}
+
+.tabs-projeto-footer-botoes button {
+    font-size: 13px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-right: 10px;
+}

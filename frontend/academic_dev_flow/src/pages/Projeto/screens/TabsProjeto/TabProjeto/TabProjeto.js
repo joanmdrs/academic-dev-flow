@@ -11,6 +11,7 @@ const TabProjeto = () => {
             form={form}
             layout="horizontal"
             style={{marginTop: "20px"}}
+            className="box"
             //   initialValues={}
             //   onFinish={handleSubmeterForm}
           
