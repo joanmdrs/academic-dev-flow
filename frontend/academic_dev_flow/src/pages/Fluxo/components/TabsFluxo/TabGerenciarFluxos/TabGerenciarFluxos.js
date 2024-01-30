@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./TabFormFluxo.css"
+import "./TabGerenciarFluxos.css"
 import FormDeBusca from "../../../../../components/Forms/FormDeBusca/FormDeBusca";
 import ListaDados from "../../../../../components/Listas/ListaDados/ListaDados";
 import { NotificationManager } from "react-notifications";
@@ -10,7 +10,7 @@ import BotaoAtualizar from "../../../../../components/Botoes/BotaoAtualizar/Bota
 import BotaoExcluir from "../../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
 import FormFluxo from "../../FormFluxo/FormFluxo";
 
-const TabFormFluxo = () => {
+const TabGerenciarFluxos = () => {
 
     const [acaoForm, setAcaoForm] = useState("criar");
     const [isFormVisivel, setIsFormVisivel] = useState(false);
@@ -200,4 +200,4 @@ const TabFormFluxo = () => {
     
 }
 
-export default TabFormFluxo;
+export default TabGerenciarFluxos;

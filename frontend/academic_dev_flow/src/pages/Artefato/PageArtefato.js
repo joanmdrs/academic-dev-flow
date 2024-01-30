@@ -3,14 +3,13 @@ import { NotificationContainer, NotificationManager } from "react-notifications"
 import BotaoAdicionar from "../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
 import BotaoExcluir from "../../components/Botoes/BotaoExcluir/BotaoExcluir";
 import Titulo from "../../components/Titulo/Titulo";
-import FormBuscarArtefato from "./components/FormBuscarArtefato/FormBuscarArtefato";
 import BotaoAtualizar from "../../components/Botoes/BotaoAtualizar/BotaoAtualizar";
-import "./PageArtefato.css";
 import BotaoFiltrar from "../../components/Botoes/BotaoFiltrar/BotaoFiltrar";
-import ListaDeArtefatos from "./components/ListaDeArtefatos/ListaDeArtefatos";
 import FormSalvarArtefato from "./components/FormSalvarArtefato/FormSalvarArtefato"
 import { buscarArtefatoPeloNome, excluirArtefato, listarArtefatos } from "../../services/artefato_service";
 import { recarregarPagina } from "../../services/utils";
+import ListaDados from "../../components/Listas/ListaDados/ListaDados";
+import FormDeBusca from "../../components/Forms/FormDeBusca/FormDeBusca";
 
 const PageArtefato = () => {
 
@@ -153,9 +152,9 @@ const PageArtefato = () => {
                         </div>
                     </div>
 
-                    {isFormFiltrarVisivel && (<FormBuscarArtefato executeFuncao={handleFiltrarArtefatos}/>)}
+                    {isFormFiltrarVisivel && (<FormDeBusca executeFuncao={handleFiltrarArtefatos}/>)}
                 
-                    <ListaDeArtefatos 
+                    <ListaDados 
                         colunas={COLUNAS_LISTA} 
                         dados={dadosArtefatos} 
                         onClickRow={handleCliqueLinhaTabelaArtefatos}

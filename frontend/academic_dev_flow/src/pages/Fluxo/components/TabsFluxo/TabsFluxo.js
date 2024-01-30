@@ -1,18 +1,15 @@
 import React from "react";
 import { Tabs } from 'antd';
-import TabFormFluxo from './TabFormFluxo/TabFormFluxo';
-import { NotificationContainer } from "react-notifications";
-import BotaoVoltar from "../../../../components/Botoes/BotaoVoltar/BotaoVoltar"
+import TabGerenciarFluxos from "./TabGerenciarFluxos/TabGerenciarFluxos";
 import TabVincularEtapas from "./TabVincularEtapas/TabVincularEtapas";
 import { useFormContext } from "../../context/Provider/FormProvider";
-import TabFinalizarFluxo from "./TabFinalizarFluxo/TabFinalizarFluxo";
-import "./TabsCriarFluxo.css";
+import "./TabsFluxo.css";
 import Titulo from "../../../../components/Titulo/Titulo";
 
 
 const { TabPane } = Tabs;
 
-const TabsCriarFluxo = ({funcaoBotaoVoltar}) => {
+const TabsFluxo = ({funcaoBotaoVoltar}) => {
   
   const {current, setCurrent} = useFormContext();
 
@@ -29,7 +26,7 @@ const TabsCriarFluxo = ({funcaoBotaoVoltar}) => {
           className="form-box"
         >
           <TabPane tab="GERENCIAR FLUXOS" key="1">
-            <TabFormFluxo />
+            <TabGerenciarFluxos />
           </TabPane>
           <TabPane tab="ETAPAS DO FLUXO" key="2">
             <TabVincularEtapas />
@@ -41,4 +38,4 @@ const TabsCriarFluxo = ({funcaoBotaoVoltar}) => {
   );
 }
 
-export default TabsCriarFluxo;
+export default TabsFluxo;
