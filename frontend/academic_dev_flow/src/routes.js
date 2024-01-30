@@ -7,14 +7,14 @@ import PageArtefato from './pages/Artefato/PageArtefato';
 import PageEtapa from './pages/Etapa/PageEtapa';
 import ScreenCadastrarFluxo from './pages/Fluxo/screens/ScreenCadastrarFluxo/ScreenCadastrarFluxo';
 import ScreenPlanilhaFluxos from './pages/Fluxo/screens/ScreenPlanilhaFluxos/ScreenPlanilhaFluxos';
+import TabsCriarFluxo from './pages/Fluxo/components/TabsCriarFluxo/TabsCriarFluxo';
 
 function Routes() {
   return (
         <Switch>
             <Route Component={Home} path='/' exact/>
             <Route Component={PageProjeto} path='/projetos' exact/>
-            <Route Component={ScreenCadastrarFluxo} path='/fluxos/cadastrar' exact/>
-            <Route Component={ScreenPlanilhaFluxos} path='/fluxos/planilha' exact/>
+            <Route Component={ScreenCadastrarFluxo} path='/fluxos/gerenciar' exact/>
             <Route Component={PageEtapa} path='/etapas' exact/>
             <Route Component={PageMembro} path='/membros' exact/>
             <Route Component={PageArtefato} path='/artefatos' exact/>
