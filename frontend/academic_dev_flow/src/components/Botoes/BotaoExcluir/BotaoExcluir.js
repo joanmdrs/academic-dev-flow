@@ -28,7 +28,8 @@ const BotaoExcluir = ({funcao, status}) => {
           icon={<DeleteOutlined />} 
           onClick={confirm} 
           disabled={status}
-          style={{backgroundColor: '#C62828'}}>
+          danger
+        >
         </Button>
         {contextHolder}
       </>

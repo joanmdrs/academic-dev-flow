@@ -40,13 +40,10 @@ const MyMenu = () => {
           icon={<RiFlowChart style={{ fontSize: '20px' }} />}
           title="Fluxos"
         >
-          <Menu.Item key="planilha-fluxos">
-            <Link to="/fluxos/planilha">Planilha de fluxos</Link>
+          <Menu.Item key="gerenciar-fluxos">
+            <Link to="/fluxos/gerenciar">Gerenciar fluxos</Link>
           </Menu.Item>
-          <Menu.Item key="cadastrar-fluxo">
-            <Link to="/fluxos/cadastrar">Cadastrar fluxo</Link>
-          </Menu.Item>
-          <Menu.Item key="etapa">
+          <Menu.Item key="etapas">
             <Link to="/etapas">Gerenciar etapas</Link>
           </Menu.Item>
         </SubMenu>
