@@ -27,13 +27,27 @@ const MyMenu = () => {
           marginTop: "20px"
         }}
       >
-        <Menu.Item
+        <SubMenu 
           className='item-menu'
-          key="projeto"
+          key='projeto'
           icon={<HiOutlineClipboardList style={{ fontSize: '20px' }} />}
+          title="Projetos"
         >
-          <Link to="/projetos">Projetos</Link>
-        </Menu.Item>
+
+          <Menu.Item
+            className='item-menu'
+            key="projeto-antigo"
+          >
+            <Link to="/projetos/antigo">Projetos antigo</Link>
+          </Menu.Item>
+
+          <Menu.Item
+            className='item-menu'
+            key="projeto-novo"
+          >
+            <Link to="/projetos/novo">Projetos novo</Link>
+          </Menu.Item>
+        </SubMenu>
         <SubMenu
           className='item-menu'
           key="fluxo"
