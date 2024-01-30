@@ -1,5 +1,5 @@
 from django.db import models
-from apps.flow.models import Flow
+from apps.fluxo.models import Fluxo
 
 class Etapa(models.Model):
     
@@ -10,8 +10,3 @@ class Etapa(models.Model):
     )
     nome = models.CharField(max_length=200)
     descricao = models.TextField()
-    data_inicio = models.DateField("Data Início")
-    data_fim = models.DateField("Data Fim")
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
-    
-    flow = models.ForeignKey(Flow, on_delete=models.PROTECT)

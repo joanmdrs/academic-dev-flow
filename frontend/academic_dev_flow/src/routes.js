@@ -1,28 +1,24 @@
 import React from 'react';
-import { BrowserRouter, Routes as Switch, Route} from 'react-router-dom';
-import Projeto from './pages/projeto/projeto';
-import Flow from './pages/flow/flow';
-import FlowSteps from './pages/flow/FlowSteps';
-import ViewFlow from './components/Flow/ViewFlow/ViewFlow';
-import PaginaMembro from './pages/membro/PaginaMembro';
-import Home from './pages/home/Home';
-import PaginaArtefato from './pages/artefato/PaginaArtefato';
+import { Routes as Switch, Route} from 'react-router-dom';
+import Home from './pages/Home/Home';
+import PageProjeto from './pages/Projeto/PageProjeto';
+import PageMembro from './pages/Membro/PageMembro';
+import PageArtefato from './pages/Artefato/PageArtefato';
+import PageEtapa from './pages/Etapa/PageEtapa';
+import PageFluxo from './pages/Fluxo/PageFluxo';
 
 function Routes() {
   return (
-    <BrowserRouter>
         <Switch>
             <Route Component={Home} path='/' exact/>
-            <Route Component={Projeto} path='/projetos' exact/>
-            <Route Component={Flow} path='/fluxos' exact/>
-            <Route Component={FlowSteps} path='/fluxos/novo' exact/>
-            <Route Component={ViewFlow} path='fluxos/visualizar/:id' exact/>
-            <Route Component={PaginaMembro} path='/membros' exact/>
-            <Route Component={PaginaArtefato} path='/artefatos' exact/>
+            <Route Component={PageProjeto} path='/projetos' exact/>
+            <Route Component={PageFluxo} path='/fluxos/gerenciar' exact/>
+            <Route Component={PageEtapa} path='/etapas' exact/>
+            <Route Component={PageMembro} path='/membros' exact/>
+            <Route Component={PageArtefato} path='/artefatos' exact/>
         
         </Switch>
         
-    </BrowserRouter>
 
   );
 }

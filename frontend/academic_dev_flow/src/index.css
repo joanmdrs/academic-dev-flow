@@ -15,12 +15,36 @@ code {
 }
 
 .form-box {
-    border-radius: 5px;
-    padding: 20px;
-    margin: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    background-color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start !important;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  padding: 20px;
+  background-color: white;
+}
+
+.date-picker {
+  display: flex;
+  height: 40px !important;
+  padding-top: 15px;
+
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 20px;
+  padding-right: 20px;
+  gap: 20px;
+}
+
+.botoes-de-acao {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
 }

@@ -1,0 +1,7 @@
+.component-tabela-lista-de-dados table {
+    font-size: 13px;
+}
+
+.component-tabela-lista-de-dados table th:first-child {
+    width: 70px;
+} 

@@ -1,0 +1,20 @@
+.table-etapas-vinculadas {
+    width: 100%;
+}
+
+.div-botoes-acao-vincular-etapas {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin: 20px;
+}
+
+.table-etapas-vinculadas table {
+    width: 100%;
+    font-size: 13px;
+}
+
+.table-etapas-vinculadas table span,
+.table-etapas-vinculadas table input {
+    font-size: 13px;
+}

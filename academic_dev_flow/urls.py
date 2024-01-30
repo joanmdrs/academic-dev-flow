@@ -16,24 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from apps.projeto.views import *
-from apps.flow.views import *
-from apps.etapa.views import *
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('projetos/cadastrar/', CadastrarProjetoView.as_view(), name='cadastrar_projeto'),
-    path('projetos/buscar/', BuscarProjetosPorNomeView.as_view(), name='buscar_projetos_por_nome'),
-    path('projetos/<int:id>/excluir/', ExcluirProjetoView.as_view(), name='excluir_projeto'),
-    path('projetos/<int:id>/atualizar/', AtualizarProjetoView.as_view(), name='atualizar_projeto'),
-    path('fluxos/cadastrar/', CadastrarFluxoView.as_view(), name='cadastrar_fluxo' ),
-    path('fluxos/buscar/', BuscarFluxoView.as_view(), name='buscar_fluxo'),
-    path('fluxos/buscar/<int:flow_id>/', BuscarFluxoPeloIdView.as_view(), name='buscar_fluxo_pelo_id'),
-    path('etapas/cadastrar/', CadastrarEtapaView.as_view(), name='cadastrar_etapa'),
-    path('etapas/buscar/', BuscarEtapaPorIdFluxoView.as_view(), name='buscar_etapa_por_id_fluxo'),
-    path('usuario/', include('apps.usuario.urls', namespace='usuario')),
+    path('projeto/', include('apps.projeto.urls', namespace='projeto')),
+    path('fluxo/', include('apps.fluxo.urls', namespace='fluxo')),
+    path('etapa/', include('apps.etapa.urls', namespace='etapa')),
+    path('fluxo_etapa/', include('apps.fluxo_etapa.urls', namespace='fluxo_etapa')),
     path('membro/', include('apps.membro.urls', namespace='membro')),
+    path('usuario/', include('apps.usuario.urls', namespace='usuario')),
     path('artefato/', include('apps.artefato.urls', namespace='artefato'))
 ]
 

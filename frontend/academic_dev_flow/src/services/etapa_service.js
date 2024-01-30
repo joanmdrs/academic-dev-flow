@@ -1,27 +1,48 @@
 import api from "./api";
 
-export const cadastrar_etapas = async (etapas, flow_id) => {
-
-    let data = {
-        etapas: etapas,
-        flow: flow_id
+export const criarEtapa = async (dadosEtapa, fluxoId) => {
+    const dados = {
+        nome: dadosEtapa.nome,
+        descricao: dadosEtapa.descricao, 
+        data_inicio: dadosEtapa.data_inicio,
+        data_fim: dadosEtapa.data_fim,
+        status: dadosEtapa.status, 
+        fluxo: fluxoId
     }
-    try {
-        const response = await api.post('etapas/cadastrar/', data);
-        return response; 
-
-    } catch (error) {
-        console.error('Erro ao cadastrar etapas:', error);
-    }
+    const resposta = await api.post('etapa/cadastrar/', dados);
+    return resposta; 
 }
 
-export const buscar_etapas_por_id_fluxo = async (flow_id) => {
+export const buscarEtapaPeloNome = async (nomeEtapa) => {
+    const resposta = await api.get(`etapa/buscar/nome/?nome=${encodeURIComponent(nomeEtapa)}`)
+    return resposta
+}
 
-    try {
-        const response = await api.get(`etapas/buscar/?flow_id=${encodeURIComponent(flow_id)}`);
-        return response; 
-    } catch (error) {
-        console.log("Erro ao buscar dados: ", error);
+export const buscarEtapaPeloId = async (idEtapa) => {
+    const resposta = await api.get(`etapa/buscar/${encodeURIComponent(idEtapa)}/`)
+    return resposta
+}
+
+export const buscarEtapasPeloIdFluxo = async (fluxoId) => {
+    const resposta = await api.get(`etapa/buscar/?fluxo_id=${encodeURIComponent(fluxoId)}`);
+    return resposta; 
+}
+
+export const listarEtapas = async () => {
+    const resposta = await api.get(`etapa/listar/`);
+    return resposta
+}
+
+export const atualizarEtapa = async (dadosEtapa, idEtapa) => {
+    const dados = {
+        nome: dadosEtapa.nome,
+        descricao: dadosEtapa.descricao,
     }
+    const resposta = await api.patch(`etapa/atualizar/${encodeURIComponent(idEtapa)}/`, dados)
+    return resposta 
+}
 
+export const excluirEtapa = async (idEtapa) => {
+    const resposta = await api.delete(`etapa/excluir/${encodeURIComponent(idEtapa)}/`)
+    return resposta
 }

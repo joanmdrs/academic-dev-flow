@@ -4,41 +4,87 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.http import JsonResponse
 from .models import Etapa
-from apps.flow.models import Flow
+from apps.fluxo.models import Fluxo
 from .serializers import EtapaSerializer
 
 class CadastrarEtapaView(APIView):
     def post(self, request):
-        data = request.data
-        flow_id = data.get('flow')
+        try:
+            serializer = EtapaSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        flow = Flow.objects.get(pk=flow_id)  
-
-        etapas_data = data.get('etapas', [])  # Obtém a lista de etapas do payload
-
-        etapas_cadastradas = []  # Lista para armazenar as etapas cadastradas
-
-        for etapa_data in etapas_data:
-            etapa_data['flow'] = flow_id  # Adiciona o ID do fluxo a cada etapa
-            serializer = EtapaSerializer(data=etapa_data)
+class BuscarEtapaPeloNomeView(APIView):
+    def get(self, request):
+        try:
+            parametro = request.GET.get('nome', None)
+            if parametro is not None: 
+                etapas = Etapa.objects.filter(nome__icontains=parametro)
+            else:
+                etapas = Etapa.objects.all()    
+                
+            if not etapas : 
+                return Response({'message': 'Nenhuma etapa encontrada', 'results': []}, status=status.HTTP_200_OK)
+            
+            serializer = EtapaSerializer(etapas, many=True)
+            
+            return Response({'message': 'Etapas encontradas com sucesso.', 'results': serializer.data}, status=status.HTTP_200_OK)
+                        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class BuscarEtapaPeloIdView(APIView):
+    def get(self, request, id):
+        try:
+            etapa = Etapa.objects.get(pk=id)
+            serializer = EtapaSerializer(etapa, many=False)
+            return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+ 
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class ListarEtapasView(APIView):
+    def get(self, request):
+        try: 
+            etapas = Etapa.objects.all()
+            serializer = EtapaSerializer(etapas, many=True) 
+            return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})  
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
+class AtualizarEtapaView(APIView): 
+    def patch(self, request, id):
+        try: 
+            print(id)
+            etapa = Etapa.objects.get(pk=id)
+            print(etapa)
+            serializer = EtapaSerializer(etapa, data=request.data)
             
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
-                etapas_cadastradas.append(serializer.data)
-
-        return Response(etapas_cadastradas, status=status.HTTP_201_CREATED)
-
-class BuscarEtapaPorIdFluxoView(APIView):
-    def get(self, request):
-        parametro = request.GET.get('flow_id', None)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+             
+        except Exception as e: 
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
+class ExcluirEtapaView(APIView):
+    def delete(self, request, id): 
+        try:
+            etapa = Etapa.objects.get(pk=id)
+            
+            if etapa is not None:
+                etapa.delete()
+                return Response({'detail': 'Etapa excluída com sucesso!'}, status=status.HTTP_204_NO_CONTENT)
+            
+            else: 
+                return Response({'error': 'Objeto não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
         
-        if parametro is not None:
-            etapas = Etapa.objects.filter(flow=parametro)
-            
-        else:
-            etapas = None
-            
-        serializer = EtapaSerializer(etapas, many=True)
-        
-        return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
-            
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
