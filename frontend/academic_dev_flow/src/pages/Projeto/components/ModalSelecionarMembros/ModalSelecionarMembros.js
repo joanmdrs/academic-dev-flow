@@ -19,18 +19,14 @@ const ModalSelecionarMembros = ({status, onCancel, onOk, colunas}) => {
         setParametro('')
     }
 
-    const handleSelecionar = () => {
-
-    }
-
 
     return (
         <Modal 
-            open={true}
+            open={status}
             onCancel={onCancel}
             footer={
                 <div> 
-                    <Button type="primary" onClick={handleSelecionar}> SELECIONAR </Button>
+                    <Button type="primary" > SELECIONAR </Button>
                     <Button onClick={onCancel}> FECHAR </Button>
                 </div>
             }
@@ -59,8 +55,9 @@ const ModalSelecionarMembros = ({status, onCancel, onOk, colunas}) => {
                 <Table
                     columns={colunas}
                     dataSource={dados}
+                    rowKey="id"
                     rowSelection={{
-                        type: "checkbox"
+                        onSelect: ((record) => console.log(record))
                         
                     }}
                 />
