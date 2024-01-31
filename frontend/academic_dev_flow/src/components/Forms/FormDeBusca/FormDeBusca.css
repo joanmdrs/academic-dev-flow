@@ -18,7 +18,7 @@
 }
 
 
-input {
+#input-nome {
     position: relative;
     z-index: 2;
     width: 500px;
@@ -31,19 +31,18 @@ input {
     outline: none;
 }
 
-label {
+#label-nome {
     position: absolute;
     top: 0;
     bottom: 0;
     left: 2px;
     right: 0;
-    pointer-events: none;
     transition: 0.5s;
     color: #888;
 }
 
-input:focus + label, 
-input:valid + label{
+#input-nome:focus + #label-nome, 
+#input-nome:valid + #label-nome{
     margin-top: 0px;
     top: -100%;
     transition: 0.2s;
