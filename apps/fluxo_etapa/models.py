@@ -9,3 +9,4 @@ class FluxoEtapa(models.Model):
     status = models.CharField(max_length=20, default="Em andamento")
     data_inicio = models.DateField("Data Início", default=timezone.now)
     data_fim = models.DateField("Data Fim", default=timezone.now)
+
