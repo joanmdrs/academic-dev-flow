@@ -59,6 +59,10 @@ const ModalSelecionarMembros = ({status, onCancel, onOk, colunas}) => {
                 <Table
                     columns={colunas}
                     dataSource={dados}
+                    rowSelection={{
+                        type: "checkbox"
+                        
+                    }}
                 />
             }
            

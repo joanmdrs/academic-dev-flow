@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import "./TabEquipe.css"
 import ListaDados from "../../../../../components/Listas/ListaDados/ListaDados";
 import BotaoAdicionar from "../../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
 import BotaoExcluir from "../../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
-import { Input } from "antd";
+import { Col, Input, Table } from "antd";
 import ModalSelecionarMembros from "../../../components/ModalSelecionarMembros/ModalSelecionarMembros";
 import { buscarMembroPeloNome } from "../../../../../services/membro_service";
 import { NotificationManager } from "react-notifications";
@@ -13,17 +14,7 @@ const TabEquipe = () => {
     const [isBotaoExcluirVisivel, setIsBotaoExcluirVisivel] = useState(true)
     const [isModalVisivel, setIsModalVisivel] = useState(false)
 
-    const COLUNAS_LISTA = [
-        {
-            title: (
-                <Input type="checkbox"/>
-            ),
-            key: "checkbox", 
-            dataIndex: "checkbox",
-            render: (_, record) => (
-                <Input type="checkbox"/>
-            )
-        },
+    const COLUNAS_LISTA = [ 
         {
             title: "ID",
             key: "id",
@@ -56,6 +47,10 @@ const TabEquipe = () => {
             NotificationManager.error("Ocorreu um problema ao buscar os dados, contate o suporte!")
         } 
     }
+
+    const handleVincularMembroAoProjeto = () => {
+
+    }
     return (
 
         <div className="box"> 
@@ -81,8 +76,12 @@ const TabEquipe = () => {
                         <BotaoExcluir status={isBotaoExcluirVisivel}/>
                     </div>
 
-                    <ListaDados 
-                        colunas={COLUNAS_LISTA}
+                    <Table
+                        className="tab-equipe"
+                        columns={COLUNAS_LISTA} 
+                        rowSelection={{
+                            type: "checkbox"
+                        }}
                     />
                 </div>
             </div>
