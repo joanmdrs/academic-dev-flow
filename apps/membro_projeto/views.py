@@ -9,7 +9,8 @@ from .serializers import MembroProjetoSerializer
 class CadastrarMembroProjetoView(APIView):
     def post(self, request):
         try:
-            serializer = MembroProjetoSerializer(data=request.data)
+            membros_data = request.data.get('membros', [])
+            serializer = MembroProjetoSerializer(data=membros_data, many=True)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
