@@ -25,6 +25,11 @@ export const buscarMembroPeloNome = async (dado) => {
     return resposta 
 }
 
+export const buscarMembroPeloId = async (parametro) => {
+    const resposta = await api.get(`membro/buscar/${encodeURIComponent(parametro)}/`)
+    return resposta
+}
+
 export const excluirMembro = async (id) => {
     const resposta = await api.delete(`/membro/excluir/${encodeURIComponent(id)}/`)
     return resposta
