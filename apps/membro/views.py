@@ -42,6 +42,15 @@ class BuscarMembrosPorNomeView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+class BuscarMembroPorIdView(APIView):
+    def get(self, request, id):
+        try:
+            membro = Membro.objects.get(pk=id)
+            serializer = MembroSerializer(membro, many=False)
+            
+            return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 class ExcluirMembroView(APIView):
     def delete(self, request, id):
