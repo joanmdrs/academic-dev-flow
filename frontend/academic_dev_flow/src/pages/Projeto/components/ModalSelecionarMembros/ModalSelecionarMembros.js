@@ -1,12 +1,13 @@
 import { Button, Form, Input, Modal, Table } from "antd";
 import React, { useState } from "react";
 
-const ModalSelecionarMembros = ({status, onCancel, onOk, colunas}) => {
+const ModalSelecionarMembros = ({status, onCancel, onOk, colunas, onSelect}) => {
 
     const [form] = Form.useForm();
     const [parametro, setParametro] = useState('');
     const [dados, setDados] = useState([])
     const [hasResposta, setHasResposta] = useState(false)
+    const [membros, setMembros] = useState([])
 
     const handleAlterarParametro = (event) => {
         setParametro(event.target.value);
@@ -19,6 +20,12 @@ const ModalSelecionarMembros = ({status, onCancel, onOk, colunas}) => {
         setParametro('')
     }
 
+    const rowSelection = {
+        onChange: (selectedRowsKeys, selectedRows) => {
+          setMembros(selectedRows)
+        },
+      };
+
 
     return (
         <Modal 
@@ -26,7 +33,7 @@ const ModalSelecionarMembros = ({status, onCancel, onOk, colunas}) => {
             onCancel={onCancel}
             footer={
                 <div> 
-                    <Button type="primary" > SELECIONAR </Button>
+                    <Button type="primary" onClick={() =>  onSelect(membros)}> SELECIONAR </Button>
                     <Button onClick={onCancel}> FECHAR </Button>
                 </div>
             }
@@ -56,15 +63,13 @@ const ModalSelecionarMembros = ({status, onCancel, onOk, colunas}) => {
                     columns={colunas}
                     dataSource={dados}
                     rowKey="id"
-                    rowSelection={{
-                        onSelect: ((record) => console.log(record))
-                        
-                    }}
+                    rowSelection={rowSelection}
                 />
             }
            
         </Modal>
     )
 }
+
 
 export default ModalSelecionarMembros;

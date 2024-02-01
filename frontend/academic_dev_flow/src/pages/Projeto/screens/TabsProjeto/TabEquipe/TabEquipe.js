@@ -5,14 +5,17 @@ import BotaoAdicionar from "../../../../../components/Botoes/BotaoAdicionar/Bota
 import BotaoExcluir from "../../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
 import { Col, Input, Table } from "antd";
 import ModalSelecionarMembros from "../../../components/ModalSelecionarMembros/ModalSelecionarMembros";
-import { buscarMembroPeloNome } from "../../../../../services/membro_service";
+import { buscarMembroPeloId, buscarMembroPeloNome } from "../../../../../services/membro_service";
 import { NotificationManager } from "react-notifications";
+import { criarMembroProjeto, listarMembrosPorProjeto } from "../../../../../services/membro_projeto_service";
 
 const TabEquipe = () => {
 
     const [isBotaoAdicionarVisivel, setIsBotaoAdicionarVisivel] = useState(false)
     const [isBotaoExcluirVisivel, setIsBotaoExcluirVisivel] = useState(true)
     const [isModalVisivel, setIsModalVisivel] = useState(false)
+    const [alunos, setAlunos] = useState([])
+    const idProjeto = "2"
 
     const COLUNAS_LISTA = [ 
         {
@@ -26,9 +29,9 @@ const TabEquipe = () => {
             key: "nome",
         },
         {
-            title: "CPF",
-            dataIndex: "cpf",
-            key: "cpf",
+            title: "Função",
+            dataIndex: "funcao",
+            key: "funcao",
         },
     ];
 
@@ -48,9 +51,63 @@ const TabEquipe = () => {
         } 
     }
 
-    const handleVincularMembroAoProjeto = () => {
+    const handleListarMembrosPorProjeto = async (parametro) => {
+        try {
+            const resposta = await listarMembrosPorProjeto(parametro)
 
+            if(resposta.status === 200){
+                const membrosVinculados = resposta.data 
+
+                if (membrosVinculados.length === 0) {
+                  setAlunos([])
+        
+                } else {
+        
+                  const promisesAlunos = membrosVinculados.map(async (membroProjeto) => {
+                    const respostaMembro = await buscarMembroPeloId(membroProjeto.membro);
+                    return {
+                      id: membroProjeto.id,
+                      projeto: idProjeto,
+                      membro: respostaMembro.data.id,
+                      nome: respostaMembro.data.nome,
+                      funcao: membroProjeto.funcao,
+                    };
+                  });
+          
+                  const resultados = await Promise.all(promisesAlunos);
+                  
+                  setAlunos(resultados);
+                }
+            }
+        } catch (error) {
+            
+        }
     }
+
+    const handleSelecionarMembros = async (dados) => {
+
+        try {
+            const dadosEnviar = dados.map((item) => {
+                return {
+                    projeto: idProjeto,
+                    membro: item.id
+                };
+            });
+            const resposta = await criarMembroProjeto(dadosEnviar)
+
+            if (resposta.status === 200){
+                NotificationManager.success("Alunos vinculados ao projeto com sucesso !")
+                await handleListarMembrosPorProjeto(idProjeto)
+            } else {
+                NotificationManager.error('Falha ao vincular os alunos ao projeto, contate o suporte!')
+            }
+        } catch (error) {
+            console.log(error)
+            NotificationManager.error("Ocorreu um problema durante a operação, contate o suporte!")
+        }
+
+    }   
+
     return (
 
         <div className="box"> 
@@ -61,7 +118,7 @@ const TabEquipe = () => {
                     colunas={COLUNAS_LISTA}
                     status={isModalVisivel}
                     onOk={handleBuscarMembro}
-
+                    onSelect={handleSelecionarMembros}
                 />
             }
 
@@ -79,6 +136,8 @@ const TabEquipe = () => {
                     <Table
                         className="tab-equipe"
                         columns={COLUNAS_LISTA} 
+                        dataSource={alunos}
+                        rowKey="id"
                         rowSelection={{
                             type: "checkbox"
                         }}
