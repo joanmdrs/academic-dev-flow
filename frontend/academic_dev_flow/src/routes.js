@@ -7,13 +7,15 @@ import PageArtefato from './pages/Artefato/PageArtefato';
 import PageEtapa from './pages/Etapa/PageEtapa';
 import PageFluxo from './pages/Fluxo/PageFluxo';
 import TabsProjeto from './pages/Projeto/screens/TabsProjeto/TabsProjeto';
+import PagePrincipal from './pages/Projeto';
 
 function Routes() {
   return (
         <Switch>
             <Route Component={Home} path='/' exact/>
             <Route Component={PageProjeto} path='/projetos/antigo' exact/>
-            <Route Component={TabsProjeto} path='/projetos/novo' exact/>
+            <Route Component={PagePrincipal} path='/projetos/novo' exact/>
+        
             <Route Component={PageFluxo} path='/fluxos/gerenciar' exact/>
             <Route Component={PageEtapa} path='/etapas' exact/>
             <Route Component={PageMembro} path='/membros' exact/>
