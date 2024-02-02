@@ -1,9 +1,17 @@
 import { Form, Input, Select } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const { Option } = Select
 
-const TabProjeto = () => {
+const TabProjeto = ({valoresIniciais}) => {
+
+    const [estadoInterno, setEstadoInterno] = useState(valoresIniciais);
+
+    // Use useEffect para monitorar as mudanças em valoresIniciais
+    useEffect(() => {
+      setEstadoInterno(valoresIniciais);
+      form.setFieldsValue(estadoInterno)
+    }, [estadoInterno, valoresIniciais]);
 
     const [form] = Form.useForm()
     return (
@@ -12,8 +20,7 @@ const TabProjeto = () => {
             layout="horizontal"
             style={{marginTop: "20px"}}
             className="box"
-            //   initialValues={}
-            //   onFinish={handleSubmeterForm}
+            initialValues={estadoInterno}
           
         >
             <Form.Item label="Nome" name="nome">

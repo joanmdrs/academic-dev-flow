@@ -18,7 +18,7 @@
 }
 
 
-#input-nome {
+.form-item #input-nome {
     position: relative;
     z-index: 2;
     width: 500px;
@@ -41,8 +41,8 @@
     color: #888;
 }
 
-#input-nome:focus + #label-nome, 
-#input-nome:valid + #label-nome{
+.form-item #input-nome:focus + #label-nome, 
+.form-item #input-nome:valid + #label-nome{
     margin-top: 0px;
     top: -100%;
     transition: 0.2s;
