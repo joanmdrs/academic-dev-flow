@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./TabsProjeto.css";
 import Titulo from "../../../../components/Titulo/Titulo";
-import { Button, Tabs } from "antd";
+import { Tabs } from "antd";
 import Item from "antd/es/list/Item";
 import TabProjeto from "./TabProjeto/TabProjeto";
 import TabEquipe from "./TabEquipe/TabEquipe";
@@ -11,19 +11,11 @@ import BotaoAdicionar from "../../../../components/Botoes/BotaoAdicionar/BotaoAd
 import BotaoExcluir from "../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
 import { useFormContext } from "../../context/Provider/Provider";
 import ModalDeBusca from "../../../../components/Modals/ModalDeBusca/ModalDeBusca";
-import FormDeBusca from "../../../../components/Forms/FormDeBusca/FormDeBusca";
-import { buscarProjetoPeloNome } from "../../../../services/projeto_service";
+import { atualizarProjeto, buscarProjetoPeloNome, criarProjeto } from "../../../../services/projeto_service";
 import { NotificationManager } from "react-notifications";
 
 const TabsProjeto = () => {
   
-    const [current, setCurrent] = useState("1");
-    const {hasProjeto, setHasProjeto} = useFormContext()
-    const [valoresIniciais, setValoresIniciais] = useState({})
-    const [isModalVisivel, setIsModalVisivel] = useState(false)
-    const [isFormVisivel, setIsFormVisivel] = useState(false)
-    const [isTabsAtivo, setIsTabsAtivo] = useState(false)
-
     const COLUNAS_MODAL = [
       {
           title: "Código",
@@ -41,7 +33,7 @@ const TabsProjeto = () => {
             >
               {text}
             </span>
-           )
+          )
       },
       {
           title: "Descrição",
@@ -50,20 +42,74 @@ const TabsProjeto = () => {
       },
     ];
 
+    const [current, setCurrent] = useState("1");
+    const [acaoForm, setAcaoForm] = useState("criar")
+    const {hasProjeto, setHasProjeto} = useFormContext()
+    const [valoresIniciais, setValoresIniciais] = useState({})
+    const [isModalVisivel, setIsModalVisivel] = useState(false)
+    const [isTabsAtivo, setIsTabsAtivo] = useState(false)
+    const [isBotaoAdicionarVisivel, setIsBotaoAdicionarVisivel] = useState(false)
+    const [isBotaoExcluirVisivel, setIsBotaoExcluirVisivel] = useState(true)
+    const [isBotaoBuscarVisivel, setIsBotaoBuscarVisivel] = useState(false)
+
     const handleExibirModal = () => setIsModalVisivel(true)
     const handleFecharModal = () => setIsModalVisivel(false)
     
-    const handleExibirForm = () => {
+    const handleBotaoAdicionar = () => {
       setIsTabsAtivo(true)
+      setIsBotaoAdicionarVisivel(true)
+      setIsBotaoExcluirVisivel(true)
+      setIsBotaoBuscarVisivel(true)
+      setAcaoForm('criar')
+      setHasProjeto({})
+      setValoresIniciais({})
+
     }
 
     const handleCliqueLinha = (record) => {
       setValoresIniciais(record)
+      setAcaoForm("atualizar")
       setHasProjeto(record)
       setIsTabsAtivo(true)
       setIsModalVisivel(false)
-      console.log(record)
     }
+
+    const handleCriarProjeto = async (dados) => {
+      
+      try {
+        const resposta = await criarProjeto(dados)
+        
+        if(resposta.status === 200){
+          NotificationManager.success('Projeto criado com sucesso!');
+        } else {
+          NotificationManager.error("Ocorreu um problema, contate o suporte!");
+        }
+      }catch (error) {
+        NotificationManager.error("Ocorreu um problema, contate o suporte!");
+      }
+    }
+  
+    const handleAtualizarProjeto = async (dados, id) => {
+      try {
+        const resposta = await atualizarProjeto(dados, id)
+        
+        if(resposta.status === 200){
+          NotificationManager.success('Projeto atualizado com sucesso!');
+        } else {
+          NotificationManager.error("Ocorreu um problema, contate o suporte!");
+        }
+      }catch (error) {
+        NotificationManager.error("Ocorreu um problema, contate o suporte!");
+      }
+    }
+  
+    const handleSalvarProjeto = async (dados) => {
+      if (acaoForm === 'criar'){
+        await handleCriarProjeto(dados)
+      }else if(acaoForm === 'atualizar'){
+        await handleAtualizarProjeto(dados, hasProjeto.id)
+      }
+    };
 
     const handleBuscarProjeto = async (parametro) => {
       try {
@@ -87,10 +133,10 @@ const TabsProjeto = () => {
               />
 
               <div className="botoes-de-acao"> 
-                <BotaoBuscar nome="BUSCAR PROJETO" funcao={handleExibirModal}/>
+                <BotaoBuscar nome="BUSCAR PROJETO" funcao={handleExibirModal} status={isBotaoBuscarVisivel}/>
                 <div className="group-buttons"> 
-                  <BotaoAdicionar funcao={handleExibirForm} />
-                  <BotaoExcluir />
+                  <BotaoAdicionar funcao={handleBotaoAdicionar} status={isBotaoAdicionarVisivel}/>
+                  <BotaoExcluir status={isBotaoExcluirVisivel}/>
                 </div>
               </div>
 
@@ -115,9 +161,10 @@ const TabsProjeto = () => {
                   style={{padding: "20px"}}
                   activeKey={current} 
                   onChange={setCurrent} 
+                  className="tabs-projeto"
                 > 
-                  <Item tab="Projeto" key="1" colStyle={{width: "250px"}}>
-                    <TabProjeto valoresIniciais={valoresIniciais}/>
+                  <Item tab="Projeto" key="1">
+                    <TabProjeto valoresIniciais={valoresIniciais} onSubmit={handleSalvarProjeto}/>
                   </Item>
                   <Item tab="Equipe" key="2" className="tab-item">
                     <TabEquipe />
@@ -126,16 +173,6 @@ const TabsProjeto = () => {
                       <TabFluxo />
                   </Item>
                 </Tabs>
-
-                <div className="tabs-projeto-footer-botoes">
-                  <Button type="primary">
-                    SALVAR
-                  </Button >
-
-                  <Button type="primary" danger>
-                    CANCELAR
-                  </Button>
-                </div>
               </div>
 }
             </div>    
