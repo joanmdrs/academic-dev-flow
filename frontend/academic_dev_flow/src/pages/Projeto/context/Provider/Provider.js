@@ -6,7 +6,7 @@ export const useFormContext = () => useContext(ProjetoContext);
 
 export const ProjetoProvider = ({children}) => {
 
-    const [hasProjeto, setHasProjeto] = useState(null);
+    const [hasProjeto, setHasProjeto] = useState({});
 
     return (
         <ProjetoContext.Provider 
