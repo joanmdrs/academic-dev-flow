@@ -97,6 +97,7 @@ const TabEquipe = () => {
       });
       const resposta = await criarMembroProjeto(dadosEnviar);
 
+      
       if (resposta.status === 200) {
         NotificationManager.success("Alunos vinculados ao projeto com sucesso !");
         await handleListarMembrosPorProjeto(idProjeto);

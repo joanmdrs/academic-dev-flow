@@ -1,29 +1,40 @@
-import { Form, Input, Select, Spin } from "antd";
+import { Button, Form, Input, Select, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import { LoadingOutlined } from '@ant-design/icons';
+import { NotificationManager } from "react-notifications";
+import { atualizarProjeto, criarProjeto } from "../../../../../services/projeto_service";
+import { useFormContext } from "../../../context/Provider/Provider";
 
 const { Option } = Select;
 
-const TabProjeto = ({ valoresIniciais }) => {
-  const [estadoInterno, setEstadoInterno] = useState(valoresIniciais);
-  const [carregando, setCarregando] = useState(false);
+const TabProjeto = ({ valoresIniciais, onSubmit }) => {
 
-  const [form] = Form.useForm();
+    const {hasProjeto, setHasProjeto} = useFormContext()
+    const [estadoInterno, setEstadoInterno] = useState(valoresIniciais);
+    const [carregando, setCarregando] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setCarregando(true);
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-        setEstadoInterno(valoresIniciais);
-      } catch (error) {
-      } finally {
-        setCarregando(false);
-      }
-    };
 
-    fetchData();
-  }, [valoresIniciais]);
+    const [form] = Form.useForm();
+
+    useEffect(() => {
+        const fetchData = async () => {
+        try {
+            setCarregando(true);
+            await new Promise((resolve) => setTimeout(resolve, 1500));
+            setEstadoInterno(valoresIniciais);
+        } catch (error) {
+        } finally {
+            setCarregando(false);
+        }
+        };
+
+        fetchData();
+    }, [valoresIniciais]);
+
+    const handleSubmeterForm = async () => {
+        const dados = form.getFieldsValue()
+        await onSubmit(dados)
+    } 
 
     return (
 
@@ -84,6 +95,16 @@ const TabProjeto = ({ valoresIniciais }) => {
                         <Form.Item label="Descrição" name="descricao" style={{ clear: 'both' }}>
                             <Input.TextArea id="descricao" name="descricao" rows={6} />
                         </Form.Item>
+
+                        <div className="tabs-projeto-footer-botoes">
+                            <Button type="primary" onClick={handleSubmeterForm}>
+                                SALVAR
+                            </Button >
+
+                            <Button type="primary" danger>
+                                CANCELAR
+                            </Button>
+                            </div>
 
                     </Form>
                 </React.Fragment>
