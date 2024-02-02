@@ -21,6 +21,7 @@ const TabsProjeto = () => {
     const {hasProjeto, setHasProjeto} = useFormContext()
     const [valoresIniciais, setValoresIniciais] = useState({})
     const [isModalVisivel, setIsModalVisivel] = useState(false)
+    const [isFormVisivel, setIsFormVisivel] = useState(false)
     const [isTabsAtivo, setIsTabsAtivo] = useState(false)
 
     const COLUNAS_MODAL = [
@@ -51,10 +52,16 @@ const TabsProjeto = () => {
 
     const handleExibirModal = () => setIsModalVisivel(true)
     const handleFecharModal = () => setIsModalVisivel(false)
+    
+    const handleExibirForm = () => {
+      setIsTabsAtivo(true)
+    }
 
     const handleCliqueLinha = (record) => {
       setValoresIniciais(record)
+      setHasProjeto(record)
       setIsTabsAtivo(true)
+      setIsModalVisivel(false)
       console.log(record)
     }
 
@@ -82,7 +89,7 @@ const TabsProjeto = () => {
               <div className="botoes-de-acao"> 
                 <BotaoBuscar nome="BUSCAR PROJETO" funcao={handleExibirModal}/>
                 <div className="group-buttons"> 
-                  <BotaoAdicionar />
+                  <BotaoAdicionar funcao={handleExibirForm} />
                   <BotaoExcluir />
                 </div>
               </div>
