@@ -13,7 +13,8 @@ export const criarMembro = async (dados) => {
         data_nascimento: dataFormatada,
         sexo: dados.sexo,
         telefone: dados.telefone,
-        email: dados.email
+        email: dados.email,
+        grupo: dados.grupo
     }
 
     const resposta = await api.post('/membro/cadastrar/', dados_membro)
@@ -52,7 +53,8 @@ export const atualizarMembro = async (dados, id) => {
         data_nascimento: dataFormatada,
         sexo: dados.sexo,
         telefone: dados.telefone,
-        email: dados.email
+        email: dados.email,
+        grupo: dados.grupo
     }
 
     const resposta = await api.patch(`/membro/atualizar/${encodeURIComponent(id)}/`, dados_membro)

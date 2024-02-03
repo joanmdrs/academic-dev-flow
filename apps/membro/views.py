@@ -27,7 +27,7 @@ class BuscarMembroPorGrupoView(APIView):
             nome = request.query_params.get('nome', None)
             grupo = request.query_params.get('grupo', None)
 
-            if grupo not in ['Aluno', 'professor']:
+            if grupo not in ['aluno', 'professor']:
                 return Response({"error": "Grupo inválido"}, status=status.HTTP_400_BAD_REQUEST)
 
             membros = Membro.objects.all()
