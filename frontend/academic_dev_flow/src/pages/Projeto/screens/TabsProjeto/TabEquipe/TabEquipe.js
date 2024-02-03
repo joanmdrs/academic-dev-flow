@@ -3,18 +3,19 @@ import "./TabEquipe.css";
 import ListaDados from "../../../../../components/Listas/ListaDados/ListaDados";
 import BotaoAdicionar from "../../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
 import BotaoExcluir from "../../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
-import { Col, Input, Table } from "antd";
+import { Table } from "antd";
 import ModalSelecionarMembros from "../../../components/ModalSelecionarMembros/ModalSelecionarMembros";
-import { buscarMembroPeloId, buscarMembroPeloNome } from "../../../../../services/membro_service";
+import { buscarMembroPeloId, buscarMembroPorGrupoENome } from "../../../../../services/membro_service";
 import { NotificationManager } from "react-notifications";
 import { criarMembroProjeto, listarMembrosPorProjeto } from "../../../../../services/membro_projeto_service";
 import { useFormContext } from "../../../context/Provider/Provider";
 
 const TabEquipe = () => {
   const { hasProjeto } = useFormContext();
-  const [isBotaoAdicionarVisivel, setIsBotaoAdicionarVisivel] = useState(false);
+  const [isBotaoAdicionarVisivel, setIsBotaoAdicionarVisivel] = useState(false) 
   const [isBotaoExcluirVisivel, setIsBotaoExcluirVisivel] = useState(true);
   const [isModalVisivel, setIsModalVisivel] = useState(false);
+  const [grupoMembro, setGrupoMembro] = useState(null)
   const [alunos, setAlunos] = useState([]);
   const [professores, setProfessores] = useState([])
 
@@ -36,12 +37,40 @@ const TabEquipe = () => {
     },
   ];
 
+  const COLUNAS_MODAL = [
+    {
+      title: "ID",
+      key: "id",
+      dataIndex: "id",
+    },
+    {
+      title: "Nome",
+      dataIndex: "nome",
+      key: "nome",
+    },
+    {
+      title: "Grupo",
+      dataIndex: "grupo",
+      key: "grupo",
+    },
+  ];
+
   const handleExibirModal = () => setIsModalVisivel(true);
   const handleFecharModal = () => setIsModalVisivel(false);
 
+  const handleBotaoAdicionarAluno = () => {
+    handleExibirModal()
+    setGrupoMembro('aluno')
+  }
+
+  const handleBotaoAdicionarProfessor = () => {
+    handleExibirModal()
+    setGrupoMembro('professor')
+  }
+
   const handleBuscarMembro = async (parametro) => {
     try {
-      const resposta = await buscarMembroPeloNome(parametro);
+      const resposta = await buscarMembroPorGrupoENome(parametro, grupoMembro);
       if (resposta.status !== 200) {
         NotificationManager.error("Ocorreu um problema ao buscar os dados, contate o suporte!");
       } else {
@@ -52,6 +81,39 @@ const TabEquipe = () => {
     }
   };
 
+
+  const handleProcessarMembros = async (membrosVinculados) => {
+    const promises = membrosVinculados.map(async (membroProjeto) => {
+      try {
+        const respostaMembro = await buscarMembroPeloId(membroProjeto.membro);
+        const grupo = respostaMembro.data.grupo;
+  
+        if (grupo === 'aluno' || grupo === 'professor') {
+          return {
+            id: membroProjeto.id,
+            projeto: hasProjeto.id,
+            membro: respostaMembro.data.id,
+            nome: respostaMembro.data.nome,
+            funcao: membroProjeto.funcao,
+            grupo: grupo,
+          };
+        } else {
+          return null;
+        }
+      } catch (error) {
+        console.error("Erro ao processar membros:", error);
+        return null;
+      }
+    });
+  
+    const resultados = (await Promise.all(promises)).filter(Boolean);
+  
+    const alunos = resultados.filter((membro) => membro.grupo === 'aluno');
+    const professores = resultados.filter((membro) => membro.grupo === 'professor');
+  
+    return { alunos, professores };
+  };
+  
   const handleListarMembrosPorProjeto = async (parametro) => {
     try {
       const resposta = await listarMembrosPorProjeto(parametro);
@@ -61,24 +123,19 @@ const TabEquipe = () => {
 
         if (membrosVinculados.length === 0) {
           setAlunos([]);
+          setProfessores([])
         } else {
-          const promisesAlunos = membrosVinculados.map(async (membroProjeto) => {
-            const respostaMembro = await buscarMembroPeloId(membroProjeto.membro);
-            return {
-              id: membroProjeto.id,
-              projeto: hasProjeto.id,
-              membro: respostaMembro.data.id,
-              nome: respostaMembro.data.nome,
-              funcao: membroProjeto.funcao,
-            };
-          });
-
-          const resultados = await Promise.all(promisesAlunos);
-
-          setAlunos(resultados);
+          const { alunos, professores } = await handleProcessarMembros(membrosVinculados);
+          setAlunos(alunos);
+          setProfessores(professores);
         }
+      } else {
+        NotificationManager.error("Falha ao buscar os dados, contate o suporte!")
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+      NotificationManager.error("Ocorreu um problema ao buscar os dados, contate o suporte!");
+    }
   };
 
   useEffect(() => {
@@ -115,7 +172,7 @@ const TabEquipe = () => {
       {isModalVisivel && (
         <ModalSelecionarMembros
           onCancel={handleFecharModal}
-          colunas={COLUNAS_LISTA}
+          colunas={COLUNAS_MODAL}
           status={isModalVisivel}
           onOk={handleBuscarMembro}
           onSelect={handleSelecionarMembros}
@@ -132,7 +189,7 @@ const TabEquipe = () => {
             className="group-buttons"
             style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
           >
-            <BotaoAdicionar status={isBotaoAdicionarVisivel} funcao={handleExibirModal} />
+            <BotaoAdicionar status={isBotaoAdicionarVisivel} funcao={handleBotaoAdicionarAluno} />
             <BotaoExcluir status={isBotaoExcluirVisivel} />
           </div>
 
@@ -158,11 +215,11 @@ const TabEquipe = () => {
             className="group-buttons"
             style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
           >
-            <BotaoAdicionar />
+            <BotaoAdicionar funcao={handleBotaoAdicionarProfessor}/>
             <BotaoExcluir />
           </div>
 
-          <ListaDados colunas={COLUNAS_LISTA} />
+          <ListaDados colunas={COLUNAS_LISTA} dados={professores} />
         </div>
       </div>
     </div>
