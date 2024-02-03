@@ -25,6 +25,11 @@ export const buscarMembroPeloNome = async (dado) => {
     return resposta 
 }
 
+export const buscarMembroPorGrupoENome = async (nome, grupo) => {
+    const resposta = await api.get(`membro/buscar/grupo/?nome=${encodeURIComponent(nome)}&grupo=${encodeURIComponent(grupo)}`)
+    return resposta
+}
+
 export const buscarMembroPeloId = async (parametro) => {
     const resposta = await api.get(`membro/buscar/${encodeURIComponent(parametro)}/`)
     return resposta
