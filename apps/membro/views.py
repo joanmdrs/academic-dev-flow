@@ -27,7 +27,7 @@ class BuscarMembroPorGrupoView(APIView):
             nome = request.query_params.get('nome', None)
             grupo = request.query_params.get('grupo', None)
 
-            if grupo not in ['aluno', 'professor']:
+            if grupo not in ['Aluno', 'professor']:
                 return Response({"error": "Grupo inválido"}, status=status.HTTP_400_BAD_REQUEST)
 
             membros = Membro.objects.all()
@@ -104,5 +104,16 @@ class AtualizarMembroView(APIView):
             
             else: 
                 return JsonResponse({'error': 'Dados inválidos'}, status=400)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class ListarMembrosView(APIView): 
+    def get(self, request):
+        try: 
+            membros = Membro.objects.all()
+            
+            serializer = MembroSerializer(membros, many=True)
+            return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})   
+        
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
