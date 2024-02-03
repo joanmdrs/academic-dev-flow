@@ -16,7 +16,7 @@ const TabEquipe = () => {
   const [isBotaoExcluirVisivel, setIsBotaoExcluirVisivel] = useState(true);
   const [isModalVisivel, setIsModalVisivel] = useState(false);
   const [alunos, setAlunos] = useState([]);
-  const idProjeto = "2";
+  const [professores, setProfessores] = useState([])
 
   const COLUNAS_LISTA = [
     {
@@ -66,7 +66,7 @@ const TabEquipe = () => {
             const respostaMembro = await buscarMembroPeloId(membroProjeto.membro);
             return {
               id: membroProjeto.id,
-              projeto: idProjeto,
+              projeto: hasProjeto.id,
               membro: respostaMembro.data.id,
               nome: respostaMembro.data.nome,
               funcao: membroProjeto.funcao,
@@ -83,7 +83,7 @@ const TabEquipe = () => {
 
   useEffect(() => {
     if (hasProjeto) {
-      handleListarMembrosPorProjeto(idProjeto);
+      handleListarMembrosPorProjeto(hasProjeto.id);
     }
   }, [hasProjeto]);
 
@@ -91,7 +91,7 @@ const TabEquipe = () => {
     try {
       const dadosEnviar = dados.map((item) => {
         return {
-          projeto: idProjeto,
+          projeto: hasProjeto.id,
           membro: item.id,
         };
       });
@@ -100,7 +100,7 @@ const TabEquipe = () => {
       
       if (resposta.status === 200) {
         NotificationManager.success("Alunos vinculados ao projeto com sucesso !");
-        await handleListarMembrosPorProjeto(idProjeto);
+        await handleListarMembrosPorProjeto(hasProjeto.id);
       } else {
         NotificationManager.error("Falha ao vincular os alunos ao projeto, contate o suporte!");
       }
