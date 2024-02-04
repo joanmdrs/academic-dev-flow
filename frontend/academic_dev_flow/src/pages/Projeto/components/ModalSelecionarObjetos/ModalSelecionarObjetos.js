@@ -1,17 +1,13 @@
 import { Button, Form, Input, Modal, Table } from "antd";
 import React, { useState } from "react";
 
-const ModalSelecionarMembros = ({status, onCancel, onOk, colunas, onSelect}) => {
+const ModalSelecionarObjetos = ({title, status, onCancel, onOk, colunas, onSelect}) => {
 
     const [form] = Form.useForm();
     const [parametro, setParametro] = useState('');
     const [dados, setDados] = useState([])
     const [hasResposta, setHasResposta] = useState(false)
-    const [membros, setMembros] = useState([])
-
-    const handleAlterarParametro = (event) => {
-        setParametro(event.target.value);
-    };
+    const [objetos, setObjetos] = useState([])
 
     const handleResetar = () => {
         form.resetFields()
@@ -22,12 +18,12 @@ const ModalSelecionarMembros = ({status, onCancel, onOk, colunas, onSelect}) => 
 
     const rowSelection = {
         onChange: (selectedRowsKeys, selectedRows) => {
-          setMembros(selectedRows)
+          setObjetos(selectedRows)
         },
     };
 
-    const handleSelecionarMembros = () => {
-        onSelect(membros)
+    const handleSelecionarObjetos = () => {
+        onSelect(objetos)
         onCancel()
     }
 
@@ -38,16 +34,16 @@ const ModalSelecionarMembros = ({status, onCancel, onOk, colunas, onSelect}) => 
             onCancel={onCancel}
             footer={
                 <div> 
-                    <Button type="primary" onClick={handleSelecionarMembros}> SELECIONAR </Button>
+                    <Button type="primary" onClick={handleSelecionarObjetos}> SELECIONAR </Button>
                     <Button onClick={onCancel}> FECHAR </Button>
                 </div>
             }
 
         >
-            <h4> Buscar Membro </h4>
+            <h4> {title} </h4>
             <Form form={form}> 
                 <Form.Item>
-                    <Input  type="text" placeholder="Ex.: Joan "/>
+                    <Input  type="text"/>
                 </Form.Item>
                 <Form.Item>
                     <Button type="primary" onClick={ async () => {
@@ -77,4 +73,4 @@ const ModalSelecionarMembros = ({status, onCancel, onOk, colunas, onSelect}) => 
 }
 
 
-export default ModalSelecionarMembros;
+export default ModalSelecionarObjetos;
