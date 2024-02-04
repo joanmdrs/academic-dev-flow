@@ -10,7 +10,11 @@ export const excluirMembroProjetoOne = async (id) => {
     return resposta
 }
 
-export const excluirMembroProjetoMany = async (id_projeto, ids_membros) => {
+export const excluirMembroProjetoMany = async (id_projeto, lista_membros, grupo) => {
+    const ids_membros = lista_membros
+    .filter(membro => membro.grupo === grupo)  
+    .map(membro => membro.id);
+
     const resposta = await api.delete(`membro_projeto/excluir/many/${encodeURIComponent(id_projeto)}`, ids_membros)
     return resposta
 }
