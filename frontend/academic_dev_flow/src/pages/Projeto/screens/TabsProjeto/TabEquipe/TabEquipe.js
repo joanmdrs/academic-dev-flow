@@ -18,6 +18,8 @@ const TabEquipe = () => {
   const [grupoMembro, setGrupoMembro] = useState(null)
   const [alunos, setAlunos] = useState([]);
   const [professores, setProfessores] = useState([])
+  const [alunosVisiveis, setAlunosVisiveis] = useState(false);
+  const [professoresVisiveis, setProfessoresVisiveis] = useState(false);
 
   const COLUNAS_LISTA = [
     {
@@ -180,47 +182,75 @@ const TabEquipe = () => {
       )}
 
       <div>
-        <div className="box" style={{ cursor: "pointer" }}>
+        <div style={{ 
+            cursor: "pointer",
+            padding: "20px",
+            border: "1px solid #d9d9d9",
+          }}
+          onClick={() => setAlunosVisiveis(!alunosVisiveis)}>
           <h4> VINCULAR ALUNO(S) </h4>
         </div>
 
-        <div>
-          <div
-            className="group-buttons"
-            style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
-          >
-            <BotaoAdicionar status={isBotaoAdicionarVisivel} funcao={handleBotaoAdicionarAluno} />
-            <BotaoExcluir status={isBotaoExcluirVisivel} />
-          </div>
+        { alunosVisiveis &&
 
-          <Table
-            className="tab-equipe"
-            columns={COLUNAS_LISTA}
-            dataSource={alunos}
-            rowKey="id"
-            rowSelection={{
-              type: "checkbox",
-            }}
-          />
-        </div>
+            <div>
+              <div
+                className="group-buttons"
+                style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
+              >
+                <BotaoAdicionar status={isBotaoAdicionarVisivel} funcao={handleBotaoAdicionarAluno} />
+                <BotaoExcluir status={isBotaoExcluirVisivel} />
+              </div>
+
+              <Table
+                className="tab-equipe"
+                columns={COLUNAS_LISTA}
+                dataSource={alunos}
+                rowKey="id"
+                rowSelection={{
+                  type: "checkbox",
+                }}
+              />
+            </div>
+        }
+
+        
       </div>
 
+
       <div>
-        <div className="box">
+        <div 
+          style={{ 
+            cursor: "pointer",
+            padding: "20px",
+            border: "1px solid #d9d9d9",
+          }} 
+          onClick={() => setProfessoresVisiveis(!professoresVisiveis)}>
           <h4> VINCULAR PROFESSOR(ES)</h4>
         </div>
 
-        <div>
-          <div
-            className="group-buttons"
-            style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
-          >
-            <BotaoAdicionar funcao={handleBotaoAdicionarProfessor}/>
-            <BotaoExcluir />
-          </div>
+        { professoresVisiveis && 
+          <div>
+            <div
+              className="group-buttons"
+              style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
+            >
+              <BotaoAdicionar funcao={handleBotaoAdicionarProfessor}/>
+              <BotaoExcluir />
+            </div>
 
-          <ListaDados colunas={COLUNAS_LISTA} dados={professores} />
+            <Table
+              className="tab-equipe"
+              columns={COLUNAS_LISTA}
+              dataSource={professores}
+              rowKey="id"
+              rowSelection={{
+                type: "checkbox",
+              }}
+            />
         </div>
+        }
+
       </div>
     </div>
   );
