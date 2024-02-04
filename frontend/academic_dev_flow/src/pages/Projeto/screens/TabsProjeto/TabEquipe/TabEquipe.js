@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./TabEquipe.css";
-import ListaDados from "../../../../../components/Listas/ListaDados/ListaDados";
 import BotaoAdicionar from "../../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
 import BotaoExcluir from "../../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
 import { Table } from "antd";
@@ -11,16 +10,6 @@ import { criarMembroProjeto, excluirMembroProjetoMany, excluirMembroProjetoOne, 
 import { useFormContext } from "../../../context/Provider/Provider";
 
 const TabEquipe = () => {
-  const { hasProjeto } = useFormContext();
-  const [isBotaoAdicionarVisivel, setIsBotaoAdicionarVisivel] = useState(false) 
-  const [isBotaoExcluirVisivel, setIsBotaoExcluirVisivel] = useState(true);
-  const [isModalVisivel, setIsModalVisivel] = useState(false);
-  const [grupoMembro, setGrupoMembro] = useState(null)
-  const [alunos, setAlunos] = useState([]);
-  const [professores, setProfessores] = useState([])
-  const [alunosVisiveis, setAlunosVisiveis] = useState(false);
-  const [professoresVisiveis, setProfessoresVisiveis] = useState(false);
-  const [membrosExcluir, setMembrosExcluir] = useState([])
 
   const COLUNAS_LISTA = [
     {
@@ -57,6 +46,17 @@ const TabEquipe = () => {
       key: "grupo",
     },
   ];
+
+  const { hasProjeto } = useFormContext();
+  const [isBotaoAdicionarVisivel, setIsBotaoAdicionarVisivel] = useState(false) 
+  const [isBotaoExcluirVisivel, setIsBotaoExcluirVisivel] = useState(false);
+  const [isModalVisivel, setIsModalVisivel] = useState(false);
+  const [grupoMembro, setGrupoMembro] = useState(null)
+  const [alunos, setAlunos] = useState([]);
+  const [professores, setProfessores] = useState([])
+  const [alunosVisiveis, setAlunosVisiveis] = useState(false);
+  const [professoresVisiveis, setProfessoresVisiveis] = useState(false);
+  const [membrosExcluir, setMembrosExcluir] = useState([])
 
   const handleExibirModal = () => setIsModalVisivel(true);
   const handleFecharModal = () => setIsModalVisivel(false);
@@ -117,9 +117,9 @@ const TabEquipe = () => {
     return { alunos, professores };
   };
   
-  const handleListarMembrosPorProjeto = async (parametro) => {
+  const handleListarMembrosPorProjeto = async () => {
     try {
-      const resposta = await listarMembrosPorProjeto(parametro);
+      const resposta = await listarMembrosPorProjeto(hasProjeto.id);
 
       if (resposta.status === 200) {
         const membrosVinculados = resposta.data;
@@ -143,7 +143,7 @@ const TabEquipe = () => {
 
   useEffect(() => {
     if (hasProjeto) {
-      handleListarMembrosPorProjeto(hasProjeto.id);
+      handleListarMembrosPorProjeto();
     }
   }, [hasProjeto]);
 
@@ -157,10 +157,9 @@ const TabEquipe = () => {
       });
       const resposta = await criarMembroProjeto(dadosEnviar);
 
-      
       if (resposta.status === 200) {
         NotificationManager.success("Alunos vinculados ao projeto com sucesso !");
-        await handleListarMembrosPorProjeto(hasProjeto.id);
+        await handleListarMembrosPorProjeto();
       } else {
         NotificationManager.error("Falha ao vincular os alunos ao projeto, contate o suporte!");
       }
@@ -184,6 +183,7 @@ const TabEquipe = () => {
         : await excluirMembroProjetoMany(hasProjeto.id, membrosExcluir, grupo);
   
       if (resposta.status === 204) {
+        await handleListarMembrosPorProjeto()
         NotificationManager.success(`Membro${membrosExcluir.length > 1 ? 's' : ''} desvinculado${membrosExcluir.length > 1 ? 's' : ''} do projeto com sucesso!`);
       } else {
         NotificationManager.error(`Falha ao desvincular o${membrosExcluir.length > 1 ? 's' : ''} membro${membrosExcluir.length > 1 ? 's' : ''} do projeto, contate o suporte!`);

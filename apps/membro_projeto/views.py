@@ -77,11 +77,9 @@ class ExcluirMembroProjetoManyView(APIView):
             # Obtenha a lista de IDs a partir dos parâmetros da solicitação
             ids_membros = request.data.get('ids_membros', [])
 
-            # Certifique-se de que a lista de IDs não está vazia
             if not ids_membros:
                 return Response({'error': 'A lista de IDs de membros está vazia!'}, status=status.HTTP_400_BAD_REQUEST)
 
-            # Filtra os objetos com base nos IDs do projeto e da lista de membros
             objetos = MembroProjeto.objects.filter(projeto=idProjeto, membro__in=ids_membros)
 
             if objetos.exists():

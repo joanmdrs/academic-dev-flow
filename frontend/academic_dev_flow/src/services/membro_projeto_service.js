@@ -6,16 +6,19 @@ export const criarMembroProjeto = async (dados) => {
 }
 
 export const excluirMembroProjetoOne = async (id) => {
-    const resposta = await api.delete(`membro_projeto/excluir/one/${encodeURIComponent(id)}`)
+    const resposta = await api.delete(`membro_projeto/excluir/one/${encodeURIComponent(id)}/`)
     return resposta
 }
 
 export const excluirMembroProjetoMany = async (id_projeto, lista_membros, grupo) => {
     const ids_membros = lista_membros
-    .filter(membro => membro.grupo === grupo)  
-    .map(membro => membro.id);
+    .filter(membroProjeto => membroProjeto.grupo === grupo)  
+    .map(membroProjeto => membroProjeto.membro);
 
-    const resposta = await api.delete(`membro_projeto/excluir/many/${encodeURIComponent(id_projeto)}`, ids_membros)
+    console.log(ids_membros)
+    const resposta = await api.delete(`membro_projeto/excluir/many/${encodeURIComponent(id_projeto)}/`, {
+        data: { ids_membros: ids_membros },
+    });
     return resposta
 }
 
