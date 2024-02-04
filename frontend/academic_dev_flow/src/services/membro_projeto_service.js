@@ -5,6 +5,18 @@ export const criarMembroProjeto = async (dados) => {
     return resposta
 }
 
+export const excluirMembroProjetoOne = async (id) => {
+    const resposta = await api.delete(`membro_projeto/excluir/one/${encodeURIComponent(id)}`)
+    return resposta
+}
+
+export const excluirMembroProjetoMany = async (id_projeto, ids_membros) => {
+    const resposta = await api.delete(`membro_projeto/excluir/many/${encodeURIComponent(id_projeto)}`, ids_membros)
+    return resposta
+}
+
+
+
 export const listarMembrosPorProjeto = async (idProjeto) => {
     const resposta = await api.get(`membro_projeto/buscar/${encodeURIComponent(idProjeto)}/`)
     return resposta
