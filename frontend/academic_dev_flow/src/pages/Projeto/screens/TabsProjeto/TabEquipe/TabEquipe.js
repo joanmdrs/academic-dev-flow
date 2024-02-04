@@ -7,7 +7,7 @@ import { Table } from "antd";
 import ModalSelecionarMembros from "../../../components/ModalSelecionarMembros/ModalSelecionarMembros";
 import { buscarMembroPeloId, buscarMembroPorGrupoENome } from "../../../../../services/membro_service";
 import { NotificationManager } from "react-notifications";
-import { criarMembroProjeto, listarMembrosPorProjeto } from "../../../../../services/membro_projeto_service";
+import { criarMembroProjeto, excluirMembroProjetoMany, excluirMembroProjetoOne, listarMembrosPorProjeto } from "../../../../../services/membro_projeto_service";
 import { useFormContext } from "../../../context/Provider/Provider";
 
 const TabEquipe = () => {
@@ -20,6 +20,7 @@ const TabEquipe = () => {
   const [professores, setProfessores] = useState([])
   const [alunosVisiveis, setAlunosVisiveis] = useState(false);
   const [professoresVisiveis, setProfessoresVisiveis] = useState(false);
+  const [membrosExcluir, setMembrosExcluir] = useState([])
 
   const COLUNAS_LISTA = [
     {
@@ -169,6 +170,65 @@ const TabEquipe = () => {
     }
   };
 
+  const rowSelection = {
+    onChange: (selectedRowsKeys, selectedRows) => {
+      setMembrosExcluir(selectedRows)
+      console.log(selectedRows)
+    },
+  };
+
+  const handleExcluirMembros = async (grupo) => {
+    try {
+      const resposta = membrosExcluir.length === 1
+        ? await excluirMembroProjetoOne(membrosExcluir[0].id)
+        : await excluirMembroProjetoMany(hasProjeto.id, membrosExcluir, grupo);
+  
+      if (resposta.status === 204) {
+        NotificationManager.success(`Membro${membrosExcluir.length > 1 ? 's' : ''} desvinculado${membrosExcluir.length > 1 ? 's' : ''} do projeto com sucesso!`);
+      } else {
+        NotificationManager.error(`Falha ao desvincular o${membrosExcluir.length > 1 ? 's' : ''} membro${membrosExcluir.length > 1 ? 's' : ''} do projeto, contate o suporte!`);
+      }
+    } catch (error) {
+      console.log(error);
+      NotificationManager.error("Ocorreu um problema durante a operação, contate o suporte!");
+    }
+  };
+
+  const renderSection = (title, data, isVisible, onToggleVisibility, onAddButtonClick, onDeleteButtonClick, grupo) => (
+    <div>
+      <div
+        style={{
+          cursor: "pointer",
+          padding: "20px",
+          border: "1px solid #d9d9d9",
+        }}
+        onClick={() => onToggleVisibility(!isVisible)}
+      >
+        <h4> {title} </h4>
+      </div>
+
+      {isVisible && (
+        <div>
+          <div
+            className="group-buttons"
+            style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
+          >
+            <BotaoAdicionar status={isBotaoAdicionarVisivel} funcao={onAddButtonClick} />
+            <BotaoExcluir status={isBotaoExcluirVisivel} funcao={() => onDeleteButtonClick(grupo)} />
+          </div>
+
+          <Table
+            className="tab-equipe"
+            columns={COLUNAS_LISTA}
+            dataSource={data}
+            rowKey="id"
+            rowSelection={rowSelection}
+          />
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <div className="box">
       {isModalVisivel && (
@@ -181,79 +241,29 @@ const TabEquipe = () => {
         />
       )}
 
-      <div>
-        <div style={{ 
-            cursor: "pointer",
-            padding: "20px",
-            border: "1px solid #d9d9d9",
-          }}
-          onClick={() => setAlunosVisiveis(!alunosVisiveis)}>
-          <h4> VINCULAR ALUNO(S) </h4>
-        </div>
+      {renderSection(
+        'VINCULAR ALUNO(S)',
+        alunos,
+        alunosVisiveis,
+        setAlunosVisiveis,
+        handleBotaoAdicionarAluno,
+        handleExcluirMembros,
+        'aluno'
+      )}
 
-        { alunosVisiveis &&
-
-            <div>
-              <div
-                className="group-buttons"
-                style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
-              >
-                <BotaoAdicionar status={isBotaoAdicionarVisivel} funcao={handleBotaoAdicionarAluno} />
-                <BotaoExcluir status={isBotaoExcluirVisivel} />
-              </div>
-
-              <Table
-                className="tab-equipe"
-                columns={COLUNAS_LISTA}
-                dataSource={alunos}
-                rowKey="id"
-                rowSelection={{
-                  type: "checkbox",
-                }}
-              />
-            </div>
-        }
-
-        
-      </div>
-
-
-      <div>
-        <div 
-          style={{ 
-            cursor: "pointer",
-            padding: "20px",
-            border: "1px solid #d9d9d9",
-          }} 
-          onClick={() => setProfessoresVisiveis(!professoresVisiveis)}>
-          <h4> VINCULAR PROFESSOR(ES)</h4>
-        </div>
-
-        { professoresVisiveis && 
-          <div>
-            <div
-              className="group-buttons"
-              style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
-            >
-              <BotaoAdicionar funcao={handleBotaoAdicionarProfessor}/>
-              <BotaoExcluir />
-            </div>
-
-            <Table
-              className="tab-equipe"
-              columns={COLUNAS_LISTA}
-              dataSource={professores}
-              rowKey="id"
-              rowSelection={{
-                type: "checkbox",
-              }}
-            />
-        </div>
-        }
-
-      </div>
+      {renderSection(
+        'VINCULAR PROFESSOR(ES)',
+        professores,
+        professoresVisiveis,
+        setProfessoresVisiveis,
+        handleBotaoAdicionarProfessor,
+        handleExcluirMembros,
+        'professor'
+      )}
     </div>
   );
 };
 
 export default TabEquipe;
+
+
