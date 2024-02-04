@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BotaoAdicionar from "../../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
 import BotaoExcluir from "../../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
 import { Table } from "antd";
 import ListaDados from "../../../../../components/Listas/ListaDados/ListaDados";
 import ModalDeBusca from "../../../../../components/Modals/ModalDeBusca/ModalDeBusca";
-import { buscarFluxoPeloNome } from "../../../../../services/fluxo_service";
+import { buscarFluxoPeloId, buscarFluxoPeloNome } from "../../../../../services/fluxo_service";
 import { NotificationManager } from "react-notifications";
 import ModalSelecionarObjetos from "../../../components/ModalSelecionarObjetos/ModalSelecionarObjetos";
 import { atualizarFluxoProjeto } from "../../../../../services/projeto_service";
@@ -63,7 +63,7 @@ const TabFluxo = () => {
 
         if (resposta.status === 200){
           NotificationManager.success("Fluxo vinculado ao projeto com sucesso!")
-          setFluxo(record)
+          await handleBuscarFluxoProjeto()
         } else {
           NotificationManager.error("Falha ao vincular o fluxo ao projeto, contate o suporte!")
         }
@@ -73,8 +73,24 @@ const TabFluxo = () => {
     }
 
     const handleBuscarFluxoProjeto = async () => {
-      
+      try {
+        const resposta = await buscarFluxoPeloId(hasProjeto.fluxo)
+
+        if (resposta.status === 200){
+          setFluxo(resposta.data)
+        } else {
+          NotificationManager.error('Falha ao buscar os dados do fluxo')
+        }
+      } catch (error) {
+        NotificationManager.error("Ocorreu um problema durante a operação, contate o suporte!")
+      }
     }
+
+    useEffect(() => {
+      if (hasProjeto) {
+        handleBuscarFluxoProjeto();
+      }
+    }, [hasProjeto]);
   
     return (
         <div> 
