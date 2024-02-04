@@ -24,7 +24,12 @@ const ModalSelecionarMembros = ({status, onCancel, onOk, colunas, onSelect}) => 
         onChange: (selectedRowsKeys, selectedRows) => {
           setMembros(selectedRows)
         },
-      };
+    };
+
+    const handleSelecionarMembros = () => {
+        onSelect(membros)
+        onCancel()
+    }
 
 
     return (
@@ -33,7 +38,7 @@ const ModalSelecionarMembros = ({status, onCancel, onOk, colunas, onSelect}) => 
             onCancel={onCancel}
             footer={
                 <div> 
-                    <Button type="primary" onClick={() =>  onSelect(membros)}> SELECIONAR </Button>
+                    <Button type="primary" onClick={handleSelecionarMembros}> SELECIONAR </Button>
                     <Button onClick={onCancel}> FECHAR </Button>
                 </div>
             }
