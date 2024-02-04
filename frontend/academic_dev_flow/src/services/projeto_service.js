@@ -22,6 +22,6 @@ export const atualizarProjeto = (dados, id) => {
 }
 
 export const atualizarFluxoProjeto = (idFluxo, idProjeto ) => {
-    const resposta = api.patch(`/projeto/atualizar/fluxo/${encodeURIComponent(idProjeto)}/`, { data: {"fluxo_id": idFluxo}})
+    const resposta = api.patch(`/projeto/atualizar/fluxo/${encodeURIComponent(idProjeto)}/`, { fluxo_id: idFluxo})
     return resposta
 }
