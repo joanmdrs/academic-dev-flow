@@ -6,6 +6,7 @@ import ListaDados from "../../../../../components/Listas/ListaDados/ListaDados";
 import ModalDeBusca from "../../../../../components/Modals/ModalDeBusca/ModalDeBusca";
 import { buscarFluxoPeloNome } from "../../../../../services/fluxo_service";
 import { NotificationManager } from "react-notifications";
+import ModalSelecionarObjetos from "../../../components/ModalSelecionarObjetos/ModalSelecionarObjetos";
 
 const TabFluxo = () => {
 
@@ -68,6 +69,10 @@ const TabFluxo = () => {
         NotificationManager.error("Ocorreu um problema ao buscar os dados, contate o suporte!")
       } 
     }
+
+    const handleSelecionarFluxo = async () => {
+      
+    }
   
     return (
         <div> 
@@ -84,14 +89,12 @@ const TabFluxo = () => {
             </div>
             <div>
                 <ListaDados colunas={COLUNAS_LISTA} dados={fluxo}/>
-                <ModalDeBusca
+                <ModalSelecionarObjetos
+                    title="BUSCAR FLUXO"
                     colunas={COLUNAS_LISTA}
-                    label="Nome do fluxo"
-                    name="nomeFluxo"
-                    onCancel={handleFecharModal}
                     onOk={handleBuscarFluxo}
-                    status={isModalVisivel}
-                    titulo={"BUSCAR FLUXO"}
+                    onCancel={handleFecharModal}
+
                 
                 />
             </div>
