@@ -14,6 +14,19 @@ const TabFluxo = () => {
 
 
     const COLUNAS_LISTA = [
+      {
+        title: "ID",
+        key: "id",
+        dataIndex: "id",
+      },
+      {
+        title: "Nome",
+        dataIndex: "nome",
+        key: "nome",
+      }
+    ]
+
+    const COLUNAS_MODAL = [
         {
           title: "ID",
           key: "id",
@@ -36,11 +49,16 @@ const TabFluxo = () => {
     ];
     
     const {hasProjeto} = useFormContext()
+    const [isBotaoExcluirVisivel, setIsBotaoExcluirVisivel] = useState(true)
     const [isModalVisivel, setIsModalVisivel] = useState(false)
     const [fluxo, setFluxo] = useState({})
 
     const handleExibirModal = () => setIsModalVisivel(true)
     const handleFecharModal = () => setIsModalVisivel(false)
+
+    const handleCliqueLinha = () => {
+      setIsBotaoExcluirVisivel(false)
+    }
 
     const handleBuscarFluxo = async (parametro) => {
        try {
@@ -74,13 +92,17 @@ const TabFluxo = () => {
 
     const handleBuscarFluxoProjeto = async () => {
       try {
-        const resposta = await buscarFluxoPeloId(hasProjeto.fluxo)
 
-        if (resposta.status === 200){
-          setFluxo(resposta.data)
-        } else {
-          NotificationManager.error('Falha ao buscar os dados do fluxo')
+        if (hasProjeto.fluxo !== null) {
+          const resposta = await buscarFluxoPeloId(hasProjeto.fluxo)
+
+          if (resposta.status === 200){
+            setFluxo(resposta.data)
+          } else {
+            NotificationManager.error('Falha ao buscar os dados do fluxo')
+          }
         }
+  
       } catch (error) {
         NotificationManager.error("Ocorreu um problema durante a operação, contate o suporte!")
       }
@@ -91,6 +113,21 @@ const TabFluxo = () => {
         handleBuscarFluxoProjeto();
       }
     }, [hasProjeto]);
+
+    const handleDesvincularFluxo = async () => {
+      try {
+        const resposta = await atualizarFluxoProjeto(0, hasProjeto.id)
+
+        if (resposta.status === 200){
+          NotificationManager.success("Fluxo desvinculado do projeto com sucesso!")
+          setFluxo([])
+        } else {
+          NotificationManager.error('Falha ao desvincular o fluxo do projeto, contate o suporte!')
+        }
+      } catch (error) {
+        NotificationManager.error("Ocorreu um problema durante a operação, contate o suporte!")
+      }
+    }
   
     return (
         <div> 
@@ -103,14 +140,14 @@ const TabFluxo = () => {
                 style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
             >
                 <BotaoAdicionar funcao={handleExibirModal}/>
-                <BotaoExcluir />
+                <BotaoExcluir funcao={handleDesvincularFluxo} status={isBotaoExcluirVisivel}/>
             </div>
             <div>
-                <ListaDados colunas={COLUNAS_LISTA} dados={[fluxo]}/>
+                <ListaDados colunas={COLUNAS_LISTA} dados={[fluxo]} onClickRow={handleCliqueLinha}/>
 
                 <ModalDeBusca 
                   titulo="BUSCAR FLUXO"
-                  colunas={COLUNAS_LISTA}
+                  colunas={COLUNAS_MODAL}
                   status={isModalVisivel}
                   label="Buscar fluxo"
                   name="nomeFluxo"

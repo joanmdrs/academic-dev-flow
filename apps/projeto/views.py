@@ -70,15 +70,19 @@ class AtualizarFluxoProjetoView(APIView):
             fluxo_id = request.data.get('fluxo_id', None)
 
             if fluxo_id is not None:
-                fluxo = get_object_or_404(Fluxo, id=fluxo_id)
+                if fluxo_id == 0:
+                    projeto.fluxo = None
+                else:
+                    fluxo = get_object_or_404(Fluxo, id=fluxo_id)
+                    projeto.fluxo = fluxo
 
-                projeto.fluxo = fluxo
                 projeto.save()
 
                 serializer = ProjetoSerializer(projeto)
                 return Response(serializer.data, status=status.HTTP_200_OK)
+            
             else:
-                return Response({'error': 'O ID do novo fluxo não foi fornecido.'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': 'O ID do novo fluxo não foi fornecido ou é inválido.'}, status=status.HTTP_400_BAD_REQUEST)
 
         except Projeto.DoesNotExist:
             return Response({'error': 'Projeto não encontrado.'}, status=status.HTTP_404_NOT_FOUND)
