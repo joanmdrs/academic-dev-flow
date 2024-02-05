@@ -57,6 +57,7 @@ const TabEquipe = () => {
   const [alunosVisiveis, setAlunosVisiveis] = useState(false);
   const [professoresVisiveis, setProfessoresVisiveis] = useState(false);
   const [membrosExcluir, setMembrosExcluir] = useState([])
+  const [carregando, setCarregando] = useState(false);
 
   const handleExibirModal = () => setIsModalVisivel(true);
   const handleFecharModal = () => setIsModalVisivel(false);
@@ -142,9 +143,13 @@ const TabEquipe = () => {
   };
 
   useEffect(() => {
-    if (hasProjeto) {
-      handleListarMembrosPorProjeto();
-    }
+    const fetchData = async () => {
+      if (hasProjeto) {
+        await handleListarMembrosPorProjeto();
+      }
+    };
+
+    fetchData();
   }, [hasProjeto]);
 
   const handleSelecionarMembros = async (dados) => {

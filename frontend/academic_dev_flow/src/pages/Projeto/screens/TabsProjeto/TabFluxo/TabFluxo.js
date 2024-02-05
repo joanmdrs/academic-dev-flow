@@ -109,9 +109,13 @@ const TabFluxo = () => {
     }
 
     useEffect(() => {
-      if (hasProjeto) {
-        handleBuscarFluxoProjeto();
-      }
+      const fetchData = async () => {
+        if (hasProjeto) {
+          await handleBuscarFluxoProjeto();
+        }
+      };
+  
+      fetchData();
     }, [hasProjeto]);
 
     const handleDesvincularFluxo = async () => {

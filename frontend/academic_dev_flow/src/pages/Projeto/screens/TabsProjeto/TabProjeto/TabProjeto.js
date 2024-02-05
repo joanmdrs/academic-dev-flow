@@ -7,12 +7,12 @@ import { useFormContext } from "../../../context/Provider/Provider";
 
 const { Option } = Select;
 
-const TabProjeto = ({ valoresIniciais, onSubmit }) => {
+const TabProjeto = ({ onSubmit }) => {
 
     const {hasProjeto, setHasProjeto} = useFormContext()
-    const [estadoInterno, setEstadoInterno] = useState(valoresIniciais);
     const [carregando, setCarregando] = useState(false);
 
+    const [valoresIniciais, setValoresIniciais] = useState({})
 
     const [form] = Form.useForm();
 
@@ -21,7 +21,7 @@ const TabProjeto = ({ valoresIniciais, onSubmit }) => {
         try {
             setCarregando(true);
             await new Promise((resolve) => setTimeout(resolve, 1500));
-            setEstadoInterno(valoresIniciais);
+            handleAlterarCampos(hasProjeto)
         } catch (error) {
         } finally {
             setCarregando(false);
@@ -29,7 +29,11 @@ const TabProjeto = ({ valoresIniciais, onSubmit }) => {
         };
 
         fetchData();
-    }, [valoresIniciais]);
+    }, [hasProjeto]);
+
+    const handleAlterarCampos = (dados) => {
+        form.setFieldsValue(dados)
+    }
 
     const handleSubmeterForm = async () => {
         const dados = form.getFieldsValue()
@@ -45,7 +49,7 @@ const TabProjeto = ({ valoresIniciais, onSubmit }) => {
                             indicator={
                             <LoadingOutlined
                                 style={{
-                                fontSize: 48, // Ajuste o tamanho do spinner aqui
+                                fontSize: 48,
                                 display: "flex",
                                 justifyContent: "center",
                                 alignItems: "center",
@@ -62,7 +66,7 @@ const TabProjeto = ({ valoresIniciais, onSubmit }) => {
                         layout="horizontal"
                         style={{marginTop: "20px"}}
                         className="box"
-                        initialValues={estadoInterno}
+                        initialValues={valoresIniciais}
                     
                     >
                         <Form.Item label="Nome" name="nome">

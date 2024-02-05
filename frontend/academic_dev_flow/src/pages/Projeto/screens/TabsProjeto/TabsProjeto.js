@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./TabsProjeto.css";
 import Titulo from "../../../../components/Titulo/Titulo";
-import { Tabs } from "antd";
+import { Spin, Tabs } from "antd";
 import Item from "antd/es/list/Item";
 import TabProjeto from "./TabProjeto/TabProjeto";
 import TabEquipe from "./TabEquipe/TabEquipe";
@@ -13,6 +13,7 @@ import { useFormContext } from "../../context/Provider/Provider";
 import ModalDeBusca from "../../../../components/Modals/ModalDeBusca/ModalDeBusca";
 import { atualizarProjeto, buscarProjetoPeloNome, criarProjeto } from "../../../../services/projeto_service";
 import { NotificationManager } from "react-notifications";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const TabsProjeto = () => {
   
@@ -51,6 +52,7 @@ const TabsProjeto = () => {
     const [isBotaoAdicionarVisivel, setIsBotaoAdicionarVisivel] = useState(false)
     const [isBotaoExcluirVisivel, setIsBotaoExcluirVisivel] = useState(true)
     const [isBotaoBuscarVisivel, setIsBotaoBuscarVisivel] = useState(false)
+    const [carregando, setCarregando] = useState(false);
 
     const handleExibirModal = () => setIsModalVisivel(true)
     const handleFecharModal = () => setIsModalVisivel(false)
@@ -63,7 +65,6 @@ const TabsProjeto = () => {
       setAcaoForm('criar')
       setHasProjeto({})
       setValoresIniciais({})
-
     }
 
     const handleCliqueLinha = (record) => {
@@ -75,7 +76,6 @@ const TabsProjeto = () => {
     }
 
     const handleCriarProjeto = async (dados) => {
-      
       try {
         const resposta = await criarProjeto(dados)
         
@@ -124,6 +124,19 @@ const TabsProjeto = () => {
       } 
     }
 
+    useEffect(() => {
+      const fetchData = async () => {
+      try {
+          setCarregando(true);
+          await new Promise((resolve) => setTimeout(resolve, 1500));
+      } catch (error) {
+      } finally {
+          setCarregando(false);
+      }
+      };
+
+      fetchData();
+  }, [hasProjeto]);
 
     return ( 
             <div className="component-tabs-projeto">
@@ -151,31 +164,56 @@ const TabsProjeto = () => {
               />
 
               {isTabsAtivo && 
-              
-              <div className="form-box"> 
-                <Tabs
-                  size="large"
-                  indicator={{
-                    align: "center"
-                  }}
-                  style={{padding: "20px"}}
-                  activeKey={current} 
-                  onChange={setCurrent} 
-                  className="tabs-projeto"
-                > 
-                  <Item tab="Projeto" key="1">
-                    <TabProjeto valoresIniciais={valoresIniciais} onSubmit={handleSalvarProjeto}/>
-                  </Item>
-                  <Item tab="Equipe" key="2" className="tab-item">
-                    <TabEquipe />
-                  </Item>
-                  <Item tab="Fluxo" key="3" className="tab-item">
-                      <TabFluxo />
-                  </Item>
-                </Tabs>
-              </div>
-}
-            </div>    
+                <React.Fragment>
+                    { carregando ? 
+
+                        (<div style={{ textAlign: "center", padding: "20px" }}>
+                            <Spin
+                                indicator={
+                                <LoadingOutlined
+                                    style={{
+                                    fontSize: 48,
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    }}
+                                    spin
+                                />
+                                }
+                            />
+                          </div>
+                        )
+
+                        : (
+                          <div className="form-box">
+                            <Tabs
+                              size="large"
+                              indicator={{
+                                align: "center"
+                              }}
+                              style={{padding: "20px"}}
+                              activeKey={current} 
+                              onChange={setCurrent} 
+                              className="tabs-projeto"
+                            > 
+                              <Item tab="Projeto" key="1">
+                                <TabProjeto valoresIniciais={valoresIniciais} onSubmit={handleSalvarProjeto}/>
+                              </Item>
+                              <Item tab="Equipe" key="2" className="tab-item">
+                                <TabEquipe />
+                              </Item>
+                              <Item tab="Fluxo" key="3" className="tab-item">
+                                  <TabFluxo />
+                              </Item>
+                            </Tabs>
+                          </div>
+                        )
+                      
+                    }
+                </React.Fragment>
+                
+              }
+          </div>    
             
     );
   }
