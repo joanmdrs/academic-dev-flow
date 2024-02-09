@@ -1,15 +1,8 @@
 import api from "./api";
 
 export const criarProjeto = (dados) => {
-    const dados_projeto = {
-        nome: dados.nome,
-        descricao: dados.descricao,
-        status: dados.status,
-        data_inicio: (dados.data_inicio).format("YYYY-MM-DD"),
-        data_fim: (dados.data_fim).format("YYYY-MM-DD"),
-    }
     
-    const resposta  = api.post("/projeto/cadastrar/", dados_projeto)
+    const resposta  = api.post("/projeto/cadastrar/", dados)
     return resposta;
 }
 
@@ -25,5 +18,10 @@ export const excluirProjeto = (id) => {
 
 export const atualizarProjeto = (dados, id) => {
     const resposta = api.patch(`/projeto/atualizar/${encodeURIComponent(id)}/`, dados);
+    return resposta
+}
+
+export const atualizarFluxoProjeto = (idFluxo, idProjeto ) => {
+    const resposta = api.patch(`/projeto/atualizar/fluxo/${encodeURIComponent(idProjeto)}/`, { fluxo_id: idFluxo})
     return resposta
 }

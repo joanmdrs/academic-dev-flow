@@ -19,9 +19,17 @@ code {
   flex-direction: column;
   justify-content: flex-start !important;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  margin-left: 20px;
-  margin-right: 20px;
-  margin-bottom: 20px;
+  border-radius: 5px;
+  padding: 20px;
+  margin: 20px;
+  background-color: white;
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start !important;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   border-radius: 5px;
   padding: 20px;
   background-color: white;
@@ -46,5 +54,10 @@ code {
   width: 100%;
   display: flex;
   justify-content: space-between;
+}
+
+.group-buttons {
+  display: flex;
+  gap: 10px;
   padding: 20px;
 }

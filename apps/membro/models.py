@@ -8,6 +8,8 @@ class Membro(models.Model):
     sexo = models.CharField(max_length=20)
     telefone = models.CharField(max_length=20)
     email = models.EmailField(max_length=200)
+    grupo = models.CharField(max_length=50, null=True, default='à definir')
+
     
 
 

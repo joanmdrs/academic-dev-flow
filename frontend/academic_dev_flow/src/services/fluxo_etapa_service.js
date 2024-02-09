@@ -2,7 +2,7 @@ import api from "./api";
 
 export const vincularEtapaFluxo = async (dados) => {
 
-    const resposta = await api.post("fluxo_etapa/cadastrar/", dados)
+    const resposta = await api.post("fluxo_etapa/cadastrar/", {etapas: dados})
     return resposta 
 }
 
@@ -16,12 +16,17 @@ export const listarEtapasPorFluxo = async (idFluxo) => {
     return resposta
 }
 
-export const removerEtapaFluxo = async (id) => {
-    const resposta = await api.delete(`fluxo_etapa/excluir/individual/${encodeURIComponent(id)}/`)
+export const excluirFluxoEtapaOne = async (id) => {
+    const resposta = await api.delete(`fluxo_etapa/excluir/one/${encodeURIComponent(id)}/`)
     return resposta
 }
 
-export const removerVinculoEtapasFluxo = async (idFluxo) => {
-    const resposta = await api.delete(`fluxo_etapa/excluir/${encodeURIComponent(idFluxo)}/`)
+export const excluirFluxoEtapaMany = async (idFluxo, listaEtapas) => {
+    const ids_etapas = listaEtapas.map(fluxoEtapa => fluxoEtapa.etapa);
+
+    console.log(ids_etapas)
+    const resposta = await api.delete(`fluxo_etapa/excluir/many/${encodeURIComponent(idFluxo)}/`, {
+        data: { ids_etapas: ids_etapas },
+    });
     return resposta
 }

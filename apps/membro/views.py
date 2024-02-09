@@ -21,7 +21,30 @@ class CadastrarMembroView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class BuscarMembroPorGrupoView(APIView):
+    def get(self, request):
+        try:
+            nome = request.query_params.get('nome', None)
+            grupo = request.query_params.get('grupo', None)
 
+            if grupo not in ['aluno', 'professor']:
+                return Response({"error": "Grupo inválido"}, status=status.HTTP_400_BAD_REQUEST)
+
+            membros = Membro.objects.all()
+
+            if nome:
+                membros = membros.filter(nome__icontains=nome)
+
+            if grupo:
+                membros = membros.filter(grupo=grupo)
+
+            serializer = MembroSerializer(membros, many=True)
+
+            return Response({'message': 'Membros encontrados com sucesso.', 'results': serializer.data}, status=status.HTTP_200_OK)
+        
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
 class BuscarMembrosPorNomeView(APIView):
     def get(self, request):
         try:
@@ -42,6 +65,15 @@ class BuscarMembrosPorNomeView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+class BuscarMembroPorIdView(APIView):
+    def get(self, request, id):
+        try:
+            membro = Membro.objects.get(pk=id)
+            serializer = MembroSerializer(membro, many=False)
+            
+            return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 class ExcluirMembroView(APIView):
     def delete(self, request, id):
@@ -72,5 +104,16 @@ class AtualizarMembroView(APIView):
             
             else: 
                 return JsonResponse({'error': 'Dados inválidos'}, status=400)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class ListarMembrosView(APIView): 
+    def get(self, request):
+        try: 
+            membros = Membro.objects.all()
+            
+            serializer = MembroSerializer(membros, many=True)
+            return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})   
+        
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

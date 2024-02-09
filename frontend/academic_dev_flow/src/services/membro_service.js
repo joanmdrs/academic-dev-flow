@@ -13,7 +13,8 @@ export const criarMembro = async (dados) => {
         data_nascimento: dataFormatada,
         sexo: dados.sexo,
         telefone: dados.telefone,
-        email: dados.email
+        email: dados.email,
+        grupo: dados.grupo
     }
 
     const resposta = await api.post('/membro/cadastrar/', dados_membro)
@@ -23,6 +24,16 @@ export const criarMembro = async (dados) => {
 export const buscarMembroPeloNome = async (dado) => {
     const resposta = await api.get(`/membro/buscar/?name=${encodeURIComponent(dado)}`)
     return resposta 
+}
+
+export const buscarMembroPorGrupoENome = async (nome, grupo) => {
+    const resposta = await api.get(`membro/buscar/grupo/?nome=${encodeURIComponent(nome)}&grupo=${encodeURIComponent(grupo)}`)
+    return resposta
+}
+
+export const buscarMembroPeloId = async (parametro) => {
+    const resposta = await api.get(`membro/buscar/${encodeURIComponent(parametro)}/`)
+    return resposta
 }
 
 export const excluirMembro = async (id) => {
@@ -42,7 +53,8 @@ export const atualizarMembro = async (dados, id) => {
         data_nascimento: dataFormatada,
         sexo: dados.sexo,
         telefone: dados.telefone,
-        email: dados.email
+        email: dados.email,
+        grupo: dados.grupo
     }
 
     const resposta = await api.patch(`/membro/atualizar/${encodeURIComponent(id)}/`, dados_membro)

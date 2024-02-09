@@ -5,6 +5,7 @@ from django.http import HttpResponseNotAllowed, JsonResponse
 from .models import Projeto
 from .serializers import ProjetoSerializer
 from django.shortcuts import get_object_or_404
+from apps.fluxo.models import Fluxo
 
 class CadastrarProjetoView(APIView):
     def post(self, request):
@@ -59,5 +60,31 @@ class AtualizarProjetoView(APIView):
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
                 return JsonResponse({'error': 'Dados inválidos'}, status=400)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class AtualizarFluxoProjetoView(APIView):
+    def patch(self, request, id):
+        try:
+            projeto = Projeto.objects.get(pk=id)
+            fluxo_id = request.data.get('fluxo_id', None)
+
+            if fluxo_id is not None:
+                if fluxo_id == 0:
+                    projeto.fluxo = None
+                else:
+                    fluxo = get_object_or_404(Fluxo, id=fluxo_id)
+                    projeto.fluxo = fluxo
+
+                projeto.save()
+
+                serializer = ProjetoSerializer(projeto)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            else:
+                return Response({'error': 'O ID do novo fluxo não foi fornecido ou é inválido.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        except Projeto.DoesNotExist:
+            return Response({'error': 'Projeto não encontrado.'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
