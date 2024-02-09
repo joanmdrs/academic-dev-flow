@@ -57,7 +57,6 @@ const TabEquipe = () => {
   const [alunosVisiveis, setAlunosVisiveis] = useState(false);
   const [professoresVisiveis, setProfessoresVisiveis] = useState(false);
   const [membrosExcluir, setMembrosExcluir] = useState([])
-  const [carregando, setCarregando] = useState(false);
 
   const handleExibirModal = () => setIsModalVisivel(true);
   const handleFecharModal = () => setIsModalVisivel(false);
@@ -163,10 +162,10 @@ const TabEquipe = () => {
       const resposta = await criarMembroProjeto(dadosEnviar);
 
       if (resposta.status === 200) {
-        NotificationManager.success("Alunos vinculados ao projeto com sucesso !");
+        NotificationManager.success("Membro(s) vinculado(s) ao projeto com sucesso !");
         await handleListarMembrosPorProjeto();
       } else {
-        NotificationManager.error("Falha ao vincular os alunos ao projeto, contate o suporte!");
+        NotificationManager.error("Falha ao vincular o(s) membro(s) ao projeto, contate o suporte!");
       }
     } catch (error) {
       console.log(error);

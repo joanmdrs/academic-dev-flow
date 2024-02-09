@@ -52,6 +52,7 @@ const TabFluxo = () => {
     const [isBotaoExcluirVisivel, setIsBotaoExcluirVisivel] = useState(true)
     const [isModalVisivel, setIsModalVisivel] = useState(false)
     const [fluxo, setFluxo] = useState({})
+    const [isVisivel, setIsVisivel] = useState(false)
 
     const handleExibirModal = () => setIsModalVisivel(true)
     const handleFecharModal = () => setIsModalVisivel(false)
@@ -135,32 +136,41 @@ const TabFluxo = () => {
   
     return (
         <div> 
-            <div className="box">
-                <h4> VINCULAR FLUXO</h4>
-            </div>
+          <div 
+            style={{
+              cursor: "pointer",
+              padding: "20px",
+              border: "1px solid #d9d9d9",
+            }}
+            onClick={() => setIsVisivel(!isVisivel)}
+          >
+            <h4> VINCULAR FLUXO</h4>
+          </div>
 
-            <div
-                className="group-buttons"
-                style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
-            >
-                <BotaoAdicionar funcao={handleExibirModal}/>
-                <BotaoExcluir funcao={handleDesvincularFluxo} status={isBotaoExcluirVisivel}/>
-            </div>
-            <div>
-                <ListaDados colunas={COLUNAS_LISTA} dados={[fluxo]} onClickRow={handleCliqueLinha}/>
+          { isVisivel && 
+            <React.Fragment>
+              <div
+                  className="group-buttons"
+                  style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
+              >
+                  <BotaoAdicionar funcao={handleExibirModal}/>
+                  <BotaoExcluir funcao={handleDesvincularFluxo} status={isBotaoExcluirVisivel}/>
+              </div>
+              <div>
+                  <ListaDados colunas={COLUNAS_LISTA} dados={[fluxo]} onClickRow={handleCliqueLinha}/>
 
-                <ModalDeBusca 
-                  titulo="BUSCAR FLUXO"
-                  colunas={COLUNAS_MODAL}
-                  status={isModalVisivel}
-                  label="Buscar fluxo"
-                  name="nomeFluxo"
-                  onOk={handleBuscarFluxo}
-                  onCancel={handleFecharModal}
-
-                
-                />
-            </div>
+                  <ModalDeBusca 
+                    titulo="BUSCAR FLUXO"
+                    colunas={COLUNAS_MODAL}
+                    status={isModalVisivel}
+                    label="Buscar fluxo"
+                    name="nomeFluxo"
+                    onOk={handleBuscarFluxo}
+                    onCancel={handleFecharModal}
+                  />
+              </div>
+            </React.Fragment>
+          }          
         </div>
     )
 
