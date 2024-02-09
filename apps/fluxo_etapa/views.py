@@ -9,7 +9,8 @@ from .serializers import FluxoEtapaSerializer
 class CadastrarFluxoEtapaView(APIView):
     def post(self, request):
         try:
-            serializer = FluxoEtapaSerializer(data=request.data)
+            etapas_data = request.data.get('etapas', [])
+            serializer = FluxoEtapaSerializer(data=etapas_data, many=True)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
@@ -53,14 +54,16 @@ class AtualizarEtapaFluxoView(APIView):
              return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
 
-class ExcluirEtapaFluxoView(APIView):
+class ExcluirEtapaFluxoOneView(APIView):
     def delete(self, request, id):
         try:
             fluxoEtapa = FluxoEtapa.objects.get(pk=id)
             
             if fluxoEtapa is not None: 
                 fluxoEtapa.delete()
-                return Response({'detail': 'Relacionamento entre fluxo e etapa excluído com sucesso!'}, status=status.HTTP_204_NO_CONTENT)
+                return Response(
+                    {'detail': 'Relacionamento entre fluxo e etapa excluído com sucesso!'}, 
+                    status=status.HTTP_204_NO_CONTENT)
             
             else: 
                 return Response({'error': 'Objeto não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
@@ -68,19 +71,21 @@ class ExcluirEtapaFluxoView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)  
         
-class ExcluirFluxoEtapasView(APIView):
+class ExcluirEtapaFluxoManyView(APIView):
     def delete(self, request, idFluxo):
         try:
-            objetos = FluxoEtapa.objects.filter(fluxo=idFluxo)
+            ids_etapas = request.data.get('ids_etapas', [])
+
+            if not ids_etapas:
+                return Response({'error': 'A lista de IDs de etapas está vazia!'}, status=status.HTTP_400_BAD_REQUEST)
+
+            objetos = FluxoEtapa.objects.filter(fluxo=idFluxo, etapa__in=ids_etapas)
 
             if objetos.exists():
                 objetos.delete()
-
                 return Response({'message': 'Objetos excluídos com sucesso!'}, status=status.HTTP_204_NO_CONTENT)
             else:
                 return Response({'error': 'Nenhum objeto encontrado para exclusão!'}, status=status.HTTP_404_NOT_FOUND)
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-

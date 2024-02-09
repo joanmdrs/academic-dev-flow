@@ -7,7 +7,7 @@ import { buscarMembroPeloId, buscarMembroPorGrupoENome } from "../../../../../se
 import { NotificationManager } from "react-notifications";
 import { criarMembroProjeto, excluirMembroProjetoMany, excluirMembroProjetoOne, listarMembrosPorProjeto } from "../../../../../services/membro_projeto_service";
 import { useFormContext } from "../../../context/Provider/Provider";
-import ModalSelecionarObjetos from "../../../components/ModalSelecionarObjetos/ModalSelecionarObjetos";
+import ModalSelecionarObjetos from "../../../../../components/Modals/ModalSelecionarObjetos/ModalSelecionarObjetos";
 
 const TabEquipe = () => {
 

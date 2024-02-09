@@ -6,7 +6,7 @@ import ListaDados from "../../../../../components/Listas/ListaDados/ListaDados";
 import ModalDeBusca from "../../../../../components/Modals/ModalDeBusca/ModalDeBusca";
 import { buscarFluxoPeloId, buscarFluxoPeloNome } from "../../../../../services/fluxo_service";
 import { NotificationManager } from "react-notifications";
-import ModalSelecionarObjetos from "../../../components/ModalSelecionarObjetos/ModalSelecionarObjetos";
+import ModalSelecionarObjetos from "../../../../../components/Modals/ModalSelecionarObjetos/ModalSelecionarObjetos";
 import { atualizarFluxoProjeto } from "../../../../../services/projeto_service";
 import { useFormContext } from "../../../context/Provider/Provider";
 
