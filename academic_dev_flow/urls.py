@@ -22,10 +22,10 @@ urlpatterns = [
     path('projeto/', include('apps.projeto.urls', namespace='projeto')),
     path('fluxo/', include('apps.fluxo.urls', namespace='fluxo')),
     path('etapa/', include('apps.etapa.urls', namespace='etapa')),
-    path('fluxo_etapa/', include('apps.fluxo_etapa.urls', namespace='fluxo_etapa')),
+    #path('fluxo_etapa/', include('apps.fluxo_etapa.urls', namespace='fluxo_etapa')),
     path('membro/', include('apps.membro.urls', namespace='membro')),
-    path('membro_projeto/', include('apps.membro_projeto.urls', namespace='membro_projeto')),
-    path('usuario/', include('apps.usuario.urls', namespace='usuario')),
+    #path('membro_projeto/', include('apps.membro_projeto.urls', namespace='membro_projeto')),
+    #path('usuario/', include('apps.usuario.urls', namespace='usuario')),
     path('artefato/', include('apps.artefato.urls', namespace='artefato'))
 ]
 

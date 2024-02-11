@@ -4,7 +4,6 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.http import HttpResponseNotAllowed, JsonResponse
 from .models import Membro
-from apps.usuario.models import Usuario
 from .serializers import MembroSerializer
 from django.shortcuts import get_object_or_404
 
