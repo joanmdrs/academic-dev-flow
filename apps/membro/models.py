@@ -11,6 +11,3 @@ class Membro(models.Model):
     email = models.EmailField(max_length=200)
     grupo = models.CharField(max_length=100, blank=True, null=True)
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, null=True)
-
-
-    

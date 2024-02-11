@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'apps.artefato',
     'apps.usuario',
     'apps.membro', 
-    'apps.membro_projeto'
+    'apps.membro_projeto',
+    'apps.auth',
 ]
 
 MIDDLEWARE = [
