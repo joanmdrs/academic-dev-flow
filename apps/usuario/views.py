@@ -5,19 +5,28 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from .serializers import UsuarioSerializer
 from .models import Usuario
+from django.contrib.auth.models import Group
 
 class CadastrarUsuarioView(APIView):
     def post(self, request):
         try:
-            serializer = UsuarioSerializer(data=request.data)
-            
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
+            grupo_nome = request.data.get('grupo', None)
+            usuario_serializer = UsuarioSerializer(data=request.data)
+
+            if usuario_serializer.is_valid(raise_exception=True):
+                usuario = usuario_serializer.save()
+
+                if grupo_nome:
+                    grupo = Group.objects.get(name=grupo_nome)
+                    usuario.groups.add(grupo)
+
+                return Response(usuario_serializer.data, status=status.HTTP_201_CREATED)
+
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'Erro ao cadastrar usuário'}, status=status.HTTP_400_BAD_REQUEST)
+
     
 class BuscarUsuarioPorIdView(APIView):
     def get(self, request, id):

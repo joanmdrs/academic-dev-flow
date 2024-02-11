@@ -9,10 +9,8 @@ class Membro(models.Model):
     sexo = models.CharField(max_length=20)
     telefone = models.CharField(max_length=20)
     email = models.EmailField(max_length=200)
-    usuario = models.OneToOneField(Usuario, on_delete=models.SET_NULL, related_name='usuario', null=True, blank=True)
-
-    
-
+    grupo = models.CharField(max_length=100, blank=True, null=True)
+    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, null=True)
 
 
     
