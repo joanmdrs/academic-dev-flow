@@ -15,11 +15,8 @@ function App() {
       minHeight: '100vh',
     }}>
       <NotificationContainer />
-      <MyMenu/>
-      <Layout>
-        <MyHeader/>
-        <Routes/>
-      </Layout>
+      
+      <Routes/>
     </Layout>
 );
    

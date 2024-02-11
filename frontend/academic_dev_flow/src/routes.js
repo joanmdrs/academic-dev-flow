@@ -1,25 +1,23 @@
 import React from 'react';
 import { Routes as Switch, Route} from 'react-router-dom';
-import Home from './pages/Home/Home';
-import PageProjeto from './pages/Projeto/PageProjeto';
-import PageMembro from './pages/Membro/PageMembro';
-import PageArtefato from './pages/Artefato/PageArtefato';
-import PageEtapa from './pages/Etapa/PageEtapa';
-import PageFluxo from './pages/Fluxo/PageFluxo';
-import TabsProjeto from './pages/Projeto/screens/TabsProjeto/TabsProjeto';
-import PagePrincipal from './pages/Projeto';
+import Home from './pages/home/Home';
+import Projeto from './pages/Projeto';
+import Etapa from './pages/Etapa';
+import Membro from './pages/Membro';
+import Artefato from './pages/Artefato';
+import LoginForm from './pages/Auth/Login';
 
 function Routes() {
   return (
         <Switch>
+            <Route Component={LoginForm} path="/login" exact/>
             <Route Component={Home} path='/' exact/>
             <Route Component={PageProjeto} path='/projetos/antigo' exact/>
-            <Route Component={PagePrincipal} path='/projetos/novo' exact/>
-        
+            <Route Component={Projeto} path='/projetos/novo' exact/>
             <Route Component={PageFluxo} path='/fluxos/gerenciar' exact/>
-            <Route Component={PageEtapa} path='/etapas' exact/>
-            <Route Component={PageMembro} path='/membros' exact/>
-            <Route Component={PageArtefato} path='/artefatos' exact/>
+            <Route Component={Etapa} path='/etapas' exact/>
+            <Route Component={Membro} path='/membros' exact/>
+            <Route Component={Artefato} path='/artefatos' exact/>
         </Switch>
         
 
