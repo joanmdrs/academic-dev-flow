@@ -6,6 +6,8 @@ import Etapa from './pages/Etapa';
 import Membro from './pages/Membro';
 import Artefato from './pages/Artefato';
 import LoginForm from './pages/Auth/Login';
+import PageFluxo from './pages/Fluxo/PageFluxo';
+import PageProjeto from './pages/Projeto/PageProjeto';
 
 function Routes() {
   return (
