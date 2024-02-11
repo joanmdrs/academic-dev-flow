@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'apps.fluxo_etapa',
     'apps.membro',
     'apps.membro_projeto',
-    'apps.artefato'
+    'apps.artefato',
+    'apps.usuario' 
 ]
 
 MIDDLEWARE = [
@@ -66,7 +67,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000", 
 ]
 
-#AUTH_USER_MODEL = 'usuario.Usuario'
+AUTH_USER_MODEL = 'usuario.Usuario'
 
 
 APPEND_SLASH = False
