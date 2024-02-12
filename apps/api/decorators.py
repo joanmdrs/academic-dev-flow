@@ -27,3 +27,4 @@ def jwt_required_and_in_group(group_name):
         return _wrapped_view
 
     return decorator
+

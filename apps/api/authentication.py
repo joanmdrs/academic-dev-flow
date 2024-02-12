@@ -57,3 +57,4 @@ class TokenService:
 
         token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
         return token
+
