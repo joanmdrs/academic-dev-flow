@@ -48,8 +48,8 @@ class TokenService:
         Gera um token JWT para o usuário.
         """
         payload = {
-            'user_id': user.id,
             'username': user.username,
+            'group': user.group,
             'iat': datetime.datetime.utcnow(),
             'nbf': datetime.datetime.utcnow() + datetime.timedelta(minutes=-5),
             'exp': datetime.datetime.utcnow() + datetime.timedelta(days=7)
