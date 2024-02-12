@@ -7,14 +7,13 @@ from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.permissions import AllowAny
 from django.contrib.auth.models import User
 
+@authentication_classes([])
+@permission_classes([AllowAny])
 class LoginView(APIView):
-    @authentication_classes([])
-    @permission_classes([AllowAny])
     def post(self, request):
         try:
             username = request.data.get('username')
             password = request.data.get('password')
-            print(f'Username: {username}, Password: {password}')
 
             user = authenticate(request, username=username, password=password)
             

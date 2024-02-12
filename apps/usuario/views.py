@@ -8,25 +8,36 @@ from .models import Usuario
 from django.contrib.auth.models import Group
 
 class CadastrarUsuarioView(APIView):
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         try:
             grupo_nome = request.data.get('grupo', None)
             
             usuario_serializer = UsuarioSerializer(data=request.data)
 
             if usuario_serializer.is_valid(raise_exception=True):
-                usuario = usuario_serializer.save()
+                usuario_data = usuario_serializer.validated_data
+                user_created = Usuario.objects.create_user(
+                    username=usuario_data['username'],
+                    password=usuario_data['password'],
+                )
+
+                user_created.is_staff = True
+                user_created.is_superuser = False
+                user_created.save()
 
                 if grupo_nome:
                     grupo = Group.objects.get(name=grupo_nome)
-                    usuario.groups.add(grupo)
+                    user_created.groups.add(grupo)
 
-                return Response(usuario_serializer.data, status=status.HTTP_201_CREATED)
+                # Use o serializador para converter o objeto Usuario em um formato serializado
+                response_serializer = UsuarioSerializer(user_created)
+
+                # Retorne a resposta com os dados serializados
+                return Response(response_serializer.data, status=status.HTTP_201_CREATED)
 
         except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        return Response({'error': 'Erro ao cadastrar usuário'}, status=status.HTTP_400_BAD_REQUEST)
+            # Adicione logs ou imprima mensagens de erro
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     
 class BuscarUsuarioPorIdView(APIView):
