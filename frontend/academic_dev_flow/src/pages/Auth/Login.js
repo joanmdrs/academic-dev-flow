@@ -2,6 +2,7 @@ import React from 'react';
 import "./Login.css";
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Form, Input, Button } from 'antd';
+import { isExpired, decodeToken } from "react-jwt";
 import AuthService from '../../services/authService';
 
 const LoginForm = () => {
@@ -11,8 +12,12 @@ const LoginForm = () => {
     const password = values.password
     const result = await AuthService.login(username, password);
 
+    const token = localStorage.getItem('token');
+    const token_decoded = decodeToken(token);
+
     if (result.success) {
       console.log('Login successful:', result.data);
+      console.log(token_decoded)
     } else {
       console.error('Login failed:', result.error);
     }
