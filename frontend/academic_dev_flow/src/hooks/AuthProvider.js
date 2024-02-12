@@ -2,6 +2,7 @@ import { useContext, createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 import { decodeToken } from "react-jwt";
+import { NotificationManager } from "react-notifications";
 
 const AuthContext = createContext();
 
@@ -18,23 +19,24 @@ const AuthProvider = ({ children }) => {
 
     try {
       const response = await api.post("auth/login/", { username, password });
-        
-      if (response.statusText === "OK") {
-        const data = await response.data
+  
+      if (response.status === 200) {
+        const data = await response.data;
         localStorage.setItem("token", data.token);
-        setUser(data.user)
-        setToken(data.token)
-        
+        setUser(data.user);
+        setToken(data.token);
+        navigate("/");
+        NotificationManager.success("Login realizado com sucesso !");
         return { success: 'Login bem-sucedido' };
-
       } else {
-        throw new Error(response.message || 'Falha no login');
+        NotificationManager.error("Usuário/senha inválidos !");
       }
     } catch (err) {
       console.error('Erro durante o login:', err);
-      throw new Error('Falha no login. Tente novamente mais tarde.');
+      NotificationManager.error("Usuário/senha inválidos !");
     }
   };
+  
 
   const logOut = () => {
     setUser(null);

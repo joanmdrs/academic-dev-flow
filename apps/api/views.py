@@ -43,7 +43,7 @@ class LoginView(APIView):
                     'detail': 'Login bem-sucedido.',
                     }, status=status.HTTP_200_OK)
             else:
-                return Response({'error': 'Credenciais inválidas.'}, status=status.HTTP_401_UNAUTHORIZED)
+                return Response({'detail': 'Credenciais inválidas.'}, status=status.HTTP_401_UNAUTHORIZED)
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

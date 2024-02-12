@@ -8,12 +8,15 @@ import Artefato from './pages/Artefato';
 import LoginForm from './pages/Auth/Login';
 import PageFluxo from './pages/Fluxo/PageFluxo';
 import PageProjeto from './pages/Projeto/PageProjeto';
+import PrivateRoute from './router/PrivateRouter';
 
 function Routes() {
   return (
-        <Switch>
+        <Switch>            
             <Route Component={LoginForm} path="/login" exact/>
-            <Route Component={Home} path='/' exact/>
+            <Route Component={PrivateRoute}>
+              <Route Component={Home} path='/' exact/>
+            </Route>
             <Route Component={PageProjeto} path='/projetos/antigo' exact/>
             <Route Component={Projeto} path='/projetos/novo' exact/>
             <Route Component={PageFluxo} path='/fluxos/gerenciar' exact/>

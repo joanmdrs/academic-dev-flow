@@ -10,11 +10,11 @@ const LoginForm = () => {
   const {loginAction} = useAuth();
 
   const handleLogin = async (values) => {  
+
     const username = values.username
     const password = values.password
     try {
-      const result = await loginAction(username, password);
-
+      await loginAction(username, password);
     } catch (error) {
       console.error('Erro durante o login:', error);
     }
