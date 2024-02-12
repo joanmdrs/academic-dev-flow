@@ -1,5 +1,5 @@
 import jwt
-import datetime
+from datetime import datetime, timedelta
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from rest_framework.authentication import BaseAuthentication
@@ -41,20 +41,21 @@ class JSONWebTokenAuthentication(BaseAuthentication):
     def authenticate_header(self, request):
         return 'Bearer'
 
+
 class TokenService:
     @staticmethod
-    def generate_token(user):
-        """
-        Gera um token JWT para o usuário.
-        """
+    def generate_token(user, additional_data=None):
         payload = {
+            'user_id': user.id,
             'username': user.username,
-            'group': user.group,
-            'iat': datetime.datetime.utcnow(),
-            'nbf': datetime.datetime.utcnow() + datetime.timedelta(minutes=-5),
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=7)
+            'exp': datetime.utcnow() + timedelta(days=1),  # Define a expiração para 1 dia
         }
 
-        token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
+        # Adiciona informações adicionais (grupos, por exemplo)
+        if additional_data:
+            payload.update(additional_data)
+
+        token = jwt.encode(payload, 'your_secret_key', algorithm='HS256').decode('utf-8')
+
         return token
 
