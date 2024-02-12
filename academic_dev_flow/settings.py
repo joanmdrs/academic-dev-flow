@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     'apps.usuario',
     'apps.membro', 
     'apps.membro_projeto',
-    'apps.myauth',
+    'apps.api',
 ]
 
 MIDDLEWARE = [
@@ -64,6 +64,8 @@ APPEND_SLASH = False
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
+        'apps.api.authentication.JSONWebTokenAuthentication',
+
     ),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
