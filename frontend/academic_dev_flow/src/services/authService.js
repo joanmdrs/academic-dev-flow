@@ -3,18 +3,24 @@ import api from "./api";
 const AuthService = {
   login: async (username, password) => {
     try {
-      const response = await api.post("myauth/login/", { username, password });
+      const response = await api.post("api/login/", { username, password });
 
       if (response.status === 200) {
-        const data = response.data; // Não precisa chamar response.json() porque o dado já está no formato JSON
+        const data = response.data;
         localStorage.setItem('token', data.token);
         return { success: true, data };
       } else {
-        const errorData = response.data; // Mesma lógica aqui
+        const errorData = response.data;
         return { success: false, error: errorData };
       }
     } catch (error) {
       console.error('Error during login:', error);
+
+      if (error.response && error.response.status === 401) {
+        return { success: false, error: 'Credenciais inválidas' };
+      }
+
+      // Tratar outros erros
       return { success: false, error: 'Internal Server Error' };
     }
   },
