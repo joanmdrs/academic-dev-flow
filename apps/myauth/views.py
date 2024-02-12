@@ -14,9 +14,10 @@ class LoginView(APIView):
         try:
             username = request.data.get('username')
             password = request.data.get('password')
-            
-            user = authenticate(request, username=username, password=password)
+            print(f'Username: {username}, Password: {password}')
 
+            user = authenticate(request, username=username, password=password)
+            
             if user is not None:
                 login(request, user)
                 return Response({'detail': 'Login bem-sucedido.'}, status=status.HTTP_200_OK)

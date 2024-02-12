@@ -11,6 +11,7 @@ class CadastrarUsuarioView(APIView):
     def post(self, request):
         try:
             grupo_nome = request.data.get('grupo', None)
+            
             usuario_serializer = UsuarioSerializer(data=request.data)
 
             if usuario_serializer.is_valid(raise_exception=True):

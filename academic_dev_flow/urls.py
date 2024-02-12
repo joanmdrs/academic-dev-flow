@@ -27,7 +27,7 @@ urlpatterns = [
     path('membro_projeto/', include('apps.membro_projeto.urls', namespace='membro_projeto')),
     path('usuario/', include('apps.usuario.urls', namespace='usuario')),
     path('artefato/', include('apps.artefato.urls', namespace='artefato')),
-    path('auth/', include('apps.auth.urls', namespace='auth')),
+    path('myauth/', include('apps.myauth.urls', namespace='myauth')),
 ]
 
 
