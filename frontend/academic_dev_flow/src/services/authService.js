@@ -1,29 +1,48 @@
+import { useContext, createContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "./api";
 
-const AuthService = {
-  login: async (username, password) => {
-    try {
-      const response = await api.post("api/login/", { username, password });
+const AuthContext = createContext();
 
-      if (response.status === 200) {
-        const data = response.data;
-        localStorage.setItem('token', data.token);
-        return { success: true, data };
-      } else {
-        const errorData = response.data;
-        return { success: false, error: errorData };
-      }
-    } catch (error) {
-      console.error('Error during login:', error);
-
-      if (error.response && error.response.status === 401) {
-        return { success: false, error: 'Credenciais inválidas' };
-      }
-
-      return { success: false, error: 'Internal Server Error' };
-    }
-  },
+export const useAuth = () => {
+  return useContext(AuthContext);
 };
 
+const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const navigate = useNavigate();
 
-export default AuthService;
+  const loginAction = async (data) => {
+    try {
+      const response = await api.post("auth/login", data);
+      const res = await response.json();
+      if (res.data) {
+        setUser(res.data.user);
+        setToken(res.token);
+        localStorage.setItem("token", res.token);
+        return;
+      }
+      throw new Error(res.message);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const logOut = () => {
+    setUser(null);
+    setToken("");
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
+  return (
+    <AuthContext.Provider value={{ token, user, loginAction, logOut }}>
+      {children}
+    </AuthContext.Provider>
+  );
+
+};
+
+export default AuthProvider;
+
