@@ -2,24 +2,21 @@ import React from 'react';
 import "./Login.css";
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Form, Input, Button } from 'antd';
-import { isExpired, decodeToken } from "react-jwt";
-import AuthService from '../../services/authService';
+import { decodeToken } from "react-jwt";
+import { useAuth } from '../../hooks/AuthProvider';
 
 const LoginForm = () => {
 
-  const handleLogin = async (values) => {   
+  const {loginAction} = useAuth();
+
+  const handleLogin = async (values) => {  
     const username = values.username
     const password = values.password
-    const result = await AuthService.login(username, password);
+    try {
+      const result = await loginAction(username, password);
 
-    const token = localStorage.getItem('token');
-    const token_decoded = decodeToken(token);
-
-    if (result.success) {
-      console.log('Login successful:', result.data);
-      console.log(token_decoded)
-    } else {
-      console.error('Login failed:', result.error);
+    } catch (error) {
+      console.error('Erro durante o login:', error);
     }
   };
 

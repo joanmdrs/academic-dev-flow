@@ -29,7 +29,19 @@ class LoginView(APIView):
                 # Gera o token incluindo informações sobre o usuário e grupos
                 token = TokenService.generate_token(user, {'groups': nomes_dos_grupos})
 
-                return Response({'token': token, 'detail': 'Login bem-sucedido.'}, status=status.HTTP_200_OK)
+                user_data = {
+                    "id": user.id,
+                    "username": user.username,
+                    "groups": nomes_dos_grupos
+                    # outras informações do usuário, se necessário
+                }
+
+                return Response(
+                    {
+                    'user': user_data,
+                    'token': token, 
+                    'detail': 'Login bem-sucedido.',
+                    }, status=status.HTTP_200_OK)
             else:
                 return Response({'error': 'Credenciais inválidas.'}, status=status.HTTP_401_UNAUTHORIZED)
 
