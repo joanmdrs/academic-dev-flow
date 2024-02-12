@@ -7,40 +7,10 @@
 }
 
 .page-login-layout {
-    border-radius: 20px;
     display: flex;
-    width: 60%;
-    height: 60%;
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, 
-    rgba(0, 0, 0, 0.12) 0px -12px 30px,
-    rgba(0, 0, 0, 0.12) 0px 4px 6px,
-    rgba(0, 0, 0, 0.17) 0px 12px 13px,
-    rgba(0, 0, 0, 0.09) 0px -3px 5px;
-    position: relative; /* Adicionado para posicionar elementos filhos relativos a este elemento */
+    flex-direction: column;
 }
 
-.page-login-banner {
-    flex: 1;
-    position: relative; /* Adicionado para posicionar elementos filhos relativos a este elemento */
-}
-
-.page-login-banner h1 {
-    z-index: 2;
-    position: absolute; /* Permite posicionar o texto sobre a imagem */
-    top: 50%; /* Posiciona o texto no meio verticalmente */
-    left: 50%; /* Posiciona o texto no meio horizontalmente */
-    transform: translate(-50%, -50%); /* Centraliza o texto completamente */
-    color: white; /* Cor do texto */
-}
-
-.page-login-banner img {
-    z-index: 1;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
-}
 
 .page-login-form {
     flex: 1;
