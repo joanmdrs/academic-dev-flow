@@ -1,11 +1,15 @@
-import React from "react";
-import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "../hooks/AuthProvider";
+import React from 'react';
+import { NotificationManager } from 'react-notifications';
+import { Navigate, Outlet } from 'react-router-dom';
 
-const PrivateRoute = () => {
-  const {token} = useAuth();
-  if (!token) return <Navigate to="/login" />;
-  return <Outlet />;
+const PrivateRoute = ({ isAllowed, children }) => {  
+
+  if (!isAllowed) {
+
+    return <Navigate to="/" replace />;
+  }
+
+  return children ? children : <Outlet />;
 };
 
 export default PrivateRoute;

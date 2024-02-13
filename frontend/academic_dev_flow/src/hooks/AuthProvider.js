@@ -25,7 +25,7 @@ const AuthProvider = ({ children }) => {
         localStorage.setItem("token", data.token);
         setUser(data.user);
         setToken(data.token);
-        navigate("/");
+        navigate("/admin");
         NotificationManager.success("Login realizado com sucesso !");
         return { success: 'Login bem-sucedido' };
       } else {
