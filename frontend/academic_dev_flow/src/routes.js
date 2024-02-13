@@ -12,7 +12,7 @@ import PrivateRoute from './router/PrivateRouter';
 import { useAuth } from './hooks/AuthProvider';
 import AdminDashboard from './pages/UserDashboards/AdminDashboard/AdminDashboard';
 import { decodeToken } from 'react-jwt';
-import StudentDashboard from './pages/UserDashboards/StudentDashboard/StudentDashboard';
+import StudentDashboard from './pages/Dashboard/StudentDashboard/StudentDashboard';
 
 function Routes() {
 
@@ -27,11 +27,11 @@ function Routes() {
       {/* Admin */}
       <Route element={<PrivateRoute isAllowed={!!decodedToken && decodedToken.groups.includes('Admin')}/>}>
         <Route path="/admin" Component={Home} />
-        <Route path="admin/projetos/antigo" Component={PageProjeto} />
-        <Route path="admin/fluxos/gerenciar" Component={PageFluxo} />
-        <Route path="admin/etapas" Component={Etapa} />
-        <Route path="admin/membros" Component={Membro} />
-        <Route path="admin/artefatos" Component={Artefato} />
+        <Route path="/admin/projetos/antigo" Component={PageProjeto} />
+        <Route path="/admin/fluxos/gerenciar" Component={PageFluxo} />
+        <Route path="/admin/etapas" Component={Etapa} />
+        <Route path="/admin/membros" Component={Membro} />
+        <Route path="/admin/artefatos" Component={Artefato} />
       </Route>
 
       {/* Aluno */}
