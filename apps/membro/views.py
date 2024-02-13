@@ -4,22 +4,43 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.http import HttpResponseNotAllowed, JsonResponse
 from .models import Membro
-from apps.usuario.models import Usuario
 from .serializers import MembroSerializer
+from apps.usuario.models import Usuario
+from apps.usuario.serializers import UsuarioSerializer
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import Group
 
 class CadastrarMembroView(APIView):
     def post(self, request):
         try:
-            serializer = MembroSerializer(data=request.data)
+            grupo_nome = request.data.get('grupo', None)
+            print(grupo_nome)
+            usuario_data = request.data.get('usuario', {})
+            usuario_serializer = UsuarioSerializer(data=usuario_data)
             
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
+            if usuario_serializer.is_valid(raise_exception=True):
+                usuario = usuario_serializer.save()
+                
+                if grupo_nome:
+                    grupo = Group.objects.get(name=grupo_nome)
+                    print("Nome do grupo", grupo)
+                    usuario.groups.add(grupo)
+
+                membro_data = request.data.get('membro', {})
+                membro_data['grupo'] = grupo_nome
+                membro_data['usuario'] = usuario.id
+                membro_serializer = MembroSerializer(data=membro_data)
+
+                if membro_serializer.is_valid(raise_exception=True):
+                    membro_serializer.save()
+                    
+                    return Response(membro_serializer.data, status=status.HTTP_201_CREATED)
+                
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'Erro ao cadastrar membro'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class BuscarMembroPorGrupoView(APIView):
     def get(self, request):

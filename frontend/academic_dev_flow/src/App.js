@@ -1,26 +1,27 @@
 import './App.css';
 import './App.css';
 import Routes from './routes';
-import MyHeader from './components/Header/Header';
-import MyMenu from './components/Menu/Menu';
 import { Layout } from 'antd';
 import { NotificationContainer } from 'react-notifications';
+import AuthProvider from './hooks/AuthProvider';
 
 
 
 function App() {
   return (
 
-    <Layout style={{
-      minHeight: '100vh',
-    }}>
-      <NotificationContainer />
-      <MyMenu/>
-      <Layout>
-        <MyHeader/>
-        <Routes/>
-      </Layout>
-    </Layout>
+    <div className='App'> 
+      <AuthProvider>
+        <Layout style={{
+            minHeight: '100vh',
+          }}>
+            <NotificationContainer />
+            <Routes/>
+        </Layout>
+      </AuthProvider>
+    </div>
+
+   
 );
    
 

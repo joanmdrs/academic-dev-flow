@@ -26,7 +26,8 @@ urlpatterns = [
     path('membro/', include('apps.membro.urls', namespace='membro')),
     path('membro_projeto/', include('apps.membro_projeto.urls', namespace='membro_projeto')),
     path('usuario/', include('apps.usuario.urls', namespace='usuario')),
-    path('artefato/', include('apps.artefato.urls', namespace='artefato'))
+    path('artefato/', include('apps.artefato.urls', namespace='artefato')),
+    path('auth/', include('apps.api.urls', namespace='api')),
 ]
 
 
