@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Routes as Switch, Route } from 'react-router-dom';
 import Home from './pages/home/Home';
 import Projeto from './pages/Projeto';
@@ -10,23 +10,35 @@ import PageFluxo from './pages/Fluxo/PageFluxo';
 import PageProjeto from './pages/Projeto/PageProjeto';
 import PrivateRoute from './router/PrivateRouter';
 import { useAuth } from './hooks/AuthProvider';
-import AdminDashboard from './pages/UserDashboards/AdminDashboard/AdminDashboard';
 import { decodeToken } from 'react-jwt';
 import StudentDashboard from './pages/Dashboard/StudentDashboard/StudentDashboard';
 
 function Routes() {
+  const { token } = useAuth();
+  const [decodedToken, setDecodedToken] = useState(null);
 
-  const token = localStorage.getItem('token')
-  const decodedToken = decodeToken(token)
-  console.log(decodedToken)
+  useEffect(() => {
+    const decodeAsync = async () => {
+      try {
+        const decoded = await decodeToken(token);
+        setDecodedToken(decoded);
+      } catch (error) {
+        console.error('Erro ao decodificar o token:', error);
+      }
+    };
+
+    if (token) {
+      decodeAsync();
+    }
+  }, [token]);
 
   return (
     <Switch>
       <Route path="/" Component={LoginForm} />
 
       {/* Admin */}
-      <Route element={<PrivateRoute isAllowed={!!decodedToken && decodedToken.groups.includes('Admin')}/>}>
-        <Route path="/admin" Component={Home} />
+      <Route element={<PrivateRoute isAllowed={!!decodedToken && decodedToken.groups.includes('Administradores')}/>}>
+        <Route path="/admin/home" Component={Home} />
         <Route path="/admin/projetos/antigo" Component={PageProjeto} />
         <Route path="/admin/fluxos/gerenciar" Component={PageFluxo} />
         <Route path="/admin/etapas" Component={Etapa} />
@@ -38,11 +50,8 @@ function Routes() {
       <Route element={<PrivateRoute isAllowed={!!decodedToken && decodedToken.groups.includes('Alunos')} />}>
         <Route path='/aluno/home' Component={StudentDashboard}/>
       </Route>
-
     </Switch>
   );
 }
 
 export default Routes;
-
-    
