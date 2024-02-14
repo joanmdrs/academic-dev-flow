@@ -1,7 +1,6 @@
 import { Menu } from "antd";
 import Sider from "antd/es/layout/Sider";
 import React, { useState } from "react";
-import './Menu.css';
 import { Link } from 'react-router-dom';
 
 import { MdOutlineSpaceDashboard } from "react-icons/md";
