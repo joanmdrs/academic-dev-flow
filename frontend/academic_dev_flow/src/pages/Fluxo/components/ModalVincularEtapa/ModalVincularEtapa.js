@@ -1,6 +1,6 @@
 import { Button, Form, Input, Modal, Select } from "antd";
 import React, { useEffect, useState } from "react";
-import { listarEtapas } from "../../../../services/etapa_service";
+import { listarEtapas } from "../../../../services/etapaService";
 import { NotificationManager } from "react-notifications";
 import { useFormContext } from "../../context/Provider/FormProvider";
 

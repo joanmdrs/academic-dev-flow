@@ -4,12 +4,11 @@ import { NotificationManager } from "react-notifications";
 import { Button, Input, Table, Form, Select } from "antd";
 import { useFormContext } from "../../../context/Provider/FormProvider";
 import { listarFluxos } from "../../../../../services/fluxoService"; 
-import { buscarEtapaPeloId, buscarEtapaPeloNome, buscarEtapasPorFluxo } from "../../../../../services/etapa_service";
+import { buscarEtapaPeloId, buscarEtapaPeloNome, buscarEtapasPorFluxo } from "../../../../../services/etapaService";
 import BotaoAdicionar from "../../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
 import BotaoExcluir from "../../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
 import ModalVincularEtapa from "../../ModalVincularEtapa/ModalVincularEtapa";
 import { atualizarEtapaFluxo, atualizarEtapasFluxo, excluirFluxoEtapaMany, excluirFluxoEtapaOne, listarEtapasPorFluxo, removerEtapaFluxo, vincularEtapaFluxo } from "../../../../../services/fluxo_etapa_service";
-import ListaDados from "../../../../../components/Listas/ListaDados/ListaDados";
 import ModalSelecionarObjetos from "../../../../../components/Modals/ModalSelecionarObjetos/ModalSelecionarObjetos";
 
 const { Option } = Select;

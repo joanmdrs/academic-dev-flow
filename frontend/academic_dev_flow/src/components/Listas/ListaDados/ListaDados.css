@@ -1,3 +1,8 @@
+.component-tabela-lista-de-dados {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
 .component-tabela-lista-de-dados table {
     font-size: 13px;
 }

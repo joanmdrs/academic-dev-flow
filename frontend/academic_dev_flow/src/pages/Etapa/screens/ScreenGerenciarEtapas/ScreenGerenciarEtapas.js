@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { NotificationContainer, NotificationManager } from "react-notifications";
-import Titulo from "../../components/Titulo/Titulo";
-import BotaoAdicionar from "../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
-import BotaoExcluir from "../../components/Botoes/BotaoExcluir/BotaoExcluir";
-import BotaoAtualizar from "../../components/Botoes/BotaoAtualizar/BotaoAtualizar";
-import BotaoFiltrar from "../../components/Botoes/BotaoFiltrar/BotaoFiltrar";
-import ListaDados from "../../components/Listas/ListaDados/ListaDados";
-import FormSalvarEtapa from "./components/FormSalvarEtapa/FormSalvarEtapa";
-import { recarregarPagina } from "../../services/utils";
-import { buscarEtapaPeloNome, excluirEtapa, listarEtapas } from "../../services/etapa_service";
-import FormDeBusca from "../../components/Forms/FormDeBusca/FormDeBusca";
+import Titulo from "../../../../components/Titulo/Titulo";
+import BotaoAdicionar from "../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
+import BotaoExcluir from "../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
+import BotaoAtualizar from "../../../../components/Botoes/BotaoAtualizar/BotaoAtualizar";
+import BotaoFiltrar from "../../../../components/Botoes/BotaoFiltrar/BotaoFiltrar";
+import ListaDados from "../../../../components/Listas/ListaDados/ListaDados";
+import { recarregarPagina } from "../../../../services/utils";
+import { buscarEtapaPeloNome, excluirEtapa, listarEtapas } from "../../../../services/etapaService";
+import FormDeBusca from "../../../../components/Forms/FormDeBusca/FormDeBusca";
+import ScreenSalvarEtapa from "../ScreenSalvarEtapa/ScreenSalvarEtapa";
 
-const PageEtapa = () => {
+const ScreenGerenciarEtapas = () => {
 
     const [acaoForm, setAcaoForm] = useState("criar");
     const [isFormVisivel, setIsFormVisivel] = useState(false);
@@ -121,48 +121,52 @@ const PageEtapa = () => {
     }
 
     return (
-        <div>
+        <React.Fragment>
             <NotificationContainer />
 
             {isFormVisivel ? (
 
-                <FormSalvarEtapa 
+                <ScreenSalvarEtapa 
                     acaoBotaoVoltar={handleCliqueBotaoVoltar} 
                     acaoForm={acaoForm} 
                     etapaSelecionada={etapaSelecionada}
                 />
 
             ) : (
-                <>
+                <div className="screen-gerenciar-etapas">
                     <Titulo
                         titulo='Etapas'
                         paragrafo='Etapas > Gerenciar etapas'
                     />
 
-                    <div className="botoes-de-acao">
-                        <div id="botao-filtrar"> 
-                            <BotaoFiltrar funcao={handleCliqueBotaoFiltrar}  />
+                    <div className="screen-gerenciar-etapas-content global-div">
+                        <div className="button-menu">
+                            <div id="botao-filtrar"> 
+                                <BotaoFiltrar funcao={handleCliqueBotaoFiltrar}  />
+                            </div>
+                            <div className="grouped-buttons"> 
+                                <BotaoAdicionar funcao={handleCliqueBotaoAdicionar} status={isBotaoAdicionarVisivel}/>
+                                <BotaoAtualizar funcao={handleCliqueBotaoEditar} status={isBotaoEditarVisivel}/>
+                                <BotaoExcluir funcao={handleCliqueBotaoExcluir} status={isBotaoExcluirVisivel}/>
+                            </div>
                         </div>
-                        <div id="botao-adicionar-atualizar-deletar"> 
-                            <BotaoAdicionar funcao={handleCliqueBotaoAdicionar} status={isBotaoAdicionarVisivel}/>
-                            <BotaoAtualizar funcao={handleCliqueBotaoEditar} status={isBotaoEditarVisivel}/>
-                            <BotaoExcluir funcao={handleCliqueBotaoExcluir} status={isBotaoExcluirVisivel}/>
-                        </div>
+
+                        {isFormFiltrarVisivel && (<FormDeBusca executeFuncao={handleFiltrarEtapas}/>)}
+                    
+                        <ListaDados 
+                            colunas={COLUNAS_LISTA} 
+                            dados={dadosEtapas} 
+                            onClickRow={handleCliqueEtapaSelecionada}
+                        />
                     </div>
 
-                    {isFormFiltrarVisivel && (<FormDeBusca executeFuncao={handleFiltrarEtapas}/>)}
-                
-                    <ListaDados 
-                        colunas={COLUNAS_LISTA} 
-                        dados={dadosEtapas} 
-                        onClickRow={handleCliqueEtapaSelecionada}
-                    />
-                </>
+                    
+                </div>
             )}
             
-        </div>
+        </React.Fragment>
 
     )
 }
 
-export default PageEtapa;
+export default ScreenGerenciarEtapas;

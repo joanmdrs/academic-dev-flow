@@ -4,11 +4,13 @@ import Titulo from "../../../../components/Titulo/Titulo";
 import BotaoVoltar from "../../../../components/Botoes/BotaoVoltar/BotaoVoltar";
 import { NotificationManager } from "react-notifications";
 import { recarregarPagina } from "../../../../services/utils";
-import { atualizarEtapa, criarEtapa } from "../../../../services/etapa_service";
+import { atualizarEtapa, criarEtapa } from "../../../../services/etapaService";
+import { useNavigate } from "react-router-dom";
 
-const FormSalvarEtapa = ({acaoBotaoVoltar, acaoForm, etapaSelecionada}) => {
+const ScreenSalvarEtapa = ({acaoBotaoVoltar, acaoForm, etapaSelecionada}) => {
 
     const [form] = Form.useForm();
+    const navigate = useNavigate();
     
     useEffect(() => {
         form.setFieldsValue(etapaSelecionada);
@@ -72,7 +74,7 @@ const FormSalvarEtapa = ({acaoBotaoVoltar, acaoForm, etapaSelecionada}) => {
                 paragrafo='Etapas > Cadastrar etapas'
             />
 
-            <div className="form-box"> 
+            <div className="global-div"> 
                 <div> 
                     <BotaoVoltar funcao={acaoBotaoVoltar} />
                 </div>
@@ -81,7 +83,7 @@ const FormSalvarEtapa = ({acaoBotaoVoltar, acaoForm, etapaSelecionada}) => {
                     <h4>INCLUIR ETAPA</h4>
                 </div>
 
-                <div> 
+                <div className="global-form"> 
                     <Form layout="vertical" form={form}>
                         <Form.Item 
                             label="Nome" 
@@ -114,4 +116,4 @@ const FormSalvarEtapa = ({acaoBotaoVoltar, acaoForm, etapaSelecionada}) => {
     )
 }
 
-export default FormSalvarEtapa;
+export default ScreenSalvarEtapa;

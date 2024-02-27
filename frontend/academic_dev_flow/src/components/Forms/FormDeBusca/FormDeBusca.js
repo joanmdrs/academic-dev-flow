@@ -4,7 +4,7 @@ import "./FormDeBusca.css"
 const FormDeBusca = ({executeFuncao}) => {
 
     return (
-        <div className="form-box component-form-de-busca">
+        <div className="global-form component-form-de-busca">
             <div className="titulo">
                 <p>FILTROS</p>
             </div>
