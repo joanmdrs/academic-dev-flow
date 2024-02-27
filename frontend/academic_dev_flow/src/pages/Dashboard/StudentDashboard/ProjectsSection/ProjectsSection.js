@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ProjectCard from '../components/ProjectCard/ProjectCard'; 
 import StudentMenu from '../../../../components/Menus/StudentMenu/StudentMenu';
-import { Layout } from 'antd';
+import { Layout, Tabs } from 'antd';
 import MyHeader from '../../../../components/Header/Header';
 import "./ProjectsSection.css"
 const projectsData = [
@@ -26,7 +26,33 @@ const projectsData = [
   // Adicione mais projetos conforme necessário
 ];
 
+const TAB_ITEMS = [
+  {
+    key: '1',
+    label: 'p',
+    children: 'Content of Tab Pane 1',
+  },
+  {
+    key: '2',
+    label: 'Tab 2',
+    children: 'Content of Tab Pane 2',
+  },
+  {
+    key: '3',
+    label: 'Tab 3',
+    children: 'Content of Tab Pane 3',
+  },
+]
+
 const ProjectsSection = () => {
+
+  const [isOpenProject, setIsOpenProject] = useState(false)
+  const [selectedProject, setSelectedProject] = useState(null);
+
+  const handleProjectClick = (project) => {
+    setSelectedProject(project);
+  };
+
   return (
     <React.Fragment>
         <StudentMenu />
@@ -43,6 +69,12 @@ const ProjectsSection = () => {
                     </div>
                     
                 </div>
+
+                { !isOpenProject && 
+                  <div className='projects-section-content-details'> 
+                      <Tabs defaultActiveKey="1" items={TAB_ITEMS}  tabPosition='left'/>;
+                  </div>
+                }
             </Layout>
     </React.Fragment>
     

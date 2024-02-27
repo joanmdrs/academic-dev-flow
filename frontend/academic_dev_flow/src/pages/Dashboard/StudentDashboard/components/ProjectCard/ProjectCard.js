@@ -1,7 +1,7 @@
 import React from 'react';
 import './ProjectCard.css'; // Importe o arquivo de estilos CSS
 import { Space } from 'antd';
-import { CalendarOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined } from '@ant-design/icons';
 import { LuCalendarCheck2, LuCalendarX2 } from "react-icons/lu";
 
 const ProjectCard = ({ project }) => {

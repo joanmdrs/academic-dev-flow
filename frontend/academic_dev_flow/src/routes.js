@@ -41,6 +41,7 @@ function Routes() {
       <Route element={<PrivateRoute isAllowed={!!decodedToken && decodedToken.groups.includes('Administradores')}/>}>
         <Route path="/admin/home" Component={Home} />
         <Route path="/admin/projetos/antigo" Component={PageProjeto} />
+        <Route path="/admin/projetos/novo" Component={Projeto}/>
         <Route path="/admin/fluxos/gerenciar" Component={PageFluxo} />
         <Route path="/admin/etapas" Component={Etapa} />
         <Route path="/admin/membros" Component={Membro} />
