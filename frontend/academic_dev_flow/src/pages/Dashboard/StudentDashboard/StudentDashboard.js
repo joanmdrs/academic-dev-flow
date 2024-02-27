@@ -1,4 +1,5 @@
 import React from "react";
+import "./StudentDashboard.css";
 import MyHeader from "../../../components/Header/Header";
 import StudentMenu from "../../../components/Menus/StudentMenu/StudentMenu";
 import { Layout } from "antd";
@@ -12,7 +13,7 @@ const StudentDashboard = () => {
             <Layout>
                 <MyHeader />
                 <div className="student-dashboard-home">
-                    Página Inicial 
+                    Página Inicial
                 </div>
             </Layout>
         </React.Fragment>

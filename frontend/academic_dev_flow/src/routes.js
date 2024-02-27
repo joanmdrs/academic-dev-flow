@@ -12,6 +12,7 @@ import PrivateRoute from './router/PrivateRouter';
 import { useAuth } from './hooks/AuthProvider';
 import { decodeToken } from 'react-jwt';
 import StudentDashboard from './pages/Dashboard/StudentDashboard/StudentDashboard';
+import ProjectsSection from './pages/Dashboard/StudentDashboard/ProjectsSection/ProjectsSection';
 
 function Routes() {
   const { token } = useAuth();
@@ -49,6 +50,7 @@ function Routes() {
       {/* Aluno */}
       <Route element={<PrivateRoute isAllowed={!!decodedToken && decodedToken.groups.includes('Alunos')} />}>
         <Route path='/aluno/home' Component={StudentDashboard}/>
+        <Route path='/aluno/projetos' Component={ProjectsSection} />
       </Route>
     </Switch>
   );

@@ -27,7 +27,7 @@ const StudentMenu = () => {
             <Menu.Item
                 className='item-menu'
                 key="meus-projetos"
-                icon={<MdOutlineSpaceDashboard />}
+                icon={<MdOutlineSpaceDashboard size="20px" />}
            >
                 <Link to="/aluno/projetos">Projetos</Link>
             </Menu.Item>
@@ -35,7 +35,7 @@ const StudentMenu = () => {
             <Menu.Item
                 className='item-menu'
                 key='minhas-atividades'
-                icon={<MdFormatListBulleted />}
+                icon={<MdFormatListBulleted size="20px"/>}
             >
                 <Link to="/aluno/atividades">Atividades</Link>
             </Menu.Item>
@@ -43,7 +43,7 @@ const StudentMenu = () => {
             <Menu.Item
                 className='item-menu'
                 key='meus-relatórios'
-                icon={<HiOutlineDocumentReport />}
+                icon={<HiOutlineDocumentReport size="20px"/>}
             >
                 <Link to="/aluno/relatorios">Relatórios</Link>
             </Menu.Item>

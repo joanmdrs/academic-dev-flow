@@ -38,14 +38,14 @@ const MyMenu = () => {
             className='item-menu'
             key="projeto-antigo"
           >
-            <Link to="/projetos/antigo">Projetos antigo</Link>
+            <Link to="/admin/projetos/antigo">Projetos antigo</Link>
           </Menu.Item>
 
           <Menu.Item
             className='item-menu'
             key="projeto-novo"
           >
-            <Link to="/projetos/novo">Projetos novo</Link>
+            <Link to="/admin/projetos/novo">Projetos novo</Link>
           </Menu.Item>
         </SubMenu>
         <SubMenu
@@ -55,10 +55,10 @@ const MyMenu = () => {
           title="Fluxos"
         >
           <Menu.Item key="gerenciar-fluxos">
-            <Link to="/fluxos/gerenciar">Gerenciar fluxos</Link>
+            <Link to="/admin/fluxos/gerenciar">Gerenciar fluxos</Link>
           </Menu.Item>
           <Menu.Item key="etapas">
-            <Link to="/etapas">Gerenciar etapas</Link>
+            <Link to="/admin/etapas">Gerenciar etapas</Link>
           </Menu.Item>
         </SubMenu>
         <Menu.Item
@@ -66,14 +66,14 @@ const MyMenu = () => {
           key="membro"
           icon={<BiGroup style={{ fontSize: '20px' }} />}
         >
-          <Link to="/membros">Membros</Link>
+          <Link to="/admin/membros">Membros</Link>
         </Menu.Item>
         <Menu.Item
           className='item-menu'
           key='artefato'
           icon={<SiAzureartifacts style={{ fontSize: '15px' }} />}
         >
-          <Link to='/artefatos'>Artefatos</Link>
+          <Link to='/admin/artefatos'>Artefatos</Link>
         </Menu.Item>
       </Menu>
     </Sider>
