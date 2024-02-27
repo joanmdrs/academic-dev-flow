@@ -3,7 +3,7 @@ import "./TabGerenciarFluxos.css"
 import FormDeBusca from "../../../../../components/Forms/FormDeBusca/FormDeBusca";
 import ListaDados from "../../../../../components/Listas/ListaDados/ListaDados";
 import { NotificationManager } from "react-notifications";
-import { atualizarFluxo, buscarFluxoPeloNome, criarFluxo, excluirFluxo, listarFluxos } from "../../../../../services/fluxo_service";
+import { atualizarFluxo, buscarFluxoPeloNome, criarFluxo, excluirFluxo, listarFluxos } from "../../../../../services/fluxoService";
 import BotaoFiltrar from "../../../../../components/Botoes/BotaoFiltrar/BotaoFiltrar";
 import BotaoAdicionar from "../../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
 import BotaoAtualizar from "../../../../../components/Botoes/BotaoAtualizar/BotaoAtualizar";

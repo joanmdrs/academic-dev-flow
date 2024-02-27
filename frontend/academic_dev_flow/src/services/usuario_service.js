@@ -1,4 +1,4 @@
-import api from "./api";
+import api from "../api/api"
 
 export const criarUsuario = async (dados, id_membro) => {
     const dados_usuario = {

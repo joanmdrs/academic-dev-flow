@@ -1,4 +1,4 @@
-import api from "./api";
+import api from "../api/api"
 
 export const criarFluxo = async (dados) => {
     const resposta = await api.post("/fluxo/cadastrar/", dados)

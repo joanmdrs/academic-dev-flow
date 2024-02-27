@@ -4,7 +4,7 @@ import BotaoExcluir from "../../../../../components/Botoes/BotaoExcluir/BotaoExc
 import { Table } from "antd";
 import ListaDados from "../../../../../components/Listas/ListaDados/ListaDados";
 import ModalDeBusca from "../../../../../components/Modals/ModalDeBusca/ModalDeBusca";
-import { buscarFluxoPeloId, buscarFluxoPeloNome } from "../../../../../services/fluxo_service";
+import { buscarFluxoPeloId, buscarFluxoPeloNome } from "../../../../../services/fluxoService";
 import { NotificationManager } from "react-notifications";
 import ModalSelecionarObjetos from "../../../../../components/Modals/ModalSelecionarObjetos/ModalSelecionarObjetos";
 import { atualizarFluxoProjeto } from "../../../../../services/projeto_service";

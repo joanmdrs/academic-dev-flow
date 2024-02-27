@@ -1,5 +1,5 @@
 import moment from "moment";
-import api from "./api"
+import api from "../api/api";
 
 export const criarMembro = async (dados) => {
 

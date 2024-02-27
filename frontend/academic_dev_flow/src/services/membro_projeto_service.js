@@ -1,4 +1,4 @@
-import api from "./api";
+import api from "../api/api"
 
 export const criarMembroProjeto = async (dados) => {
     const resposta = await api.post('membro_projeto/cadastrar/', {membros: dados})

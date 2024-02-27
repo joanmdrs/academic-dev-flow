@@ -1,4 +1,4 @@
-import api from "./api";
+import api from "../api/api";
 
 export const criarEtapa = async (dadosEtapa, fluxoId) => {
     const dados = {

@@ -3,7 +3,7 @@ import "./TabVincularEtapas.css";
 import { NotificationManager } from "react-notifications";
 import { Button, Input, Table, Form, Select } from "antd";
 import { useFormContext } from "../../../context/Provider/FormProvider";
-import { listarFluxos } from "../../../../../services/fluxo_service";
+import { listarFluxos } from "../../../../../services/fluxoService"; 
 import { buscarEtapaPeloId, buscarEtapaPeloNome, buscarEtapasPorFluxo } from "../../../../../services/etapa_service";
 import BotaoAdicionar from "../../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
 import BotaoExcluir from "../../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
