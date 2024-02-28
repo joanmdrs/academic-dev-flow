@@ -12,8 +12,6 @@ export const useAuth = () => {
 
 const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
-  const [decodedUser, setDecodedUser] = useState(null);
 
   const redirectUser = (decodedUser) => {
     if (decodedUser.groups.includes("Administradores")) {
@@ -46,17 +44,14 @@ const AuthProvider = ({ children }) => {
       if (response.status === 200) {
         const data = await response.data;
         localStorage.setItem("token", data.token);
-        setToken(data.token);
 
         const newToken = await waitForToken();
 
         if (newToken) {
           try {
             const decodedUser = await decodeToken(newToken);
-            setDecodedUser(decodedUser);
             redirectUser(decodedUser);
             NotificationManager.success("Login realizado com sucesso !");
-            return { success: "Login bem-sucedido" };
           } catch (decodeError) {
             console.error("Erro ao decodificar o token:", decodeError);
             logOut(); // Limpa completamente o estado em caso de erro de decodificação
@@ -75,36 +70,11 @@ const AuthProvider = ({ children }) => {
 
   const logOut = () => {
     localStorage.removeItem("token");
-    setToken(null);
-    setDecodedUser(null);
-    navigate("/");
+    navigate("/", {replace: true});
   };
 
-  useEffect(() => {
-    const checkToken = async () => {
-      const newToken = await waitForToken();
-      if (newToken) {
-        try {
-          const decodedUser = await decodeToken(newToken);
-          setDecodedUser(decodedUser);
-          redirectUser(decodedUser);
-        } catch (decodeError) {
-          console.error("Erro ao decodificar o token:", decodeError);
-          logOut();
-        }
-      } else {
-        // Se o token não estiver disponível, faz o logout
-        logOut();
-      }
-    };
-
-    if (token) {
-      checkToken();
-    }
-  }, [token]);
-
   return (
-    <AuthContext.Provider value={{ loginAction, logOut, token }}>
+    <AuthContext.Provider value={{ loginAction, logOut }}>
       {children}
     </AuthContext.Provider>
   );

@@ -13,32 +13,16 @@ import { useAuth } from './hooks/AuthProvider';
 import { decodeToken } from 'react-jwt';
 import StudentDashboard from './pages/Dashboard/StudentDashboard/StudentDashboard';
 import ProjectsSection from './pages/Dashboard/StudentDashboard/ProjectsSection/ProjectsSection';
+import AdminRoutes from './router/AdminRoutes/AdminRoutes';
 
 function Routes() {
-  const { token } = useAuth();
-  const [decodedToken, setDecodedToken] = useState(null);
-
-  useEffect(() => {
-    const decodeAsync = async () => {
-      try {
-        const decoded = await decodeToken(token);
-        setDecodedToken(decoded);
-      } catch (error) {
-        console.error('Erro ao decodificar o token:', error);
-      }
-    };
-
-    if (token) {
-      decodeAsync();
-    }
-  }, [token]);
-
+ 
   return (
     <Switch>
       <Route path="/" Component={LoginForm} />
 
       {/* Admin */}
-      <Route element={<PrivateRoute isAllowed={!!decodedToken && decodedToken.groups.includes('Administradores')}/>}>
+      <Route element={<AdminRoutes />}>
         <Route path="/admin/home" Component={Home} />
         <Route path="/admin/projetos/antigo" Component={PageProjeto} />
         <Route path="/admin/projetos/novo" Component={Projeto}/>
@@ -48,11 +32,11 @@ function Routes() {
         <Route path="/admin/artefatos" Component={Artefato} />
       </Route>
 
-      {/* Aluno */}
+      {/* Aluno
       <Route element={<PrivateRoute isAllowed={!!decodedToken && decodedToken.groups.includes('Alunos')} />}>
         <Route path='/aluno/home' Component={StudentDashboard}/>
         <Route path='/aluno/projetos' Component={ProjectsSection} />
-      </Route>
+      </Route> */}
     </Switch>
   );
 }
