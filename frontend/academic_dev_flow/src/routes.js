@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Routes as Switch, Route } from 'react-router-dom';
 import Home from './pages/home/Home';
 import Projeto from './pages/Projeto';
@@ -8,12 +8,10 @@ import Artefato from './pages/Artefato';
 import LoginForm from './pages/Auth/Login';
 import PageFluxo from './pages/Fluxo/PageFluxo';
 import PageProjeto from './pages/Projeto/PageProjeto';
-import PrivateRoute from './router/PrivateRouter';
-import { useAuth } from './hooks/AuthProvider';
-import { decodeToken } from 'react-jwt';
 import StudentDashboard from './pages/Dashboard/StudentDashboard/StudentDashboard';
 import ProjectsSection from './pages/Dashboard/StudentDashboard/ProjectsSection/ProjectsSection';
 import AdminRoutes from './router/AdminRoutes/AdminRoutes';
+import StudentRoutes from './router/StudentRoutes/StudentRoutes';
 
 function Routes() {
  
@@ -32,11 +30,11 @@ function Routes() {
         <Route path="/admin/artefatos" Component={Artefato} />
       </Route>
 
-      {/* Aluno
-      <Route element={<PrivateRoute isAllowed={!!decodedToken && decodedToken.groups.includes('Alunos')} />}>
+      {/* Aluno */}
+      <Route element={<StudentRoutes />}>
         <Route path='/aluno/home' Component={StudentDashboard}/>
         <Route path='/aluno/projetos' Component={ProjectsSection} />
-      </Route> */}
+      </Route>
     </Switch>
   );
 }

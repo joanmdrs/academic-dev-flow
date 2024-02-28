@@ -3,7 +3,7 @@ import { decodeToken } from 'react-jwt';
 import { Navigate, Outlet } from 'react-router-dom';
 import Loading from '../../components/Loading/Loading';
 
-const StudentRoutes = ({ children }) => {
+const TeacherRoutes = ({ children }) => {
     const [token, setToken] = useState(localStorage.getItem("token") || null);
     const [decodedToken, setDecodedToken] = useState(null);
     const [shouldRender, setShouldRender] = useState(false);
@@ -27,11 +27,11 @@ const StudentRoutes = ({ children }) => {
         return <Loading />
     }
 
-    if (!(decodedToken && decodedToken.groups.includes('Alunos'))) {
+    if (!(decodedToken && decodedToken.groups.includes('Professores'))) {
         return <Navigate to="/" replace />;
     }
 
     return children ? children : <Outlet />;
 };
 
-export default StudentRoutes;
+export default TeacherRoutes;
