@@ -1,15 +1,15 @@
 import React from "react";
 import { Tabs } from 'antd';
-import TabGerenciarFluxos from "./TabGerenciarFluxos/TabGerenciarFluxos";
-import TabVincularEtapas from "./TabVincularEtapas/TabVincularEtapas";
-import { useFormContext } from "../../context/Provider/FormProvider";
+
+import { useFormContext } from "../../context/Provider/Provider"; 
 import "./TabsFluxo.css";
 import Titulo from "../../../../components/Titulo/Titulo";
-
+import TabGerenciarFluxos from "./TabGerenciarFluxos/TabGerenciarFluxos";
+import TabVincularEtapas from "./TabVincularEtapas/TabVincularEtapas";
 
 const { TabPane } = Tabs;
 
-const TabsFluxo = ({funcaoBotaoVoltar}) => {
+const TabsFluxo = () => {
   
   const {current, setCurrent} = useFormContext();
 
@@ -20,10 +20,11 @@ const TabsFluxo = ({funcaoBotaoVoltar}) => {
           paragrafo="Fluxos > Gerenciar fluxos"
         />
         <Tabs
+          
           style={{marginTop: "30px"}} 
           activeKey={current} 
           onChange={setCurrent} 
-          className="form-box"
+          className="global-div tabs-fluxo"
         >
           <TabPane tab="GERENCIAR FLUXOS" key="1">
             <TabGerenciarFluxos />

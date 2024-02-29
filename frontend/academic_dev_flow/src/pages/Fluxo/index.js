@@ -1,22 +1,21 @@
 import React from "react";
-import { FormProvider } from "./context/Provider/FormProvider";
 import { Layout } from 'antd';
-import TabsFluxo from "./components/TabsFluxo/TabsFluxo"; 
 import MyMenu from "../../components/Menu/Menu";
 import MyHeader from "../../components/Header/Header";
+import { FluxoProvider } from "./context/Provider/Provider";
+import TabsFluxo from "./screens/TabsFluxo/TabsFluxo"
 
-const PageFluxo = () => {
+const Fluxo = () => {
     return (
 
         <React.Fragment>
             <MyMenu />
             <Layout>
                 <MyHeader />
-                <FormProvider> <TabsFluxo /> </FormProvider>
+                <FluxoProvider> <TabsFluxo /> </FluxoProvider>
             </Layout>
         </React.Fragment>
-        
     )
 }
 
-export default PageFluxo
+export default Fluxo

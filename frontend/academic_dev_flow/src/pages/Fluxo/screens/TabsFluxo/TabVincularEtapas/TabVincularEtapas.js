@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./TabVincularEtapas.css";
 import { NotificationManager } from "react-notifications";
-import { Button, Input, Table, Form, Select } from "antd";
-import { useFormContext } from "../../../context/Provider/FormProvider";
+import { Table, Form, Select, Space } from "antd";
+import { useFormContext } from "../../../context/Provider/Provider";
 import { listarFluxos } from "../../../../../services/fluxoService"; 
-import { buscarEtapaPeloId, buscarEtapaPeloNome, buscarEtapasPorFluxo } from "../../../../../services/etapaService";
+import { buscarEtapaPeloId, buscarEtapaPeloNome } from "../../../../../services/etapaService";
 import BotaoAdicionar from "../../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
 import BotaoExcluir from "../../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
-import ModalVincularEtapa from "../../ModalVincularEtapa/ModalVincularEtapa";
-import { atualizarEtapaFluxo, atualizarEtapasFluxo, excluirFluxoEtapaMany, excluirFluxoEtapaOne, listarEtapasPorFluxo, removerEtapaFluxo, vincularEtapaFluxo } from "../../../../../services/fluxo_etapa_service";
+import {  excluirFluxoEtapaMany, excluirFluxoEtapaOne, listarEtapasPorFluxo, vincularEtapaFluxo } from "../../../../../services/fluxo_etapa_service";
 import ModalSelecionarObjetos from "../../../../../components/Modals/ModalSelecionarObjetos/ModalSelecionarObjetos";
 
 const { Option } = Select;
@@ -20,11 +19,10 @@ const TabVincularEtapas = () => {
   const [fluxoSelecionado, setFluxoSelecionado] = useState(null);
   const {hasDadosFluxo, setHasDadosFluxo} = useFormContext()
   const [isModalVisivel, setIsModalVisivel] = useState(false)
-  const [isBotaoExcluirVisivel, setIsBotaoExcluirVisivel] = useState(true)
   const [etapasExcluir, setEtapasExcluir] = useState([])
  
   const COLUNAS_TABELA = [
-    { title: "ID", dataIndex: "id", key: "id" },
+    { title: "Código", dataIndex: "id", key: "id" },
     { title: "Nome", dataIndex: "nome", key: "nome" },
     { title: "Descrição", dataIndex: "descricao", key: "descricao"}
   ];
@@ -91,10 +89,18 @@ const TabVincularEtapas = () => {
   };
   
   const handleFluxoChange = async (value) => {
-    setFluxoSelecionado(value);
-    const fluxo = JSON.parse(value)
-    setHasDadosFluxo(fluxo)
-    await handleListarEtapasPorFluxo(fluxo.id)
+
+    if (value !== undefined) {
+      setFluxoSelecionado(value);
+      const fluxo = JSON.parse(value);
+      setHasDadosFluxo(fluxo);
+      await handleListarEtapasPorFluxo(fluxo.id);
+    } else {
+      setFluxoSelecionado(null)
+      setHasDadosFluxo(null)
+    }
+     
+    
   };
 
   const handleBuscarEtapas = async (parametro) => {
@@ -135,7 +141,6 @@ const TabVincularEtapas = () => {
   };
 
   const handleExcluirEtapas = async () => {
-    console.log(etapasExcluir)
     try {
       const resposta = etapasExcluir.length === 1
         ? await excluirFluxoEtapaOne(etapasExcluir[0].id)
@@ -167,17 +172,20 @@ const TabVincularEtapas = () => {
 
 
   return (
-    <div className="tab-vincular-etapas form-box">
+    <div className="tab-vincular-etapas global-form">
       <div className="form-selecionar-fluxo">
         <Form layout="vertical">
-          <Form.Item label="Fluxo">
+          <Form.Item label={<span style={{fontSize: "13px", color: "var(--primary-color)" }}> Selecione o fluxo </span>}>
+            
             <Select
-              style={{ width: "50%" }}
+              style={{width: "50%", fontSize: '13px'}}
               onChange={handleFluxoChange}
               value={fluxoSelecionado}
+              allowClear
+            
             >
               {fluxos.map((fluxo) => (
-                <Option key={fluxo.id} value={JSON.stringify(fluxo)}>
+                <Option style={{fontSize: "13px"}} key={fluxo.id} value={JSON.stringify(fluxo)}>
                   {fluxo.nome}
                 </Option>
               ))}
@@ -185,8 +193,6 @@ const TabVincularEtapas = () => {
           </Form.Item>
         </Form>
       </div>
-
-      
 
       <div className="tabela-etapas-vinculadas">
 
@@ -208,7 +214,8 @@ const TabVincularEtapas = () => {
                 status={isModalVisivel}
               />
 
-              <Table 
+              <Table
+                className="global-table" 
                 columns={COLUNAS_TABELA}
                 dataSource={etapasVinculadas}
                 rowSelection={rowSelection}

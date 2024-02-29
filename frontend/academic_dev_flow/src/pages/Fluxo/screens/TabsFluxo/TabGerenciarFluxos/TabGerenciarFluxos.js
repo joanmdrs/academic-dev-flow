@@ -8,7 +8,7 @@ import BotaoFiltrar from "../../../../../components/Botoes/BotaoFiltrar/BotaoFil
 import BotaoAdicionar from "../../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
 import BotaoAtualizar from "../../../../../components/Botoes/BotaoAtualizar/BotaoAtualizar";
 import BotaoExcluir from "../../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
-import FormFluxo from "../../FormFluxo/FormFluxo";
+import FormFluxo from "../../../components/FormFluxo/FormFluxo";
 
 const TabGerenciarFluxos = () => {
 
@@ -174,11 +174,11 @@ const TabGerenciarFluxos = () => {
 
              : (
                 <React.Fragment>
-                    <div className="botoes-de-acao">
+                    <div className="button-menu">
                         <div id="botao-filtrar"> 
                             <BotaoFiltrar funcao={handleCliqueBotaoFiltrar} />
                         </div>
-                        <div id="botao-adicionar-atualizar-deletar"> 
+                        <div className="grouped-buttons"> 
                             <BotaoAdicionar funcao={handleCliqueBotaoAdicionar} status={isBotaoAdicionarVisivel}/>
                             <BotaoAtualizar funcao={handleCliqueBotaoEditar} status={isBotaoEditarVisivel}/>
                             <BotaoExcluir funcao={handleExcluirFluxo} status={isBotaoExcluirVisivel}/>
@@ -187,7 +187,7 @@ const TabGerenciarFluxos = () => {
 
                     { isFormFiltrarVisivel && (<FormDeBusca executeFuncao={handleBuscarFluxo}/>) }
                 
-                    <div className="form-box">
+                    <div>
                         <ListaDados colunas={COLUNAS_LISTA} dados={fluxos} onClickRow={handleSelecionarFluxo}/>
                     </div>
                 </React.Fragment>

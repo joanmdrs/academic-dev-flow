@@ -4,7 +4,7 @@ const FormContext = createContext();
 
 export const useFormContext = () => useContext(FormContext);
 
-export const FormProvider = ({children}) => {
+export const FluxoProvider = ({children}) => {
 
     const [hasDadosFluxo, setHasDadosFluxo] = useState({});
     const [hasDadosEtapas, setHasDadosEtapas] = useState([]);
