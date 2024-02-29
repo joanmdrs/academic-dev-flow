@@ -3,7 +3,7 @@ import "./TabEquipe.css";
 import BotaoAdicionar from "../../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
 import BotaoExcluir from "../../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
 import { Table } from "antd";
-import { buscarMembroPeloId, buscarMembroPorGrupoENome } from "../../../../../services/membro_service";
+import { buscarMembroPeloId, buscarMembroPorGrupoENome } from "../../../../../services/membroService";
 import { NotificationManager } from "react-notifications";
 import { criarMembroProjeto, excluirMembroProjetoMany, excluirMembroProjetoOne, listarMembrosPorProjeto } from "../../../../../services/membro_projeto_service";
 import { useFormContext } from "../../../context/Provider/Provider";

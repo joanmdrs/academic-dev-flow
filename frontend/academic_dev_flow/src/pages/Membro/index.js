@@ -2,7 +2,7 @@ import React from "react";
 import MyMenu from "../../components/Menu/Menu";
 import { Layout } from 'antd';
 import MyHeader from "../../components/Header/Header";
-import PageMembro from "./PageMembro";
+import ScreenMembro from "./screens/ScreenMembro";
 
 const Membro = () => {
 
@@ -11,7 +11,7 @@ const Membro = () => {
             <MyMenu/>
             <Layout>
                 <MyHeader/>
-                <PageMembro />
+                <ScreenMembro />
             </Layout>
         </React.Fragment>
       

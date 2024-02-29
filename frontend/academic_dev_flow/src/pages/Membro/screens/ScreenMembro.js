@@ -1,41 +1,34 @@
-import React, { useState, useEffect } from "react";
-import "./PageMembro.css";
-import Titulo from "../../components/Titulo/Titulo";
-import BotaoBuscar from "../../components/Botoes/BotaoBuscar/BotaoBuscar";
-import BotaoAdicionar from "../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
-import BotaoExcluir from "../../components/Botoes/BotaoExcluir/BotaoExcluir";
-import ModalDeBusca from "../../components/Modals/ModalDeBusca/ModalDeBusca";
+import React, { useState } from "react";
+import "./ScreenMembro.css";
+import Titulo from "../../../components/Titulo/Titulo";
+import BotaoBuscar from "../../../components/Botoes/BotaoBuscar/BotaoBuscar";
+import BotaoAdicionar from "../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
+import BotaoExcluir from "../../../components/Botoes/BotaoExcluir/BotaoExcluir";
+import ModalDeBusca from "../../../components/Modals/ModalDeBusca/ModalDeBusca";
 import {
   atualizarMembro,
   buscarMembroPeloNome,
   criarMembro,
   excluirMembro,
-} from "../../services/membro_service";
+} from "../../../services/membroService";
 import {
   atualizarUsuario,
+  buscarUsuarioPeloId,
   buscarUsuarioPeloIdMembro,
-  criarUsuario,
-} from "../../services/usuario_service";
-import { recarregarPagina } from "../../services/utils";
+} from "../../../services/usuarioService";
+import { recarregarPagina } from "../../../services/utils";
 import {
   Button,
-  DatePicker,
   Form,
   Input,
-  Tooltip,
   Select,
   Tabs,
 } from "antd";
 import { NotificationContainer, NotificationManager } from "react-notifications";
-import { QuestionCircleOutlined } from '@ant-design/icons';
-
 import InputMask from 'react-input-mask';
-import moment from "moment";
-import "moment/locale/pt-br";
-moment.locale("pt-br");
 
 
-const PageMembro = () => {
+const ScreenMembro = () => {
 
     const VALORES_INICIAIS = {
         nome: "",
@@ -62,7 +55,7 @@ const PageMembro = () => {
         render: (text, record) => (
             <span
                 style={{ color: "blue", cursor: "pointer" }}
-                onClick={() => handleCliqueLinha(record)}
+                onClick={() => handlePreencherForm(record)}
             >
             {text}
             </span>
@@ -115,64 +108,54 @@ const PageMembro = () => {
         setIsBotaoAdicionarVisivel(true);
     };
 
-    const handleCliqueLinha = async (dados) => {
-        const resposta_usuario = await buscarUsuarioPeloIdMembro(dados.id);
-        const dados_usuario = resposta_usuario.data;
+    const handlePreencherForm = async (dadosMembro) => {
+        const response = await buscarUsuarioPeloId(dadosMembro.usuario)
+        const dadosUsuario = response.data;
 
         form.setFieldsValue({
-            nome: dados.nome,
-            cpf: dados.cpf,
-            data_nascimento: moment(dados.data_nascimento).format('DD/MM/YYYY'),
-            sexo: dados.sexo,
-            telefone: dados.telefone,
-            email: dados.email,
-            usuario: dados_usuario.usuario,
-            senha: dados_usuario.senha,
-            grupo: dados_usuario.grupo,
+            grupo: dadosMembro.grupo,
+            nome: dadosMembro.nome,
+            cpf: dadosMembro.cpf,
+            data_nascimento: dadosMembro.data_nascimento,
+            sexo: dadosMembro.sexo,
+            telefone: dadosMembro.telefone,
+            email: dadosMembro.email,
+            usuario: dadosUsuario.username,
+            senha: dadosUsuario.password,
         });
         handleFecharModal();
-        setIdMembro(dados.id);
+        setIdMembro(dadosMembro.id);
         setAcaoForm("atualizar");
         setIsFormVisivel(true);
         setIsBotaoExcluirVisivel(false);
     };
 
     const handleCriarMembro = async () => {
+        const dadosForm = form.getFieldsValue()
+        try {   
+            const response = await criarMembro(dadosForm)
 
-        const dados_form = form.getFieldValue();
-        try {
-            const resposta_membro = await criarMembro(dados_form);
-
-            if(resposta_membro.status === 200){
-                const resposta_usuario = await criarUsuario(dados_form, resposta_membro.data.id)
-
-                if(resposta_usuario.status === 200){
-                    NotificationManager.success("Membro criado com sucesso!");
-                    recarregarPagina()
-                } else {
-                    NotificationManager.error("Ocorreu um problema, contate o suporte!");
-                }
+            if (response.status === 201) {
+                NotificationManager.success("Membro criado com sucesso!");
+                recarregarPagina()
+            } else {
+                NotificationManager.error("Ocorreu um problema, contate o suporte!");
             }
+            
         } catch (error) {
             NotificationManager.error("Ocorreu um problema, contate o suporte!");
         }
     };
 
     const handleAtualizarMembro = async () => {
-        const dados_form = form.getFieldsValue();
+        const dadosForm = form.getFieldsValue();
 
         try {
-            const resposta_membro = await atualizarMembro(dados_form, idMembro);
+            const response = await atualizarMembro(dadosForm, idMembro);
 
-            if (resposta_membro.status === 200) {
-                const resposta_usuario = await atualizarUsuario(dados_form, idMembro);
-
-                if (resposta_usuario.status === 200) {
-                    NotificationManager.success("Membro atualizado com sucesso!");
-                    recarregarPagina()
-                } else {
-                    NotificationManager.error("Ocorreu um problema durante a operação, contate o suporte!");
-                }
+            if (response.status === 200) {
+                NotificationManager.success("Membro atualizado com sucesso!");
+                recarregarPagina()
             } else {
                 NotificationManager.error("Ocorreu um problema durante a operação, contate o suporte!");
             }
@@ -212,7 +195,7 @@ const PageMembro = () => {
                 paragrafo='Membros > Gerenciar membros'
             />
 
-            <div className='add-and-delete'>
+            <div className='two-buttons'>
                 <BotaoAdicionar funcao={handleCliqueBotaoAdicionar} status={isBotaoAdicionarVisivel}/>
                 <BotaoExcluir funcao={handleExcluirMembro} status={isBotaoExcluirVisivel}/>
             </div>
@@ -269,9 +252,7 @@ const PageMembro = () => {
                             name="data_nascimento"
                             rules={[{ required: true, message: 'Por favor, selecione a data de nascimento!' }]}
                         >
-                             <InputMask mask="99/99/9999" maskChar={null}>
-                            {() => <Input placeholder="00/00/0000" />}
-                            </InputMask>
+                            <Input type="date"/>
                            
                         </Form.Item>
 
@@ -354,7 +335,7 @@ const PageMembro = () => {
                             label="Senha"
                         >
                             
-                            <Input />
+                            <Input.Password placeholder="" />
                         </Form.Item>
 
                         <Form.Item 
@@ -364,8 +345,9 @@ const PageMembro = () => {
                         >
 
                            <Select>
-                                <Option value="aluno">Aluno</Option>
-                                <Option value="professor">Professor</Option>
+                                <Option value="Administradores"> Administradores </Option>
+                                <Option value="Alunos">Alunos</Option>
+                                <Option value="Professores">Professores</Option>
                            </Select>
                         </Form.Item>
 
@@ -386,4 +368,4 @@ const PageMembro = () => {
     )
 }
 
-export default PageMembro;
+export default ScreenMembro;

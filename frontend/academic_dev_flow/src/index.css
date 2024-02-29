@@ -20,22 +20,10 @@ code {
     monospace;
 }
 
-
 .global-div {
   margin: 20px;
   padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-}
-
-.button-menu {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-}
-
-.grouped-buttons {
-  display: flex;
-  gap: 10px;
 }
 
 .global-form {
@@ -60,6 +48,25 @@ code {
   width: 70px;
 }
 
+.button-menu {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.grouped-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.two-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin: 20px;
+}
 
 .form-box {
   display: flex;

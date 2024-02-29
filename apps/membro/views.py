@@ -11,6 +11,8 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import Group
 from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
+from django.contrib.auth.hashers import make_password
+
 
 class BaseMembroView(APIView):
     permission_classes = [IsAuthenticated, IsAdminUserOrReadOnly]
@@ -114,12 +116,12 @@ class BuscarMembroPorIdView(BaseMembroView):
 class ExcluirMembroView(BaseMembroView):
     def delete(self, request, id):
         try:
-            membro = get_object_or_404(Membro, id=id)
-            usuario = Usuario.objects.get(membro_id=id) 
+            member = Membro.objects.get(pk=id)
+            user = Usuario.objects.get(pk=member.usuario.id)
             
-            if (membro is not None and usuario is not None):
-                usuario.delete()
-                membro.delete()
+            if (member is not None and user is not None):
+                user.delete()
+                member.delete()
                 return Response({"detail": "Membro excluído com sucesso"}, status=status.HTTP_204_NO_CONTENT);
             
             else:
@@ -131,13 +133,35 @@ class ExcluirMembroView(BaseMembroView):
 class AtualizarMembroView(BaseMembroView):
     def patch(self, request, id):
         try:
-            membro = Membro.objects.get(pk=id)
-            serializer = MembroSerializer(membro, data=request.data)
+            group_name = request.data.get('grupo', None)
+            member = Membro.objects.get(pk=id)
+            member_data = request.data.get('membro', {})
+            member_data['grupo'] = group_name
+            member_serializer = MembroSerializer(member, data=member_data)
             
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            
+            if member_serializer.is_valid(raise_exception=True):
+                member_serializer.save()
+
+                user_data = request.data.get('usuario', {})
+                user = Usuario.objects.get(id=member.usuario.id)
+                user_serializer = UsuarioSerializer(user, data=user_data)
+
+                if user_serializer.is_valid(raise_exception=True):
+                    user_validated = user_serializer.validated_data
+                    user.username = user_validated['username']
+                    new_password = user_validated.get('password')
+                    if new_password:
+                        user.set_password(new_password)
+
+                    user.save()
+                    
+
+                    if group_name:
+                        group = Group.objects.get(name=group_name)
+                        user.groups.set([group])
+                        
+                return Response(member_serializer.data, status=status.HTTP_200_OK)
+
             else: 
                 return JsonResponse({'error': 'Dados inválidos'}, status=400)
         except Exception as e:
