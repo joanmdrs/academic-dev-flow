@@ -2,7 +2,7 @@ import React from "react";
 import MyMenu from "../../components/Menu/Menu";
 import { Layout } from 'antd';
 import MyHeader from "../../components/Header/Header";
-import PageArtefato from "./PageArtefato";
+import ScreenGerenciarArtefatos from "./screens/ScreenGerenciarArtefatos/ScreenGerenciarArtefatos";
 
 const Artefato = () => {
 
@@ -11,7 +11,7 @@ const Artefato = () => {
             <MyMenu/>
             <Layout>
                 <MyHeader/>
-                <PageArtefato />
+                <ScreenGerenciarArtefatos />
             </Layout>
         </React.Fragment>
       

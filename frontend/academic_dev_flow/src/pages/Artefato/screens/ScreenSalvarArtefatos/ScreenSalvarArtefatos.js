@@ -2,11 +2,11 @@ import { Button, Form, Input } from "antd";
 import React, { useEffect } from "react";
 import Titulo from "../../../../components/Titulo/Titulo";
 import BotaoVoltar from "../../../../components/Botoes/BotaoVoltar/BotaoVoltar";
-import { atualizarArtefato, criarArtefato } from "../../../../services/artefato_service";
+import { atualizarArtefato, criarArtefato } from "../../../../services/artefatoService";
 import { NotificationManager } from "react-notifications";
 import { recarregarPagina } from "../../../../services/utils";
 
-const FormSalvarArtefato = ({acaoBotaoVoltar, acaoForm, dadosLinhaListaArtefatos}) => {
+const ScreenSalvarArtefatos = ({acaoBotaoVoltar, acaoForm, dadosLinhaListaArtefatos}) => {
 
     const [form] = Form.useForm();
     
@@ -72,7 +72,7 @@ const FormSalvarArtefato = ({acaoBotaoVoltar, acaoForm, dadosLinhaListaArtefatos
                 paragrafo='Artefatos > Cadastrar artefatos'
             />
 
-            <div className="form-box"> 
+            <div className="global-div"> 
                 <div> 
                     <BotaoVoltar funcao={acaoBotaoVoltar} />
                 </div>
@@ -81,7 +81,7 @@ const FormSalvarArtefato = ({acaoBotaoVoltar, acaoForm, dadosLinhaListaArtefatos
                     <h4>INCLUIR DISCIPLINA</h4>
                 </div>
 
-                <div> 
+                <div className="global-form"> 
                     <Form layout="vertical" form={form}>
                         <Form.Item 
                             label="Nome" 
@@ -114,4 +114,4 @@ const FormSalvarArtefato = ({acaoBotaoVoltar, acaoForm, dadosLinhaListaArtefatos
     )
 }
 
-export default FormSalvarArtefato;
+export default ScreenSalvarArtefatos;

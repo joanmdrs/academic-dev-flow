@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { NotificationContainer, NotificationManager } from "react-notifications";
-import BotaoAdicionar from "../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
-import BotaoExcluir from "../../components/Botoes/BotaoExcluir/BotaoExcluir";
-import Titulo from "../../components/Titulo/Titulo";
-import BotaoAtualizar from "../../components/Botoes/BotaoAtualizar/BotaoAtualizar";
-import BotaoFiltrar from "../../components/Botoes/BotaoFiltrar/BotaoFiltrar";
-import FormSalvarArtefato from "./components/FormSalvarArtefato/FormSalvarArtefato"
-import { buscarArtefatoPeloNome, excluirArtefato, listarArtefatos } from "../../services/artefato_service";
-import { recarregarPagina } from "../../services/utils";
-import ListaDados from "../../components/Listas/ListaDados/ListaDados";
-import FormDeBusca from "../../components/Forms/FormDeBusca/FormDeBusca";
+import BotaoAdicionar from "../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
+import BotaoExcluir from "../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
+import Titulo from "../../../../components/Titulo/Titulo";
+import BotaoAtualizar from "../../../../components/Botoes/BotaoAtualizar/BotaoAtualizar";
+import BotaoFiltrar from "../../../../components/Botoes/BotaoFiltrar/BotaoFiltrar";
+import { buscarArtefatoPeloNome, excluirArtefato, listarArtefatos } from "../../../../services/artefatoService";
+import { recarregarPagina } from "../../../../services/utils";
+import ListaDados from "../../../../components/Listas/ListaDados/ListaDados";
+import FormDeBusca from "../../../../components/Forms/FormDeBusca/FormDeBusca";
+import ScreenSalvarArtefatos from "../ScreenSalvarArtefatos/ScreenSalvarArtefatos";
 
-const PageArtefato = () => {
+const ScreenGerenciarArtefatos = () => {
 
     const [acaoForm, setAcaoForm] = useState("criar");
     const [isFormVisivel, setIsFormVisivel] = useState(false);
@@ -126,45 +126,44 @@ const PageArtefato = () => {
 
             {isFormVisivel ? (
 
-                <FormSalvarArtefato 
+                <ScreenSalvarArtefatos 
                     acaoBotaoVoltar={handleCliqueBotaoVoltar} 
                     acaoForm={acaoForm} 
                     dadosLinhaListaArtefatos={dadosArtefatoSelecionado}
                 />
 
             ) : (
-                <>
+                <React.Fragment>
                     <Titulo
                         titulo='Artefatos'
                         paragrafo='Artefatos > Gerenciar artefatos'
                     />
 
-                   
+                    <div className="global-div">
+                        <div className="button-menu">
+                            <div id="botao-filtrar"> 
+                                <BotaoFiltrar funcao={handleCliqueBotaoFiltrar}  />
+                            </div>
+                            <div className="grouped-buttons"> 
+                                <BotaoAdicionar funcao={handleCliqueBotaoAdicionar} status={isBotaoAdicionarVisivel}/>
+                                <BotaoAtualizar funcao={handleCliqueBotaoEditar} status={isBotaoEditarVisivel}/>
+                                <BotaoExcluir funcao={handleCliqueBotaoExcluir} status={isBotaoExcluirVisivel}/>
+                            </div>
+                        </div>
 
-                    <div className="botoes-de-acao">
-                        <div id="botao-filtrar"> 
-                            <BotaoFiltrar funcao={handleCliqueBotaoFiltrar}  />
-                        </div>
-                        <div id="botao-adicionar-atualizar-deletar"> 
-                            <BotaoAdicionar funcao={handleCliqueBotaoAdicionar} status={isBotaoAdicionarVisivel}/>
-                            <BotaoAtualizar funcao={handleCliqueBotaoEditar} status={isBotaoEditarVisivel}/>
-                            <BotaoExcluir funcao={handleCliqueBotaoExcluir} status={isBotaoExcluirVisivel}/>
-                        </div>
+                        {isFormFiltrarVisivel && (<FormDeBusca executeFuncao={handleFiltrarArtefatos}/>)}
+                    
+                        <ListaDados 
+                            colunas={COLUNAS_LISTA} 
+                            dados={dadosArtefatos} 
+                            onClickRow={handleCliqueLinhaTabelaArtefatos}
+                        />
                     </div>
-
-                    {isFormFiltrarVisivel && (<FormDeBusca executeFuncao={handleFiltrarArtefatos}/>)}
-                
-                    <ListaDados 
-                        colunas={COLUNAS_LISTA} 
-                        dados={dadosArtefatos} 
-                        onClickRow={handleCliqueLinhaTabelaArtefatos}
-                    />
-                </>
+                </React.Fragment>
             )}
             
         </div>
-
     )
 }
 
-export default PageArtefato;
+export default ScreenGerenciarArtefatos;
