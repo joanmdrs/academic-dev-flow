@@ -7,10 +7,8 @@ const { Option } = Select;
 
 const TabProjeto = ({ onSubmit, onCancel }) => {
 
-    const {hasProjeto, setHasProjeto} = useFormContext()
+    const {hasProjeto} = useFormContext()
     const [carregando, setCarregando] = useState(false);
-
-    const [valoresIniciais, setValoresIniciais] = useState({})
 
     const [form] = Form.useForm();
 
@@ -63,9 +61,7 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
                         form={form}
                         layout="horizontal"
                         style={{marginTop: "20px"}}
-                        className="box"
-                        initialValues={valoresIniciais}
-                    
+                        className="global-form"                    
                     >
                         <Form.Item label="Nome" name="nome">
                             <Input

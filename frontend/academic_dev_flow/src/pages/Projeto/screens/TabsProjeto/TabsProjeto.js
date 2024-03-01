@@ -107,7 +107,7 @@ const TabsProjeto = () => {
         
         if(resposta.status === 200){
           NotificationManager.success('Projeto criado com sucesso!');
-          
+          setHasProjeto(resposta.data)          
         } else {
           NotificationManager.error("Ocorreu um problema, contate o suporte!");
         }
@@ -122,6 +122,7 @@ const TabsProjeto = () => {
         
         if(resposta.status === 200){
           NotificationManager.success('Projeto atualizado com sucesso!');
+          setHasProjeto(resposta.data)
         } else {
           NotificationManager.error("Ocorreu um problema, contate o suporte!");
         }
@@ -136,7 +137,6 @@ const TabsProjeto = () => {
       }else if(acaoForm === 'atualizar'){
         await handleAtualizarProjeto(dados, hasProjeto.id)
       }
-      recarregarPagina()
     };
 
     const handleCancelar = () => {
@@ -210,7 +210,7 @@ const TabsProjeto = () => {
                         )
 
                         : (
-                          <div className="form-box">
+                          <div className="global-div">
                             <Tabs
                               size="large"
                               indicator={{

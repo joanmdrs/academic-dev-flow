@@ -68,27 +68,6 @@ code {
   margin: 20px;
 }
 
-.form-box {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start !important;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  border-radius: 5px;
-  padding: 20px;
-  margin: 20px;
-  background-color: white;
-}
-
-.box {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start !important;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  border-radius: 5px;
-  padding: 20px;
-  background-color: white;
-}
-
 
 
 

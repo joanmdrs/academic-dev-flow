@@ -7,7 +7,7 @@ import { listarFluxos } from "../../../../../services/fluxoService";
 import { buscarEtapaPeloId, buscarEtapaPeloNome } from "../../../../../services/etapaService";
 import BotaoAdicionar from "../../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
 import BotaoExcluir from "../../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
-import {  excluirFluxoEtapaMany, excluirFluxoEtapaOne, listarEtapasPorFluxo, vincularEtapaFluxo } from "../../../../../services/fluxo_etapa_service";
+import {  excluirFluxoEtapaMany, excluirFluxoEtapaOne, listarEtapasPorFluxo, vincularEtapaFluxo } from "../../../../../services/fluxoEtapaService";
 import ModalSelecionarObjetos from "../../../../../components/Modals/ModalSelecionarObjetos/ModalSelecionarObjetos";
 
 const { Option } = Select;
