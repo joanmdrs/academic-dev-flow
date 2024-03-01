@@ -1,4 +1,3 @@
-import moment from "moment";
 import api from "../api/api";
 
 export const criarMembro = async (dadosForm) => {
@@ -35,7 +34,6 @@ export const buscarMembroPorGrupoENome = async (nome, grupo) => {
 
 export const buscarMembroPeloId = async (parametro) => {
     const resposta = await api.get(`membro/buscar/${encodeURIComponent(parametro)}/`)
-    console.log(resposta)
     return resposta
 }
 

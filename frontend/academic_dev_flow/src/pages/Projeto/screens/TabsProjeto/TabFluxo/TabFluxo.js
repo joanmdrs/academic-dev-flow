@@ -118,17 +118,15 @@ const TabFluxo = () => {
 
     const handleBuscarFluxoProjeto = async () => {
       try {
-
         if (hasProjeto.fluxo !== null) {
           const resposta = await buscarFluxoPeloId(hasProjeto.fluxo)
-          console.log("estou sendo executado")
           if (resposta.status === 200){
             setHasFluxo([resposta.data])
           } else {
             NotificationManager.error('Falha ao buscar os dados do fluxo')
           }
         } else {
-          NotificationManager.error('Falha ao buscar os dados do fluxo')
+          return
         }
   
       } catch (error) {

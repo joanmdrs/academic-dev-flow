@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./TabVincularEtapas.css";
 import { NotificationManager } from "react-notifications";
-import { Table, Form, Select, Space } from "antd";
+import { Table, Form, Select } from "antd";
 import { useFormContext } from "../../../context/Provider/Provider";
 import { listarFluxos } from "../../../../../services/fluxoService"; 
 import { buscarEtapaPeloId, buscarEtapaPeloNome } from "../../../../../services/etapaService";
