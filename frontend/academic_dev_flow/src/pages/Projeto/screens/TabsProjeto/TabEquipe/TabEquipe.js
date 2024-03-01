@@ -5,7 +5,7 @@ import BotaoExcluir from "../../../../../components/Botoes/BotaoExcluir/BotaoExc
 import { Table } from "antd";
 import { buscarMembroPeloId, buscarMembroPorGrupoENome } from "../../../../../services/membroService";
 import { NotificationManager } from "react-notifications";
-import { criarMembroProjeto, excluirMembroProjetoMany, excluirMembroProjetoOne, listarMembrosPorProjeto } from "../../../../../services/membro_projeto_service";
+import { criarMembroProjeto, excluirMembroProjetoMany, excluirMembroProjetoOne, listarMembrosPorProjeto } from "../../../../../services/membroProjetoService";
 import { useFormContext } from "../../../context/Provider/Provider";
 import ModalSelecionarObjetos from "../../../../../components/Modals/ModalSelecionarObjetos/ModalSelecionarObjetos";
 
@@ -48,14 +48,29 @@ const TabEquipe = () => {
   ];
 
   const { hasProjeto } = useFormContext();
-  const [isBotaoAdicionarVisivel, setIsBotaoAdicionarVisivel] = useState(false) 
-  const [isBotaoExcluirVisivel, setIsBotaoExcluirVisivel] = useState(false);
+  const [isBotaoAdicionarVisivel, setIsBotaoAdicionarVisivel] = useState(true) 
+  const [isBotaoExcluirVisivel, setIsBotaoExcluirVisivel] = useState(true);
   const [isModalVisivel, setIsModalVisivel] = useState(false);
   const [grupoMembro, setGrupoMembro] = useState(null)
   const [alunos, setAlunos] = useState([]);
   const [professores, setProfessores] = useState([])
   const [alunosVisiveis, setAlunosVisiveis] = useState(false);
   const [professoresVisiveis, setProfessoresVisiveis] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (hasProjeto !== null) {
+        setIsBotaoAdicionarVisivel(false)
+        setIsBotaoExcluirVisivel(false)
+        await handleListarMembrosPorProjeto();
+      }
+    };
+
+    fetchData();
+  
+    
+  }, [hasProjeto]);
+
   const [membrosExcluir, setMembrosExcluir] = useState([])
 
   const handleExibirModal = () => setIsModalVisivel(true);
@@ -63,12 +78,12 @@ const TabEquipe = () => {
 
   const handleBotaoAdicionarAluno = () => {
     handleExibirModal()
-    setGrupoMembro('aluno')
+    setGrupoMembro('Alunos')
   }
 
   const handleBotaoAdicionarProfessor = () => {
     handleExibirModal()
-    setGrupoMembro('professor')
+    setGrupoMembro('Professores')
   }
 
   const handleBuscarMembro = async (parametro) => {
@@ -84,14 +99,13 @@ const TabEquipe = () => {
     }
   };
 
-
   const handleProcessarMembros = async (membrosVinculados) => {
     const promises = membrosVinculados.map(async (membroProjeto) => {
       try {
         const respostaMembro = await buscarMembroPeloId(membroProjeto.membro);
         const grupo = respostaMembro.data.grupo;
   
-        if (grupo === 'aluno' || grupo === 'professor') {
+        if (grupo === 'Alunos' || grupo === 'Professores') {
           return {
             id: membroProjeto.id,
             projeto: hasProjeto.id,
@@ -111,8 +125,8 @@ const TabEquipe = () => {
   
     const resultados = (await Promise.all(promises)).filter(Boolean);
   
-    const alunos = resultados.filter((membro) => membro.grupo === 'aluno');
-    const professores = resultados.filter((membro) => membro.grupo === 'professor');
+    const alunos = resultados.filter((membro) => membro.grupo === 'Alunos');
+    const professores = resultados.filter((membro) => membro.grupo === 'Professores');
   
     return { alunos, professores };
   };
@@ -141,15 +155,6 @@ const TabEquipe = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (hasProjeto) {
-        await handleListarMembrosPorProjeto();
-      }
-    };
-
-    fetchData();
-  }, [hasProjeto]);
 
   const handleSelecionarMembros = async (dados) => {
     try {
@@ -213,28 +218,28 @@ const TabEquipe = () => {
 
       {isVisible && (
         <div>
-          <div
-            className="group-buttons"
-            style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
-          >
+          <div className="two-buttons">
             <BotaoAdicionar status={isBotaoAdicionarVisivel} funcao={onAddButtonClick} />
             <BotaoExcluir status={isBotaoExcluirVisivel} funcao={() => onDeleteButtonClick(grupo)} />
           </div>
 
-          <Table
-            className="tab-equipe"
+          { data.length > 0 && <Table
+            className="global-table"
             columns={COLUNAS_LISTA}
             dataSource={data}
             rowKey="id"
             rowSelection={rowSelection}
           />
+
+          }
+          
         </div>
       )}
     </div>
   );
 
   return (
-    <div className="box">
+    <div>
       {isModalVisivel && (
         <ModalSelecionarObjetos
           title="BUSCAR MEMBRO"
@@ -253,7 +258,7 @@ const TabEquipe = () => {
         setAlunosVisiveis,
         handleBotaoAdicionarAluno,
         handleExcluirMembros,
-        'aluno'
+        'Alunos'
       )}
 
       {renderSection(
@@ -263,7 +268,7 @@ const TabEquipe = () => {
         setProfessoresVisiveis,
         handleBotaoAdicionarProfessor,
         handleExcluirMembros,
-        'professor'
+        'Professores'
       )}
     </div>
   );

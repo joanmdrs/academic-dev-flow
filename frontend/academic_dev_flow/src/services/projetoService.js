@@ -11,6 +11,11 @@ export const buscarProjetoPeloNome = async (parametro) => {
     return resposta;
 };
 
+export const buscarProjetoPeloId = async (idProjeto) => {
+    const resposta = await api.get(`/projeto/buscar_por_id/${encodeURIComponent(idProjeto)}/`);
+    return resposta
+}
+
 export const excluirProjeto = (id) => {
     const resposta = api.delete(`/projeto/excluir/${encodeURIComponent(id)}/`);
     return resposta;

@@ -1,13 +1,11 @@
 import { Button, Form, Input, Select, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import { LoadingOutlined } from '@ant-design/icons';
-import { NotificationManager } from "react-notifications";
-import { atualizarProjeto, criarProjeto } from "../../../../../services/projeto_service";
 import { useFormContext } from "../../../context/Provider/Provider";
 
 const { Option } = Select;
 
-const TabProjeto = ({ onSubmit }) => {
+const TabProjeto = ({ onSubmit, onCancel }) => {
 
     const {hasProjeto, setHasProjeto} = useFormContext()
     const [carregando, setCarregando] = useState(false);
@@ -105,7 +103,7 @@ const TabProjeto = ({ onSubmit }) => {
                                 SALVAR
                             </Button >
 
-                            <Button type="primary" danger>
+                            <Button type="primary" onClick={onCancel} danger >
                                 CANCELAR
                             </Button>
                             </div>

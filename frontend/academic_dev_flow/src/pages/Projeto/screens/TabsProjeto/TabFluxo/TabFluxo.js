@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import BotaoAdicionar from "../../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
 import BotaoExcluir from "../../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
-import { Table } from "antd";
 import ListaDados from "../../../../../components/Listas/ListaDados/ListaDados";
 import ModalDeBusca from "../../../../../components/Modals/ModalDeBusca/ModalDeBusca";
 import { buscarFluxoPeloId, buscarFluxoPeloNome } from "../../../../../services/fluxoService";
 import { NotificationManager } from "react-notifications";
-import ModalSelecionarObjetos from "../../../../../components/Modals/ModalSelecionarObjetos/ModalSelecionarObjetos";
-import { atualizarFluxoProjeto } from "../../../../../services/projeto_service";
+import { atualizarFluxoProjeto, buscarProjetoPeloId } from "../../../../../services/projetoService";
 import { useFormContext } from "../../../context/Provider/Provider";
 
 const TabFluxo = () => {
@@ -23,6 +21,14 @@ const TabFluxo = () => {
         title: "Nome",
         dataIndex: "nome",
         key: "nome",
+        render:(text) => (
+          <span 
+            style={{color: 'blue', cursor: 'pointer'}}
+            onClick={() => setIsBotaoExcluirVisivel(true)}
+          >
+            {text}
+          </span>
+        )
       }
     ]
 
@@ -48,11 +54,23 @@ const TabFluxo = () => {
         
     ];
     
-    const {hasProjeto} = useFormContext()
+    const {hasProjeto, setHasProjeto} = useFormContext()
+    const [isBotaoAdicionarVisivel, setIsBotaoAdicionarVisivel] = useState(true)
     const [isBotaoExcluirVisivel, setIsBotaoExcluirVisivel] = useState(true)
     const [isModalVisivel, setIsModalVisivel] = useState(false)
-    const [fluxo, setFluxo] = useState({})
+    const [hasFluxo, setHasFluxo] = useState([])
     const [isVisivel, setIsVisivel] = useState(false)
+
+    useEffect(() => {
+      const fetchData = async () => {
+        if (hasProjeto !== null) {
+          setIsBotaoAdicionarVisivel(false)
+          await handleBuscarFluxoProjeto();
+        }
+      };
+  
+      fetchData();
+    }, [hasProjeto]);
 
     const handleExibirModal = () => setIsModalVisivel(true)
     const handleFecharModal = () => setIsModalVisivel(false)
@@ -81,8 +99,15 @@ const TabFluxo = () => {
         const resposta = await atualizarFluxoProjeto(idFluxo, idProjeto)
 
         if (resposta.status === 200){
-          NotificationManager.success("Fluxo vinculado ao projeto com sucesso!")
-          await handleBuscarFluxoProjeto()
+          const responseFilterProject = await buscarProjetoPeloId(idProjeto)
+          
+          if (responseFilterProject.status === 200){
+            setHasProjeto(responseFilterProject.data)
+            await handleBuscarFluxoProjeto()
+            handleFecharModal()
+          } else {
+            NotificationManager.error("Falha ao buscar as informações do projeto, contate o suporte!")
+          } 
         } else {
           NotificationManager.error("Falha ao vincular o fluxo ao projeto, contate o suporte!")
         }
@@ -96,12 +121,14 @@ const TabFluxo = () => {
 
         if (hasProjeto.fluxo !== null) {
           const resposta = await buscarFluxoPeloId(hasProjeto.fluxo)
-
+          console.log("estou sendo executado")
           if (resposta.status === 200){
-            setFluxo(resposta.data)
+            setHasFluxo([resposta.data])
           } else {
             NotificationManager.error('Falha ao buscar os dados do fluxo')
           }
+        } else {
+          NotificationManager.error('Falha ao buscar os dados do fluxo')
         }
   
       } catch (error) {
@@ -109,23 +136,14 @@ const TabFluxo = () => {
       }
     }
 
-    useEffect(() => {
-      const fetchData = async () => {
-        if (hasProjeto) {
-          await handleBuscarFluxoProjeto();
-        }
-      };
-  
-      fetchData();
-    }, [hasProjeto]);
-
     const handleDesvincularFluxo = async () => {
       try {
         const resposta = await atualizarFluxoProjeto(0, hasProjeto.id)
 
         if (resposta.status === 200){
           NotificationManager.success("Fluxo desvinculado do projeto com sucesso!")
-          setFluxo([])
+          setHasFluxo([])
+          setIsBotaoExcluirVisivel(false)
         } else {
           NotificationManager.error('Falha ao desvincular o fluxo do projeto, contate o suporte!')
         }
@@ -150,14 +168,19 @@ const TabFluxo = () => {
           { isVisivel && 
             <React.Fragment>
               <div
-                  className="group-buttons"
-                  style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
+                  className="two-buttons"
+                  // style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
               >
-                  <BotaoAdicionar funcao={handleExibirModal}/>
+                  <BotaoAdicionar funcao={handleExibirModal} status={isBotaoAdicionarVisivel}/>
                   <BotaoExcluir funcao={handleDesvincularFluxo} status={isBotaoExcluirVisivel}/>
               </div>
               <div>
-                  <ListaDados colunas={COLUNAS_LISTA} dados={[fluxo]} onClickRow={handleCliqueLinha}/>
+
+              {hasFluxo && hasFluxo.length > 0 ? (
+                <ListaDados colunas={COLUNAS_LISTA} dados={hasFluxo} onClickRow={handleCliqueLinha} />
+              ) : null}
+
+                  
 
                   <ModalDeBusca 
                     titulo="BUSCAR FLUXO"

@@ -22,8 +22,6 @@ export const excluirMembroProjetoMany = async (id_projeto, lista_membros, grupo)
     return resposta
 }
 
-
-
 export const listarMembrosPorProjeto = async (idProjeto) => {
     const resposta = await api.get(`membro_projeto/buscar/${encodeURIComponent(idProjeto)}/`)
     return resposta

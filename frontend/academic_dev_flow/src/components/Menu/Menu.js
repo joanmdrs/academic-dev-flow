@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './Menu.css';
 import { Link } from 'react-router-dom';
 import { Menu } from 'antd';
 import { HiOutlineClipboardList } from "react-icons/hi";
-import { DiScrum } from "react-icons/di";
 import { BiGroup } from "react-icons/bi";
 import { SiAzureartifacts } from "react-icons/si";
-import { BsBarChartSteps } from "react-icons/bs";
 import Sider from 'antd/es/layout/Sider';
 import { RiFlowChart } from "react-icons/ri";
 
@@ -27,40 +25,31 @@ const MyMenu = () => {
           marginTop: "20px"
         }}
       >
-        <SubMenu 
+        <Menu.Item
           className='item-menu'
           key='projeto'
           icon={<HiOutlineClipboardList style={{ fontSize: '20px' }} />}
-          title="Projetos"
         >
-
-          <Menu.Item
-            className='item-menu'
-            key="projeto-antigo"
-          >
-            <Link to="/admin/projetos/antigo">Projetos antigo</Link>
-          </Menu.Item>
-
-          <Menu.Item
-            className='item-menu'
-            key="projeto-novo"
-          >
-            <Link to="/admin/projetos/novo">Projetos novo</Link>
-          </Menu.Item>
-        </SubMenu>
+          <Link to='/admin/projetos'>Projetos</Link>
+        </Menu.Item>
+        
         <SubMenu
           className='item-menu'
           key="fluxo"
           icon={<RiFlowChart style={{ fontSize: '20px' }} />}
           title="Fluxos"
         >
+
           <Menu.Item key="gerenciar-fluxos">
             <Link to="/admin/fluxos/gerenciar">Gerenciar fluxos</Link>
           </Menu.Item>
+
           <Menu.Item key="etapas">
             <Link to="/admin/etapas">Gerenciar etapas</Link>
           </Menu.Item>
+
         </SubMenu>
+
         <Menu.Item
           className='item-menu'
           key="membro"
@@ -68,6 +57,7 @@ const MyMenu = () => {
         >
           <Link to="/admin/membros">Membros</Link>
         </Menu.Item>
+
         <Menu.Item
           className='item-menu'
           key='artefato'
@@ -75,6 +65,7 @@ const MyMenu = () => {
         >
           <Link to='/admin/artefatos'>Artefatos</Link>
         </Menu.Item>
+
       </Menu>
     </Sider>
   );

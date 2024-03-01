@@ -7,24 +7,6 @@
     font-size: 13px;
 }
 
-.tabs-projeto .ant-tabs-nav {
-    display: flex;
-    width: 100%;
-  }
-  
-.tabs-projeto .ant-tabs-nav-list {
-    width: 100%;
-}
-
-.tabs-projeto .ant-tabs-tab {
-    width: 300px;
-    justify-content: center;
-    text-align: center;
-}
-
-.tabs-projeto-footer-botoes {
-}
-
 .tabs-projeto-footer-botoes button {
     font-size: 13px;
     padding-left: 20px;

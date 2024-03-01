@@ -6,8 +6,17 @@ from .models import Projeto
 from .serializers import ProjetoSerializer
 from django.shortcuts import get_object_or_404
 from apps.fluxo.models import Fluxo
+from rest_framework.permissions import IsAuthenticated
+from apps.api.permissions import IsAdminUserOrReadOnly 
+from apps.membro_projeto.models import MembroProjeto
 
-class CadastrarProjetoView(APIView):
+class BaseProjetoView(APIView):
+    permission_classes = [IsAuthenticated, IsAdminUserOrReadOnly]
+
+    def handle_exception(self, exc):
+        return Response({'error': str(exc)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+class CadastrarProjetoView(BaseProjetoView):
     def post(self, request):
         try:
             serializer = ProjetoSerializer(data=request.data)
@@ -18,7 +27,7 @@ class CadastrarProjetoView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-class BuscarProjetosPorNomeView(APIView):
+class BuscarProjetosPorNomeView(BaseProjetoView):
     def get(self, request):
         try:
             parametro = request.GET.get('name', None)
@@ -38,7 +47,18 @@ class BuscarProjetosPorNomeView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
-class ExcluirProjetoView(APIView):
+class BuscarProjetoPorIdView(BaseProjetoView):
+    def get(self, request, id):
+        try:
+            projeto = Projeto.objects.get(pk=id)
+            serializer = ProjetoSerializer(projeto, many=False)
+            
+            return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    
+class ExcluirProjetoView(BaseProjetoView):
     def delete(self, request, id):
         try:
             projeto = get_object_or_404(Projeto, id=id)
@@ -50,7 +70,7 @@ class ExcluirProjetoView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-class AtualizarProjetoView(APIView):
+class AtualizarProjetoView(BaseProjetoView):
     def patch(self, request, id):
         try:
             projeto = Projeto.objects.get(pk=id)
@@ -63,7 +83,7 @@ class AtualizarProjetoView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-class AtualizarFluxoProjetoView(APIView):
+class AtualizarFluxoProjetoView(BaseProjetoView):
     def patch(self, request, id):
         try:
             projeto = Projeto.objects.get(pk=id)
