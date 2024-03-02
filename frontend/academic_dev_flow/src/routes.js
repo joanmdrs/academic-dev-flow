@@ -5,18 +5,18 @@ import Projeto from './pages/Projeto';
 import Etapa from './pages/Etapa';
 import Membro from './pages/Membro';
 import Artefato from './pages/Artefato';
-import LoginForm from './pages/Auth/Login';
 import StudentDashboard from './pages/Dashboard/StudentDashboard/StudentDashboard';
 import ProjectsSection from './pages/Dashboard/StudentDashboard/ProjectsSection/ProjectsSection';
 import AdminRoutes from './router/AdminRoutes/AdminRoutes';
 import StudentRoutes from './router/StudentRoutes/StudentRoutes';
 import Fluxo from './pages/Fluxo';
+import Login from './pages/Auth/Login';
 
 function Routes() {
  
   return (
     <Switch>
-      <Route path="/" Component={LoginForm} />
+      <Route path="/" Component={Login} />
 
       {/* Admin */}
       <Route element={<AdminRoutes />}>

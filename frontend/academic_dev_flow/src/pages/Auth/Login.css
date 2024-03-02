@@ -1,23 +1,106 @@
-.page-login {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+.login-layout {
+  display: flex;
+  justify-content: space-between;
+  height: 100vh;
 }
 
-.page-login-layout {
-    display: flex;
-    flex-direction: column;
+.container-form-login {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 20px;
+  background: hsla(215, 100%, 77%, 1);
+  background: radial-gradient(circle, hsla(215, 100%, 77%, 1) 0%, hsla(0, 0%, 100%, 1) 100%);
+
 }
 
-
-.page-login-form {
-    flex: 1;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-left: 1px solid #d9d9d9;
+.container-presentation-image {
+  background-color: #fff;
+  flex: 1;
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+  overflow: hidden; 
 }
+
+.container-presentation-image img {
+  max-width: 80%; 
+  max-height: 80%; 
+  width: auto; 
+  height: auto; 
+}
+
+.form-login-header {
+  color: var(--primary-color);
+  width: fit-content;
+  padding: 10px 20px; 
+  border-radius: 20px;
+  margin-bottom: 100px;
+  font-size: 14px; 
+  font-weight: 600; 
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+.form-login-content {
+  margin: 0 20%;
+}
+  
+.form-login-title h3 {
+  text-align: center;
+  font-size: 25px;
+  margin-bottom: 5px;
+  font-weight: 400;
+}
+
+.form-login-title p {
+  text-align: center;
+  margin-bottom: 20px;
+
+
+}
+  
+.form-login form {
+  flex: 1;
+  width: 100%;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.form-login form .form-item {
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.form-login form .form-item input[type="text"] {
+  padding: 15px;
+}
+
+.form-login form .form-item input[type="password"] {
+  padding: 10px; 
+}
+  
+.form-login form .link-recovery {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.form-login form .link-recovery a {
+  font-size: smaller;
+}
+
+.form-login form button {
+  width: 100%; 
+  height: 50px;
+  background-color: var(--primary-color);
+  color: #fff; 
+  border: 1px solid #1890ff; 
+  transition: all 0.3s; 
+}
+  
+.form-login form .ant-btn:hover {
+  background-color: #40a9ff; /* Change background color on hover for 3D effect */
+  border-color: #40a9ff; /* Change border color on hover for 3D effect */
+}
+  

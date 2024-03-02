@@ -1,77 +1,93 @@
+import { Button, Form, Input } from 'antd';
 import React from 'react';
-import "./Login.css";
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Form, Input, Button } from 'antd';
-import { decodeToken } from "react-jwt";
+import { Link } from 'react-router-dom';
+import "./Login.css"
+import ImagePresentation from "../../../src/assets/img-presentation-page-login.jpg"
 import { useAuth } from '../../hooks/AuthProvider';
 
-const LoginForm = () => {
+const Login = () => {
+    const {loginAction} = useAuth();
 
-  const {loginAction} = useAuth();
+    const handleLogin = async (values) => {  
 
-  const handleLogin = async (values) => {  
+        const username = values.username
+        const password = values.password
 
-    const username = values.username
-    const password = values.password
-    try {
-      await loginAction(username, password);
-    } catch (error) {
-      console.error('Erro durante o login:', error);
-    }
-  };
+        try {
+            await loginAction(username, password);
+        } catch (error) {
+            console.error('Erro durante o login:', error);
+        }
+    };
+    
 
-  return (
-    <div className='page-login'> 
+  return (  
 
-        <div className='page-login-layout'> 
+    <div className='login-layout'> 
+        <div className='container-form-login'> 
 
-          
-          <div className='page-login-form-header'> 
-            <h2> LOGIN </h2>
-          </div>
+            <div className='form-login-header'> 
+                Academic Dev Flow
+            </div>
 
-          <div className='page-login-form-content'>
-            <Form
-              name="login-form"
-              layout='vertical'
-              onFinish={handleLogin}
-              initialValues={{ remember: true }}
-              >
-                <Form.Item
-                  name="username"
-                  rules={[{ required: true, message: 'Please input your username!' }]}
-                >
-                  <Input 
-                    style={{padding: "10px"}}
-                    prefix={<UserOutlined 
-                    className="site-form-item-icon" />} 
-                    placeholder='username'/>
+            <div className='form-login-content'>
 
-                </Form.Item>
+                <div className='form-login-title'> 
+                    <h3> Bem-vindo ! </h3>
+                    <p> Preencha as informações abaixo </p>
+                </div>
 
-                <Form.Item
-                  name="password"
-                  rules={[{ required: true, message: 'Please input your password!' }]}
-                >
-                  <Input.Password 
-                    style={{padding: "10px"}}
-                    prefix={<LockOutlined 
-                    className="site-form-item-icon" />} 
-                    placeholder='password'/>
-                </Form.Item>
+                <div className='form-login'> 
+                    <Form 
+                        onFinish={handleLogin}
+                        layout='vertical'
+                        name="basic"
+                        initialValues={{ remember: true }}
+                    > 
+                        <Form.Item
+                            className='form-item'
+                            name="username"
+                            rules={[
+                                {
+                                message: 'Please input your username!',
+                                },
+                            ]}
+                            >
+                                <Input placeholder='Username'/>
+                            </Form.Item>
 
-                <Form.Item>
-                  <Button type="primary" htmlType="submit" size='large'>
-                    Log in
-                  </Button>
-                </Form.Item>
-              </Form>
-      </div>
+                        <Form.Item
+                            className='form-item'
+                            name="password"
+                            rules={[
+                                {
+                                message: 'Please input your password!',
+                                },
+                            ]}
+                        >
+                            <Input.Password placeholder='Password'/>
+                        </Form.Item>
+
+                        <Form.Item className='link-recovery'> 
+                            <Link> Esqueceu sua senha ? </Link>
+                        </Form.Item>
+                        <Form.Item>
+                            <Button type="primary" htmlType="submit">
+                                Log in
+                            </Button>
+                        </Form.Item>
+                    </Form>
+                </div>
+            </div>
+        </div>
+
+        <div className='container-presentation-image'>
+            <img src={ImagePresentation} alt='Imagem de Apresentação' />
+        </div>
+
     </div>
-            
-  </div>
-        
-);
+    
+  );
 };
 
-export default LoginForm;
+export default Login;
