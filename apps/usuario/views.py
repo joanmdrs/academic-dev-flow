@@ -75,23 +75,23 @@ class ExcluirUsuarioView(BaseUsuarioView):
         
         return Response({"detail": "Usuário não encontrado."}, status=status.HTTP_404_NOT_FOUND)
     
-# class AtualizarUsuarioView(BaseUsuarioView):
-#     def patch(self, request, id):
-#         try:
-#             usuario = Usuario.objects.get(membro_id=id)
+class AtualizarUsuarioView(BaseUsuarioView):
+    def patch(self, request, id):
+        try:
+            usuario = Usuario.objects.get(membro_id=id)
             
-#             if usuario is not None:
-#                 serializer = UsuarioSerializer(usuario, data=request.data)
+            if usuario is not None:
+                serializer = UsuarioSerializer(usuario, data=request.data)
                 
-#                 if serializer.is_valid(raise_exception=True):
-#                     serializer.save()
-#                     return Response(serializer.data, status=status.HTTP_200_OK)
-#                 else: 
-#                     return JsonResponse({'error': 'Dados inválidos'}, status=400)
+                if serializer.is_valid(raise_exception=True):
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+                else: 
+                    return JsonResponse({'error': 'Dados inválidos'}, status=400)
                 
-#         except Exception as e:
-#             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
-#         return Response({"detail": "Usuário não encontrado."}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"detail": "Usuário não encontrado."}, status=status.HTTP_404_NOT_FOUND)
 
 
