@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import StudentMenu from '../../../../components/Menus/StudentMenu/StudentMenu';
+import StudentMenu from '../../../../../components/Menus/StudentMenu/StudentMenu';
 import { Button, Empty, Layout, Table } from 'antd';
-import MyHeader from '../../../../components/Header/Header';
+import MyHeader from '../../../../../components/Header/Header';
 import "./ProjectsSection.css"
-import CustomBreadcrumb from '../../../../components/Breadcrumb/Breadcrumb';
+import CustomBreadcrumb from '../../../../../components/Breadcrumb/Breadcrumb';
 import { LuCalendarCheck2, LuCalendarX2 } from "react-icons/lu";
 import { TeamOutlined } from '@ant-design/icons';
 import { CiCircleCheck } from "react-icons/ci";
 import { TiFlowChildren } from "react-icons/ti";
+import { PiEye } from "react-icons/pi";
 import { decodeToken } from 'react-jwt';
-import { buscarProjetosDoMembro, buscarQuantidadeMembrosPorProjeto } from '../../../../services/membroProjetoService';
-import { buscarProjetoPeloId } from '../../../../services/projetoService';
-import { buscarFluxoPeloId } from '../../../../services/fluxoService';
-import { formatDate } from '../../../../services/utils';
+import { buscarProjetosDoMembro, buscarQuantidadeMembrosPorProjeto } from '../../../../../services/membroProjetoService';
+import { buscarProjetoPeloId } from '../../../../../services/projetoService';
+import { buscarFluxoPeloId } from '../../../../../services/fluxoService';
+import { formatDate } from '../../../../../services/utils';
+import { Link } from 'react-router-dom';
 
 const columns = [
   {
@@ -68,11 +70,15 @@ const columns = [
     key: 'fluxo'
   },
   {
-    title: 'Ações',
+    title: (
+      <>
+        <PiEye /> Ações
+      </>
+    ),
     key: 'action',
     render: (_, record) => (
       <Button>
-        Visualizar
+        <Link to={`/aluno/projetos/visualizar/${record.idProject}`}>Visualizar</Link>
       </Button>
     ),
 
@@ -115,6 +121,7 @@ const ProjectsSection = () => {
 
       return {
         id: membroProjeto.id,
+        idProject: response2.data.id,
         nome: response2.data.nome,
         status: response2.data.status,
         data_inicio: formatDate(response2.data.data_inicio),
@@ -132,7 +139,7 @@ const ProjectsSection = () => {
 
   return (
     <React.Fragment>
-        <StudentMenu />
+            <StudentMenu />
             <Layout>
                 <MyHeader />
                 <CustomBreadcrumb routes={breadcrumbRoutes} />

@@ -1,7 +1,6 @@
 import api from "../api/api"
 
 export const vincularEtapaFluxo = async (dados) => {
-
     const resposta = await api.post("fluxo_etapa/cadastrar/", {etapas: dados})
     return resposta 
 }

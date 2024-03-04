@@ -5,6 +5,8 @@ from rest_framework import status
 from django.http import JsonResponse
 from .models import FluxoEtapa
 from .serializers import FluxoEtapaSerializer
+from rest_framework.permissions import IsAuthenticated
+from apps.api.permissions import IsAdminUserOrReadOnly 
 
 class CadastrarFluxoEtapaView(APIView):
     def post(self, request):
@@ -23,6 +25,7 @@ class CadastrarFluxoEtapaView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 class BuscarFluxoEtapaPeloIdFluxoView(APIView): 
+    permission_classes = [IsAuthenticated]
     def get(self, request, idFluxo):
         try: 
             objetos = FluxoEtapa.objects.filter(fluxo=idFluxo)

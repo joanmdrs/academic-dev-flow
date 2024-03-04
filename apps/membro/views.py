@@ -14,6 +14,7 @@ from apps.api.permissions import IsAdminUserOrReadOnly
 from django.contrib.auth.hashers import make_password
 
 
+
 class BaseMembroView(APIView):
     permission_classes = [IsAuthenticated, IsAdminUserOrReadOnly]
 

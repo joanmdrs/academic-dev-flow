@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from .models import Etapa
 from apps.fluxo.models import Fluxo
 from .serializers import EtapaSerializer
+from rest_framework.permissions import IsAuthenticated
 
 class CadastrarEtapaView(APIView):
     def post(self, request):
@@ -39,6 +40,7 @@ class BuscarEtapaPeloNomeView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 class BuscarEtapaPeloIdView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request, id):
         try:
             etapa = Etapa.objects.get(pk=id)
