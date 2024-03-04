@@ -9,3 +9,4 @@ export const formatDate = (dateString) => {
   const formattedDate = new Date(dateString).toLocaleDateString('pt-BR', options);
   return formattedDate;
 };
+

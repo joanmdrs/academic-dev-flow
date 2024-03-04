@@ -88,7 +88,7 @@ const ViewProject = () => {
 
                     <div className="content"> 
                         Cronograma
-                        {
+                        {/* {
                             etapas &&  
                             
                             <Flex horizontal>
@@ -105,7 +105,7 @@ const ViewProject = () => {
                                     </div>
                                 ))}
                             </Flex>
-                        }
+                        } */}
                     </div>
 
 
