@@ -8,3 +8,6 @@ class MembroProjeto(models.Model):
     funcao = models.CharField(max_length=40, null=True, blank=True, default="À definir")
     data_inicio = models.DateField(auto_now_add=True)
     data_fim = models.DateField(null=True, blank=True)
+    
+    def __str__(self):
+        return f"{self.membro}"
