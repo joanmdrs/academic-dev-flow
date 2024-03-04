@@ -8,6 +8,7 @@ from .serializers import MembroProjetoSerializer
 from apps.membro.models import Membro
 from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
+from django.db.models import Count
 
 class BaseMembroProjetoView(APIView):
     permission_classes = [IsAuthenticated, IsAdminUserOrReadOnly]
@@ -113,6 +114,21 @@ class ExcluirMembroProjetoManyView(BaseMembroProjetoView):
                 return Response({'message': 'Objetos excluídos com sucesso!'}, status=status.HTTP_204_NO_CONTENT)
             else:
                 return Response({'error': 'Nenhum objeto encontrado para exclusão!'}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class QuantidadeMembrosPorProjetoView(APIView):
+    def get(self, request, id_projeto):
+        try:
+            # Utilizando a função aggregate para contar a quantidade de membros por projeto
+            quantidade_membros = MembroProjeto.objects.filter(projeto__id=id_projeto).aggregate(quantidade_membros=Count('id'))
+
+            # Verificando se o projeto existe
+            if quantidade_membros is not None:
+                return Response({'id_projeto': id_projeto, 'quantidade_membros': quantidade_membros['quantidade_membros']}, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Projeto não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
