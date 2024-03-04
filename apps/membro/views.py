@@ -9,32 +9,50 @@ from apps.usuario.models import Usuario
 from apps.usuario.serializers import UsuarioSerializer
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import Group
+from rest_framework.permissions import IsAuthenticated
+from apps.api.permissions import IsAdminUserOrReadOnly 
+from django.contrib.auth.hashers import make_password
 
-class CadastrarMembroView(APIView):
+
+
+class BaseMembroView(APIView):
+    permission_classes = [IsAuthenticated, IsAdminUserOrReadOnly]
+
+    def handle_exception(self, exc):
+        return Response({'error': str(exc)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    
+class CadastrarMembroView(BaseMembroView):
     def post(self, request):
         try:
-            grupo_nome = request.data.get('grupo', None)
-            print(grupo_nome)
-            usuario_data = request.data.get('usuario', {})
-            usuario_serializer = UsuarioSerializer(data=usuario_data)
+            group_name = request.data.get('grupo', None) # Obtém o grupo
+            user_data = request.data.get('usuario', {}) # Obtém os dados do usuário
+            user_serializer = UsuarioSerializer(data=user_data)
             
-            if usuario_serializer.is_valid(raise_exception=True):
-                usuario = usuario_serializer.save()
+            if user_serializer.is_valid(raise_exception=True):
+                user_validated = user_serializer.validated_data
+                user_created = Usuario.objects.create_user(
+                    username=user_validated['username'],
+                    password=user_validated['password'],
+                )
+
+                user_created.is_staff = True
+                user_created.is_superuser = False
+                user_created.save()
                 
-                if grupo_nome:
-                    grupo = Group.objects.get(name=grupo_nome)
-                    print("Nome do grupo", grupo)
-                    usuario.groups.add(grupo)
+                if group_name:
+                    group = Group.objects.get(name=group_name)
+                    user_created.groups.add(group)
 
-                membro_data = request.data.get('membro', {})
-                membro_data['grupo'] = grupo_nome
-                membro_data['usuario'] = usuario.id
-                membro_serializer = MembroSerializer(data=membro_data)
+                member_data = request.data.get('membro', {})
+                member_data['grupo'] = group_name
+                member_data['usuario'] = user_created.id
+                member_serializer = MembroSerializer(data=member_data)
 
-                if membro_serializer.is_valid(raise_exception=True):
-                    membro_serializer.save()
+                if member_serializer.is_valid(raise_exception=True):
+                    member_serializer.save()
                     
-                    return Response(membro_serializer.data, status=status.HTTP_201_CREATED)
+                    return Response(member_serializer.data, status=status.HTTP_201_CREATED)
                 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -42,13 +60,13 @@ class CadastrarMembroView(APIView):
         return Response({'error': 'Erro ao cadastrar membro'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class BuscarMembroPorGrupoView(APIView):
+class BuscarMembroPorGrupoView(BaseMembroView):
     def get(self, request):
         try:
             nome = request.query_params.get('nome', None)
             grupo = request.query_params.get('grupo', None)
 
-            if grupo not in ['aluno', 'professor']:
+            if grupo not in ['Alunos', 'Professores']:
                 return Response({"error": "Grupo inválido"}, status=status.HTTP_400_BAD_REQUEST)
 
             membros = Membro.objects.all()
@@ -66,7 +84,7 @@ class BuscarMembroPorGrupoView(APIView):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-class BuscarMembrosPorNomeView(APIView):
+class BuscarMembrosPorNomeView(BaseMembroView):
     def get(self, request):
         try:
             parametro = request.GET.get('name', None)
@@ -86,7 +104,7 @@ class BuscarMembrosPorNomeView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-class BuscarMembroPorIdView(APIView):
+class BuscarMembroPorIdView(BaseMembroView):
     def get(self, request, id):
         try:
             membro = Membro.objects.get(pk=id)
@@ -96,15 +114,15 @@ class BuscarMembroPorIdView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
-class ExcluirMembroView(APIView):
+class ExcluirMembroView(BaseMembroView):
     def delete(self, request, id):
         try:
-            membro = get_object_or_404(Membro, id=id)
-            usuario = Usuario.objects.get(membro_id=id) 
+            member = Membro.objects.get(pk=id)
+            user = Usuario.objects.get(pk=member.usuario.id)
             
-            if (membro is not None and usuario is not None):
-                usuario.delete()
-                membro.delete()
+            if (member is not None and user is not None):
+                user.delete()
+                member.delete()
                 return Response({"detail": "Membro excluído com sucesso"}, status=status.HTTP_204_NO_CONTENT);
             
             else:
@@ -113,22 +131,44 @@ class ExcluirMembroView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     
-class AtualizarMembroView(APIView):
+class AtualizarMembroView(BaseMembroView):
     def patch(self, request, id):
         try:
-            membro = Membro.objects.get(pk=id)
-            serializer = MembroSerializer(membro, data=request.data)
+            group_name = request.data.get('grupo', None)
+            member = Membro.objects.get(pk=id)
+            member_data = request.data.get('membro', {})
+            member_data['grupo'] = group_name
+            member_serializer = MembroSerializer(member, data=member_data)
             
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            
+            if member_serializer.is_valid(raise_exception=True):
+                member_serializer.save()
+
+                user_data = request.data.get('usuario', {})
+                user = Usuario.objects.get(id=member.usuario.id)
+                user_serializer = UsuarioSerializer(user, data=user_data)
+
+                if user_serializer.is_valid(raise_exception=True):
+                    user_validated = user_serializer.validated_data
+                    user.username = user_validated['username']
+                    new_password = user_validated.get('password')
+                    if new_password:
+                        user.set_password(new_password)
+
+                    user.save()
+                    
+
+                    if group_name:
+                        group = Group.objects.get(name=group_name)
+                        user.groups.set([group])
+                        
+                return Response(member_serializer.data, status=status.HTTP_200_OK)
+
             else: 
                 return JsonResponse({'error': 'Dados inválidos'}, status=400)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-class ListarMembrosView(APIView): 
+class ListarMembrosView(BaseMembroView): 
     def get(self, request):
         try: 
             membros = Membro.objects.all()

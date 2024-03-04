@@ -61,7 +61,7 @@ const ModalDeBusca = ({status, titulo, label, name, onCancel, onOk, colunas}) =>
                     
                 </>
             ) : null
-        }
+            }
 
             
 

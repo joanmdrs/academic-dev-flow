@@ -1,63 +1,73 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;0,1000;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900;1,1000&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;0,1000;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900;1,1000&family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+:root {
+  --primary-color: #1677FF;
+  --second-color: #001529;
+  --third-color: #002140;
+}
+
+* {
+  font-family: "Nunito", sans-serif;
+}
 
 body {
   margin: 0;
-  font-family: 'Nunito', sans-serif !important;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-code {
+/* code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
+} */
 
-.form-box {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start !important;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  border-radius: 5px;
-  padding: 20px;
+.global-div {
   margin: 20px;
-  background-color: white;
+  padding: 20px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
-.box {
+.global-form {
   display: flex;
   flex-direction: column;
   justify-content: flex-start !important;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   border-radius: 5px;
   padding: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   background-color: white;
 }
 
-.date-picker {
-  display: flex;
-  height: 40px !important;
-  padding-top: 15px;
-
+.global-table table {
+  font-size: 13px;
+  border: 1px solid #d9d9d9;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
-.action-buttons {
-  display: flex;
-  justify-content: flex-end;
-  padding-top: 20px;
-  padding-right: 20px;
-  gap: 20px;
+.global-table table th:first-child {
+  width: 70px;
 }
 
-.botoes-de-acao {
+.button-menu {
   width: 100%;
   display: flex;
   justify-content: space-between;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
-.group-buttons {
+.grouped-buttons {
   display: flex;
   gap: 10px;
-  padding: 20px;
 }
+
+.two-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin: 20px;
+}
+
+
+
+

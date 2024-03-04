@@ -1,6 +1,6 @@
-import { useContext, createContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../services/api";
+import api from "../api/api";
 import { decodeToken } from "react-jwt";
 import { NotificationManager } from "react-notifications";
 
@@ -11,47 +11,73 @@ export const useAuth = () => {
 };
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem("token") || "");
   const navigate = useNavigate();
 
-  const loginAction = async (username, password) => {
+  const redirectUser = (decodedUser) => {
+    if (decodedUser.groups.includes("Administradores")) {
+      navigate("/admin/home");
+    } else if (decodedUser.groups.includes("Alunos")) {
+      navigate("/aluno/home");
+    } else if (decodedUser.groups.includes("Professores")) {
+      navigate("/professor/home");
+    }
+  };
 
+  const waitForToken = () =>
+    new Promise((resolve) => {
+      const checkToken = () => {
+        const newToken = localStorage.getItem("token");
+        if (newToken) {
+          resolve(newToken);
+        } else {
+          setTimeout(checkToken, 500);
+        }
+      };
+
+      checkToken();
+    });
+
+  const loginAction = async (username, password) => {
     try {
       const response = await api.post("auth/login/", { username, password });
-  
+
       if (response.status === 200) {
         const data = await response.data;
         localStorage.setItem("token", data.token);
-        setUser(data.user);
-        setToken(data.token);
-        navigate("/");
-        NotificationManager.success("Login realizado com sucesso !");
-        return { success: 'Login bem-sucedido' };
+
+        const newToken = await waitForToken();
+
+        if (newToken) {
+          try {
+            const decodedUser = await decodeToken(newToken);
+            redirectUser(decodedUser);
+            NotificationManager.success("Login realizado com sucesso !");
+          } catch (decodeError) {
+            console.error("Erro ao decodificar o token:", decodeError);
+            logOut(); // Limpa completamente o estado em caso de erro de decodificação
+          }
+        } else {
+          NotificationManager.error("Token não disponível");
+        }
       } else {
         NotificationManager.error("Usuário/senha inválidos !");
       }
     } catch (err) {
-      console.error('Erro durante o login:', err);
+      console.error("Erro durante o login:", err);
       NotificationManager.error("Usuário/senha inválidos !");
     }
   };
-  
 
   const logOut = () => {
-    setUser(null);
-    setToken("");
     localStorage.removeItem("token");
-    navigate("/login");
+    navigate("/", {replace: true});
   };
 
   return (
-    <AuthContext.Provider value={{ token, user, loginAction, logOut }}>
+    <AuthContext.Provider value={{ loginAction, logOut }}>
       {children}
     </AuthContext.Provider>
   );
-
 };
 
 export default AuthProvider;
-

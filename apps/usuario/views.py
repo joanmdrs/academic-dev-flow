@@ -6,8 +6,16 @@ from django.shortcuts import get_object_or_404
 from .serializers import UsuarioSerializer
 from .models import Usuario
 from django.contrib.auth.models import Group
+from rest_framework.permissions import IsAuthenticated
+from apps.api.permissions import IsAdminUserOrReadOnly 
 
-class CadastrarUsuarioView(APIView):
+class BaseUsuarioView(APIView):
+    permission_classes = [IsAuthenticated, IsAdminUserOrReadOnly]
+
+    def handle_exception(self, exc):
+        return Response({'error': str(exc)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class CadastrarUsuarioView(BaseUsuarioView):
     def post(self, request, *args, **kwargs):
         try:
             grupo_nome = request.data.get('grupo', None)
@@ -40,7 +48,7 @@ class CadastrarUsuarioView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     
-class BuscarUsuarioPorIdView(APIView):
+class BuscarUsuarioPorIdView(BaseUsuarioView):
     def get(self, request, id):
         try:
             usuario = get_object_or_404(Usuario, id=id)
@@ -53,19 +61,8 @@ class BuscarUsuarioPorIdView(APIView):
         
         return Response({"detail": "Usuário não encontrado."}, status=status.HTTP_404_NOT_FOUND)
     
-class BuscarUsuarioPorIdMembroView(APIView):
-    def get(self, request, id):
-        try: 
-            usuario = Usuario.objects.get(membro_id=id)
-
-            if usuario is not None:
-                serializer = UsuarioSerializer(usuario)
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
                 
-class ExcluirUsuarioView(APIView):
+class ExcluirUsuarioView(BaseUsuarioView):
     def delete(self, request, id):
         try:
             usuario = get_object_or_404(Usuario, id=id)
@@ -78,7 +75,7 @@ class ExcluirUsuarioView(APIView):
         
         return Response({"detail": "Usuário não encontrado."}, status=status.HTTP_404_NOT_FOUND)
     
-class AtualizarUsuarioView(APIView):
+class AtualizarUsuarioView(BaseUsuarioView):
     def patch(self, request, id):
         try:
             usuario = Usuario.objects.get(membro_id=id)

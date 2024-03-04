@@ -12,7 +12,7 @@ const FormFluxo = ({onSubmit, onBack, valoresIniciais}) => {
     }   
 
     return (
-        <div>
+        <div className="global-form">
             <div> 
                 <BotaoVoltar funcao={onBack}/>
             </div>

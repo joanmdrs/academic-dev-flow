@@ -2,7 +2,7 @@ import React from "react";
 import MyMenu from "../../components/Menu/Menu";
 import { Layout } from 'antd';
 import MyHeader from "../../components/Header/Header";
-import PageEtapa from "./PageEtapa";
+import ScreenGerenciarEtapas from "./screens/ScreenGerenciarEtapas/ScreenGerenciarEtapas";
 
 const Etapa = () => {
 
@@ -11,7 +11,7 @@ const Etapa = () => {
             <MyMenu/>
             <Layout>
                 <MyHeader/>
-                <PageEtapa />
+                <ScreenGerenciarEtapas />
             </Layout>
         </React.Fragment>
       

@@ -5,8 +5,16 @@ from rest_framework import status
 from django.http import HttpResponseNotAllowed, JsonResponse
 from .models import Artefato
 from .serializers import ArtefatoSerializer
+from rest_framework.permissions import IsAuthenticated
+from apps.api.permissions import IsAdminUserOrReadOnly 
 
-class CadastrarArtefatoView(APIView):
+class BaseArtefatoView(APIView):
+    permission_classes = [IsAuthenticated, IsAdminUserOrReadOnly]
+
+    def handle_exception(self, exc):
+        return Response({'error': str(exc)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class CadastrarArtefatoView(BaseArtefatoView):
     def post(self, request):
         try: 
             serializer = ArtefatoSerializer(data=request.data)
@@ -19,7 +27,7 @@ class CadastrarArtefatoView(APIView):
     
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)            
 
-class BuscarArtefatoPorNomeView(APIView):
+class BuscarArtefatoPorNomeView(BaseArtefatoView):
     def get(self, request):
         try:
             parametro = request.GET.get('name', None)
@@ -37,7 +45,7 @@ class BuscarArtefatoPorNomeView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-class AtualizarArtefatoView(APIView):
+class AtualizarArtefatoView(BaseArtefatoView):
     def patch(self, request, id):
         try: 
             
@@ -53,7 +61,7 @@ class AtualizarArtefatoView(APIView):
             
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
     
-class ExcluirArtefatoView(APIView):
+class ExcluirArtefatoView(BaseArtefatoView):
     def delete(self, request, id): 
         try: 
             artefato = Artefato.objects.get(pk=id)
@@ -68,7 +76,7 @@ class ExcluirArtefatoView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)        
         
-class ListarArtefatosView(APIView): 
+class ListarArtefatosView(BaseArtefatoView): 
     def get(self, request): 
         try: 
             artefatos = Artefato.objects.all()

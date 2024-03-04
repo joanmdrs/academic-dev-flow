@@ -10,7 +10,7 @@ class JSONWebTokenAuthentication(BaseAuthentication):
         # Obtenha o token da solicitação
         token = self.get_token(request)
 
-        if token is None:
+        if not token:
             return None
 
         try:
@@ -18,13 +18,13 @@ class JSONWebTokenAuthentication(BaseAuthentication):
             payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
             
             # Obtenha o usuário associado ao token
-            user = get_user_model().objects.get(pk=payload['user_id'])
+            user = get_user_model().objects.get(pk=payload.get('user_id'))
             
             # Verifique se o usuário está ativo
             if not user.is_active:
                 raise AuthenticationFailed('Usuário inativo ou excluído.')
 
-            return (user, None)
+            return user, None
 
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Token expirado.')
@@ -34,9 +34,14 @@ class JSONWebTokenAuthentication(BaseAuthentication):
             raise AuthenticationFailed('Usuário associado ao token não encontrado.')
 
     def get_token(self, request):
-        # Obtém o token da solicitação (pode ser de um cabeçalho, cookie, parâmetro de consulta, etc.)
-        # Adapte conforme necessário para a sua aplicação
-        return request.headers.get('Authorization', '').split(' ')[1]
+        auth_header = request.headers.get('Authorization', '')
+        token_parts = auth_header.split(" ")
+
+        if len(token_parts) == 2:
+            return token_parts[1]
+        
+        print('Token não encontrado ou malformatado')
+        return None
 
     def authenticate_header(self, request):
         return 'Bearer'
@@ -46,16 +51,15 @@ class TokenService:
     @staticmethod
     def generate_token(user, additional_data=None):
         payload = {
-            'user_id': user.id,
-            'username': user.username,
-            'exp': datetime.utcnow() + timedelta(days=1),  # Define a expiração para 1 dia
+            'user_id': getattr(user, 'id', None),
+            'username': getattr(user, 'username', None),
+            'exp': datetime.utcnow() + timedelta(days=1),
         }
 
         # Adiciona informações adicionais (grupos, por exemplo)
         if additional_data:
             payload.update(additional_data)
 
-        token = jwt.encode(payload, 'your_secret_key', algorithm='HS256').decode('utf-8')
+        token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256').decode('utf-8')
 
         return token
-

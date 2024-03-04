@@ -11,9 +11,10 @@ import BotaoAdicionar from "../../../../components/Botoes/BotaoAdicionar/BotaoAd
 import BotaoExcluir from "../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
 import { useFormContext } from "../../context/Provider/Provider";
 import ModalDeBusca from "../../../../components/Modals/ModalDeBusca/ModalDeBusca";
-import { atualizarProjeto, buscarProjetoPeloNome, criarProjeto } from "../../../../services/projeto_service";
+import { atualizarProjeto, buscarProjetoPeloNome, criarProjeto, excluirProjeto } from "../../../../services/projetoService";
 import { NotificationManager } from "react-notifications";
 import { LoadingOutlined } from "@ant-design/icons";
+import { recarregarPagina } from "../../../../services/utils";
 
 const TabsProjeto = () => {
   
@@ -46,13 +47,26 @@ const TabsProjeto = () => {
     const [current, setCurrent] = useState("1");
     const [acaoForm, setAcaoForm] = useState("criar")
     const {hasProjeto, setHasProjeto} = useFormContext()
-    const [valoresIniciais, setValoresIniciais] = useState({})
     const [isModalVisivel, setIsModalVisivel] = useState(false)
     const [isTabsAtivo, setIsTabsAtivo] = useState(false)
     const [isBotaoAdicionarVisivel, setIsBotaoAdicionarVisivel] = useState(false)
     const [isBotaoExcluirVisivel, setIsBotaoExcluirVisivel] = useState(true)
     const [isBotaoBuscarVisivel, setIsBotaoBuscarVisivel] = useState(false)
     const [carregando, setCarregando] = useState(false);
+
+    useEffect(() => {
+      const fetchData = async () => {
+      try {
+          setCarregando(true);
+          await new Promise((resolve) => setTimeout(resolve, 1500));
+      } catch (error) {
+      } finally {
+          setCarregando(false);
+      }
+      };
+
+      fetchData();
+  }, [hasProjeto]);
 
     const handleExibirModal = () => setIsModalVisivel(true)
     const handleFecharModal = () => setIsModalVisivel(false)
@@ -63,16 +77,28 @@ const TabsProjeto = () => {
       setIsBotaoExcluirVisivel(true)
       setIsBotaoBuscarVisivel(true)
       setAcaoForm('criar')
-      setHasProjeto({})
-      setValoresIniciais({})
+      setHasProjeto(null)
     }
 
     const handleCliqueLinha = (record) => {
-      setValoresIniciais(record)
       setAcaoForm("atualizar")
       setHasProjeto(record)
       setIsTabsAtivo(true)
       setIsModalVisivel(false)
+      setIsBotaoExcluirVisivel(false)
+    }
+
+    const handleBuscarProjeto = async (parametro) => {
+      try {
+        const resposta = await buscarProjetoPeloNome(parametro)
+        if(resposta.status !== 200){
+          NotificationManager.error("Ocorreu um problema ao buscar os dados, contate o suporte!")
+        } else {
+          return resposta
+        }
+      } catch (error) {
+        NotificationManager.error("Ocorreu um problema ao buscar os dados, contate o suporte!")
+      } 
     }
 
     const handleCriarProjeto = async (dados) => {
@@ -81,6 +107,7 @@ const TabsProjeto = () => {
         
         if(resposta.status === 200){
           NotificationManager.success('Projeto criado com sucesso!');
+          setHasProjeto(resposta.data)          
         } else {
           NotificationManager.error("Ocorreu um problema, contate o suporte!");
         }
@@ -95,6 +122,7 @@ const TabsProjeto = () => {
         
         if(resposta.status === 200){
           NotificationManager.success('Projeto atualizado com sucesso!');
+          setHasProjeto(resposta.data)
         } else {
           NotificationManager.error("Ocorreu um problema, contate o suporte!");
         }
@@ -111,32 +139,29 @@ const TabsProjeto = () => {
       }
     };
 
-    const handleBuscarProjeto = async (parametro) => {
-      try {
-        const resposta = await buscarProjetoPeloNome(parametro)
-        if(resposta.status !== 200){
-          NotificationManager.error("Ocorreu um problema ao buscar os dados, contate o suporte!")
-        } else {
-          return resposta
-        }
-      } catch (error) {
-        NotificationManager.error("Ocorreu um problema ao buscar os dados, contate o suporte!")
-      } 
+    const handleCancelar = () => {
+      setIsTabsAtivo(false)
+      setIsBotaoAdicionarVisivel(false)
+      setIsBotaoBuscarVisivel(false)
+      setIsBotaoExcluirVisivel(true)
     }
 
-    useEffect(() => {
-      const fetchData = async () => {
+    const handleExcluirProjeto = async () => {
       try {
-          setCarregando(true);
-          await new Promise((resolve) => setTimeout(resolve, 1500));
-      } catch (error) {
-      } finally {
-          setCarregando(false);
-      }
-      };
+        const response = await excluirProjeto(hasProjeto.id)
 
-      fetchData();
-  }, [hasProjeto]);
+        if (response.status === 204){
+          NotificationManager.success("Projeto excluído com sucesso !")
+          recarregarPagina()
+        } else {
+          NotificationManager.error("Falha ao excluir o projeto, contate o suporte !")
+        }
+      } catch (error) {
+        console.log(error)
+        NotificationManager.error("Falha durante a operação, contate o suporte !")
+
+      }
+    }
 
     return ( 
             <div className="component-tabs-projeto">
@@ -145,11 +170,11 @@ const TabsProjeto = () => {
                 paragrafo="Administração > Gerenciar projetos"
               />
 
-              <div className="botoes-de-acao"> 
+              <div className="button-menu"> 
                 <BotaoBuscar nome="BUSCAR PROJETO" funcao={handleExibirModal} status={isBotaoBuscarVisivel}/>
-                <div className="group-buttons"> 
+                <div className="two-buttons"> 
                   <BotaoAdicionar funcao={handleBotaoAdicionar} status={isBotaoAdicionarVisivel}/>
-                  <BotaoExcluir status={isBotaoExcluirVisivel}/>
+                  <BotaoExcluir funcao={handleExcluirProjeto} status={isBotaoExcluirVisivel}/>
                 </div>
               </div>
 
@@ -185,7 +210,7 @@ const TabsProjeto = () => {
                         )
 
                         : (
-                          <div className="form-box">
+                          <div className="global-div">
                             <Tabs
                               size="large"
                               indicator={{
@@ -197,7 +222,7 @@ const TabsProjeto = () => {
                               className="tabs-projeto"
                             > 
                               <Item tab="Projeto" key="1">
-                                <TabProjeto valoresIniciais={valoresIniciais} onSubmit={handleSalvarProjeto}/>
+                                <TabProjeto onSubmit={handleSalvarProjeto} onCancel={handleCancelar} />
                               </Item>
                               <Item tab="Equipe" key="2" className="tab-item">
                                 <TabEquipe />

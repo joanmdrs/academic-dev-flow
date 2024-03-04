@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Table } from "antd";
+import { Button, Divider, Form, Input, Modal, Table } from "antd";
 import React, { useState } from "react";
 
 const ModalSelecionarObjetos = ({title, status, onCancel, onOk, colunas, onSelect}) => {
@@ -10,6 +10,7 @@ const ModalSelecionarObjetos = ({title, status, onCancel, onOk, colunas, onSelec
     const [objetos, setObjetos] = useState([])
 
     const handleResetar = () => {
+        onCancel()
         form.resetFields()
         setHasResposta(false)
         setDados([])
@@ -33,9 +34,9 @@ const ModalSelecionarObjetos = ({title, status, onCancel, onOk, colunas, onSelec
             open={status}
             onCancel={onCancel}
             footer={
-                <div> 
-                    <Button type="primary" onClick={handleSelecionarObjetos}> SELECIONAR </Button>
-                    <Button onClick={onCancel}> FECHAR </Button>
+                <div style={{display: "flex", gap: "10px", justifyContent: "flex-end"}}> 
+                    <Button style={{fontSize: "13px"}} type="primary" onClick={handleSelecionarObjetos} disabled={dados.length === 0}> SELECIONAR </Button>
+                    <Button style={{fontSize: "13px"}} onClick={handleResetar}> FECHAR </Button>
                 </div>
             }
 
@@ -45,8 +46,14 @@ const ModalSelecionarObjetos = ({title, status, onCancel, onOk, colunas, onSelec
                 <Form.Item>
                     <Input  type="text"/>
                 </Form.Item>
-                <Form.Item>
-                    <Button type="primary" onClick={ async () => {
+                <div 
+                    style={{
+                        display: "flex", 
+                        gap: "10px", 
+                        justifyContent: "flex-start", 
+                        marginBottom: "10px",
+                    }}>
+                    <Button style={{fontSize: "13px"}} type="primary" onClick={ async () => {
                         const resposta = await onOk(parametro)
                         setHasResposta(true)
                         if(resposta.status === 200) {
@@ -55,22 +62,32 @@ const ModalSelecionarObjetos = ({title, status, onCancel, onOk, colunas, onSelec
                             setDados([])
                     }
                     }}> FILTRAR </Button>
-                    <Button onClick={handleResetar}> LIMPAR </Button>
-                </Form.Item>
+                    <Button style={{fontSize: "13px"}} onClick={handleResetar}> LIMPAR </Button>
+                </div>
             </Form>
 
-            { hasResposta &&  
-                <Table
-                    columns={colunas}
-                    dataSource={dados}
-                    rowKey="id"
-                    rowSelection={rowSelection}
-                />
+            {hasResposta ? (
+                <>
+                    {hasResposta && dados.length > 0 ? (
+                        <>
+                            <Divider orientation="left">Resultados</Divider>
+                            <Table 
+                                className="global-table" 
+                                dataSource={dados} 
+                                columns={colunas} 
+                                rowKey="id" 
+                                rowSelection={rowSelection}
+                            />
+                        </>
+                    ) : 
+                        <div> Nenhum resultado encontrado </div>
+                    }
+                    
+                </>
+            ) : null
             }
            
         </Modal>
     )
 }
-
-
 export default ModalSelecionarObjetos;
