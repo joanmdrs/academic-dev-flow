@@ -119,6 +119,7 @@ class ExcluirMembroProjetoManyView(BaseMembroProjetoView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 class QuantidadeMembrosPorProjetoView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request, id_projeto):
         try:
             # Utilizando a função aggregate para contar a quantidade de membros por projeto

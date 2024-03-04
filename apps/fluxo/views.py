@@ -39,7 +39,9 @@ class BuscarFluxoPeloNomeView(BaseFluxoView):
         serializer = FluxoSerializer(fluxos, many=True)
         return Response({'message': 'Fluxos encontrados com sucesso!', 'results': serializer.data}, status=status.HTTP_200_OK)
 
-class BuscarFluxoPeloIdView(BaseFluxoView):
+class BuscarFluxoPeloIdView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, fluxo_id):
         fluxo = get_object_or_404(Fluxo, pk=fluxo_id)
         serializer = FluxoSerializer(fluxo, many=False)

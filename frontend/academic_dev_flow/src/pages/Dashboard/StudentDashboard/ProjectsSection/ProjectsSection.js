@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import ProjectCard from '../components/ProjectCard/ProjectCard'; 
 import StudentMenu from '../../../../components/Menus/StudentMenu/StudentMenu';
-import { Button, Empty, Flex, Layout, Space, Table, Tabs } from 'antd';
+import { Button, Empty, Layout, Table } from 'antd';
 import MyHeader from '../../../../components/Header/Header';
 import "./ProjectsSection.css"
 import CustomBreadcrumb from '../../../../components/Breadcrumb/Breadcrumb';
@@ -10,9 +9,10 @@ import { TeamOutlined } from '@ant-design/icons';
 import { CiCircleCheck } from "react-icons/ci";
 import { TiFlowChildren } from "react-icons/ti";
 import { decodeToken } from 'react-jwt';
-import Loading from '../../../../components/Loading/Loading';
-import { buscarProjetosDoMembro } from '../../../../services/membroProjetoService';
-import { buscarProjetosPorListaIds } from '../../../../services/projetoService';
+import { buscarProjetosDoMembro, buscarQuantidadeMembrosPorProjeto } from '../../../../services/membroProjetoService';
+import { buscarProjetoPeloId } from '../../../../services/projetoService';
+import { buscarFluxoPeloId } from '../../../../services/fluxoService';
+import { formatDate } from '../../../../services/utils';
 
 const columns = [
   {
@@ -36,8 +36,8 @@ const columns = [
         <LuCalendarCheck2 /> Início
       </>
     ),
-    dataIndex: 'inicio',
-    key: 'inicio',
+    dataIndex: 'data_inicio',
+    key: 'data_inicio',
   },
   {
     title: (
@@ -45,17 +45,18 @@ const columns = [
         <LuCalendarX2/> Fim
       </>
     ),
-    dataIndex: 'fim',
-    key: 'fim',
+    dataIndex: 'data_fim',
+    key: 'data_fim',
   },
   {
     title: (
       <>
-        <TeamOutlined /> Membros
+        <TeamOutlined /> Qtd. Membros
       </>
     ),
-    dataIndex: 'membros',
-    key: 'membros'
+    dataIndex: 'qtd_membros',
+    key: 'qtd_membros',
+    align: 'center'
   },
   {
     title: (
@@ -87,19 +88,11 @@ const ProjectsSection = () => {
 
   const [projectsData, setProjectsData] = useState(null)
   const [token] = useState(localStorage.getItem("token") || null);
-  const [shouldRender, setShouldRender] = useState(false);
 
   useEffect(() => {
       const searchData = async () => {
           try {
-            const decoded = await decodeToken(token);
-
-            const response1 = await buscarProjetosDoMembro(decoded.user_id);
-            
-            const ids = response1.data.map(element => element.projeto)
-            const response2 = await buscarProjetosPorListaIds(ids)
-            setProjectsData(response2.data.results)
-            setTimeout(() => setShouldRender(true), 2000);
+            await handleGetProjects()
           } catch (error) {
               console.error('Erro ao decodificar o token:', error);
           }
@@ -109,9 +102,32 @@ const ProjectsSection = () => {
       }
   }, [token]);
 
-  if (!shouldRender) {
-    return <Loading />
-}
+
+  const handleGetProjects = async () => {
+    const decoded = await decodeToken(token);
+    const response1 = await buscarProjetosDoMembro(decoded.user_id);
+
+    const promises = response1.data.map(async (membroProjeto) => {
+
+      const response2 = await buscarProjetoPeloId(membroProjeto.projeto)
+      const response3 = await buscarQuantidadeMembrosPorProjeto(membroProjeto.projeto)
+      const response4 = await buscarFluxoPeloId(response2.data.fluxo)
+
+      return {
+        id: membroProjeto.id,
+        nome: response2.data.nome,
+        status: response2.data.status,
+        data_inicio: formatDate(response2.data.data_inicio),
+        data_fim: formatDate(response2.data.data_fim),
+        qtd_membros: response3.data.quantidade_membros,
+        fluxo: response4.data.nome
+      }
+    })
+
+    const resultados = (await Promise.all(promises))
+    setProjectsData(resultados)
+    
+  }
 
 
   return (
@@ -125,21 +141,28 @@ const ProjectsSection = () => {
                       <h2> Meus Projetos </h2>  
                     </div>
                     <div className='projects-section-content'> 
-                      { 
-                        projectsData !== null ? 
-
-                        (<Table 
-                            className='meus-projetos-table'
-                            dataSource={projectsData} 
-                            columns={columns} />) 
-                        
-                        : <Empty style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
-                          justifyContent: "center" 
-                        }}/>
-                      }
+                    {
+                      projectsData !== null ? (
+                        <Table
+                          className='meus-projetos-table'
+                          dataSource={projectsData}
+                          columns={columns}
+                        />
+                      ) : (
+                        <Empty 
+                          description="Não há projetos para exibir"
+                          image={Empty.PRESENTED_IMAGE_SIMPLE}
+                          style={{
+                            display: 'flex',
+                            width: "100%",
+                            height: "100%",
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                        >
+                        </Empty>
+                    )}
                       
                     </div>
                     
