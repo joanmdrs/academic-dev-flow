@@ -1,8 +1,26 @@
+import { NotificationManager } from "react-notifications"
 import api from "../api/api"
 
 export const criarMembroProjeto = async (dados) => {
     const resposta = await api.post('membro_projeto/cadastrar/', {membros: dados})
     return resposta
+}
+
+export const buscarProjetosDoMembro =  async (idMembro) => {
+
+    try {
+        const response = await api.get(`membro_projeto/buscar/projetos/${encodeURIComponent(idMembro)}/`)
+
+        if (response.status === 200){   
+            NotificationManager.success('Busca realizada com sucesso !')
+            return response
+        } else {
+            NotificationManager.warning('Falha na busca, contate o suporte !')
+        }
+    } catch (error) {
+        console.log(error)
+        NotificationManager.error('Erro na operação, contate o suporte!')
+    }
 }
 
 export const excluirMembroProjetoOne = async (id) => {

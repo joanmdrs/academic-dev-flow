@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ProjectCard from '../components/ProjectCard/ProjectCard'; 
 import StudentMenu from '../../../../components/Menus/StudentMenu/StudentMenu';
-import { Button, Layout, Space, Table, Tabs } from 'antd';
+import { Button, Empty, Flex, Layout, Space, Table, Tabs } from 'antd';
 import MyHeader from '../../../../components/Header/Header';
 import "./ProjectsSection.css"
 import CustomBreadcrumb from '../../../../components/Breadcrumb/Breadcrumb';
@@ -9,30 +9,10 @@ import { LuCalendarCheck2, LuCalendarX2 } from "react-icons/lu";
 import { TeamOutlined } from '@ant-design/icons';
 import { CiCircleCheck } from "react-icons/ci";
 import { TiFlowChildren } from "react-icons/ti";
-import { PiEye } from "react-icons/pi";
-
-const projectsData = [
-  {
-    key: 1,
-    id: 1,
-    nome: 'Projeto A',
-    description: 'Descrição do Projeto A.',
-    inicio: '27/02/2024',
-    fim: '27/03/2024',
-    status: 'Em andamento',
-    team: 'Equipe A',
-  },
-  {
-    key: 2,
-    id: 2,
-    nome: 'Projeto B',
-    description: 'Descrição do Projeto B.',
-    inicio: '27/02/2024',
-    fim: '27/03/2024',
-    status: 'Em andamento',
-    team: 'Equipe B',
-  },
-];
+import { decodeToken } from 'react-jwt';
+import Loading from '../../../../components/Loading/Loading';
+import { buscarProjetosDoMembro } from '../../../../services/membroProjetoService';
+import { buscarProjetosPorListaIds } from '../../../../services/projetoService';
 
 const columns = [
   {
@@ -105,6 +85,35 @@ const breadcrumbRoutes = [
 
 const ProjectsSection = () => {
 
+  const [projectsData, setProjectsData] = useState(null)
+  const [token] = useState(localStorage.getItem("token") || null);
+  const [shouldRender, setShouldRender] = useState(false);
+
+  useEffect(() => {
+      const searchData = async () => {
+          try {
+            const decoded = await decodeToken(token);
+
+            const response1 = await buscarProjetosDoMembro(decoded.user_id);
+            
+            const ids = response1.data.map(element => element.projeto)
+            const response2 = await buscarProjetosPorListaIds(ids)
+            setProjectsData(response2.data.results)
+            setTimeout(() => setShouldRender(true), 2000);
+          } catch (error) {
+              console.error('Erro ao decodificar o token:', error);
+          }
+      };
+      if (token) {
+          searchData();
+      }
+  }, [token]);
+
+  if (!shouldRender) {
+    return <Loading />
+}
+
+
   return (
     <React.Fragment>
         <StudentMenu />
@@ -116,10 +125,22 @@ const ProjectsSection = () => {
                       <h2> Meus Projetos </h2>  
                     </div>
                     <div className='projects-section-content'> 
-                      <Table 
-                        className='meus-projetos-table'
-                        dataSource={projectsData} 
-                        columns={columns} />
+                      { 
+                        projectsData !== null ? 
+
+                        (<Table 
+                            className='meus-projetos-table'
+                            dataSource={projectsData} 
+                            columns={columns} />) 
+                        
+                        : <Empty style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center" 
+                        }}/>
+                      }
+                      
                     </div>
                     
                 </div>

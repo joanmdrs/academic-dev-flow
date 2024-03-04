@@ -16,6 +16,13 @@ export const buscarProjetoPeloId = async (idProjeto) => {
     return resposta
 }
 
+export const buscarProjetosPorListaIds = async (listaIds) => {
+    const response = await api.get('/projeto/buscar_por_lista_ids/', {params: {ids: listaIds}});
+    return response;
+}
+
+
+
 export const excluirProjeto = (id) => {
     const resposta = api.delete(`/projeto/excluir/${encodeURIComponent(id)}/`);
     return resposta;

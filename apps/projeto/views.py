@@ -56,6 +56,27 @@ class BuscarProjetoPorIdView(BaseProjetoView):
             return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class BuscarProjetosPorListaDeIdsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            ids_projetos = request.GET.getlist('ids[]', [])
+
+            projetos = Projeto.objects.filter(id__in=ids_projetos)
+
+            if not projetos:
+                return Response({'message': 'Nenhum projeto encontrado.', 'results': []}, status=status.HTTP_200_OK)
+
+            serializer = ProjetoSerializer(projetos, many=True)
+            return Response({'message': 'Projetos encontrados com sucesso.', 'results': serializer.data}, status=status.HTTP_200_OK)
+
+        except ValueError:
+            return Response({'error': 'IDs fornecidos são inválidos.'}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
     
     
 class ExcluirProjetoView(BaseProjetoView):
