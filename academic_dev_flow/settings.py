@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'apps.usuario',
     'apps.membro', 
     'apps.membro_projeto',
+    'apps.iteracao',
     'apps.api',
 ]
 
