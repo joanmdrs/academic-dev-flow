@@ -5,6 +5,7 @@ import { listarEtapasPorFluxo } from "../../../../../services/fluxoEtapaService"
 import { buscarEtapaPeloId } from "../../../../../services/etapaService";
 import { listarMembrosPorProjeto } from "../../../../../services/membroProjetoService";
 import { buscarMembroPeloId } from "../../../../../services/membroService";
+import { useForm } from "antd/es/form/Form";
 
 const baseStyle = {
     display: "flex",
@@ -33,22 +34,25 @@ const OPTIONS_STATUS = [
 
 const FormIteracao = ({onSubmit, onCancel}) => {
 
-    const {hasProjectData} = useFormContext()
-    const [optionsEtapas, setOptionsEtapas] = useState([])
-    const [optionsMembros, setOptionsMembros] = useState([])
- 
-    useEffect(() => {
+    const { hasProjectData, valuesIteracao } = useFormContext();
+  const [form] = useForm();
+  const [optionsEtapas, setOptionsEtapas] = useState([]);
+  const [optionsMembros, setOptionsMembros] = useState([]);
 
-        const fetchData = async () => {
-            if (hasProjectData !== null){
-                await handleGetEtapas()
-                await handleGetMembros()
-            }
+  useEffect(() => {
+    const fetchData = async () => {
+      if (hasProjectData !== null) {
+        await handleGetEtapas();
+        await handleGetMembros();
+
+        if (valuesIteracao) {
+          form.setFieldsValue(valuesIteracao);
         }
+      }
+    };
 
-        fetchData()
-
-    }, [])
+    fetchData();
+  }, [hasProjectData, valuesIteracao, form]);
 
     const handleGetEtapas = async () => {
         const response = await listarEtapasPorFluxo(hasProjectData.fluxo)
@@ -90,7 +94,7 @@ const FormIteracao = ({onSubmit, onCancel}) => {
 
     return (
         <div>
-            <Form layout="vertical" className="global-form">
+            <Form layout="vertical" className="global-form" onFinish={onSubmit} form={form}>
                 <Form.Item>
                     <h4> CADASTRAR ITERAÇÃO </h4>
                 </Form.Item>
@@ -133,7 +137,7 @@ const FormIteracao = ({onSubmit, onCancel}) => {
 
                 <div style={{...baseStyle}}> 
                     <Form.Item>
-                        <Button type="primary"> Salvar </Button>
+                        <Button type="primary" htmlType="submit"> Salvar </Button>
                     </Form.Item>
 
                     <Form.Item>
