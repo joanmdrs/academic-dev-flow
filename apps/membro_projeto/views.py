@@ -50,6 +50,8 @@ class BuscarProjetosDoMembroView(BaseMembroProjetoView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 class BuscarMembroProjetoPeloIdProjetoView(APIView): 
+    permission_classes = [IsAuthenticated]
+    
     def get(self, request, idProjeto):
         try: 
             objetos = MembroProjeto.objects.filter(projeto=idProjeto)
