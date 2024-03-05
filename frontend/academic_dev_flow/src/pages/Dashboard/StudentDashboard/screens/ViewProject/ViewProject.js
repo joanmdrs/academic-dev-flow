@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./ViewProject.css"
 import StudentMenu from "../../../../../components/Menus/StudentMenu/StudentMenu";
-import { Button, Flex, Layout } from "antd";
+import { Button, Dropdown, Flex, Layout, Menu, Popconfirm } from "antd";
 import { IoAdd } from "react-icons/io5";
 import { IoCloseOutline } from "react-icons/io5";
 import MyHeader from "../../../../../components/Header/Header";
@@ -10,10 +10,14 @@ import { useParams } from "react-router-dom";
 import { buscarProjetoPeloId } from "../../../../../services/projetoService";
 import { buscarFluxoPeloId } from "../../../../../services/fluxoService";
 import { listarEtapasPorFluxo } from "../../../../../services/fluxoEtapaService";
-import { buscarEtapaPeloId } from "../../../../../services/etapaService";
-import { listarIteracoesPorProjeto } from "../../../../../services/iteracaoService";
+import { buscarEtapaPeloId, criarEtapa } from "../../../../../services/etapaService";
+import { criarIteracao, listarIteracoesPorProjeto } from "../../../../../services/iteracaoService";
 import FormIteracao from "../FormIteracao/FormIteracao";
 import { useFormContext } from "../../context/ProviderIteracao/ProviderIteracao";
+import { FiEdit } from "react-icons/fi";
+import { FiTrash } from "react-icons/fi";
+import { IoIosMore } from "react-icons/io";
+import { recarregarPagina } from "../../../../../services/utils";
 
 const breadcrumbRoutes = [
     { title: 'Home', path: '/aluno/home' },
@@ -25,14 +29,16 @@ const baseStyle = {
     width: '25%',
     height: '100vh',
   };
+  
 
 const ViewProject = () => {
 
     const { projectId } = useParams();
-    const { hasProjectData, setHasProjectData } = useFormContext()
+    const { hasProjectData, setHasProjectData, setValuesIteracao } = useFormContext()
     const [projectData, setProjectData] = useState(null)
     const [iteracoes, setIteracoes] = useState(null)
     const [isFormVisivel, setIsFormVisivel] = useState(false)
+    const [acaoForm, setAcaoForm] = useState("create")
 
     useEffect(() => {
         const fetchData = async () => {
@@ -54,26 +60,62 @@ const ViewProject = () => {
         if (response1.status === 200){
 
             const response2 = await listarIteracoesPorProjeto(projectId)
-
-            const data = response2.data
-            const promises = data.map(async (iteracao) => {
-                const response3 = await buscarEtapaPeloId(iteracao.fase)
-
-                return {
-                    id: iteracao.id,
-                    idEtapa: iteracao.fase, 
-                    nome: iteracao.nome,
-                    etapa: response3.data.nome
-                }
-            })
-
-            const results = (await Promise.all(promises))
-            setIteracoes(results)
+            setIteracoes(response2.data)
         }
     }
 
-    const onCancel = () => setIsFormVisivel(false)
-    const onShow = () => setIsFormVisivel(true)
+    const handleCancel = () => setIsFormVisivel(false)
+
+    const handleAdd = () => {
+        setAcaoForm('create')
+        setIsFormVisivel(true)
+        setValuesIteracao(null)
+    }
+
+    const handleEdit = (record) => {
+        setValuesIteracao(record)
+        setAcaoForm('update')
+        setIsFormVisivel(true)
+    }
+
+    const handleSaveIteracao = async (dados) => {    
+        dados['projeto'] = projectId
+        if (acaoForm === 'create'){
+            await criarIteracao(dados)
+        } else if (acaoForm === 'update') {
+            return
+        }
+        recarregarPagina()
+    }
+
+    const handleDelete = (record) => {
+
+    }
+
+    const CustomMenu = ({ iteracao}) => {
+        return (
+            <Menu>
+                <Menu.Item key="editar">
+                    <Button type="text" icon={<FiEdit />} onClick={() => handleEdit(iteracao)}>
+                        Editar
+                    </Button>
+                </Menu.Item>
+
+                <Menu.Item key="excluir">
+                    <Popconfirm
+                        title="Tem certeza que deseja excluir?"
+                        onConfirm={handleDelete}
+                        okText="Sim"
+                        cancelText="Não"
+                        >
+                        <Button type="text" icon={<FiTrash />}>
+                            Excluir
+                        </Button>
+                    </Popconfirm>
+                </Menu.Item>
+            </Menu>
+        );
+    };
 
 
     return (
@@ -84,10 +126,10 @@ const ViewProject = () => {
                 <CustomBreadcrumb routes={breadcrumbRoutes} />
                 <div className="screen-view-project">
 
-                    <div className="title global-div">
+                    <div className="global-div title"> 
                         { 
                             projectData !== null ? (
-                                <div className="title"> 
+                                <div> 
                                     {projectData.nome}
                                 </div>
                             ) : null
@@ -98,14 +140,14 @@ const ViewProject = () => {
                                 (
                                     <Button 
                                         icon={<IoCloseOutline />} 
-                                        onClick={onCancel}>
+                                        onClick={handleCancel}>
                                         Cancelar
                                     </Button>
                                 )
                                 : 
                                     <Button 
                                         icon={<IoAdd />} 
-                                        onClick={onShow}>
+                                        onClick={handleAdd}>
                                         Adicionar Iteração
                                     </Button>
                             }
@@ -117,11 +159,11 @@ const ViewProject = () => {
                     <div className="content"> 
 
                         {isFormVisivel ? (
-                            <FormIteracao />
+                            <FormIteracao  onSubmit={handleSaveIteracao} onCancel={handleCancel} />
                         ) : 
                         (
-                            <div>
-                                Cronograma de Iterações
+                            <div className="cronograme-iterations">
+                                <div> <h4> Cronograma de Iterações </h4> </div>
                                 {
                                     iteracoes &&  
                                     
@@ -130,12 +172,26 @@ const ViewProject = () => {
                                             <div
                                                 className="cronograme-column"
                                                 key={iteracao.id}
+
                                                 style={{
                                                 ...baseStyle,
                                                 backgroundColor: iteracao.id % 2 ? '#1677ff' : '#1677ffbf',
                                                 }}
+
                                             >
-                                                {iteracao.nome}
+                                                <div style={{display: 'flex', flexDirection: 'column-reverse', width: "100%"}}>
+                                                    <div className="iteration">
+                                                        {iteracao.nome}
+                                                    </div>
+                                                    <Dropdown overlay={<CustomMenu iteracao={iteracao} />} trigger={['click']}
+                                                        >
+                                                        <Button className="actions-iteration" >
+                                                            <IoIosMore fontSize="25px" color="#fff" />
+                                                        </Button>
+                                                    </Dropdown>
+
+                                                </div>
+                                                
                                             </div>
                                         ))}
                                     </Flex>
