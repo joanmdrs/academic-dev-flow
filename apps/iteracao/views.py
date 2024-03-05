@@ -15,21 +15,43 @@ class CadastrarIteracaoView(APIView):
     permission_classes = [IsAuthenticated]
     
     def post(self, request):
-        try:
-            gerente_id = request.data.get('gerente', None)
-            
-            membro_projeto = MembroProjeto.objects.get(id=gerente_id)
+        
+        gerente_id = request.data.get('gerente', None)
+        print(gerente_id)
+        membro_projeto = MembroProjeto.objects.get(id=gerente_id)
 
+
+        if membro_projeto is not None: 
+            
             membro_projeto.funcao = "gerente"
             membro_projeto.save()
-            
+        
             serializer = IteracaoSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
+    
+        # try:
+        #     gerente_id = request.data.get('gerente', None)
+        #     p
+        #     membro_projeto = MembroProjeto.objects.get(id=gerente_id)
+
+
+        #     if membro_projeto is not None: 
+                
+        #         membro_projeto.funcao = "gerente"
+        #         membro_projeto.save()
+            
+        #         serializer = IteracaoSerializer(data=request.data)
+        #         if serializer.is_valid(raise_exception=True):
+        #             serializer.save()
+        #             return Response(serializer.data, status=status.HTTP_200_OK)
+        #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        #     return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
+        # except Exception as e:
+        #     return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 class ListarIteracoesPorProjetoView(APIView):
     permission_classes = [IsAuthenticated]

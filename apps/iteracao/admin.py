@@ -6,7 +6,8 @@ class IteracaoAdmin(admin.ModelAdmin):
     search_fields = ('nome', )
     
     def exibir_projeto(self, obj):
-        return obj.projeto.nome
+        if (obj.projeto.nome):
+            return obj.projeto.nome
     exibir_projeto.short_description = 'Projeto'
         
     def exibir_gerente(self, obj):
