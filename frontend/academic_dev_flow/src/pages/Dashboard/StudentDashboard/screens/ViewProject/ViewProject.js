@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./ViewProject.css"
 import StudentMenu from "../../../../../components/Menus/StudentMenu/StudentMenu";
-import { Flex, Layout } from "antd";
+import { Button, Flex, Layout } from "antd";
+import { IoAdd } from "react-icons/io5";
+import { IoCloseOutline } from "react-icons/io5";
 import MyHeader from "../../../../../components/Header/Header";
 import CustomBreadcrumb from "../../../../../components/Breadcrumb/Breadcrumb";
 import { useParams } from "react-router-dom";
@@ -9,6 +11,9 @@ import { buscarProjetoPeloId } from "../../../../../services/projetoService";
 import { buscarFluxoPeloId } from "../../../../../services/fluxoService";
 import { listarEtapasPorFluxo } from "../../../../../services/fluxoEtapaService";
 import { buscarEtapaPeloId } from "../../../../../services/etapaService";
+import { listarIteracoesPorProjeto } from "../../../../../services/iteracaoService";
+import FormIteracao from "../FormIteracao/FormIteracao";
+import { useFormContext } from "../../context/ProviderIteracao/ProviderIteracao";
 
 const breadcrumbRoutes = [
     { title: 'Home', path: '/aluno/home' },
@@ -24,8 +29,10 @@ const baseStyle = {
 const ViewProject = () => {
 
     const { projectId } = useParams();
+    const { hasProjectData, setHasProjectData } = useFormContext()
     const [projectData, setProjectData] = useState(null)
-    const [etapas, setEtapas] = useState(null)
+    const [iteracoes, setIteracoes] = useState(null)
+    const [isFormVisivel, setIsFormVisivel] = useState(false)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -42,30 +49,31 @@ const ViewProject = () => {
 
         const response1 = await buscarProjetoPeloId(projectId);
         setProjectData(response1.data);
+        setHasProjectData(response1.data)
 
         if (response1.status === 200){
 
-            const response2 = await listarEtapasPorFluxo(response1.data.fluxo)
+            const response2 = await listarIteracoesPorProjeto(projectId)
 
-            const results = response2.data
-            const promises = results.map(async (fluxoEtapa) => {
-                console.log(fluxoEtapa)
-                const response3 = await buscarEtapaPeloId(fluxoEtapa.etapa)
+            const data = response2.data
+            const promises = data.map(async (iteracao) => {
+                const response3 = await buscarEtapaPeloId(iteracao.fase)
 
                 return {
-                    id: fluxoEtapa.id,
-                    idFluxo: fluxoEtapa.fluxo,
-                    idEtapa: fluxoEtapa.etapa, 
-                    nome: response3.data.nome
+                    id: iteracao.id,
+                    idEtapa: iteracao.fase, 
+                    nome: iteracao.nome,
+                    etapa: response3.data.nome
                 }
             })
 
-            const resultados = (await Promise.all(promises))
-
-            console.log(resultados)
-            setEtapas(resultados)
+            const results = (await Promise.all(promises))
+            setIteracoes(results)
         }
     }
+
+    const onCancel = () => setIsFormVisivel(false)
+    const onShow = () => setIsFormVisivel(true)
 
 
     return (
@@ -84,28 +92,60 @@ const ViewProject = () => {
                                 </div>
                             ) : null
                         }
+
+                        <div> 
+                            { isFormVisivel ? 
+                                (
+                                    <Button 
+                                        icon={<IoCloseOutline />} 
+                                        onClick={onCancel}>
+                                        Cancelar
+                                    </Button>
+                                )
+                                : 
+                                    <Button 
+                                        icon={<IoAdd />} 
+                                        onClick={onShow}>
+                                        Adicionar Iteração
+                                    </Button>
+                            }
+                            
+                        </div>
+
                     </div>
 
                     <div className="content"> 
-                        Cronograma
-                        {/* {
-                            etapas &&  
+
+                        {isFormVisivel ? (
+                            <FormIteracao />
+                        ) : 
+                        (
+                            <div>
+                                Cronograma de Iterações
+                                {
+                                    iteracoes &&  
+                                    
+                                    <Flex horizontal>
+                                        {iteracoes.map((iteracao) => (
+                                            <div
+                                                className="cronograme-column"
+                                                key={iteracao.id}
+                                                style={{
+                                                ...baseStyle,
+                                                backgroundColor: iteracao.id % 2 ? '#1677ff' : '#1677ffbf',
+                                                }}
+                                            >
+                                                {iteracao.nome}
+                                            </div>
+                                        ))}
+                                    </Flex>
+                                }
+                            </div>
                             
-                            <Flex horizontal>
-                                {etapas.map((etapa) => (
-                                    <div
-                                        className="cronograme-column"
-                                        key={etapa.id}
-                                        style={{
-                                        ...baseStyle,
-                                        backgroundColor: etapa.id % 2 ? '#1677ff' : '#1677ffbf',
-                                        }}
-                                    >
-                                        {etapa.nome}
-                                    </div>
-                                ))}
-                            </Flex>
-                        } */}
+                         )
+                    
+                    }
+                        
                     </div>
 
 

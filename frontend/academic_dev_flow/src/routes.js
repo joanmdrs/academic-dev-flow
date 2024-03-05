@@ -12,6 +12,7 @@ import Fluxo from './pages/Fluxo';
 import Login from './pages/Auth/Login';
 import ProjectsSection from './pages/Dashboard/StudentDashboard/screens/ProjectSection/ProjectsSection';
 import ViewProject from './pages/Dashboard/StudentDashboard/screens/ViewProject/ViewProject';
+import { IteracaoProvider } from './pages/Dashboard/StudentDashboard/context/ProviderIteracao/ProviderIteracao';
 
 function Routes() {
  
@@ -33,7 +34,9 @@ function Routes() {
       <Route element={<StudentRoutes />}>
         <Route path='/aluno/home' Component={StudentDashboard} exact/>
         <Route path='/aluno/projetos' Component={ProjectsSection} exact/>
-        <Route path='/aluno/projetos/visualizar/:projectId' Component={ViewProject} exact/> 
+        <Route path='/aluno/projetos/visualizar/:projectId' element={
+          <IteracaoProvider> <ViewProject /> </IteracaoProvider>
+        } exact/> 
       </Route>
     </Switch>
   );
