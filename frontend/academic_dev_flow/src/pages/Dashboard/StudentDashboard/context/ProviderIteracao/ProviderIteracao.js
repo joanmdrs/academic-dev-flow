@@ -7,12 +7,16 @@ export const useFormContext = () => useContext(IteracaoContext);
 export const IteracaoProvider = ({children}) => {
 
     const [hasProjectData, setHasProjectData] = useState(null);
+    const [valuesIteracao, setValuesIteracao] = useState(null)
 
     return (
         <IteracaoContext.Provider 
             value={{ 
                 hasProjectData,
-                setHasProjectData 
+                setHasProjectData,
+                valuesIteracao,
+                setValuesIteracao
+
             }}
         >
           {children}
