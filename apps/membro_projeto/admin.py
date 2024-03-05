@@ -4,7 +4,7 @@ from .models import MembroProjeto, HistoricoMembroProjeto
 
 class MembroProjetoAdmin(admin.ModelAdmin):
     
-    list_display = ('id', 'exibir_projeto', 'exibir_membro', 'funcao', 'data_inicio', 'data_fim')
+    list_display = ('id', 'exibir_projeto', 'exibir_membro', 'funcao',)
     
     def exibir_projeto(self, obj):
         return obj.projeto.nome
