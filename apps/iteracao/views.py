@@ -31,7 +31,7 @@ class CadastrarIteracaoView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-class BuscarIteracaoPorProjetoView(APIView):
+class ListarIteracoesPorProjetoView(APIView):
     permission_classes = [IsAuthenticated]
     
     def get(self, request, id_projeto):
