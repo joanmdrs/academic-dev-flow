@@ -123,10 +123,10 @@ class ExcluirMembroView(BaseMembroView):
             if (member is not None and user is not None):
                 user.delete()
                 member.delete()
-                return Response({"detail": "Membro excluído com sucesso"}, status=status.HTTP_204_NO_CONTENT);
+                return Response({"detail": "Membro excluído com sucesso"}, status=status.HTTP_204_NO_CONTENT)
             
             else:
-                return JsonResponse({'error': 'Recurso não encontrado'}, status=404);
+                return JsonResponse({'error': 'Recurso não encontrado'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
