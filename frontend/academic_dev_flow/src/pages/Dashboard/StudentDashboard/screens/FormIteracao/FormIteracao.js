@@ -6,6 +6,7 @@ import { buscarEtapaPeloId } from "../../../../../services/etapaService";
 import { listarMembrosPorProjeto } from "../../../../../services/membroProjetoService";
 import { buscarMembroPeloId } from "../../../../../services/membroService";
 import { useForm } from "antd/es/form/Form";
+import Loading from "../../../../../components/Loading/Loading";
 
 const baseStyle = {
     display: "flex",
@@ -35,24 +36,10 @@ const OPTIONS_STATUS = [
 const FormIteracao = ({onSubmit, onCancel}) => {
 
     const { hasProjectData, valuesIteracao } = useFormContext();
-  const [form] = useForm();
-  const [optionsEtapas, setOptionsEtapas] = useState([]);
-  const [optionsMembros, setOptionsMembros] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (hasProjectData !== null) {
-        await handleGetEtapas();
-        await handleGetMembros();
-
-        if (valuesIteracao) {
-          form.setFieldsValue(valuesIteracao);
-        }
-      }
-    };
-
-    fetchData();
-  }, [hasProjectData, valuesIteracao, form]);
+    const [form] = useForm();
+    const [optionsEtapas, setOptionsEtapas] = useState([]);
+    const [optionsMembros, setOptionsMembros] = useState([]);
+    const [loading, setLoading] = useState(true)
 
     const handleGetEtapas = async () => {
         const response = await listarEtapasPorFluxo(hasProjectData.fluxo)
@@ -92,6 +79,29 @@ const FormIteracao = ({onSubmit, onCancel}) => {
         }
     }
 
+
+    useEffect(() => {
+        const fetchData = async () => {
+        if (hasProjectData !== null) {
+            await handleGetEtapas();
+            await handleGetMembros();
+
+            if (valuesIteracao) {
+                form.setFieldsValue(valuesIteracao);
+            }
+
+            setLoading(false)
+        }
+        };
+
+        fetchData();
+    }, [hasProjectData, valuesIteracao, form]);
+
+    if (loading) {
+        return <Loading />
+    }
+
+    
     return (
         <div>
             <Form layout="vertical" className="global-form" onFinish={onSubmit} form={form}>
@@ -141,7 +151,7 @@ const FormIteracao = ({onSubmit, onCancel}) => {
                     </Form.Item>
 
                     <Form.Item>
-                        <Button> Cancelar </Button>
+                        <Button onClick={onCancel}> Cancelar </Button>
                     </Form.Item>
                 </div>
                 

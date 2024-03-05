@@ -11,7 +11,7 @@ import { buscarProjetoPeloId } from "../../../../../services/projetoService";
 import { buscarFluxoPeloId } from "../../../../../services/fluxoService";
 import { listarEtapasPorFluxo } from "../../../../../services/fluxoEtapaService";
 import { buscarEtapaPeloId, criarEtapa } from "../../../../../services/etapaService";
-import { criarIteracao, listarIteracoesPorProjeto } from "../../../../../services/iteracaoService";
+import { atualizarIteracao, criarIteracao, listarIteracoesPorProjeto } from "../../../../../services/iteracaoService";
 import FormIteracao from "../FormIteracao/FormIteracao";
 import { useFormContext } from "../../context/ProviderIteracao/ProviderIteracao";
 import { FiEdit } from "react-icons/fi";
@@ -34,7 +34,7 @@ const baseStyle = {
 const ViewProject = () => {
 
     const { projectId } = useParams();
-    const { hasProjectData, setHasProjectData, setValuesIteracao } = useFormContext()
+    const { hasProjectData, setHasProjectData, valuesIteracao, setValuesIteracao } = useFormContext()
     const [projectData, setProjectData] = useState(null)
     const [iteracoes, setIteracoes] = useState(null)
     const [isFormVisivel, setIsFormVisivel] = useState(false)
@@ -64,7 +64,11 @@ const ViewProject = () => {
         }
     }
 
-    const handleCancel = () => setIsFormVisivel(false)
+    const handleCancel = () => {
+        setAcaoForm('create')
+        setIsFormVisivel(false)
+        setValuesIteracao(null)
+    }
 
     const handleAdd = () => {
         setAcaoForm('create')
@@ -83,7 +87,7 @@ const ViewProject = () => {
         if (acaoForm === 'create'){
             await criarIteracao(dados)
         } else if (acaoForm === 'update') {
-            return
+            await atualizarIteracao(valuesIteracao.id, dados)
         }
         recarregarPagina()
     }
