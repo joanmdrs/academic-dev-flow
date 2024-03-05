@@ -12,11 +12,10 @@ export const criarIteracao = async (dados) => {
         
     } catch (error) {
         console.log(error)
-        NotificationManager.error('Falha na operação, contate o suporte !')
+        NotificationManager.error('Falha ao cadastrar a iteração, contate o suporte !')
+        return { error: "Erro ao cadastrar a iteração"};
     }
 
-    const response = await api.post('iteracao/cadastrar/', {dados})
-    return response
 }
 
 export const listarIteracoesPorProjeto = async (idProjeto) => {
@@ -38,5 +37,20 @@ export const atualizarIteracao = async (id, dados) => {
         console.log(error)
         NotificationManager.error('Falha na operação, contate o suporte !')
         return { error: "Erro ao atualizar a iteração"};
+    }
+}
+
+export const excluirIteracao = async (id) => {
+    try {
+        const response = await api.delete(`iteracao/excluir/${encodeURIComponent(id)}/`)
+
+        if (response.status === 204){
+            NotificationManager.success('Iteração excluída com sucesso !')
+            return response
+        }
+    } catch (error) {
+        console.log(error)
+        NotificationManager.error('Falha ao excluir a iteração')
+        return {error: 'Erro ao excluir a iteração'}
     }
 }

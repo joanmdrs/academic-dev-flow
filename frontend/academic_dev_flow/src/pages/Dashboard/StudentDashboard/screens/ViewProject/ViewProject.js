@@ -11,7 +11,7 @@ import { buscarProjetoPeloId } from "../../../../../services/projetoService";
 import { buscarFluxoPeloId } from "../../../../../services/fluxoService";
 import { listarEtapasPorFluxo } from "../../../../../services/fluxoEtapaService";
 import { buscarEtapaPeloId, criarEtapa } from "../../../../../services/etapaService";
-import { atualizarIteracao, criarIteracao, listarIteracoesPorProjeto } from "../../../../../services/iteracaoService";
+import { atualizarIteracao, criarIteracao, excluirIteracao, listarIteracoesPorProjeto } from "../../../../../services/iteracaoService";
 import FormIteracao from "../FormIteracao/FormIteracao";
 import { useFormContext } from "../../context/ProviderIteracao/ProviderIteracao";
 import { FiEdit } from "react-icons/fi";
@@ -39,6 +39,7 @@ const ViewProject = () => {
     const [iteracoes, setIteracoes] = useState(null)
     const [isFormVisivel, setIsFormVisivel] = useState(false)
     const [acaoForm, setAcaoForm] = useState("create")
+    const [reloadTrigger, setReloadTrigger] = useState(0);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -49,8 +50,12 @@ const ViewProject = () => {
     
         fetchData(); 
     
-    }, [projectId]);
+    }, [projectId, reloadTrigger]);
 
+
+    const reloadPage = () => {
+        setReloadTrigger((prev) => prev + 1);
+    };
     const handleGetProject = async () => {
 
         const response1 = await buscarProjetoPeloId(projectId);
@@ -60,7 +65,8 @@ const ViewProject = () => {
         if (response1.status === 200){
 
             const response2 = await listarIteracoesPorProjeto(projectId)
-            setIteracoes(response2.data)
+            const iteracoesOrdenadas = response2.data.sort((a, b) => a.numero - b.numero);
+            setIteracoes(iteracoesOrdenadas);
         }
     }
 
@@ -89,11 +95,12 @@ const ViewProject = () => {
         } else if (acaoForm === 'update') {
             await atualizarIteracao(valuesIteracao.id, dados)
         }
-        recarregarPagina()
+        reloadPage()
     }
 
-    const handleDelete = (record) => {
-
+    const handleDelete = async (record) => {
+        await excluirIteracao(record.id)
+        reloadPage()
     }
 
     const CustomMenu = ({ iteracao}) => {
@@ -108,7 +115,7 @@ const ViewProject = () => {
                 <Menu.Item key="excluir">
                     <Popconfirm
                         title="Tem certeza que deseja excluir?"
-                        onConfirm={handleDelete}
+                        onConfirm={async () => await handleDelete(iteracao)}
                         okText="Sim"
                         cancelText="Não"
                         >
