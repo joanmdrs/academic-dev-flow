@@ -3,6 +3,13 @@
     flex-direction: column;
     margin: 20px;
 }
+
+.screen-view-project .title {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
 .screen-view-project .content .cronograme-column {
     padding: 10px;
 }
