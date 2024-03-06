@@ -1,23 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./ViewProject.css"
 import StudentMenu from "../../../../../components/Menus/StudentMenu/StudentMenu";
-import { Button, Dropdown, Flex, Layout, Menu, Popconfirm } from "antd";
+import { Button, Flex, Layout } from "antd";
 import { IoAdd } from "react-icons/io5";
 import { IoCloseOutline } from "react-icons/io5";
 import MyHeader from "../../../../../components/Header/Header";
 import CustomBreadcrumb from "../../../../../components/Breadcrumb/Breadcrumb";
 import { useParams } from "react-router-dom";
 import { buscarProjetoPeloId } from "../../../../../services/projetoService";
-import { buscarFluxoPeloId } from "../../../../../services/fluxoService";
-import { listarEtapasPorFluxo } from "../../../../../services/fluxoEtapaService";
-import { buscarEtapaPeloId, criarEtapa } from "../../../../../services/etapaService";
 import { atualizarIteracao, criarIteracao, excluirIteracao, listarIteracoesPorProjeto } from "../../../../../services/iteracaoService";
 import FormIteracao from "../FormIteracao/FormIteracao";
 import { useFormContext } from "../../context/ProviderIteracao/ProviderIteracao";
-import { FiEdit } from "react-icons/fi";
-import { FiTrash } from "react-icons/fi";
-import { IoIosMore } from "react-icons/io";
-import { recarregarPagina } from "../../../../../services/utils";
+import CustomDropdown from "../../../../../components/CustomDropdown/CustomDropdown";
 
 const breadcrumbRoutes = [
     { title: 'Home', path: '/aluno/home' },
@@ -28,13 +22,12 @@ const breadcrumbRoutes = [
 const baseStyle = {
     width: '25%',
     height: '100vh',
-  };
-  
+  };  
 
 const ViewProject = () => {
 
     const { projectId } = useParams();
-    const { hasProjectData, setHasProjectData, valuesIteracao, setValuesIteracao } = useFormContext()
+    const { setHasProjectData, valuesIteracao, setValuesIteracao } = useFormContext()
     const [projectData, setProjectData] = useState(null)
     const [iteracoes, setIteracoes] = useState(null)
     const [isFormVisivel, setIsFormVisivel] = useState(false)
@@ -102,33 +95,6 @@ const ViewProject = () => {
         await excluirIteracao(record.id)
         reloadPage()
     }
-
-    const CustomMenu = ({ iteracao}) => {
-        return (
-            <Menu>
-                <Menu.Item key="editar">
-                    <Button type="text" icon={<FiEdit />} onClick={() => handleEdit(iteracao)}>
-                        Editar
-                    </Button>
-                </Menu.Item>
-
-                <Menu.Item key="excluir">
-                    <Popconfirm
-                        title="Tem certeza que deseja excluir?"
-                        onConfirm={async () => await handleDelete(iteracao)}
-                        okText="Sim"
-                        cancelText="Não"
-                        >
-                        <Button type="text" icon={<FiTrash />}>
-                            Excluir
-                        </Button>
-                    </Popconfirm>
-                </Menu.Item>
-            </Menu>
-        );
-    };
-
-
     return (
         <React.Fragment>
             <StudentMenu />
@@ -194,12 +160,8 @@ const ViewProject = () => {
                                                     <div className="iteration">
                                                         {iteracao.nome}
                                                     </div>
-                                                    <Dropdown overlay={<CustomMenu iteracao={iteracao} />} trigger={['click']}
-                                                        >
-                                                        <Button className="actions-iteration" >
-                                                            <IoIosMore fontSize="25px" color="#fff" />
-                                                        </Button>
-                                                    </Dropdown>
+                                                    
+                                                    <CustomDropdown iteracao={iteracao} handleDelete={handleDelete} handleEdit={handleEdit} />
 
                                                 </div>
                                                 

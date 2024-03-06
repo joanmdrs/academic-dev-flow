@@ -4,7 +4,7 @@ import { IoIosMore } from 'react-icons/io';
 import { FiEdit, FiTrash } from 'react-icons/fi';
 import './CustomDropdown.css';
 
-const Dropdown = ({ iteracao, handleEdit, handleDelete }) => {
+const CustomDropdown = ({ iteracao, handleEdit, handleDelete }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleteConfirmVisible, setDeleteConfirmVisible] = useState(false);
 
@@ -56,4 +56,4 @@ const Dropdown = ({ iteracao, handleEdit, handleDelete }) => {
   );
 };
 
-export default Dropdown;
+export default CustomDropdown;

@@ -33,14 +33,4 @@
     color: #fff;
 }
 
-.screen-view-project .actions-iteration {
-    width: fit-content;
-    border: none;
-    display: flex;
-    justify-content: flex-end;
-    margin-left: auto;
-    background-color: transparent;
-    
-}
-
-
+  
