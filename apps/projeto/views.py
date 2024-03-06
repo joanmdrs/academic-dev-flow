@@ -47,7 +47,7 @@ class BuscarProjetosPorNomeView(BaseProjetoView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
-class BuscarProjetoPorIdView(APIView):
+class ListarProjetoPorIdView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, id):

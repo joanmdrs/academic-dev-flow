@@ -1,5 +1,6 @@
 from django.db import models
 from apps.membro_projeto.models import MembroProjeto
+from apps.projeto.models import Projeto
 
 class Tarefa(models.Model):
     
@@ -7,6 +8,7 @@ class Tarefa(models.Model):
     descricao = models.TextField(null=True)
     data_criacao = models.DateTimeField(auto_now_add=True)
     concluida = models.BooleanField(default=False)
+    projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, null=True, blank=True)
     membro = models.ForeignKey(MembroProjeto, on_delete=models.SET_NULL, null=True, blank=True)
 
     def concluir_tarefa(self):
