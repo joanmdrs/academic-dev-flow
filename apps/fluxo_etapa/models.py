@@ -6,3 +6,6 @@ from apps.etapa.models import Etapa
 class FluxoEtapa(models.Model):
     fluxo = models.ForeignKey(Fluxo, on_delete=models.CASCADE)
     etapa = models.ForeignKey(Etapa, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return f"{self.etapa}"

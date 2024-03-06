@@ -16,75 +16,6 @@ import { buscarFluxoPeloId } from '../../../../../services/fluxoService';
 import { formatDate } from '../../../../../services/utils';
 import { Link } from 'react-router-dom';
 
-const columns = [
-  {
-    title: 'Nome',
-    dataIndex: 'nome',
-    key: 'nome',
-  },
-  {
-    title: (
-      <>
-        <CiCircleCheck style={{color: "#fffff"}} /> Status
-      </>
-    ),
-    dataIndex: 'status',
-    key: 'status'
-
-  },
-  {
-    title: (
-      <>
-        <LuCalendarCheck2 /> Início
-      </>
-    ),
-    dataIndex: 'data_inicio',
-    key: 'data_inicio',
-  },
-  {
-    title: (
-      <>
-        <LuCalendarX2/> Fim
-      </>
-    ),
-    dataIndex: 'data_fim',
-    key: 'data_fim',
-  },
-  {
-    title: (
-      <>
-        <TeamOutlined /> Qtd. Membros
-      </>
-    ),
-    dataIndex: 'qtd_membros',
-    key: 'qtd_membros',
-    align: 'center'
-  },
-  {
-    title: (
-      <>
-        <TiFlowChildren/> Fluxo
-      </>
-    ),
-    dataIndex: 'fluxo',
-    key: 'fluxo'
-  },
-  {
-    title: (
-      <>
-        <PiEye /> Ações
-      </>
-    ),
-    key: 'action',
-    render: (_, record) => (
-      <Button>
-        <Link to={`/aluno/projetos/visualizar/${record.idProject}`}>Visualizar</Link>
-      </Button>
-    ),
-
-  }
-];
-
 const breadcrumbRoutes = [
   { title: 'Home', path: '/aluno/home' },
   { title: 'Projetos', path: '/aluno/projetos' },
@@ -107,6 +38,75 @@ const ProjectsSection = () => {
           searchData();
       }
   }, [token]);
+
+  const columns = [
+    {
+      title: 'Nome',
+      dataIndex: 'nome',
+      key: 'nome',
+    },
+    {
+      title: (
+        <>
+          <CiCircleCheck style={{color: "#fffff"}} /> Status
+        </>
+      ),
+      dataIndex: 'status',
+      key: 'status'
+  
+    },
+    {
+      title: (
+        <>
+          <LuCalendarCheck2 /> Início
+        </>
+      ),
+      dataIndex: 'data_inicio',
+      key: 'data_inicio',
+    },
+    {
+      title: (
+        <>
+          <LuCalendarX2/> Fim
+        </>
+      ),
+      dataIndex: 'data_fim',
+      key: 'data_fim',
+    },
+    {
+      title: (
+        <>
+          <TeamOutlined /> Qtd. Membros
+        </>
+      ),
+      dataIndex: 'qtd_membros',
+      key: 'qtd_membros',
+      align: 'center'
+    },
+    {
+      title: (
+        <>
+          <TiFlowChildren/> Fluxo
+        </>
+      ),
+      dataIndex: 'fluxo',
+      key: 'fluxo'
+    },
+    {
+      title: (
+        <>
+          <PiEye /> Ações
+        </>
+      ),
+      key: 'action',
+      render: (_, record) => (
+        <Button>
+          <Link to={`/aluno/projetos/visualizar/${record.idProject}`}>Visualizar</Link>
+        </Button>
+      ),
+  
+    }
+  ];
 
 
   const handleGetProjects = async () => {
