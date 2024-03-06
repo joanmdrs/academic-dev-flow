@@ -5,11 +5,12 @@ from apps.projeto.models import Projeto
 class Tarefa(models.Model):
     
     nome = models.CharField(max_length=255)
-    descricao = models.TextField(null=True)
+    descricao = models.TextField(null=True, blank=True)
     data_criacao = models.DateTimeField(auto_now_add=True)
+    prazo = models.IntegerField(null=True, blank=True)
     concluida = models.BooleanField(default=False)
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, null=True, blank=True)
-    membro = models.ForeignKey(MembroProjeto, on_delete=models.SET_NULL, null=True, blank=True)
+    membro = models.ManyToManyField(MembroProjeto)
 
     def concluir_tarefa(self):
         self.concluida = True
