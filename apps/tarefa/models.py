@@ -10,7 +10,7 @@ class Tarefa(models.Model):
     prazo = models.IntegerField(null=True, blank=True)
     concluida = models.BooleanField(default=False)
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, null=True, blank=True)
-    membro = models.ManyToManyField(MembroProjeto)
+    membros = models.ManyToManyField(MembroProjeto)
 
     def concluir_tarefa(self):
         self.concluida = True
