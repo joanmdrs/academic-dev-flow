@@ -132,6 +132,49 @@ class ExcluirTarefaView(APIView):
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class ConcluirTarefasView(APIView):
+    permission_classes = [IsAuthenticated]
+    def patch(self, request):
+        try:
+            
+            ids_tasks = request.GET.getlist('ids[]', [])
+            
+            if not ids_tasks:
+                return Response({'error': 'IDs das tarefas a serem concluídas não forão fornecidos'}, status=status.HTTP_400_BAD_REQUEST)
+
+            tarefas = Tarefa.objects.filter(id__in=ids_tasks)
+            
+            for tarefa in tarefas:
+                tarefa.concluida = True  
+                tarefa.save()
+
+            return Response({'success': 'Tarefas resolvidas com sucesso'}, status=status.HTTP_200_OK)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
+class ReabrirTarefasView(APIView):
+    permission_classes = [IsAuthenticated]
+    def patch(self, request):
+        try:
+            
+            ids_tasks = request.GET.getlist('ids[]', [])
+            
+            if not ids_tasks:
+                return Response({'error': 'IDs das tarefas a serem reabertas não forão fornecidos'}, status=status.HTTP_400_BAD_REQUEST)
+
+            tarefas = Tarefa.objects.filter(id__in=ids_tasks)
+            
+            for tarefa in tarefas:
+                tarefa.concluida = False 
+                tarefa.save()
+
+            return Response({'success': 'Tarefas reabertas com sucesso'}, status=status.HTTP_200_OK)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
 
         
         
