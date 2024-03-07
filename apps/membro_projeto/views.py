@@ -135,3 +135,20 @@ class QuantidadeMembrosPorProjetoView(APIView):
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class BuscarMembrosPorListaIdsView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        try:
+            ids_membros = request.GET.getlist('ids[]', [])
+            membros = MembroProjeto.objects.filter(id__in=ids_membros)
+            
+            if not membros:
+                return Response({'message': 'Nenhum membro encontrado.', 'results': []}, status=status.HTTP_200_OK)
+            
+            serializer = MembroProjetoSerializer(membros, many=True)
+            return Response({'message': 'Membros encontrados com sucesso.', 'results': serializer.data}, status=status.HTTP_200_OK)
+  
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
