@@ -21,8 +21,6 @@ export const buscarProjetosPorListaIds = async (listaIds) => {
     return response;
 }
 
-
-
 export const excluirProjeto = (id) => {
     const resposta = api.delete(`/projeto/excluir/${encodeURIComponent(id)}/`);
     return resposta;

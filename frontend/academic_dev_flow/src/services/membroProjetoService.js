@@ -47,3 +47,14 @@ export const buscarQuantidadeMembrosPorProjeto = async (idProjeto) => {
         NotificationManager.error('Falha na operação, contate o suporte !')
     }
 }
+
+export const listarMembrosPorListaIds = async (listaIds) => {
+    try {
+        const response = api.get(`membro_projeto/listar/`, {params: {ids: listaIds}})
+        return response
+        
+    } catch (error) {
+        NotificationManager.error('Falha ao buscar os dados')
+        return {error: 'Falha ao executar a operação'}
+    }
+}
