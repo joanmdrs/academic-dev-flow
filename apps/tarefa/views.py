@@ -79,19 +79,6 @@ class ListarTarefasPorProjetoView(APIView):
                 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-# class ListarTarefasPorProjetoView(APIView): 
-#     permission_classes = [IsAuthenticated]
-    
-#     def get(self, request, id_projeto): 
-#         try:
-#             tarefas = Tarefa.objects.filter(projeto_id=id_projeto)
-#             serializer = TarefaSerializer(tarefas, many=True)
-#             return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
-        
-#         except Exception as e:
-#             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
-        
         
 class AtualizarTarefaView(APIView):
     permission_classes = [IsAuthenticated]
@@ -171,6 +158,23 @@ class ReabrirTarefasView(APIView):
                 tarefa.save()
 
             return Response({'success': 'Tarefas reabertas com sucesso'}, status=status.HTTP_200_OK)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class ListarTarefasPorIteracaoView(APIView): 
+    permission_classes = [IsAuthenticated] 
+    def get(self, request, id_iteracao):
+        
+        try:
+            
+            tarefas = Tarefa.objects.filter(iteracao_id=id_iteracao)
+            
+            if tarefas.exists():  
+                serializer = TarefaSerializer(tarefas, many=True)
+                return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False}, status=status.HTTP_200_OK)
+            
+            return JsonResponse([], safe=False, status=status_HTTP_204_NO_CONTENT)
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

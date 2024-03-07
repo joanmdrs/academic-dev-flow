@@ -30,6 +30,17 @@ export const listarTarefasPorProjeto = async (idProjeto) => {
     }
 }
 
+export const listarTarefasPorIteracao = async (idIteracao) => {
+    try {
+        const response = await api.get(`tarefa/listar/iteracao/${encodeURIComponent(idIteracao)}/`)
+        return response
+    } catch (error) {
+        console.log(error.data.response)
+        NotificationManager.error('Falha ao buscar as tarefas, contate o suporte!')
+        return { error: "Erro ao buscar as tarefas"}
+    }
+}
+
 export const atualizarTarefa = async (id, dados) => {
     try {
         const response = await api.patch(`tarefa/atualizar/${encodeURIComponent(id)}/`, dados)
