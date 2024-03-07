@@ -1,6 +1,6 @@
 import "./ListaTarefas.css"
-import { Empty, Table, Tabs } from "antd";
-import React, { useEffect, useState } from "react";
+import { Button, Empty, Modal, Popconfirm, Table, Tabs } from "antd";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { LuCalendarCheck2 } from "react-icons/lu";
 import { MdAccessTime } from "react-icons/md";
 import { HiOutlineUsers } from "react-icons/hi2";
@@ -8,12 +8,19 @@ import { useFormContext } from "../../../context/Provider/Provider";
 import { formatDate } from "../../../../../../services/utils";
 import Item from "antd/es/list/Item";
 import { GoCheck } from "react-icons/go";
-import { FaRegFolderOpen } from "react-icons/fa";
-import { listarTarefasPorProjeto } from "../../../../../../services/tarefaService";
+import { FaRegFolderOpen, FaTrash } from "react-icons/fa";
+import { excluirTarefas, listarTarefasPorProjeto } from "../../../../../../services/tarefaService";
+import Loading from "../../../../../../components/Loading/Loading";
 
-const ListaTarefas = ({onEdit}) => {
+const ListaTarefas = ({onEdit, onDelete}) => {
 
     const columns = [
+      {
+        title: "ID",
+        dataIndex: 'id',
+        key: 'id'
+      },
+
         {
           title: 'Nome',
           dataIndex: 'nome',
@@ -73,71 +80,125 @@ const ListaTarefas = ({onEdit}) => {
         },       
     ];
 
-    const CustomTable = ({dados, colunas}) => {
-      return (
-        <Table
-          className="table-lista-tarefas"
-          dataSource={dados}
-          columns={colunas}
-          rowKey="id"
-          rowSelection={{
-              type: 'checkbox'
-          }}
-        />
-      )
-    }
 
-    const {dadosProjeto, dadosTarefa, setDadosTarefa} = useFormContext()
+    const {dadosProjeto, tarefasExcluir, setTarefasExcluir} = useFormContext()
     const [tarefasPendentes, setTarefasPendentes] = useState([])
     const [tarefasResolvidas, setTarefasResolvidas] = useState([])
+    const [loading, setLoading] = useState(true)
+
+    const handleGetTarefas = async () => {
+
+      const response = await listarTarefasPorProjeto(dadosProjeto.id)
+
+      if (response.data.length > 0) {
+        const tarefasConcluidas = response.data.filter((tarefa) => tarefa.concluida);
+        const tarefasNaoConcluidas = response.data.filter((tarefa) => !tarefa.concluida);
+
+        setTarefasPendentes(tarefasNaoConcluidas)
+        setTarefasResolvidas(tarefasConcluidas)
+
+        return {tarefasConcluidas, tarefasNaoConcluidas}
+      }
+    }
 
     useEffect(() => {
         const fetchData = async () => {
             if (dadosProjeto !== null){
-                await handleGetTarefas()
+              await handleGetTarefas()
             }
+
+            setLoading(false)
         }
 
         fetchData()
-    }, [])
+    }, [dadosProjeto, loading])
 
-    const handleGetTarefas = async () => {
-
-        const response = await listarTarefasPorProjeto(dadosProjeto.id)
-
-        if (response.data.length > 0) {
-          const tarefasConcluidas = response.data.filter((tarefa) => tarefa.concluida);
-          const tarefasNaoConcluidas = response.data.filter((tarefa) => !tarefa.concluida);
-
-          setTarefasPendentes(tarefasNaoConcluidas)
-          setTarefasResolvidas(tarefasConcluidas)
-        }
+    if (loading) {
+      return <Loading />
     }
+
+    const rowSelection = {
+      onChange: (selectedRowsKeys, selectedRows) => {
+        setTarefasExcluir(selectedRows)
+      },
+    };
+
+    const handleDeleteTarefa = async () => {
+
+      if (tarefasExcluir !== null) {
+        const ids = tarefasExcluir.map((item) => item.id)
+        await excluirTarefas(ids)
+        setTarefasExcluir([])
+        setTarefasPendentes([])
+        setTarefasResolvidas([])
+        setLoading(true)
+      } 
+    }
+
+  const showDeleteConfirm = () => {
+
+    Modal.confirm({
+        title: 'Confirmar exclusão',
+        content: 'Tem certeza que deseja excluir a(s) tarefa(s) ?',
+        okText: 'Sim',
+        cancelText: 'Não',
+        onOk: async () =>  await handleDeleteTarefa()
+        
+      });
+  };
+
+  
     
     return (
 
-      <React.Fragment>
+      <div>
+
+          <div style={{display: "flex", justifyContent: "flex-end", marginRight: "20px"}}> 
+            { 
+              (tarefasExcluir.length > 0) && 
+
+                <Button danger icon={<FaTrash />} onClick={() => showDeleteConfirm()}> Excluir </Button>
+
+              
+            }
+          </div>
+  
           <Tabs>
-            <Item tab="Abertas" key="1" icon={<FaRegFolderOpen />}>
-              { tarefasPendentes.length > 0 ? (<CustomTable colunas={columns} dados={tarefasPendentes}/>) : (
+            <Tabs.TabPane tab="Abertas" key="1" icon={<FaRegFolderOpen />}>
+              { tarefasPendentes.length > 0 ? (
+                <Table
+                  className="table-lista-tarefas"
+                  dataSource={tarefasPendentes}
+                  columns={columns}
+                  rowKey="id"
+                  rowSelection={rowSelection}
+                  />
+              ) : (
                   <Empty 
                     description="Não há tarefas pendentes"
                     image={Empty.PRESENTED_IMAGE_SIMPLE}
                   />
                 )}
-            </Item>
+            </Tabs.TabPane>
 
-            <Item tab="Resolvidas" key="2" icon={<GoCheck />}>
-              { tarefasResolvidas.length > 0 ? (<CustomTable colunas={columns} dados={tarefasResolvidas}/>) : (
-                <Empty 
-                  description="Não há tarefas resolvidas"
-                  image={Empty.PRESENTED_IMAGE_SIMPLE}
-                />
-              )}
-              
-            </Item>
+            <Tabs.TabPane tab="Resolvidas" key="2" icon={<GoCheck />}>
+              { tarefasResolvidas.length > 0 ? (
+                <Table
+                  className="table-lista-tarefas"
+                  dataSource={tarefasResolvidas}
+                  columns={columns}
+                  rowKey="id"
+                  rowSelection={rowSelection}
+                  />
+              ) : (
+                  <Empty 
+                    description="Não há tarefas resolvidas"
+                    image={Empty.PRESENTED_IMAGE_SIMPLE}
+                  />
+                )}
+            </Tabs.TabPane>
           </Tabs>
-      </React.Fragment>
+      </div>
     )
 }
 

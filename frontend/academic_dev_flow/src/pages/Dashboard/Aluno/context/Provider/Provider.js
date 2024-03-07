@@ -9,6 +9,7 @@ export const ProviderProjeto = ({children}) => {
     const [dadosProjeto, setDadosProjeto] = useState(null);
     const [dadosIteracao, setDadosIteracao] = useState(null)
     const [dadosTarefa, setDadosTarefa] = useState(null)
+    const [tarefasExcluir, setTarefasExcluir] = useState([])
     const [reload, setReload] = useState(true)
 
     return (
@@ -21,7 +22,8 @@ export const ProviderProjeto = ({children}) => {
                 dadosTarefa,
                 setDadosTarefa,
                 reload, 
-                setReload
+                setReload, 
+                tarefasExcluir, setTarefasExcluir
             }}
         >
           {children}

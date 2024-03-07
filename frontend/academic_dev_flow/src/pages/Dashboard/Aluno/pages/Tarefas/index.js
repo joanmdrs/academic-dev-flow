@@ -6,61 +6,61 @@ import BotaoAdicionar from "../../../../../components/Botoes/BotaoAdicionar/Bota
 import BotaoExcluir from "../../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
 import FormTarefa from "./FormTarefa/FormTarefa";
 import { useFormContext } from "../../context/Provider/Provider";
-import { atualizarTarefa, criarTarefa } from "../../../../../services/tarefaService";
+import { atualizarTarefa, criarTarefa, excluirTarefas } from "../../../../../services/tarefaService";
 import { atualizarIteracao } from "../../../../../services/iteracaoService";
+import { IoAdd, IoClose, IoCloseCircle } from "react-icons/io5";
 
 const GerenciarTarefas = () => {
 
-    const [exibirForm, setExibirForm] = useState(false)
     const [acaoForm, setAcaoForm] = useState('create')
-    const [botaoAdicionarVisivel, setBotaoAdicionarVisivel] = useState(false)
-    const [botaoExcluirVisivel, setBotaoExcluirVisivel] = useState(true)
-    const {dadosProjeto, setDadosTarefa} = useFormContext()
+    const [formVisivel, setFormVisivel] = useState(false)
+    const {dadosProjeto, setDadosTarefa, setTarefasExcluir} = useFormContext()
 
-    const handleExibirForm = () => setExibirForm(true)
 
-    const handleFecharForm = () => setExibirForm(false)
+    const handleCancelar = () => {
+        setDadosTarefa(null)
+        setAcaoForm('create')
+        setTarefasExcluir([])
+        setFormVisivel(false)
+    }
 
     const handleAddTarefa = () => {
+        setFormVisivel(true)
         setDadosTarefa(null)
-        handleExibirForm()
         setAcaoForm('create')
+        setTarefasExcluir([])
     }
 
     const handleEditTarefa = (dados) => {
+        setFormVisivel(true)
         setDadosTarefa(dados)
-        handleExibirForm()
-        setBotaoAdicionarVisivel(true)
         setAcaoForm('update')
+        setTarefasExcluir([])
     }
 
     const handleSaveTarefa = async (dados) => {
         dados['projeto'] = dadosProjeto.id
 
-        console.log(dados)
         if (acaoForm === 'create'){
             await criarTarefa(dados)
         } else if (acaoForm === 'update'){
             await atualizarTarefa(dadosProjeto.id, dados)
         }
-        handleFecharForm()
-        setBotaoAdicionarVisivel(false)
+        handleCancelar()
     }
 
     return (
         <React.Fragment>
             <div>
                 <div className="button-menu"> 
-                    <BotaoBuscar nome="Buscar tarefas" />
-                    <div className="two-buttons"> 
-                        <BotaoAdicionar funcao={handleAddTarefa} status={botaoAdicionarVisivel}/>
-                        <BotaoExcluir status={botaoExcluirVisivel}  />
-                    </div>
+                    { formVisivel ? (<Button onClick={handleCancelar} icon={<IoClose/>}> Cancelar </Button>) 
+                    : ( <Button onClick={handleAddTarefa} icon={<IoAdd/>}> Adicionar Tarefa </Button>)}
+                  
                 </div>
                  
-                { exibirForm ? 
-                    (<FormTarefa onCancel={handleFecharForm} onSubmit={handleSaveTarefa}/>) 
-                    : <ListaTarefas  onEdit={handleEditTarefa}/> }
+                { formVisivel ? 
+                    (<FormTarefa onCancel={handleCancelar} onSubmit={handleSaveTarefa}/>) 
+                    : <ListaTarefas  onEdit={handleEditTarefa} />}
 
 
 
