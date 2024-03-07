@@ -49,7 +49,7 @@ class BuscarProjetosDoMembroView(BaseMembroProjetoView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-class BuscarMembroProjetoPeloIdProjetoView(APIView): 
+class BuscarMembrosPorProjetoView(APIView): 
     permission_classes = [IsAuthenticated]
     
     def get(self, request, idProjeto):
@@ -136,19 +136,27 @@ class QuantidadeMembrosPorProjetoView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-class BuscarMembrosPorListaIdsView(APIView):
+class ListarMembrosPorProjeto(APIView):
     permission_classes = [IsAuthenticated]
     
-    def get(self, request):
+    def get(self, request, id_projeto):
         try:
-            ids_membros = request.GET.getlist('ids[]', [])
-            membros = MembroProjeto.objects.filter(id__in=ids_membros)
             
-            if not membros:
+            membros_projeto = MembroProjeto.objects.filter(projeto_id=id_projeto)
+            membros_info = []
+            for membro_projeto in membros_projeto:
+                membros_info.append({
+                    'id_membro_projeto': membro_projeto.id,
+                    'id_projeto': membro_projeto.projeto.id,
+                    'id_membro': membro_projeto.membro.id,
+                    'nome_membro': membro_projeto.membro.nome,
+                    'grupo_membro': membro_projeto.membro.grupo
+                })
+            
+            if not membros_info:
                 return Response({'message': 'Nenhum membro encontrado.', 'results': []}, status=status.HTTP_200_OK)
             
-            serializer = MembroProjetoSerializer(membros, many=True)
-            return Response({'message': 'Membros encontrados com sucesso.', 'results': serializer.data}, status=status.HTTP_200_OK)
+            return JsonResponse(membros_info, safe=False, status=status.HTTP_200_OK)
   
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

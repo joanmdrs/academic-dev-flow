@@ -48,13 +48,14 @@ export const buscarQuantidadeMembrosPorProjeto = async (idProjeto) => {
     }
 }
 
-export const listarMembrosPorListaIds = async (listaIds) => {
+export const listarMembrosPeloIdProjeto = async (idProjeto) => {
+
     try {
-        const response = api.get(`membro_projeto/listar/`, {params: {ids: listaIds}})
+        const response = await api.get(`membro_projeto/listar/projeto/${encodeURIComponent(idProjeto)}`)
         return response
-        
     } catch (error) {
-        NotificationManager.error('Falha ao buscar os dados')
-        return {error: 'Falha ao executar a operação'}
+        console.log(error)
+        NotificationManager.error('Falha ao buscar os dados dos membros, contate o suporte!')
+        return {error: 'Erro ao buscar os dados'}
     }
 }
