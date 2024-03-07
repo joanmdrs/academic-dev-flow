@@ -12,17 +12,27 @@ const GerenciarTarefas = () => {
 
     const [exibirForm, setExibirForm] = useState(false)
     const [acaoForm, setAcaoForm] = useState('create')
-    const {dadosProjeto, dadosTarefa, setDadosTarefa} = useFormContext()
+    const [botaoAdicionarVisivel, setBotaoAdicionarVisivel] = useState(false)
+    const [botaoExcluirVisivel, setBotaoExcluirVisivel] = useState(true)
+    const {dadosProjeto, setDadosTarefa} = useFormContext()
+
 
     const handleExibirForm = () => setExibirForm(true)
 
     const handleFecharForm = () => setExibirForm(false)
 
+    const handleAddTarefa = () => {
+        setDadosTarefa(null)
+        handleExibirForm()
+        setAcaoForm('create')
+    }
+
+
     const handleEditTarefa = (dados) => {
         setDadosTarefa(dados)
         handleExibirForm()
+        setBotaoAdicionarVisivel(true)
         setAcaoForm('update')
-        console.log(dados)
     }
 
     const handleSaveTarefa = async (dados) => {
@@ -35,6 +45,7 @@ const GerenciarTarefas = () => {
         }
 
         handleFecharForm()
+        setBotaoAdicionarVisivel(false)
     }
 
 
@@ -45,8 +56,8 @@ const GerenciarTarefas = () => {
                 <div className="button-menu"> 
                     <BotaoBuscar nome="Buscar tarefas" />
                     <div className="two-buttons"> 
-                        <BotaoAdicionar funcao={handleExibirForm}/>
-                        <BotaoExcluir />
+                        <BotaoAdicionar funcao={handleAddTarefa} status={botaoAdicionarVisivel}/>
+                        <BotaoExcluir status={botaoExcluirVisivel}  />
                     </div>
                 </div>
                  

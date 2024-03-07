@@ -79,7 +79,7 @@ const FormTarefa = ({onCancel, onSubmit}) => {
 
         fetchData()
 
-    }, [dadosProjeto])
+    }, [dadosProjeto, dadosTarefa])
 
     if(loading){
         return <Loading />
