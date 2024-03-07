@@ -11,7 +11,7 @@ const baseStyle = {
 };
 
 
-const FormTarefa = ({onCancel}) => {
+const FormTarefa = ({onCancel, onSubmit}) => {
 
     const [form] = useForm()
     const {dadosProjeto} = useFormContext()
@@ -46,7 +46,7 @@ const FormTarefa = ({onCancel}) => {
     return (
 
         <div>
-            <Form form={form} layout='vertical' className='global-form'>
+            <Form form={form} layout='vertical' className='global-form' onFinish={onSubmit}>
                 <Form.Item>
                     <h4> CADASTRAR TAREFA </h4>
                 </Form.Item>

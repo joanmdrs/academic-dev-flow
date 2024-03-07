@@ -9,10 +9,19 @@ import FormTarefa from "./FormTarefa/FormTarefa";
 const GerenciarTarefas = () => {
 
     const [exibirForm, setExibirForm] = useState(false)
+    const [acaoForm, setAcaoForm] = useState('create')
 
     const handleExibirForm = () => setExibirForm(true)
 
     const handleFecharForm = () => setExibirForm(false)
+
+    const handleSaveTarefa = async (dados) => {
+
+        if (acaoForm === 'create'){
+            console.log(dados)
+        }
+    }
+
 
     return (
 
@@ -26,7 +35,7 @@ const GerenciarTarefas = () => {
                     </div>
                 </div>
                  
-                { exibirForm ? (<FormTarefa onCancel={handleFecharForm} />) : <ListaTarefas /> }
+                { exibirForm ? (<FormTarefa onCancel={handleFecharForm} onSubmit={handleSaveTarefa}/>) : <ListaTarefas /> }
 
 
 
