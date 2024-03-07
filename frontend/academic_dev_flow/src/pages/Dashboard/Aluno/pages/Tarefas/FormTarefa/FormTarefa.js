@@ -58,13 +58,16 @@ const FormTarefa = ({onCancel, onSubmit}) => {
 
                 if (dadosTarefa !== null){
 
-                    const membrosValue = dadosTarefa.membros.map((item) => {
+                    // const membrosValue = dadosTarefa.membros.map((item) => {
 
-                        return {
-                            value: item.id_membro_projeto,
-                            label: `${item.nome_membro} (${item.grupo_membro})`
-                        }
-                    })
+                    //     return {
+                    //         value: item.id_membro_projeto,
+                    //         label: `${item.nome_membro} (${item.grupo_membro})`
+                    //     }
+                    // })
+                    const membrosValue = dadosTarefa.membros ? 
+                        dadosTarefa.membros.map(membro => (membro.id_membro_projeto)) 
+                        : undefined;
 
                     form.setFieldsValue({
                         ...dadosTarefa,

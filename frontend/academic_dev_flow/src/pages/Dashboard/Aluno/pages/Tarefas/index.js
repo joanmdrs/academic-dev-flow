@@ -6,7 +6,8 @@ import BotaoAdicionar from "../../../../../components/Botoes/BotaoAdicionar/Bota
 import BotaoExcluir from "../../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
 import FormTarefa from "./FormTarefa/FormTarefa";
 import { useFormContext } from "../../context/Provider/Provider";
-import { criarTarefa } from "../../../../../services/tarefaService";
+import { atualizarTarefa, criarTarefa } from "../../../../../services/tarefaService";
+import { atualizarIteracao } from "../../../../../services/iteracaoService";
 
 const GerenciarTarefas = () => {
 
@@ -15,7 +16,6 @@ const GerenciarTarefas = () => {
     const [botaoAdicionarVisivel, setBotaoAdicionarVisivel] = useState(false)
     const [botaoExcluirVisivel, setBotaoExcluirVisivel] = useState(true)
     const {dadosProjeto, setDadosTarefa} = useFormContext()
-
 
     const handleExibirForm = () => setExibirForm(true)
 
@@ -27,7 +27,6 @@ const GerenciarTarefas = () => {
         setAcaoForm('create')
     }
 
-
     const handleEditTarefa = (dados) => {
         setDadosTarefa(dados)
         handleExibirForm()
@@ -36,21 +35,19 @@ const GerenciarTarefas = () => {
     }
 
     const handleSaveTarefa = async (dados) => {
-
         dados['projeto'] = dadosProjeto.id
+
+        console.log(dados)
         if (acaoForm === 'create'){
             await criarTarefa(dados)
         } else if (acaoForm === 'update'){
-            return
+            await atualizarTarefa(dadosProjeto.id, dados)
         }
-
         handleFecharForm()
         setBotaoAdicionarVisivel(false)
     }
 
-
     return (
-
         <React.Fragment>
             <div>
                 <div className="button-menu"> 

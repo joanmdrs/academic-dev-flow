@@ -16,7 +16,6 @@ export const criarTarefa = async (dados) => {
     }
 }
 
-
 export const listarTarefasPorProjeto = async (idProjeto) => {
     try {
         const response = await api.get(`tarefa/listar/projeto/${encodeURIComponent(idProjeto)}/`)
@@ -28,5 +27,20 @@ export const listarTarefasPorProjeto = async (idProjeto) => {
         console.log(error)
         NotificationManager.error("Falha ao buscar tarefas, contate o suporte!")
         return { error: "Erro ao buscar tarefas"};
+    }
+}
+
+export const atualizarTarefa = async (id, dados) => {
+    try {
+        const response = await api.patch(`tarefa/atualizar/${encodeURIComponent(id)}/`, dados)
+        if (response.status === 200){
+            NotificationManager.success('Tarefa atualizada com sucesso !')
+            return response
+        }
+        
+    } catch (error) {
+        console.log(error)
+        NotificationManager.error('Falha ao atualizar a tarefa, contate o suporte!')
+        return {error: 'Erro ao atualizar a tarefa!'}
     }
 }
