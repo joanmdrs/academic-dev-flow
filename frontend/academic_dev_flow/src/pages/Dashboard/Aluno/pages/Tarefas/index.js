@@ -12,6 +12,8 @@ const GerenciarTarefas = () => {
 
     const handleExibirForm = () => setExibirForm(true)
 
+    const handleFecharForm = () => setExibirForm(false)
+
     return (
 
         <React.Fragment>
@@ -24,7 +26,7 @@ const GerenciarTarefas = () => {
                     </div>
                 </div>
                  
-                { exibirForm ? (<FormTarefa />) : <ListaTarefas /> }
+                { exibirForm ? (<FormTarefa onCancel={handleFecharForm} />) : <ListaTarefas /> }
 
 
 

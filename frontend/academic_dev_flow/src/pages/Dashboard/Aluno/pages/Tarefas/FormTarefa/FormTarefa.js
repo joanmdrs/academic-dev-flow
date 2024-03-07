@@ -11,7 +11,7 @@ const baseStyle = {
 };
 
 
-const FormTarefa = () => {
+const FormTarefa = ({onCancel}) => {
 
     const [form] = useForm()
     const {dadosProjeto} = useFormContext()
@@ -81,7 +81,7 @@ const FormTarefa = () => {
 
                 <Form.Item>
                     <Button type="primary" htmlType='submit'> Salvar </Button>
-                    <Button style={{marginLeft: "10px"}}> Cancelar </Button>
+                    <Button style={{marginLeft: "10px"}} onClick={onCancel}> Cancelar </Button>
                 </Form.Item>
             </Form>
         </div>
