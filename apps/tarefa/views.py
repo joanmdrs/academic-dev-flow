@@ -40,7 +40,7 @@ class BuscarTarefaPeloIdView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
             
-class ListarTarefasView(APIView):
+class ListarTarefasPorProjetoView(APIView):
     
     permission_classes = [IsAuthenticated]
     def get(self, request, id_projeto): 
@@ -79,17 +79,17 @@ class ListarTarefasView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-class ListarTarefasPorProjetoView(APIView): 
-    permission_classes = [IsAuthenticated]
+# class ListarTarefasPorProjetoView(APIView): 
+#     permission_classes = [IsAuthenticated]
     
-    def get(self, request, id_projeto): 
-        try:
-            tarefas = Tarefa.objects.filter(projeto_id=id_projeto)
-            serializer = TarefaSerializer(tarefas, many=True)
-            return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+#     def get(self, request, id_projeto): 
+#         try:
+#             tarefas = Tarefa.objects.filter(projeto_id=id_projeto)
+#             serializer = TarefaSerializer(tarefas, many=True)
+#             return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
         
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
+#         except Exception as e:
+#             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
         
         
 class AtualizarTarefaView(APIView):

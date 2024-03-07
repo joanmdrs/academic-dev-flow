@@ -3,7 +3,7 @@ import api from "../api/api";
 
 export const listarTarefasPorProjeto = async (idProjeto) => {
     try {
-        const response = await api.get(`tarefa/listar/${encodeURIComponent(idProjeto)}/`)
+        const response = await api.get(`tarefa/listar/projeto/${encodeURIComponent(idProjeto)}/`)
 
         if(response.status === 200){
             return response

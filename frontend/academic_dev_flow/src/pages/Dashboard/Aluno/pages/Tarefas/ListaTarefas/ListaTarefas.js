@@ -1,4 +1,5 @@
-import { Table } from "antd";
+import "./ListaTarefas.css"
+import { Empty, Table, Tabs } from "antd";
 import React, { useEffect, useState } from "react";
 import { LuCalendarCheck2 } from "react-icons/lu";
 import { MdAccessTime } from "react-icons/md";
@@ -8,7 +9,11 @@ import { useFormContext } from "../../../context/Provider/Provider";
 import { ListaTarefasPorProjeto, listarTarefasPorProjeto } from "../../../../../../services/tarefaService";
 import { listarMembrosPorListaIds } from "../../../../../../services/membroProjetoService";
 import { buscarMembrosPorListaIds } from "../../../../../../services/membroService";
-
+import { formatDate } from "../../../../../../services/utils";
+import Item from "antd/es/list/Item";
+import { GoIssueOpened } from "react-icons/go";
+import { GoCheck } from "react-icons/go";
+import { FaRegFolderOpen } from "react-icons/fa";
 
 const ListaTarefas = () => {
 
@@ -25,7 +30,10 @@ const ListaTarefas = () => {
             </>
           ),
           dataIndex: 'data_criacao',
-          key: 'data_criacao'
+          key: 'data_criacao',
+          render: (data_criacao) => (
+            <span> {formatDate(data_criacao)} </span>
+          ),
       
         },
         {
@@ -36,6 +44,9 @@ const ListaTarefas = () => {
           ),
           dataIndex: 'prazo',
           key: 'prazo',
+          render: (prazo) => (
+            <span> {prazo} dia(s) </span>
+          )
         },
         {
           title: (
@@ -46,27 +57,40 @@ const ListaTarefas = () => {
           dataIndex: 'membros',
           key: 'membros',
           render: (membros) => (
-            <span>
+            <span style={{display: "flex", gap: "10px"}}>
               {membros.map((membro) => (
-                <span key={membro.id}>{membro.nome}, </span>
+                <span style={{
+                    border: "1px solid var(--primary-color)", 
+                    padding: "5px",
+                    color: "var(--primary-color)",
+                    borderRadius: "5px"
+                  }} 
+                  key={membro.id_membro_projeto}>
+                    {membro.nome_membro} 
+                </span>
               ))}
             </span>
           ),
-        },
-        {
-            title: (
-                <>
-                    <IoMdCheckboxOutline /> Concluída
-                </>
-            ),
-            dataIndex: 'concluida',
-            key: 'concluida'
-        }
-        
+        },       
     ];
 
+    const CustomTable = ({dados, colunas}) => {
+      return (
+        <Table
+          className="table-lista-tarefas"
+          dataSource={dados}
+          columns={colunas}
+          rowKey="id"
+          rowSelection={{
+              type: 'checkbox'
+          }}
+        />
+      )
+    }
+
     const {dadosProjeto} = useFormContext()
-    const [tarefas, setTarefas] = useState([])
+    const [tarefasPendentes, setTarefasPendentes] = useState([])
+    const [tarefasResolvidas, setTarefasResolvidas] = useState([])
 
     useEffect(() => {
         const fetchData = async () => {
@@ -81,42 +105,43 @@ const ListaTarefas = () => {
     const handleGetTarefas = async () => {
 
         const response = await listarTarefasPorProjeto(dadosProjeto.id)
-        const promises = response.data.map(async (tarefa) => {
-            const response1 = await listarMembrosPorListaIds(tarefa.membros)
 
-            console.log(response1.data.results)
-            const listaIds = response1.data.results.map(item => item.membro);
+        if (response.data.length > 0) {
+          const tarefasConcluidas = response.data.filter((tarefa) => tarefa.concluida);
+          const tarefasNaoConcluidas = response.data.filter((tarefa) => !tarefa.concluida);
 
-            const response2 = await buscarMembrosPorListaIds(listaIds)
+          setTarefasPendentes(tarefasNaoConcluidas)
+          setTarefasResolvidas(tarefasConcluidas)
+        }
 
 
-            return {
-                id: tarefa.id,
-                nome: tarefa.nome,
-                data_criacao: tarefa.data_criacao,
-                prazo: tarefa.prazo,
-                membros: response2.data.results,
-                projeto: tarefa.projeto,
-                concluida: tarefa.concluida
-
-            }
-
-        })
-
-        const resultados = await (Promise.all(promises))
-        setTarefas(resultados)
     }
     
 
     return (
-        <Table
-            dataSource={tarefas}
-            columns={columns}
-            rowKey="id"
-            rowSelection={{
-                type: 'checkbox'
-            }}
-        />
+
+      <React.Fragment>
+          <Tabs>
+            <Item tab="Abertas" key="1" icon={<FaRegFolderOpen />}>
+              { tarefasPendentes.length > 0 ? (<CustomTable colunas={columns} dados={tarefasPendentes}/>) : (
+                  <Empty 
+                    description="Não há tarefas pendentes"
+                    image={Empty.PRESENTED_IMAGE_SIMPLE}
+                  />
+                )}
+            </Item>
+
+            <Item tab="Resolvidas" key="2" icon={<GoCheck />}>
+              { tarefasResolvidas.length > 0 ? (<CustomTable colunas={columns} dados={tarefasResolvidas}/>) : (
+                <Empty 
+                  description="Não há tarefas resolvidas"
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                />
+              )}
+              
+            </Item>
+          </Tabs>
+      </React.Fragment>
     )
 }
 
