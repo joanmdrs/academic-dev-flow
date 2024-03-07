@@ -1,6 +1,7 @@
 from django.db import models
 from apps.membro_projeto.models import MembroProjeto
 from apps.projeto.models import Projeto
+from apps.iteracao.models import Iteracao
 
 class Tarefa(models.Model):
     
@@ -11,6 +12,7 @@ class Tarefa(models.Model):
     concluida = models.BooleanField(default=False)
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, null=True, blank=True)
     membros = models.ManyToManyField(MembroProjeto)
+    iteracao = models.ForeignKey(Iteracao, on_delete=models.CASCADE, null=True, blank=True)
 
     def concluir_tarefa(self):
         self.concluida = True
