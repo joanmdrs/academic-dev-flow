@@ -14,13 +14,13 @@ const GerenciarTarefas = () => {
 
     const [acaoForm, setAcaoForm] = useState('create')
     const [formVisivel, setFormVisivel] = useState(false)
-    const {dadosProjeto, setDadosTarefa, setTarefasExcluir} = useFormContext()
+    const {dadosProjeto, setDadosTarefa, setTarefasSelecionadas} = useFormContext()
 
 
     const handleCancelar = () => {
         setDadosTarefa(null)
         setAcaoForm('create')
-        setTarefasExcluir([])
+        setTarefasSelecionadas([])
         setFormVisivel(false)
     }
 
@@ -28,14 +28,14 @@ const GerenciarTarefas = () => {
         setFormVisivel(true)
         setDadosTarefa(null)
         setAcaoForm('create')
-        setTarefasExcluir([])
+        setTarefasSelecionadas([])
     }
 
     const handleEditTarefa = (dados) => {
         setFormVisivel(true)
         setDadosTarefa(dados)
         setAcaoForm('update')
-        setTarefasExcluir([])
+        setTarefasSelecionadas([])
     }
 
     const handleSaveTarefa = async (dados) => {
@@ -52,7 +52,7 @@ const GerenciarTarefas = () => {
     return (
         <React.Fragment>
             <div>
-                <div className="button-menu"> 
+                <div className="button-menu" style={{marginBottom: "40px"}}> 
                     { formVisivel ? (<Button onClick={handleCancelar} icon={<IoClose/>}> Cancelar </Button>) 
                     : ( <Button onClick={handleAddTarefa} icon={<IoAdd/>}> Adicionar Tarefa </Button>)}
                   

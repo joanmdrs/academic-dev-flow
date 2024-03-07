@@ -138,7 +138,7 @@ class ConcluirTarefasView(APIView):
     def patch(self, request):
         try:
             
-            ids_tasks = request.GET.getlist('ids[]', [])
+            ids_tasks = request.data.get('ids', [])
             
             if not ids_tasks:
                 return Response({'error': 'IDs das tarefas a serem concluídas não forão fornecidos'}, status=status.HTTP_400_BAD_REQUEST)
@@ -159,7 +159,7 @@ class ReabrirTarefasView(APIView):
     def patch(self, request):
         try:
             
-            ids_tasks = request.GET.getlist('ids[]', [])
+            ids_tasks = request.data.get('ids', [])
             
             if not ids_tasks:
                 return Response({'error': 'IDs das tarefas a serem reabertas não forão fornecidos'}, status=status.HTTP_400_BAD_REQUEST)

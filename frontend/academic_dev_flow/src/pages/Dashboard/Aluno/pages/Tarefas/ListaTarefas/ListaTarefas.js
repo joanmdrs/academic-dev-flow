@@ -1,26 +1,19 @@
 import "./ListaTarefas.css"
-import { Button, Empty, Modal, Popconfirm, Table, Tabs } from "antd";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import { Button, Empty, Modal, Table, Tabs } from "antd";
+import React, { useEffect, useState } from "react";
 import { LuCalendarCheck2 } from "react-icons/lu";
 import { MdAccessTime } from "react-icons/md";
 import { HiOutlineUsers } from "react-icons/hi2";
 import { useFormContext } from "../../../context/Provider/Provider";
 import { formatDate } from "../../../../../../services/utils";
-import Item from "antd/es/list/Item";
 import { GoCheck } from "react-icons/go";
 import { FaRegFolderOpen, FaTrash } from "react-icons/fa";
-import { excluirTarefas, listarTarefasPorProjeto } from "../../../../../../services/tarefaService";
+import { concluirTarefas, excluirTarefas, listarTarefasPorProjeto, reabrirTarefas } from "../../../../../../services/tarefaService";
 import Loading from "../../../../../../components/Loading/Loading";
 
 const ListaTarefas = ({onEdit, onDelete}) => {
 
     const columns = [
-      {
-        title: "ID",
-        dataIndex: 'id',
-        key: 'id'
-      },
-
         {
           title: 'Nome',
           dataIndex: 'nome',
@@ -32,7 +25,7 @@ const ListaTarefas = ({onEdit, onDelete}) => {
         {
           title: (
             <>
-              <LuCalendarCheck2 style={{color: "#fffff"}} /> Criação
+              <LuCalendarCheck2 style={{color: "#fffff"}} /> Data de criação
             </>
           ),
           dataIndex: 'data_criacao',
@@ -81,10 +74,11 @@ const ListaTarefas = ({onEdit, onDelete}) => {
     ];
 
 
-    const {dadosProjeto, tarefasExcluir, setTarefasExcluir} = useFormContext()
+    const {dadosProjeto, tarefasSelecionadas, setTarefasSelecionadas} = useFormContext()
     const [tarefasPendentes, setTarefasPendentes] = useState([])
     const [tarefasResolvidas, setTarefasResolvidas] = useState([])
     const [loading, setLoading] = useState(true)
+    const [activeTab, setActiveTab] = useState("1");
 
     const handleGetTarefas = async () => {
 
@@ -119,16 +113,16 @@ const ListaTarefas = ({onEdit, onDelete}) => {
 
     const rowSelection = {
       onChange: (selectedRowsKeys, selectedRows) => {
-        setTarefasExcluir(selectedRows)
+        setTarefasSelecionadas(selectedRows)
       },
     };
 
     const handleDeleteTarefa = async () => {
 
-      if (tarefasExcluir !== null) {
-        const ids = tarefasExcluir.map((item) => item.id)
+      if (tarefasSelecionadas !== null) {
+        const ids = tarefasSelecionadas.map((item) => item.id)
         await excluirTarefas(ids)
-        setTarefasExcluir([])
+        setTarefasSelecionadas([])
         setTarefasPendentes([])
         setTarefasResolvidas([])
         setLoading(true)
@@ -147,6 +141,33 @@ const ListaTarefas = ({onEdit, onDelete}) => {
       });
   };
 
+  const handleTabChange = (activeKey) => {
+    setActiveTab(activeKey);
+  };
+
+  const handleConcluirTarefas = async () => {
+    if (tarefasSelecionadas !== null) {
+      const ids = tarefasSelecionadas.map((item) => item.id)
+      await concluirTarefas(ids)
+      setTarefasSelecionadas([])
+      setTarefasPendentes([])
+      setTarefasResolvidas([])
+      setLoading(true)
+    } 
+  }
+
+  const handleReabrirTarefas = async () => {
+    if (tarefasSelecionadas !== null) {
+      const ids = tarefasSelecionadas.map((item) => item.id)
+      await reabrirTarefas(ids)
+      setTarefasSelecionadas([])
+      setTarefasPendentes([])
+      setTarefasResolvidas([])
+      setLoading(true)
+
+    } 
+  }
+
   
     
     return (
@@ -155,15 +176,31 @@ const ListaTarefas = ({onEdit, onDelete}) => {
 
           <div style={{display: "flex", justifyContent: "flex-end", marginRight: "20px"}}> 
             { 
-              (tarefasExcluir.length > 0) && 
+              (tarefasSelecionadas.length > 0) && 
 
-                <Button danger icon={<FaTrash />} onClick={() => showDeleteConfirm()}> Excluir </Button>
+                <div style={{display: "flex", gap: "10px"}}> 
+                  {activeTab === "1" && (
+                    <Button onClick={handleConcluirTarefas} icon={<GoCheck/> }>
+                      Resolver
+                    </Button>
+                  )}
+
+                  {activeTab === "2" && (
+                    <Button onClick={handleReabrirTarefas} icon={<FaRegFolderOpen/>}>
+                      Reabrir
+                    </Button>
+                  )}
+                  
+                  <Button danger icon={<FaTrash />} onClick={() => showDeleteConfirm()}> Excluir </Button>
+
+                </div>
+
 
               
             }
           </div>
   
-          <Tabs>
+          <Tabs activeKey={activeTab} onChange={handleTabChange}>
             <Tabs.TabPane tab="Abertas" key="1" icon={<FaRegFolderOpen />}>
               { tarefasPendentes.length > 0 ? (
                 <Table
@@ -181,7 +218,7 @@ const ListaTarefas = ({onEdit, onDelete}) => {
                 )}
             </Tabs.TabPane>
 
-            <Tabs.TabPane tab="Resolvidas" key="2" icon={<GoCheck />}>
+            <Tabs.TabPane tab="Resolvidas" key="2" icon={<GoCheck />} >
               { tarefasResolvidas.length > 0 ? (
                 <Table
                   className="table-lista-tarefas"

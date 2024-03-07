@@ -58,3 +58,32 @@ export const excluirTarefas = async (ids) => {
         return {error: 'Erro ao excluir a(s) tarefa(s)!'}
     }
 }
+
+export const concluirTarefas = async (ids) => {
+    console.log(ids)
+    try {
+        const response = await api.patch('tarefa/concluir/', {ids})
+        if (response.status === 200){
+            NotificationManager.success('Tarefa(s) concluída(s) com sucesso!')
+            return response
+        }
+    } catch (error) {
+        console.log(error)
+        NotificationManager.error('Falha ao concluir a(s) tarefa(s), contate o suporte!')
+        return {error: 'Erro ao concluir a(s) tarefa(s)!'}
+    }
+}
+
+export const reabrirTarefas = async (ids) => {
+    try {
+        const response = await api.patch('tarefa/reabrir/', {ids})
+        if (response.status === 200){
+            NotificationManager.success('Tarefa(s) reaberta(s) com sucesso!')
+            return response
+        }
+    } catch (error) {
+        console.log(error)
+        NotificationManager.error('Falha ao reabrir a(s) tarefa(s), contate o suporte!')
+        return {error: 'Erro ao reabrir a(s) tarefa(s)!'}
+    }
+}
