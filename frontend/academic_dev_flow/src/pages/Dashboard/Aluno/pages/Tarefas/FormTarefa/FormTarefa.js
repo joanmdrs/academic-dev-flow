@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useFormContext } from '../../../context/Provider/Provider';
 import { listarMembrosPeloIdProjeto } from '../../../../../../services/membroProjetoService';
 import { listarIteracoesPorProjeto } from '../../../../../../services/iteracaoService';
+import Loading from '../../../../../../components/Loading/Loading';
 
 const baseStyle = {
     display: "flex",
@@ -15,22 +16,10 @@ const baseStyle = {
 const FormTarefa = ({onCancel, onSubmit}) => {
 
     const [form] = useForm()
-    const {dadosProjeto} = useFormContext()
+    const {dadosProjeto, dadosTarefa} = useFormContext()
     const [optionsMembros, setOptionsMembros] = useState(null)
     const [optionsIteracoes, setOptionsIteracoes] = useState(null)
-
-    useEffect(() => {
-        const fetchData = async () => {
-            if (dadosProjeto != null ){
-                await handleGetMembros()
-                await handleGetIteracoes()
-                
-            }
-        }
-
-        fetchData()
-
-    }, [dadosProjeto])
+    const [loading, setLoading] = useState(true)
 
     const handleGetMembros = async () => {
         const response = await listarMembrosPeloIdProjeto(dadosProjeto.id)
@@ -59,6 +48,41 @@ const FormTarefa = ({onCancel, onSubmit}) => {
 
 
         setOptionsIteracoes(resultados)
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (dadosProjeto != null ){
+                await handleGetMembros()
+                await handleGetIteracoes()
+
+                if (dadosTarefa !== null){
+
+                    const membrosValue = dadosTarefa.membros.map((item) => {
+
+                        return {
+                            value: item.id_membro_projeto,
+                            label: `${item.nome_membro} (${item.grupo_membro})`
+                        }
+                    })
+
+                    form.setFieldsValue({
+                        ...dadosTarefa,
+                        membros: membrosValue
+                    });
+                }
+
+                setLoading(false)
+                
+            }
+        }
+
+        fetchData()
+
+    }, [dadosProjeto])
+
+    if(loading){
+        return <Loading />
     }
 
     return (

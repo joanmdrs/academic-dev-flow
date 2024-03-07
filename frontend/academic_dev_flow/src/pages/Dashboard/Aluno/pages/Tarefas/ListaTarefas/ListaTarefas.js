@@ -11,13 +11,16 @@ import { GoCheck } from "react-icons/go";
 import { FaRegFolderOpen } from "react-icons/fa";
 import { listarTarefasPorProjeto } from "../../../../../../services/tarefaService";
 
-const ListaTarefas = () => {
+const ListaTarefas = ({onEdit}) => {
 
     const columns = [
         {
           title: 'Nome',
           dataIndex: 'nome',
           key: 'nome',
+          render: (_, record) => (
+            <span onClick={() => onEdit(record)} style={{color: "var(--primary-color)", cursor: 'pointer'}}> {record.nome} </span>
+          )
         },
         {
           title: (
@@ -84,7 +87,7 @@ const ListaTarefas = () => {
       )
     }
 
-    const {dadosProjeto} = useFormContext()
+    const {dadosProjeto, dadosTarefa, setDadosTarefa} = useFormContext()
     const [tarefasPendentes, setTarefasPendentes] = useState([])
     const [tarefasResolvidas, setTarefasResolvidas] = useState([])
 

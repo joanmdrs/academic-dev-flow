@@ -12,18 +12,29 @@ const GerenciarTarefas = () => {
 
     const [exibirForm, setExibirForm] = useState(false)
     const [acaoForm, setAcaoForm] = useState('create')
-    const {dadosProjeto} = useFormContext()
+    const {dadosProjeto, dadosTarefa, setDadosTarefa} = useFormContext()
 
     const handleExibirForm = () => setExibirForm(true)
 
     const handleFecharForm = () => setExibirForm(false)
+
+    const handleEditTarefa = (dados) => {
+        setDadosTarefa(dados)
+        handleExibirForm()
+        setAcaoForm('update')
+        console.log(dados)
+    }
 
     const handleSaveTarefa = async (dados) => {
 
         dados['projeto'] = dadosProjeto.id
         if (acaoForm === 'create'){
             await criarTarefa(dados)
+        } else if (acaoForm === 'update'){
+            return
         }
+
+        handleFecharForm()
     }
 
 
@@ -39,7 +50,9 @@ const GerenciarTarefas = () => {
                     </div>
                 </div>
                  
-                { exibirForm ? (<FormTarefa onCancel={handleFecharForm} onSubmit={handleSaveTarefa}/>) : <ListaTarefas /> }
+                { exibirForm ? 
+                    (<FormTarefa onCancel={handleFecharForm} onSubmit={handleSaveTarefa}/>) 
+                    : <ListaTarefas  onEdit={handleEditTarefa}/> }
 
 
 
