@@ -44,3 +44,17 @@ export const atualizarTarefa = async (id, dados) => {
         return {error: 'Erro ao atualizar a tarefa!'}
     }
 }
+
+export const excluirTarefas = async (ids) => {
+    try {
+        const response = await api.delete('tarefa/excluir/',{params: {ids: ids}})
+        if (response.status === 204){
+            NotificationManager.success('Tarefa(s) excluída(s) com sucesso!')
+            return response
+        }
+    } catch (error) {
+        console.log(error)
+        NotificationManager.error('Falha ao excluir a(s) tarefa(s), contate o suporte!')
+        return {error: 'Erro ao excluir a(s) tarefa(s)!'}
+    }
+}

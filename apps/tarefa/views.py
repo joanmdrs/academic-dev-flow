@@ -111,23 +111,27 @@ class AtualizarTarefaView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
         
-class ExcluirTarefaView(APIView): 
+class ExcluirTarefaView(APIView):
     permission_classes = [IsAuthenticated]
-    
-    def delete(self, request, id): 
-        try: 
-            tarefa = Tarefa.objects.get(pk=id)
-            if tarefa is not None: 
-                tarefa.delete()
-                return Response({"detail": "Tarefa excluída com sucesso"}, status=status.HTTP_204_NO_CONTENT)
-            else:
-                return JsonResponse({'error': 'Recurso não encontrado'}, status=status.HTTP_404_NOT_FOUND)  
-        
+
+    def delete(self, request):
+        try:
+            ids = request.GET.getlist('ids[]', [])
+
+            if not ids:
+                return Response({'error': 'IDs das tarefas a serem excluídas não fornecidos'}, status=status.HTTP_400_BAD_REQUEST)
+
+            tarefas = Tarefa.objects.filter(pk__in=ids_to_delete)
+
+            if not tarefas.exists():
+                return JsonResponse({'error': 'Nenhuma tarefa encontrada com os IDs fornecidos'}, status=status.HTTP_404_NOT_FOUND)
+
+            tarefas.delete()
+
+            return Response({"detail": "Tarefas excluídas com sucesso"}, status=status.HTTP_204_NO_CONTENT)
+
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        
-        
 
         
         
