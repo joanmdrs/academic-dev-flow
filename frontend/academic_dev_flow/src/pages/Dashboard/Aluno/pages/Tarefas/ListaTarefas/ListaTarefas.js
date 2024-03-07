@@ -4,16 +4,12 @@ import React, { useEffect, useState } from "react";
 import { LuCalendarCheck2 } from "react-icons/lu";
 import { MdAccessTime } from "react-icons/md";
 import { HiOutlineUsers } from "react-icons/hi2";
-import { IoMdCheckboxOutline } from "react-icons/io";
 import { useFormContext } from "../../../context/Provider/Provider";
-import { ListaTarefasPorProjeto, listarTarefasPorProjeto } from "../../../../../../services/tarefaService";
-import { listarMembrosPorListaIds } from "../../../../../../services/membroProjetoService";
-import { buscarMembrosPorListaIds } from "../../../../../../services/membroService";
 import { formatDate } from "../../../../../../services/utils";
 import Item from "antd/es/list/Item";
-import { GoIssueOpened } from "react-icons/go";
 import { GoCheck } from "react-icons/go";
 import { FaRegFolderOpen } from "react-icons/fa";
+import { listarTarefasPorProjeto } from "../../../../../../services/tarefaService";
 
 const ListaTarefas = () => {
 
@@ -113,11 +109,8 @@ const ListaTarefas = () => {
           setTarefasPendentes(tarefasNaoConcluidas)
           setTarefasResolvidas(tarefasConcluidas)
         }
-
-
     }
     
-
     return (
 
       <React.Fragment>

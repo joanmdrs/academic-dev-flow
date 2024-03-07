@@ -51,7 +51,7 @@ export const buscarQuantidadeMembrosPorProjeto = async (idProjeto) => {
 export const listarMembrosPeloIdProjeto = async (idProjeto) => {
 
     try {
-        const response = await api.get(`membro_projeto/listar/projeto/${encodeURIComponent(idProjeto)}`)
+        const response = await api.get(`membro_projeto/listar/projeto/${encodeURIComponent(idProjeto)}/`)
         return response
     } catch (error) {
         console.log(error)
