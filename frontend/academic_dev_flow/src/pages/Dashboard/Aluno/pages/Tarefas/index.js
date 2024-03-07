@@ -5,11 +5,14 @@ import BotaoBuscar from "../../../../../components/Botoes/BotaoBuscar/BotaoBusca
 import BotaoAdicionar from "../../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
 import BotaoExcluir from "../../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
 import FormTarefa from "./FormTarefa/FormTarefa";
+import { useFormContext } from "../../context/Provider/Provider";
+import { criarTarefa } from "../../../../../services/tarefaService";
 
 const GerenciarTarefas = () => {
 
     const [exibirForm, setExibirForm] = useState(false)
     const [acaoForm, setAcaoForm] = useState('create')
+    const {dadosProjeto} = useFormContext()
 
     const handleExibirForm = () => setExibirForm(true)
 
@@ -17,8 +20,9 @@ const GerenciarTarefas = () => {
 
     const handleSaveTarefa = async (dados) => {
 
+        dados['projeto'] = dadosProjeto.id
         if (acaoForm === 'create'){
-            console.log(dados)
+            await criarTarefa(dados)
         }
     }
 
