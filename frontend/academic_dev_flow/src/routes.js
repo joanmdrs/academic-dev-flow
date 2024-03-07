@@ -5,14 +5,14 @@ import Projeto from './pages/Projeto';
 import Etapa from './pages/Etapa';
 import Membro from './pages/Membro';
 import Artefato from './pages/Artefato';
-import StudentDashboard from './pages/Dashboard/StudentDashboard/StudentDashboard';
 import AdminRoutes from './router/AdminRoutes/AdminRoutes';
 import StudentRoutes from './router/StudentRoutes/StudentRoutes';
 import Fluxo from './pages/Fluxo';
 import Login from './pages/Auth/Login';
-import ProjectsSection from './pages/Dashboard/StudentDashboard/screens/ProjectSection/ProjectsSection';
-import ViewProject from './pages/Dashboard/StudentDashboard/screens/ViewProject/ViewProject';
-import { IteracaoProvider } from './pages/Dashboard/StudentDashboard/context/ProviderIteracao/ProviderIteracao';
+import HomeAluno from './pages/Dashboard/Aluno/HomeAluno';
+import MeusProjetos from './pages/Dashboard/Aluno/pages/Projetos/MeusProjetos/MeusProjetos';
+import { ProviderProjeto } from './pages/Dashboard/Aluno/context/Provider/Provider';
+import VisualizarProjeto from './pages/Dashboard/Aluno/pages/Projetos/VisualizarProjeto/VisualizarProjeto';
 
 function Routes() {
  
@@ -32,10 +32,10 @@ function Routes() {
 
       {/* Aluno */}
       <Route element={<StudentRoutes />}>
-        <Route path='/aluno/home' Component={StudentDashboard} exact/>
-        <Route path='/aluno/projetos' Component={ProjectsSection} exact/>
-        <Route path='/aluno/projetos/visualizar/:projectId' element={
-          <IteracaoProvider> <ViewProject /> </IteracaoProvider>
+        <Route path='/aluno/home' Component={HomeAluno} exact/>
+        <Route path='/aluno/projetos' Component={MeusProjetos} exact/>
+        <Route path='/aluno/projetos/visualizar/:idProjeto' element={
+          <ProviderProjeto> <VisualizarProjeto /> </ProviderProjeto>
         } exact/> 
       </Route>
     </Switch>
