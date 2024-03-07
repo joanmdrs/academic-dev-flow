@@ -116,12 +116,12 @@ class ExcluirTarefaView(APIView):
 
     def delete(self, request):
         try:
-            ids = request.GET.getlist('ids[]', [])
+            ids_tasks = request.GET.getlist('ids[]', [])
 
-            if not ids:
+            if not ids_tasks:
                 return Response({'error': 'IDs das tarefas a serem excluídas não fornecidos'}, status=status.HTTP_400_BAD_REQUEST)
 
-            tarefas = Tarefa.objects.filter(pk__in=ids_to_delete)
+            tarefas = Tarefa.objects.filter(id__in=ids_tasks)
 
             if not tarefas.exists():
                 return JsonResponse({'error': 'Nenhuma tarefa encontrada com os IDs fornecidos'}, status=status.HTTP_404_NOT_FOUND)
