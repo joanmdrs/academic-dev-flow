@@ -20,6 +20,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'markdownx',
     'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
