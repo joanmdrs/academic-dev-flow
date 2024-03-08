@@ -13,6 +13,7 @@ import CronogramaIteracoes from "../../Iteracoes";
 import Loading from "../../../../../../components/Loading/Loading";
 import GerenciarTarefas from "../../Tarefas";
 import { LuCalendarClock } from "react-icons/lu";
+import GerenciarArtefatos from "../../Artefatos";
 
 const breadcrumbRoutes = [
     { title: 'Home', path: '/aluno/home' },
@@ -78,12 +79,15 @@ const VisualizarProjeto = () => {
                             </Button> 
                             <Button 
                                 icon={<GoTasklist />} 
-                                onClick={() => setCurrentPage("tasks")}
+                                onClick={() => setCurrentPage("tarefas")}
                             >
                                 Tarefas
                             </Button>
 
-                            <Button icon={<IoDocumentTextOutline />}> 
+                            <Button 
+                                icon={<IoDocumentTextOutline />}
+                                onClick={() => setCurrentPage("artefatos")}
+                            > 
                                 Artefatos
                             </Button>
 
@@ -93,7 +97,8 @@ const VisualizarProjeto = () => {
 
                     <div className="content"> 
                         {currentPage === "default" && <CronogramaIteracoes />}
-                        {currentPage === "tasks" && <GerenciarTarefas />}
+                        {currentPage === "tarefas" && <GerenciarTarefas />}
+                        {currentPage === "artefatos" && <GerenciarArtefatos/>}
                     </div>
                 </div>
             </Layout>

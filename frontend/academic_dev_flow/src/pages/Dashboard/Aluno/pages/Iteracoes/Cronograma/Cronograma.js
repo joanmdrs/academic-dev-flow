@@ -69,7 +69,7 @@ const Cronograma = (props) => {
                                     {iteracao.nome}
                                 </div>
 
-                                <div style={{display: "flex", alignItems: "center", flexDirection: "column", marginTop: "20px"}}>
+                                {/* <div style={{display: "flex", alignItems: "center", flexDirection: "column", marginTop: "20px"}}>
 
                                     { props.tarefas ? 
                                         <div >
@@ -103,7 +103,7 @@ const Cronograma = (props) => {
 
                                     }
                                     
-                                </div>
+                                </div> */}
                             </div>
                             
                         </div>

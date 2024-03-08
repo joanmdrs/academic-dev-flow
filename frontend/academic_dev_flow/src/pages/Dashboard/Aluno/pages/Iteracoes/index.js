@@ -28,23 +28,23 @@ const CronogramaIteracoes = () => {
         const iteracoesOrdenadas = response.data.sort((a, b) => a.numero - b.numero);
         setIteracoes(iteracoesOrdenadas)
 
-        const promises = (response.data).map(async (iteracao) => {
-            const response1 = await listarTarefasPorIteracao(iteracao.id)
+        // const promises = (response.data).map(async (iteracao) => {
+        //     const response1 = await listarTarefasPorIteracao(iteracao.id)
         
-            if (response1.data.length > 0) {
-                return {
-                    idIteracao: iteracao.id,
-                    tarefas: response1.data
-                };
-            }
+        //     if (response1.data.length > 0) {
+        //         return {
+        //             idIteracao: iteracao.id,
+        //             tarefas: response1.data
+        //         };
+        //     }
         
-            return null; // Se não houver tarefas, retorne null
-        });
+        //     return null; // Se não houver tarefas, retorne null
+        // });
         
-        const resultados = await Promise.all(promises);
-        const tarefasComTarefas = resultados.filter((item) => item !== null);
+        // const resultados = await Promise.all(promises);
+        // const tarefasComTarefas = resultados.filter((item) => item !== null);
         
-        setTarefas(tarefasComTarefas);
+        // setTarefas(tarefasComTarefas);
     }
 
     const handleCancel = () => {
@@ -73,7 +73,7 @@ const CronogramaIteracoes = () => {
 
             { 
                 mostrarIteracoes ? (
-                    <Cronograma exibirForm={handleExibirForm} iteracoes={iteracoes} tarefas={tarefas}  />
+                    <Cronograma exibirForm={handleExibirForm} iteracoes={iteracoes} />
                 ) :
                     <FormIteracao onReload={handleReload} />
             }
