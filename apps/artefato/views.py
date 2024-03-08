@@ -76,7 +76,9 @@ class ExcluirArtefatoView(BaseArtefatoView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)        
         
-class ListarArtefatosView(BaseArtefatoView): 
+class ListarArtefatosView(APIView): 
+    
+    permission_classes = [IsAuthenticated]
     def get(self, request): 
         try: 
             artefatos = Artefato.objects.all()
