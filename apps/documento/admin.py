@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import Documento
 
-# Register your models here.
+class DocumentoAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'data_criacao')
+
+admin.site.register(Documento, DocumentoAdmin)
