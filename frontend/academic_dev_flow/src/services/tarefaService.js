@@ -35,7 +35,7 @@ export const listarTarefasPorIteracao = async (idIteracao) => {
         const response = await api.get(`tarefa/listar/iteracao/${encodeURIComponent(idIteracao)}/`)
         return response
     } catch (error) {
-        console.log(error.data.response)
+        console.log(error)
         NotificationManager.error('Falha ao buscar as tarefas, contate o suporte!')
         return { error: "Erro ao buscar as tarefas"}
     }

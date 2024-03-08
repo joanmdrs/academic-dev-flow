@@ -174,7 +174,7 @@ class ListarTarefasPorIteracaoView(APIView):
                 serializer = TarefaSerializer(tarefas, many=True)
                 return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False}, status=status.HTTP_200_OK)
             
-            return JsonResponse([], safe=False, status=status_HTTP_204_NO_CONTENT)
+            return JsonResponse([], safe=False, status=status.HTTP_200_OK)
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
