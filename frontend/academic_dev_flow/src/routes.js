@@ -13,6 +13,8 @@ import HomeAluno from './pages/Dashboard/Aluno/HomeAluno';
 import MeusProjetos from './pages/Dashboard/Aluno/pages/Projetos/MeusProjetos/MeusProjetos';
 import { ProviderProjeto } from './pages/Dashboard/Aluno/context/Provider/Provider';
 import VisualizarProjeto from './pages/Dashboard/Aluno/pages/Projetos/VisualizarProjeto/VisualizarProjeto';
+import TeacherRoutes from './router/TeacherRoutes/TeacherRoutes';
+import HomeProfessor from './pages/Dashboard/Professor/Home';
 
 function Routes() {
  
@@ -37,6 +39,15 @@ function Routes() {
         <Route path='/aluno/projetos/visualizar/:idProjeto' element={
           <ProviderProjeto> <VisualizarProjeto /> </ProviderProjeto>
         } exact/> 
+      </Route>
+
+      {/* Professor */}
+      <Route element={<TeacherRoutes />}>
+        <Route path='/professor/home' Component={HomeProfessor} exact/>
+        <Route path='/professor/projetos' Component={MeusProjetos} exact/>
+        {/* <Route path='/professor/projetos/visualizar/:idProjeto' element={
+          <ProviderProjeto> <VisualizarProjeto /> </ProviderProjeto>
+        } exact/>  */}
       </Route>
     </Switch>
   );
