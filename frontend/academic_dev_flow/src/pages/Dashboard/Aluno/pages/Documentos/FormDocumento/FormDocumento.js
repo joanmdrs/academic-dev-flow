@@ -3,6 +3,12 @@ import React, { useEffect, useState } from "react";
 import { listarIteracoesPorProjeto } from "../../../../../../services/iteracaoService";
 import { useFormContext } from "../../../context/Provider/Provider";
 import { listarArtefatos } from "../../../../../../services/artefatoService";
+import MDEditor from "@uiw/react-md-editor";
+import { buscarDocumentos, criarDocumento } from "../../../../../../api/apiGitHubService";
+import BotaoBuscar from "../../../../../../components/Botoes/BotaoBuscar/BotaoBuscar";
+import Markdown from "react-markdown";
+import remarkGfm from 'remark-gfm'
+import { IoAdd, IoSearch } from "react-icons/io5";
 
 const optionsStatus = [
     {
@@ -24,6 +30,9 @@ const FormDocumento = () => {
     const {dadosProjeto} = useFormContext()
     const [optionsIteracao, setOptionsIteracao] = useState(null)
     const [optionsArtefato, setOptionsArtefato] = useState(null)
+    const [isBuscar, setIsBuscar] = useState(false)
+    const [isCadastrar, setIsCadastrar] = useState(false)
+    const [documentos, setDocumentos] = useState(null)
 
 
     const handleGetIteracoes = async () => {
@@ -53,8 +62,6 @@ const FormDocumento = () => {
 
     }
 
-    
-
     useEffect(() => {
         const fetchData = async () => {
             if (dadosProjeto !== null){
@@ -66,23 +73,78 @@ const FormDocumento = () => {
         fetchData()
     }, [dadosProjeto])
 
+    const handleSaveDocumento = async (dados) => {
+        const file_path = (dados.file_path)
+        const file_content = btoa(dados.file_content)
+        const commit_message = dados.commit_message
+
+        const response = await criarDocumento(file_path, file_content, commit_message )
+
+        console.log(response)
+    }
+
+    const handleGetDocumentos = async (dados) => {
+        console.log(dados)
+        const response = await buscarDocumentos(dados.caminho)
+        const decodedContent = decodeURIComponent(escape(atob(response.data.content)));
+        setDocumentos(decodedContent)
+    }
+
     return (
 
         <div>
-            <Form layout="vertical" className="global-form">
+            <div style={{display: "flex", justifyContent: "space-between"}}> 
+                <Button icon={<IoSearch/>} onClick={() => setIsBuscar(!isBuscar)}> Buscar Documento </Button>
+                <Button icon={<IoAdd/>} onClick={() => setIsCadastrar(!isCadastrar)}> Adicionar Documento </Button>
+
+            </div>
+            
+
+            { isBuscar && 
+
+                <div>
+                    <Form className="global-form" onFinish={handleGetDocumentos}>
+                        <Form.Item label="Especifique o caminho do(s) arquivo(s)" name="caminho">
+                            <Input name="caminho" />
+                        </Form.Item>
+
+                        <Form.Item>
+                            <Button type="primary" htmlType="submit"> Salvar </Button>
+                        </Form.Item>
+                    </Form>
+
+                    { documentos !== null && 
+                        <div className="global-div"> 
+                            <Markdown remarkPlugins={[remarkGfm]}>{documentos}</Markdown>
+
+                        </div>
+                             
 
 
-                <Form.Item>
-                    <h4> CADASTRAR DOCUMENTO </h4>
-                </Form.Item>
+                    }
+                </div>
+
+                
+
+                
+                
+            }
+
+            {
+                isCadastrar && 
+
+                <Form layout="vertical" className="global-form" onFinish={handleSaveDocumento}>
+                    <Form.Item>
+                        <h4> CADASTRAR DOCUMENTO </h4>
+                    </Form.Item>
 
                     <div style={{display: "flex", gap: "20px"}}> 
                         <Form.Item label="Título" name="titulo" style={{flex: "1"}}>
                             <Input type="text" name="titulo" placeholder="Ex.: Documento de Visão"/>
                         </Form.Item>
 
-                        <Form.Item label="Link do documento do github" name="url" style={{flex: "1"}}> 
-                            <Input type="url" name="url" />
+                        <Form.Item label="Link do documento do github" name="file_path" style={{flex: "1"}}> 
+                            <Input type="text" name="file_path" />
                         </Form.Item>
                     </div>
 
@@ -100,18 +162,35 @@ const FormDocumento = () => {
                         </Form.Item>
                     </div>
 
+                    <Form.Item
+                        label="Conteúdo do arquivo"
+                        name="file_content"
+                        rules={[
+                            {
+                            required: true,
+                            },
+                        ]}
+                        >
+                        <MDEditor data-color-mode="dark"  />
+                    </Form.Item>
+
+                    <Form.Item label="Mensagem commit" name="commit_message">
+                        <Input type="text" name="commit_message" />
+                    </Form.Item>
+
                     <div style={{display: "flex", gap: "10px"}}> 
                         <Form.Item>
-                            <Button type="primary" > Salvar </Button>
+                            <Button type="primary" htmlType="submit" > Salvar </Button>
                         </Form.Item>
 
                         <Form.Item>
                             <Button> Cancelar </Button>
                         </Form.Item>
                     </div>            
-                
+                </Form>
+            }
 
-            </Form>
+            
         </div>
     )
 
