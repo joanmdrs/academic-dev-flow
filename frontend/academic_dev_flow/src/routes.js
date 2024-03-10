@@ -10,11 +10,11 @@ import StudentRoutes from './router/StudentRoutes/StudentRoutes';
 import Fluxo from './pages/Fluxo';
 import Login from './pages/Auth/Login';
 import HomeAluno from './pages/Dashboard/Aluno/HomeAluno';
-import MeusProjetos from './pages/Dashboard/Aluno/pages/Projetos/MeusProjetos/MeusProjetos';
 import { ProviderProjeto } from './pages/Dashboard/Aluno/context/Provider/Provider';
-import VisualizarProjeto from './pages/Dashboard/Aluno/pages/Projetos/VisualizarProjeto/VisualizarProjeto';
 import TeacherRoutes from './router/TeacherRoutes/TeacherRoutes';
 import HomeProfessor from './pages/Dashboard/Professor/Home';
+import MeusProjetos from './pages/Dashboard/Projetos/MeusProjetos/MeusProjetos';
+import VisualizarProjeto from './pages/Dashboard/Projetos/VisualizarProjeto/VisualizarProjeto';
 
 function Routes() {
  
@@ -45,9 +45,9 @@ function Routes() {
       <Route element={<TeacherRoutes />}>
         <Route path='/professor/home' Component={HomeProfessor} exact/>
         <Route path='/professor/projetos' Component={MeusProjetos} exact/>
-        {/* <Route path='/professor/projetos/visualizar/:idProjeto' element={
-          <ProviderProjeto> <VisualizarProjeto /> </ProviderProjeto>
-        } exact/>  */}
+        <Route path='/professor/projetos/visualizar/:idProjeto' element={
+          <ProviderProjeto> <VisualizarProjeto grupo={'professor'} /> </ProviderProjeto>
+        } exact/> 
       </Route>
     </Switch>
   );

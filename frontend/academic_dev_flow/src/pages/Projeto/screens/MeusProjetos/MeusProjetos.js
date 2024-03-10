@@ -2,33 +2,37 @@ import "./MeusProjetos.css"
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Empty, Layout, Table } from 'antd';
-import MyHeader from '../../../../../../components/Header/Header';
-import MenuAluno from '../../../../../../components/Menus/MenuAluno/MenuAluno'
-import CustomBreadcrumb from '../../../../../../components/Breadcrumb/Breadcrumb';
+
 import { LuCalendarCheck2, LuCalendarX2 } from "react-icons/lu";
 import { TeamOutlined } from '@ant-design/icons';
 import { CiCircleCheck } from "react-icons/ci";
 import { TiFlowChildren } from "react-icons/ti";
 import { PiEye } from "react-icons/pi";
-import { buscarProjetosDoMembro, buscarQuantidadeMembrosPorProjeto } from '../../../../../../services/membroProjetoService';
-import { buscarProjetoPeloId } from '../../../../../../services/projetoService';
-import { buscarFluxoPeloId } from '../../../../../../services/fluxoService';
-import { formatDate } from '../../../../../../services/utils';
+import { formatDate } from "../../../../services/utils"; 
 import { decodeToken } from 'react-jwt';
+import MenuAluno from "../../../../components/Menus/MenuAluno/MenuAluno";
+import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfessor";
+import { buscarProjetosDoMembro, buscarQuantidadeMembrosPorProjeto } from "../../../../services/membroProjetoService";
+import { buscarProjetoPeloId } from "../../../../services/projetoService";
+import { buscarFluxoPeloId } from "../../../../services/fluxoService";
+import MyHeader from "../../../../components/Header/Header";
+import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
 
-const breadcrumbRoutes = [
-  { title: 'Home', path: '/aluno/home' },
-  { title: 'Projetos', path: '/aluno/projetos' },
-];
 
 const MeusProjetos = () => {
 
   const [projetos, setProjetos] = useState(null)
   const [token] = useState(localStorage.getItem("token") || null);
+  const [grupo, setGrupo] = useState(null)
 
+  const breadcrumbRoutes = [
+    { title: 'Home', path: `/${grupo}/home` },
+    { title: 'Projetos', path: `/${grupo}/projetos` },
+  ];
   useEffect(() => {
       const searchData = async () => {
           try {
+            await handleGetGrupo()
             await handleGetProjects()
           } catch (error) {
               console.error('Erro ao decodificar o token:', error);
@@ -101,12 +105,22 @@ const MeusProjetos = () => {
       key: 'action',
       render: (_, record) => (
         <Button>
-          <Link to={`/aluno/projetos/visualizar/${record.idProject}`}>Visualizar</Link>
+          <Link to={`/${grupo}/projetos/visualizar/${record.idProject}`}>Visualizar</Link>
         </Button>
       ),
   
     }
   ];
+
+  const handleGetGrupo = async () => {
+    const decoded = await decodeToken(token);
+
+    if (decoded.groups.includes('Alunos')){
+      setGrupo('aluno')
+    } else if (decoded.groups.includes('Professores')){
+      setGrupo('professor')
+    }
+  }
 
 
   const handleGetProjects = async () => {
@@ -139,7 +153,14 @@ const MeusProjetos = () => {
 
   return (
     <React.Fragment>
-            <MenuAluno />
+
+      {
+        grupo !== null && (
+          <React.Fragment>
+
+            { grupo === "aluno" &&  <MenuAluno />}
+            { grupo === "professor" && <MenuProfessor /> }
+           
             <Layout>
                 <MyHeader />
                 <CustomBreadcrumb routes={breadcrumbRoutes} />
@@ -175,6 +196,10 @@ const MeusProjetos = () => {
                     
                 </div>
             </Layout>
+          </React.Fragment>
+        )
+      }
+            
     </React.Fragment>
     
   );

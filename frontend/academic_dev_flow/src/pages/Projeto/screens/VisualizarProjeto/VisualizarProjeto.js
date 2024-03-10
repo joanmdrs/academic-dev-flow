@@ -3,31 +3,29 @@ import "./VisualizarProjeto.css"
 import { Button, Flex, Layout } from "antd";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { GoTasklist } from "react-icons/go";
-import MyHeader from "../../../../../../components/Header/Header";
-import CustomBreadcrumb from "../../../../../../components/Breadcrumb/Breadcrumb";
 import { useParams } from "react-router-dom";
-import { buscarProjetoPeloId } from "../../../../../../services/projetoService";
-import { useFormContext } from "../../../context/Provider/Provider"
-import MenuAluno from "../../../../../../components/Menus/MenuAluno/MenuAluno";
-import CronogramaIteracoes from "../../Iteracoes";
-import Loading from "../../../../../../components/Loading/Loading";
-import GerenciarTarefas from "../../Tarefas";
 import { LuCalendarClock } from "react-icons/lu";
-import GerenciarDocumentos from "../../Documentos";
+import { useFormContext } from "../../Aluno/context/Provider/Provider";
+import { buscarProjetoPeloId } from "../../../../services/projetoService";
+import MenuAluno from "../../../../components/Menus/MenuAluno/MenuAluno";
+import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfessor";
+import MyHeader from "../../../../components/Header/Header";
+import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
+import Loading from "../../../../components/Loading/Loading";
 
-const breadcrumbRoutes = [
-    { title: 'Home', path: '/aluno/home' },
-    { title: 'Projetos', path: '/aluno/projetos' },
-    { title: 'Visualizar', path: '/aluno/projetos/visualizar'}
-];
-
-const VisualizarProjeto = () => {
+const VisualizarProjeto = ({grupo}) => {
 
     const { idProjeto } = useParams();
     const { setDadosProjeto } = useFormContext()
     const [projeto, setProjeto] = useState(null)
     const [currentPage, setCurrentPage] = useState('default')
     const [loading, setLoading] = useState(true)
+
+    const breadcrumbRoutes = [
+        { title: 'Home', path: `/${grupo}/home` },
+        { title: 'Projetos', path: `/${grupo}/projetos`  },
+        { title: 'Visualizar', path: `/${grupo}/projetos/visualizar` }
+    ];
 
     const handleGetProject = async () => {
         const response1 = await buscarProjetoPeloId(idProjeto);
@@ -55,7 +53,10 @@ const VisualizarProjeto = () => {
 
     return (
         <React.Fragment>
-            <MenuAluno />
+
+            {grupo === 'aluno' && <MenuAluno />}
+            {grupo === 'professor' && <MenuProfessor />}
+            
             <Layout>
                 <MyHeader />
                 <CustomBreadcrumb routes={breadcrumbRoutes} />
@@ -95,11 +96,11 @@ const VisualizarProjeto = () => {
 
                     </div>
 
-                    <div className="content"> 
+                    {/* <div className="content"> 
                         {currentPage === "default" && <CronogramaIteracoes />}
                         {currentPage === "tarefas" && <GerenciarTarefas />}
                         {currentPage === "documentos" && <GerenciarDocumentos/>}
-                    </div>
+                    </div> */}
                 </div>
             </Layout>
         </React.Fragment>
