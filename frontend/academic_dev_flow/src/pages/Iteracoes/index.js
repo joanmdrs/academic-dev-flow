@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Cronograma from "./Cronograma/Cronograma";
 import FormIteracao from "./FormIteracao/FormIteracao";
-import { useFormContext } from "../../context/Provider/Provider";
-import { listarIteracoesPorProjeto } from "../../../../../services/iteracaoService";
 import { Button } from "antd";
 import { IoAdd, IoClose } from "react-icons/io5";
-import { listarTarefasPorIteracao } from "../../../../../services/tarefaService";
+import { useProjetoContext } from "../../context/ProjetoContext";
+import { listarIteracoesPorProjeto } from "../../services/iteracaoService";
 
 const CronogramaIteracoes = () => {
 
     const [mostrarIteracoes, setMostrarIteracoes] = useState(true)
-    const {dadosProjeto, setDadosIteracao} = useFormContext()
+    const {dadosProjeto, setDadosIteracao} = useProjetoContext()
     const [iteracoes, setIteracoes] = useState(null)
     const [tarefas, setTarefas] = useState([])
 

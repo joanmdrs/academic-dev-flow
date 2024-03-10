@@ -1,20 +1,16 @@
 import { Button } from "antd";
 import React, { useState } from "react";
 import ListaTarefas from "./ListaTarefas/ListaTarefas";
-import BotaoBuscar from "../../../../../components/Botoes/BotaoBuscar/BotaoBuscar";
-import BotaoAdicionar from "../../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
-import BotaoExcluir from "../../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
 import FormTarefa from "./FormTarefa/FormTarefa";
-import { useFormContext } from "../../context/Provider/Provider";
-import { atualizarTarefa, criarTarefa, excluirTarefas } from "../../../../../services/tarefaService";
-import { atualizarIteracao } from "../../../../../services/iteracaoService";
-import { IoAdd, IoClose, IoCloseCircle } from "react-icons/io5";
+import { IoAdd, IoClose } from "react-icons/io5";
+import { useProjetoContext } from "../../context/ProjetoContext";
+import { atualizarTarefa, criarTarefa } from "../../services/tarefaService";
 
 const GerenciarTarefas = () => {
 
     const [acaoForm, setAcaoForm] = useState('create')
     const [formVisivel, setFormVisivel] = useState(false)
-    const {dadosProjeto, setDadosTarefa, setTarefasSelecionadas} = useFormContext()
+    const {dadosProjeto, setDadosTarefa, setTarefasSelecionadas} = useProjetoContext()
 
 
     const handleCancelar = () => {
