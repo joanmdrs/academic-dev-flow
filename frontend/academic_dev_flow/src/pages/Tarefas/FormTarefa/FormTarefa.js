@@ -1,10 +1,11 @@
 import { Button, Form, Input, Select } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import React, { useEffect, useState } from 'react'
-import { useFormContext } from '../../../context/Provider/Provider';
-import { listarMembrosPeloIdProjeto } from '../../../../../../services/membroProjetoService';
-import { listarIteracoesPorProjeto } from '../../../../../../services/iteracaoService';
-import Loading from '../../../../../../components/Loading/Loading';
+import { useProjetoContext } from '../../../context/ProjetoContext';
+import { listarMembrosPeloIdProjeto } from '../../../services/membroProjetoService';
+import { listarIteracoesPorProjeto } from '../../../services/iteracaoService';
+import Loading from '../../../components/Loading/Loading';
+
 
 const baseStyle = {
     display: "flex",
@@ -16,7 +17,7 @@ const baseStyle = {
 const FormTarefa = ({onCancel, onSubmit}) => {
 
     const [form] = useForm()
-    const {dadosProjeto, dadosTarefa} = useFormContext()
+    const {dadosProjeto, dadosTarefa} = useProjetoContext()
     const [optionsMembros, setOptionsMembros] = useState(null)
     const [optionsIteracoes, setOptionsIteracoes] = useState(null)
     const [loading, setLoading] = useState(true)
