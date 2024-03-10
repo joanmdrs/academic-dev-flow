@@ -10,20 +10,20 @@ import { TiFlowChildren } from "react-icons/ti";
 import { PiEye } from "react-icons/pi";
 import { formatDate } from "../../../../services/utils"; 
 import { decodeToken } from 'react-jwt';
-import MenuAluno from "../../../../components/Menus/MenuAluno/MenuAluno";
-import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfessor";
 import { buscarProjetosDoMembro, buscarQuantidadeMembrosPorProjeto } from "../../../../services/membroProjetoService";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { buscarFluxoPeloId } from "../../../../services/fluxoService";
+import MenuAluno from "../../../../components/Menus/MenuAluno/MenuAluno";
+import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfessor";
 import MyHeader from "../../../../components/Header/Header";
 import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
 
 
-const MeusProjetos = () => {
+
+const MeusProjetos = ({grupo}) => {
 
   const [projetos, setProjetos] = useState(null)
   const [token] = useState(localStorage.getItem("token") || null);
-  const [grupo, setGrupo] = useState(null)
 
   const breadcrumbRoutes = [
     { title: 'Home', path: `/${grupo}/home` },
@@ -32,7 +32,6 @@ const MeusProjetos = () => {
   useEffect(() => {
       const searchData = async () => {
           try {
-            await handleGetGrupo()
             await handleGetProjects()
           } catch (error) {
               console.error('Erro ao decodificar o token:', error);
@@ -112,15 +111,7 @@ const MeusProjetos = () => {
     }
   ];
 
-  const handleGetGrupo = async () => {
-    const decoded = await decodeToken(token);
 
-    if (decoded.groups.includes('Alunos')){
-      setGrupo('aluno')
-    } else if (decoded.groups.includes('Professores')){
-      setGrupo('professor')
-    }
-  }
 
 
   const handleGetProjects = async () => {
