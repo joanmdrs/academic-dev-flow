@@ -1,14 +1,13 @@
 import { Button, Form, Input, Select } from "antd";
 import React, { useEffect, useState } from "react";
-import { listarIteracoesPorProjeto } from "../../../../../../services/iteracaoService";
-import { useFormContext } from "../../../context/Provider/Provider";
-import { listarArtefatos } from "../../../../../../services/artefatoService";
 import MDEditor from "@uiw/react-md-editor";
-import { buscarDocumentos, criarDocumento } from "../../../../../../api/apiGitHubService";
-import BotaoBuscar from "../../../../../../components/Botoes/BotaoBuscar/BotaoBuscar";
 import Markdown from "react-markdown";
 import remarkGfm from 'remark-gfm'
 import { IoAdd, IoSearch } from "react-icons/io5";
+import { useProjetoContext } from "../../../context/ProjetoContext";
+import { listarIteracoesPorProjeto } from "../../../services/iteracaoService";
+import { listarArtefatos } from "../../../services/artefatoService";
+import { buscarDocumentos, criarDocumento } from "../../../api/apiGitHubService";
 
 const optionsStatus = [
     {
@@ -27,7 +26,7 @@ const optionsStatus = [
 
 const FormDocumento = () => {
 
-    const {dadosProjeto} = useFormContext()
+    const {dadosProjeto} = useProjetoContext()
     const [optionsIteracao, setOptionsIteracao] = useState(null)
     const [optionsArtefato, setOptionsArtefato] = useState(null)
     const [isBuscar, setIsBuscar] = useState(false)
