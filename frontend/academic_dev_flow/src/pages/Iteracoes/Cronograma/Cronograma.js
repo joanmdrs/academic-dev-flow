@@ -1,8 +1,9 @@
 import { Flex } from "antd";
 import React from "react";
 import CustomDropdown from "../CustomDropdown/CustomDropdown";
-import { useFormContext } from "../../../context/Provider/Provider";
-import { excluirIteracao } from "../../../../../../services/iteracaoService";
+import { useProjetoContext } from "../../../context/ProjetoContext";
+import { excluirIteracao } from "../../../services/iteracaoService";
+
 
 const cronogramaStyle = {
     display: "flex",
@@ -29,7 +30,7 @@ const iteracaoStyle = {
 
 const Cronograma = (props) => {
 
-    const {setDadosIteracao} = useFormContext()
+    const {setDadosIteracao} = useProjetoContext()
 
     const handleEdit = (record) => {
         props.exibirForm()

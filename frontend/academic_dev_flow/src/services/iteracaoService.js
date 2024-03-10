@@ -15,7 +15,6 @@ export const criarIteracao = async (dados) => {
         NotificationManager.error('Falha ao cadastrar a iteração, contate o suporte !')
         return { error: "Erro ao cadastrar a iteração"};
     }
-
 }
 
 export const listarIteracoesPorProjeto = async (idProjeto) => {
