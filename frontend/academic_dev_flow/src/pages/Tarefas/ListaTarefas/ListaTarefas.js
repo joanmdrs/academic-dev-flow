@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { LuCalendarCheck2 } from "react-icons/lu";
 import { MdAccessTime } from "react-icons/md";
 import { HiOutlineUsers } from "react-icons/hi2";
-import { formatDate } from "../../../../../../services/utils";
+import { formatDate } from "../../../services/utils";
 import { GoCheck } from "react-icons/go";
 import { FaRegFolderOpen, FaTrash } from "react-icons/fa";
 import { useProjetoContext } from "../../../context/ProjetoContext";

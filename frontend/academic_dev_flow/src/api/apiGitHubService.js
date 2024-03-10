@@ -15,7 +15,7 @@ const email = 'joanmedeiros2018@gmail.com'
 export const criarDocumento = async (file_path, file_content, commit_message) => {
   try {
     
-    const response = octokit.request('PUT /repos/{owner}/{repo}/contents/docs/doc-teste.md', {
+    const response = octokit.request('PUT /repos/{owner}/{repo}/contents/{path}', {
       owner: owner,
       repo: repo,
       path: file_path,

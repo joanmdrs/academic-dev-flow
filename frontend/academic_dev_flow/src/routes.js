@@ -34,7 +34,7 @@ function Routes() {
       {/* Aluno */}
       <Route element={<StudentRoutes />}>
         <Route path='/aluno/home' Component={HomeAluno} exact/>
-        <Route path='/aluno/projetos' Component={MeusProjetos} exact/>
+        <Route path='/aluno/projetos' element={<MeusProjetos  grupo="aluno" />} exact/>
         <Route path='/aluno/projetos/visualizar/:idProjeto' element={
           <ProjetoProvider> <VisualizarProjeto grupo={'aluno'} /> </ProjetoProvider>
         } exact/> 
@@ -43,7 +43,7 @@ function Routes() {
       {/* Professor */}
       <Route element={<TeacherRoutes />}>
         <Route path='/professor/home' Component={HomeProfessor} exact/>
-        <Route path='/professor/projetos' Component={MeusProjetos} exact/>
+        <Route path='/professor/projetos' element={<MeusProjetos  grupo="professor" />} exact/>
         <Route path='/professor/projetos/visualizar/:idProjeto' element={
           <ProjetoProvider> <VisualizarProjeto grupo={'professor'} /> </ProjetoProvider>
         } exact/> 

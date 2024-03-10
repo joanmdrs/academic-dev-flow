@@ -5,6 +5,7 @@ import { Button } from "antd";
 import { IoAdd, IoClose } from "react-icons/io5";
 import { useProjetoContext } from "../../context/ProjetoContext";
 import { listarIteracoesPorProjeto } from "../../services/iteracaoService";
+import Loading from "../../components/Loading/Loading";
 
 const CronogramaIteracoes = () => {
 
@@ -12,15 +13,18 @@ const CronogramaIteracoes = () => {
     const {dadosProjeto, setDadosIteracao} = useProjetoContext()
     const [iteracoes, setIteracoes] = useState(null)
     const [tarefas, setTarefas] = useState([])
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const fetchData = async () => {
             if (dadosProjeto !== null) {
                 await handleGetIteracoes()
             }
+            setLoading(false)
         }
         fetchData()
-    }, [dadosProjeto])
+    }, [dadosProjeto, loading])
+
 
     const handleGetIteracoes = async () => {
         const response = await listarIteracoesPorProjeto(dadosProjeto.id)
@@ -44,6 +48,10 @@ const CronogramaIteracoes = () => {
         // const tarefasComTarefas = resultados.filter((item) => item !== null);
         
         // setTarefas(tarefasComTarefas);
+    }
+
+    if (loading) {
+        return <Loading />
     }
 
     const handleCancel = () => {

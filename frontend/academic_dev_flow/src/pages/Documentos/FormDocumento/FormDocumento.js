@@ -108,7 +108,7 @@ const FormDocumento = () => {
                         </Form.Item>
 
                         <Form.Item>
-                            <Button type="primary" htmlType="submit"> Salvar </Button>
+                            <Button type="primary" htmlType="submit"> Buscar </Button>
                         </Form.Item>
                     </Form>
 

@@ -12,6 +12,9 @@ import MenuAluno from "../../../../components/Menus/MenuAluno/MenuAluno";
 import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfessor";
 import MyHeader from "../../../../components/Header/Header";
 import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
+import CronogramaIteracoes from "../../../Iteracoes";
+import GerenciarTarefas from "../../../Tarefas";
+import GerenciarDocumentos from "../../../Documentos";
 
 
 const VisualizarProjeto = ({grupo}) => {
@@ -97,11 +100,11 @@ const VisualizarProjeto = ({grupo}) => {
 
                     </div>
 
-                    {/* <div className="content"> 
+                    <div className="content"> 
                         {currentPage === "default" && <CronogramaIteracoes />}
                         {currentPage === "tarefas" && <GerenciarTarefas />}
                         {currentPage === "documentos" && <GerenciarDocumentos/>}
-                    </div> */}
+                    </div>
                 </div>
             </Layout>
         </React.Fragment>
