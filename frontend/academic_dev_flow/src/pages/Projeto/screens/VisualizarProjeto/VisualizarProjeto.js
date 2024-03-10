@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from "react";
 import "./VisualizarProjeto.css"
-import { Button, Flex, Layout } from "antd";
+import { Button, Layout } from "antd";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { GoTasklist } from "react-icons/go";
 import { useParams } from "react-router-dom";
 import { LuCalendarClock } from "react-icons/lu";
-import { useFormContext } from "../../Aluno/context/Provider/Provider";
+import { useProjetoContext } from "../../../../context/ProjetoContext";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
+import Loading from "../../../../components/Loading/Loading";
 import MenuAluno from "../../../../components/Menus/MenuAluno/MenuAluno";
 import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfessor";
 import MyHeader from "../../../../components/Header/Header";
 import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
-import Loading from "../../../../components/Loading/Loading";
+
 
 const VisualizarProjeto = ({grupo}) => {
 
     const { idProjeto } = useParams();
-    const { setDadosProjeto } = useFormContext()
+    const { setDadosProjeto } = useProjetoContext()
     const [projeto, setProjeto] = useState(null)
     const [currentPage, setCurrentPage] = useState('default')
     const [loading, setLoading] = useState(true)
