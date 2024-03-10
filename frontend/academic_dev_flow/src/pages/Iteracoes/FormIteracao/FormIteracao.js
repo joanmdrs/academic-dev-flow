@@ -1,14 +1,14 @@
 import { Button, Form, Input, Select } from "antd";
 import React, { useEffect, useState } from "react";
-import { listarEtapasPorFluxo } from "../../../../../../services/fluxoEtapaService";
-import { buscarEtapaPeloId } from "../../../../../../services/etapaService";
-import { listarMembrosPorProjeto } from "../../../../../../services/membroProjetoService";
-import { buscarMembroPeloId } from "../../../../../../services/membroService";
+
 import { useForm } from "antd/es/form/Form";
-import Loading from "../../../../../../components/Loading/Loading";
-import { useFormContext } from "../../../context/Provider/Provider";
-import { atualizarIteracao, criarIteracao } from "../../../../../../services/iteracaoService";
-import { recarregarPagina } from "../../../../../../services/utils";
+import { useProjetoContext } from "../../../context/ProjetoContext";
+import { listarEtapasPorFluxo } from "../../../services/fluxoEtapaService";
+import { buscarEtapaPeloId } from "../../../services/etapaService";
+import { listarMembrosPorProjeto } from "../../../services/membroProjetoService";
+import { buscarMembroPeloId } from "../../../services/membroService";
+import { atualizarIteracao, criarIteracao } from "../../../services/iteracaoService";
+import Loading from "../../../components/Loading/Loading";
 
 const baseStyle = {
     display: "flex",
@@ -36,7 +36,7 @@ const OPTIONS_STATUS = [
 
 const FormIteracao = ({onReload}) => {
 
-    const { dadosProjeto, dadosIteracao } = useFormContext();
+    const { dadosProjeto, dadosIteracao } = useProjetoContext();
     const [form] = useForm();
     const [optionsEtapas, setOptionsEtapas] = useState([]);
     const [optionsMembros, setOptionsMembros] = useState([]);
