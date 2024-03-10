@@ -4,12 +4,12 @@ import React, { useEffect, useState } from "react";
 import { LuCalendarCheck2 } from "react-icons/lu";
 import { MdAccessTime } from "react-icons/md";
 import { HiOutlineUsers } from "react-icons/hi2";
-import { useFormContext } from "../../../context/Provider/Provider";
 import { formatDate } from "../../../../../../services/utils";
 import { GoCheck } from "react-icons/go";
 import { FaRegFolderOpen, FaTrash } from "react-icons/fa";
-import { concluirTarefas, excluirTarefas, listarTarefasPorProjeto, reabrirTarefas } from "../../../../../../services/tarefaService";
-import Loading from "../../../../../../components/Loading/Loading";
+import { useProjetoContext } from "../../../context/ProjetoContext";
+import { concluirTarefas, excluirTarefas, listarTarefasPorProjeto, reabrirTarefas } from "../../../services/tarefaService";
+import Loading from "../../../components/Loading/Loading";
 
 const ListaTarefas = ({onEdit, onDelete}) => {
 
@@ -74,7 +74,7 @@ const ListaTarefas = ({onEdit, onDelete}) => {
     ];
 
 
-    const {dadosProjeto, tarefasSelecionadas, setTarefasSelecionadas} = useFormContext()
+    const {dadosProjeto, tarefasSelecionadas, setTarefasSelecionadas} = useProjetoContext()
     const [tarefasPendentes, setTarefasPendentes] = useState([])
     const [tarefasResolvidas, setTarefasResolvidas] = useState([])
     const [loading, setLoading] = useState(true)
