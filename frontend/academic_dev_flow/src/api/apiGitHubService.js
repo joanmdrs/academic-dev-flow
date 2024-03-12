@@ -14,25 +14,25 @@ const email = 'joanmedeiros2018@gmail.com'
 
 export const criarDocumento = async (file_path, file_content, commit_message) => {
   try {
-    
-    const response = octokit.request('PUT /repos/{owner}/{repo}/contents/{path}', {
+    const contentBase64 = btoa(file_content);
+    const response = await octokit.request('PUT /repos/{owner}/{repo}/contents/{path}', {
       owner: owner,
       repo: repo,
       path: file_path,
       message: commit_message,
       committer: {
         name: name,
-        email: email
+        email: email,
       },
-      content: file_content,
+      content: contentBase64,
       headers: {
-        'accept': 'application/vnd.github.v3+json',
-        'X-GitHub-Api-Version': '2022-11-28'
-      }
+        'X-GitHub-Api-Version': '2022-11-28',
+      },
     });
+
     return response;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return { error: 'Falha ao escrever o conteúdo do arquivo' };
   }
 };

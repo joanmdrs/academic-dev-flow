@@ -74,7 +74,7 @@ const FormDocumento = () => {
 
     const handleSaveDocumento = async (dados) => {
         const file_path = (dados.file_path)
-        const file_content = btoa(dados.file_content)
+        const file_content = (dados.file_content)
         const commit_message = dados.commit_message
 
         const response = await criarDocumento(file_path, file_content, commit_message )
@@ -85,6 +85,7 @@ const FormDocumento = () => {
     const handleGetDocumentos = async (dados) => {
         console.log(dados)
         const response = await buscarDocumentos(dados.caminho)
+        console.log(response.data)
         const decodedContent = decodeURIComponent(escape(atob(response.data.content)));
         setDocumentos(decodedContent)
     }
