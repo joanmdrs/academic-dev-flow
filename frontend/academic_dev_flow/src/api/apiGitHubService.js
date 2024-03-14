@@ -39,14 +39,21 @@ export const criarDocumento = async (file_path, file_content, commit_message) =>
 
 
 export const buscarDocumentos = async (file_path) => {
-  const response = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
-    owner: owner,
-    repo: repo,
-    path: file_path,
-    headers: {
-      'X-GitHub-Api-Version': '2022-11-28'
-    }
-  })
+  try {
+    const response = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
+      owner: owner,
+      repo: repo,
+      path: file_path,
+      headers: {
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
+    })
+  
+    return response
 
-  return response
+  } catch (error) {
+    console.error(error);
+    return { error: 'Falha ao buscar os documentos do projeto' };
+  }
+  
 }
