@@ -1,0 +1,21 @@
+.conteudo-markdown table {
+    width: 100%; 
+    border-collapse: collapse; 
+    border: 2px solid #ddd; 
+}
+
+.conteudo-markdown th, 
+.conteudo-markdown td {
+    border: 1px solid #ddd; 
+    padding: 8px; 
+    text-align: left; 
+}
+
+.conteudo-markdown th {
+    background-color: #f2f2f2; 
+    color: #333; 
+}
+
+.conteudo-markdown tr:nth-child(even) {
+    background-color: #f9f9f9; 
+}
