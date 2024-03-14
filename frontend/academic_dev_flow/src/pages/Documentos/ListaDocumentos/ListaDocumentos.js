@@ -1,23 +1,35 @@
-import { Button, Card, Empty, Table, Tabs } from "antd";
+import { Button, Empty, Table } from "antd";
 import "./ListaDocumentos.css"
 import React, { useState } from "react";
 import { PiEye } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import { GoCommentDiscussion } from "react-icons/go";
-import { buscarDocumentos } from "../../../api/apiGitHubService"
-import { FcInfo } from "react-icons/fc";
-import { MdInfo } from "react-icons/md";
+import { buscarDocumentos } from "../../../api/apiGitHubService";
 import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
-import { IoClose } from "react-icons/io5";
-
+import { IoCloseCircleOutline } from "react-icons/io5";
+import { IoDocumentOutline } from "react-icons/io5";
+import { FcFolder } from "react-icons/fc";
+import VisualizarDocumento from "../VisualizarDocumento/VisualizarDocumento";
 
 const ListaDocumentos = () => {
+    const [documentos, setDocumentos] = useState([]);
+    const [exibirDocumentos, setExibirDocumentos] = useState(false);
+    const [currentPage, setCurrentPage] = useState('default')
+    const [documentoSelecionado, setDocumentoSelecionado] = useState(null);
+    const [currentPath, setCurrentPath] = useState('docs');
 
     const COLUNAS_TABELA_DOCUMENTOS = [
         {
             title: 'Nome',
             dataIndex: 'nome',
             key: 'nome',
+            render: (_, record) => (
+                <span style={{display: "flex", justifyContent: "baseline", gap: "10px"}}> 
+                    {record.tipo === "file" ? <IoDocumentOutline size="20px" /> : <FcFolder size="20px"/> }
+
+                    {record.nome}
+                </span>
+            ),
         },
         {
             title: (
@@ -34,100 +46,78 @@ const ListaDocumentos = () => {
             ),
             key: 'action',
             render: (_, record) => (
-              <Button>
-                <Link  to={record.link}>Visualizar</Link>
-              </Button>
+              <Button onClick={() => handleVisualizarDocumento(record)}>Visualizar</Button>
             ),
-        
-          }
-    ]
+        }
+    ];
 
-
-    const [documentos, setDocumentos] = useState([]);
-    const [primeiroAcesso, setPrimeiroAcesso] = useState(true)
-    const [exibirDocumentos, setExibirDocumentos] = useState(false)
-
-    const handleGetDocumentos = async () => {
-
-        const response = await buscarDocumentos('docs')
-
-        if (response.status === 200){
-
-            const listaDocumentos = response.data
-
-            const listaFormatada = listaDocumentos.map((item) => {
-
-                return {
-                    id: item.sha,
-                    nome: item.name,
-                    conteudo: item.content,
-                    caminho: item.path,
-                    link: item.html_url
-                }
-            })
-
-            setDocumentos(listaFormatada)
-
-
-            // const decodedContent = decodeURIComponent(escape(atob(response.data)));
-            // setDocumentos(decodedContent)
-        } 
-
-        setPrimeiroAcesso(false)
-        setExibirDocumentos(true)
-
-
+    const handleVisualizarDocumento = (record) => {
+        if (record.tipo === "dir") {
+            setCurrentPath(`${currentPath}/${record.nome}`);
+            handleGetDocumentos(record.caminho);
+        } else {
+            setDocumentoSelecionado(record);
+            setCurrentPage('visualizar');
+        }
     }
 
+    const handleGetDocumentos = async (path) => {
+        const response = await buscarDocumentos(path);
 
+        if (response.status === 200){
+            const listaDocumentos = response.data
+
+            console.log(listaDocumentos)
+            const listaFormatada = listaDocumentos.map((item) => ({
+                id: item.sha,
+                nome: item.name,
+                caminho: item.path,
+                tipo: item.type,
+                link: item.html_url
+            }));
+
+            setDocumentos(listaFormatada);
+        } 
+
+        setExibirDocumentos(true);
+    };
 
     return (
 
-        <div>
+        <div> 
 
-            {primeiroAcesso && <Card
-                color="red"
-                bordered={false}
-                style={{
-                    width: "100%",
-                    marginBottom: "20px",
-                    backgroundColor: "#00BCD4",
-                    color: "#fff",
-                    padding: "0 !important",
+            {currentPage === "default" && (
 
+                <React.Fragment>
+                    <div style={{marginBottom: "20px"}}> 
+                        {exibirDocumentos ? (
+                            <Button danger icon={<IoCloseCircleOutline/>} onClick={() => setExibirDocumentos(false)}> Fechar </Button>
+                        ) : (
+                            <Button type="primary" icon={<HiOutlineClipboardDocumentList/>} onClick={() => handleGetDocumentos(currentPath)}> Listar Documentos </Button>
+                        )}
+                    </div>
 
-                }}
-            >
-                 <p> Para visualizar os documentos do seu projeto, criados no repositório do GitHub, clique no botão 'Listar Documentos'. </p>
-            </Card>}
+                    <div>
+                        {exibirDocumentos && documentos.length !== 0 ? (
+                            <Table bordered="true" className="table-lista-documentos" columns={COLUNAS_TABELA_DOCUMENTOS} dataSource={documentos} />
+                        ) : exibirDocumentos ? (
+                            <Empty description="Não foram encontrados documentos para o seu projeto" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                        ) : null}
 
-            
-            {   exibirDocumentos ? 
-                (<Button danger  icon={<IoClose/>} onClick={() => setExibirDocumentos(false)}> Fechar </Button>)
-
-                : (<Button type="primary" icon={<HiOutlineClipboardDocumentList/>} onClick={() => handleGetDocumentos()}> Listar Documentos </Button>)
-
-            }
-
-            
-
-            { exibirDocumentos ?
-
-                <>
-                    { documentos.length !== 0 ? 
-                        <Table className="table-lista-documentos" columns={COLUNAS_TABELA_DOCUMENTOS} dataSource={documentos} />
-                        :  <Empty 
-                            description="Não foram encontrados documentos para o seu projeto"
-                            image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                    </div>
                     
-                    }
-                </>
-                : null
-            }
+                   
+                </React.Fragment>
+            )}
 
-
-
-           
+            {currentPage === "visualizar" && (
+                <React.Fragment>
+                    {documentoSelecionado && (
+                        <VisualizarDocumento documento={documentoSelecionado} onBack={()=> setCurrentPage('default')} />
+                    )}
+                </React.Fragment>
+            )}
+                
         </div>
     );
 };

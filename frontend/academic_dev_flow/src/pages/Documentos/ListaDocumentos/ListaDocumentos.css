@@ -1,9 +1,16 @@
-.table-lista-documentos table {
+.table-lista-documentos {
     margin-top: 20px;
 }
 
-.table-lista-documentos table thead  th.ant-table-cell {
+.table-lista-documentos table {
+    font-size: 13px;
+}
+
+.table-lista-documentos table tbody td.ant-table-cell {
+    border: 1px solid #d9d9d9;
+}
+
+.table-lista-documentos table thead th.ant-table-cell {
     background-color: var(--primary-color);
     color: #fff;
 }
-
