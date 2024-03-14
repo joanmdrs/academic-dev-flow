@@ -9,8 +9,8 @@ const GerenciarDocumentos = () => {
     return (
         <div> 
 
-            <FormDocumento />
-            {/* <ListaDocumentos /> */}
+            {/* <FormDocumento /> */}
+            <ListaDocumentos />
 
         </div>
     )

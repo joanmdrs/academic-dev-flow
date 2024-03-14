@@ -41,8 +41,6 @@ const Cronograma = (props) => {
         await excluirIteracao(record.id)
     }
 
-    console.log(props.tarefas)
-
 
     return (
         <div style={{...cronogramaStyle}}>

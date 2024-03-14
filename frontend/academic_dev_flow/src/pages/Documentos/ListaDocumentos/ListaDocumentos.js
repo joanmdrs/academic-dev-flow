@@ -1,66 +1,97 @@
-// import { Tabs } from "antd";
-// import React, { useEffect, useState } from "react";
-// import { octokit } from "../../../../../../api/apiGitHubService";
-// import Markdown from 'react-markdown';
-// import remarkGfm from 'remark-gfm';
+import { Button, Table, Tabs } from "antd";
+import React, { useEffect, useState } from "react";
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { PiEye } from "react-icons/pi";
+import { Link } from "react-router-dom";
+import { GoCommentDiscussion } from "react-icons/go";
+import { buscarDocumentos } from "../../../api/apiGitHubService"
+const ListaDocumentos = () => {
 
-// const ListaDocumentos = () => {
-//     useEffect(() => {
-//         const fetchData = async () => {
-//             await handleGetDocumentos();
-//         };
+    const COLUNAS_TABELA_DOCUMENTOS = [
+        {
+            title: 'Nome',
+            dataIndex: 'nome',
+            key: 'nome',
+        },
+        {
+            title: (
+                <> <GoCommentDiscussion/> Comentários  </>
+            ),
+            dataIndex: 'comments',
+            key: 'comments'
+        },
+        {
+            title: (
+              <>
+                <PiEye /> Ações
+              </>
+            ),
+            key: 'action',
+            render: (_, record) => (
+              <Button>
+                <Link  to={record.link}>Visualizar</Link>
+              </Button>
+            ),
+        
+          }
+    ]
 
-//         fetchData();
-//     }, []);
 
-//     const [documentos, setDocumentos] = useState([]);
+    const [documentos, setDocumentos] = useState([]);
+    const [exibirDocumentos, setExibirDocumentos] = useState(false)
 
-//     const handleGetDocumentos = async () => {
-//         try {
-//             const response = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
-//                 owner: 'joanmdrs',
-//                 repo: 'sigcli',
-//                 path: 'docs',
-//             });
+    const handleGetDocumentos = async () => {
 
-//             if (response.status === 200) {
-//                 const promises = response.data.map(async (item) => {
-//                     const response1 = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
-//                         owner: 'joanmdrs',
-//                         repo: 'sigcli',
-//                         path: item.path,
-//                     });
+        const response = await buscarDocumentos('docs')
 
-//                     const decodedContent = decodeURIComponent(escape(atob(response1.data.content)));
-//                     console.log("Documento: ", decodedContent);
+        if (response.status === 200){
 
-//                     return { path: item.path, content: decodedContent }; // Retorna o conteúdo do documento
-//                 });
+            const listaDocumentos = response.data
 
-//                 // Aguarde a resolução de todas as promessas antes de prosseguir
-//                 const results = await Promise.all(promises);
-//                 setDocumentos(results);
-//             }
-//         } catch (error) {
-//             console.error("Erro na solicitação:", error);
-//         }
-//     };
+            const listaFormatada = listaDocumentos.map((item) => {
 
-//     return (
-//         <div>
-//             {/* Se quiser renderizar a lista de documentos */}
-//             <ul>
-//                 {documentos.map((doc, index) => (
-//                     <li key={index}>
-//                         <strong>{doc.path}</strong>: 
-//                         <Markdown remarkPlugins={[remarkGfm]}>{doc.content}</Markdown>
-//                     </li>
-//                 ))}
-//             </ul>
+                return {
+                    id: item.sha,
+                    nome: item.name,
+                    conteudo: item.content,
+                    caminho: item.path,
+                    link: item.html_url
+                }
+            })
 
-            
-//         </div>
-//     );
-// };
+            setDocumentos(listaFormatada)
+            setExibirDocumentos(true)
 
-// export default ListaDocumentos;
+
+            // const decodedContent = decodeURIComponent(escape(atob(response.data)));
+            // setDocumentos(decodedContent)
+        }  
+    }
+
+
+
+    return (
+
+        <div>
+
+            <Button onClick={() => handleGetDocumentos()}> Listar Documentos </Button>
+
+            { exibirDocumentos && (<Table columns={COLUNAS_TABELA_DOCUMENTOS} dataSource={documentos} />)}
+
+           
+        </div>
+    );
+};
+
+export default ListaDocumentos;
+
+//  {/* Se quiser renderizar a lista de documentos */}
+//  <ul>
+//  {documentos.map((doc, index) => (
+//      <li key={index}>
+//          <strong>{doc.path}</strong>: 
+//          <Markdown remarkPlugins={[remarkGfm]}>{doc.content}</Markdown>
+//      </li>
+//  ))}
+// </ul>
