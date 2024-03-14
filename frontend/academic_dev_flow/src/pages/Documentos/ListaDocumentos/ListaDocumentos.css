@@ -1,0 +1,9 @@
+.table-lista-documentos table {
+    margin-top: 20px;
+}
+
+.table-lista-documentos table thead  th.ant-table-cell {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
