@@ -98,20 +98,22 @@ class AtualizarIteracaoView(APIView):
         
 class ExcluirIteracaoView(APIView):
     permission_classes = [IsAuthenticated]
-    
-    def delete(self, request, id): 
+
+    def delete(self, request):
         try:
-            iteracao = Iteracao.objects.get(pk=id)
-            
-            if iteracao is not None: 
-                iteracao.delete()
-                return Response({"detail": "Iteração excluída com sucesso"}, status=status.HTTP_204_NO_CONTENT)
-            else:
-                return JsonResponse({'error': 'Recurso não encontrado'}, status=status.HTTP_404_NOT_FOUND)  
-        
+            ids_iteracoes = request.GET.getlist('ids[]', [])
+
+            if not ids_iteracoes:
+                return Response({'error': 'IDs das iterações a serem excluídas não fornecidos'}, status=status.HTTP_400_BAD_REQUEST)
+
+            iteracoes = Iteracao.objects.filter(id__in=ids_iteracoes)
+
+            if not iteracoes.exists():
+                return JsonResponse({'error': 'Nenhuma iteração encontrada com os IDs fornecidos'}, status=status.HTTP_404_NOT_FOUND)
+
+            iteracoes.delete()
+
+            return Response({"detail": "Iterações excluídas com sucesso"}, status=status.HTTP_204_NO_CONTENT)
+
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-        
-        
-        
