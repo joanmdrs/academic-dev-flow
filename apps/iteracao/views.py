@@ -8,7 +8,9 @@ from .models import Iteracao
 from .serializers import IteracaoSerializer
 from apps.projeto.models import Projeto
 from apps.fluxo_etapa.models import FluxoEtapa
+from apps.etapa.models import Etapa
 from apps.membro_projeto.models import MembroProjeto
+from apps.membro.models import Membro
 from rest_framework.permissions import IsAuthenticated
     
 class CadastrarIteracaoView(APIView):
@@ -42,14 +44,36 @@ class ListarIteracoesPorProjetoView(APIView):
     
     def get(self, request, id_projeto):
         try:
-        
             iteracoes = Iteracao.objects.filter(projeto=id_projeto)
+            iteracoes_info = []
             
-            if iteracoes is not None: 
-                serializer = IteracaoSerializer(iteracoes, many=True)
-                return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+            for iteracao in iteracoes:
+
+                gerente = MembroProjeto.objects.get(id=iteracao.gerente_id)
+                membro = Membro.objects.get(id=gerente.membro_id)
+                fase = FluxoEtapa.objects.get(id=iteracao.fase_id)
+                etapa = Etapa.objects.get(id=fase.etapa_id)
+                
+                iteracoes_info.append({
+                    'id': iteracao.id,
+                    'nome': iteracao.nome,
+                    'numero': iteracao.numero,
+                    'data_inicio': iteracao.data_inicio,
+                    'data_fim': iteracao.data_fim,
+                    'status': iteracao.status,
+                    'projeto': iteracao.projeto_id,
+                    'gerente': gerente.id,
+                    'id_membro': membro.id,
+                    'nome_membro': membro.nome,
+                    'fase': fase.id,
+                    'id_etapa': etapa.id,
+                    'nome_etapa': etapa.nome,
+                })
+                
+            if iteracoes_info: 
+                return JsonResponse(iteracoes_info, safe=False, json_dumps_params={'ensure_ascii': False})
             
-            return Response({'error': 'Objeto não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Nenhuma iteração encontrada para este projeto.'}, status=status.HTTP_404_NOT_FOUND)
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
