@@ -194,9 +194,6 @@ const ListaTarefas = ({onEdit, onDelete}) => {
                   <Button danger icon={<FaTrash />} onClick={() => showDeleteConfirm()}> Excluir </Button>
 
                 </div>
-
-
-              
             }
           </div>
   

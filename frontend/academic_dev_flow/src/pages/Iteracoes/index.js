@@ -12,7 +12,6 @@ const CronogramaIteracoes = () => {
     const [mostrarIteracoes, setMostrarIteracoes] = useState(true)
     const {dadosProjeto, setDadosIteracao} = useProjetoContext()
     const [iteracoes, setIteracoes] = useState(null)
-    const [tarefas, setTarefas] = useState([])
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -30,24 +29,6 @@ const CronogramaIteracoes = () => {
         const response = await listarIteracoesPorProjeto(dadosProjeto.id)
         const iteracoesOrdenadas = response.data.sort((a, b) => a.numero - b.numero);
         setIteracoes(iteracoesOrdenadas)
-
-        // const promises = (response.data).map(async (iteracao) => {
-        //     const response1 = await listarTarefasPorIteracao(iteracao.id)
-        
-        //     if (response1.data.length > 0) {
-        //         return {
-        //             idIteracao: iteracao.id,
-        //             tarefas: response1.data
-        //         };
-        //     }
-        
-        //     return null; // Se não houver tarefas, retorne null
-        // });
-        
-        // const resultados = await Promise.all(promises);
-        // const tarefasComTarefas = resultados.filter((item) => item !== null);
-        
-        // setTarefas(tarefasComTarefas);
     }
 
     if (loading) {
@@ -72,7 +53,7 @@ const CronogramaIteracoes = () => {
         <React.Fragment>
             <div style={{display: "flex", justifyContent: "flex-end"}}>
                 { 
-                    mostrarIteracoes ? (<Button onClick={handleExibirForm} icon={<IoAdd/>}> Adicionar Iteração </Button>)
+                    mostrarIteracoes ? (<Button type="primary" onClick={handleExibirForm} icon={<IoAdd/>}> Adicionar Iteração </Button>)
                     : (<Button onClick={handleCancel} icon={<IoClose/>}> Cancelar </Button>)
                 }
                 

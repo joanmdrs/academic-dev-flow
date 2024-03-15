@@ -1,8 +1,9 @@
-import { Flex } from "antd";
+import { Flex, Table } from "antd";
 import React from "react";
 import CustomDropdown from "../CustomDropdown/CustomDropdown";
 import { useProjetoContext } from "../../../context/ProjetoContext";
 import { excluirIteracao } from "../../../services/iteracaoService";
+import { formatDate } from "../../../services/utils";
 
 
 const cronogramaStyle = {
@@ -28,12 +29,62 @@ const iteracaoStyle = {
     color: "#fff"
 }
 
-const Cronograma = (props) => {
+const Cronograma = ({iteracoes, exibirForm, }) => {
+
+    const COLUNAS_ITERACOES = [
+        {
+            title: 'Nome',
+            dataIndex: 'nome',
+            key: 'nome',
+            render: (_, record) => (
+                <span style={{cursor: "pointer", color: "var(--primary-color)"}} onClick={() => handleEdit(record)}>
+                    {record.nome}
+                </span>
+
+            )
+        },
+
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status'
+        },
+        {
+            title: 'Data de início',
+            dataIndex: 'data_inicio',
+            key: 'data_inicio',
+            render: (_, record) => (
+                <span>
+                    {formatDate(record.data_inicio)}
+                </span>
+            )
+        },
+        {
+            title: 'Data de término',
+            dataIndex: 'data_fim',
+            key: 'data_fim',
+            render: (_, record) => (
+                <span>
+                    {formatDate(record.data_fim)}
+                </span>
+            )
+        },
+        {
+            title: 'Gerente',
+            dataIndex: 'nome_membro',
+            key: 'nome_membro'
+        },
+        {
+            title: 'Fase',
+            dataIndex: 'nome_etapa',
+            key: 'nome_etapa'
+        }
+    ]
 
     const {setDadosIteracao} = useProjetoContext()
 
     const handleEdit = (record) => {
-        props.exibirForm()
+        exibirForm()
         setDadosIteracao(record)
     }
 
@@ -41,73 +92,27 @@ const Cronograma = (props) => {
         await excluirIteracao(record.id)
     }
 
+    const rowSelection = {
+        onChange: (selectedRowsKeys, selectedRows) => {
+          console.log(selectedRows)
+        },
+    };
 
     return (
         <div style={{...cronogramaStyle}}>
                 
             <h4 style={{textAlign: "center"}}> Cronograma de Iterações </h4> 
             {
-                props.iteracoes &&  
+                iteracoes &&  
                                     
-                (<Flex horizontal>
-                    {props.iteracoes.map((iteracao) => (
-                        <div
-                            
-                            key={iteracao.id}
-                            style={{
-                            ...colunaStyle,
-                            backgroundColor: iteracao.numero % 2 ? '#1677ff' : '#1677ffbf',
-                            }}
-
-                        >
-                            <div style={{display: 'flex', flexDirection: 'column', width: "100%"}}>
-                                <CustomDropdown iteracao={iteracao} handleEdit={handleEdit} handleDelete={handleDelete}/>
-
-
-                                <div style={{...iteracaoStyle}}>
-                                    {iteracao.nome}
-                                </div>
-
-                                {/* <div style={{display: "flex", alignItems: "center", flexDirection: "column", marginTop: "20px"}}>
-
-                                    { props.tarefas ? 
-                                        <div >
-                                            {props.tarefas.map((item) => {
-                                                if (item.idIteracao === iteracao.id) {
-                                                    return (
-                                                        <div key={item.id} style={{display: "flex", alignItems: "center", flexDirection: "column", gap: "10px"}}>
-                                                            {item.tarefas.map((task) => {
-                                                                return (
-                                                                    <div 
-                                                                        style={{
-                                                                            border: "1px solid #d9d9d9",
-                                                                            padding: "20px",
-                                                                            width: "100%",
-                                                                            borderRadius: "20px"
-                                                                        }} 
-                                                                        key={task.id}> {task.nome} 
-                                                                    </div>
-                                                                )
-                                                                
-                                                            })}
-                                                        </div>
-                                                    );
-                                                }
-                                                return null;
-                                            })}
-                                        </div>
-                                        
-
-                                        : null
-
-                                    }
-                                    
-                                </div> */}
-                            </div>
-                            
-                        </div>
-                    ))}
-                </Flex>)
+                <Table 
+                    bordered={true}
+                    className="style-table"
+                    columns={COLUNAS_ITERACOES}
+                    dataSource={iteracoes}
+                    rowKey={"id"}
+                    rowSelection={rowSelection}
+                />
 
             }
         </div>

@@ -4,6 +4,7 @@
   --primary-color: #1677FF;
   --second-color: #001529;
   --third-color: #002140;
+  --light-blue: #00AAFF;
 }
 
 * {
@@ -46,6 +47,15 @@ body {
 
 .global-table table th:first-child {
   width: 70px;
+}
+
+.style-table table {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.style-table table thead th.ant-table-cell {
+  background-color: var(--primary-color);
+  color: #fff;
 }
 
 .button-menu {
