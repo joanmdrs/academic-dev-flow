@@ -40,7 +40,7 @@ const CronogramaIteracoes = () => {
         setDadosIteracao(null)
     }
 
-    const handleExibirForm = () => {
+    const handleShowForm = () => {
         setMostrarIteracoes(false)
     }
 
@@ -53,7 +53,7 @@ const CronogramaIteracoes = () => {
         <React.Fragment>
             <div style={{display: "flex", justifyContent: "flex-end"}}>
                 { 
-                    mostrarIteracoes ? (<Button type="primary" onClick={handleExibirForm} icon={<IoAdd/>}> Adicionar Iteração </Button>)
+                    mostrarIteracoes ? (<Button type="primary" onClick={handleShowForm} icon={<IoAdd/>}> Adicionar Iteração </Button>)
                     : (<Button onClick={handleCancel} icon={<IoClose/>}> Cancelar </Button>)
                 }
                 
@@ -61,7 +61,7 @@ const CronogramaIteracoes = () => {
 
             { 
                 mostrarIteracoes ? (
-                    <Cronograma exibirForm={handleExibirForm} iteracoes={iteracoes} />
+                    <Cronograma onShow={handleShowForm} onReload={handleReload} iteracoes={iteracoes} />
                 ) :
                     <FormIteracao onReload={handleReload} />
             }
