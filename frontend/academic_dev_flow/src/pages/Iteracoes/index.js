@@ -51,10 +51,10 @@ const CronogramaIteracoes = () => {
 
     return (
         <React.Fragment>
-            <div style={{display: "flex", justifyContent: "flex-start", marginBottom: "20px"}}>
+            <div style={{display: "flex", justifyContent: "flex-end", marginBottom: "20px"}}>
                 { 
                     mostrarIteracoes ? (
-                        <Button type="primary" onClick={handleShowForm} icon={<IoAdd/>}> Adicionar Iteração </Button>
+                        <Button type="primary" ghost onClick={handleShowForm} shape="round" icon={<IoAdd/>}> Adicionar Iteração </Button>
                     ) : (
                     <Button  type="primary" danger onClick={handleCancel} icon={<IoClose/>}> Cancelar </Button>
                     )

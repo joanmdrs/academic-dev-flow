@@ -66,23 +66,23 @@ const VisualizarProjeto = ({grupo}) => {
                 <CustomBreadcrumb routes={breadcrumbRoutes} />
                 <div className="screen-view-project">
 
-                    <div className="global-div title"> 
+                    <div className="title"> 
                         { 
                             projeto !== null ? (
-                                <div> 
-                                    {projeto.nome}
-                                </div>
+                                <h4>{projeto.nome} </h4>
                             ) : null
                         }
 
                         <div style={{display: "flex", gap: "10px"}}>
                             <Button
+                                type={currentPage === 'default' ? "primary" : "default"}
                                 icon={<LuCalendarClock />} 
                                 onClick={() => setCurrentPage("default")}
                             >
                                 Iterações
                             </Button> 
                             <Button 
+                                type={currentPage === 'tarefas' ? "primary" : "default"}
                                 icon={<GoTasklist />} 
                                 onClick={() => setCurrentPage("tarefas")}
                             >
@@ -90,6 +90,7 @@ const VisualizarProjeto = ({grupo}) => {
                             </Button>
 
                             <Button 
+                                type={currentPage === 'documentos' ? "primary" : "default"}
                                 icon={<IoDocumentTextOutline />}
                                 onClick={() => setCurrentPage("documentos")}
                             > 
