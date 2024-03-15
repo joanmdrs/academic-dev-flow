@@ -49,8 +49,8 @@ const GerenciarTarefas = () => {
         <React.Fragment>
             <div>
                 <div className="button-menu" style={{marginBottom: "40px"}}> 
-                    { formVisivel ? (<Button onClick={handleCancelar} icon={<IoClose/>}> Cancelar </Button>) 
-                    : ( <Button onClick={handleAddTarefa} icon={<IoAdd/>}> Adicionar Tarefa </Button>)}
+                    { formVisivel ? (<Button type="primary" danger  onClick={handleCancelar} icon={<IoClose/>}> Cancelar </Button>) 
+                    : ( <Button type="primary" onClick={handleAddTarefa} icon={<IoAdd/>}> Adicionar Tarefa </Button>)}
                   
                 </div>
                  

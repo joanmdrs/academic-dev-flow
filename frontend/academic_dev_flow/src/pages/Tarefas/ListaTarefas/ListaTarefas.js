@@ -11,7 +11,7 @@ import { useProjetoContext } from "../../../context/ProjetoContext";
 import { concluirTarefas, excluirTarefas, listarTarefasPorProjeto, reabrirTarefas } from "../../../services/tarefaService";
 import Loading from "../../../components/Loading/Loading";
 
-const ListaTarefas = ({onEdit, onDelete}) => {
+const ListaTarefas = ({onEdit}) => {
 
     const columns = [
         {

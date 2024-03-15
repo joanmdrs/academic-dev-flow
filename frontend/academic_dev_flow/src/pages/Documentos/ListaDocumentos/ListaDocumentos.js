@@ -91,7 +91,7 @@ const ListaDocumentos = () => {
                 <React.Fragment>
                     <div style={{marginBottom: "20px"}}> 
                         {exibirDocumentos ? (
-                            <Button danger icon={<IoCloseCircleOutline/>} onClick={() => setExibirDocumentos(false)}> Fechar </Button>
+                            <Button type="primary" danger icon={<IoCloseCircleOutline/>} onClick={() => setExibirDocumentos(false)}> Fechar </Button>
                         ) : (
                             <Button type="primary" icon={<HiOutlineClipboardDocumentList/>} onClick={() => handleGetDocumentos(currentPath)}> Listar Documentos </Button>
                         )}
