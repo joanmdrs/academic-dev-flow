@@ -12,7 +12,7 @@ class Documento(models.Model):
     ]
     
     titulo = models.CharField(max_length=255)
-    caminho = models.URLField(null=True, blank=True)
+    caminho = models.CharField(null=True, blank=True)
     status = models.CharField(max_length=40, choices=STATUS_CHOICES, null=True, blank=True)
     data_criacao = models.DateTimeField(auto_now_add=True)
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE)
