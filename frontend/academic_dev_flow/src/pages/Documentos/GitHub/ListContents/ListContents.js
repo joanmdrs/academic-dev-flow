@@ -7,21 +7,21 @@ import { IoDocumentOutline } from "react-icons/io5";
 import { FcFolder } from "react-icons/fc";
 import VisualizarDocumento from "../../VisualizarDocumento/VisualizarDocumento";
 
-const ListContents = ({docs, onSearchDocs}) => {
+const ListContents = ({contents, onSearchDocs}) => {
     const [currentPage, setCurrentPage] = useState('default')
     const [documentoSelecionado, setDocumentoSelecionado] = useState(null);
     const [currentPath, setCurrentPath] = useState('docs');
 
     const COLUNAS_TABELA_DOCUMENTOS = [
         {
-            title: 'Nome',
-            dataIndex: 'nome',
-            key: 'nome',
+            title: 'Título',
+            dataIndex: 'titulo',
+            key: 'titulo',
             render: (_, record) => (
                 <span style={{display: "flex", justifyContent: "baseline", gap: "10px"}}> 
                     {record.tipo === "file" ? <IoDocumentOutline size="20px" /> : <FcFolder size="20px"/> }
 
-                    {record.nome}
+                    {record.titulo}
                 </span>
             ),
         },
@@ -47,8 +47,9 @@ const ListContents = ({docs, onSearchDocs}) => {
 
     const handleVisualizarDocumento = (record) => {
         if (record.tipo === "dir") {
-            setCurrentPath(`${currentPath}/${record.nome}`);
+            setCurrentPath(`${currentPath}/${record.caminho}`);
             onSearchDocs(record.caminho);
+            console.log(record.caminho)
         } else {
             setDocumentoSelecionado(record);
             setCurrentPage('visualizar');
@@ -64,8 +65,8 @@ const ListContents = ({docs, onSearchDocs}) => {
                 <React.Fragment>
 
                     {
-                        docs.length !== 0 ? (
-                            <Table bordered="true" className="table-lista-documentos" columns={COLUNAS_TABELA_DOCUMENTOS} dataSource={docs} />
+                        contents.length !== 0 ? (
+                            <Table bordered="true" className="table-lista-documentos" columns={COLUNAS_TABELA_DOCUMENTOS} dataSource={contents} />
                         ) : (
                             <Empty description="Não foram encontrados documentos para o seu projeto" image={Empty.PRESENTED_IMAGE_SIMPLE} />
                         ) 

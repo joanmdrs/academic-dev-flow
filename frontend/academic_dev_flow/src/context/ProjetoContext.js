@@ -9,8 +9,10 @@ export const ProjetoProvider = ({ children }) => {
   const [dadosProjeto, setDadosProjeto] = useState(null);
   const [dadosIteracao, setDadosIteracao] = useState(null);
   const [dadosTarefa, setDadosTarefa] = useState(null);
+  const [dadosDocumento, setDadosDocumento] = useState(null)
   const [tarefasSelecionadas, setTarefasSelecionadas] = useState([]);
   const [iteracoesSelecionadas, setIteracoesSelecionadas] = useState([])
+  const [documentosSelecionados, setDocumentosSelecionados] = useState([])
 
   return (
     <ProjetoContext.Provider
@@ -18,8 +20,10 @@ export const ProjetoProvider = ({ children }) => {
         dadosProjeto, setDadosProjeto,
         dadosIteracao, setDadosIteracao,
         dadosTarefa, setDadosTarefa,
+        dadosDocumento, setDadosDocumento,
         tarefasSelecionadas, setTarefasSelecionadas,
-        iteracoesSelecionadas, setIteracoesSelecionadas
+        iteracoesSelecionadas, setIteracoesSelecionadas,
+        documentosSelecionados, setDocumentosSelecionados
       }}
     >
       {children}

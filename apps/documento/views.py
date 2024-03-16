@@ -49,6 +49,7 @@ class FiltrarDocumentosPorProjetoView(APIView):
                 documentos_info.append({
                     'id': documento.id,
                     'titulo': documento.titulo,
+                    'caminho': documento.caminho,
                     'status': documento.status,
                     'data_criacao': documento.data_criacao,
                     'projeto': documento.projeto_id,

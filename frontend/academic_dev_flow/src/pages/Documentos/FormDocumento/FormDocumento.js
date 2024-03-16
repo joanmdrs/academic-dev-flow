@@ -4,6 +4,7 @@ import { useProjetoContext } from "../../../context/ProjetoContext";
 import { listarIteracoesPorProjeto } from "../../../services/iteracaoService";
 import { listarArtefatos } from "../../../services/artefatoService";
 import { criarDocumento } from "../../../api/apiGitHubService";
+import { useForm } from "antd/es/form/Form";
 
 const optionsStatus = [
     {
@@ -22,9 +23,10 @@ const optionsStatus = [
 
 const FormDocumento = ({onSubmit, onCancel}) => {
 
-    const {dadosProjeto} = useProjetoContext()
+    const {dadosProjeto, dadosDocumento} = useProjetoContext()
     const [optionsIteracao, setOptionsIteracao] = useState(null)
     const [optionsArtefato, setOptionsArtefato] = useState(null)
+    const [form] = useForm()
 
 
     const handleGetIteracoes = async () => {
@@ -59,6 +61,12 @@ const FormDocumento = ({onSubmit, onCancel}) => {
             if (dadosProjeto !== null){
                 await handleGetIteracoes()
                 await handleGetArtefatos()
+
+                if (dadosDocumento !== null) {
+                    form.setFieldsValue(dadosDocumento)
+                }
+
+
             }
         }
 
@@ -77,7 +85,7 @@ const FormDocumento = ({onSubmit, onCancel}) => {
 
     return (
 
-        <Form layout="vertical" className="global-form" onFinish={onSubmit}>
+        <Form layout="vertical" className="global-form" onFinish={onSubmit} form={form}>
             <Form.Item>
                 <h4> CADASTRAR DOCUMENTO </h4>
             </Form.Item>
