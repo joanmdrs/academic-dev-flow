@@ -1,6 +1,5 @@
 import { Button, Form, Input, Select } from "antd";
 import React, { useEffect, useState } from "react";
-import MDEditor from "@uiw/react-md-editor";
 import { useProjetoContext } from "../../../context/ProjetoContext";
 import { listarIteracoesPorProjeto } from "../../../services/iteracaoService";
 import { listarArtefatos } from "../../../services/artefatoService";
