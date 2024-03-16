@@ -91,6 +91,7 @@ const GerenciarDocumentos = () => {
             await excluirDocumentos(ids)
             setDocumentosSelecionados([])
         } 
+        handleReload()
       }
   
     const handleConfirmDelete = () => {

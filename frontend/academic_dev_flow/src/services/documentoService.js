@@ -29,10 +29,12 @@ export const buscarDocumentoPeloId = async (id) => {
 export const filtrarDocumentosPorProjeto = async (idProjeto) => {
     try {
         const response = await api.get(`documento/filtrar/${encodeURIComponent(idProjeto)}/`)
+        if (response.status === 200) {
+            return response
+        }
         return response
     } catch (error) {
         console.log(error)
-        NotificationManager.error('Falha ao filtrar os documentos, contate o suporte!')
         return {error: 'Falha ao filtrar os documentos!'}
     }
 }
@@ -53,7 +55,7 @@ export const atualizarDocumento = async (id, dados) => {
 
 export const excluirDocumentos = async (ids) => {
     try {
-        const response = await api.delete('documento/excluir/', {params: {ids: ids}})
+        const response = await api.delete('documento/excluir/', {params: {ids}})
         if (response.status === 204){
             NotificationManager.success('Documento(s) excluído(s) com sucesso !')
             return response

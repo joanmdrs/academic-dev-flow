@@ -74,6 +74,7 @@ class ListarTarefasPorProjetoView(APIView):
                     'iteracao': tarefa.iteracao_id,
                     'membros': membros_info,
                 })
+                
             return JsonResponse(tarefas_info, safe=False, json_dumps_params={'ensure_ascii': False})
         
                 

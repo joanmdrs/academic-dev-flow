@@ -70,11 +70,8 @@ class ListarIteracoesPorProjetoView(APIView):
                     'nome_etapa': etapa.nome,
                 })
                 
-            if iteracoes_info: 
-                return JsonResponse(iteracoes_info, safe=False, json_dumps_params={'ensure_ascii': False})
+            return JsonResponse(iteracoes_info, safe=False, json_dumps_params={'ensure_ascii': False})
             
-            return Response({'error': 'Nenhuma iteração encontrada para este projeto.'}, status=status.HTTP_404_NOT_FOUND)
-
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         

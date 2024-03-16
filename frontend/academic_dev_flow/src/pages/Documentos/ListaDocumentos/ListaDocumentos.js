@@ -11,7 +11,7 @@ const ListaDocumentos = ({docs, onSearch, onEdit, onDelete}) => {
     const [currentPage, setCurrentPage] = useState('default')
     const [documentoSelecionado, setDocumentoSelecionado] = useState(null);
     const [currentPath, setCurrentPath] = useState('docs');
-    const {documentosSelecionandos, setDocumentosSelecionados} = useProjetoContext()
+    const {documentosSelecionados, setDocumentosSelecionados} = useProjetoContext()
 
     const COLUNAS_TABELA_DOCUMENTOS = [
         {
@@ -77,7 +77,7 @@ const ListaDocumentos = ({docs, onSearch, onEdit, onDelete}) => {
             {currentPage === "default" && (
                 <div>
                     <div style={{display: "flex", justifyContent: "flex-end", marginRight: "20px"}}>
-                        {   documentosSelecionandos.length > 0  &&
+                        {   documentosSelecionados.length > 0  &&
                             <Button danger icon={<FaTrash />} onClick={onDelete}> Excluir </Button>
                         }
                     </div>
