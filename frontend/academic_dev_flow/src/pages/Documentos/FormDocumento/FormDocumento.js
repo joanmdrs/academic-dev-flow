@@ -20,7 +20,7 @@ const optionsStatus = [
     }
 ]
 
-const FormDocumento = () => {
+const FormDocumento = ({onSubmit, onCancel}) => {
 
     const {dadosProjeto} = useProjetoContext()
     const [optionsIteracao, setOptionsIteracao] = useState(null)
@@ -65,19 +65,19 @@ const FormDocumento = () => {
         fetchData()
     }, [dadosProjeto])
 
-    const handleSaveDocumento = async (dados) => {
-        const file_path = (dados.file_path)
-        const file_content = (dados.file_content)
-        const commit_message = dados.commit_message
-        const response = await criarDocumento(file_path, file_content, commit_message )
-        console.log(response)
-    }
+    // const handleSaveDocumento = async (dados) => {
+    //     const file_path = (dados.file_path)
+    //     const file_content = (dados.file_content)
+    //     const commit_message = dados.commit_message
+    //     const response = await criarDocumento(file_path, file_content, commit_message )
+    //     console.log(response)
+    // }
 
 
 
     return (
 
-        <Form layout="vertical" className="global-form" onFinish={handleSaveDocumento}>
+        <Form layout="vertical" className="global-form" onFinish={onSubmit}>
             <Form.Item>
                 <h4> CADASTRAR DOCUMENTO </h4>
             </Form.Item>
@@ -87,22 +87,22 @@ const FormDocumento = () => {
                     <Input type="text" name="titulo" placeholder="Ex.: Documento de Visão"/>
                 </Form.Item>
 
-                <Form.Item label="Path dentro do repositório" name="file_path" style={{flex: "1"}}> 
-                    <Input type="text" name="file_path" placeholder="docs/doc-visao.md" />
+                <Form.Item label="Path dentro do repositório" name="caminho" style={{flex: "1"}}> 
+                    <Input type="text" name="caminho" placeholder="docs/doc-visao.md" />
                 </Form.Item>
             </div>
 
             <div style={{display: "flex", gap: "20px"}}> 
                 <Form.Item label="Iteração" name="iteracao" style={{flex: "1"}}>
-                    <Select options={optionsIteracao}/>
+                    <Select options={optionsIteracao} name="iteracao" />
                 </Form.Item>
 
                 <Form.Item label="Categoria" name="artefato" style={{flex: "1"}}>
-                    <Select options={optionsArtefato}/>
+                    <Select options={optionsArtefato} name="artefato" />
                 </Form.Item>
                 
                 <Form.Item label="Status" name="status" style={{flex: "1"}}>
-                    <Select options={optionsStatus} />
+                    <Select options={optionsStatus} name="status" />
                 </Form.Item>
             </div>
 
@@ -112,7 +112,7 @@ const FormDocumento = () => {
                 </Form.Item>
 
                 <Form.Item>
-                    <Button> Cancelar </Button>
+                    <Button onClick={onCancel}> Cancelar </Button>
                 </Form.Item>
             </div>            
         </Form>
