@@ -1,6 +1,6 @@
 import { Octokit } from "octokit"  
 
-export const octokit = new Octokit({ 
+const octokit = new Octokit({ 
     auth: process.env.GITHUB_TOKEN
 });
 
@@ -32,8 +32,8 @@ export const criarDocumento = async (file_path, file_content, commit_message) =>
 
     return response;
   } catch (error) {
-    console.error(error);
-    return { error: 'Falha ao escrever o conteúdo do arquivo' };
+    console.log(error);
+    // return { error: 'Falha ao escrever o conteúdo do arquivo' };
   }
 };
 
