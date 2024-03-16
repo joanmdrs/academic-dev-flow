@@ -27,7 +27,7 @@ class CadastrarDocumentoView(APIView):
 class BuscarDocumentoPeloIdView(APIView):
     permission_classes = [IsAuthenticated]
     
-    def get(self, request): 
+    def get(self, request, id): 
         try:
             documento = Documento.objects.get(pk=id)
             serializer = DocumentoSerializer(documento, many=False)
@@ -90,7 +90,8 @@ class ExcluirDocumentosView(APIView):
 
     def delete(self, request):
         try:
-            ids_documentos = request.GET.getlist('ids[]', [])
+            ids_documentos = request.GET.getlist('ids')
+            print(ids_documentos)
 
             if not ids_documentos:
                 return Response({'error': 'IDs dos documentos a serem excluídos não fornecidos'}, status=status.HTTP_400_BAD_REQUEST)
