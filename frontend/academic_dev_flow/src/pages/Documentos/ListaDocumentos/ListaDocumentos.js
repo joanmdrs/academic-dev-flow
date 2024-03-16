@@ -11,9 +11,7 @@ import { IoDocumentOutline } from "react-icons/io5";
 import { FcFolder } from "react-icons/fc";
 import VisualizarDocumento from "../VisualizarDocumento/VisualizarDocumento";
 
-const ListaDocumentos = () => {
-    const [documentos, setDocumentos] = useState([]);
-    const [exibirDocumentos, setExibirDocumentos] = useState(false);
+const ListaDocumentos = ({docs, onSearchDocs}) => {
     const [currentPage, setCurrentPage] = useState('default')
     const [documentoSelecionado, setDocumentoSelecionado] = useState(null);
     const [currentPath, setCurrentPath] = useState('docs');
@@ -54,33 +52,12 @@ const ListaDocumentos = () => {
     const handleVisualizarDocumento = (record) => {
         if (record.tipo === "dir") {
             setCurrentPath(`${currentPath}/${record.nome}`);
-            handleGetDocumentos(record.caminho);
+            onSearchDocs(record.caminho);
         } else {
             setDocumentoSelecionado(record);
             setCurrentPage('visualizar');
         }
     }
-
-    const handleGetDocumentos = async (path) => {
-        const response = await buscarDocumentos(path);
-
-        if (response.status === 200){
-            const listaDocumentos = response.data
-
-            console.log(listaDocumentos)
-            const listaFormatada = listaDocumentos.map((item) => ({
-                id: item.sha,
-                nome: item.name,
-                caminho: item.path,
-                tipo: item.type,
-                link: item.html_url
-            }));
-
-            setDocumentos(listaFormatada);
-        } 
-
-        setExibirDocumentos(true);
-    };
 
     return (
 
@@ -89,24 +66,15 @@ const ListaDocumentos = () => {
             {currentPage === "default" && (
 
                 <React.Fragment>
-                    <div style={{marginBottom: "20px"}}> 
-                        {exibirDocumentos ? (
-                            <Button type="primary" danger icon={<IoCloseCircleOutline/>} onClick={() => setExibirDocumentos(false)}> Fechar </Button>
+
+                    {
+                        docs.length !== 0 ? (
+                            <Table bordered="true" className="table-lista-documentos" columns={COLUNAS_TABELA_DOCUMENTOS} dataSource={docs} />
                         ) : (
-                            <Button type="primary" icon={<HiOutlineClipboardDocumentList/>} onClick={() => handleGetDocumentos(currentPath)}> Listar Documentos </Button>
-                        )}
-                    </div>
-
-                    <div>
-                        {exibirDocumentos && documentos.length !== 0 ? (
-                            <Table bordered="true" className="table-lista-documentos" columns={COLUNAS_TABELA_DOCUMENTOS} dataSource={documentos} />
-                        ) : exibirDocumentos ? (
                             <Empty description="Não foram encontrados documentos para o seu projeto" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                        ) : null}
+                        ) 
+                    }
 
-                    </div>
-                    
-                   
                 </React.Fragment>
             )}
 
