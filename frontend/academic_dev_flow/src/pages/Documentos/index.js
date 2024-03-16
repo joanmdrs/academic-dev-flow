@@ -1,23 +1,35 @@
 import React, { useState } from "react";
 import FormDocumento from "./FormDocumento/FormDocumento";
-import ListaDocumentos from "./ListaDocumentos/ListaDocumentos";
 import { Button } from "antd";
-import { IoAdd, IoAddCircle, IoCloseCircleOutline } from "react-icons/io5";
+import { IoAdd, IoCloseCircleOutline } from "react-icons/io5";
 import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
 import { buscarDocumentos } from "../../api/apiGitHubService";
+import { useProjetoContext } from "../../context/ProjetoContext";
+import { atualizarDocumento, criarDocumento } from "../../services/documentoService";
+import ListaDocumentos from "./GitHub/ListContents/ListContents";
 
 const GerenciarDocumentos = () => {
 
+    const {dadosProjeto} = useProjetoContext()
     const [exibirForm, setExibirForm] = useState(false)
     const [exibirDocs, setExibirDocs] = useState(false)
     const [docs, setDocs] = useState([])
+    const [acaoForm, setAcaoForm] = useState('create')
     const defaultPath = "docs"
 
     const handleAddDoc = () => {
+        setAcaoForm('create')
         setExibirForm(true)
         setExibirDocs(false)
     }
 
+    const handleReload = async () => {
+        setAcaoForm('create')
+        setExibirForm(false)
+        setExibirDocs(false)
+    }
+
+    // Esta função busca os documentos do repositório
     const handleGetDocumentos = async (path) => {
         const response = await buscarDocumentos(path);
 
@@ -32,12 +44,21 @@ const GerenciarDocumentos = () => {
                 tipo: item.type,
                 link: item.html_url
             }));
-
             setDocs(listaFormatada);
         } 
-
         setExibirDocs(true);
     };
+
+    const handleSaveDocumento = async (dados) => {
+        dados['projeto'] = dadosProjeto.id
+
+        if (acaoForm === 'create'){
+            await criarDocumento(dados)
+        } else if (acaoForm === 'update'){
+            await atualizarDocumento(dadosProjeto.id, dados)
+        }
+        handleReload()
+    }
 
     return (
 
@@ -50,17 +71,13 @@ const GerenciarDocumentos = () => {
                     <Button icon={<HiOutlineClipboardDocumentList/>} onClick={() => handleGetDocumentos(defaultPath)}> Listar documentos do GitHub </Button>
                 )}
 
-                <Button icon={<IoAdd />} onClick={() => handleAddDoc()}> Adicionar Documento </Button>
-
+                { !exibirForm && <Button icon={<IoAdd />} onClick={() => handleAddDoc()}> Adicionar Documento </Button> }
+                
             </div>
 
-            {
-                exibirDocs && <ListaDocumentos docs={docs} />
-            }
+            { exibirDocs && <ListaDocumentos docs={docs} /> }
 
-            {
-                exibirForm && <FormDocumento />
-            }
+            { exibirForm && <FormDocumento onSubmit={handleSaveDocumento} onCancel={handleReload}/> }
 
         </div>
     )
