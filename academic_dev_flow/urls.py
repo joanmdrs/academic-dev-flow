@@ -30,6 +30,7 @@ urlpatterns = [
     path('iteracao/', include('apps.iteracao.urls', namespace='iteracao')),
     path('tarefa/', include('apps.tarefa.urls', namespace='tarefa')),
     path('documento/', include('apps.documento.urls', namespace='documento')),
+    path('comentario/', include('apps.comentario.urls', namespace='comentario')),
     path('auth/', include('apps.api.urls', namespace='api')),
 ]
 
