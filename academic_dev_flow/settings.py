@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'apps.iteracao',
     'apps.tarefa',
     'apps.documento',
+    'apps.comentario',
     'apps.api',
 ]
 
