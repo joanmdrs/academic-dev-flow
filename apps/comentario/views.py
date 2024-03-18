@@ -30,7 +30,7 @@ class BuscarComentarioPeloIdView(APIView):
     def get(self, request, id): 
         try:
             comentario = Comentario.objects.get(pk=id)
-            serializer = ComentarioSerializer(documento, many=False)
+            serializer = ComentarioSerializer(comentario, many=False)
             return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
             
         except Exception as e:
@@ -44,7 +44,7 @@ class AtualizarComentarioView(APIView):
             
             comentario = Comentario.objects.get(pk=id)
             
-            serializer = ComentarioSerializer(documento, data=request.data, partial=True)
+            serializer = ComentarioSerializer(comentario, data=request.data, partial=True)
             
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
@@ -54,7 +54,8 @@ class AtualizarComentarioView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-class ExcluirComentarioView(BaseProjetoView):
+class ExcluirComentarioView(APIView):
+    permission_classes = [IsAuthenticated]
     def delete(self, request, id):
         try:
             comentario = Comentario.objects.get(pk=id)
