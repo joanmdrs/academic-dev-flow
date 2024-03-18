@@ -7,6 +7,7 @@ import { Button, Layout, Menu } from "antd";
 import BotaoVoltar from "../../../components/Botoes/BotaoVoltar/BotaoVoltar";
 import Loading from "../../../components/Loading/Loading";
 import { MenuUnfoldOutlined, MenuFoldOutlined, FileTextOutlined, StarOutlined, CommentOutlined } from '@ant-design/icons';
+import FormComentario from "../../Comentario/FormComentario/FormComentario";
 
 const { Sider, Content } = Layout;
 
@@ -87,8 +88,9 @@ const VisualizarDocumento = ({ documento, onBack }) => {
                     )}
                     {currentPage === 'comments' && (
                         <div>
-                            {/* Componente de Comentários */}
-                            <h1>Aqui será a área de comentários</h1>
+                            <Button type="primary"> Adicionar Comentário </Button>
+
+                            <FormComentario />
                         </div>
                     )}
                 </Content>
