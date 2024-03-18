@@ -60,6 +60,6 @@ class TokenService:
         if additional_data:
             payload.update(additional_data)
 
-        token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256').decode('utf-8')
+        token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
 
         return token

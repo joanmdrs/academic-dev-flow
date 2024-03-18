@@ -15,7 +15,6 @@ export const criarIteracao = async (dados) => {
         NotificationManager.error('Falha ao cadastrar a iteração, contate o suporte !')
         return { error: "Erro ao cadastrar a iteração"};
     }
-
 }
 
 export const listarIteracoesPorProjeto = async (idProjeto) => {
@@ -40,17 +39,16 @@ export const atualizarIteracao = async (id, dados) => {
     }
 }
 
-export const excluirIteracao = async (id) => {
+export const excluirIteracoes = async (ids) => {
     try {
-        const response = await api.delete(`iteracao/excluir/${encodeURIComponent(id)}/`)
-
+        const response = await api.delete('/iteracao/excluir/',{params: {ids: ids}})
         if (response.status === 204){
-            NotificationManager.success('Iteração excluída com sucesso !')
+            NotificationManager.success('Iteração(oes) excluída(s) com sucesso!')
             return response
         }
     } catch (error) {
         console.log(error)
-        NotificationManager.error('Falha ao excluir a iteração')
-        return {error: 'Erro ao excluir a iteração'}
+        NotificationManager.error('Falha ao excluir a(s) iteração(oes), contate o suporte!')
+        return {error: 'Erro ao excluir a(s) iteração(oes)!'}
     }
 }

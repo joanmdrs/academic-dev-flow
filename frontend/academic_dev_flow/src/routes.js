@@ -1,18 +1,19 @@
 import React from 'react';
 import { Routes as Switch, Route } from 'react-router-dom';
-import Home from './pages/home/Home';
 import Projeto from './pages/Projeto';
 import Etapa from './pages/Etapa';
 import Membro from './pages/Membro';
 import Artefato from './pages/Artefato';
-import StudentDashboard from './pages/Dashboard/StudentDashboard/StudentDashboard';
 import AdminRoutes from './router/AdminRoutes/AdminRoutes';
 import StudentRoutes from './router/StudentRoutes/StudentRoutes';
 import Fluxo from './pages/Fluxo';
 import Login from './pages/Auth/Login';
-import ProjectsSection from './pages/Dashboard/StudentDashboard/screens/ProjectSection/ProjectsSection';
-import ViewProject from './pages/Dashboard/StudentDashboard/screens/ViewProject/ViewProject';
-import { IteracaoProvider } from './pages/Dashboard/StudentDashboard/context/ProviderIteracao/ProviderIteracao';
+import TeacherRoutes from './router/TeacherRoutes/TeacherRoutes';
+import MeusProjetos from './pages/Projeto/screens/MeusProjetos/MeusProjetos';
+import VisualizarProjeto from './pages/Projeto/screens/VisualizarProjeto/VisualizarProjeto';
+import { ProjetoProvider } from './context/ProjetoContext';
+import HomeProfessor from './pages/Perfis/Professor/Home';
+import HomeAluno from './pages/Perfis/Aluno/HomeAluno';
 
 function Routes() {
  
@@ -22,7 +23,7 @@ function Routes() {
 
       {/* Admin */}
       <Route element={<AdminRoutes />}>
-        <Route path="/admin/home" Component={Home} exact/>
+        {/* <Route path="/admin/home" Component={Home} exact/> */}
         <Route path="/admin/projetos" Component={Projeto} exact/>
         <Route path="/admin/fluxos/gerenciar" Component={Fluxo} exact/>
         <Route path="/admin/etapas" Component={Etapa} exact/>
@@ -32,10 +33,19 @@ function Routes() {
 
       {/* Aluno */}
       <Route element={<StudentRoutes />}>
-        <Route path='/aluno/home' Component={StudentDashboard} exact/>
-        <Route path='/aluno/projetos' Component={ProjectsSection} exact/>
-        <Route path='/aluno/projetos/visualizar/:projectId' element={
-          <IteracaoProvider> <ViewProject /> </IteracaoProvider>
+        <Route path='/aluno/home' Component={HomeAluno} exact/>
+        <Route path='/aluno/projetos' element={<MeusProjetos  grupo="aluno" />} exact/>
+        <Route path='/aluno/projetos/visualizar/:idProjeto' element={
+          <ProjetoProvider> <VisualizarProjeto grupo={'aluno'} /> </ProjetoProvider>
+        } exact/> 
+      </Route>
+
+      {/* Professor */}
+      <Route element={<TeacherRoutes />}>
+        <Route path='/professor/home' Component={HomeProfessor} exact/>
+        <Route path='/professor/projetos' element={<MeusProjetos  grupo="professor" />} exact/>
+        <Route path='/professor/projetos/visualizar/:idProjeto' element={
+          <ProjetoProvider> <VisualizarProjeto grupo={'professor'} /> </ProjetoProvider>
         } exact/> 
       </Route>
     </Switch>

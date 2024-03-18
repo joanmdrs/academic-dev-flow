@@ -1,3 +1,4 @@
+import { NotificationManager } from "react-notifications";
 import api from "../api/api";
 
 export const criarMembro = async (dadosForm) => {
@@ -62,4 +63,17 @@ export const atualizarMembro = async (dadosForm, idMembro) => {
     }
     const resposta = await api.patch(`/membro/atualizar/${encodeURIComponent(idMembro)}/`, dadosEnviar)
     return resposta
+}
+
+export const buscarMembrosPorListaIds = async (listaIds) => {
+
+    try {
+        const response = await api.get('/membro/listar/', {params: {ids: listaIds}});
+        return response;
+    } catch (error) {
+        console.log(error)
+        NotificationManager.error("Falha ao buscar os membros, contate o suporte!")
+        return {error: "Falha ao buscar os membros"}
+    }
+    
 }

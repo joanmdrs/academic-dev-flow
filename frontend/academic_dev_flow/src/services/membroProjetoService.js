@@ -47,3 +47,15 @@ export const buscarQuantidadeMembrosPorProjeto = async (idProjeto) => {
         NotificationManager.error('Falha na operação, contate o suporte !')
     }
 }
+
+export const listarMembrosPeloIdProjeto = async (idProjeto) => {
+
+    try {
+        const response = await api.get(`membro_projeto/listar/projeto/${encodeURIComponent(idProjeto)}/`)
+        return response
+    } catch (error) {
+        console.log(error)
+        NotificationManager.error('Falha ao buscar os dados dos membros, contate o suporte!')
+        return {error: 'Erro ao buscar os dados'}
+    }
+}

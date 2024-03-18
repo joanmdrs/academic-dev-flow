@@ -10,5 +10,5 @@ urlpatterns = [
     path('buscar/<int:id>/', BuscarMembroPorIdView.as_view(), name='buscar_membro_pelo_id'),
     path('excluir/<int:id>/', ExcluirMembroView.as_view(), name='excluir_membro'),
     path('atualizar/<int:id>/', AtualizarMembroView.as_view(), name='atualizar_membro'),
-    path('listar/', ListarMembrosView.as_view(), name='listar_membros')
+    path('listar/', BuscarMembrosPorListaIdsView.as_view(), name='listar_membros_por_lista_ids')
 ]
