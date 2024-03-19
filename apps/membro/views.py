@@ -103,6 +103,24 @@ class BuscarMembrosPorNomeView(BaseMembroView):
                 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class BuscarMembroPeloUserView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request, id_user):
+        try:
+            membro = Membro.objects.get(usuario_id=id_user)
+            
+            if membro: 
+                
+                serializer = MembroSerializer(membro, many=False)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+
+            return Response({'error': 'Membro não encontrado'}, status=status.HTTP_404_NOT_FOUND)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 class BuscarMembroPorIdView(APIView):
     permission_classes = [IsAuthenticated]
