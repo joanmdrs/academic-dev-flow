@@ -30,7 +30,6 @@ const GerenciarDocumentos = () => {
         const response = await filtrarDocumentosPorProjeto(dadosProjeto.id)
 
         if (response.status === 200){
-            console.log(response.data)
             setDocs(response.data)
         }   
     }
@@ -59,7 +58,6 @@ const GerenciarDocumentos = () => {
         setExibirContents(false)
         setExibirDocs(false)
         setDadosDocumento(record)
-        console.log(record)
     }
 
     const handleReload = async () => {
@@ -72,7 +70,6 @@ const GerenciarDocumentos = () => {
     }
 
     const handleSaveDoc = async (dados) => {
-        console.log(dados)
         dados['projeto'] = dadosProjeto.id
 
         if (acaoForm === 'create'){
@@ -86,7 +83,6 @@ const GerenciarDocumentos = () => {
     const handleDeleteDoc = async () => {
 
         if (documentosSelecionados !== null) {
-            console.log(documentosSelecionados)
             const ids = documentosSelecionados.map((item) => item.id)
             await excluirDocumentos(ids)
             setDocumentosSelecionados([])
