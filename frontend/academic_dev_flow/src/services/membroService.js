@@ -38,6 +38,21 @@ export const buscarMembroPeloId = async (parametro) => {
     return resposta
 }
 
+export const buscarMembroPeloUser = async (idUser) => {
+    try {
+        const response = await api.get(`membro/buscar/usuario/${encodeURIComponent(idUser)}/`)
+
+        if (response.status === 200){
+            return response
+        }
+        
+    } catch (error) {
+        console.log(error)
+        NotificationManager.error('Não foi possível encontrar o membro, contate o suporte!')
+        return {error: 'Falha ao buscar o recurso!'}
+    }
+}
+
 export const excluirMembro = async (id) => {
     const resposta = await api.delete(`/membro/excluir/${encodeURIComponent(id)}/`)
     return resposta
