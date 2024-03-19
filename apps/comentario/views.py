@@ -66,3 +66,15 @@ class ExcluirComentarioView(APIView):
                 return JsonResponse({'error': 'Recurso não encontrado'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class ListarComentariosPorArtefatoView(APIView):
+    def get(self, request, id_artefato):
+        comentarios = Comentario.objects.filter(documento_id=id_artefato)
+        serializer = ComentarioSerializer(comentarios, many=True)
+        return Response(serializer.data)
+
+class ComentarioTreeView(APIView):
+    def get(self, request, id_artefato):
+        comentarios = Comentario.objects.filter(documento_id=id_artefato, comentario_pai__isnull=True)
+        arvore_comentarios = Comentario.construir_arvore(comentarios)
+        return Response(arvore_comentarios)

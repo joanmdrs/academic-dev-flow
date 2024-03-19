@@ -1,10 +1,12 @@
 from django.db import models
 from apps.membro_projeto.models import MembroProjeto
+from apps.documento.models import Documento
 
 class Comentario(models.Model):
     texto = models.TextField()
     data_hora = models.DateTimeField(auto_now_add=True)
     autor = models.ForeignKey(MembroProjeto, on_delete=models.CASCADE)
+    documento = models.ForeignKey(Documento, on_delete=models.CASCADE, null=True, blank=True)  
     comentario_pai = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='respostas')
 
     def __str__(self):
