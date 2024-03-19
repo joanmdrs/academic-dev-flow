@@ -9,3 +9,18 @@ class Comentario(models.Model):
 
     def __str__(self):
         return f'Comentário por {self.autor.membro.nome} em {self.data_hora}'
+    
+    @classmethod
+    def construir_arvore(cls, comentarios, comentario_pai=None):
+        arvore = []
+        for comentario in comentarios:
+            if comentario.comentario_pai == comentario_pai:
+                subarvore = cls.construir_arvore(comentarios, comentario)
+                arvore.append({
+                    'id': comentario.id,
+                    'texto': comentario.texto,
+                    'data_hora': comentario.data_hora,
+                    'autor': comentario.autor,
+                    'respostas': subarvore
+                })
+        return arvore
