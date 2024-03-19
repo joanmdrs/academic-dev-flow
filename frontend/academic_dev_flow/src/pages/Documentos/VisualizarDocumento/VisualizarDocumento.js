@@ -88,8 +88,6 @@ const VisualizarDocumento = ({ documento, onBack }) => {
                     )}
                     {currentPage === 'comments' && (
                         <div>
-                            <Button type="primary"> Adicionar Comentário </Button>
-
                             <FormComentario />
                         </div>
                     )}
