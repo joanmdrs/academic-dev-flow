@@ -10,9 +10,6 @@
     cursor: pointer;
   }
   
-  .actions-iteration svg {
-    fill: #fff; 
-  }
   
   .dropdown-content {
     display: none;

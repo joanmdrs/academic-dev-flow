@@ -4,7 +4,7 @@ import { IoIosMore } from 'react-icons/io';
 import { FiEdit, FiTrash } from 'react-icons/fi';
 import './CustomDropdown.css';
 
-const CustomDropdown = ({ iteracao, handleEdit, handleDelete }) => {
+const CustomDropdown = ({ item, handleEdit, handleDelete }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleteConfirmVisible, setDeleteConfirmVisible] = useState(false);
 
@@ -24,7 +24,7 @@ const CustomDropdown = ({ iteracao, handleEdit, handleDelete }) => {
         okText: 'Sim',
         cancelText: 'Não',
         onOk: async () => {
-          await handleDelete(iteracao);
+          await handleDelete(item);
           setIsOpen(false);
         },
         onCancel: () => {
@@ -42,7 +42,7 @@ const CustomDropdown = ({ iteracao, handleEdit, handleDelete }) => {
 
       {isOpen && (
             <div className="dropdown-content">
-                <Button type="text" onClick={() => handleEdit(iteracao)}>
+                <Button type="text" onClick={() => handleEdit(item)}>
                     <FiEdit /> Editar
                 </Button>
 
