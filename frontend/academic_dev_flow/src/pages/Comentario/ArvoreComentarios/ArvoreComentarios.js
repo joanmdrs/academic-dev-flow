@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './ArvoreComentarios.css';
 import { Button, Dropdown, Menu, Space } from 'antd';
 import FormComentario from '../FormComentario/FormComentario';
-import { criarComentario, listarComentariosPorDocumento } from '../../../services/comentarioService';
+import { atualizarComentario, criarComentario, excluirComentario, listarComentariosPorDocumento } from '../../../services/comentarioService';
 import { Editor } from 'primereact/editor';
 import { SlOptions } from 'react-icons/sl';
 import { formatDate } from '../../../services/utils';
@@ -37,10 +37,11 @@ const ArvoreComentarios = ({ documento }) => {
     setEditorVisible(false);
   };
 
-  const handleSaveEdit = () => {
-    // Implemente a lógica para salvar o comentário editado
+  const handleUpdateComment = async (id, dados) => {
+    await atualizarComentario(id, dados)
     setComentarioEditado(null);
     setEditorVisible(false);
+    await handleGetComments()
   };
 
   const handleCreateComment = async (autor, comment) => {
@@ -51,6 +52,11 @@ const ArvoreComentarios = ({ documento }) => {
     }
 
     await criarComentario(dados)
+    await handleGetComments()
+  }
+  
+  const handleDeleteComment = async (idComentario) => {
+    await excluirComentario(idComentario)
     await handleGetComments()
   }
 
@@ -75,7 +81,7 @@ const ArvoreComentarios = ({ documento }) => {
                 <Dropdown trigger={['click']} overlay={
                     <Menu>
                       <Menu.Item onClick={() => handleEdit(comentario)} key="1">Editar</Menu.Item>
-                      <Menu.Item style={{color: 'red'}} key="2">Excluir</Menu.Item>
+                      <Menu.Item onClick={() => handleDeleteComment(comentario.id)} style={{color: 'red'}} key="2">Excluir</Menu.Item>
                     </Menu>
                   }>
                   <Button onClick={(e) => e.preventDefault()}>
@@ -97,7 +103,7 @@ const ArvoreComentarios = ({ documento }) => {
                   />
 
                   <div style={{display: 'flex', gap: '5px'}}>
-                    <Button type='primary'> Atualizar Comentário</Button>
+                    <Button onClick={() => handleUpdateComment(comentario.id, comentarioEditado)}  type='primary'> Atualizar Comentário</Button>
                     <Button onClick={handleCancelEdit} danger> Cancelar </Button>
                   </div>
 
