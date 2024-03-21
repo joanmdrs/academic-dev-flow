@@ -8,5 +8,6 @@ urlpatterns = [
     path('buscar/<int:id>/', BuscarComentarioPeloIdView.as_view(), name='buscar_comentario_pelo_id'),
     path('atualizar/<int:id>/', AtualizarComentarioView.as_view(), name='atualizar_comentario'),
     path('excluir/<int:id>/', ExcluirComentarioView.as_view(), name='excluir_comentario'),
+    path('listar/documento/<int:id_documento>/', ListarComentariosPorDocumentoView.as_view(), name='filtrar_comentarios_por_documento')
     
 ]

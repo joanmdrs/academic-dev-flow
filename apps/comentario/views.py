@@ -4,6 +4,8 @@ from rest_framework import status
 from django.http import HttpResponseNotAllowed, JsonResponse
 from .models import Comentario
 from .serializers import ComentarioSerializer
+from apps.membro_projeto.models import MembroProjeto
+from apps.membro.models import Membro
 from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
 
@@ -67,14 +69,31 @@ class ExcluirComentarioView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-class ListarComentariosPorArtefatoView(APIView):
-    def get(self, request, id_artefato):
-        comentarios = Comentario.objects.filter(documento_id=id_artefato)
-        serializer = ComentarioSerializer(comentarios, many=True)
-        return Response(serializer.data)
+class ListarComentariosPorDocumentoView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, id_documento):
+        comentarios = Comentario.objects.filter(documento_id=id_documento)
+        comentarios_info = []
+        
+        for comentario in comentarios:
+            
+            membro_projeto = MembroProjeto.objects.get(id=comentario.autor_id)
+            membro = Membro.objects.get(id=membro_projeto.membro_id)            
+            comentarios_info.append({
+                'id': comentario.id,
+                'texto': comentario.texto,
+                'data_hora': comentario.data_hora,
+                'comentario_pai': comentario.comentario_pai,
+                'autor': comentario.autor_id,
+                'nome_autor': membro.nome
+                
+            })
+
+        return Response(comentarios_info, status=status.HTTP_200_OK)
 
 class ComentarioTreeView(APIView):
-    def get(self, request, id_artefato):
-        comentarios = Comentario.objects.filter(documento_id=id_artefato, comentario_pai__isnull=True)
+    permission_classes = [IsAuthenticated]
+    def get(self, request, id_documento):
+        comentarios = Comentario.objects.filter(documento_id=id_documento, comentario_pai__isnull=True)
         arvore_comentarios = Comentario.construir_arvore(comentarios)
         return Response(arvore_comentarios)
