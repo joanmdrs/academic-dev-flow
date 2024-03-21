@@ -6,10 +6,9 @@ import { decodeToken } from "react-jwt";
 import { buscarMembroPeloUser } from "../../../services/membroService";
 import { criarComentario } from "../../../services/comentarioService";
                 
-const FormComentario = () => {
+const FormComentario = ({onSubmit}) => {
 
-    const [contentEditor, setContentEditor] = useState('');
-
+    const [comment, setComment] = useState('');
     const [token] = useState(localStorage.getItem("token") || null);
     const [autor, setAutor] = useState(null)
 
@@ -28,27 +27,21 @@ const FormComentario = () => {
 
         const decodedToken = await decodeToken(token);
         const response = await buscarMembroPeloUser(decodedToken.user_id)
-        setAutor(response.data)
-    }
-
-    const handleSaveComment = async () => {
-        const dados = {
-            texto: contentEditor,
-            autor: autor.id_membro_projeto
-        }
-
-        const response = await criarComentario(dados)
-        console.log(response)
+        const idAutor = response.data.id_membro_projeto
+        setAutor(idAutor)
     }
 
     return (
 
-        <Form className="form-comment" layout="vertical" onFinish={handleSaveComment}>
-            <Form.Item className="form-item-text-editor" label='Adicione um comentário' >
+        <Form className="form-comments" layout="vertical" onFinish={() => onSubmit(autor, comment)}>
+            <Form.Item>
+
+                <h3> Adicione um comentário </h3>
+
                 <Editor 
                     className="text-editor"
-                    value={contentEditor} 
-                    onTextChange={(e) => setContentEditor(e.htmlValue)} 
+                    value={comment} 
+                    onTextChange={(e) => setComment(e.htmlValue)} 
                     style={{ 
                         minHeight: "100px"
                     }} 

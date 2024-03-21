@@ -53,3 +53,16 @@ export const excluirComentario = async (id) => {
         return {error: 'Falha ao excluir o comentário'}
     }
 }
+
+export const listarComentariosPorDocumento = async (idDocumento) => {
+    try {
+        const response = await api.get(`comentario/listar/documento/${encodeURIComponent(idDocumento)}/`)
+        if (response.status === 200){
+            return response
+        }
+        
+    } catch (error) {
+        console.log(error)
+        return {error: 'Falha ao excluir o comentário'}
+    }
+}

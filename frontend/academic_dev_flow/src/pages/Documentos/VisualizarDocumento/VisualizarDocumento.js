@@ -8,6 +8,7 @@ import BotaoVoltar from "../../../components/Botoes/BotaoVoltar/BotaoVoltar";
 import Loading from "../../../components/Loading/Loading";
 import { MenuUnfoldOutlined, MenuFoldOutlined, FileTextOutlined, StarOutlined, CommentOutlined } from '@ant-design/icons';
 import FormComentario from "../../Comentario/FormComentario/FormComentario";
+import ArvoreComentarios from "../../Comentario/ArvoreComentarios/ArvoreComentarios";
 
 const { Sider, Content } = Layout;
 
@@ -88,7 +89,7 @@ const VisualizarDocumento = ({ documento, onBack }) => {
                     )}
                     {currentPage === 'comments' && (
                         <div>
-                            <FormComentario />
+                            <ArvoreComentarios documento={documento} />
                         </div>
                     )}
                 </Content>
