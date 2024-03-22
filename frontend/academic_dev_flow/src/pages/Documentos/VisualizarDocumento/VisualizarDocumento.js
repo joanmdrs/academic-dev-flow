@@ -72,7 +72,7 @@ const VisualizarDocumento = ({ documento, onBack }) => {
             </Sider>
 
                 
-            <Layout className="site-layout" >
+            <Layout className="site-layout">
                 <Content className="global-form">
                     <BotaoVoltar funcao={onBack} />
 

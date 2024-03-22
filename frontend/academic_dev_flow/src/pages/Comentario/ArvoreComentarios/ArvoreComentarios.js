@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import './ArvoreComentarios.css';
-import { Button, Dropdown, Menu, Space } from 'antd';
+import { Avatar, Button, Dropdown, Form, Input, Menu, Space } from 'antd';
 import FormComentario from '../FormComentario/FormComentario';
 import { atualizarComentario, criarComentario, excluirComentario, listarComentariosPorDocumento } from '../../../services/comentarioService';
 import { Editor } from 'primereact/editor';
 import { SlOptions } from 'react-icons/sl';
 import { formatDate } from '../../../services/utils';
+import { useProjetoContext } from '../../../context/ProjetoContext';
+import { FaCircleUser, FaRegCircleUser } from 'react-icons/fa6';
 
 const ArvoreComentarios = ({ documento }) => {
   const [comentarios, setComentarios] = useState([]);
   const [comentarioEditado, setComentarioEditado] = useState(null);
   const [editorVisible, setEditorVisible] = useState(false);
+  const {dadosComentario, setDadosComentario, autor} = useProjetoContext()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,6 +31,7 @@ const ArvoreComentarios = ({ documento }) => {
   };
 
   const handleEdit = (comentario) => {
+    setDadosComentario(comentario)
     setComentarioEditado(comentario);
     setEditorVisible(true);
   };
@@ -37,21 +41,20 @@ const ArvoreComentarios = ({ documento }) => {
     setEditorVisible(false);
   };
 
-  const handleUpdateComment = async (id, dados) => {
-    await atualizarComentario(id, dados)
+  const handleUpdateComment = async (texto) => {
+    await atualizarComentario(dadosComentario.id, texto)
     setComentarioEditado(null);
     setEditorVisible(false);
     await handleGetComments()
   };
 
-  const handleCreateComment = async (autor, comment) => {
-    const dados = {
-      texto: comment,
+  const handleCreateComment = async (dados) => {
+    const dadosEnviar = {
+      texto: dados.texto,
       autor: autor,
       documento: documento.id
     }
-
-    await criarComentario(dados)
+    await criarComentario(dadosEnviar)
     await handleGetComments()
   }
   
@@ -73,10 +76,21 @@ const ArvoreComentarios = ({ documento }) => {
             <div key={comentario.id} className='container-comment'>
 
               <div className='header-comment'>
+                <div className='info-comment'>
+                  <div>
+                    <Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${"1"}`} />
+                  </div>
 
-                <span className='autor-comment'>
-                  {comentario.nome_autor} | {formatDate(comentario.data_hora)}
-                </span>
+                  <h4 className='autor-comment'>
+                    {comentario.nome_autor}
+                  </h4>
+
+                  <span className='data-comment'>
+                    {formatDate(comentario.data_hora)}
+                  </span>
+
+                </div>
+                
 
                 <Dropdown trigger={['click']} overlay={
                     <Menu>
@@ -96,12 +110,15 @@ const ArvoreComentarios = ({ documento }) => {
               {comentarioEditado && comentarioEditado.id === comentario.id && editorVisible ? (
                 <div style={{padding: "10px", display: 'flex', flexDirection: 'column', gap:'20px'}}>
 
-                  <Editor 
-                    style={{ minHeight: '100px' }}
-                    value={comentarioEditado.texto}
-                    onTextChange={(e) => setComentarioEditado({ ...comentarioEditado, texto: e.htmlValue })}
-                  />
-
+                  <Form>
+                    <Form.Item>
+                      <Input.TextArea
+                        value={comentarioEditado.texto}
+                        onChange={(e) => setComentarioEditado({ ...comentarioEditado, texto: e.target.value })}
+                        rows={4}
+                      />
+                    </Form.Item>
+                  </Form>
                   <div style={{display: 'flex', gap: '5px'}}>
                     <Button onClick={() => handleUpdateComment(comentario.id, comentarioEditado)}  type='primary'> Atualizar Comentário</Button>
                     <Button onClick={handleCancelEdit} danger> Cancelar </Button>
@@ -111,7 +128,8 @@ const ArvoreComentarios = ({ documento }) => {
             
 
               ) : (
-                <div className='content-comment' dangerouslySetInnerHTML={{ __html: comentario.texto }}>
+                <div className='content-comment'>
+                  {comentario.texto}
                 </div>
               )}
 
@@ -121,6 +139,10 @@ const ArvoreComentarios = ({ documento }) => {
 
         </div>
       )}
+
+      <div style={{borderTop: "2px solid var(--primary-color)", marginTop: '30px', marginBottom: "30px", width: '70%'}}>
+        <h3> Adicione um comentário </h3>
+      </div>
 
       <FormComentario onSubmit={handleCreateComment} />
 

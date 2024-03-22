@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
 import './FormComentario.css'
 import { Editor } from 'primereact/editor';
-import { Button, Form } from "antd";
+import { Button, Form, Input } from "antd";
 import { decodeToken } from "react-jwt";
 import { buscarMembroPeloUser } from "../../../services/membroService";
 import { criarComentario } from "../../../services/comentarioService";
+import { FaCircleUser } from "react-icons/fa6";
+import { useForm } from "antd/es/form/Form";
+import { useProjetoContext } from "../../../context/ProjetoContext";
+
                 
 const FormComentario = ({onSubmit}) => {
 
-    const [comment, setComment] = useState('');
     const [token] = useState(localStorage.getItem("token") || null);
-    const [autor, setAutor] = useState(null)
+    const [form] = useForm()
+    const {dadosComentario, setAutor} = useProjetoContext()
 
     useEffect(() => {
         const fetchData = async () => {
@@ -33,26 +37,25 @@ const FormComentario = ({onSubmit}) => {
 
     return (
 
-        <Form className="form-comments" layout="vertical" onFinish={() => onSubmit(autor, comment)}>
-            <Form.Item>
+        <Form form={form} className="form-comments" layout="vertical" onFinish={onSubmit}>
 
-                <h3> Adicione um comentário </h3>
+            <div>
+                <FaCircleUser size="25px" />
+            </div>
 
-                <Editor 
-                    className="text-editor"
-                    value={comment} 
-                    onTextChange={(e) => setComment(e.htmlValue)} 
-                    style={{ 
-                        minHeight: "100px"
-                    }} 
-                />
-            </Form.Item>
+            <div style={{flex: '1'}}>
 
-            <Form.Item>
-                <Button type="primary" htmlType="submit">
-                    Comentar
-                </Button>
-            </Form.Item>
+                <Form.Item name="texto">
+                    <Input.TextArea rows={4} name="texto" />
+                </Form.Item>
+
+                <Form.Item>
+                    <Button type="primary" htmlType="submit">
+                        Comentar
+                    </Button>
+                </Form.Item>
+            </div>
+            
 
         </Form>
  

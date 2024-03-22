@@ -22,11 +22,15 @@
     padding: 10px;
     display: flex;
     justify-content: space-between;
+}
+
+.info-comment {
+    display: flex;
     align-items: baseline;
+    gap: 10px;
 }
 
 .autor-comment {
-    font-size: 12px;
 
 }
 
