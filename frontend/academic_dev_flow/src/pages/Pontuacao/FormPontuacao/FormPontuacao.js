@@ -1,12 +1,24 @@
 import { Button, Checkbox, Form, Input } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
 import { useProjetoContext } from "../../../context/ProjetoContext";
+import { useForm } from "antd/es/form/Form";
 
 const FormPontuacao = ({onSubmit, onCancel}) => {
     
-    const {dadosDocumento} = useProjetoContext()
+    const {dadosDocumento, dadosPontuacao} = useProjetoContext()
+    const [form] = useForm()
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (dadosPontuacao) {
+                form.setFieldsValue(dadosPontuacao)
+            }
+        }
+
+        fetchData()
+    }, [])  
     return (
-        <Form className="global-form" onFinish={onSubmit}>
+        <Form className="global-form" onFinish={onSubmit} form={form}>
 
             <Form.Item>
                 <h4 style={{margin: 0}}> 

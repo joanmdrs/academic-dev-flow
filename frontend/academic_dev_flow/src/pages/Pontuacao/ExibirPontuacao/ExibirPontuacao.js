@@ -5,7 +5,7 @@ import { Button } from "antd";
 import { FaTrash } from "react-icons/fa6";
 import { FaEdit } from "react-icons/fa";
 
-const ExibirPontuacao = () => {
+const ExibirPontuacao = ({onEdit, onDelete}) => {
 
     const {dadosPontuacao, userGroup} = useProjetoContext()
 
@@ -14,8 +14,8 @@ const ExibirPontuacao = () => {
         <div className="global-form">
             {   userGroup === "Professores" && (
                     <div className="score-buttons"> 
-                        <Button type="primary" ghost> <FaEdit /> Editar </Button>
-                        <Button danger> <FaTrash /> Excluir </Button>
+                        <Button onClick={onEdit} type="primary" ghost> <FaEdit /> Editar </Button>
+                        <Button onClick={onDelete} danger> <FaTrash /> Excluir </Button>
                     </div>
                 )  
             }
