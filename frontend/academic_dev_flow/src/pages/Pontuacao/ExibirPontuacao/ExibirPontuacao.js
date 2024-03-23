@@ -1,13 +1,15 @@
 import React from "react";
+import { useProjetoContext } from "../../../context/ProjetoContext";
 
-const ExibirPontuacao = ({pontuacao}) => {
-      
+const ExibirPontuacao = () => {
+
+    const {dadosPontuacao} = useProjetoContext()
 
     return (
         <div>
-            <div> Nota: {pontuacao.nota} </div>
-            <div> Comentários: {pontuacao.comentario} </div>
-            <div> Professor: {pontuacao.autor} </div>
+            <div> Nota: {dadosPontuacao.nota} </div>
+            <div> Comentários: {dadosPontuacao.comentario} </div>
+            <div> Professor: {dadosPontuacao.autor} </div>
         </div>
     )
 }
