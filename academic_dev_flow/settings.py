@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'apps.tarefa',
     'apps.documento',
     'apps.comentario',
+    'apps.pontuacao',
     'apps.api',
 ]
 
