@@ -15,15 +15,15 @@ const FormPontuacao = ({onSubmit, onCancel}) => {
             </Form.Item>
 
             <Form.Item label="Nota" name="nota">
-                <Input name="nota" style={{width: 'fit-content'}} />
+                <Input name="nota" type="number" step="0.01" style={{width: 'fit-content'}} />
             </Form.Item>
 
             <Form.Item label="Comentário" name="comentario"  >
                 <Input.TextArea name="comentario" rows={4} style={{width: '50%'}} />
             </Form.Item>
 
-            <Form.Item label="Liberar" name="disponivel">
-                <Checkbox name="disponivel" />
+            <Form.Item label="Liberar" name="disponivel" valuePropName="checked">
+                <Checkbox />
             </Form.Item>
 
             <Form.Item >

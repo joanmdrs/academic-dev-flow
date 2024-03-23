@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import FormPontuacao from "./FormPontuacao/FormPontuacao";
 import { useProjetoContext } from "../../context/ProjetoContext";
-import { buscarDocumentoPeloId } from "../../services/documentoService";
+import { atualizarDocumento, buscarDocumentoPeloId } from "../../services/documentoService";
 import ExibirPontuacao from "./ExibirPontuacao/ExibirPontuacao";
-import { buscarPontuacaoPeloId } from "../../services/pontuacaoService";
+import { buscarPontuacaoPeloId, registrarPontuacao } from "../../services/pontuacaoService";
 
 const GerenciarPontuacao = () => {
 
-    const {dadosDocumento, setDadosPontuacao} = useProjetoContext()
+    const {dadosDocumento, setDadosPontuacao, autor} = useProjetoContext()
     const [hasScore, setHasScore] = useState(false)
+    const [actionForm, setActionForm] = useState('create')
 
     useEffect (() => {
         const fetchData = async () => {
@@ -30,7 +31,20 @@ const GerenciarPontuacao = () => {
             const response1 = await buscarPontuacaoPeloId(idScore)
             setDadosPontuacao(response1.data)
         }
+    }
 
+    const handleCreateScore = async (dados) => {
+        const response = await registrarPontuacao(dados)
+        return response
+    }
+
+    const handleSavePontuacao = async (dados) => {
+        dados['autor'] = autor 
+        if (actionForm === 'create'){
+            const response = await handleCreateScore(dados)
+            const newData = { pontuacao: response.data.id }
+            await atualizarDocumento(dadosDocumento.id, newData)
+        } 
     }
 
     return (
@@ -40,7 +54,7 @@ const GerenciarPontuacao = () => {
                     <ExibirPontuacao />
 
                 ) : (
-                    <FormPontuacao />
+                    <FormPontuacao onSubmit={handleSavePontuacao}/>
 
                 )
 
