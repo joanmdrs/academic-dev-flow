@@ -11,7 +11,7 @@ const ListaDocumentos = ({docs, onSearch, onEdit, onDelete}) => {
     const [currentPage, setCurrentPage] = useState('default')
     const [documentoSelecionado, setDocumentoSelecionado] = useState(null);
     const [currentPath, setCurrentPath] = useState('docs');
-    const {documentosSelecionados, setDocumentosSelecionados} = useProjetoContext()
+    const {setDadosDocumento, documentosSelecionados, setDocumentosSelecionados} = useProjetoContext()
 
     const COLUNAS_TABELA_DOCUMENTOS = [
         {
@@ -61,8 +61,14 @@ const ListaDocumentos = ({docs, onSearch, onEdit, onDelete}) => {
             console.log(record.caminho)
         } else {
             setDocumentoSelecionado(record);
+            setDadosDocumento(record)
             setCurrentPage('visualizar');
         }
+    }
+
+    const handleBack = () => {
+        setCurrentPage('default')
+        setDadosDocumento(null)
     }
 
     const rowSelection = {
@@ -94,7 +100,7 @@ const ListaDocumentos = ({docs, onSearch, onEdit, onDelete}) => {
             {currentPage === "visualizar" && (
                 <React.Fragment>
                     {documentoSelecionado && (
-                        <VisualizarDocumento documento={documentoSelecionado} onBack={()=> setCurrentPage('default')} />
+                        <VisualizarDocumento documento={documentoSelecionado} onBack={handleBack} />
                     )}
                 </React.Fragment>
             )}
