@@ -57,7 +57,8 @@ class FiltrarDocumentosPorProjetoView(APIView):
                     'iteracao': documento.iteracao_id,
                     'nome_iteracao': documento.iteracao.nome,
                     'artefato': documento.artefato_id,
-                    'nome_artefato': documento.artefato.nome
+                    'nome_artefato': documento.artefato.nome,
+                    'pontuacao': documento.pontuacao_id
                 })
                 
             return JsonResponse(documentos_info, safe=False, json_dumps_params={'ensure_ascii': False})
