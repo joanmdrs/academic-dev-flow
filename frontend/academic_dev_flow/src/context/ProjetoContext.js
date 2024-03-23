@@ -18,6 +18,8 @@ export const ProjetoProvider = ({ children }) => {
                   const response = await buscarMembroPeloUser(decodedToken.user_id);
                   const idAutor = response.data.id_membro_projeto;
                   setAutor(idAutor);
+                  setUserGroup(decodedToken.groups[0])
+                  
               } catch (error) {
                   console.error("Erro ao buscar membro pelo usuário:", error);
               }
@@ -29,6 +31,7 @@ export const ProjetoProvider = ({ children }) => {
   }, [token]);
 
   const [autor, setAutor] = useState(null);
+  const [userGroup, setUserGroup] = useState(null)
   const [dadosProjeto, setDadosProjeto] = useState(null);
   const [dadosIteracao, setDadosIteracao] = useState(null);
   const [dadosTarefa, setDadosTarefa] = useState(null);
@@ -43,6 +46,7 @@ export const ProjetoProvider = ({ children }) => {
     <ProjetoContext.Provider
       value={{
         autor, setAutor,
+        userGroup, setUserGroup,
         dadosProjeto, setDadosProjeto,
         dadosIteracao, setDadosIteracao,
         dadosTarefa, setDadosTarefa,
