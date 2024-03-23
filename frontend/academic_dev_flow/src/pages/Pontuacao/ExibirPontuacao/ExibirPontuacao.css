@@ -1,5 +1,6 @@
 .score-container .score-note {
-    color: var(--primary-color)
+    color:  #01DF74;
+    font-size: 20px;
 }
 
 .score-container .score-comment p {
@@ -8,4 +9,10 @@
     width: 70%;
     height: 100px;
     border-radius: 5px;
+}
+
+.score-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
 }
