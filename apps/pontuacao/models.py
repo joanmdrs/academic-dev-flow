@@ -11,5 +11,5 @@ class Pontuacao(models.Model):
     disponivel = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"Nota: {self.nota} - Data de Atribuição: {self.data_atribuicao}"
+        return f"{self.nota}"
 
