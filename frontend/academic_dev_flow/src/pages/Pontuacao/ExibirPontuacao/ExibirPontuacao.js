@@ -1,3 +1,4 @@
+import "./ExibirPontuacao.css"
 import React from "react";
 import { useProjetoContext } from "../../../context/ProjetoContext";
 
@@ -6,10 +7,18 @@ const ExibirPontuacao = () => {
     const {dadosPontuacao} = useProjetoContext()
 
     return (
-        <div>
-            <div> Nota: {dadosPontuacao.nota} </div>
-            <div> Comentários: {dadosPontuacao.comentario} </div>
-            <div> Professor: {dadosPontuacao.autor} </div>
+        <div className="global-form score-container">
+            <div className="score-note"> 
+                <h2> Nota: {dadosPontuacao.nota} </h2> 
+            </div>
+            <div className="score-comment">
+                <h4>Comentário(s):</h4> 
+                <p> {dadosPontuacao.comentario} </p>
+                
+            </div>
+            <div className="score-autor"> 
+                <h4> Professor: <span style={{fontWeight: '400'}}> {dadosPontuacao.autor}  </span></h4> 
+            </div>
         </div>
     )
 }
