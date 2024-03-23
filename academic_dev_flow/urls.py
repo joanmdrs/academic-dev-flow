@@ -31,6 +31,7 @@ urlpatterns = [
     path('tarefa/', include('apps.tarefa.urls', namespace='tarefa')),
     path('documento/', include('apps.documento.urls', namespace='documento')),
     path('comentario/', include('apps.comentario.urls', namespace='comentario')),
+    path('pontuacao/', include('apps.pontuacao.urls', namespace='pontuacao')),
     path('auth/', include('apps.api.urls', namespace='api')),
 ]
 
