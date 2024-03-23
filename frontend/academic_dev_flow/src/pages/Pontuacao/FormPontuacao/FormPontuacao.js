@@ -1,4 +1,4 @@
-import { Button, Form, Input } from "antd";
+import { Button, Checkbox, Form, Input } from "antd";
 import React from "react";
 
 const FormPontuacao = ({onSubmit, onCancel}) => {
@@ -12,6 +12,10 @@ const FormPontuacao = ({onSubmit, onCancel}) => {
 
             <Form.Item label="Comentário" name="comentario">
                 <Input name="comentario" />
+            </Form.Item>
+
+            <Form.Item label="Disponibilizar" name="disponivel">
+                <Checkbox name="disponivel" />
             </Form.Item>
 
             <Form.Item>
