@@ -32,8 +32,21 @@ class BuscarPontuacaoPeloIdView(APIView):
     def get(self, request, id): 
         try:
             pontuacao = Pontuacao.objects.get(pk=id)
-            serializer = PontuacaoSerializer(pontuacao, many=False)
-            return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+            membro_projeto = MembroProjeto.objects.get(id=pontuacao.autor_id)
+            membro = Membro.objects.get(id=membro_projeto.membro_id)
+            
+            pontuacao_info = {
+                'id': pontuacao.id,
+                'nota': pontuacao.nota,
+                'comentario': pontuacao.comentario,
+                'data_atribuicao': pontuacao.data_atribuicao,
+                'disponivel': pontuacao.disponivel,
+                'autor': pontuacao.autor_id,
+                'nome_autor': membro.nome 
+            }
+            
+            return Response(pontuacao_info, status=status.HTTP_200_OK)
+
             
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
