@@ -33,6 +33,7 @@ urlpatterns = [
     path('comentario/', include('apps.comentario.urls', namespace='comentario')),
     path('pontuacao/', include('apps.pontuacao.urls', namespace='pontuacao')),
     path('auth/', include('apps.api.urls', namespace='api')),
+    path('github_integration/', include('apps.github_integration.urls', namespace='github_integration')),
 ]
 
 
