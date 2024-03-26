@@ -1,6 +1,6 @@
 from pathlib import Path
 from rest_framework.permissions import AllowAny
-
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -11,6 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-ug($fm-0lbb+48r4y=q63#byfced4uzi_jjax3_g$3g@62)uji'
+GITHUB_TOKEN = config('GITHUB_TOKEN')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'apps.comentario',
     'apps.pontuacao',
     'apps.api',
+    'apps.github_integration',
 ]
 
 MIDDLEWARE = [
