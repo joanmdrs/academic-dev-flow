@@ -134,6 +134,30 @@ def create_content(request):
     
 def update_content(request):
     try:
+    
+        data = json.loads(request.body)
         
-    except 
+        content = data.get('content')
+        repository = data.get('repository')
+        commit_message = data.get('commit_message')
+        path = data.get('path')
+        
+        if not repository or not content or not commit_message or not path:
+            return JsonResponse(
+                {'error': 'Os parâmetros de consulta repository, content, path e commit_message são obrigatórios'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        g = get_github_client()
+    
+        repo = g.get_repo(repository)
+        
+        contents = repo.get_contents(path)
+        
+        repo.update_file(contents.path, content, commit_message, contents.sha, branch="main")
+        
+        return JsonResponse({'success': 'Arquivo atualizado com sucesso'}, status=status.HTTP_200_OK)
+    
+    except GithubException as e:
+        return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
