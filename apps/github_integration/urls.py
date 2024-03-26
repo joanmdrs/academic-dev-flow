@@ -10,5 +10,6 @@ urlpatterns = [
     path('list_issues/', views.list_issues, name='list_issues'),
     path('create_issue/', views.create_issue, name='create_issue'),
     path('list_contents/', views.list_contents, name='list_contents'),
+    path("create_content/", views.create_content, name="create_content"),
     path('list_commits_by_user/', views.user_commits_view, name='list_commits')
 ]
