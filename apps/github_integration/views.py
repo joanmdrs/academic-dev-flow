@@ -48,12 +48,24 @@ def list_issues(request):
     
 def user_commits_view(request):
     try:
+        # Obtenha os parâmetros de consulta da solicitação
+        repository = request.GET.get('repository')
+        username = request.GET.get('username')
+
+        # Verifique se os parâmetros de consulta estão presentes
+        if not repository or not username:
+            return JsonResponse({'error': 'Os parâmetros de consulta repository e username são obrigatórios'}, status=400)
+
+        # Initialize the GitHub instance
         g = get_github_client()
 
-        repo = g.get_repo("joanmdrs/sigcli")
+        # Get the repository
+        repo = g.get_repo(repository)
 
-        user = g.get_user("allangbr")
+        # Get the user
+        user = g.get_user(username)
 
+        # Get the commits by the user
         user_commits = []
         for commit in repo.get_commits(author=user):
             user_commits.append({
@@ -66,4 +78,4 @@ def user_commits_view(request):
         return JsonResponse(user_commits, safe=False)
 
     except GithubException as e:
-        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return JsonResponse({'error': str(e)}, status=500)
