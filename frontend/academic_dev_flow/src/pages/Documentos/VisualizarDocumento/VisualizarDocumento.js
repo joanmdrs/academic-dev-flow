@@ -7,10 +7,14 @@ import { Button, Layout, Menu } from "antd";
 import BotaoVoltar from "../../../components/Botoes/BotaoVoltar/BotaoVoltar";
 import Loading from "../../../components/Loading/Loading";
 import { MenuUnfoldOutlined, MenuFoldOutlined, FileTextOutlined, StarOutlined, CommentOutlined } from '@ant-design/icons';
+import ArvoreComentarios from "../../Comentario/ArvoreComentarios/ArvoreComentarios";
+import GerenciarPontuacao from "../../Pontuacao";
+import { useProjetoContext } from "../../../context/ProjetoContext";
 
 const { Sider, Content } = Layout;
 
-const VisualizarDocumento = ({ documento, onBack }) => {
+const VisualizarDocumento = ({ onBack }) => {
+    const {dadosDocumento} = useProjetoContext()
     const [decodedDoc, setDecodedDoc] = useState('');
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState('document');
@@ -30,8 +34,8 @@ const VisualizarDocumento = ({ documento, onBack }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            if (documento) {
-                await handleGetDocumento(documento.caminho);
+            if (dadosDocumento) {
+                await handleGetDocumento(dadosDocumento.caminho);
             }
             setLoading(false);
         };
@@ -70,7 +74,7 @@ const VisualizarDocumento = ({ documento, onBack }) => {
             </Sider>
 
                 
-            <Layout className="site-layout" >
+            <Layout className="site-layout">
                 <Content className="global-form">
                     <BotaoVoltar funcao={onBack} />
 
@@ -81,14 +85,12 @@ const VisualizarDocumento = ({ documento, onBack }) => {
                     )}
                     {currentPage === 'score' && (
                         <div>
-                            {/* Componente de Pontuação */}
-                            <h1>Aqui será a área de pontuação</h1>
+                            <GerenciarPontuacao  />
                         </div>
                     )}
                     {currentPage === 'comments' && (
                         <div>
-                            {/* Componente de Comentários */}
-                            <h1>Aqui será a área de comentários</h1>
+                            <ArvoreComentarios documento={dadosDocumento} />
                         </div>
                     )}
                 </Content>

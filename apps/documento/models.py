@@ -2,6 +2,7 @@ from django.db import models
 from apps.projeto.models import Projeto
 from apps.artefato.models import Artefato
 from apps.iteracao.models import Iteracao
+from apps.pontuacao.models import Pontuacao
 
 class Documento(models.Model):
     
@@ -18,6 +19,7 @@ class Documento(models.Model):
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE)
     iteracao = models.ForeignKey(Iteracao, on_delete=models.SET_NULL, null=True, blank=True)
     artefato = models.ForeignKey(Artefato, on_delete=models.SET_NULL, null=True, blank=True)
+    pontuacao = models.ForeignKey(Pontuacao, on_delete=models.SET_NULL, null=True, blank=True )
 
     def __str__(self):
         return self.titulo

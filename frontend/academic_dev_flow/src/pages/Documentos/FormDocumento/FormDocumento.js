@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useProjetoContext } from "../../../context/ProjetoContext";
 import { listarIteracoesPorProjeto } from "../../../services/iteracaoService";
 import { listarArtefatos } from "../../../services/artefatoService";
-import { criarDocumento } from "../../../api/apiGitHubService";
 import { useForm } from "antd/es/form/Form";
 
 const optionsStatus = [

@@ -5,6 +5,7 @@ from rest_framework import status
 from django.http import HttpResponseNotAllowed, JsonResponse
 from .models import Membro
 from .serializers import MembroSerializer
+from apps.membro_projeto.models import MembroProjeto
 from apps.usuario.models import Usuario
 from apps.usuario.serializers import UsuarioSerializer
 from django.shortcuts import get_object_or_404
@@ -103,6 +104,35 @@ class BuscarMembrosPorNomeView(BaseMembroView):
                 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class BuscarMembroPeloUserView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request, id_user):
+        try:
+            membro = Membro.objects.get(usuario_id=id_user)
+           
+            
+            if membro: 
+                membro_projeto = MembroProjeto.objects.get(membro_id=membro.id)
+                
+                if membro_projeto: 
+                    autor = {
+                        'id_membro': membro.id,
+                        'id_membro_projeto': membro_projeto.id,
+                        'nome': membro.nome,
+                    }
+                    
+                    return Response(autor, status=status.HTTP_200_OK)
+                
+                return Response({'error': 'Este membro não está vinculado a nenhum projeto'}, status=status.HTTP_404_NOT_FOUND)
+
+                
+            return Response({'error': 'Membro não encontrado'}, status=status.HTTP_404_NOT_FOUND)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 class BuscarMembroPorIdView(APIView):
     permission_classes = [IsAuthenticated]
