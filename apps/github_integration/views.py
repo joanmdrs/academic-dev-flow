@@ -80,7 +80,7 @@ def list_contents(request):
         repository = request.GET.get('repository')
         
         if not repository:
-            return JsonResponse({'error': 'Os parâmetros de consulta repository e username são obrigatórios'}, status=400)
+            return JsonResponse({'error': 'Os parâmetros repository e username são obrigatórios'}, status=400)
         
         g = get_github_client()
         
@@ -120,7 +120,7 @@ def create_content(request):
         path = data.get('path', "test.txt") 
         
         if not repository or not content or not commit_message:
-            return JsonResponse({'error': 'Os parâmetros de consulta repository, content e commit_message são obrigatórios'}, status=400)
+            return JsonResponse({'error': 'Os parâmetros repository, content e commit_message são obrigatórios'}, status=400)
         
         repo = g.get_repo(repository)
         repo.create_file(path, commit_message, content, branch="main")
@@ -144,7 +144,7 @@ def update_content(request):
         
         if not repository or not content or not commit_message or not path:
             return JsonResponse(
-                {'error': 'Os parâmetros de consulta repository, content, path e commit_message são obrigatórios'}, 
+                {'error': 'Os parâmetros repository, content, path e commit_message são obrigatórios'}, 
                 status=status.HTTP_400_BAD_REQUEST
             )
         
@@ -161,3 +161,27 @@ def update_content(request):
     except GithubException as e:
         return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
+        
+def delete_content(request):
+    try:
+
+        repository = request.GET.get('repository')
+        commit_message = request.GET.get('commit_message')
+        path = request.GET.get('path')
+        
+        if not repository or not path or not commit_message:
+            return JsonResponse({'error': 'Os parâmetros repository, path e commit_message são obrigatórios'}, status=400)
+    
+        g = get_github_client()
+        
+        repo = g.get_repo(repository)
+        
+        contents = repo.get_contents(path)
+        
+        repo.delete_file(contents.path, commit_message, contents.sha, branch="main")
+        
+        return JsonResponse({'success': 'Arquivo excluído com sucesso'}, status=status.HTTP_204_NO_CONTENT)
+
+
+    except GithubException as e:
+        return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
