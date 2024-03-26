@@ -48,24 +48,18 @@ def list_issues(request):
     
 def user_commits_view(request):
     try:
-        # Obtenha os parâmetros de consulta da solicitação
         repository = request.GET.get('repository')
         username = request.GET.get('username')
 
-        # Verifique se os parâmetros de consulta estão presentes
         if not repository or not username:
             return JsonResponse({'error': 'Os parâmetros de consulta repository e username são obrigatórios'}, status=400)
 
-        # Initialize the GitHub instance
         g = get_github_client()
 
-        # Get the repository
         repo = g.get_repo(repository)
 
-        # Get the user
         user = g.get_user(username)
 
-        # Get the commits by the user
         user_commits = []
         for commit in repo.get_commits(author=user):
             user_commits.append({
@@ -79,3 +73,38 @@ def user_commits_view(request):
 
     except GithubException as e:
         return JsonResponse({'error': str(e)}, status=500)
+    
+def list_contents(request):
+    try:
+        repository = request.GET.get('repository')
+        
+        if not repository:
+            return JsonResponse({'error': 'Os parâmetros de consulta repository e username são obrigatórios'}, status=400)
+        
+        g = get_github_client()
+        
+        repo = g.get_repo(repository)
+        
+        documentos = []
+
+        contents = repo.get_contents("docs")
+        
+        while contents:
+            file_content = contents.pop(0)
+            if file_content.type == "dir":
+                contents.extend(repo.get_contents(file_content.path))
+            else:
+                documentos.append({
+                    'name': file_content.name,
+                    'path': file_content.path,
+                    'content': file_content.content,
+                    'download_url': file_content.download_url,
+                    'type': file_content.type
+                })
+                
+        return JsonResponse(documentos, safe=False)
+                
+    except GithubException as e:
+        return JsonResponse({'error': str(e)}, status=500)
+        
+        
