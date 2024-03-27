@@ -1,7 +1,7 @@
 import React from "react";
-import MyHeader from "../../../components/Header/Header";
-import { Layout } from "antd";
-import MenuAluno from "../../../components/Menus/MenuAluno/MenuAluno";
+import { Layout } from 'antd';
+import MenuAdmin from "../../../../components/Menus/MenuAdmin/MenuAdmin";
+import MyHeader from "../../../../components/Header/Header";
 
 const baseStyle = {
     display: "flex",
@@ -11,20 +11,19 @@ const baseStyle = {
     alignItems: "center"
 }
 
-const HomeAluno = () => {
 
+const HomeAdministrador = () => {
     return (
-
         <React.Fragment>
-            <MenuAluno />
+            <MenuAdmin />
             <Layout>
                 <MyHeader />
                 <div style={{...baseStyle}}>
-                    Página Inicial do Aluno
+                    Página Inicial 
                 </div>
             </Layout>
         </React.Fragment>
     )
 }
 
-export default HomeAluno
+export default HomeAdministrador;
