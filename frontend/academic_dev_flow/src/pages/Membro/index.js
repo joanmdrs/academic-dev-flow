@@ -2,7 +2,8 @@ import React from "react";
 import MyMenu from "../../components/Menu/Menu";
 import { Layout } from 'antd';
 import MyHeader from "../../components/Header/Header";
-import ScreenMembro from "./screens/ScreenMembro";
+import GerenciarMembros from "./screens/GerenciarMembros/GerenciarMembros";
+import { MembroProvider } from "./context/MembroContexto";
 
 const Membro = () => {
 
@@ -11,7 +12,9 @@ const Membro = () => {
             <MyMenu/>
             <Layout>
                 <MyHeader/>
-                <ScreenMembro />
+                <MembroProvider>
+                    <GerenciarMembros />
+                </MembroProvider>
             </Layout>
         </React.Fragment>
       
