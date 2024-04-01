@@ -16,10 +16,13 @@ body {
   overflow-x: hidden;
 }
 
-/* code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-} */
+.ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector {
+  border: 1px solid #585858;
+
+}
+.ant-input-outlined {
+  border: 1px solid #585858;
+}
 
 .global-div {
   margin: 20px;
