@@ -5,7 +5,7 @@ from apps.membro.models import Membro
 class Projeto(models.Model):
         
     nome = models.CharField(max_length=200)
-    descricao = models.TextField()
+    descricao = models.TextField(blank=True, null=True)
     status = models.CharField(max_length=20)
     data_inicio = models.DateField("Data Início")
     data_fim = models.DateField("Data Fim")
