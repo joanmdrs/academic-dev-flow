@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "./TabsProjeto.css";
 import Titulo from "../../../../components/Titulo/Titulo";
 import { Spin, Tabs } from "antd";
 import Item from "antd/es/list/Item";
