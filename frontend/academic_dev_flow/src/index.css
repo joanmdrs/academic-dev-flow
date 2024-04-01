@@ -28,6 +28,7 @@ body {
   margin: 20px;
   padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  background-color: white;
 }
 
 .global-form {
@@ -40,6 +41,9 @@ body {
   margin-top: 10px;
   margin-bottom: 10px;
   background-color: white;
+  border: 1px solid #585858;
+  border-radius: 5px;
+
 }
 
 .global-table table {
