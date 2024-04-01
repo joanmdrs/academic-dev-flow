@@ -3,7 +3,6 @@ import InputMask from 'react-input-mask';
 import { customizeRequiredMark } from "../../../../components/LabelMask/LabelMask";
 import { useMembroContexto } from "../../context/MembroContexto";
 import { useEffect, useState } from "react";
-import { useForm } from "antd/es/form/Form";
 import Loading from "../../../../components/Loading/Loading";
 
 const OPTIONS_GROUP = [
@@ -28,22 +27,37 @@ const OPTIONS_GROUP = [
 const FormMembro = ({onSubmit, onCancel}) => {
 
     const {dadosMembro} = useMembroContexto()
-    const [form] = useForm()
-    const [loading, setLoading] = useState(true)
+    const [form] = Form.useForm()
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         const fetchData = () => {
-            if (dadosMembro !== null){
-                form.setFieldsValue(dadosMembro)
+            try {
+                setLoading(true);
+
+                if (dadosMembro !== null){
+                    form.setFieldsValue(dadosMembro)
+                } else {
+                    form.resetFields()
+                }
+                
+            } catch (error) {
+            } finally {
+                setLoading(false);
             }
+
         }
         fetchData()
-        setLoading(false)
-    }, [])
+    }, [dadosMembro])
 
     if (loading) {
         return <Loading />
     }
+
+    const handleEmailChange = (e) => {
+        const { value } = e.target;
+        form.setFieldsValue({ usuario: value }); // Atualiza o valor do campo de usuário com o valor do campo de email
+    };
 
     return (
         <Form 
@@ -98,7 +112,7 @@ const FormMembro = ({onSubmit, onCancel}) => {
                     { type: 'email', message: 'Por favor, insira um email válido!' },
                     ]}
                 >
-                    <Input placeholder="Ex.: nome@gmail.com"/>
+                    <Input placeholder="Ex.: nome@gmail.com" onChange={handleEmailChange}/>
                 </Form.Item>
 
                 <Form.Item 
@@ -129,6 +143,15 @@ const FormMembro = ({onSubmit, onCancel}) => {
             <div style={{width: '50%'}}>
                 <Form.Item>
                     <h3> Dados do Usuário </h3>
+                </Form.Item>
+
+                <Form.Item
+                    name="usuario"
+                    label="Usuário de Acesso"
+                    required
+                >
+                    <Input name="usuario" disabled/> 
+
                 </Form.Item>
                 <Form.Item
                     name="senha"

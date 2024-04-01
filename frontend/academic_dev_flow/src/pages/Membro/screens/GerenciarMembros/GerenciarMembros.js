@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Titulo from "../../../../components/Titulo/Titulo"
 import BotaoAdicionar from "../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar"
 import BotaoExcluir from "../../../../components/Botoes/BotaoExcluir/BotaoExcluir"
@@ -7,6 +7,8 @@ import ModalDeBusca from "../../../../components/Modals/ModalDeBusca/ModalDeBusc
 import { atualizarMembro, buscarMembroPeloNome, criarMembro, excluirMembro } from "../../../../services/membroService"
 import FormMembro from "../FormMembro/FormMembro"
 import { useMembroContexto } from "../../context/MembroContexto"
+import { buscarUsuarioPeloId } from "../../../../services/usuarioService"
+import Loading from "../../../../components/Loading/Loading"
 
 const GerenciarMembros = () => {
 
@@ -43,8 +45,24 @@ const GerenciarMembros = () => {
     const [isPlusBtnEnabled, setIsPlusBtnEnabled] = useState(false)
     const [isTrashBtnEnabled, setIsTrashBtnEnabled] = useState(true)
     const [isSearchBtnEnabled, setIsSearchBtnEnabled] = useState(false)
+    const [loading, setLoading] = useState(false)
 
- 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+                
+                await new Promise((resolve) => setTimeout(resolve, 500));
+            } catch (error) {
+            } finally {
+                setLoading(false);
+            }
+
+        }
+        fetchData()
+    }, [dadosMembro])
+
+     
     const handleFecharModal = () => setIsModalVisivel(false)
     const handleAbrirModal = () => setIsModalVisivel(true)
     
@@ -52,7 +70,11 @@ const GerenciarMembros = () => {
 
     }
 
-    const handleSelecionarMembro = (dados) => {
+    const handleSelecionarMembro = async (dados) => {
+        setLoading(true)
+        const response = await buscarUsuarioPeloId(dados.usuario)
+        dados['usuario'] = response.data.username
+        dados['senha'] = response.data.password
         setDadosMembro(dados)
         setAcaoForm('atualizar')
         setIsFormVisivel(true)
@@ -61,6 +83,8 @@ const GerenciarMembros = () => {
     }
 
     const handleAdicionarMembro = () => {
+        setDadosMembro(null)
+        setLoading(true)
         setIsFormVisivel(true)
         setIsModalVisivel(false)
         setAcaoForm('criar')
@@ -111,6 +135,8 @@ const GerenciarMembros = () => {
                 status={isModalVisivel}
                 colunas={COLUNAS_MODAL}
             />
+            
+            { loading && <Loading /> }
             
             {isFormVisivel &&  (
 
