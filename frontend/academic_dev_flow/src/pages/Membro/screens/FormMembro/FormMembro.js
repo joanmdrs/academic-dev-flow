@@ -1,6 +1,10 @@
 import { Button, Form, Input, Select } from "antd"
 import InputMask from 'react-input-mask';
 import { customizeRequiredMark } from "../../../../components/LabelMask/LabelMask";
+import { useMembroContexto } from "../../context/MembroContexto";
+import { useEffect, useState } from "react";
+import { useForm } from "antd/es/form/Form";
+import Loading from "../../../../components/Loading/Loading";
 
 const OPTIONS_GROUP = [
     {
@@ -23,8 +27,27 @@ const OPTIONS_GROUP = [
 
 const FormMembro = ({onSubmit, onCancel}) => {
 
+    const {dadosMembro} = useMembroContexto()
+    const [form] = useForm()
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        const fetchData = () => {
+            if (dadosMembro !== null){
+                form.setFieldsValue(dadosMembro)
+            }
+        }
+        fetchData()
+        setLoading(false)
+    }, [])
+
+    if (loading) {
+        return <Loading />
+    }
+
     return (
         <Form 
+            form={form}
             className="global-form"
             layout="vertical"
             requiredMark={customizeRequiredMark}
@@ -112,7 +135,7 @@ const FormMembro = ({onSubmit, onCancel}) => {
                     label="Senha de Acesso"
                     rules={[{ required: true, message: 'Por favor, cadastre uma senha para acessar a plataforma'}]}
                 >
-                    <Input.Password />
+                    <Input.Password name="senha"/>
                 </Form.Item>
 
                 <Form.Item 
