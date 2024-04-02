@@ -1,14 +1,14 @@
 import React from "react";
-import MyMenu from "../../components/Menu/Menu";
 import { Layout } from 'antd';
 import MyHeader from "../../components/Header/Header";
 import ScreenGerenciarEtapas from "./screens/ScreenGerenciarEtapas/ScreenGerenciarEtapas";
+import MenuAdmin from "../../components/Menus/MenuAdmin/MenuAdmin";
 
 const Etapa = () => {
 
     return (
         <React.Fragment>
-            <MyMenu/>
+            <MenuAdmin/>
             <Layout>
                 <MyHeader/>
                 <ScreenGerenciarEtapas />
