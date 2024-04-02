@@ -4,7 +4,7 @@ import { Modal, Form, Input, Divider, Table } from 'antd';
 
 const { Item } = Form;
 
-const ModalDeBusca = ({status, titulo, label, name, onCancel, onOk, colunas}) => {
+const ModalDeBusca = ({status, titulo, name, onCancel, onOk, colunas}) => {
 
 
     const [form] = Form.useForm();
@@ -20,6 +20,8 @@ const ModalDeBusca = ({status, titulo, label, name, onCancel, onOk, colunas}) =>
         <Modal
             title={titulo}
             open={status}
+            cancelText="Cancelar"
+            okText="Buscar"
             onCancel={() => {
                 onCancel()
                 setHasResposta(false)
@@ -27,7 +29,6 @@ const ModalDeBusca = ({status, titulo, label, name, onCancel, onOk, colunas}) =>
 
             }}
             onOk={async () => {
-                // A função onOk(query) é responsável por buscar os dados por meio da query
                 const resposta = await onOk(parametro)
                 setHasResposta(true)
                 if(resposta.status === 200) {
@@ -38,10 +39,9 @@ const ModalDeBusca = ({status, titulo, label, name, onCancel, onOk, colunas}) =>
             }}
         >
             <Form form={form} layout="vertical">
-                <Item label={label} name={name} >
+                <Item name={name} >
                     <Input
                         name={name}
-                        placeholder={label}
                         value={parametro}
                         onChange={handleAlterarParametro}
                     />

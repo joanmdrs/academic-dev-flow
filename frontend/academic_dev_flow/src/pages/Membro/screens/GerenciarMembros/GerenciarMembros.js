@@ -140,12 +140,16 @@ const GerenciarMembros = () => {
                 paragrafo='Membros > Gerenciar membros'
             />
 
-            <div className='two-buttons'>
-                <BotaoAdicionar funcao={handleAdicionarMembro} status={isPlusBtnEnabled}/>
-                <BotaoExcluir funcao={handleExcluirMembro} status={isTrashBtnEnabled}/>
+            <div className="button-menu"> 
+                <BotaoBuscar nome="BUSCAR MEMBRO" funcao={handleAbrirModal} status={isSearchBtnEnabled}/>
+                <div className="grouped-buttons">
+                    <BotaoAdicionar funcao={handleAdicionarMembro} status={isPlusBtnEnabled}/>
+                    <BotaoExcluir funcao={handleExcluirMembro} status={isTrashBtnEnabled}/>
+                </div>
             </div>
 
-            <BotaoBuscar nome="BUSCAR MEMBRO" funcao={handleAbrirModal} status={isSearchBtnEnabled}/>
+            
+
 
             <ModalDeBusca  
                 titulo="Buscar membro" 
