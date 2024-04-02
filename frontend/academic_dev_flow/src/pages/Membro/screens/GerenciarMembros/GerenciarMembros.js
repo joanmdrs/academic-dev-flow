@@ -5,10 +5,10 @@ import BotaoExcluir from "../../../../components/Botoes/BotaoExcluir/BotaoExclui
 import BotaoBuscar from "../../../../components/Botoes/BotaoBuscar/BotaoBuscar"
 import ModalDeBusca from "../../../../components/Modals/ModalDeBusca/ModalDeBusca"
 import { atualizarMembro, buscarMembroPeloNome, criarMembro, excluirMembro } from "../../../../services/membroService"
-import FormMembro from "../FormMembro/FormMembro"
 import { useMembroContexto } from "../../context/MembroContexto"
 import { buscarUsuarioPeloId } from "../../../../services/usuarioService"
 import Loading from "../../../../components/Loading/Loading"
+import FormMembro from "../../components/FormMembro/FormMembro"
 
 const GerenciarMembros = () => {
 
@@ -134,7 +134,6 @@ const GerenciarMembros = () => {
 
     return (
         <div> 
-        
             <Titulo 
                 titulo='Membros'
                 paragrafo='Membros > Gerenciar membros'
@@ -147,9 +146,6 @@ const GerenciarMembros = () => {
                     <BotaoExcluir funcao={handleExcluirMembro} status={isTrashBtnEnabled}/>
                 </div>
             </div>
-
-            
-
 
             <ModalDeBusca  
                 titulo="Buscar membro" 
