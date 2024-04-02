@@ -17,10 +17,18 @@ const MenuAdmin = () => {
       width={250}
       collapsible
       collapsed={collapsed}
-      a
       onCollapse={(value) => setCollapsed(value)}
     >
-      <div className="demo-logo-vertical">Academic Dev Flow</div>
+      <div 
+        style={{
+          display: "flex", 
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "10px",
+          color: "#FFFFFF",
+        }} className="demo-logo-vertical">
+        Academic Dev Flow
+      </div>
       <Menu
         theme="dark"
         mode="inline"
