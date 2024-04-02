@@ -8,19 +8,19 @@ import Loading from "../../../../components/Loading/Loading";
 const OPTIONS_GROUP = [
     {
         label: "Administradores",
-        value: "administradores"
+        value: "Administradores"
     },
     {
         label: "Discentes",
-        value: "discentes"
+        value: "Discentes"
     },
     {
         label: "Docentes",
-        value: "docentes"
+        value: "Docentes"
     },
     {
         label: "Colaboradores",
-        value: "colaboradores"
+        value: "Colaboradores"
     }
 ]
 

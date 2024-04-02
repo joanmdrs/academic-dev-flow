@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, {useEffect, useState } from "react"
 import Titulo from "../../../../components/Titulo/Titulo"
 import BotaoAdicionar from "../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar"
 import BotaoExcluir from "../../../../components/Botoes/BotaoExcluir/BotaoExcluir"
@@ -51,31 +51,51 @@ const GerenciarMembros = () => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                
-                await new Promise((resolve) => setTimeout(resolve, 500));
+                await new Promise((resolve) => setTimeout(resolve, 1000));
             } catch (error) {
+                
             } finally {
-                setLoading(false);
+                setLoading(false)
             }
-
         }
         fetchData()
     }, [dadosMembro])
 
+    if (loading) {
+        return <Loading />
+    }
      
     const handleFecharModal = () => setIsModalVisivel(false)
     const handleAbrirModal = () => setIsModalVisivel(true)
-    
-    const handleResetar = () => {
 
+    const handleCancelar = () => {
+        setAcaoForm('criar')
+        setDadosMembro(null)
+        setIsFormVisivel(false)
+        setIsModalVisivel(false)
+        setIsPlusBtnEnabled(false)
+        setIsTrashBtnEnabled(true)
+        setIsSearchBtnEnabled(false)
+        setLoading(false)
     }
 
-    const handleSelecionarMembro = async (dados) => {
-        setLoading(true)
+    const handleOrganizarDados = async (dados) => {
         const response = await buscarUsuarioPeloId(dados.usuario)
         dados['usuario'] = response.data.username
         dados['senha'] = response.data.password
         setDadosMembro(dados)
+    }
+    
+    const handleReload = async (acao, dadosMembro) => {
+        await handleOrganizarDados(dadosMembro)
+        setAcaoForm(acao)
+        setIsPlusBtnEnabled(false)
+        setIsTrashBtnEnabled(true)
+        setIsSearchBtnEnabled(false)
+    }
+
+    const handleSelecionarMembro = async (dados) => {
+        await handleOrganizarDados(dados)
         setAcaoForm('atualizar')
         setIsFormVisivel(true)
         setIsModalVisivel(false)
@@ -84,7 +104,6 @@ const GerenciarMembros = () => {
 
     const handleAdicionarMembro = () => {
         setDadosMembro(null)
-        setLoading(true)
         setIsFormVisivel(true)
         setIsModalVisivel(false)
         setAcaoForm('criar')
@@ -95,11 +114,12 @@ const GerenciarMembros = () => {
 
     const handleSalvarMembro = async (dados) => {
         if (acaoForm === 'criar'){
-            await criarMembro(dados)
+            const response = await criarMembro(dados)
+            handleReload('atualizar', response.data)
         } else if (acaoForm === 'atualizar') {
-            await atualizarMembro(dadosMembro.id, dados) 
+            const response = await atualizarMembro(dadosMembro.id, dados)
+            handleReload('atualizar', response.data )
         }
-        handleResetar()
     }
 
     const handleBuscarMembro = async (parametro) => {
@@ -109,6 +129,7 @@ const GerenciarMembros = () => {
 
     const handleExcluirMembro = async () => {
         await excluirMembro(dadosMembro.id)
+        handleCancelar()
     }
 
     return (
@@ -126,7 +147,7 @@ const GerenciarMembros = () => {
 
             <BotaoBuscar nome="BUSCAR MEMBRO" funcao={handleAbrirModal} status={isSearchBtnEnabled}/>
 
-            <ModalDeBusca 
+            <ModalDeBusca  
                 titulo="Buscar membro" 
                 label="Nome do membro"
                 name="name-membro"
@@ -135,13 +156,11 @@ const GerenciarMembros = () => {
                 status={isModalVisivel}
                 colunas={COLUNAS_MODAL}
             />
-            
-            { loading && <Loading /> }
-            
+                        
             {isFormVisivel &&  (
 
                 <div className="global-div"> 
-                    <FormMembro onSubmit={handleSalvarMembro} />
+                    <FormMembro onSubmit={handleSalvarMembro} onCancel={handleCancelar}/>
                 </div>
             )}
         </div>

@@ -14,16 +14,16 @@ export const criarMembro = async (dados) => {
             nome: dados.nome,
             data_nascimento: dados.data_nascimento,
             telefone: dados.telefone,
-            email: dados.email
+            email: dados.email,
+            github: dados.github,
+            linkedin: dados.linkedin,
+            lattes: dados.lattes
         }
     }
     try {
         const resposta = await api.post('/membro/cadastrar/', dadosEnviar)
-            if (resposta.status === 200){
-                NotificationManager.success('Membro criado com sucesso !')
-                return resposta
-
-            }
+        NotificationManager.success('Membro criado com sucesso !')
+        return resposta
     } catch (error) {
         console.log(error)
         NotificationManager.error('Falha ao criar o membro, contate o suporte!')
@@ -94,7 +94,7 @@ export const excluirMembro = async (idMembro) => {
     }
 }
 
-export const atualizarMembro = async (dados, idMembro) => {
+export const atualizarMembro = async (idMembro, dados) => {
 
     const dadosEnviar = {
         grupo: dados.grupo,
@@ -107,7 +107,10 @@ export const atualizarMembro = async (dados, idMembro) => {
             nome: dados.nome,
             data_nascimento: dados.data_nascimento,
             telefone: dados.telefone,
-            email: dados.email
+            email: dados.email,
+            github: dados.github,
+            linkedin: dados.linkedin,
+            lattes: dados.lattes
         }
     }
 
@@ -117,7 +120,7 @@ export const atualizarMembro = async (dados, idMembro) => {
         return resposta
     } catch (error) {
         console.log(error)
-        NotificationManager.error('Falha ao criar o membro, contate o suporte!')
+        NotificationManager.error('Falha ao atualizar o membro, contate o suporte!')
         return {error: "Erro durante a operação, contate o suporte!"}
     }
 }
