@@ -2,8 +2,8 @@ import { Button, Form, Input } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import "./Login.css"
-import imgPageLogin from "../../../src/assets/img-page-login.svg"
-import { useAuth } from '../../hooks/AuthProvider';
+import imgPageLogin from "../../../../src/assets/img-page-login.svg"
+import { useAuth } from '../../../hooks/AuthProvider';
 
 const Login = () => {
     const {loginAction} = useAuth();
