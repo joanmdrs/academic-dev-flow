@@ -3,8 +3,19 @@ import "./FormRegister.css"
 import React from "react";
 import InputMask from 'react-input-mask';
 import assetRegister from "../../../../../assets/asset-register.svg"
+import { useForm } from "antd/es/form/Form";
 const FormRegister = () => {
 
+    const [form] = useForm()
+
+    const handleVerificarSenhas = (rule, value) => {
+        const senha = form.getFieldValue('senha');
+        if (value && senha && value !== senha) {
+            return Promise.reject('As senhas não correspondem!');
+        } else {
+            return Promise.resolve();
+        }
+    }
     return (
     
         <div className="screen-register"> 
@@ -13,7 +24,7 @@ const FormRegister = () => {
             </div>
 
             <div className="screen-register-form"> 
-                <Form layout="vertical">
+                <Form layout="vertical" form={form}>
 
                     <Form.Item>
                         <h2> Registre-se para uma nova conta</h2>
@@ -75,7 +86,11 @@ const FormRegister = () => {
                     <Form.Item
                         name="confirme-senha"
                         label="Confirme a senha"
-                        rules={[{ required: true, message: 'Por favor, cadastre uma senha para acessar a plataforma'}]}
+                        dependencies={['senha']}
+                        rules={[
+                            { required: true, message: 'Por favor, confirme a senha de acesso à plataforma'},
+                            { validator: handleVerificarSenhas }
+                        ]}
                     >
                         <Input.Password name="confime-senha"/>
                     </Form.Item>
