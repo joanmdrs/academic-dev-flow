@@ -1,12 +1,12 @@
 import { Button, Form, Input } from "antd";
-import "./Register.css"
+import "./FormRegister.css"
 import React from "react";
 import InputMask from 'react-input-mask';
-import assetRegister from "../../../assets/asset-register.svg"
-import { customizeRequiredMark } from "../../../components/LabelMask/LabelMask";
-const Register = () => {
+import assetRegister from "../../../../../assets/asset-register.svg"
+const FormRegister = () => {
 
     return (
+    
         <div className="screen-register"> 
             <div className="screen-register-banner"> 
                 <img src={assetRegister} alt="Imagem da página de cadastro" />
@@ -80,8 +80,6 @@ const Register = () => {
                         <Input.Password name="confime-senha"/>
                     </Form.Item>
 
-                   
-
                     <Form.Item >
                         <Button type="primary"> Cadastre-se</Button>
                     </Form.Item>
@@ -92,4 +90,4 @@ const Register = () => {
     )
 }
 
-export default Register
+export default FormRegister
