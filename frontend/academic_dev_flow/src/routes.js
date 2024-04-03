@@ -6,7 +6,6 @@ import Artefato from "./pages/Artefato";
 import AdminRoutes from "./router/AdminRoutes/AdminRoutes";
 import StudentRoutes from "./router/StudentRoutes/StudentRoutes";
 import Fluxo from "./pages/Fluxo";
-import Login from "./pages/Auth/Login";
 import TeacherRoutes from "./router/TeacherRoutes/TeacherRoutes";
 import MeusProjetos from "./pages/Projeto/screens/MeusProjetos/MeusProjetos";
 import VisualizarProjeto from "./pages/Projeto/screens/VisualizarProjeto/VisualizarProjeto";
@@ -16,11 +15,14 @@ import HomeAdministrador from "./pages/Perfis/Administrador/Home";
 import HomeAluno from "./pages/Perfis/Aluno/Home";
 import ScreenGerenciarMembros from "./pages/Membro/screens/GerenciarMembros";
 import ScreenVincularMembroAoProjeto from "./pages/Membro/screens/VincularMembroAoProjeto";
+import Login from "./pages/Auth/Login/Login";
+import Register from "./pages/Auth/Register/Register";
 
 function Routes() {
   return (
     <Switch>
       <Route path="/" Component={Login} />
+      <Route path="/cadastre-se" Component={Register} />
 
       {/* Admin */}
       <Route element={<AdminRoutes />}>
