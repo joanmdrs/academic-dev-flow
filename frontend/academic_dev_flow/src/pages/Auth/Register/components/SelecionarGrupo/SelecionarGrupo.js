@@ -8,7 +8,7 @@ import { useRegisterContexto } from "../../context/RegisterContexto";
 const SelecionarGrupo = () => {
 
     const [itemSelecionado, setItemSelecionado] = useState(null);
-    const {setGrupoUsuario} = useRegisterContexto()
+    const {setGrupoUsuario, setStep} = useRegisterContexto()
 
     const handleSelecionarGrupo = (id) => { 
 
@@ -21,6 +21,7 @@ const SelecionarGrupo = () => {
 
     const handleProsseguir = () => {
         setGrupoUsuario(itemSelecionado)
+        setStep("2")
     }
 
     return (
