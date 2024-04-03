@@ -16,7 +16,7 @@ import HomeAluno from "./pages/Perfis/Aluno/Home";
 import ScreenGerenciarMembros from "./pages/Membro/screens/GerenciarMembros";
 import ScreenVincularMembroAoProjeto from "./pages/Membro/screens/VincularMembroAoProjeto";
 import Login from "./pages/Auth/Login/Login";
-import Register from "./pages/Auth/Register/Register";
+import Register from "./pages/Auth/Register";
 
 function Routes() {
   return (
