@@ -1,0 +1,19 @@
+.screen-selecionar-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    width: 100vw;
+    height: 100vh;
+}
+
+
+.screen-selecionar-area button {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+}
