@@ -1,3 +1,5 @@
+import { NotificationManager } from "react-notifications";
+
 export const recarregarPagina = () => {
     setTimeout(() => {
         document.location.reload();
@@ -21,3 +23,18 @@ export const converterData = (dataString) => {
   return dataFormatada
   
 }
+
+export const handleResponse = (response, successMessage) => {
+  if (response.status === 200 || response.status === 204) {
+      NotificationManager.success(successMessage);
+      return response;
+  } else {
+      throw new Error("Unexpected response status: " + response.status);
+  }
+};
+
+export const handleError = (error, errorMessage) => {
+  console.log(error);
+  NotificationManager.error(errorMessage);
+  return { error: errorMessage };
+};
