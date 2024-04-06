@@ -6,6 +6,8 @@ import { BiGroup } from "react-icons/bi";
 import { SiAzureartifacts } from "react-icons/si";
 import Sider from "antd/es/layout/Sider";
 import { RiFlowChart } from "react-icons/ri";
+import { IoPricetagsOutline } from "react-icons/io5";
+
 
 const { SubMenu } = Menu;
 
@@ -80,6 +82,15 @@ const MenuAdmin = () => {
           icon={<SiAzureartifacts style={{ fontSize: "15px" }} />}
         >
           <Link to="/admin/artefatos">Artefatos</Link>
+        </Menu.Item>
+
+        <Menu.Item 
+          className="item-menu"
+          key="tipos"
+          icon={<IoPricetagsOutline style={{ fontSize: "15px" }} />}
+        >
+          <Link to="/admin/tipos">Tipos</Link>
+
         </Menu.Item>
       </Menu>
     </Sider>
