@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'apps.membro_projeto',
     'apps.iteracao',
     'apps.tarefa',
+    'apps.tipo',
     'apps.documento',
     'apps.comentario',
     'apps.pontuacao',
