@@ -57,7 +57,8 @@ const GerenciarTipos = () => {
 
     const handleSalvarTipo = async (dados) => {
         if (acaoForm === 'criar'){
-            const response = await criarTipo(dados)
+            console.log(dados)
+            await criarTipo(dados)
         } else if (acaoForm === 'atualizar') {
             const response = await atualizarTipo(dadosTipo.id, dados)
         }
@@ -94,6 +95,7 @@ const GerenciarTipos = () => {
                     <Button 
                         icon={<FaPlus />} 
                         type="primary" 
+                        onClick={handleAdicionarTipo}
                         disabled={isPlusBtnEnabled}> 
                         Criar Tipo 
                     </Button>
