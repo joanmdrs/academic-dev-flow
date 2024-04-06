@@ -25,7 +25,7 @@ export const converterData = (dataString) => {
 }
 
 export const handleResponse = (response, successMessage) => {
-  if (response.status === 200 || response.status === 204) {
+  if (response.status === 200 || response.status === 204 || response.status === 201) {
       NotificationManager.success(successMessage);
       return response;
   } else {
