@@ -28,8 +28,14 @@ const FormTipo = ({onSubmit, onCancel}) => {
         setCor(value)
     }
 
+    const handleFormSubmit = (values) => {
+        values['cor'] = cor
+        onSubmit(values);
+    };
+
+
     return (
-        <Form className='global-form' layout='vertical' onFinish={onSubmit}>
+        <Form className='global-form' layout='vertical' onFinish={handleFormSubmit}>
 
             <div style={{display: 'flex', gap: '20px', alignItems: 'flex-end'}}> 
                 <Form.Item label="Nome" name="nome">
@@ -50,7 +56,7 @@ const FormTipo = ({onSubmit, onCancel}) => {
                         </Button>
                     </Form.Item>
                     <Form.Item>
-                        <Input type='text' name='cor' value={cor} onChange={handleAlterarCor}/>
+                        <Input type='text' value={cor} onChange={handleAlterarCor}/>
                     </Form.Item>
                 </div>
 
