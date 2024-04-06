@@ -14,6 +14,8 @@ const ListaTipos = () => {
             key: 'nome',
             render: (_, record) => (
                 <a style={{
+                    padding: "5px 10px",
+                    borderRadius: '10px',
                     backgroundColor: `${record.cor}`,
                     color: '#FFFFFF'
                 }}> {record.nome} </a>
