@@ -27,13 +27,14 @@ class BuscarTipoPeloNomeView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request): 
         try:
-            nome = request.GET.get('nome_tipo')
+            nome = request.GET.get('nome')
             
-            if nome is not None: 
+            if nome: 
                 tipos = Tipo.objects.filter(nome__icontains=nome)
                 
             else:
                 tipos = Tipo.objects.all()
+                print('to pegando todos')
                 
             if not tipos: 
                 return Response({'message': 'Nenhum resultado encontrado.'}, status=status.HTTP_200_OK)
