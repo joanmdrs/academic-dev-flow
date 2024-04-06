@@ -3,7 +3,7 @@ const ContextoTipo = createContext();
 
 export const useContextoTipo = () => useContext(ContextoTipo);
 
-export const TipoProvider = ({ children }) => {
+export const ProviderTipo = ({ children }) => {
 
     const [dadosTipo, setDadosTipo] = useState(null)
     return (
