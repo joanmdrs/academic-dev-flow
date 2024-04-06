@@ -13,10 +13,12 @@ from django.contrib.auth.models import Group
 from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
 from django.contrib.auth.hashers import make_password
+from rest_framework.permissions import AllowAny
+
    
     
 class CadastrarMembroView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     def post(self, request):
         try:
             group_name = request.data.get('grupo', None) # Obtém o grupo

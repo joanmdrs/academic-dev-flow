@@ -4,9 +4,18 @@ import React from "react";
 import InputMask from 'react-input-mask';
 import assetRegister from "../../../../../assets/asset-register.svg"
 import { useForm } from "antd/es/form/Form";
+import { useNavigate } from "react-router-dom";
+
+import { useRegisterContexto } from "../../context/RegisterContexto";
+import { criarConta, criarMembro } from "../../../../../services/membroService";
+import { converterData } from "../../../../../services/utils";
 const FormRegister = () => {
 
-    const [form] = useForm()
+    const [form] = useForm();
+    const navigate = useNavigate();
+
+
+    const {usuarioGithub, grupoUsuario} = useRegisterContexto()
 
     const handleVerificarSenhas = (rule, value) => {
         const senha = form.getFieldValue('senha');
@@ -16,6 +25,20 @@ const FormRegister = () => {
             return Promise.resolve();
         }
     }
+
+    const handleCriarConta = async (dados) => {
+        dados['github'] = usuarioGithub
+        dados['grupo'] = grupoUsuario
+        dados['usuario'] = dados.email
+        dados['data_nascimento'] = converterData(dados.data_nascimento)
+
+        await criarConta(dados)
+        setInterval(() => {
+            navigate("/")
+        }, 1500);
+
+    }
+
     return (
     
         <div className="screen-register"> 
@@ -24,7 +47,7 @@ const FormRegister = () => {
             </div>
 
             <div className="screen-register-form"> 
-                <Form layout="vertical" form={form}>
+                <Form layout="vertical" form={form} onFinish={handleCriarConta}>
 
                     <Form.Item>
                         <h2> Registre-se para uma nova conta</h2>
@@ -96,7 +119,7 @@ const FormRegister = () => {
                     </Form.Item>
 
                     <Form.Item >
-                        <Button type="primary"> Cadastre-se</Button>
+                        <Button type="primary" htmlType="submit"> Cadastre-se</Button>
                     </Form.Item>
 
                 </Form>

@@ -1,6 +1,35 @@
 import { NotificationManager } from "react-notifications";
 import api from "../api/api";
 
+export const criarConta = async (dados) => {
+    const dadosEnviar = {
+        grupo: dados.grupo,
+        
+        usuario : {
+            username: dados.usuario,
+            password: dados.senha
+        },
+        membro : {
+            nome: dados.nome,
+            data_nascimento: dados.data_nascimento,
+            telefone: dados.telefone,
+            email: dados.email,
+            github: dados.github,
+            linkedin: dados.linkedin,
+            lattes: dados.lattes
+        }
+    }
+    try {
+        const resposta = await api.post('/membro/cadastrar/', dadosEnviar)
+        NotificationManager.success('Conta criada com sucesso !')
+        return resposta
+    } catch (error) {
+        console.log(error)
+        NotificationManager.error('Falha ao criar a conta, contate o suporte!')
+        return {error: "Erro durante a operação, contate o suporte!"}
+    }
+}
+
 export const criarMembro = async (dados) => {
 
     const dadosEnviar = {
