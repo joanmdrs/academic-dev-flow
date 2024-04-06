@@ -1,16 +1,77 @@
 import React, { useState } from "react";
+import {Button} from 'antd'
+import { Input, Space } from 'antd';
 import FormTipo from "../../components/FormTipo/FormTipo";
 import Titulo from "../../../../components/Titulo/Titulo";
-import BotaoBuscar from "../../../../components/Botoes/BotaoBuscar/BotaoBuscar";
-import BotaoAdicionar from "../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
-import BotaoExcluir from "../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
 import ModalDeBusca from "../../../../components/Modals/ModalDeBusca/ModalDeBusca";
 import ListaTipos from "../../components/ListaTipos/ListaTipos";
+import { FaPlus } from "react-icons/fa6";
+import { atualizarTipo, criarTipo } from "../../../../services/tipoService";
+import { useContextoTipo } from "../../context/ContextoTipo";
+
+const { Search } = Input;
 
 const GerenciarTipos = () => {
 
     const [isFormVisivel, setIsFormVisivel] = useState(false)
+    const [acaoForm, setAcaoForm] = useState('criar')
+    const [isPlusBtnEnabled, setIsPlusBtnEnabled] = useState(false)
+    const {dadosTipo, setDadosTipo} = useContextoTipo()
+
+
+    const handleCancelar = () => {
+        setAcaoForm('criar')
+        setDadosTipo(null)
+        setIsFormVisivel(false)
+        setIsPlusBtnEnabled(false)
+    }
+
+    // const handleOrganizarDados = async (dados) => {
+    //     const response = await buscarUsuarioPeloId(dados.usuario)
+    //     dados['usuario'] = response.data.username
+    //     dados['senha'] = response.data.password
+    //     setDadosMembro(dados)
+    // }
     
+    // const handleReload = async (acao, dadosMembro) => {
+    //     await handleOrganizarDados(dadosMembro)
+    //     setAcaoForm(acao)
+    //     setIsPlusBtnEnabled(false)
+    //     setIsTrashBtnEnabled(true)
+    //     setIsSearchBtnEnabled(false)
+    // }
+
+    // const handleSelecionarMembro = async (dados) => {
+    //     await handleOrganizarDados(dados)
+    //     setAcaoForm('atualizar')
+    //     setIsFormVisivel(true)
+    //     setIsModalVisivel(false)
+    //     setIsTrashBtnEnabled(false)
+    // }
+
+    const handleAdicionarTipo = () => {
+        setIsFormVisivel(true)
+        setAcaoForm('criar')
+        setIsPlusBtnEnabled(true)
+    }
+
+    const handleSalvarTipo = async (dados) => {
+        if (acaoForm === 'criar'){
+            const response = await criarTipo(dados)
+        } else if (acaoForm === 'atualizar') {
+            const response = await atualizarTipo(dadosTipo.id, dados)
+        }
+    }
+
+    // const handleBuscarMembro = async (parametro) => {
+    //     const response = await buscarMembroPeloNome(parametro)
+    //     return response
+    // }
+
+    // const handleExcluirMembro = async () => {
+    //     await excluirMembro(dadosMembro.id)
+    //     handleCancelar()
+    // }
 
     return (
 
@@ -22,29 +83,29 @@ const GerenciarTipos = () => {
             />
 
             <div className="button-menu"> 
-                <BotaoBuscar nome="BUSCAR TIPO" />
-                <div className="grouped-buttons">
-                    <BotaoAdicionar />
-                    <BotaoExcluir/>
-                </div>
-            </div>
-
-            <ModalDeBusca  
-                titulo="Buscar membro" 
-                label="Nome do membro"
-                name="name-membro"
                 
-            />
+                <Search
+                    placeholder="Busque todos os tipos"
+                    style={{
+                        width: 400,
+                    }}
+                />
 
-            <div className="global-div"> 
-
-                { isFormVisivel ? 
-                    (
-                        <FormTipo />
-                    )
-                    : null
-                }
+                    <Button 
+                        icon={<FaPlus />} 
+                        type="primary" 
+                        disabled={isPlusBtnEnabled}> 
+                        Criar Tipo 
+                    </Button>
             </div>
+
+            { isFormVisivel && 
+                (
+                    <div className="global-div"> 
+                        <FormTipo onSubmit={handleSalvarTipo} onCancel={handleCancelar}/>
+                    </div>
+                )
+            }
 
             <div className="global-div"> 
                 <ListaTipos />

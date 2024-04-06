@@ -3,7 +3,7 @@ import {Form, Input, Button} from 'antd'
 import { FaArrowsRotate } from "react-icons/fa6";
 import { gerarCorAleatoria, lightenDarkenColor } from '../../../../services/utils';
 
-const FormTipo = () => {
+const FormTipo = ({onSubmit, onCancel}) => {
 
     const [cor, setCor] = useState('');
     const [corClara, setCorClara] = useState('')
@@ -29,7 +29,7 @@ const FormTipo = () => {
     }
 
     return (
-        <Form className='global-form' layout='vertical'>
+        <Form className='global-form' layout='vertical' onFinish={onSubmit}>
 
             <div style={{display: 'flex', gap: '20px', alignItems: 'flex-end'}}> 
                 <Form.Item label="Nome" name="nome">
@@ -56,7 +56,7 @@ const FormTipo = () => {
 
                 <Form.Item> 
                     <Button type='primary' htmlType='submit'> Salvar </Button>
-                    <Button type='dashed'> Cancelar </Button>
+                    <Button type='dashed' onClick={onCancel}> Cancelar </Button>
                 </Form.Item>
             </div>
 
