@@ -29,6 +29,7 @@ urlpatterns = [
     path('artefato/', include('apps.artefato.urls', namespace='artefato')),
     path('iteracao/', include('apps.iteracao.urls', namespace='iteracao')),
     path('tarefa/', include('apps.tarefa.urls', namespace='tarefa')),
+    path('tipo/', include('apps.tipo.urls', namespace='tipo')),
     path('documento/', include('apps.documento.urls', namespace='documento')),
     path('comentario/', include('apps.comentario.urls', namespace='comentario')),
     path('pontuacao/', include('apps.pontuacao.urls', namespace='pontuacao')),
