@@ -10,13 +10,8 @@ from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
 from django.db.models import Count
 
-class BaseMembroProjetoView(APIView):
-    permission_classes = [IsAuthenticated, IsAdminUserOrReadOnly]
-
-    def handle_exception(self, exc):
-        return Response({'error': str(exc)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-class CadastrarMembroProjetoView(BaseMembroProjetoView):
+class CadastrarMembroProjetoView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         try:
             membros_data = request.data.get('membros', [])
@@ -32,7 +27,7 @@ class CadastrarMembroProjetoView(BaseMembroProjetoView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
                 
-class BuscarProjetosDoMembroView(BaseMembroProjetoView):
+class BuscarProjetosDoMembroView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, idUser):
         try:   
@@ -65,7 +60,8 @@ class BuscarMembrosPorProjetoView(APIView):
         except Exception as e: 
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-class AtualizarMembroProjetoView(BaseMembroProjetoView):
+class AtualizarMembroProjetoView(APIView):
+    permission_classes = [IsAuthenticated]
     def patch(self, request, id): 
         try: 
             
@@ -83,7 +79,8 @@ class AtualizarMembroProjetoView(BaseMembroProjetoView):
              return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
 
-class ExcluirMembroProjetoOneView(BaseMembroProjetoView):
+class ExcluirMembroProjetoOneView(APIView):
+    permission_classes = [IsAuthenticated]
     def delete(self, request, id):
         try:
             membroProjeto = MembroProjeto.objects.get(pk=id)
@@ -100,7 +97,8 @@ class ExcluirMembroProjetoOneView(BaseMembroProjetoView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)  
         
-class ExcluirMembroProjetoManyView(BaseMembroProjetoView):
+class ExcluirMembroProjetoManyView(APIView):
+    permission_classes = [IsAuthenticated]
     def delete(self, request, idProjeto):
         try:
             # Obtenha a lista de IDs a partir dos parâmetros da solicitação

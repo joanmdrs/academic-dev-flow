@@ -16,9 +16,9 @@ const AuthProvider = ({ children }) => {
   const redirectUser = (decodedUser) => {
     if (decodedUser.groups.includes("Administradores")) {
       navigate("/admin/home");
-    } else if (decodedUser.groups.includes("Alunos")) {
+    } else if (decodedUser.groups.includes("Discentes")) {
       navigate("/aluno/home");
-    } else if (decodedUser.groups.includes("Professores")) {
+    } else if (decodedUser.groups.includes("Docentes")) {
       navigate("/professor/home");
     }
   };

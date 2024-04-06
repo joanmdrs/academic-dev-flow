@@ -7,7 +7,6 @@ from .github_auth import get_github_client
 from django.http import HttpResponse
 import json
 
-
 def list_user_repositories(request):
     github_client = get_github_client() 
     user = github_client.get_user()  
@@ -30,7 +29,8 @@ def create_issue(request):
 def list_issues(request):
     try:
         g = get_github_client()
-        repo = g.get_repo("joanmdrs/sigcli")
+        repository = request.GET.get('repository')
+        repo = g.get_repo(repository)
         open_issues = repo.get_issues(state='open')
         
         issues_list = []

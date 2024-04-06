@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "./TabsProjeto.css";
 import Titulo from "../../../../components/Titulo/Titulo";
 import { Spin, Tabs } from "antd";
 import Item from "antd/es/list/Item";
@@ -172,7 +171,7 @@ const TabsProjeto = () => {
 
               <div className="button-menu"> 
                 <BotaoBuscar nome="BUSCAR PROJETO" funcao={handleExibirModal} status={isBotaoBuscarVisivel}/>
-                <div className="two-buttons"> 
+                <div className="grouped-buttons"> 
                   <BotaoAdicionar funcao={handleBotaoAdicionar} status={isBotaoAdicionarVisivel}/>
                   <BotaoExcluir funcao={handleExcluirProjeto} status={isBotaoExcluirVisivel}/>
                 </div>

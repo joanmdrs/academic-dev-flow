@@ -13,17 +13,12 @@ from django.contrib.auth.models import Group
 from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
 from django.contrib.auth.hashers import make_password
+from rest_framework.permissions import AllowAny
 
-
-
-class BaseMembroView(APIView):
-    permission_classes = [IsAuthenticated, IsAdminUserOrReadOnly]
-
-    def handle_exception(self, exc):
-        return Response({'error': str(exc)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+   
     
-    
-class CadastrarMembroView(BaseMembroView):
+class CadastrarMembroView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         try:
             group_name = request.data.get('grupo', None) # Obtém o grupo
@@ -61,13 +56,14 @@ class CadastrarMembroView(BaseMembroView):
         return Response({'error': 'Erro ao cadastrar membro'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class BuscarMembroPorGrupoView(BaseMembroView):
+class BuscarMembroPorGrupoView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         try:
             nome = request.query_params.get('nome', None)
             grupo = request.query_params.get('grupo', None)
 
-            if grupo not in ['Alunos', 'Professores']:
+            if grupo not in ['Discentes', 'Docentes']:
                 return Response({"error": "Grupo inválido"}, status=status.HTTP_400_BAD_REQUEST)
 
             membros = Membro.objects.all()
@@ -85,7 +81,8 @@ class BuscarMembroPorGrupoView(BaseMembroView):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-class BuscarMembrosPorNomeView(BaseMembroView):
+class BuscarMembrosPorNomeView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         try:
             parametro = request.GET.get('name', None)
@@ -145,7 +142,8 @@ class BuscarMembroPorIdView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
-class ExcluirMembroView(BaseMembroView):
+class ExcluirMembroView(APIView):
+    permission_classes = [IsAuthenticated]
     def delete(self, request, id):
         try:
             member = Membro.objects.get(pk=id)
@@ -162,7 +160,8 @@ class ExcluirMembroView(BaseMembroView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     
-class AtualizarMembroView(BaseMembroView):
+class AtualizarMembroView(APIView):
+    permission_classes = [IsAuthenticated]
     def patch(self, request, id):
         try:
             group_name = request.data.get('grupo', None)
@@ -199,7 +198,8 @@ class AtualizarMembroView(BaseMembroView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-class ListarMembrosView(BaseMembroView): 
+class ListarMembrosView(APIView):
+    permission_classes = [IsAuthenticated] 
     def get(self, request):
         try: 
             membros = Membro.objects.all()

@@ -1,9 +1,29 @@
-import { Button, Form, Input, Select, Spin } from "antd";
+import { Button, Form, Input, Select, Spin, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 import { LoadingOutlined } from '@ant-design/icons';
 import { useFormContext } from "../../../context/Provider/Provider";
 
-const { Option } = Select;
+const OPTIONS_STATUS = [
+    {
+        label: "Cancelado",
+        value: "cancelado"
+    },
+    {
+        label: "Em andamento",
+        value: "em_andamento"
+    },
+    {
+        label: "Concluído",
+        value: "concluido"
+    }
+]
+
+const customizeRequiredMark = (label, { required }) => (
+    <>
+        {label}
+        {required ? null : <Tag style={{marginLeft: "5px"}} color="warning">Opcional </Tag> }
+    </>
+  );
 
 const TabProjeto = ({ onSubmit, onCancel }) => {
 
@@ -16,7 +36,6 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
         const fetchData = async () => {
         try {
             setCarregando(true);
-            await new Promise((resolve) => setTimeout(resolve, 1500));
             handleAlterarCampos(hasProjeto)
         } catch (error) {
         } finally {
@@ -59,50 +78,59 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
                 (<React.Fragment>
                     <Form
                         form={form}
-                        layout="horizontal"
-                        style={{marginTop: "20px"}}
-                        className="global-form"                    
+                        layout="vertical"
+                        className="global-form"  
+                        requiredMark={customizeRequiredMark}                  
                     >
-                        <Form.Item label="Nome" name="nome">
+                        <Form.Item label="Nome" name="nome" required>
                             <Input
-                                id="input-nome"
                                 name="nome"
                             />
                         </Form.Item>
 
-                        <Form.Item label="Status" name="status" style={{maxWidth: 250}}>
+                        <div style={{display: 'flex', gap: "20px"}}>
+                            <Form.Item label="Status" name="status" style={{width: "250px"}} required>
                                 <Select
-                                    id="status"
                                     name="status"
-                                >
-                                    <Option value="">Selecione</Option>
-                                    <Option value="cancelado">Cancelado</Option>
-                                    <Option value="em_andamento">Em andamento</Option>
-                                    <Option value="concluido">Concluído</Option>
-                                </Select>
+                                    defaultValue="Selecione"
+                                    options={OPTIONS_STATUS}
+                                />
+                            </Form.Item>
+
+                            <Form.Item label="Data de Início" name="data_inicio" style={{width: "250px"}} required>
+                                <Input name="data_inicio" type="date" />
+                            </Form.Item>
+
+                            <Form.Item label="Data de Término" name="data_fim" style={{width: "250px"}} required>
+                                <Input name="data_fim" type="date" />
+                            </Form.Item>
+                        </div>
+
+                        <Form.Item label="Link do repositório" name="repositorio" style={{width: "70%"}}>
+                            <Input name="repositorio" />
                         </Form.Item>
 
-                        <Form.Item label="Data de Início" name="data_inicio" style={{ maxWidth: 250, float: 'left', marginRight: '10px' }}>
-                            <Input id="data_inicio" name="data_inicio" type="date" />
+                        <Form.Item label="Link do MVP" name="site" style={{width: "70%"}}>
+                            <Input name="site" />
                         </Form.Item>
 
-                        <Form.Item label="Data de Término" name="data_fim" style={{ maxWidth: 250, float: 'left' }}>
-                            <Input id="data_fim" name="data_fim" type="date" />
+                        <Form.Item label="Token de acesso" name="token" style={{width: "70%"}}>
+                            <Input name="token" />
                         </Form.Item>
 
-                        <Form.Item label="Descrição" name="descricao" style={{ clear: 'both' }}>
+                        <Form.Item label="Descrição" name="descricao">
                             <Input.TextArea id="descricao" name="descricao" rows={6} />
                         </Form.Item>
 
-                        <div className="tabs-projeto-footer-botoes">
-                            <Button type="primary" onClick={handleSubmeterForm}>
-                                SALVAR
+                        <div style={{display: 'flex', gap: "10px"}} >
+                            <Button type="primary" size="large" onClick={handleSubmeterForm}>
+                                Salvar
                             </Button >
 
-                            <Button type="primary" onClick={onCancel} danger >
-                                CANCELAR
+                            <Button type="primary" size="large" onClick={onCancel} danger >
+                                Cancelar
                             </Button>
-                            </div>
+                        </div>
 
                     </Form>
                 </React.Fragment>

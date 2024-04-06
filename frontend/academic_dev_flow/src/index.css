@@ -4,7 +4,7 @@
   --primary-color: #1677FF;
   --second-color: #001529;
   --third-color: #002140;
-  --light-blue: #00AAFF;
+  --border-color: #A4A4A4;
 }
 
 * {
@@ -16,15 +16,26 @@ body {
   overflow-x: hidden;
 }
 
-/* code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-} */
+
+.ant-layout {
+  background-color: #FFFFFF;
+}
+
+.ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector {
+  border: 1px solid var(--border-color);
+
+}
+.ant-input-outlined {
+  border: 1px solid var(--border-color);
+}
 
 .global-div {
   margin: 20px;
   padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  background-color: #F7F7F7;
+  border-radius: 5px;
+  border: 1px solid #ddd;
 }
 
 .global-form {
@@ -36,7 +47,8 @@ body {
   padding: 20px;
   margin-top: 10px;
   margin-bottom: 10px;
-  background-color: white;
+  border-radius: 5px;
+  background-color: #FFFFFF;
 }
 
 .global-table table {
@@ -62,22 +74,15 @@ body {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  align-items: baseline;
+  padding: 20px;
+
 }
 
 .grouped-buttons {
   display: flex;
   gap: 10px;
 }
-
-.two-buttons {
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-  margin: 20px;
-}
-
 
 
 

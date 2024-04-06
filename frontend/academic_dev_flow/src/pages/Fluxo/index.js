@@ -1,15 +1,15 @@
 import React from "react";
 import { Layout } from 'antd';
-import MyMenu from "../../components/Menu/Menu";
 import MyHeader from "../../components/Header/Header";
 import { FluxoProvider } from "./context/Provider/Provider";
 import TabsFluxo from "./screens/TabsFluxo/TabsFluxo"
+import MenuAdmin from "../../components/Menus/MenuAdmin/MenuAdmin";
 
 const Fluxo = () => {
     return (
 
         <React.Fragment>
-            <MyMenu />
+            <MenuAdmin />
             <Layout>
                 <MyHeader />
                 <FluxoProvider> <TabsFluxo /> </FluxoProvider>

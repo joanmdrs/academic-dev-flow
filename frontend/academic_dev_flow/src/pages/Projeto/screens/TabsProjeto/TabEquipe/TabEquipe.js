@@ -218,7 +218,13 @@ const TabEquipe = () => {
 
       {isVisible && (
         <div>
-          <div className="two-buttons">
+          <div className="grouped-buttons" 
+            style={{ 
+              width: "100%", 
+              display: "flex", 
+              justifyContent: "flex-end", 
+              padding:'20px'
+            }}>
             <BotaoAdicionar status={isBotaoAdicionarVisivel} funcao={onAddButtonClick} />
             <BotaoExcluir status={isBotaoExcluirVisivel} funcao={() => onDeleteButtonClick(grupo)} />
           </div>

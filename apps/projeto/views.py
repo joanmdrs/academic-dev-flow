@@ -10,13 +10,9 @@ from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
 from apps.membro_projeto.models import MembroProjeto
 
-class BaseProjetoView(APIView):
-    permission_classes = [IsAuthenticated, IsAdminUserOrReadOnly]
-
-    def handle_exception(self, exc):
-        return Response({'error': str(exc)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
-class CadastrarProjetoView(BaseProjetoView):
+class CadastrarProjetoView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         try:
             serializer = ProjetoSerializer(data=request.data)
@@ -27,7 +23,8 @@ class CadastrarProjetoView(BaseProjetoView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-class BuscarProjetosPorNomeView(BaseProjetoView):
+class BuscarProjetosPorNomeView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         try:
             parametro = request.GET.get('name', None)
@@ -81,7 +78,8 @@ class BuscarProjetosPorListaDeIdsView(APIView):
 
     
     
-class ExcluirProjetoView(BaseProjetoView):
+class ExcluirProjetoView(APIView):
+    permission_classes = [IsAuthenticated]
     def delete(self, request, id):
         try:
             projeto = get_object_or_404(Projeto, id=id)
@@ -93,7 +91,8 @@ class ExcluirProjetoView(BaseProjetoView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-class AtualizarProjetoView(BaseProjetoView):
+class AtualizarProjetoView(APIView):
+    permission_classes = [IsAuthenticated]
     def patch(self, request, id):
         try:
             projeto = Projeto.objects.get(pk=id)
@@ -106,7 +105,8 @@ class AtualizarProjetoView(BaseProjetoView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-class AtualizarFluxoProjetoView(BaseProjetoView):
+class AtualizarFluxoProjetoView(APIView):
+    permission_classes = [IsAuthenticated]
     def patch(self, request, id):
         try:
             projeto = Projeto.objects.get(pk=id)

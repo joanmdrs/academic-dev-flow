@@ -165,13 +165,18 @@ const TabFluxo = () => {
 
           { isVisivel && 
             <React.Fragment>
-              <div
-                  className="two-buttons"
-                  // style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
-              >
-                  <BotaoAdicionar funcao={handleExibirModal} status={isBotaoAdicionarVisivel}/>
-                  <BotaoExcluir funcao={handleDesvincularFluxo} status={isBotaoExcluirVisivel}/>
-              </div>
+                <div
+                    className="grouped-buttons"
+                    style={{ 
+                      width: "100%", 
+                      display: "flex", 
+                      justifyContent: "flex-end", 
+                      padding:'20px'
+                    }}
+                >
+                    <BotaoAdicionar funcao={handleExibirModal} status={isBotaoAdicionarVisivel}/>
+                    <BotaoExcluir funcao={handleDesvincularFluxo} status={isBotaoExcluirVisivel}/>
+                </div>
               <div>
 
               {hasFluxo && hasFluxo.length > 0 ? (

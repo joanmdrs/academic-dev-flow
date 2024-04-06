@@ -2,8 +2,8 @@ import { Button, Form, Input } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import "./Login.css"
-import ImagePresentation from "../../../src/assets/img-presentation-page-login.jpg"
-import { useAuth } from '../../hooks/AuthProvider';
+import imgPageLogin from "../../../../src/assets/img-page-login.svg"
+import { useAuth } from '../../../hooks/AuthProvider';
 
 const Login = () => {
     const {loginAction} = useAuth();
@@ -27,13 +27,21 @@ const Login = () => {
         <div className='container-form-login'> 
 
             <div className='form-login-header'> 
-                Academic Dev Flow
+                <div className='demo-logo'> 
+
+                </div>
+
+                <div> 
+                    <h3> Logo </h3>
+                </div>
+
+
             </div>
 
             <div className='form-login-content'>
 
                 <div className='form-login-title'> 
-                    <h3> Bem-vindo ! </h3>
+                    <h2> Bem-vindo ! </h2>
                     <p> Preencha as informações abaixo </p>
                 </div>
 
@@ -47,25 +55,30 @@ const Login = () => {
                         <Form.Item
                             className='form-item'
                             name="username"
+                            label="Nome de usuário"
                             rules={[
                                 {
                                 message: 'Please input your username!',
+                                required: true
                                 },
+                
                             ]}
                             >
-                                <Input placeholder='Username'/>
+                                <Input placeholder='Informe o nome de usuário'/>
                             </Form.Item>
 
                         <Form.Item
                             className='form-item'
+                            label="Senha"
                             name="password"
                             rules={[
                                 {
                                 message: 'Please input your password!',
+                                required: true
                                 },
                             ]}
                         >
-                            <Input.Password placeholder='Password'/>
+                            <Input.Password placeholder='Informe a senha'/>
                         </Form.Item>
 
                         <Form.Item className='link-recovery'> 
@@ -82,8 +95,10 @@ const Login = () => {
         </div>
 
         <div className='container-presentation-image'>
-            <img src={ImagePresentation} alt='Imagem de Apresentação' />
+            <img src={imgPageLogin} alt='Imagem de Apresentação' />
         </div>
+
+        <div className='trapezoide'></div>
 
     </div>
     

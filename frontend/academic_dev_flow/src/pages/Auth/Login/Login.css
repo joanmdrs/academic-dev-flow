@@ -1,0 +1,127 @@
+.login-layout {
+  display: flex;
+  justify-content: space-between;
+  height: 100vh;
+  background-color: #fff;
+  position: relative;
+}
+
+.container-form-login {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+
+.form-login-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 400px;
+  height: auto;
+  margin-top: 20px;
+  margin-bottom: 60px;
+}
+
+.form-login-header .demo-logo {
+  background-color: var(--primary-color);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.form-login-content {
+  width: 400px;
+  height: auto;
+}
+
+.form-login-title {
+  margin-bottom: 60px;
+}
+  
+.form-login-title h2 {
+  font-size: 30px;
+  margin-bottom: 5px;
+}
+
+.form-login-title p {
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+  
+.form-login form {
+  flex: 1;
+  width: 100%;
+}
+
+.form-login form .form-item {
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+}
+
+.form-login form .form-item input[type="text"] {
+  padding: 15px;
+}
+
+.form-login form .form-item input[type="password"] {
+  padding: 10px; 
+}
+  
+.form-login form .link-recovery {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.form-login form .link-recovery a {
+  font-size: smaller;
+}
+
+.form-login form button {
+  width: 100%; 
+  height: 50px;
+  background-color: var(--primary-color);
+  color: #fff; 
+  border: 1px solid #1890ff; 
+  transition: all 0.3s; 
+}
+  
+.form-login form .ant-btn:hover {
+  background-color: #40a9ff; /* Change background color on hover for 3D effect */
+  border-color: #40a9ff; /* Change border color on hover for 3D effect */
+}
+  
+.container-presentation-image {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+  overflow: hidden; 
+  margin: 10px;
+  background-color: transparent;
+  z-index: 2;
+}
+
+.trapezoide {
+  position: absolute;
+  border-right:  40vw solid #f2f2f2;
+  border-left: 15vw solid transparent;
+  border-bottom: 100vh solid #f2f2f2;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  z-index: 1;
+  opacity: 1;
+}
+
+.container-presentation-image img {
+  max-width: 80%; 
+  max-height: 80%; 
+  width: auto; 
+  height: auto; 
+}
