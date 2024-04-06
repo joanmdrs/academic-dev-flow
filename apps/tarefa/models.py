@@ -5,20 +5,42 @@ from apps.iteracao.models import Iteracao
 
 class Tarefa(models.Model):
     
+    STATUS_CHOICES = [
+        ('criada', 'Criada'),
+        ('andamento', 'Em Andamento'),
+        ('concluida', 'Concluída'),
+        ('cancelada', 'Cancelada'),
+        ('atrasada', 'Atrasada'),
+        ('bloqueada', 'Bloqueada')
+    ]
+    
     nome = models.CharField(max_length=255)
-    descricao = models.TextField(null=True, blank=True)
     data_criacao = models.DateTimeField(auto_now_add=True)
-    prazo = models.IntegerField(null=True, blank=True)
+    data_termino = models.DateTimeField(null=True, blank=True)
+    status = models.CharField(choices=STATUS_CHOICES, default='criada')
+    descricao = models.TextField(null=True, blank=True)
     concluida = models.BooleanField(default=False)
+    tempo_gasto = models.IntegerField(default=0)
+
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, null=True, blank=True)
     membros = models.ManyToManyField(MembroProjeto)
     iteracao = models.ForeignKey(Iteracao, on_delete=models.CASCADE, null=True, blank=True)
 
-    def concluir_tarefa(self):
-        self.concluida = True
-        self.data_fim = models.DateTimeField(auto_now=True)
-        self.save()
-
     def __str__(self):
         return self.nome
+    
+class IntervaloTempo(models.Model):
+    
+    INTERVALO_CHOICES = [
+        ('inicio', 'Início'),
+        ('pausa', 'Pausa'),
+    ]
+
+    tipo = models.CharField(choices=INTERVALO_CHOICES, max_length=10)
+    data_hora = models.DateTimeField(auto_now_add=True)
+    membro_projeto = models.ForeignKey(MembroProjeto, on_delete=models.CASCADE, null=True)
+    tarefa = models.ForeignKey(Tarefa, on_delete=models.CASCADE, related_name='intervalos')
+    
+    def __str__(self):
+        return f"Intervalo de {self.tipo} para a tarefa {self.tarefa.nome}"
 
