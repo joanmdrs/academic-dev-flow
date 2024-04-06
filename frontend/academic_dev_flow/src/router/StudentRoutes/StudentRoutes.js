@@ -27,7 +27,7 @@ const StudentRoutes = ({ children }) => {
         return <Loading />
     }
 
-    if (!(decodedToken && decodedToken.groups.includes('Alunos'))) {
+    if (!(decodedToken && decodedToken.groups.includes('Discentes'))) {
         return <Navigate to="/" replace />;
     }
 

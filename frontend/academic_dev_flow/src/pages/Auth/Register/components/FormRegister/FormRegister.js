@@ -7,13 +7,12 @@ import { useForm } from "antd/es/form/Form";
 import { useNavigate } from "react-router-dom";
 
 import { useRegisterContexto } from "../../context/RegisterContexto";
-import { criarConta, criarMembro } from "../../../../../services/membroService";
+import { criarConta } from "../../../../../services/membroService";
 import { converterData } from "../../../../../services/utils";
 const FormRegister = () => {
 
     const [form] = useForm();
     const navigate = useNavigate();
-
 
     const {usuarioGithub, grupoUsuario} = useRegisterContexto()
 

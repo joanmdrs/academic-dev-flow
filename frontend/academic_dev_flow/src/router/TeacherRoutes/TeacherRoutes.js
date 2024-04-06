@@ -27,7 +27,7 @@ const TeacherRoutes = ({ children }) => {
         return <Loading />
     }
 
-    if (!(decodedToken && decodedToken.groups.includes('Professores'))) {
+    if (!(decodedToken && decodedToken.groups.includes('Docentes'))) {
         return <Navigate to="/" replace />;
     }
 
