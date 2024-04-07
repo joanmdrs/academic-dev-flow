@@ -39,6 +39,31 @@ class BuscarTarefaPeloIdView(APIView):
             
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
+        
+class FiltrarTarefasPeloNomeEPeloProjeto(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        try:
+            nome = request.GET.get('nome_tarefa')
+            projeto = request.GET.get('id_projeto')
+            
+            if not nome and not projeto:
+                return Response({'error': 'Pelo menos um parâmetro é necessário'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            if nome and projeto:
+                tarefas = Tarefa.objects.filter(nome__icontains=nome, projeto_id=projeto)
+            elif nome:
+                tarefas = Tarefa.objects.filter(nome__icontains=nome)
+            else: 
+                tarefas = Tarefa.objects.filter(projeto_id=projeto)
+            
+            serializer = TarefaSerializer(tarefas, many=True)
+            
+            return Response(serializer.data, status=status.HTTP_200_OK)
+                
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)   
             
 class ListarTarefasPorProjetoView(APIView):
     
@@ -51,32 +76,9 @@ class ListarTarefasPorProjetoView(APIView):
             
             if tarefas is not None:
 
-                for tarefa in tarefas:
-                    membros_projeto = MembroProjeto.objects.filter(projeto_id=id_projeto, id__in=tarefa.membros.all())
-                    membros_info = []
+                serializer = TarefaSerializer(tarefas, many=True)
                     
-                    for membro_projeto in membros_projeto:
-                        membros_info.append({
-                            'id_membro_projeto': membro_projeto.id,
-                            'id_membro': membro_projeto.membro.id,
-                            'nome_membro': membro_projeto.membro.nome,
-                            'grupo_membro': membro_projeto.membro.grupo
-                        })
-
-                    tarefas_info.append({
-                        'id': tarefa.id,
-                        'nome': tarefa.nome,
-                        'data_criacao': tarefa.data_criacao,
-                        'data_termino': tarefa.data_termino,
-                        'descricao': tarefa.descricao,
-                        'concluida': tarefa.concluida,
-                        'tipo': tarefa.tipo_id,
-                        'projeto': tarefa.projeto_id,   
-                        'iteracao': tarefa.iteracao_id,
-                        'membros': membros_info,
-                    })
-                    
-                return Response(data=tarefas_info, status=status.HTTP_200_OK)
+                return Response(serializer.data, status=status.HTTP_200_OK)
             
             return Response(data=[], status=status.HTTP_204_NO_CONTENT)
                 

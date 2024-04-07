@@ -12,5 +12,6 @@ urlpatterns = [
     path('concluir/', ConcluirTarefasView.as_view(), name="concluir_tarefa"),
     path('reabrir/', ReabrirTarefasView.as_view(), name='reabrir_tarefa'),
     path('listar/iteracao/<int:id_iteracao>/', ListarTarefasPorIteracaoView.as_view(), name='listar_tarefas_por_iteracao'),
-    path('listar/', ListarTarefasView.as_view(), name='listar_tarefas')
+    path('listar/', ListarTarefasView.as_view(), name='listar_tarefas'),
+    path('filtrar/nome-projeto/', FiltrarTarefasPeloNomeEPeloProjeto.as_view(), name='filtrar_tarefas_pelo_nome_e_pelo_projeto')
 ]
