@@ -12,9 +12,9 @@ import MenuAluno from "../../../../components/Menus/MenuAluno/MenuAluno";
 import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfessor";
 import MyHeader from "../../../../components/Header/Header";
 import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
-import CronogramaIteracoes from "../../../Iteracoes";
-import GerenciarTarefas from "../../../Tarefas";
-import GerenciarDocumentos from "../../../Documentos";
+import CronogramaIteracoes from "../../../Iteracao";
+import GerenciarTarefas from "../../../Tarefa";
+import GerenciarDocumentos from "../../../Documento";
 
 
 const VisualizarProjeto = ({grupo}) => {
