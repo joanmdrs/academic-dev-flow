@@ -72,7 +72,7 @@ class ListarIteracoesPorProjetoView(APIView):
                         'nome_etapa': etapa.nome,
                     })
                     
-                return Response(data=iteracoes, status=status.HTTP_200_OK)
+                return Response(data=iteracoes_info, status=status.HTTP_200_OK)
             
             return Response(data=[], status=status.HTTP_204_NO_CONTENT)
                     
