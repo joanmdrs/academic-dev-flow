@@ -51,11 +51,11 @@ class BuscarMembrosPorProjetoView(APIView):
         try: 
             objetos = MembroProjeto.objects.filter(projeto=idProjeto)
             
-            if objetos is not None:
+            if objetos.exists():
                 serializer = MembroProjetoSerializer(objetos, many=True)
-                return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+                return Response(serializer.data, status=status.HTTP_200_OK)
 
-            return Response({'error': 'Objeto não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
+            return Response(data=[], status=status.HTTP_204_NO_CONTENT)
 
         except Exception as e: 
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
