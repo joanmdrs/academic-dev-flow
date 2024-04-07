@@ -5,6 +5,8 @@ import { useContextoTarefa } from '../../context/ContextoTarefa';
 import { listarMembrosPeloIdProjeto } from '../../../../services/membroProjetoService';
 import { listarIteracoesPorProjeto } from '../../../../services/iteracaoService';
 import Loading from '../../../../components/Loading/Loading';
+import { customizeRequiredMark } from '../../../../components/LabelMask/LabelMask';
+import { listarTipos } from '../../../../services/tipoService';
 
 
 const baseStyle = {
@@ -20,6 +22,7 @@ function FormGenericTarefa ({onCancel, onSubmit, addtionalFields}) {
     const {dadosProjeto, dadosTarefa} = useContextoTarefa()
     const [optionsMembros, setOptionsMembros] = useState(null)
     const [optionsIteracoes, setOptionsIteracoes] = useState(null)
+    const [optionsTipos, setOptionsTipos] = useState(null)
     const [loading, setLoading] = useState(false)
 
     const handleGetMembros = async () => {
@@ -51,9 +54,24 @@ function FormGenericTarefa ({onCancel, onSubmit, addtionalFields}) {
                 }
             })
 
-
             setOptionsIteracoes(resultados)
         }
+    }
+
+    const handleGetTipos = async () => {
+        const response = await listarTipos()
+
+        if (response.data.length > 0){
+            const resultados = response.data.map((item) => {
+                return {
+                    value: item.id,
+                    label: item.nome
+                }
+            })
+            setOptionsTipos(resultados)
+
+        }
+
     }
 
     useEffect(() => {
@@ -61,6 +79,7 @@ function FormGenericTarefa ({onCancel, onSubmit, addtionalFields}) {
             if (dadosProjeto !== null ){
                 await handleGetMembros()
                 await handleGetIteracoes()
+                await handleGetTipos()
 
                 if (dadosTarefa !== null){
 
@@ -89,43 +108,61 @@ function FormGenericTarefa ({onCancel, onSubmit, addtionalFields}) {
 
     return (
 
-        <Form form={form} layout='vertical' className='global-form' onFinish={onSubmit}>
+        <Form requiredMark={customizeRequiredMark} form={form} layout='vertical' className='global-form' onFinish={onSubmit}>
             <Form.Item>
                 <h4> CADASTRAR TAREFA </h4>
             </Form.Item>
 
-            {addtionalFields}
+            <div style={baseStyle}>
+                <Form.Item label="Nome" name="nome" required style={{flex: '1'}}>
+                    <Input type='text' name='nome' />
+                </Form.Item>
 
-            <Form.Item label="Nome" name="nome">
-                <Input type='text' name='nome' />
-            </Form.Item>
+                <Form.Item label="Data de Início" name="data_inicio" required>
+                    <Input type='date' name='data_inicio' />
+                </Form.Item>
 
-            <Form.Item label="Prazo (em dias)" name="prazo">
-                <Input type='number' name='prazo'/>
-            </Form.Item>
+                <Form.Item label="Data de Término (Previsão)" name="data_termino" required>
+                    <Input type='date' name='data_termino' />
+                </Form.Item>
+            </div>
 
-    
-            <Form.Item label="Iteração" name="iteracao">
-                <Select
-                    allowClear
-                    placeholder="Selecione"
-                    options={optionsIteracoes}
-                    name="iteracao"
-                />
-            </Form.Item>
+            <div style={baseStyle}> 
+                <Form.Item label="Iteração" name="iteracao" required style={{flex: '1'}}>
+                    <Select
+                        allowClear
+                        placeholder="Selecione"
+                        options={optionsIteracoes}
+                        name="iteracao"
+                    />
+                </Form.Item>
 
-            <Form.Item label="Atribuir à" name="membros">
-                <Select
-                    mode="multiple"
-                    allowClear
-                    style={{
-                        width: '100%',
-                    }}
-                    placeholder="Selecione"
-                    options={optionsMembros}
-                    name="membros"
-                />
-            </Form.Item>
+                <Form.Item label="Atribuir à" name="membros" required style={{flex: '1'}}>
+                    <Select
+                        mode="multiple"
+                        allowClear
+                        style={{
+                            width: '100%',
+                        }}
+                        placeholder="Selecione"
+                        options={optionsMembros}
+                        name="membros"
+                    />
+                </Form.Item>
+
+                <Form.Item label='Tipo' name='tipo' required style={{flex: '1'}}>
+                    <Select
+                        allowClear
+                        style={{
+                            width: '100%',
+                        }}
+                        placeholder="Selecione"
+                        options={optionsTipos}
+                        name="tipo"
+                    />
+
+                </Form.Item>
+            </div>
 
             <Form.Item label="Descrição" name="descricao">
                 <Input.TextArea rows={4} name='descricao' />
