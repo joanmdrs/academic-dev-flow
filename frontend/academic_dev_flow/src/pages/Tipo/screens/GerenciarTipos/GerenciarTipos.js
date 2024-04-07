@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import {Button} from 'antd'
-import { Input, Space } from 'antd';
+import { Input } from 'antd';
+import { Modal } from 'antd'
 import FormTipo from "../../components/FormTipo/FormTipo";
 import Titulo from "../../../../components/Titulo/Titulo";
-import ModalDeBusca from "../../../../components/Modals/ModalDeBusca/ModalDeBusca";
 import ListaTipos from "../../components/ListaTipos/ListaTipos";
 import { FaPlus } from "react-icons/fa6";
 import { atualizarTipo, buscarTipo, criarTipo, excluirTipo } from "../../../../services/tipoService";
 import { useContextoTipo } from "../../context/ContextoTipo";
-import { showDeleteConfirm } from "../../../../services/utils";
 
 const { Search } = Input;
 
@@ -27,37 +26,20 @@ const GerenciarTipos = () => {
         setIsPlusBtnEnabled(false)
     }
 
-    // const handleOrganizarDados = async (dados) => {
-    //     const response = await buscarUsuarioPeloId(dados.usuario)
-    //     dados['usuario'] = response.data.username
-    //     dados['senha'] = response.data.password
-    //     setDadosMembro(dados)
-    // }
-    
-    // const handleReload = async (acao, dadosMembro) => {
-    //     await handleOrganizarDados(dadosMembro)
-    //     setAcaoForm(acao)
-    //     setIsPlusBtnEnabled(false)
-    //     setIsTrashBtnEnabled(true)
-    //     setIsSearchBtnEnabled(false)
-    // }
-
-    // const handleSelecionarMembro = async (dados) => {
-    //     await handleOrganizarDados(dados)
-    //     setAcaoForm('atualizar')
-    //     setIsFormVisivel(true)
-    //     setIsModalVisivel(false)
-    //     setIsTrashBtnEnabled(false)
-    // }
+    const handleReload = () => {
+        setIsFormVisivel(false)
+        setIsPlusBtnEnabled(false)
+        setTipos([])
+    }
 
     const handleAdicionarTipo = () => {
+        setDadosTipo(null)
         setIsFormVisivel(true)
         setAcaoForm('criar')
         setIsPlusBtnEnabled(true)
     }
 
     const handleAtualizarTipo = (record) => {
-        console.log('estou passando ')
         setIsFormVisivel(true)
         setAcaoForm('atualizar')
         setDadosTipo(record)
@@ -65,11 +47,11 @@ const GerenciarTipos = () => {
 
     const handleSalvarTipo = async (dados) => {
         if (acaoForm === 'criar'){
-            console.log(dados)
             await criarTipo(dados)
         } else if (acaoForm === 'atualizar') {
             await atualizarTipo(dadosTipo.id, dados)
         }
+        handleReload()
     }
 
     const handleBuscarTipoPeloNome = async (nome) => {
@@ -78,8 +60,15 @@ const GerenciarTipos = () => {
     }
 
     const handleExcluirTipo = async (id) => {
-        showDeleteConfirm({
-            handleDelete: () => excluirTipo(id)
+        Modal.confirm({
+            title: 'Confirmar exclusão',
+            content: 'Você está seguro de que deseja excluir este(s) item(s) ?',
+            okText: 'Sim',
+            cancelText: 'Não',
+            onOk: async () => {
+                await excluirTipo(id)
+                handleReload()
+            }
         });
     }
     return (
