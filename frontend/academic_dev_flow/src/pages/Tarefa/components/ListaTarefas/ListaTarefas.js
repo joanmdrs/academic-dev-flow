@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import {Table} from 'antd'
+import {Table, Space} from 'antd'
 import { listarTarefas } from "../../../../services/tarefaService";
 
-const ListaTarefas = () => {
+const ListaTarefas = ({onEdit, onDelete}) => {
 
     const COLUNAS_TABELA_TAREFAS = [
         {
@@ -24,6 +24,17 @@ const ListaTarefas = () => {
             title: 'Status',
             dataIndex: 'status',
             key: 'status'
+        },
+        {
+            title: 'Ações',
+            dataIndex: 'action',
+            key: 'action',
+            render: (_, record) => (
+                <Space size="middle">
+                    <a onClick={() => onEdit(record)}>Editar</a>
+                    <a onClick={() =>  onDelete(record.id)}>Excluir</a>
+                </Space>
+            )
         }
     ]
 
