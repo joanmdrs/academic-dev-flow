@@ -2,6 +2,7 @@ from django.db import models
 from apps.membro_projeto.models import MembroProjeto
 from apps.projeto.models import Projeto
 from apps.iteracao.models import Iteracao
+from apps.tipo.models import Tipo
 
 class Tarefa(models.Model):
     
@@ -21,7 +22,7 @@ class Tarefa(models.Model):
     descricao = models.TextField(null=True, blank=True)
     concluida = models.BooleanField(default=False)
     tempo_gasto = models.IntegerField(default=0)
-
+    tipo = models.ForeignKey(Tipo, on_delete=models.SET_NULL, null=True, blank=True)
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, null=True, blank=True)
     membros = models.ManyToManyField(MembroProjeto)
     iteracao = models.ForeignKey(Iteracao, on_delete=models.CASCADE, null=True, blank=True)
