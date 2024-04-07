@@ -3,6 +3,7 @@ import {Form, Input, Button} from 'antd'
 import { FaArrowsRotate } from "react-icons/fa6";
 import { gerarCorAleatoria, lightenDarkenColor } from '../../../../services/utils';
 import { useContextoTipo } from '../../context/ContextoTipo';
+import { customizeRequiredMark } from '../../../../components/LabelMask/LabelMask';
 
 const FormTipo = ({onSubmit, onCancel}) => {
 
@@ -46,19 +47,25 @@ const FormTipo = ({onSubmit, onCancel}) => {
 
 
     return (
-        <Form form={form} className='global-form' layout='vertical' onFinish={handleFormSubmit}>
+        <Form 
+            form={form} 
+            requiredMark={customizeRequiredMark}
+            className='global-form' 
+            layout='vertical' 
+            onFinish={handleFormSubmit}
+        >
 
             <div style={{display: 'flex', gap: '20px', alignItems: 'flex-end'}}> 
-                <Form.Item label="Nome" name="nome">
-                    <Input type='text' name='nome'/> 
+                <Form.Item label="Nome" name="nome" required>
+                    <Input type='text' name='nome' placeholder='nome'/> 
                 </Form.Item>
 
                 <Form.Item label='Descrição' name='descricao'>
-                    <Input type='text' name='descricão' />
+                    <Input type='text' name='descricão' placeholder='descrição (opcional)' />
                 </Form.Item>
 
                 <div style={{display: 'flex', alignItems: 'flex-end', gap: '10px'}}> 
-                    <Form.Item label='Cor'>
+                    <Form.Item label='Cor' required>
                         <Button 
                             style={{backgroundColor: `${cor}`, color: `${corClara}`, border: `1px solid ${corClara}`}} 
                             onClick={handleGerarCor}
@@ -66,14 +73,17 @@ const FormTipo = ({onSubmit, onCancel}) => {
                             <FaArrowsRotate /> 
                         </Button>
                     </Form.Item>
-                    <Form.Item>
+                    <Form.Item required>
                         <Input type='text' value={cor} onChange={handleAlterarCor}/>
                     </Form.Item>
                 </div>
 
                 <Form.Item> 
                     <Button type='primary' htmlType='submit'> Salvar </Button>
-                    <Button type='dashed' onClick={onCancel}> Cancelar </Button>
+                </Form.Item>
+                
+                <Form.Item>
+                    <Button type='default' onClick={onCancel}> Cancelar </Button>
                 </Form.Item>
             </div>
 
