@@ -31,9 +31,9 @@ const FormBuscarTarefa = () => {
 
     const filterOption = (input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
-    
+
     return (
-        <Form layout="vertical">
+        <Form layout="vertical" className="global-form">
             <Form.Item label='Nome' name='nome'>
                 <Input name="nome" placeholder="nome da tarefa"/>
             </Form.Item>

@@ -91,6 +91,8 @@ function FormGenericTarefa ({onCancel, onSubmit, addtionalFields}) {
                         ...dadosTarefa,
                         membros: membrosValue
                     });
+                } else {
+                    form.resetFields()
                 }
 
                 setLoading(false)
