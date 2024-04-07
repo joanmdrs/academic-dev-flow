@@ -1,5 +1,7 @@
 import { NotificationManager } from "react-notifications";
 import api from "../api/api";
+import { handleError } from "./utils";
+import { ERROR_MESSAGE_ON_SEARCHING } from "./messages";
 
 export const criarTarefa = async (dados) => {
     try {
@@ -96,5 +98,14 @@ export const reabrirTarefas = async (ids) => {
         console.log(error)
         NotificationManager.error('Falha ao reabrir a(s) tarefa(s), contate o suporte!')
         return {error: 'Erro ao reabrir a(s) tarefa(s)!'}
+    }
+}
+
+export const listarTarefas = async () => {
+    try {
+        const response = await api.get('tarefa/listar/')
+        return response
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
     }
 }
