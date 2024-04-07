@@ -6,15 +6,16 @@ import ListaTarefas from "../../components/ListaTarefas/ListaTarefas"
 import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProjeto";
 import FormBuscarTarefa from "../../components/FormBuscarTarefa/FormBuscarTarefa";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
-import { criarTarefa } from "../../../../services/tarefaService";
+import { atualizarTarefa, criarTarefa } from "../../../../services/tarefaService";
 import FormGenericTarefa from "../../components/FormGenericTarefa/FormGenericTarefa";
+import { buscarProjetoPeloId } from "../../../../services/projetoService";
 
 const GerenciarTarefas = () => {
 
     const [isFormVisivel, setIsFormVisivel] = useState(false)
-    const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(true)
+    const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false)
     const [acaoForm, setAcaoForm] = useState('criar')
-    const {dadosProjeto, setDadosTarefa, step} = useContextoTarefa()
+    const {dadosProjeto, setDadosProjeto, dadosTarefa, setDadosTarefa, step} = useContextoTarefa()
 
     const handleAdicionarTarefa = () => {
         setIsFormVisivel(true)
@@ -23,12 +24,29 @@ const GerenciarTarefas = () => {
         setDadosTarefa(null)
     }
 
+    const handleBuscarProjeto = async (id) => {
+        const response = await buscarProjetoPeloId(id)
+        setDadosProjeto(response.data)
+    }
+
+    const handleAtualizarTarefa = async (record) => {
+        await handleBuscarProjeto(record.projeto)
+        setIsFormVisivel(true)
+        setIsFormBuscarVisivel(false)
+        setAcaoForm('atualizar')
+        setDadosTarefa(record)
+    }
+
     const handleSalvarTarefa = async (dados) => {
         dados['projeto'] = dadosProjeto.id
         if (acaoForm === 'criar'){
             await criarTarefa(dados)
-        } 
+        } else if (acaoForm === 'atualizar'){
+            await atualizarTarefa(dadosTarefa.id, dados)
+        }
     }
+
+
 
     return (
 
@@ -63,18 +81,20 @@ const GerenciarTarefas = () => {
             )}
 
             <div className="global-div"> 
-                {
-                    isFormVisivel && acaoForm === 'criar' ? 
-                    ( 
+                {isFormVisivel && acaoForm === 'criar' && (
+                    <React.Fragment> 
+                        {step === "0" && <SelecionarProjeto />}
+                        {step === "1" && <FormGenericTarefa onSubmit={handleSalvarTarefa} />}
+                    </React.Fragment>
+                )}
 
-                        <React.Fragment> 
-                            { step === "0" && <SelecionarProjeto /> }
-                            { step === "1" && <FormGenericTarefa onSubmit={handleSalvarTarefa} />}
-                
-                        </React.Fragment>
-                    )
-                    : (<ListaTarefas />)
-                }
+                {isFormVisivel && acaoForm === 'atualizar' && (
+                    <FormGenericTarefa onSubmit={handleSalvarTarefa} />
+                )}
+
+                {!isFormVisivel  && (
+                    <ListaTarefas onEdit={handleAtualizarTarefa} />
+                )}
             </div>
 
         

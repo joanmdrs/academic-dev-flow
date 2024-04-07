@@ -36,7 +36,7 @@ function FormGenericTarefa ({onCancel, onSubmit, addtionalFields}) {
                     label: `${item.nome_membro} (${item.grupo_membro})`
                 }
             })
-
+            
             setOptionsMembros(resultados)
         } 
     }
@@ -80,23 +80,12 @@ function FormGenericTarefa ({onCancel, onSubmit, addtionalFields}) {
                 await handleGetMembros()
                 await handleGetIteracoes()
                 await handleGetTipos()
-
+                setLoading(false)
                 if (dadosTarefa !== null){
-
-                    const membrosValue = dadosTarefa.membros ? 
-                        dadosTarefa.membros.map(membro => (membro.id_membro_projeto)) 
-                        : undefined;
-
-                    form.setFieldsValue({
-                        ...dadosTarefa,
-                        membros: membrosValue
-                    });
+                    form.setFieldsValue(dadosTarefa)
                 } else {
                     form.resetFields()
                 }
-
-                setLoading(false)
-                
             }
         }
 
