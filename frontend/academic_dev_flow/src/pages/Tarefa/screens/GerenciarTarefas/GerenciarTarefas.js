@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Titulo from "../../../../components/Titulo/Titulo";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaSearch } from "react-icons/fa";
 import {Button} from 'antd'
 import FormAdminTarefa from "../../components/FormAdminTarefa/FormAdminTarefa";
 import ListaTarefas from "../../components/ListaTarefas/ListaTarefas"
@@ -21,25 +21,33 @@ const GerenciarTarefas = () => {
             />
 
             <div className="button-menu"> 
-            
-                    <Button 
-                        icon={<FaPlus />} 
-                        type="primary"  
-                    >
-                        Criar Tarefa
-                    </Button>
+
+                <Button
+                    icon={<FaSearch />} 
+                    type="primary"
+                >
+                    Filtrar
+                </Button>
+                <Button 
+                    icon={<FaPlus />} 
+                    type="primary"  
+                >
+                    Criar Tarefa
+                </Button>
+            </div>
+
+            <div>   
+                Form de busca
             </div>
 
             <div className="global-div"> 
-
-               
-                <FormAdminTarefa />
-
+                {
+                    isFormVisivel ? (<FormAdminTarefa />)
+                    : (<ListaTarefas />)
+                }
             </div>
 
         
-                
-
         
         </React.Fragment>            
     )

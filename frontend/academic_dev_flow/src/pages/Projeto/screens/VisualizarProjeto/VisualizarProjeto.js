@@ -13,7 +13,6 @@ import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfes
 import MyHeader from "../../../../components/Header/Header";
 import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
 import CronogramaIteracoes from "../../../Iteracao";
-import GerenciarTarefas from "../../../Tarefa";
 import GerenciarDocumentos from "../../../Documento";
 
 
