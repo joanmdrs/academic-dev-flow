@@ -6,8 +6,9 @@ import Titulo from "../../../../components/Titulo/Titulo";
 import ModalDeBusca from "../../../../components/Modals/ModalDeBusca/ModalDeBusca";
 import ListaTipos from "../../components/ListaTipos/ListaTipos";
 import { FaPlus } from "react-icons/fa6";
-import { atualizarTipo, buscarTipo, criarTipo } from "../../../../services/tipoService";
+import { atualizarTipo, buscarTipo, criarTipo, excluirTipo } from "../../../../services/tipoService";
 import { useContextoTipo } from "../../context/ContextoTipo";
+import { showDeleteConfirm } from "../../../../services/utils";
 
 const { Search } = Input;
 
@@ -76,11 +77,11 @@ const GerenciarTipos = () => {
         setTipos(response.data)
     }
 
-    // const handleExcluirMembro = async () => {
-    //     await excluirMembro(dadosMembro.id)
-    //     handleCancelar()
-    // }
-
+    const handleExcluirTipo = async (id) => {
+        showDeleteConfirm({
+            handleDelete: () => excluirTipo(id)
+        });
+    }
     return (
 
         <div> 
@@ -118,8 +119,7 @@ const GerenciarTipos = () => {
             }
 
             <div className="global-div"> 
-                <ListaTipos onEdit={handleAtualizarTipo}/>
-
+                <ListaTipos onEdit={handleAtualizarTipo} onDelete={handleExcluirTipo}/>
             </div>
 
 

@@ -37,7 +37,7 @@ const ListaTipos = ({onEdit, onDelete}) => {
             render: (_, record) => (
                 <Space size="middle">
                     <a onClick={() => onEdit(record)}>Editar</a>
-                    <a>Excluir</a>
+                    <a onClick={() =>  onDelete(record.id)}>Excluir</a>
                 </Space>
             ),
             },

@@ -1,4 +1,5 @@
 import { NotificationManager } from "react-notifications";
+import {Modal} from 'antd'
 
 export const recarregarPagina = () => {
     setTimeout(() => {
@@ -71,3 +72,14 @@ export const lightenDarkenColor = (col, amt) => {
   else if (g < 0) g = 0;
   return (usePound ? '#' : '') + (g | (b << 8) | (r << 16)).toString(16);
 }
+
+export const showDeleteConfirm = async ({handleDelete}) => {
+
+  Modal.confirm({
+      title: 'Confirmar exclusão',
+      content: 'Você está seguro de que deseja excluir este(s) item(s) ?',
+      okText: 'Sim',
+      cancelText: 'Não',
+      onOk:async () => { await handleDelete() } 
+    });
+};
