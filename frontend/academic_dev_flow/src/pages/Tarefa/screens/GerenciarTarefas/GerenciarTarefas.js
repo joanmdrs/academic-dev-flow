@@ -5,10 +5,12 @@ import {Button} from 'antd'
 import FormAdminTarefa from "../../components/FormAdminTarefa/FormAdminTarefa";
 import ListaTarefas from "../../components/ListaTarefas/ListaTarefas"
 import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProjeto";
+import FormBuscarTarefa from "../../components/FormBuscarTarefa/FormBuscarTarefa";
 
 const GerenciarTarefas = () => {
 
     const [isFormVisivel, setIsFormVisivel] = useState(false)
+    const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(true)
 
     return (
 
@@ -25,8 +27,9 @@ const GerenciarTarefas = () => {
                 <Button
                     icon={<FaSearch />} 
                     type="primary"
+                    onClick={() => setIsFormBuscarVisivel(!isFormBuscarVisivel)}
                 >
-                    Filtrar
+                    Buscar
                 </Button>
                 <Button 
                     icon={<FaPlus />} 
@@ -36,9 +39,11 @@ const GerenciarTarefas = () => {
                 </Button>
             </div>
 
-            <div>   
-                Form de busca
-            </div>
+            {isFormBuscarVisivel && (
+                <div className="global-div" style={{width: '50%'}}>   
+                    <FormBuscarTarefa />
+                </div>
+            )}
 
             <div className="global-div"> 
                 {
