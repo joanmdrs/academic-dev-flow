@@ -3,7 +3,7 @@ import Titulo from "../../../../components/Titulo/Titulo";
 import { FaPlus } from "react-icons/fa";
 import {Button} from 'antd'
 import FormAdminTarefa from "../../components/FormAdminTarefa/FormAdminTarefa";
-import ListaTarefas from "../../ListaTarefas/ListaTarefas";
+import ListaTarefas from "../../components/ListaTarefas/ListaTarefas"
 
 const GerenciarTarefas = () => {
 
@@ -31,12 +31,10 @@ const GerenciarTarefas = () => {
             </div>
 
         
-                <FormAdminTarefa />
+            <FormAdminTarefa />
                 
 
-            <div className="global-div"> 
-                <ListaTarefas />
-            </div>
+        
         </React.Fragment>            
     )
 }

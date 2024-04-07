@@ -103,7 +103,7 @@ const VisualizarProjeto = ({grupo}) => {
 
                     <div className="content"> 
                         {currentPage === "default" && <CronogramaIteracoes />}
-                        {currentPage === "tarefas" && <GerenciarTarefas />}
+                        {/* {currentPage === "tarefas" && <GerenciarTarefas />} */}
                         {currentPage === "documentos" && <GerenciarDocumentos/>}
                     </div>
                 </div>

@@ -8,6 +8,7 @@ import Sider from "antd/es/layout/Sider";
 import { RiFlowChart } from "react-icons/ri";
 import { IoPricetagsOutline } from "react-icons/io5";
 import { MdOutlineTaskAlt } from "react-icons/md";
+import { IoDocumentTextOutline } from "react-icons/io5";
 
 
 const { SubMenu } = Menu;
@@ -80,7 +81,7 @@ const MenuAdmin = () => {
         <Menu.Item
           className="item-menu"
           key="artefato"
-          icon={<SiAzureartifacts style={{ fontSize: "15px" }} />}
+          icon={<IoDocumentTextOutline style={{ fontSize: "20px" }} />}
         >
           <Link to="/admin/artefatos">Artefatos</Link>
         </Menu.Item>
@@ -88,7 +89,7 @@ const MenuAdmin = () => {
         <Menu.Item
           className="item-menu"
           key="tarefa"
-          icon={<MdOutlineTaskAlt style={{fontSize: '15px'}}/>}
+          icon={<MdOutlineTaskAlt style={{fontSize: '20px'}}/>}
         >
           <Link to="/admin/tarefas"> Tarefas </Link>
         </Menu.Item>
@@ -96,7 +97,7 @@ const MenuAdmin = () => {
         <Menu.Item 
           className="item-menu"
           key="tipos"
-          icon={<IoPricetagsOutline style={{ fontSize: "15px" }} />}
+          icon={<IoPricetagsOutline style={{ fontSize: "20px" }} />}
         >
           <Link to="/admin/tipos">Tipos</Link>
 

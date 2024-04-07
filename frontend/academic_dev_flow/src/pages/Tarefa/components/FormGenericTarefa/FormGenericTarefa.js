@@ -1,10 +1,10 @@
 import { Button, Form, Input, Select } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import React, { useEffect, useState } from 'react'
-import { useProjetoContext } from '../../../context/ProjetoContext';
-import { listarMembrosPeloIdProjeto } from '../../../services/membroProjetoService';
-import { listarIteracoesPorProjeto } from '../../../services/iteracaoService';
-import Loading from '../../../components/Loading/Loading';
+import { useContextoTarefa } from '../../context/ContextoTarefa';
+import { listarMembrosPeloIdProjeto } from '../../../../services/membroProjetoService';
+import { listarIteracoesPorProjeto } from '../../../../services/iteracaoService';
+import Loading from '../../../../components/Loading/Loading';
 
 
 const baseStyle = {
@@ -17,10 +17,10 @@ const baseStyle = {
 function FormGenericTarefa ({onCancel, onSubmit, addtionalFields}) {
 
     const [form] = useForm()
-    const {dadosProjeto, dadosTarefa} = useProjetoContext()
+    const {dadosProjeto, dadosTarefa} = useContextoTarefa()
     const [optionsMembros, setOptionsMembros] = useState(null)
     const [optionsIteracoes, setOptionsIteracoes] = useState(null)
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
 
     const handleGetMembros = async () => {
         const response = await listarMembrosPeloIdProjeto(dadosProjeto.id)
