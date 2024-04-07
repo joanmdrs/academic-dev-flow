@@ -48,35 +48,37 @@ class ListarTarefasPorProjetoView(APIView):
             
             tarefas = Tarefa.objects.filter(projeto_id=id_projeto)  # Buscamos as tarefas do projeto
             tarefas_info = []
+            
+            if tarefas is not None:
 
-            for tarefa in tarefas:
-                # Obtemos os dados dos objetos do relacionamento entre membro e projeto
-                membros_projeto = MembroProjeto.objects.filter(projeto_id=id_projeto, id__in=tarefa.membros.all())
-                
-                membros_info = []
-                
-                for membro_projeto in membros_projeto:
-                    membros_info.append({
-                        'id_membro_projeto': membro_projeto.id,
-                        'id_membro': membro_projeto.membro.id,
-                        'nome_membro': membro_projeto.membro.nome,
-                        'grupo_membro': membro_projeto.membro.grupo
+                for tarefa in tarefas:
+                    membros_projeto = MembroProjeto.objects.filter(projeto_id=id_projeto, id__in=tarefa.membros.all())
+                    membros_info = []
+                    
+                    for membro_projeto in membros_projeto:
+                        membros_info.append({
+                            'id_membro_projeto': membro_projeto.id,
+                            'id_membro': membro_projeto.membro.id,
+                            'nome_membro': membro_projeto.membro.nome,
+                            'grupo_membro': membro_projeto.membro.grupo
+                        })
+
+                    tarefas_info.append({
+                        'id': tarefa.id,
+                        'nome': tarefa.nome,
+                        'data_criacao': tarefa.data_criacao,
+                        'data_termino': tarefa.data_termino,
+                        'descricao': tarefa.descricao,
+                        'concluida': tarefa.concluida,
+                        'tipo': tarefa.tipo_id,
+                        'projeto': tarefa.projeto_id,   
+                        'iteracao': tarefa.iteracao_id,
+                        'membros': membros_info,
                     })
-
-                tarefas_info.append({
-                    'id': tarefa.id,
-                    'nome': tarefa.nome,
-                    'data_criacao': tarefa.data_criacao,
-                    'prazo': tarefa.prazo,
-                    'descricao': tarefa.descricao,
-                    'concluida': tarefa.concluida,
-                    'projeto': tarefa.projeto_id,   
-                    'iteracao': tarefa.iteracao_id,
-                    'membros': membros_info,
-                })
-                
-            return JsonResponse(tarefas_info, safe=False, json_dumps_params={'ensure_ascii': False})
-        
+                    
+                return Response(data=tarefas_info, status=status.HTTP_200_OK)
+            
+            return Response(data=[], status=status.HTTP_204_NO_CONTENT)
                 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
