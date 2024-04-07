@@ -4,6 +4,7 @@ import { FaPlus } from "react-icons/fa";
 import {Button} from 'antd'
 import FormAdminTarefa from "../../components/FormAdminTarefa/FormAdminTarefa";
 import ListaTarefas from "../../components/ListaTarefas/ListaTarefas"
+import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProjeto";
 
 const GerenciarTarefas = () => {
 
@@ -20,7 +21,6 @@ const GerenciarTarefas = () => {
             />
 
             <div className="button-menu"> 
-                
             
                     <Button 
                         icon={<FaPlus />} 
@@ -30,8 +30,14 @@ const GerenciarTarefas = () => {
                     </Button>
             </div>
 
+            <div className="global-div"> 
+
+               
+                <FormAdminTarefa />
+
+            </div>
+
         
-            <FormAdminTarefa />
                 
 
         

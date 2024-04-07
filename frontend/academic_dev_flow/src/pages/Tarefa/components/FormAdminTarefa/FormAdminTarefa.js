@@ -1,47 +1,20 @@
 import React, { useEffect, useState } from "react";
 import FormGenericTarefa from "../FormGenericTarefa/FormGenericTarefa";
-import { Form, Select } from "antd";
-import { listarProjetos } from "../../../../services/projetoService";
-
-const InputProjeto = () => {
-
-    const [optionsProjetos, setOptionsProjetos] = useState(null)
-
-    useEffect(() => {
-
-        const fetchData = async () => {
-            await handleGetProjetos()
-        }
-       
-        fetchData()
-    }, [])
-
-    
-    const handleGetProjetos = async () => {
-        const response = await listarProjetos()
-
-        const resultados = response.data.map((item) => {
-            return {
-                value: item.id,
-                label: item.nome
-            }
-        })
-
-
-        setOptionsProjetos(resultados)
-    }
-
-    return (
-        <Form.Item>
-            <Select defaultValue="Selecione o projeto" allowClear options={optionsProjetos} />
-        </Form.Item>
-    )
-}
+import { useContextoTarefa } from "../../context/ContextoTarefa";
+import SelecionarProjeto from "../SelecionarProjeto/SelecionarProjeto";
 
 function FormAdminTarefa () {
 
+    const {step} = useContextoTarefa()
+    
     return (
-        <FormGenericTarefa addtionalFields={<InputProjeto />} />
+
+        <React.Fragment> 
+            { step === "0" && <SelecionarProjeto /> }
+            { step === "1" && <FormGenericTarefa />}
+
+        </React.Fragment>
+
     ) 
 }
 

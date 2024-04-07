@@ -25,30 +25,35 @@ function FormGenericTarefa ({onCancel, onSubmit, addtionalFields}) {
     const handleGetMembros = async () => {
         const response = await listarMembrosPeloIdProjeto(dadosProjeto.id)
 
-        const resultados = response.data.map((item) => {
+        if (response.data.length > 0){
+            const resultados = response.data.map((item) => {
 
-            return {
-                value: item.id_membro_projeto,
-                label: `${item.nome_membro} (${item.grupo_membro})`
-            }
-        })
+                return {
+                    value: item.id_membro_projeto,
+                    label: `${item.nome_membro} (${item.grupo_membro})`
+                }
+            })
 
-        setOptionsMembros(resultados)
+            setOptionsMembros(resultados)
+        } 
     }
 
     const handleGetIteracoes = async () => {
         const response = await listarIteracoesPorProjeto(dadosProjeto.id)
-        const iteracoesOrdenadas = response.data.sort((a, b) => a.numero - b.numero);
 
-        const resultados = iteracoesOrdenadas.map((item) => {
-            return {
-                value: item.id,
-                label: item.nome
-            }
-        })
+        if (response.data.length > 0) {
+            const iteracoesOrdenadas = response.data.sort((a, b) => a.numero - b.numero);
+
+            const resultados = iteracoesOrdenadas.map((item) => {
+                return {
+                    value: item.id,
+                    label: item.nome
+                }
+            })
 
 
-        setOptionsIteracoes(resultados)
+            setOptionsIteracoes(resultados)
+        }
     }
 
     useEffect(() => {
@@ -91,46 +96,36 @@ function FormGenericTarefa ({onCancel, onSubmit, addtionalFields}) {
 
             {addtionalFields}
 
-            <div style={{...baseStyle}}> 
-                <Form.Item label="Nome" name="nome" style={{ flex: "1"}}>
-                    <Input type='text' name='nome' />
-                </Form.Item>
+            <Form.Item label="Nome" name="nome">
+                <Input type='text' name='nome' />
+            </Form.Item>
 
-                <Form.Item label="Prazo (em dias)" name="prazo" style={{flex: "1"}}>
-                    <Input type='number' name='prazo'/>
-                </Form.Item>
+            <Form.Item label="Prazo (em dias)" name="prazo">
+                <Input type='number' name='prazo'/>
+            </Form.Item>
 
-                
+    
+            <Form.Item label="Iteração" name="iteracao">
+                <Select
+                    allowClear
+                    placeholder="Selecione"
+                    options={optionsIteracoes}
+                    name="iteracao"
+                />
+            </Form.Item>
 
-            </div>
-
-            <div style={{...baseStyle}}>
-                <Form.Item label="Iteração" name="iteracao" style={{ flex: "1"}}>
-                    <Select
-                        allowClear
-                        style={{
-                            width: '100%',
-                        }}
-                        placeholder="Selecione"
-                        options={optionsIteracoes}
-                        name="iteracao"
-                    />
-                </Form.Item>
-
-                <Form.Item label="Atribuir à" name="membros" style={{ flex: "1"}}>
-                    <Select
-                        mode="multiple"
-                        allowClear
-                        style={{
-                            width: '100%',
-                        }}
-                        placeholder="Selecione"
-                        options={optionsMembros}
-                        name="membros"
-                    />
-                </Form.Item>
-
-            </div>
+            <Form.Item label="Atribuir à" name="membros">
+                <Select
+                    mode="multiple"
+                    allowClear
+                    style={{
+                        width: '100%',
+                    }}
+                    placeholder="Selecione"
+                    options={optionsMembros}
+                    name="membros"
+                />
+            </Form.Item>
 
             <Form.Item label="Descrição" name="descricao">
                 <Input.TextArea rows={4} name='descricao' />
