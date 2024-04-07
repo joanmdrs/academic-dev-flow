@@ -51,8 +51,8 @@ class ListarIteracoesPorProjetoView(APIView):
             
                 for iteracao in iteracoes:
 
-                    gerente = MembroProjeto.objects.get(id=iteracao.gerente_id)
-                    membro = Membro.objects.get(id=gerente.membro_id)
+                    lider = MembroProjeto.objects.get(id=iteracao.lider_id)
+                    membro = Membro.objects.get(id=lider.membro_id)
                     fase = FluxoEtapa.objects.get(id=iteracao.fase_id)
                     etapa = Etapa.objects.get(id=fase.etapa_id)
                     
@@ -64,7 +64,7 @@ class ListarIteracoesPorProjetoView(APIView):
                         'data_fim': iteracao.data_fim,
                         'status': iteracao.status,
                         'projeto': iteracao.projeto_id,
-                        'gerente': gerente.id,
+                        'lider': lider.id,
                         'id_membro': membro.id,
                         'nome_membro': membro.nome,
                         'fase': fase.id,
