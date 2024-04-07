@@ -17,7 +17,8 @@ class Tarefa(models.Model):
     
     nome = models.CharField(max_length=255)
     data_criacao = models.DateTimeField(auto_now_add=True)
-    data_termino = models.DateTimeField(null=True, blank=True)
+    data_inicio = models.DateField(null=True, blank=True)
+    data_termino = models.DateField(null=True, blank=True)
     status = models.CharField(choices=STATUS_CHOICES, default='criada')
     descricao = models.TextField(null=True, blank=True)
     concluida = models.BooleanField(default=False)
