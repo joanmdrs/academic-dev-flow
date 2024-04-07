@@ -7,6 +7,7 @@ import { SiAzureartifacts } from "react-icons/si";
 import Sider from "antd/es/layout/Sider";
 import { RiFlowChart } from "react-icons/ri";
 import { IoPricetagsOutline } from "react-icons/io5";
+import { MdOutlineTaskAlt } from "react-icons/md";
 
 
 const { SubMenu } = Menu;
@@ -82,6 +83,14 @@ const MenuAdmin = () => {
           icon={<SiAzureartifacts style={{ fontSize: "15px" }} />}
         >
           <Link to="/admin/artefatos">Artefatos</Link>
+        </Menu.Item>
+
+        <Menu.Item
+          className="item-menu"
+          key="tarefa"
+          icon={<MdOutlineTaskAlt style={{fontSize: '15px'}}/>}
+        >
+          <Link to="/admin/tarefas"> Tarefas </Link>
         </Menu.Item>
 
         <Menu.Item 
