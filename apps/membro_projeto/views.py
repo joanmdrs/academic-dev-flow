@@ -51,7 +51,7 @@ class BuscarMembrosPorProjetoView(APIView):
         try: 
             objetos = MembroProjeto.objects.filter(projeto=idProjeto)
             
-            if objetos.exists():
+            if objetos is not None:
                 serializer = MembroProjetoSerializer(objetos, many=True)
                 return Response(serializer.data, status=status.HTTP_200_OK)
 

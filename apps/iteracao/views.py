@@ -47,30 +47,35 @@ class ListarIteracoesPorProjetoView(APIView):
             iteracoes = Iteracao.objects.filter(projeto=id_projeto)
             iteracoes_info = []
             
-            for iteracao in iteracoes:
+            if iteracoes is not None:
+            
+                for iteracao in iteracoes:
 
-                gerente = MembroProjeto.objects.get(id=iteracao.gerente_id)
-                membro = Membro.objects.get(id=gerente.membro_id)
-                fase = FluxoEtapa.objects.get(id=iteracao.fase_id)
-                etapa = Etapa.objects.get(id=fase.etapa_id)
-                
-                iteracoes_info.append({
-                    'id': iteracao.id,
-                    'nome': iteracao.nome,
-                    'numero': iteracao.numero,
-                    'data_inicio': iteracao.data_inicio,
-                    'data_fim': iteracao.data_fim,
-                    'status': iteracao.status,
-                    'projeto': iteracao.projeto_id,
-                    'gerente': gerente.id,
-                    'id_membro': membro.id,
-                    'nome_membro': membro.nome,
-                    'fase': fase.id,
-                    'id_etapa': etapa.id,
-                    'nome_etapa': etapa.nome,
-                })
-                
-            return JsonResponse(iteracoes_info, safe=False, json_dumps_params={'ensure_ascii': False})
+                    gerente = MembroProjeto.objects.get(id=iteracao.gerente_id)
+                    membro = Membro.objects.get(id=gerente.membro_id)
+                    fase = FluxoEtapa.objects.get(id=iteracao.fase_id)
+                    etapa = Etapa.objects.get(id=fase.etapa_id)
+                    
+                    iteracoes_info.append({
+                        'id': iteracao.id,
+                        'nome': iteracao.nome,
+                        'numero': iteracao.numero,
+                        'data_inicio': iteracao.data_inicio,
+                        'data_fim': iteracao.data_fim,
+                        'status': iteracao.status,
+                        'projeto': iteracao.projeto_id,
+                        'gerente': gerente.id,
+                        'id_membro': membro.id,
+                        'nome_membro': membro.nome,
+                        'fase': fase.id,
+                        'id_etapa': etapa.id,
+                        'nome_etapa': etapa.nome,
+                    })
+                    
+                return Response(data=iteracoes, status=status.HTTP_200_OK)
+            
+            return Response(data=[], status=status.HTTP_204_NO_CONTENT)
+                    
             
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
