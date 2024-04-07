@@ -6,10 +6,12 @@ export const useContextoTipo = () => useContext(ContextoTipo);
 export const ProviderTipo = ({ children }) => {
 
     const [dadosTipo, setDadosTipo] = useState(null)
+    const [tipos, setTipos] = useState([])
     return (
         <ContextoTipo.Provider
             value={{
-                dadosTipo, setDadosTipo
+                dadosTipo, setDadosTipo,
+                tipos, setTipos,
             }}
         >
             {children}

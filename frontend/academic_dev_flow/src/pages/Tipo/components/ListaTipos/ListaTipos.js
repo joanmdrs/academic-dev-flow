@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import {Table, Space} from 'antd'
 import { listarTipos } from "../../../../services/tipoService"
 import Loading from "../../../../components/Loading/Loading"
+import { useContextoTipo } from "../../context/ContextoTipo"
 
 
 const ListaTipos = () => {
@@ -40,7 +41,7 @@ const ListaTipos = () => {
 
     ]
 
-    const [tipos, setTipos ] = useState([])
+    const {tipos, setTipos } = useContextoTipo()
     const [loading, setLoading] = useState(true)
 
 
@@ -51,12 +52,17 @@ const ListaTipos = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            await handleListarTipos()
+
+            if (tipos.length === 0) {
+                await handleListarTipos()
+            }
             setLoading(false)
+            
         }
 
         fetchData()
-    }, [])
+
+    }, [tipos])
 
     if (loading) {
         return <Loading />

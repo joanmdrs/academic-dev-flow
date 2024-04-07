@@ -6,7 +6,7 @@ import Titulo from "../../../../components/Titulo/Titulo";
 import ModalDeBusca from "../../../../components/Modals/ModalDeBusca/ModalDeBusca";
 import ListaTipos from "../../components/ListaTipos/ListaTipos";
 import { FaPlus } from "react-icons/fa6";
-import { atualizarTipo, criarTipo } from "../../../../services/tipoService";
+import { atualizarTipo, buscarTipo, criarTipo } from "../../../../services/tipoService";
 import { useContextoTipo } from "../../context/ContextoTipo";
 
 const { Search } = Input;
@@ -16,7 +16,7 @@ const GerenciarTipos = () => {
     const [isFormVisivel, setIsFormVisivel] = useState(false)
     const [acaoForm, setAcaoForm] = useState('criar')
     const [isPlusBtnEnabled, setIsPlusBtnEnabled] = useState(false)
-    const {dadosTipo, setDadosTipo} = useContextoTipo()
+    const {dadosTipo, setDadosTipo, setTipos} = useContextoTipo()
 
 
     const handleCancelar = () => {
@@ -64,10 +64,11 @@ const GerenciarTipos = () => {
         }
     }
 
-    // const handleBuscarMembro = async (parametro) => {
-    //     const response = await buscarMembroPeloNome(parametro)
-    //     return response
-    // }
+    const handleBuscarTipoPeloNome = async (nome) => {
+        
+        const response = await buscarTipo(nome)
+        setTipos(response.data)
+    }
 
     // const handleExcluirMembro = async () => {
     //     await excluirMembro(dadosMembro.id)
@@ -87,6 +88,7 @@ const GerenciarTipos = () => {
                 
                 <Search
                     placeholder="Busque todos os tipos"
+                    onSearch={handleBuscarTipoPeloNome}
                     style={{
                         width: 400,
                     }}

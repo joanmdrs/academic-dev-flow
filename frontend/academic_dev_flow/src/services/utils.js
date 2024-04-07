@@ -24,7 +24,7 @@ export const converterData = (dataString) => {
   
 }
 
-export const handleResponse = (response, successMessage) => {
+export const handleSuccess = (response, successMessage) => {
   if (response.status === 200 || response.status === 204 || response.status === 201) {
       NotificationManager.success(successMessage);
       return response;
@@ -32,6 +32,15 @@ export const handleResponse = (response, successMessage) => {
       throw new Error("Unexpected response status: " + response.status);
   }
 };
+
+export const handleInfo = (response, infoMessage) => {
+  if (response.status === 204){
+    NotificationManager.info(infoMessage)
+    return response;
+  } else {
+    throw new Error("Unexpected response status: " + response.status);
+}
+}
 
 export const handleError = (error, errorMessage) => {
   console.log(error);

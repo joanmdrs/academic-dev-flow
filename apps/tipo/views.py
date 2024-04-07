@@ -37,7 +37,7 @@ class BuscarTipoPeloNomeView(APIView):
                 print('to pegando todos')
                 
             if not tipos: 
-                return Response({'message': 'Nenhum resultado encontrado.'}, status=status.HTTP_200_OK)
+                return Response(data=[], status=status.HTTP_204_NO_CONTENT)
             
             serializer = TipoSerializer(tipos, many=True)
                         
