@@ -55,17 +55,23 @@ const GerenciarTipos = () => {
         setIsPlusBtnEnabled(true)
     }
 
+    const handleAtualizarTipo = (record) => {
+        console.log('estou passando ')
+        setIsFormVisivel(true)
+        setAcaoForm('atualizar')
+        setDadosTipo(record)
+    }
+
     const handleSalvarTipo = async (dados) => {
         if (acaoForm === 'criar'){
             console.log(dados)
             await criarTipo(dados)
         } else if (acaoForm === 'atualizar') {
-            const response = await atualizarTipo(dadosTipo.id, dados)
+            await atualizarTipo(dadosTipo.id, dados)
         }
     }
 
     const handleBuscarTipoPeloNome = async (nome) => {
-        
         const response = await buscarTipo(nome)
         setTipos(response.data)
     }
@@ -112,7 +118,7 @@ const GerenciarTipos = () => {
             }
 
             <div className="global-div"> 
-                <ListaTipos />
+                <ListaTipos onEdit={handleAtualizarTipo}/>
 
             </div>
 

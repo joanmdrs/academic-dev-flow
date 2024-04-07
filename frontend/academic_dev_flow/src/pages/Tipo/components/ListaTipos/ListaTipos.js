@@ -5,7 +5,7 @@ import Loading from "../../../../components/Loading/Loading"
 import { useContextoTipo } from "../../context/ContextoTipo"
 
 
-const ListaTipos = () => {
+const ListaTipos = ({onEdit, onDelete}) => {
 
     const COLUNAS_TABELA = [
         {
@@ -14,12 +14,15 @@ const ListaTipos = () => {
             dataIndex: 'nome',
             key: 'nome',
             render: (_, record) => (
-                <a style={{
+                <a
+                 style={{
                     padding: "5px 10px",
                     borderRadius: '10px',
                     backgroundColor: `${record.cor}`,
                     color: '#FFFFFF'
-                }}> {record.nome} </a>
+                }}
+        
+                > {record.nome} </a>
             ),  
         },
         {
@@ -33,7 +36,7 @@ const ListaTipos = () => {
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    <a>Editar</a>
+                    <a onClick={() => onEdit(record)}>Editar</a>
                     <a>Excluir</a>
                 </Space>
             ),

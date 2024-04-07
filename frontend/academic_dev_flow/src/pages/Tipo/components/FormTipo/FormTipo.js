@@ -2,19 +2,30 @@ import React, { useEffect, useState } from 'react'
 import {Form, Input, Button} from 'antd'
 import { FaArrowsRotate } from "react-icons/fa6";
 import { gerarCorAleatoria, lightenDarkenColor } from '../../../../services/utils';
+import { useContextoTipo } from '../../context/ContextoTipo';
 
 const FormTipo = ({onSubmit, onCancel}) => {
 
     const [cor, setCor] = useState('');
     const [corClara, setCorClara] = useState('')
+    const {dadosTipo} = useContextoTipo()
+    const [form] = Form.useForm()
 
     useEffect(() => {
         const fetchData = async () => {
-            handleGerarCor()
+
+            if (dadosTipo !== null) {
+                form.setFieldsValue(dadosTipo)
+                setCor(dadosTipo.cor)
+
+            } else {
+                form.resetFields()
+                handleGerarCor()
+            }
         }
 
         fetchData()
-    }, [])
+    }, [dadosTipo])
 
     const handleGerarCor = () => {
         const color = gerarCorAleatoria()
@@ -35,7 +46,7 @@ const FormTipo = ({onSubmit, onCancel}) => {
 
 
     return (
-        <Form className='global-form' layout='vertical' onFinish={handleFormSubmit}>
+        <Form form={form} className='global-form' layout='vertical' onFinish={handleFormSubmit}>
 
             <div style={{display: 'flex', gap: '20px', alignItems: 'flex-end'}}> 
                 <Form.Item label="Nome" name="nome">
