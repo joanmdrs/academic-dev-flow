@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import Titulo from "../../../../components/Titulo/Titulo";
 import { FaPlus, FaSearch } from "react-icons/fa";
-import {Button} from 'antd'
+import {Button, Modal} from 'antd'
 import ListaTarefas from "../../components/ListaTarefas/ListaTarefas"
 import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProjeto";
 import FormBuscarTarefa from "../../components/FormBuscarTarefa/FormBuscarTarefa";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
-import { atualizarTarefa, criarTarefa, filtrarTarefasPeloNomeEPeloProjeto } from "../../../../services/tarefaService";
+import { atualizarTarefa, criarTarefa, excluirTarefas, filtrarTarefasPeloNomeEPeloProjeto } from "../../../../services/tarefaService";
 import FormGenericTarefa from "../../components/FormGenericTarefa/FormGenericTarefa";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 
@@ -53,7 +53,17 @@ const GerenciarTarefas = () => {
         }
     }
 
-
+    const handleExcluirTarefa = async (id) => {
+        Modal.confirm({
+            title: 'Confirmar exclusão',
+            content: 'Você está seguro de que deseja excluir este(s) item(s) ?',
+            okText: 'Sim',
+            cancelText: 'Não',
+            onOk: async () => {
+                await excluirTarefas([id])
+            }
+        });
+    }
 
     return (
 
@@ -100,7 +110,7 @@ const GerenciarTarefas = () => {
                 )}
 
                 {!isFormVisivel  && (
-                    <ListaTarefas onEdit={handleAtualizarTarefa} />
+                    <ListaTarefas onEdit={handleAtualizarTarefa} onDelete={handleExcluirTarefa} />
                 )}
             </div>
 

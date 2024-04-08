@@ -113,17 +113,16 @@ class ExcluirTarefaView(APIView):
         try:
             ids_tasks = request.GET.getlist('ids[]', [])
 
-            if not ids_tasks:
-                return Response({'error': 'IDs das tarefas a serem excluídas não fornecidos'}, status=status.HTTP_400_BAD_REQUEST)
+            if ids_tasks is not None:
+                tarefas = Tarefa.objects.filter(id__in=ids_tasks)
+                
+                if tarefas.exists():
+                    tarefas.delete()
+                    return Response({"detail": "Tarefas excluídas com sucesso"}, status=status.HTTP_204_NO_CONTENT)
+                
+                return Response({'error': 'Nenhuma tarefa encontrada com os IDs fornecidos'}, status=status.HTTP_404_NOT_FOUND)
 
-            tarefas = Tarefa.objects.filter(id__in=ids_tasks)
-
-            if not tarefas.exists():
-                return JsonResponse({'error': 'Nenhuma tarefa encontrada com os IDs fornecidos'}, status=status.HTTP_404_NOT_FOUND)
-
-            tarefas.delete()
-
-            return Response({"detail": "Tarefas excluídas com sucesso"}, status=status.HTTP_204_NO_CONTENT)
+            return Response({'error': 'IDs das tarefas a serem excluídas não fornecidos'}, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
