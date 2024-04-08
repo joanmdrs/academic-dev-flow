@@ -133,14 +133,15 @@ def create_content(request):
         content = data.get('content')
         commit_message = data.get('commit_message')
         path = data.get('path', "test.txt")
-        author_name = data.get('author_name')  # Adicionando o nome do autor
+        author_name = data.get('author_name')
+        author_email = data.get('author_email')
          
         if not repository or not content or not commit_message:
             return JsonResponse({'error': 'Os parâmetros repository, content e commit_message são obrigatórios'}, status=400)
         
         repo = g.get_repo(repository)
         
-        author = {"name": author_name, "email": "author@example.com"} 
+        author = {"name": author_name, "email": author_email} 
             
         repo.create_file(path, commit_message, content, branch="main", committer=author)
         
