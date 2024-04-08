@@ -6,6 +6,10 @@ import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService"
 
 const optionsStatus = [
     {
+        value: 'criado',
+        label: 'Criado'
+    },
+    {
         value: 'rascunho',
         label: 'Em rascunho'
     },
@@ -16,10 +20,14 @@ const optionsStatus = [
     {
         value: 'aprovado',
         label: 'Aprovado'
+    },
+    {
+        value: 'finalizado',
+        label: 'Finalizado'
     }
 ]
 
-const FormArtefato = ({onSubmit, onCancel}) => {
+const FormArtefato = ({onSubmit, onCancel, additionalInputs}) => {
 
     const {dadosProjeto, dadosArtefato} = useContextoArtefato()
     const [optionsIteracao, setOptionsIteracao] = useState(null)
@@ -61,37 +69,33 @@ const FormArtefato = ({onSubmit, onCancel}) => {
                 <h4> CADASTRAR ARTEFATO </h4>
             </Form.Item>
 
-            <div style={{display: "flex", gap: "20px"}}> 
-                <Form.Item label="Título" name="titulo" style={{flex: "1"}}>
-                    <Input type="text" name="titulo" placeholder="Ex.: Documento de Visão"/>
-                </Form.Item>
+            {additionalInputs}
 
-                <Form.Item label="Path dentro do repositório" name="caminho" style={{flex: "1"}}> 
-                    <Input type="text" name="caminho" placeholder="docs/doc-visao.md" />
-                </Form.Item>
-            </div>
+            <Form.Item label="Nome" name="nome">
+                <Input type="text" name="nome" placeholder="Ex.: Documento de Visão"/>
+            </Form.Item>
 
-            <div style={{display: "flex", gap: "20px"}}> 
-                <Form.Item label="Iteração" name="iteracao" style={{flex: "1"}}>
-                    <Select options={optionsIteracao} name="iteracao" />
-                </Form.Item>
-                
-                <Form.Item label="Status" name="status" style={{flex: "1"}}>
-                    <Select options={optionsStatus} name="status" />
-                </Form.Item>
-            </div>
+            <Form.Item label="Path artefato no repositório" name="path_github"> 
+                <Input type="text" name="path_github" placeholder="docs/doc-visao.md" />
+            </Form.Item>
 
-            <div style={{display: "flex", gap: "10px"}}> 
-                <Form.Item>
-                    <Button type="primary" htmlType="submit" > Salvar </Button>
-                </Form.Item>
+            <Form.Item label="Iteração" name="iteracao">
+                <Select options={optionsIteracao} name="iteracao" />
+            </Form.Item>
+            
+            <Form.Item label="Status" name="status">
+                <Select options={optionsStatus} name="status" />
+            </Form.Item>
 
-                <Form.Item>
-                    <Button onClick={onCancel}> Cancelar </Button>
-                </Form.Item>
-            </div>            
+            <Form.Item label="Descrição" name="descricao">
+                <Input.TextArea rows={4} name="descricao"/>
+            </Form.Item>
+
+            <Form.Item>
+                <Button type="primary" htmlType="submit" > Salvar </Button>
+                <Button onClick={onCancel}> Cancelar </Button>
+            </Form.Item>
         </Form>
-
     )
 
 }

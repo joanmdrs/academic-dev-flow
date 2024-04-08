@@ -3,12 +3,20 @@ import {Button} from 'antd'
 import Titulo from "../../../../components/Titulo/Titulo";
 import { FaPlus, FaSearch } from "react-icons/fa";
 import FormGenericBusca from "../../../../components/Forms/FormGenericBusca/FormGenericBusca";
+import FormArtefato from "../../components/FormArtefato/FormArtefato";
+import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProjeto";
+import ListaArtefatos from "../../components/ListaArtefatos/ListaArtefatos";
 
 const GerenciarArtefatos = () => {
 
     const [isFormVisivel, setIsFormVisivel] = useState(false)
     const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false)
     const [acaoForm, setAcaoForm] = useState('criar')
+
+    const handleCriarArtefato = () => {
+        setIsFormVisivel(true)
+
+    }
 
     return (
         <React.Fragment>
@@ -28,6 +36,7 @@ const GerenciarArtefatos = () => {
                 <Button 
                     icon={<FaPlus />} 
                     type="primary" 
+                    onClick={handleCriarArtefato}
                 >
                     Criar Artefato
                 </Button>
@@ -40,20 +49,10 @@ const GerenciarArtefatos = () => {
             )}
 
             <div className="global-div"> 
-                {/* {isFormVisivel && acaoForm === 'criar' && (
-                    <React.Fragment> 
-                        {step === "0" && <SelecionarProjeto />}
-                        {step === "1" && <FormGenericTarefa onSubmit={handleSalvarTarefa} onCancel={handleCancelar}/>}
-                    </React.Fragment>
-                )} */}
+                {isFormVisivel ? (
+                    <FormArtefato additionalInputs={<SelecionarProjeto />} /> 
+                ) : (<ListaArtefatos />)}
 
-                {/* {isFormVisivel && acaoForm === 'atualizar' && (
-                    
-                )}
-
-                {!isFormVisivel  && (
-                    
-                )} */}
             </div>
         </React.Fragment>    
     )

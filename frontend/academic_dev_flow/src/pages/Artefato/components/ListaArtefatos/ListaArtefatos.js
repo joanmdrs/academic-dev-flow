@@ -60,3 +60,5 @@ const ListaArtefatos = ({onEdit, onDelete}) => {
         />
     )
 }
+
+export default ListaArtefatos
