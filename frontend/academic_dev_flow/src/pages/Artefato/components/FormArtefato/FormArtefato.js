@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "antd/es/form/Form";
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
+import SelectProjeto from "../SelectProjeto/SelectProjeto";
 
 const optionsStatus = [
     {
@@ -27,7 +28,7 @@ const optionsStatus = [
     }
 ]
 
-const FormArtefato = ({onSubmit, onCancel, additionalInputs}) => {
+const FormArtefato = ({onSubmit, onCancel, selectProjeto, inputsAdmin}) => {
 
     const {dadosProjeto, dadosArtefato} = useContextoArtefato()
     const [optionsIteracao, setOptionsIteracao] = useState(null)
@@ -69,7 +70,7 @@ const FormArtefato = ({onSubmit, onCancel, additionalInputs}) => {
                 <h4> CADASTRAR ARTEFATO </h4>
             </Form.Item>
 
-            {additionalInputs}
+            {selectProjeto}
 
             <Form.Item label="Nome" name="nome">
                 <Input type="text" name="nome" placeholder="Ex.: Documento de Visão"/>
@@ -77,6 +78,12 @@ const FormArtefato = ({onSubmit, onCancel, additionalInputs}) => {
 
             <Form.Item label="Path artefato no repositório" name="path_github"> 
                 <Input type="text" name="path_github" placeholder="docs/doc-visao.md" />
+            </Form.Item>
+
+            {inputsAdmin}
+
+            <Form.Item label="Mensagem de commit" name="commit_message">
+                <Input name="commit_message" />
             </Form.Item>
 
             <Form.Item label="Iteração" name="iteracao">

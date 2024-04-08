@@ -4,8 +4,9 @@ import Titulo from "../../../../components/Titulo/Titulo";
 import { FaPlus, FaSearch } from "react-icons/fa";
 import FormGenericBusca from "../../../../components/Forms/FormGenericBusca/FormGenericBusca";
 import FormArtefato from "../../components/FormArtefato/FormArtefato";
-import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProjeto";
 import ListaArtefatos from "../../components/ListaArtefatos/ListaArtefatos";
+import SelectProjeto from "../../components/SelectProjeto/SelectProjeto"
+import InputsAdmin from "../../components/InputsAdmin/InputsAdmin"
 
 const GerenciarArtefatos = () => {
 
@@ -15,7 +16,20 @@ const GerenciarArtefatos = () => {
 
     const handleCriarArtefato = () => {
         setIsFormVisivel(true)
+    }
 
+    const handleSalvarArtefato = (dados) => {
+    
+        const dadosGit = {
+            repository: dados.repository,
+            content: dados.descricao,
+            commit_message: dados.commit_message,
+            path: dados.path_github,
+            author_name: dados.author_name,
+            author_email: dados.author_email
+        }
+
+        console.log(dadosGit)
     }
 
     return (
@@ -50,7 +64,7 @@ const GerenciarArtefatos = () => {
 
             <div className="global-div"> 
                 {isFormVisivel ? (
-                    <FormArtefato additionalInputs={<SelecionarProjeto />} /> 
+                    <FormArtefato onSubmit={handleSalvarArtefato} selectProjeto={<SelectProjeto />} inputsAdmin={<InputsAdmin/>} /> 
                 ) : (<ListaArtefatos />)}
 
             </div>

@@ -16,3 +16,8 @@ export const ERROR_MESSAGE_ON_CREATION = "Falha durante o cadastro, contate o su
 export const ERROR_MESSAGE_ON_UPDATE = "Falha ao atualizar as informações, contate o suporte!"
 export const ERROR_MESSAGE_ON_DELETION = "Falha durante a exclusão, contate o suporte!"
 
+// Mensagens GITHUB INTEGRATION 
+
+export const SUCCESS_MESSAGE_ON_CREATION_THE_CONTENT = "Conteúdo cadastrado com sucesso !"
+
+export const ERROR_MESSAGE_ON_CREATION_THE_CONTENT = "Falha durante o cadastro do conteúdo, contate o suporte!"

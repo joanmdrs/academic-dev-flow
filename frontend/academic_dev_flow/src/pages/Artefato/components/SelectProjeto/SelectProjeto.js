@@ -3,7 +3,7 @@ import {Form, Select, Button, Input } from "antd";
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { buscarProjetoPeloId, listarProjetos } from "../../../../services/projetoService";
 
-const SelecionarProjeto = () => {
+const SelectProjeto = () => {
     const [optionsProjetos, setOptionsProjetos] = useState([]);
     const [selectedItem, setSelectedItem] = useState(null);
     const {setDadosProjeto} = useContextoArtefato()
@@ -32,20 +32,19 @@ const SelecionarProjeto = () => {
 
     const filterOption = (input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
     return (
-        <Form.Item>
-            <Select
-                showSearch
-                allowClear
-                placeholder="Pesquise ou selecione o projeto"
-                optionFilterProp="children"
-                value={selectedItem}
-                onChange={handleChange}
-                options={optionsProjetos}
-                filterOption={filterOption}
-            />
-        </Form.Item>
-        
+            <Form.Item>
+                <Select
+                    showSearch
+                    allowClear
+                    placeholder="Pesquise ou selecione o projeto"
+                    optionFilterProp="children"
+                    value={selectedItem}
+                    onChange={handleChange}
+                    options={optionsProjetos}
+                    filterOption={filterOption}
+                />
+            </Form.Item>
     );
 };
 
-export default SelecionarProjeto;
+export default SelectProjeto;
