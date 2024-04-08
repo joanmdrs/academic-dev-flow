@@ -18,6 +18,7 @@ import Login from "./pages/Auth/Login/Login";
 import Register from "./pages/Auth/Register";
 import PageGerenciarTipos from "./pages/Tipo";
 import ScreenGerenciarTarefas from "./pages/Tarefa/screens/GerenciarTarefas";
+import ScreenGerenciarArtefatos from "./pages/Artefato/screens/GerenciarArtefatos";
 
 function Routes() {
   return (
@@ -34,7 +35,7 @@ function Routes() {
         <Route path="/admin/etapas" Component={Etapa} exact />
         <Route path="/admin/membros/gerenciar" Component={ScreenGerenciarMembros} exact />
         <Route path="/admin/membros/vincular-projeto" Component={ScreenVincularMembroAoProjeto} exact/>
-        {/* <Route path="/admin/artefatos" Component={Artefato} exact /> */}
+        <Route path="/admin/artefatos" Component={ScreenGerenciarArtefatos} exact />
         <Route path="/admin/tarefas" Component={ScreenGerenciarTarefas} exact/>
         <Route path="/admin/tipos" Component={PageGerenciarTipos} exact/>
       </Route>
