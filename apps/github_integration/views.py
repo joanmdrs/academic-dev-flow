@@ -4,6 +4,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from github import Github, GithubException
 from .github_auth import get_github_client
+from github import InputGitAuthor
+
 from django.http import HttpResponse
 import json
 
@@ -125,32 +127,33 @@ def list_contents(request):
         
 def create_content(request):
     try:
-        g = get_github_client()
     
         data = json.loads(request.body)
         
+        github_token = data.get('github_token')
         repository = data.get('repository')
         content = data.get('content')
         commit_message = data.get('commit_message')
         path = data.get('path', "test.txt")
         author_name = data.get('author_name')
         author_email = data.get('author_email')
+        
+        g = get_github_client(github_token)
          
         if not repository or not content or not commit_message:
             return JsonResponse({'error': 'Os parâmetros repository, content e commit_message são obrigatórios'}, status=400)
         
         repo = g.get_repo(repository)
         
-        author = {"name": author_name, "email": author_email} 
+        author = InputGitAuthor(author_name, author_email)
             
         repo.create_file(path, commit_message, content, branch="main", committer=author)
         
         return JsonResponse({'success': 'Arquivo criado com sucesso!'}, status=status.HTTP_201_CREATED)
-
         
     except GithubException as e:
         return JsonResponse({'error': str(e)}, status=500)
-    
+
     
 def update_content(request):
     try:

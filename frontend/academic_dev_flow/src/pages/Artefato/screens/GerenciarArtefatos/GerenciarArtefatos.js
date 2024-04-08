@@ -7,29 +7,25 @@ import FormArtefato from "../../components/FormArtefato/FormArtefato";
 import ListaArtefatos from "../../components/ListaArtefatos/ListaArtefatos";
 import SelectProjeto from "../../components/SelectProjeto/SelectProjeto"
 import InputsAdmin from "../../components/InputsAdmin/InputsAdmin"
+import { useContextoArtefato } from "../../context/ContextoArtefato";
+import { createContent } from "../../../../services/githubIntegration";
 
 const GerenciarArtefatos = () => {
 
     const [isFormVisivel, setIsFormVisivel] = useState(false)
     const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false)
     const [acaoForm, setAcaoForm] = useState('criar')
+    const {dadosProjeto} = useContextoArtefato()
 
     const handleCriarArtefato = () => {
         setIsFormVisivel(true)
     }
 
-    const handleSalvarArtefato = (dados) => {
-    
-        const dadosGit = {
-            repository: dados.repository,
-            content: dados.descricao,
-            commit_message: dados.commit_message,
-            path: dados.path_github,
-            author_name: dados.author_name,
-            author_email: dados.author_email
-        }
+    const handleSalvarArtefato = async (dados) => {
+        dados['projeto'] = dadosProjeto.id
+        dados['github_token'] = dadosProjeto.token
 
-        console.log(dadosGit)
+        await createContent(dados)
     }
 
     return (
