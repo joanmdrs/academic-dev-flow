@@ -6,7 +6,11 @@ import ListaTarefas from "../../components/ListaTarefas/ListaTarefas"
 import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProjeto";
 import FormBuscarTarefa from "../../components/FormBuscarTarefa/FormBuscarTarefa";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
-import { atualizarTarefa, criarTarefa, excluirTarefas, filtrarTarefasPeloNomeEPeloProjeto } from "../../../../services/tarefaService";
+import { 
+    atualizarTarefa, 
+    criarTarefa, 
+    excluirTarefas, 
+    filtrarTarefasPeloNomeEPeloProjeto } from "../../../../services/tarefaService";
 import FormGenericTarefa from "../../components/FormGenericTarefa/FormGenericTarefa";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 
@@ -15,7 +19,28 @@ const GerenciarTarefas = () => {
     const [isFormVisivel, setIsFormVisivel] = useState(false)
     const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false)
     const [acaoForm, setAcaoForm] = useState('criar')
-    const {setTarefas, dadosProjeto, setDadosProjeto, dadosTarefa, setDadosTarefa, step} = useContextoTarefa()
+    const {
+        setTarefas, 
+        dadosProjeto, 
+        setDadosProjeto, 
+        dadosTarefa, 
+        setDadosTarefa, 
+        step, 
+        setStep} = useContextoTarefa()
+
+    const handleCancelar = () => {
+        setIsFormVisivel(false)
+        setDadosTarefa(null)
+    }
+
+    const handleReload = () => {
+        setIsFormVisivel(false)
+        setIsFormBuscarVisivel(false)
+        setAcaoForm('criar')
+        setTarefas([])
+        setDadosProjeto(null)
+        setStep('0')
+    }
 
     const handleFiltrarTarefas = async (dados) => {
         const response = await filtrarTarefasPeloNomeEPeloProjeto(dados.nome_tarefa, dados.id_projeto)
@@ -51,6 +76,7 @@ const GerenciarTarefas = () => {
         } else if (acaoForm === 'atualizar'){
             await atualizarTarefa(dadosTarefa.id, dados)
         }
+        handleReload()
     }
 
     const handleExcluirTarefa = async (id) => {
@@ -61,12 +87,12 @@ const GerenciarTarefas = () => {
             cancelText: 'Não',
             onOk: async () => {
                 await excluirTarefas([id])
+                handleReload()
             }
         });
     }
 
     return (
-
         <React.Fragment>
             <Titulo 
                 titulo='Tarefas'
@@ -74,7 +100,6 @@ const GerenciarTarefas = () => {
             />
 
             <div className="button-menu"> 
-
                 <Button
                     icon={<FaSearch />} 
                     type="primary"
@@ -93,7 +118,7 @@ const GerenciarTarefas = () => {
 
             {isFormBuscarVisivel && (
                 <div className="global-div" style={{width: '50%'}}>   
-                    <FormBuscarTarefa onSearch={handleFiltrarTarefas} />
+                    <FormBuscarTarefa onSearch={handleFiltrarTarefas}  />
                 </div>
             )}
 
@@ -101,21 +126,18 @@ const GerenciarTarefas = () => {
                 {isFormVisivel && acaoForm === 'criar' && (
                     <React.Fragment> 
                         {step === "0" && <SelecionarProjeto />}
-                        {step === "1" && <FormGenericTarefa onSubmit={handleSalvarTarefa} />}
+                        {step === "1" && <FormGenericTarefa onSubmit={handleSalvarTarefa} onCancel={handleCancelar}/>}
                     </React.Fragment>
                 )}
 
                 {isFormVisivel && acaoForm === 'atualizar' && (
-                    <FormGenericTarefa onSubmit={handleSalvarTarefa} />
+                    <FormGenericTarefa onSubmit={handleSalvarTarefa} onCancel={handleCancelar} />
                 )}
 
                 {!isFormVisivel  && (
                     <ListaTarefas onEdit={handleAtualizarTarefa} onDelete={handleExcluirTarefa} />
                 )}
             </div>
-
-        
-        
         </React.Fragment>            
     )
 }
