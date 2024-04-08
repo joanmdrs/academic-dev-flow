@@ -2,7 +2,6 @@ import React from "react";
 import { Routes as Switch, Route } from "react-router-dom";
 import Projeto from "./pages/Projeto";
 import Etapa from "./pages/Etapa";
-import Artefato from "./pages/Artefato";
 import AdminRoutes from "./router/AdminRoutes/AdminRoutes";
 import StudentRoutes from "./router/StudentRoutes/StudentRoutes";
 import Fluxo from "./pages/Fluxo";
@@ -35,7 +34,7 @@ function Routes() {
         <Route path="/admin/etapas" Component={Etapa} exact />
         <Route path="/admin/membros/gerenciar" Component={ScreenGerenciarMembros} exact />
         <Route path="/admin/membros/vincular-projeto" Component={ScreenVincularMembroAoProjeto} exact/>
-        <Route path="/admin/artefatos" Component={Artefato} exact />
+        {/* <Route path="/admin/artefatos" Component={Artefato} exact /> */}
         <Route path="/admin/tarefas" Component={ScreenGerenciarTarefas} exact/>
         <Route path="/admin/tipos" Component={PageGerenciarTipos} exact/>
       </Route>
