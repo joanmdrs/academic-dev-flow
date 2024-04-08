@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {Table, Space} from 'antd'
 import { listarTarefas } from "../../../../services/tarefaService";
+import { useContextoTarefa } from "../../context/ContextoTarefa";
 
 const ListaTarefas = ({onEdit, onDelete}) => {
 
@@ -38,14 +39,17 @@ const ListaTarefas = ({onEdit, onDelete}) => {
         }
     ]
 
-    const [tarefas, setTarefas] = useState([])
+    const {tarefas, setTarefas} = useContextoTarefa()
+
     useEffect(() => {
         const fetchData = async () => {
-            await handleListarTarefas()
+            if (tarefas.length === 0){
+                await handleListarTarefas()
+            }
         }
 
         fetchData()
-    }, [])
+    }, [tarefas])
 
     const handleListarTarefas = async () => {
         const response = await listarTarefas()

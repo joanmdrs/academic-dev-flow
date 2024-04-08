@@ -6,6 +6,8 @@ export const SUCCESS_MESSAGE_ON_DELETION = "Exclusão realizada com sucesso!"
 
 // Mensagens de informação
 export const INFO_MESSAGE_ON_SEARCHING = 'Nenhum resultado encontrado para a pesquisa fornecida.'
+export const INFO_MESSAGE_MANDATORY_PARAMETERS = "É necessário informar menos um parâmetro"
+
 
 // Mensagens de erro 
 export const ERROR_MESSAGE_DEFAULT = "A operação falhou, contate o suporte!"

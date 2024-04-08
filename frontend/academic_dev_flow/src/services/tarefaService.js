@@ -1,7 +1,7 @@
 import { NotificationManager } from "react-notifications";
 import api from "../api/api";
-import { handleError } from "./utils";
-import { ERROR_MESSAGE_ON_SEARCHING } from "./messages";
+import { handleError, handleInfo } from "./utils";
+import { ERROR_MESSAGE_ON_SEARCHING, INFO_MESSAGE_MANDATORY_PARAMETERS, INFO_MESSAGE_ON_SEARCHING } from "./messages";
 
 export const criarTarefa = async (dados) => {
     try {
@@ -107,5 +107,18 @@ export const listarTarefas = async () => {
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
+}
+
+export const filtrarTarefasPeloNomeEPeloProjeto = async (nomeTarefa, idProjeto) => {
+    try {
+        const response = await api.get('tarefa/filtrar/nome-projeto/', {params: {nome_tarefa: nomeTarefa, id_projeto: idProjeto}})
+        if (response.status === 204) {
+            return handleInfo(response, INFO_MESSAGE_ON_SEARCHING)
+        }
+        return response 
+    } catch (error) {
+        return handleError(error, INFO_MESSAGE_MANDATORY_PARAMETERS)
+
     }
 }

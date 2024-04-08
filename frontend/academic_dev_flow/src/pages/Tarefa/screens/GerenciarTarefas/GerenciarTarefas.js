@@ -6,7 +6,7 @@ import ListaTarefas from "../../components/ListaTarefas/ListaTarefas"
 import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProjeto";
 import FormBuscarTarefa from "../../components/FormBuscarTarefa/FormBuscarTarefa";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
-import { atualizarTarefa, criarTarefa } from "../../../../services/tarefaService";
+import { atualizarTarefa, criarTarefa, filtrarTarefasPeloNomeEPeloProjeto } from "../../../../services/tarefaService";
 import FormGenericTarefa from "../../components/FormGenericTarefa/FormGenericTarefa";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 
@@ -15,7 +15,14 @@ const GerenciarTarefas = () => {
     const [isFormVisivel, setIsFormVisivel] = useState(false)
     const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false)
     const [acaoForm, setAcaoForm] = useState('criar')
-    const {dadosProjeto, setDadosProjeto, dadosTarefa, setDadosTarefa, step} = useContextoTarefa()
+    const {setTarefas, dadosProjeto, setDadosProjeto, dadosTarefa, setDadosTarefa, step} = useContextoTarefa()
+
+    const handleFiltrarTarefas = async (dados) => {
+        const response = await filtrarTarefasPeloNomeEPeloProjeto(dados.nome_tarefa, dados.id_projeto)
+        if (!response.error) {
+            setTarefas(response.data)
+        }
+    }
 
     const handleAdicionarTarefa = () => {
         setIsFormVisivel(true)
@@ -76,7 +83,7 @@ const GerenciarTarefas = () => {
 
             {isFormBuscarVisivel && (
                 <div className="global-div" style={{width: '50%'}}>   
-                    <FormBuscarTarefa  />
+                    <FormBuscarTarefa onSearch={handleFiltrarTarefas} />
                 </div>
             )}
 

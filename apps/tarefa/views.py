@@ -57,10 +57,13 @@ class FiltrarTarefasPeloNomeEPeloProjeto(APIView):
                 tarefas = Tarefa.objects.filter(nome__icontains=nome)
             else: 
                 tarefas = Tarefa.objects.filter(projeto_id=projeto)
+                
+            if tarefas.exists():
+                
+                serializer = TarefaSerializer(tarefas, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
             
-            serializer = TarefaSerializer(tarefas, many=True)
-            
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(data=[], status=status.HTTP_204_NO_CONTENT)
                 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)   
