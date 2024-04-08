@@ -8,22 +8,37 @@ from django.http import HttpResponse
 import json
 
 def list_user_repositories(request):
-    github_client = get_github_client() 
-    user = github_client.get_user()  
-    repositories = [repo.name for repo in user.get_repos()]  
+    try:
+        github_token = request.GET.get('github_token') 
 
-    return JsonResponse({'repositories': repositories}) 
-
+        if github_token:
+            github_client = get_github_client(github_token)
+            user = github_client.get_user()  
+            repositories = [repo.name for repo in user.get_repos()]  
+            return JsonResponse({'repositories': repositories})
+        
+        return JsonResponse({'error': 'Token não fornecido'}, status=status.HTTP_400_BAD_REQUEST)
+    except GithubException as e:
+        return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
 def create_issue(request):
     try:
-        g = get_github_client()
-        repo = g.get_repo("joanmdrs/sigcli")
-        repo.create_issue(title="This is a new issue", body="This is the issue body", assignee="joanmdrs")
+        github_token = request.GET.get('github_token') 
+        repositorio = request.GET.get('repositorio')
+        titulo_issue = request.GET.get('titulo')
+        descricao_issue = request.GET.get('descricao')
+        autor = request.GET.get('autor')
+        
+        if github_token:
+            
+            g = get_github_client(github_token)
+            repo = g.get_repo(repositorio)
+            repo.create_issue(title={titulo_issue}, body={descricao_issue}, assignee={autor})
 
-        return HttpResponse('Issue created successfully', status=201)
+            return JsonResponse('Issue criada com sucesso!', status=status.HTTP_201_CREATED)
 
     except GithubException as e:
-        return HttpResponse(str(e), status=500)
+        return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
     
 def list_issues(request):
@@ -117,13 +132,17 @@ def create_content(request):
         repository = data.get('repository')
         content = data.get('content')
         commit_message = data.get('commit_message')
-        path = data.get('path', "test.txt") 
-        
+        path = data.get('path', "test.txt")
+        author_name = data.get('author_name')  # Adicionando o nome do autor
+         
         if not repository or not content or not commit_message:
             return JsonResponse({'error': 'Os parâmetros repository, content e commit_message são obrigatórios'}, status=400)
         
         repo = g.get_repo(repository)
-        repo.create_file(path, commit_message, content, branch="main")
+        
+        author = {"name": author_name, "email": "author@example.com"} 
+            
+        repo.create_file(path, commit_message, content, branch="main", committer=author)
         
         return JsonResponse({'success': 'Arquivo criado com sucesso!'}, status=status.HTTP_201_CREATED)
 
