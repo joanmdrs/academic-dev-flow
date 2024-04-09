@@ -16,6 +16,10 @@ const InputsAdmin = () => {
             <Form.Item label="Email do autor" name="author_email"> 
                 <Input name="author_email" placeholder="email do autor" />
             </Form.Item>
+
+            <Form.Item label="Mensagem de commit" name="commit_message">
+                <Input name="commit_message" placeholder="mensagem de commit"/>
+            </Form.Item>
         </>
     )
 }

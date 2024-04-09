@@ -38,6 +38,7 @@ const GerenciarArtefatos = () => {
     const handleCriarArtefato = () => {
         setIsFormVisivel(true)
         setDadosProjeto(null)
+        setAcaoForm('criar')
     }
 
     const handleAtualizarArtefato = async (record) => {

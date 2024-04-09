@@ -82,10 +82,6 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto, inputsAdmin}) => {
 
             {inputsAdmin}
 
-            <Form.Item label="Mensagem de commit" name="commit_message">
-                <Input name="commit_message" placeholder="mensagem de commit"/>
-            </Form.Item>
-
             <Form.Item label="Iteração" name="iteracao">
                 <Select options={optionsIteracao} name="iteracao" defaultValue="selecione" />
             </Form.Item>
