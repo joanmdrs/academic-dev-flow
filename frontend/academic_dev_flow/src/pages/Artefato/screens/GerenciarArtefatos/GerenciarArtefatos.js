@@ -65,6 +65,10 @@ const GerenciarArtefatos = () => {
         }
     }
 
+    const handleBuscarArtefato = async () => {
+        
+    }
+
     return (
         <React.Fragment>
             <Titulo 
