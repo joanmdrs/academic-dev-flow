@@ -144,8 +144,8 @@ def get_content(request):
             if content:
                 return JsonResponse({'content': content.decoded_content.decode()}, status=status.HTTP_200_OK)
 
-        except UnknownObjectException as e:
-            return JsonResponse({'error': 'O arquivo especificado não foi encontrado'}, status=status.HTTP_404_NOT_FOUND)
+        except GithubException as e:
+            return JsonResponse({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
     
     
     except GithubException as e:

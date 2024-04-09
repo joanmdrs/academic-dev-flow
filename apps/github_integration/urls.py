@@ -13,5 +13,6 @@ urlpatterns = [
     path("create_content/", views.create_content, name="create_content"),
     path('update_content/', views.update_content, name='update_content'),
     path('delete_content/', views.delete_content, name='delete_content'),
-    path('list_commits_by_user/', views.user_commits_view, name='list_commits')
+    path('list_commits_by_user/', views.user_commits_view, name='list_commits'),
+    path('get_content/', views.get_content, name='get_content'),
 ]
