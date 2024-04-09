@@ -9,14 +9,15 @@ import SelectProjeto from "../../components/SelectProjeto/SelectProjeto"
 import InputsAdmin from "../../components/InputsAdmin/InputsAdmin"
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { createContent } from "../../../../services/githubIntegration";
-import { criarArtefato } from "../../../../services/artefatoService";
+import { atualizarArtefato, criarArtefato } from "../../../../services/artefatoService";
+import { buscarProjetoPeloId } from "../../../../services/projetoService";
 
 const GerenciarArtefatos = () => {
 
     const [isFormVisivel, setIsFormVisivel] = useState(false)
     const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false)
     const [acaoForm, setAcaoForm] = useState('criar')
-    const {dadosProjeto, setDadosProjeto, setArtefatos} = useContextoArtefato()
+    const {dadosArtefato, setDadosArtefato, dadosProjeto, setDadosProjeto, setArtefatos} = useContextoArtefato()
 
     const handleCancelar = () => {
         setIsFormVisivel(false)
@@ -29,16 +30,27 @@ const GerenciarArtefatos = () => {
         setArtefatos([])
     }
 
+    const handleBuscarProjeto = async (id) => {
+        const response = await buscarProjetoPeloId(id)
+        setDadosProjeto(response.data)
+    }
+
     const handleCriarArtefato = () => {
         setIsFormVisivel(true)
         setDadosProjeto(null)
     }
 
+    const handleAtualizarArtefato = async (record) => {
+        await handleBuscarProjeto(record.projeto)
+        setIsFormVisivel(true)
+        setIsFormBuscarVisivel(false)
+        setAcaoForm('atualizar')
+        setDadosArtefato(record)
+    }
+
     const handleSalvarArtefato = async (dados) => {
         dados['projeto'] = dadosProjeto.id
         dados['github_token'] = dadosProjeto.token
-
-
         if (acaoForm === 'criar') {
             const response = await createContent(dados)
             if (!response.error){
@@ -47,10 +59,9 @@ const GerenciarArtefatos = () => {
                 handleReload()
             } 
         } else if (acaoForm === 'atualizar'){
-        
+            await atualizarArtefato(dadosArtefato.id, dados)
+            handleReload()
         }
-
-
     }
 
     return (
@@ -84,14 +95,24 @@ const GerenciarArtefatos = () => {
             )}
 
             <div className="global-div"> 
-                {isFormVisivel ? (
-                    <FormArtefato 
-                        onSubmit={handleSalvarArtefato} 
-                        onCancel={handleCancelar}
-                        selectProjeto={<SelectProjeto />} 
-                        inputsAdmin={<InputsAdmin/>} /> 
-                ) : (<ListaArtefatos />)}
 
+                {isFormVisivel && acaoForm === 'criar' && (
+                    <React.Fragment> 
+                        <FormArtefato 
+                            onSubmit={handleSalvarArtefato} 
+                            onCancel={handleCancelar}
+                            selectProjeto={<SelectProjeto />} 
+                            inputsAdmin={<InputsAdmin/>} /> 
+                    </React.Fragment>
+                )}
+
+                {isFormVisivel && acaoForm === 'atualizar' && (
+                    <FormArtefato onSubmit={handleSalvarArtefato} onCancel={handleCancelar} />
+                )}
+
+                {!isFormVisivel  && (
+                    <ListaArtefatos onEdit={handleAtualizarArtefato}  />
+                )}
             </div>
         </React.Fragment>    
     )
