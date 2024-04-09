@@ -18,7 +18,10 @@ export const ERROR_MESSAGE_ON_DELETION = "Falha durante a exclusão, contate o s
 
 // Mensagens GITHUB INTEGRATION 
 
-export const SUCCESS_MESSAGE_ON_CREATION_THE_CONTENT = "Conteúdo cadastrado com sucesso !"
+export const SUCCESS_MESSAGE_ON_CREATION_THE_CONTENT = "Arquivo cadastrado com sucesso!"
+export const SUCCESS_MESSAGE_ON_DELETION_THE_CONTENT = "Arquivo excluído com sucesso!"
 
 export const ERROR_MESSAGE_ON_CREATION_THE_CONTENT = "Falha durante o cadastro do conteúdo, contate o suporte!"
 export const ERROR_MESSAGE_ON_SEARCHING_THE_CONTENT = "Arquivo não encontrado, informe outros parâmetros de busca."
+
+export const ERROR_MESSAGE_ABSENCE_PARAMETERS = "Ausência de parâmetros obrigatórios, contate o suporte!"

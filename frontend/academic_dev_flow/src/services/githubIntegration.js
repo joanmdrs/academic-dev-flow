@@ -1,5 +1,5 @@
 import api from "../api/api";
-import { ERROR_MESSAGE_ON_CREATION_THE_CONTENT, ERROR_MESSAGE_ON_SEARCHING, ERROR_MESSAGE_ON_SEARCHING_THE_CONTENT, SUCCESS_MESSAGE_ON_CREATION_THE_CONTENT } from "./messages";
+import { ERROR_MESSAGE_ABSENCE_PARAMETERS, ERROR_MESSAGE_ON_CREATION_THE_CONTENT, ERROR_MESSAGE_ON_DELETION, ERROR_MESSAGE_ON_SEARCHING, ERROR_MESSAGE_ON_SEARCHING_THE_CONTENT, SUCCESS_MESSAGE_ON_CREATION_THE_CONTENT, SUCCESS_MESSAGE_ON_DELETION_THE_CONTENT } from "./messages";
 import { handleError, handleSuccess } from "./utils";
 
 export const createContent = async (dados) => {
@@ -39,6 +39,26 @@ export const getContent = async (parametros) => {
             return handleError(error, ERROR_MESSAGE_ON_SEARCHING_THE_CONTENT)
         } else {
             return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+        }
+    }
+}
+
+export const deleteContent = async (parametros) => {
+    try {
+        const response = await api.delete('github_integrations/delete_content/', {params: {
+            github_token: parametros.github_token,
+            repository: parametros.repository,
+            path: parametros.path,
+            commit_message: parametros.commit_message
+        }})
+
+        return handleSuccess(response, SUCCESS_MESSAGE_ON_DELETION_THE_CONTENT)
+
+    } catch (error) {
+        if (error.response && error.response.status === 400){
+            return handleError(error, ERROR_MESSAGE_ABSENCE_PARAMETERS)
+        } else {
+            return handleError(error, ERROR_MESSAGE_ON_DELETION)
         }
     }
 }
