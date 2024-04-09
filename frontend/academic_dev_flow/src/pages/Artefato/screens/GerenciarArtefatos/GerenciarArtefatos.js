@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {Button} from 'antd'
+import {Button, Modal} from 'antd'
 import Titulo from "../../../../components/Titulo/Titulo";
 import { FaPlus, FaSearch } from "react-icons/fa";
 import FormGenericBusca from "../../../../components/Forms/FormGenericBusca/FormGenericBusca";
@@ -9,7 +9,7 @@ import SelectProjeto from "../../components/SelectProjeto/SelectProjeto"
 import InputsAdmin from "../../components/InputsAdmin/InputsAdmin"
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { createContent } from "../../../../services/githubIntegration";
-import { atualizarArtefato, criarArtefato, filtrarArtefatosPeloNomeEPeloProjeto } from "../../../../services/artefatoService";
+import { atualizarArtefato, criarArtefato, excluirArtefato, filtrarArtefatosPeloNomeEPeloProjeto } from "../../../../services/artefatoService";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 
 const GerenciarArtefatos = () => {
@@ -74,6 +74,19 @@ const GerenciarArtefatos = () => {
         }
     }
 
+    const handleExcluirArtefato = async (id) => {
+        Modal.confirm({
+            title: 'Confirmar exclusão',
+            content: 'Você está seguro de que deseja excluir este(s) item(s) ?',
+            okText: 'Sim',
+            cancelText: 'Não',
+            onOk: async () => {
+                await excluirArtefato(id)
+                handleReload()
+            }
+        });
+    }
+
     return (
         <React.Fragment>
             <Titulo 
@@ -121,7 +134,7 @@ const GerenciarArtefatos = () => {
                 )}
 
                 {!isFormVisivel  && (
-                    <ListaArtefatos onEdit={handleAtualizarArtefato}  />
+                    <ListaArtefatos onEdit={handleAtualizarArtefato} onDelete={handleExcluirArtefato} />
                 )}
             </div>
         </React.Fragment>    
