@@ -3,7 +3,7 @@ import {Table, Space} from 'antd'
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { listarArtefatos } from "../../../../services/artefatoService";
 
-const ListaArtefatos = ({onGetContent, onEdit, onDelete}) => {
+const ListaArtefatos = ({onView, onEdit, onDelete}) => {
 
     const COLUNAS_TABELA_ARTEFATOS = [
         {
@@ -12,7 +12,7 @@ const ListaArtefatos = ({onGetContent, onEdit, onDelete}) => {
             key: 'nome',
             render: (_, record) => (
                 <a
-                    onClick={() =>  onGetContent(record)}
+                    onClick={() =>  onView(record)}
                 > {record.nome} </a>
             )
         },

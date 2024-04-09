@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {Button, Modal} from 'antd'
 import Titulo from "../../../../components/Titulo/Titulo";
 import { FaPlus, FaSearch } from "react-icons/fa";
@@ -18,8 +19,9 @@ const GerenciarArtefatos = () => {
     const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false)
     const [acaoForm, setAcaoForm] = useState('criar')
     const {dadosArtefato, setDadosArtefato, dadosProjeto, setDadosProjeto, setArtefatos} = useContextoArtefato()
+    const navigate = useNavigate()
 
-    const handleCancelar = () => {
+    const handleCancelar = () => {  
         setIsFormVisivel(false)
     }
 
@@ -30,10 +32,9 @@ const GerenciarArtefatos = () => {
         setArtefatos([])
     }
 
-    const handleBuscarArquivoNoGithub = async (record) => {
+    const handleVisualizarArtefato = async (record) => {
 
         const response = await buscarProjetoPeloId(record.projeto)
-
         const projeto = response.data
 
         const parametros = {
@@ -41,8 +42,9 @@ const GerenciarArtefatos = () => {
             repository: "joanmdrs/sistema-gerenciamento-tarefas",
             path: "docs/documento-teste.md"
         }
-        const response1 = await getContent(parametros)
-        console.log(response1)
+        navigate("/admin/artefatos/visualizar-artefato", {
+            state: parametros
+        });
     }
 
     const handleBuscarProjeto = async (id) => {
@@ -150,7 +152,7 @@ const GerenciarArtefatos = () => {
 
                 {!isFormVisivel  && (
                     <ListaArtefatos    
-                        onGetContent={handleBuscarArquivoNoGithub} 
+                        onView={handleVisualizarArtefato} 
                         onEdit={handleAtualizarArtefato} 
                         onDelete={handleExcluirArtefato} />
                 )}
