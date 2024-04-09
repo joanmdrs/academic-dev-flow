@@ -44,13 +44,12 @@ const GerenciarArtefatos = () => {
             if (!response.error){
                 dados['id_file'] = response.data.sha
                 await criarArtefato(dados)
-
+                handleReload()
             } 
         } else if (acaoForm === 'atualizar'){
         
         }
 
-        handleReload()
 
     }
 

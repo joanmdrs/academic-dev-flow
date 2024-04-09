@@ -18,6 +18,10 @@ export const createContent = async (dados) => {
         const response = await api.post('github_integration/create_content/', dadosEnviar)
         return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION_THE_CONTENT)
     } catch (error) {
-        return handleError(error, ERROR_MESSAGE_ON_CREATION_THE_CONTENT)
+        if (error.response && error.response.status === 409) {
+            return handleError(error, 'Um arquivo com o mesmo caminho já existe. Escolha outro caminho.');
+        } else {
+            return handleError(error, ERROR_MESSAGE_ON_CREATION_THE_CONTENT);
+        }
     }
 }
