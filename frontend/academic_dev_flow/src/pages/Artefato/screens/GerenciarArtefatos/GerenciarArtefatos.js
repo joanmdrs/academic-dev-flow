@@ -9,23 +9,49 @@ import SelectProjeto from "../../components/SelectProjeto/SelectProjeto"
 import InputsAdmin from "../../components/InputsAdmin/InputsAdmin"
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { createContent } from "../../../../services/githubIntegration";
+import { criarArtefato } from "../../../../services/artefatoService";
 
 const GerenciarArtefatos = () => {
 
     const [isFormVisivel, setIsFormVisivel] = useState(false)
     const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false)
     const [acaoForm, setAcaoForm] = useState('criar')
-    const {dadosProjeto} = useContextoArtefato()
+    const {dadosProjeto, setDadosProjeto, setArtefatos} = useContextoArtefato()
+
+    const handleCancelar = () => {
+        setIsFormVisivel(false)
+    }
+
+    const handleReload = () => {
+        setIsFormVisivel(false)
+        setIsFormBuscarVisivel(false)
+        setDadosProjeto(null)
+        setArtefatos([])
+    }
 
     const handleCriarArtefato = () => {
         setIsFormVisivel(true)
+        setDadosProjeto(null)
     }
 
     const handleSalvarArtefato = async (dados) => {
         dados['projeto'] = dadosProjeto.id
         dados['github_token'] = dadosProjeto.token
 
-        await createContent(dados)
+
+        if (acaoForm === 'criar') {
+            const response = await createContent(dados)
+            if (!response.error){
+                dados['id_file'] = response.data.sha
+                await criarArtefato(dados)
+
+            } 
+        } else if (acaoForm === 'atualizar'){
+        
+        }
+
+        handleReload()
+
     }
 
     return (
@@ -60,7 +86,11 @@ const GerenciarArtefatos = () => {
 
             <div className="global-div"> 
                 {isFormVisivel ? (
-                    <FormArtefato onSubmit={handleSalvarArtefato} selectProjeto={<SelectProjeto />} inputsAdmin={<InputsAdmin/>} /> 
+                    <FormArtefato 
+                        onSubmit={handleSalvarArtefato} 
+                        onCancel={handleCancelar}
+                        selectProjeto={<SelectProjeto />} 
+                        inputsAdmin={<InputsAdmin/>} /> 
                 ) : (<ListaArtefatos />)}
 
             </div>
