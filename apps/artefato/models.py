@@ -16,10 +16,8 @@ class Artefato(models.Model):
     status = models.CharField(max_length=40, choices=STATUS_CHOICES, null=True, blank=True)
     data_criacao = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     descricao = models.TextField(null=True, blank=True)
-
-    id_github = models.CharField(null=True, blank=True)   
-    path_github = models.CharField(null=True, blank=True)
-    
+    id_file = models.CharField(null=True, blank=True)   
+    path_file = models.CharField(null=True, blank=True)
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, null=True, blank=True)
     iteracao = models.ForeignKey(Iteracao, on_delete=models.SET_NULL, null=True, blank=True)
     
