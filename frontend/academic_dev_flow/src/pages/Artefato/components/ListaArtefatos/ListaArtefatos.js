@@ -3,18 +3,26 @@ import {Table, Space} from 'antd'
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { listarArtefatos } from "../../../../services/artefatoService";
 
-const ListaArtefatos = ({onEdit, onDelete}) => {
+const ListaArtefatos = ({onGetContent, onEdit, onDelete}) => {
 
     const COLUNAS_TABELA_ARTEFATOS = [
         {
             title: 'Nome',
             dataIndex: 'nome',
-            key: 'nome'
+            key: 'nome',
+            render: (_, record) => (
+                <a
+                    onClick={() =>  onGetContent(record)}
+                > {record.nome} </a>
+            )
         },
         {
-            title: 'Data de Criação',
-            dataIndex: 'data_criacao',
-            key: 'data_criacao'
+            title: 'Descrição',
+            dataIndex: 'descricao',
+            key: 'descricao',
+            render: (_, record) => (
+                <span> {handleLimitarCaracteres(record.descricao)}</span>
+            )
         },
         {
             title: 'Status',
@@ -46,12 +54,17 @@ const ListaArtefatos = ({onEdit, onDelete}) => {
         fetchData()
     }, [artefatos])
 
+    function handleLimitarCaracteres(texto, limite) {
+        if (texto.length >= limite) {
+            return `${texto.substring(0, limite)}...`;
+        }
+        return texto;
+    }
+
     const handleListarArtefatos = async () => {
         const response = await listarArtefatos()
         setArtefatos(response.data)
-
     }
-
 
     return (
         <Table

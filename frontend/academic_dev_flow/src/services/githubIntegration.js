@@ -30,7 +30,7 @@ export const getContent = async (parametros) => {
     try {
         const response = await api.get('github_integration/get_content/', {params: {
             github_token: parametros.github_token,
-            repository: parametros.github_token,
+            repository: parametros.repository,
             path: parametros.path 
         }})
         return response

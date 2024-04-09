@@ -8,7 +8,7 @@ import ListaArtefatos from "../../components/ListaArtefatos/ListaArtefatos";
 import SelectProjeto from "../../components/SelectProjeto/SelectProjeto"
 import InputsAdmin from "../../components/InputsAdmin/InputsAdmin"
 import { useContextoArtefato } from "../../context/ContextoArtefato";
-import { createContent } from "../../../../services/githubIntegration";
+import { createContent, getContent } from "../../../../services/githubIntegration";
 import { atualizarArtefato, criarArtefato, excluirArtefato, filtrarArtefatosPeloNomeEPeloProjeto } from "../../../../services/artefatoService";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 
@@ -28,6 +28,21 @@ const GerenciarArtefatos = () => {
         setIsFormBuscarVisivel(false)
         setDadosProjeto(null)
         setArtefatos([])
+    }
+
+    const handleBuscarArquivoNoGithub = async (record) => {
+
+        const response = await buscarProjetoPeloId(record.projeto)
+
+        const projeto = response.data
+
+        const parametros = {
+            github_token: projeto.token,
+            repository: "joanmdrs/sistema-gerenciamento-tarefas",
+            path: "docs/documento-teste.md"
+        }
+        const response1 = await getContent(parametros)
+        console.log(response1)
     }
 
     const handleBuscarProjeto = async (id) => {
@@ -134,7 +149,10 @@ const GerenciarArtefatos = () => {
                 )}
 
                 {!isFormVisivel  && (
-                    <ListaArtefatos onEdit={handleAtualizarArtefato} onDelete={handleExcluirArtefato} />
+                    <ListaArtefatos    
+                        onGetContent={handleBuscarArquivoNoGithub} 
+                        onEdit={handleAtualizarArtefato} 
+                        onDelete={handleExcluirArtefato} />
                 )}
             </div>
         </React.Fragment>    
