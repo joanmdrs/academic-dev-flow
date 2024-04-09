@@ -3,8 +3,18 @@ import { ERROR_MESSAGE_ON_CREATION, ERROR_MESSAGE_ON_DELETION, ERROR_MESSAGE_ON_
 import { handleError, handleSuccess } from "./utils"
 
 export const criarArtefato = async (dados) => {
+
+    const dadosEnviar = {
+        nome: dados.nome,
+        status: dados.status,
+        descricao: dados.descricao,
+        id_file: dados.id_file,
+        path_file: dados.path_file,
+        projeto: dados.projeto,
+        iteracao: dados.iteracao
+    }
     try {
-        const response = await api.post('/artefato/cadastrar/', dados)
+        const response = await api.post('/artefato/cadastrar/', dadosEnviar)
         return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION)
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_CREATION)
