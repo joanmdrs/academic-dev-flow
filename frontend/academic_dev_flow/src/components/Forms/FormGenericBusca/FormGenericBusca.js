@@ -39,7 +39,7 @@ const FormGenericBusca = ({onSearch}) => {
     return (
         <Form layout="vertical" className="global-form" onFinish={handleOnSearch}> 
             <Form.Item label='Nome' name='nome'>
-                <Input name="nome" placeholder="nome da tarefa"/>
+                <Input name="nome" placeholder="nome"/>
             </Form.Item>
 
             <Form.Item label='Projeto' name='id_projeto'>

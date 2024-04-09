@@ -9,7 +9,7 @@ import SelectProjeto from "../../components/SelectProjeto/SelectProjeto"
 import InputsAdmin from "../../components/InputsAdmin/InputsAdmin"
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { createContent } from "../../../../services/githubIntegration";
-import { atualizarArtefato, criarArtefato } from "../../../../services/artefatoService";
+import { atualizarArtefato, criarArtefato, filtrarArtefatosPeloNomeEPeloProjeto } from "../../../../services/artefatoService";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 
 const GerenciarArtefatos = () => {
@@ -65,8 +65,13 @@ const GerenciarArtefatos = () => {
         }
     }
 
-    const handleBuscarArtefato = async () => {
-        
+    const handleBuscarArtefato = async (dados) => {
+        const nomeArtefato = dados.nome
+        const idProjeto = dados.id_projeto
+        const response = await filtrarArtefatosPeloNomeEPeloProjeto(nomeArtefato, idProjeto)
+        if (!response.error) {
+            setArtefatos(response.data)
+        }
     }
 
     return (
@@ -95,7 +100,7 @@ const GerenciarArtefatos = () => {
 
             {isFormBuscarVisivel && (
                 <div className="global-div" style={{width: '50%'}}>   
-                    <FormGenericBusca />
+                    <FormGenericBusca onSearch={handleBuscarArtefato} />
                 </div>
             )}
 

@@ -62,7 +62,7 @@ class FiltrarArtefatoPeloNomeEProjeto(APIView):
                 
             if artefatos.exists():
                 
-                serializer = ArtefatoSerializer(artefato, many=True)
+                serializer = ArtefatoSerializer(artefatos, many=True)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             
             return Response(data=[], status=status.HTTP_204_NO_CONTENT)

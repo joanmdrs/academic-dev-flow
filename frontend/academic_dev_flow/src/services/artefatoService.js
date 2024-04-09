@@ -59,7 +59,7 @@ export const listarArtefatos = async () => {
 
 export const filtrarArtefatosPeloNomeEPeloProjeto = async (nomeArtefato, idProjeto) => {
     try {
-        const response = await api.get('artefato/filtrar/nome-projeto/', {params: {nome_tarefa: nomeArtefato, id_projeto: idProjeto}})
+        const response = await api.get('artefato/filtrar/nome-projeto/', {params: {nome_artefato: nomeArtefato, id_projeto: idProjeto}})
         if (response.status === 204) {
             return handleInfo(response, INFO_MESSAGE_ON_SEARCHING)
         }
