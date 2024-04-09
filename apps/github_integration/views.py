@@ -146,12 +146,21 @@ def create_content(request):
         repo = g.get_repo(repository)
         
         author = InputGitAuthor(author_name, author_email)
-            
-        new_file = repo.create_file(path, commit_message, content, branch="main", committer=author)
-        commit_sha = new_file['commit'].sha
-    
-        return JsonResponse({'success': 'Arquivo criado com sucesso!', 'sha': commit_sha}, status=status.HTTP_201_CREATED)
         
+        # Verifica se o arquivo já existe
+        try:
+            existing_file = repo.get_contents(path)
+            sha = existing_file.sha
+            # Se o arquivo existe, atualize o conteúdo
+            repo.update_file(path, commit_message, content, sha, branch="main", committer=author)
+        except Exception as e:
+            # Se o arquivo não existe, crie um novo
+            create_result = repo.create_file(path, commit_message, content, branch="main", committer=author)
+            # Obtém o SHA do commit para o arquivo criado
+            sha = create_result['commit'].sha
+        
+        return JsonResponse({'success': 'Arquivo criado ou atualizado com sucesso!', 'sha': sha}, status=status.HTTP_200_OK)
+                
     except GithubException as e:
         return JsonResponse({'error': str(e)}, status=500)
 
