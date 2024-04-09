@@ -124,6 +124,32 @@ def list_contents(request):
                 
     except GithubException as e:
         return JsonResponse({'error': str(e)}, status=500)
+    
+def get_content(request):
+    try: 
+        
+        github_token = request.GET.get('github_token')
+        repository = request.GET.get('repository')
+        path = request.GET.get('path')
+        
+        if not repository or not github_token:
+            return JsonResponse({'error': 'O parâmetro token e repository são obrigatórios'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        g = get_github_client(github_token)
+        repo = g.get_repo(repository)    
+        
+        try:
+            content = repo.get_contents(path)
+            
+            if content:
+                return JsonResponse({'content': content.decoded_content.decode()}, status=status.HTTP_200_OK)
+
+        except UnknownObjectException as e:
+            return JsonResponse({'error': 'O arquivo especificado não foi encontrado'}, status=status.HTTP_404_NOT_FOUND)
+    
+    
+    except GithubException as e:
+        return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 def create_content(request):
     try:
