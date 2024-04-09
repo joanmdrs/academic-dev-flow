@@ -147,9 +147,10 @@ def create_content(request):
         
         author = InputGitAuthor(author_name, author_email)
             
-        repo.create_file(path, commit_message, content, branch="main", committer=author)
-        
-        return JsonResponse({'success': 'Arquivo criado com sucesso!'}, status=status.HTTP_201_CREATED)
+        new_file = repo.create_file(path, commit_message, content, branch="main", committer=author)
+        commit_sha = new_file['commit'].sha
+    
+        return JsonResponse({'success': 'Arquivo criado com sucesso!', 'sha': commit_sha}, status=status.HTTP_201_CREATED)
         
     except GithubException as e:
         return JsonResponse({'error': str(e)}, status=500)
