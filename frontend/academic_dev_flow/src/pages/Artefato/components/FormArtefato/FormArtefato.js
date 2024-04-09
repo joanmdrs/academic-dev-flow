@@ -73,29 +73,29 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto, inputsAdmin}) => {
             {selectProjeto}
 
             <Form.Item label="Nome" name="nome">
-                <Input type="text" name="nome" placeholder="Ex.: Documento de Visão"/>
+                <Input type="text" name="nome" placeholder="nome do artefato"/>
             </Form.Item>
 
-            <Form.Item label="Path artefato no repositório" name="path_github"> 
-                <Input type="text" name="path_github" placeholder="docs/doc-visao.md" />
+            <Form.Item label="Path do arquivo no repositório" name="path_file"> 
+                <Input type="text" name="path_file" placeholder="path do arquivo" />
             </Form.Item>
 
             {inputsAdmin}
 
             <Form.Item label="Mensagem de commit" name="commit_message">
-                <Input name="commit_message" />
+                <Input name="commit_message" placeholder="mensagem de commit"/>
             </Form.Item>
 
             <Form.Item label="Iteração" name="iteracao">
-                <Select options={optionsIteracao} name="iteracao" />
+                <Select options={optionsIteracao} name="iteracao" defaultValue="selecione" />
             </Form.Item>
             
             <Form.Item label="Status" name="status">
-                <Select options={optionsStatus} name="status" />
+                <Select options={optionsStatus} name="status" defaultValue="selecione" />
             </Form.Item>
 
             <Form.Item label="Descrição" name="descricao">
-                <Input.TextArea rows={4} name="descricao"/>
+                <Input.TextArea rows={4} name="descricao" placeholder="descrição do artefato"/>
             </Form.Item>
 
             <Form.Item>
