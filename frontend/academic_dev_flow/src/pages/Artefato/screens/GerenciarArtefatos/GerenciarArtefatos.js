@@ -9,17 +9,24 @@ import ListaArtefatos from "../../components/ListaArtefatos/ListaArtefatos";
 import SelectProjeto from "../../components/SelectProjeto/SelectProjeto"
 import InputsAdmin from "../../components/InputsAdmin/InputsAdmin"
 import { useContextoArtefato } from "../../context/ContextoArtefato";
-import { createContent, getContent } from "../../../../services/githubIntegration";
+import { createContent, deleteContent, getContent } from "../../../../services/githubIntegration";
 import { atualizarArtefato, criarArtefato, excluirArtefato, filtrarArtefatosPeloNomeEPeloProjeto } from "../../../../services/artefatoService";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
+import ModalExcluirArtefato from "../../components/ModalExcluirArtefato/ModalExcluirArtefato";
 
 const GerenciarArtefatos = () => {
 
     const [isFormVisivel, setIsFormVisivel] = useState(false)
     const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false)
+    const [isModalExcluirVisivel, setIsModalExcluirVisivel] = useState(false)
     const [acaoForm, setAcaoForm] = useState('criar')
+    const [artefatoExcluir, setArtefatoExcluir] = useState(null)
     const {dadosArtefato, setDadosArtefato, dadosProjeto, setDadosProjeto, setArtefatos} = useContextoArtefato()
     const navigate = useNavigate()
+
+    const handleExibirModal = () => setIsModalExcluirVisivel(true)
+    
+    const handleFecharModal = () => setIsModalExcluirVisivel(false)
 
     const handleCancelar = () => {  
         setIsFormVisivel(false)
@@ -91,17 +98,28 @@ const GerenciarArtefatos = () => {
         }
     }
 
-    const handleExcluirArtefato = async (id) => {
-        Modal.confirm({
-            title: 'Confirmar exclusão',
-            content: 'Você está seguro de que deseja excluir este(s) item(s) ?',
-            okText: 'Sim',
-            cancelText: 'Não',
-            onOk: async () => {
-                await excluirArtefato(id)
-                handleReload()
-            }
-        });
+    const handlePrepararParaExcluirArtefato = async (record) => {
+        handleExibirModal()
+        const resProjeto = await buscarProjetoPeloId(record.projeto)
+        const projeto = resProjeto.data
+        const parametros = {
+            github_token: projeto.token,
+            repository: "joanmdrs/sistema-gerenciamento-tarefas",
+            path: "docs/documento-teste.md"
+        }
+
+        setArtefatoExcluir(parametros)
+        console.log(parametros)
+        
+    }
+
+
+
+    const handleExcluirArtefato = async (parametro) => {
+        const objeto = artefatoExcluir
+        objeto['commit_message'] = parametro
+        console.log(objeto)
+        await deleteContent(objeto)
     }
 
     return (
@@ -154,9 +172,16 @@ const GerenciarArtefatos = () => {
                     <ListaArtefatos    
                         onView={handleVisualizarArtefato} 
                         onEdit={handleAtualizarArtefato} 
-                        onDelete={handleExcluirArtefato} />
+                        onDelete={handlePrepararParaExcluirArtefato} />
                 )}
+                
             </div>
+
+            <ModalExcluirArtefato 
+                visible={isModalExcluirVisivel}
+                onCancel={handleFecharModal}
+                onDelete={handleExcluirArtefato}
+            />
         </React.Fragment>    
     )
 }

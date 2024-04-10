@@ -45,7 +45,7 @@ export const getContent = async (parametros) => {
 
 export const deleteContent = async (parametros) => {
     try {
-        const response = await api.delete('github_integrations/delete_content/', {params: {
+        const response = await api.delete('github_integration/delete_content/', {params: {
             github_token: parametros.github_token,
             repository: parametros.repository,
             path: parametros.path,

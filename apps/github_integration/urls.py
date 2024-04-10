@@ -9,7 +9,6 @@ urlpatterns = [
     path('list_repositories/', views.list_user_repositories, name='list_repositories'),
     path('list_issues/', views.list_issues, name='list_issues'),
     path('create_issue/', views.create_issue, name='create_issue'),
-    path('list_contents/', views.list_contents, name='list_contents'),
     path("create_content/", views_contents.create_content, name="create_content"),
     path('get_content/', views_contents.get_content, name='get_content'),
     path('update_content/', views_contents.update_content, name='update_content'),

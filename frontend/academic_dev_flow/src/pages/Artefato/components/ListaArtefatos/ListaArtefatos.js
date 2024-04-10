@@ -36,7 +36,7 @@ const ListaArtefatos = ({onView, onEdit, onDelete}) => {
             render: (_, record) => (
                 <Space size="middle">
                     <a onClick={() => onEdit(record)}>Editar</a>
-                    <a onClick={() =>  onDelete(record.id)}>Excluir</a>
+                    <a onClick={() =>  onDelete(record)}>Excluir</a>
                 </Space>
             )
         }
