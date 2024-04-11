@@ -46,8 +46,8 @@ const GerenciarArtefatos = () => {
 
         const parametros = {
             github_token: projeto.token,
-            repository: "joanmdrs/sistema-gerenciamento-tarefas",
-            path: "docs/documento-teste.md"
+            repository: projeto.nome_repo,
+            path: record.path_file
         }
         navigate("/admin/artefatos/visualizar-artefato", {
             state: parametros
@@ -104,8 +104,8 @@ const GerenciarArtefatos = () => {
         const projeto = resProjeto.data
         const parametros = {
             github_token: projeto.token,
-            repository: "joanmdrs/sistema-gerenciamento-tarefas",
-            path: "docs/documento-teste.md"
+            repository: projeto.nome_repo,
+            path: record.path_file
         }
 
         setArtefatoExcluir(parametros)
