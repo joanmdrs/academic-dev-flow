@@ -14,9 +14,14 @@ export const criarConta = async (dados) => {
             data_nascimento: dados.data_nascimento,
             telefone: dados.telefone,
             email: dados.email,
-            github: dados.github,
             linkedin: dados.linkedin,
             lattes: dados.lattes
+        },
+
+        github: {
+            nome: dados.nome_github,
+            email_github: dados.email_github,
+            usuario_github: dados.usuario_github
         }
     }
     try {
@@ -44,9 +49,14 @@ export const criarMembro = async (dados) => {
             data_nascimento: dados.data_nascimento,
             telefone: dados.telefone,
             email: dados.email,
-            github: dados.github,
             linkedin: dados.linkedin,
             lattes: dados.lattes
+        },
+
+        github: {
+            nome: dados.nome_github,
+            email_github: dados.email_github,
+            usuario_github: dados.usuario_github
         }
     }
     try {
@@ -137,9 +147,14 @@ export const atualizarMembro = async (idMembro, dados) => {
             data_nascimento: dados.data_nascimento,
             telefone: dados.telefone,
             email: dados.email,
-            github: dados.github,
             linkedin: dados.linkedin,
             lattes: dados.lattes
+        },
+
+        github: {
+            nome: dados.nome_github,
+            email_github: dados.email_github,
+            usuario_github: dados.usuario_github
         }
     }
 
