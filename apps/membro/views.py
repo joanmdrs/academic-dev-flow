@@ -14,8 +14,6 @@ from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
 from django.contrib.auth.hashers import make_password
 from rest_framework.permissions import AllowAny
-
-   
     
 class CadastrarMembroView(APIView):
     permission_classes = [AllowAny]
@@ -182,42 +180,68 @@ class ExcluirMembroView(APIView):
     
 class AtualizarMembroView(APIView):
     permission_classes = [IsAuthenticated]
+    
     def patch(self, request, id):
         try:
             group_name = request.data.get('grupo', None)
             member = Membro.objects.get(pk=id)
+
             member_data = request.data.get('membro', {})
+            if not member_data:
+                raise ValueError("Dados do membro não fornecidos")
+            
             member_data['grupo'] = group_name
             member_serializer = MembroSerializer(member, data=member_data)
-            
-            if member_serializer.is_valid(raise_exception=True):
-                member_serializer.save()
 
-                user_data = request.data.get('usuario', {})
-                user = Usuario.objects.get(id=member.usuario.id)
-                user_serializer = UsuarioSerializer(user, data=user_data)
+            if not member_serializer.is_valid():
+                return Response({'error': 'Dados do membro inválidos'}, status=status.HTTP_400_BAD_REQUEST)
 
-                if user_serializer.is_valid(raise_exception=True):
-                    user_validated = user_serializer.validated_data
-                    user.username = user_validated['username']
-                    new_password = user_validated.get('password')
-                    if new_password:
-                        user.set_password(new_password)
+            member_serializer.save()
 
-                    user.save()
-                    
+            user = Usuario.objects.get(id=member.usuario_id)
+            user_data = request.data.get('usuario', {})
+            if not user_data:
+                raise ValueError("Dados do usuário não fornecidos")
 
-                    if group_name:
-                        group = Group.objects.get(name=group_name)
-                        user.groups.set([group])
-                        
-                return Response(member_serializer.data, status=status.HTTP_200_OK)
+            user_serializer = UsuarioSerializer(user, data=user_data)
 
-            else: 
-                return JsonResponse({'error': 'Dados inválidos'}, status=400)
+            if not user_serializer.is_valid():
+                return Response({'error': 'Dados do usuário inválidos'}, status=status.HTTP_400_BAD_REQUEST)
+
+            user_validated = user_serializer.validated_data
+            user.username = user_validated.get('username', user.username)
+            new_password = user_validated.get('password')
+            if new_password:
+                user.set_password(new_password)
+            user.save()
+
+            if group_name:
+                group = Group.objects.get(name=group_name)
+                user.groups.set([group])
+
+            github_data = request.data.get('github', {})
+            if github_data:
+                member_github = member.github
+                if member_github:
+                    github_serializer = UsuarioGithubSerializer(member_github, data=github_data, partial=True)
+                else:
+                    github_serializer = UsuarioGithubSerializer(data=github_data)
+
+                if github_serializer.is_valid():
+                    github_created = github_serializer.save()
+                    member.github = github_created
+                    member.save()
+                else:
+                    return Response({'error': 'Dados do GitHub inválidos'}, status=status.HTTP_400_BAD_REQUEST)
+
+            return Response(member_serializer.data, status=status.HTTP_200_OK)
+
+        except ValueError as ve:
+            return Response({'error': str(ve)}, status=status.HTTP_400_BAD_REQUEST)
+
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+        
 class ListarMembrosView(APIView):
     permission_classes = [IsAuthenticated] 
     def get(self, request):
