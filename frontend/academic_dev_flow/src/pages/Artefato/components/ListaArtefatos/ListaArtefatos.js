@@ -1,7 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {Table, Space} from 'antd'
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { listarArtefatos } from "../../../../services/artefatoService";
+import { buscarProjetoPeloId } from "../../../../services/projetoService";
+import { handleError } from "../../../../services/utils";
+import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 
 const ListaArtefatos = ({onView, onEdit, onDelete}) => {
 
@@ -28,6 +31,15 @@ const ListaArtefatos = ({onView, onEdit, onDelete}) => {
             title: 'Status',
             dataIndex: 'status',
             key: 'status'
+        },
+        {
+            title: 'Path',
+            dataIndex: 'path_file',
+        },
+        {
+            title: 'Projeto',
+            dataIndex: 'nome_projeto',
+            key: 'nome_projeto'
         },
         {
             title: 'Ações',
@@ -62,9 +74,30 @@ const ListaArtefatos = ({onView, onEdit, onDelete}) => {
     }
 
     const handleListarArtefatos = async () => {
-        const response = await listarArtefatos()
-        setArtefatos(response.data)
+        try {
+            const response = await listarArtefatos();
+    
+            if (response.data.length > 0) { 
+                const dados = await Promise.all(response.data.map(async (artefato) => {
+                    const resProjeto = await buscarProjetoPeloId(artefato.projeto);
+    
+                    if (!resProjeto.error){
+                        artefato['nome_projeto'] = resProjeto.data.nome;
+                    }
+                    return artefato;
+                }));
+                const resultado = await (Promise.resolve(dados))
+                setArtefatos(resultado)
+            } else {
+                setArtefatos([])
+            }
+        } catch (error) {
+            setArtefatos([])
+            return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+            
+        }
     }
+
 
     return (
         <Table
