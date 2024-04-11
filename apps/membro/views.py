@@ -3,8 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import HttpResponseNotAllowed, JsonResponse
-from .models import Membro
-from .serializers import MembroSerializer
+from .models import Membro, UsuarioGithub
+from .serializers import MembroSerializer, UsuarioGithubSerializer
 from apps.membro_projeto.models import MembroProjeto
 from apps.usuario.models import Usuario
 from apps.usuario.serializers import UsuarioSerializer
@@ -19,42 +19,60 @@ from rest_framework.permissions import AllowAny
     
 class CadastrarMembroView(APIView):
     permission_classes = [AllowAny]
+    
     def post(self, request):
         try:
-            group_name = request.data.get('grupo', None) # Obtém o grupo
-            user_data = request.data.get('usuario', {}) # Obtém os dados do usuário
+            group_name = request.data.get('grupo')
+            user_data = request.data.get('usuario', {}) 
+            github_data = request.data.get('github', {})
+            member_data = request.data.get('membro', {})
+
+            if not user_data:
+                raise ValueError("Dados do usuário não fornecidos")
+
             user_serializer = UsuarioSerializer(data=user_data)
-            
-            if user_serializer.is_valid(raise_exception=True):
-                user_validated = user_serializer.validated_data
-                user_created = Usuario.objects.create_user(
-                    username=user_validated['username'],
-                    password=user_validated['password'],
-                )
+            if not user_serializer.is_valid(raise_exception=True):
+                return Response({'error': 'Dados do usuário inválidos'}, status=status.HTTP_400_BAD_REQUEST)
 
-                user_created.is_staff = True
-                user_created.is_superuser = False
-                user_created.save()
-                
-                if group_name:
-                    group = Group.objects.get(name=group_name)
-                    user_created.groups.add(group)
+            user_created = Usuario.objects.create_user(
+                username=user_serializer.validated_data['username'],
+                password=user_serializer.validated_data['password'],
+            )
+            user_created.is_staff = True
+            user_created.is_superuser = False
+            user_created.save()
 
-                member_data = request.data.get('membro', {})
-                member_data['grupo'] = group_name
-                member_data['usuario'] = user_created.id
-                member_serializer = MembroSerializer(data=member_data)
+            if not github_data:
+                raise ValueError("Dados do GitHub não fornecidos")
 
-                if member_serializer.is_valid(raise_exception=True):
-                    member_serializer.save()
-                    
-                    return Response(member_serializer.data, status=status.HTTP_201_CREATED)
-                
+            github_serializer = UsuarioGithubSerializer(data=github_data)
+            if not github_serializer.is_valid(raise_exception=True):
+                return Response({'error': 'Dados do GitHub inválidos'}, status=status.HTTP_400_BAD_REQUEST)
+
+            github_created = github_serializer.save()
+
+            if group_name:
+                group = Group.objects.get(name=group_name)
+                user_created.groups.add(group)
+
+            member_data['grupo'] = group_name
+            member_data['usuario'] = user_created.id
+            member_data['github'] = github_created.id
+
+            member_serializer = MembroSerializer(data=member_data)
+            if not member_serializer.is_valid(raise_exception=True):
+                return Response({'error': 'Dados do membro inválidos'}, status=status.HTTP_400_BAD_REQUEST)
+
+            member_serializer.save()
+
+            return Response(member_serializer.data, status=status.HTTP_201_CREATED)
+
+        except ValueError as ve:
+            return Response({'error': str(ve)}, status=status.HTTP_400_BAD_REQUEST)
+
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        return Response({'error': 'Erro ao cadastrar membro'}, status=status.HTTP_400_BAD_REQUEST)
-
+    
 
 class BuscarMembroPorGrupoView(APIView):
     permission_classes = [IsAuthenticated]
