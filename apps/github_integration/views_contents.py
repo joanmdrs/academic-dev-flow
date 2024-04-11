@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from github import Github, GithubException
 from .github_auth import get_github_client
 from github import InputGitAuthor
+import base64
 
 def create_content(request):
     try:
@@ -125,18 +126,23 @@ def delete_content(request):
 
 def list_contents(request):
     try:
+        github_token = request.GET.get('github_token')
         repository = request.GET.get('repository')
+        folder = request.GET.get('folder')
         
-        if not repository:
-            return JsonResponse({'error': 'Os parâmetros repository e username são obrigatórios'}, status=400)
+        if not repository or not github_token or not folder:
+            return JsonResponse({'error': 'Os parâmetros repository, github_token e folder são obrigatórios'}, status=status.HTTP_400_BAD_REQUEST)
         
-        g = get_github_client()
+        g = get_github_client(github_token)
         
         repo = g.get_repo(repository)
         
         documentos = []
 
-        contents = repo.get_contents("docs")
+        contents = repo.get_contents(folder)
+        
+        if not contents:
+            return JsonResponse({'message': 'Não foi localizado nenhum arquivo'}, status=status.HTTP_404_NOT_FOUND)
         
         while contents:
             file_content = contents.pop(0)
@@ -151,7 +157,7 @@ def list_contents(request):
                     'type': file_content.type
                 })
                 
-        return JsonResponse(documentos, safe=False)
+        return JsonResponse(documentos, safe=False, status=status.HTTP_200_OK)
                 
     except GithubException as e:
-        return JsonResponse({'error': str(e)}, status=500)
+        return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
