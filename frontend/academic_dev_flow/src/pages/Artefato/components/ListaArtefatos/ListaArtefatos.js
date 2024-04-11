@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {Table, Space} from 'antd'
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { listarArtefatos } from "../../../../services/artefatoService";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { handleError } from "../../../../services/utils";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
+import { IoDocumentTextOutline } from "react-icons/io5";
 
 const ListaArtefatos = ({onView, onEdit, onDelete}) => {
 
@@ -16,7 +17,7 @@ const ListaArtefatos = ({onView, onEdit, onDelete}) => {
             render: (_, record) => (
                 <a
                     onClick={() =>  onView(record)}
-                > {record.nome} </a>
+                > <IoDocumentTextOutline /> {record.nome} </a>
             )
         },
         {
@@ -101,6 +102,8 @@ const ListaArtefatos = ({onView, onEdit, onDelete}) => {
 
     return (
         <Table
+            rowKey="id"
+            className="style-table"
             dataSource={artefatos}
             columns={COLUNAS_TABELA_ARTEFATOS}
         />
