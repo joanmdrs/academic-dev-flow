@@ -31,7 +31,7 @@ class CadastrarMembroView(APIView):
                 raise ValueError("Dados do usuário não fornecidos")
 
             user_serializer = UsuarioSerializer(data=user_data)
-            if not user_serializer.is_valid(raise_exception=True):
+            if not user_serializer.is_valid():
                 return Response({'error': 'Dados do usuário inválidos'}, status=status.HTTP_400_BAD_REQUEST)
 
             user_created = Usuario.objects.create_user(
@@ -42,14 +42,13 @@ class CadastrarMembroView(APIView):
             user_created.is_superuser = False
             user_created.save()
 
-            if not github_data:
-                raise ValueError("Dados do GitHub não fornecidos")
-
-            github_serializer = UsuarioGithubSerializer(data=github_data)
-            if not github_serializer.is_valid(raise_exception=True):
-                return Response({'error': 'Dados do GitHub inválidos'}, status=status.HTTP_400_BAD_REQUEST)
-
-            github_created = github_serializer.save()
+            github_created = None
+        
+            if github_data['nome'] is not None:
+                github_serializer = UsuarioGithubSerializer(data=github_data)
+                if not github_serializer.is_valid():
+                    return Response({'error': 'Dados do GitHub inválidos'}, status=status.HTTP_400_BAD_REQUEST)
+                github_created = github_serializer.save()
 
             if group_name:
                 group = Group.objects.get(name=group_name)
@@ -57,10 +56,11 @@ class CadastrarMembroView(APIView):
 
             member_data['grupo'] = group_name
             member_data['usuario'] = user_created.id
-            member_data['github'] = github_created.id
+            if github_created:
+                member_data['github'] = github_created.id
 
             member_serializer = MembroSerializer(data=member_data)
-            if not member_serializer.is_valid(raise_exception=True):
+            if not member_serializer.is_valid():
                 return Response({'error': 'Dados do membro inválidos'}, status=status.HTTP_400_BAD_REQUEST)
 
             member_serializer.save()
@@ -71,6 +71,8 @@ class CadastrarMembroView(APIView):
             return Response({'error': str(ve)}, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
+            if user_created:
+                user_created.delete()
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 
