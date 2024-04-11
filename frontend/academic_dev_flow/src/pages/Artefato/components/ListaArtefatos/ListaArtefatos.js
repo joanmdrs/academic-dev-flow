@@ -17,7 +17,7 @@ const ListaArtefatos = ({onView, onEdit, onDelete}) => {
             render: (_, record) => (
                 <a
                     onClick={() =>  onView(record)}
-                > <IoDocumentTextOutline /> {record.nome} </a>
+                > {record.nome} </a>
             )
         },
         {

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {Button, Modal} from 'antd'
+import {Button} from 'antd'
 import Titulo from "../../../../components/Titulo/Titulo";
 import { FaPlus, FaSearch } from "react-icons/fa";
 import FormGenericBusca from "../../../../components/Forms/FormGenericBusca/FormGenericBusca";
@@ -9,8 +9,8 @@ import ListaArtefatos from "../../components/ListaArtefatos/ListaArtefatos";
 import SelectProjeto from "../../components/SelectProjeto/SelectProjeto"
 import InputsAdmin from "../../components/InputsAdmin/InputsAdmin"
 import { useContextoArtefato } from "../../context/ContextoArtefato";
-import { createContent, deleteContent, getContent } from "../../../../services/githubIntegration";
-import { atualizarArtefato, criarArtefato, excluirArtefato, filtrarArtefatosPeloNomeEPeloProjeto } from "../../../../services/artefatoService";
+import { createContent, deleteContent } from "../../../../services/githubIntegration";
+import { atualizarArtefato, criarArtefato, filtrarArtefatosPeloNomeEPeloProjeto } from "../../../../services/artefatoService";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import ModalExcluirArtefato from "../../components/ModalExcluirArtefato/ModalExcluirArtefato";
 
