@@ -20,6 +20,7 @@ import PageGerenciarTipos from "./pages/Tipo";
 import ScreenGerenciarTarefas from "./pages/Tarefa/screens/GerenciarTarefas";
 import ScreenGerenciarArtefatos from "./pages/Artefato/screens/GerenciarArtefatos";
 import ScreenVisualizarArtefato from "./pages/Artefato/screens/VisualizarArtefato";
+import ScreenGerenciarArquivosGithub from "./pages/Artefato/screens/GerenciarArquivosGithub";
 
 function Routes() {
   return (
@@ -38,6 +39,7 @@ function Routes() {
         <Route path="/admin/membros/vincular-projeto" Component={ScreenVincularMembroAoProjeto} exact/>
         <Route path="/admin/artefatos" Component={ScreenGerenciarArtefatos} exact />
         <Route path="/admin/artefatos/visualizar-artefato/" Component={ScreenVisualizarArtefato} exact/>
+        <Route path="/admin/artefatos/gerenciar-arquivos/" Component={ScreenGerenciarArquivosGithub} exact/>
         <Route path="/admin/tarefas" Component={ScreenGerenciarTarefas} exact/>
         <Route path="/admin/tipos" Component={PageGerenciarTipos} exact/>
       </Route>
