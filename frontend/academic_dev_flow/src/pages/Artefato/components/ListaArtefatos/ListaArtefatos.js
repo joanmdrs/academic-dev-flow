@@ -21,14 +21,6 @@ const ListaArtefatos = ({onView, onEdit, onDelete}) => {
             )
         },
         {
-            title: 'Descrição',
-            dataIndex: 'descricao',
-            key: 'descricao',
-            render: (_, record) => (
-                <span> {handleLimitarCaracteres(record.descricao)}</span>
-            )
-        },
-        {
             title: 'Status',
             dataIndex: 'status',
             key: 'status'
@@ -68,7 +60,7 @@ const ListaArtefatos = ({onView, onEdit, onDelete}) => {
     }, [artefatos])
 
     function handleLimitarCaracteres(texto, limite) {
-        if (texto.length >= limite) {
+        if (texto && texto.length >= limite) {
             return `${texto.substring(0, limite)}...`;
         }
         return texto;
