@@ -117,3 +117,21 @@ class ListarArtefatosView(APIView):
 
         except Exception as e: 
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        
+class VerificarExistenciaArquivoView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        try:
+            sha_file = request.GET.get('sha_file', None)
+            
+            if sha_file is None:
+                return Response({'error': 'O identificador do arquivo não foi informado.'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            existe = Artefato.objects.filter(id_file=sha_file).exists()
+            
+            return Response({'existe': existe}, status=status.HTTP_200_OK)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
