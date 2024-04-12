@@ -121,10 +121,6 @@ const GerenciarArtefatos = () => {
         await deleteContent(objeto)
     }
 
-    const handleNavigateGerenciarArquivos = () => {
-        navigate("/admin/artefatos/gerenciar-arquivos")
-    }
-
     return (
         <React.Fragment>
             <Titulo 
@@ -141,22 +137,13 @@ const GerenciarArtefatos = () => {
                     Buscar
                 </Button>
 
-                <div className="grouped-buttons"> 
-                    <Button 
-                        icon={<FaGithub />}
-                        type="primary" 
-                        onClick={handleNavigateGerenciarArquivos}
-                        > 
-                        Visualizar Artefatos
-                    </Button>
-                    <Button 
-                        icon={<FaPlus />} 
-                        type="primary" 
-                        onClick={handleCriarArtefato}
-                    >
-                        Criar Artefato
-                    </Button>
-                </div>
+                <Button 
+                    icon={<FaPlus />} 
+                    type="primary" 
+                    onClick={handleCriarArtefato}
+                >
+                    Criar Artefato
+                </Button>
                 
             </div>
 

@@ -37,7 +37,7 @@ function Routes() {
         <Route path="/admin/etapas" Component={Etapa} exact />
         <Route path="/admin/membros/gerenciar" Component={ScreenGerenciarMembros} exact />
         <Route path="/admin/membros/vincular-projeto" Component={ScreenVincularMembroAoProjeto} exact/>
-        <Route path="/admin/artefatos" Component={ScreenGerenciarArtefatos} exact />
+        <Route path="/admin/artefatos/gerenciar" Component={ScreenGerenciarArtefatos} exact />
         <Route path="/admin/artefatos/visualizar-artefato/" Component={ScreenVisualizarArtefato} exact/>
         <Route path="/admin/artefatos/gerenciar-arquivos/" Component={ScreenGerenciarArquivosGithub} exact/>
         <Route path="/admin/tarefas" Component={ScreenGerenciarTarefas} exact/>
