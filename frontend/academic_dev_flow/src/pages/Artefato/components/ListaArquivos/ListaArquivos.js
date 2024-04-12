@@ -50,40 +50,8 @@ const ListaArquivos = ({dadosArquivos, carregando}) => {
         }
     ]
 
-    const [arquivos, setArquivos] = useState([])
-
-    useEffect(() => {
-        const fetchData = async () => {
-            if (dadosArquivos){
-                await handleVerificarExistenciaArquivo()
-            }
-        }
-
-        fetchData()
-    }, [dadosArquivos])
-
-    const handleVerificarExistenciaArquivo = async () => {
-
-        try {
-            const dados = await Promise.all(dadosArquivos.map(async (arquivo) => {
-                const resArtefato = await verificarExistenciaArquivo(arquivo.sha)
-    
-                if (!resArtefato.error) {
-                    const existe = resArtefato.data.existe
-                    return { ...arquivo, existe }
-                }
-                return arquivo
-            }))
-
-            setArquivos(dados)
-
-        } catch (error) {
-            return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
-        }
-    }
-
     return (    
-        <Table className="style-table" loading={carregando} rowKey="sha" columns={COLUNAS_ARQUIVOS} dataSource={arquivos}/>
+        <Table className="style-table" loading={carregando} rowKey="sha" columns={COLUNAS_ARQUIVOS} dataSource={dadosArquivos}/>
     )
 }
 

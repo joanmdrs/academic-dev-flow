@@ -8,6 +8,9 @@ import ListaArquivos from "../../components/ListaArquivos/ListaArquivos";
 import { NotificationManager } from "react-notifications";
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { FaArrowsRotate } from "react-icons/fa6";
+import { sicronizarArtefatos, verificarExistenciaArquivo } from "../../../../services/artefatoService";
+import { handleError } from "../../../../services/utils";
+import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 
 const GerenciarArquivosGithub = () => {
 
@@ -17,7 +20,7 @@ const GerenciarArquivosGithub = () => {
     const [carregando, setCarregando] = useState(false);
     const {dadosProjeto} = useContextoArtefato()
 
-    const handleListarArquivos = async (parametros) => {
+    const handleListarArquivosGithub = async (parametros) => {
         NotificationManager.info("Essa operação pode demorar alguns segundos, aguarde enquanto obtemos os dados.")
 
         setCarregando(true);
@@ -25,14 +28,48 @@ const GerenciarArquivosGithub = () => {
         const response = await listContents(parametros);
 
         if (!response.error) {
-            console.log(response.data);
-            setArquivos(response.data);
+            await handleVerificarExistenciaArquivoBD(response.data)
         }
         setCarregando(false)
     };
 
-    const handleSicronizarArquivos = async () => {
-        
+    const handleVerificarExistenciaArquivoBD = async (dadosArquivos) => {
+
+        try {
+            const dados = await Promise.all(dadosArquivos.map(async (arquivo) => {
+                const resArtefato = await verificarExistenciaArquivo(arquivo.sha)
+    
+                if (!resArtefato.error) {
+                    const existe = resArtefato.data.existe
+                    return { ...arquivo, existe }
+                }
+                return arquivo
+            }))
+
+            setArquivos(dados)
+
+        } catch (error) {
+            return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+        }
+    }
+
+    const handleSicronizar = async () => {
+        const arquivosSicronizar = arquivos.filter(arquivo => !arquivo.existe);
+
+        const dadosEnviar = arquivosSicronizar.map((item) => {
+            
+            return {
+                nome: item.name,
+                status: 'criado',
+                descricao: null,
+                id_file: item.sha,
+                path_file: item.path,
+                projeto: dadosProjeto.id,
+                iteracao: null
+            }
+        })
+
+        await sicronizarArtefatos(dadosEnviar)
     }
 
     return (
@@ -54,7 +91,7 @@ const GerenciarArquivosGithub = () => {
 
             { isFormVisivel && (
                 <div className="global-div" style={{width: "50%"}}> 
-                    <FormListarArquivos onSearch={handleListarArquivos}/>
+                    <FormListarArquivos onSearch={handleListarArquivosGithub}/>
                 </div>
             )}
 
@@ -69,7 +106,7 @@ const GerenciarArquivosGithub = () => {
                             }}
                         > 
                             <h3> {dadosProjeto.nome} </h3>
-                            <Button type="primary" icon={<FaArrowsRotate/>}> Sicronizar </Button>
+                            <Button onClick={handleSicronizar} type="primary" icon={<FaArrowsRotate/>}> Sicronizar </Button>
 
                         </div>
                     </div>
