@@ -2,22 +2,24 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {Button} from 'antd'
 import Titulo from "../../../../components/Titulo/Titulo";
-import { FaPlus, FaSearch } from "react-icons/fa";
+import { FaGithub, FaPlus, FaSearch } from "react-icons/fa";
 import FormGenericBusca from "../../../../components/Forms/FormGenericBusca/FormGenericBusca";
 import FormArtefato from "../../components/FormArtefato/FormArtefato";
 import ListaArtefatos from "../../components/ListaArtefatos/ListaArtefatos";
 import SelectProjeto from "../../components/SelectProjeto/SelectProjeto"
 import InputsAdmin from "../../components/InputsAdmin/InputsAdmin"
 import { useContextoArtefato } from "../../context/ContextoArtefato";
-import { createContent, deleteContent } from "../../../../services/githubIntegration";
+import { createContent, deleteContent, listContents } from "../../../../services/githubIntegration";
 import { atualizarArtefato, criarArtefato, filtrarArtefatosPeloNomeEPeloProjeto } from "../../../../services/artefatoService";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import ModalExcluirArtefato from "../../components/ModalExcluirArtefato/ModalExcluirArtefato";
+import FormListarArquivos from "../../components/FormListarArquivos/FormListarArquivos";
 
 const GerenciarArtefatos = () => {
 
     const [isFormVisivel, setIsFormVisivel] = useState(false)
     const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false)
+    const [isFormListarVisibel, setIsFormListarVisivel] = useState(false)
     const [isModalExcluirVisivel, setIsModalExcluirVisivel] = useState(false)
     const [acaoForm, setAcaoForm] = useState('criar')
     const [artefatoExcluir, setArtefatoExcluir] = useState(null)
@@ -107,19 +109,23 @@ const GerenciarArtefatos = () => {
             repository: projeto.nome_repo,
             path: record.path_file
         }
-
         setArtefatoExcluir(parametros)
-        console.log(parametros)
-        
+        console.log(parametros)  
     }
-
-
 
     const handleExcluirArtefato = async (parametro) => {
         const objeto = artefatoExcluir
         objeto['commit_message'] = parametro
         console.log(objeto)
         await deleteContent(objeto)
+    }
+
+    const handleListarArquivos = async (parametros) =>{
+        const response = await listContents(parametros)
+
+        if (!response.error){
+            console.log(response.data)
+        }
     }
 
     return (
@@ -137,18 +143,35 @@ const GerenciarArtefatos = () => {
                 >
                     Buscar
                 </Button>
-                <Button 
-                    icon={<FaPlus />} 
-                    type="primary" 
-                    onClick={handleCriarArtefato}
-                >
-                    Criar Artefato
-                </Button>
+
+                <div className="grouped-buttons"> 
+                    <Button 
+                        icon={<FaGithub />}
+                        type="primary" 
+                        onClick={()=> setIsFormListarVisivel(true)}
+                        > 
+                        Visualizar Artefatos
+                    </Button>
+                    <Button 
+                        icon={<FaPlus />} 
+                        type="primary" 
+                        onClick={handleCriarArtefato}
+                    >
+                        Criar Artefato
+                    </Button>
+                </div>
+                
             </div>
 
             {isFormBuscarVisivel && (
                 <div className="global-div" style={{width: '50%'}}>   
                     <FormGenericBusca onSearch={handleBuscarArtefato} />
+                </div>
+            )}
+
+            {isFormListarVisibel && (
+                <div className="global-div" style={{width: "50%"}}> 
+                    <FormListarArquivos onSearch={handleListarArquivos} />
                 </div>
             )}
 
