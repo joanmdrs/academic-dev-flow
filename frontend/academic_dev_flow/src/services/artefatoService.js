@@ -1,5 +1,5 @@
 import api from "../api/api" 
-import { ERROR_MESSAGE_ON_CREATION, ERROR_MESSAGE_ON_DELETION, ERROR_MESSAGE_ON_SEARCHING, ERROR_MESSAGE_ON_UPDATE, INFO_MESSAGE_MANDATORY_PARAMETERS, INFO_MESSAGE_ON_SEARCHING, SUCCESS_MESSAGE_ON_CREATION, SUCCESS_MESSAGE_ON_DELETION, SUCCESS_MESSAGE_ON_UPDATE } from "./messages"
+import { ERROR_MESSAGE_ON_CREATION, ERROR_MESSAGE_ON_DELETION, ERROR_MESSAGE_ON_SEARCHING, ERROR_MESSAGE_ON_SYNC, ERROR_MESSAGE_ON_UPDATE, INFO_MESSAGE_MANDATORY_PARAMETERS, INFO_MESSAGE_ON_SEARCHING, SUCCESS_MESSAGE_ON_CREATION, SUCCESS_MESSAGE_ON_DELETION, SUCCESS_MESSAGE_ON_SYNC_ARTIFACTS, SUCCESS_MESSAGE_ON_UPDATE } from "./messages"
 import { handleError, handleInfo, handleSuccess } from "./utils"
 
 export const criarArtefato = async (dados) => {
@@ -87,4 +87,13 @@ export const verificarExistenciaArquivo = async (parametro) => {
             return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
         }
     }
+}
+
+export const sicronizarArtefatos = async (dados) => {
+    try {
+        const response = await api.post('/artefato/sicronizar-artefatos/', dados)
+        return handleSuccess(response, SUCCESS_MESSAGE_ON_SYNC_ARTIFACTS)
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SYNC)
+    }   
 }
