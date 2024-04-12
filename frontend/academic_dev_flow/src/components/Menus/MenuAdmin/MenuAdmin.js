@@ -69,22 +69,29 @@ const MenuAdmin = () => {
           icon={<BiGroup style={{ fontSize: "20px" }} />}
           title="Membros"
         >
-          <Menu.Item key="gerenciar-fluxos">
+          <Menu.Item key="gerenciar-membros">
             <Link to="/admin/membros/gerenciar">Gerenciar membros</Link>
           </Menu.Item>
 
-          <Menu.Item key="etapas">
+          <Menu.Item key="vincular-projeto">
             <Link to="/admin/membros/vincular-projeto">Vincular projeto</Link>
           </Menu.Item>
         </SubMenu>
 
-        <Menu.Item
-          className="item-menu"
-          key="artefato"
+        <SubMenu
+          className='item-menu'
+          key='artefato'
           icon={<IoDocumentTextOutline style={{ fontSize: "20px" }} />}
+          title="Artefatos"
         >
-          <Link to="/admin/artefatos">Artefatos</Link>
-        </Menu.Item>
+          <Menu.Item key="gerenciar-artefatos">
+            <Link to="/admin/artefatos/gerenciar">Gerenciar artefatos</Link>
+          </Menu.Item>
+
+          <Menu.Item key="gerenciar-arquivos">
+            <Link to="/admin/artefatos/gerenciar-arquivos">Gerenciar arquivos</Link>
+          </Menu.Item>
+        </SubMenu>
 
         <Menu.Item
           className="item-menu"
