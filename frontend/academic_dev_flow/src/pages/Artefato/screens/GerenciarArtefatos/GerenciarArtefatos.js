@@ -30,6 +30,7 @@ const GerenciarArtefatos = () => {
     
     const handleFecharModal = () => setIsModalExcluirVisivel(false)
 
+
     const handleCancelar = () => {  
         setIsFormVisivel(false)
     }
@@ -120,12 +121,8 @@ const GerenciarArtefatos = () => {
         await deleteContent(objeto)
     }
 
-    const handleListarArquivos = async (parametros) =>{
-        const response = await listContents(parametros)
-
-        if (!response.error){
-            console.log(response.data)
-        }
+    const handleNavigateGerenciarArquivos = () => {
+        navigate("/admin/artefatos/gerenciar-arquivos")
     }
 
     return (
@@ -148,7 +145,7 @@ const GerenciarArtefatos = () => {
                     <Button 
                         icon={<FaGithub />}
                         type="primary" 
-                        onClick={()=> setIsFormListarVisivel(true)}
+                        onClick={handleNavigateGerenciarArquivos}
                         > 
                         Visualizar Artefatos
                     </Button>
@@ -166,12 +163,6 @@ const GerenciarArtefatos = () => {
             {isFormBuscarVisivel && (
                 <div className="global-div" style={{width: '50%'}}>   
                     <FormGenericBusca onSearch={handleBuscarArtefato} />
-                </div>
-            )}
-
-            {isFormListarVisibel && (
-                <div className="global-div" style={{width: "50%"}}> 
-                    <FormListarArquivos onSearch={handleListarArquivos} />
                 </div>
             )}
 
