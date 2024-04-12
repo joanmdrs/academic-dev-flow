@@ -150,6 +150,7 @@ def list_contents(request):
                 contents.extend(repo.get_contents(file_content.path))
             else:
                 documentos.append({
+                    'sha': file_content.sha,
                     'name': file_content.name,
                     'path': file_content.path,
                     'content': file_content.content,
