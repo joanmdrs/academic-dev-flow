@@ -46,7 +46,7 @@ const GerenciarArquivosGithub = () => {
             </div>
 
             { isFormVisivel && (
-                <div className="global-div"> 
+                <div className="global-div" style={{width: "50%"}}> 
                     <FormListarArquivos onSearch={handleListarArquivos}/>
                 </div>
             )}

@@ -27,7 +27,7 @@ const ListaArquivos = ({dadosArquivos, carregando}) => {
     ]
 
     return (    
-        <Table loading={carregando} rowKey="sha" columns={COLUNAS_ARQUIVOS} dataSource={dadosArquivos}/>
+        <Table className="style-table" loading={carregando} rowKey="sha" columns={COLUNAS_ARQUIVOS} dataSource={dadosArquivos}/>
     )
 }
 
