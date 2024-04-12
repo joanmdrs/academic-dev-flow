@@ -6,6 +6,8 @@ import FormListarArquivos from "../../components/FormListarArquivos/FormListarAr
 import { listContents } from "../../../../services/githubIntegration";
 import ListaArquivos from "../../components/ListaArquivos/ListaArquivos";
 import { NotificationManager } from "react-notifications";
+import { useContextoArtefato } from "../../context/ContextoArtefato";
+import { FaArrowsRotate } from "react-icons/fa6";
 
 const GerenciarArquivosGithub = () => {
 
@@ -13,6 +15,7 @@ const GerenciarArquivosGithub = () => {
     const [isFormVisivel, setIsFormVisivel] = useState(true);
     const [exibirLista, setExibirLista] = useState(false);
     const [carregando, setCarregando] = useState(false);
+    const {dadosProjeto} = useContextoArtefato()
 
     const handleListarArquivos = async (parametros) => {
         NotificationManager.info("Essa operação pode demorar alguns segundos, aguarde enquanto obtemos os dados.")
@@ -51,10 +54,26 @@ const GerenciarArquivosGithub = () => {
                 </div>
             )}
 
-            { exibirLista && (
-                <div className="global-div">
-                    <ListaArquivos dadosArquivos={arquivos} carregando={carregando}/>
-                </div>)
+            { exibirLista &&
+                <React.Fragment>
+                    <div className="global-div" > 
+                        <div 
+                            style={{
+                                display: 'flex', 
+                                justifyContent: 'space-between', 
+                                alignItems: 'baseline',
+                            }}
+                        > 
+                            <h3> {dadosProjeto.nome} </h3>
+                            <Button type="primary" icon={<FaArrowsRotate/>}> Sicronizar </Button>
+
+                        </div>
+                    </div>
+
+                    <div className="global-div">
+                        <ListaArquivos dadosArquivos={arquivos} carregando={carregando}/>
+                    </div>)
+                </React.Fragment>
             } 
 
         </React.Fragment> 

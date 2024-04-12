@@ -60,7 +60,7 @@ const ListaArquivos = ({dadosArquivos, carregando}) => {
         }
 
         fetchData()
-    }, [])
+    }, [dadosArquivos])
 
     const handleVerificarExistenciaArquivo = async () => {
 
