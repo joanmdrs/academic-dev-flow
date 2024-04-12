@@ -82,14 +82,14 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
                         className="global-form"  
                         requiredMark={customizeRequiredMark}                  
                     >
-                        <Form.Item label="Nome" name="nome" required>
+                        <Form.Item label="Nome:" name="nome" required>
                             <Input
                                 name="nome"
                             />
                         </Form.Item>
 
                         <div style={{display: 'flex', gap: "20px"}}>
-                            <Form.Item label="Status" name="status" style={{width: "250px"}} required>
+                            <Form.Item label="Status:" name="status" style={{width: "250px"}} required>
                                 <Select
                                     name="status"
                                     defaultValue="Selecione"
@@ -97,28 +97,32 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
                                 />
                             </Form.Item>
 
-                            <Form.Item label="Data de Início" name="data_inicio" style={{width: "250px"}} required>
+                            <Form.Item label="Data de Início:" name="data_inicio" style={{width: "250px"}} required>
                                 <Input name="data_inicio" type="date" />
                             </Form.Item>
 
-                            <Form.Item label="Data de Término" name="data_fim" style={{width: "250px"}} required>
+                            <Form.Item label="Data de Término:" name="data_fim" style={{width: "250px"}} required>
                                 <Input name="data_fim" type="date" />
                             </Form.Item>
                         </div>
 
-                        <Form.Item label="Link do repositório" name="repositorio" style={{width: "70%"}}>
+                        <Form.Item label="Informe (proprietário/repositório): ">
+                            <Input name="nome_repo"/>
+                        </Form.Item>
+
+                        <Form.Item label="Link do repositório:" name="repositorio">
                             <Input name="repositorio" />
                         </Form.Item>
 
-                        <Form.Item label="Link do MVP" name="site" style={{width: "70%"}}>
+                        <Form.Item label="Link do MVP:" name="site">
                             <Input name="site" />
                         </Form.Item>
 
-                        <Form.Item label="Token de acesso" name="token" style={{width: "70%"}}>
+                        <Form.Item label="Token de acesso:" name="token">
                             <Input name="token" />
                         </Form.Item>
 
-                        <Form.Item label="Descrição" name="descricao">
+                        <Form.Item label="Descrição:" name="descricao">
                             <Input.TextArea id="descricao" name="descricao" rows={6} />
                         </Form.Item>
 
