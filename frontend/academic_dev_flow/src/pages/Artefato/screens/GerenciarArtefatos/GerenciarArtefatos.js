@@ -97,7 +97,17 @@ const GerenciarArtefatos = () => {
         const idProjeto = dados.id_projeto
         const response = await filtrarArtefatosPeloNomeEPeloProjeto(nomeArtefato, idProjeto)
         if (!response.error) {
-            setArtefatos(response.data)
+
+            const dadosModificar = await Promise.all(response.data.map(async (artefato) => {
+                const resProjeto = await buscarProjetoPeloId(artefato.projeto);
+
+                if (!resProjeto.error){
+                    artefato['nome_projeto'] = resProjeto.data.nome;
+                }
+                return artefato;
+            }));
+            const resultado = await (Promise.resolve(dadosModificar))
+            setArtefatos(resultado)
         }
     }
 
