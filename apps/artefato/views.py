@@ -119,7 +119,7 @@ class ListarArtefatosView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
         
-class VerificarExistenciaArquivoView(APIView):
+class VerificarExistenciaArtefatoView(APIView):
     permission_classes = [IsAuthenticated]
     
     def get(self, request):
@@ -135,3 +135,21 @@ class VerificarExistenciaArquivoView(APIView):
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class SicronizarArtefatosView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        try: 
+            
+            serializer = ArtefatoSerializer(data=request.data, many=True)
+            
+            if not serializer.is_valid(raise_exception=True):
+                return Response(artefatos_serializer.data, status=status.HTTP_400_BAD_REQUEST)
+            serializer.save()
+            
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+                 
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+

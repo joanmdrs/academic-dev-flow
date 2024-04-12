@@ -31,6 +31,10 @@ const GerenciarArquivosGithub = () => {
         setCarregando(false)
     };
 
+    const handleSicronizarArquivos = async () => {
+        
+    }
+
     return (
         <React.Fragment>
             <Titulo 
