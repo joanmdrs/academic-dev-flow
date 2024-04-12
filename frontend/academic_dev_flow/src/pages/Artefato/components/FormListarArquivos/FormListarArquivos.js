@@ -11,15 +11,20 @@ const  FormListarArquivos = ({onSearch}) => {
         dados['repository'] = dadosProjeto.nome_repo
 
         console.log(dados)
-        // onSearch(dados)
+        onSearch(dados)
     }
 
     return (
-        <Form onFinish={handleBuscarArquivos} layout="vertical">
+        <Form  className="global-form" onFinish={handleBuscarArquivos} layout="vertical" style={{width: "50%"}}>
+            <Form.Item>
+                <h4> LISTAR ARQUIVOS </h4>
+            </Form.Item>
+
+
             <SelectProjeto />
 
-            <Form.Item label="Nome da pasta" name="folder">
-                <Input name="folder" placeholder="nome da pasta" /> 
+            <Form.Item name="folder" required>
+                <Input name="folder" placeholder="Informe a pasta dos artefatos do repositório" /> 
             </Form.Item>
 
             <Form.Item>
