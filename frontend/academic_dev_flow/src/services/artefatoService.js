@@ -74,3 +74,17 @@ export const filtrarArtefatosPeloNomeEPeloProjeto = async (nomeArtefato, idProje
 
     }
 }
+
+export const verificarExistenciaArquivo = async (parametro) => {
+    try {
+        const response = await api.get('artefato/verificar-existencia/', {params: {sha_file: parametro}})
+        return response
+        
+    } catch (error) {
+        if (error.response && error.response.status === 400){
+            return handleError(error, 'Parâmetro não informado!')
+        } else {
+            return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+        }
+    }
+}
