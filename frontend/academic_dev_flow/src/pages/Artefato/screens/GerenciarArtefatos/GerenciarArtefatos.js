@@ -121,13 +121,11 @@ const GerenciarArtefatos = () => {
             path: record.path_file
         }
         setArtefatoExcluir(parametros)
-        console.log(parametros)  
     }
 
     const handleExcluirArtefato = async (parametro) => {
         const objeto = artefatoExcluir
         objeto['commit_message'] = parametro
-        console.log(objeto)
         await deleteContent(objeto)
     }
 

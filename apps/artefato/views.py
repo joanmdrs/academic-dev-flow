@@ -129,9 +129,13 @@ class VerificarExistenciaArtefatoView(APIView):
             if sha_file is None:
                 return Response({'error': 'O identificador do arquivo não foi informado.'}, status=status.HTTP_400_BAD_REQUEST)
             
-            existe = Artefato.objects.filter(id_file=sha_file).exists()
+            artefato = Artefato.objects.filter(id_file=sha_file).first()
             
-            return Response({'existe': existe}, status=status.HTTP_200_OK)
+            if artefato:
+                serializer = ArtefatoSerializer(artefato)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'O arquivo não foi encontrado.'}, status=status.HTTP_404_NOT_FOUND)
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -152,4 +156,4 @@ class SicronizarArtefatosView(APIView):
                  
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+    

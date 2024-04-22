@@ -8,7 +8,7 @@ import { IoCloseCircle } from "react-icons/io5";
 import { IoMdTrash } from "react-icons/io";
 import { FaArrowsRotate } from "react-icons/fa6";
 
-const ListaArquivos = ({dadosArquivos, carregando}) => {
+const ListaArquivos = ({dadosArquivos, carregando, onDelete}) => {
 
     const COLUNAS_ARQUIVOS = [
         {
@@ -42,7 +42,7 @@ const ListaArquivos = ({dadosArquivos, carregando}) => {
             render: (_, record) => (
                 <Space> 
                     { record.existe ? 
-                        <a> <IoMdTrash /> Excluir </a>
+                        <a onClick={() => onDelete(record)}> <IoMdTrash /> Excluir </a>
                         : <a> <FaArrowsRotate /> Sicronizar </a>
                     }
                 </Space>
