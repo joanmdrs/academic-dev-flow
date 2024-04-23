@@ -18,6 +18,9 @@ export const ERROR_MESSAGE_ON_DELETION = "Falha durante a exclusão, contate o s
 
 // Mensagens GITHUB INTEGRATION 
 
+
+// Contents 
+
 export const SUCCESS_MESSAGE_ON_CREATION_THE_CONTENT = "Arquivo cadastrado com sucesso!"
 export const SUCCESS_MESSAGE_ON_DELETION_THE_CONTENT = "Arquivo excluído com sucesso!"
 export const SUCCESS_MESSAGE_ON_SYNC_ARTIFACTS = "Artefatos sicronizados com sucesso!"
@@ -27,3 +30,12 @@ export const ERROR_MESSAGE_ON_SEARCHING_THE_CONTENT = "Arquivo não encontrado, 
 export const ERROR_MESSAGE_ON_LIST_CONTENTS = "Não foi localizado nenhum arquivo na pasta informada, tente novamente!"
 export const ERROR_MESSAGE_ABSENCE_PARAMETERS = "Ausência de parâmetros obrigatórios, contate o suporte!"
 export const ERROR_MESSAGE_ON_SYNC = "Falha durante a sicronização, contate o suporte!"
+
+// Issues 
+
+export const SUCCESS_MESSAGE_ON_CREATION_THE_ISSUE = "Issue criada com sucesso!"
+export const SUCCESS_MESSAGe_ON_UPDATE_THE_ISSUE = "Issue atualizada com sucesso!"
+
+export const ERROR_MESSAGE_ON_CREATION_THE_ISSUE = "Falha durante a criação da issue, contate o suporte!"
+export const ERROR_MESSAGE_ON_UPDATE_THE_ISSUE = "Falha durante a atualização da issue, contate o suporte!"
+export const ERROR_MESSAGE_ON_LIST_ISSUES = "Não foram encontradas issues para o repositório deste projeto, contate o suporte!"
