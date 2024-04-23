@@ -23,28 +23,6 @@ def list_user_repositories(request):
     except GithubException as e:
         return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        
-    
-def list_issues(request):
-    try:
-        g = get_github_client()
-        repository = request.GET.get('repository')
-        repo = g.get_repo(repository)
-        open_issues = repo.get_issues(state='open')
-        
-        issues_list = []
-        for issue in open_issues:
-            issues_list.append({
-                'title': issue.title,
-                'body': issue.body,
-                'created_at': issue.created_at.isoformat(),
-            })
-        
-        return JsonResponse(issues_list, safe=False, status=status.HTTP_200_OK)
-    
-    
-    except GithubException as e:
-        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 def user_commits_view(request):
     try:
