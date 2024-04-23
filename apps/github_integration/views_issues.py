@@ -41,3 +41,40 @@ def create_issue(request):
         
     except GithubException as e:
         return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+def update_issue(request, issue_number):
+    try:
+        data = json.loads(request.body)
+        
+        github_token = data.get('github_token')
+        repository = data.get('repository')
+        title = data.get('title')
+        body = data.get('body')
+        labels = data.getlist('labels')
+        assignee = data.get('assignee')
+        
+        if not github_token or not repository or not issue_number:
+            return JsonResponse({'error': 'Ausência de parâmetros'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        g = get_github_client(github_token)
+        repo = g.get_repo(repository)
+        
+        issue = repo.get_issue(number=issue_number)
+        
+        if title:
+            issue.edit(title=title)
+        
+        if body:
+            issue.edit(body=body)
+        
+        if labels:
+            issue.edit(labels=labels)
+        
+        if assignee:
+            issue.edit(assignee=assignee)
+        
+        return JsonResponse({'success': 'Issue atualizada com sucesso!'}, status=status.HTTP_200_OK)        
+        
+    except GithubException as e:
+        return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+

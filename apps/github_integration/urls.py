@@ -7,8 +7,11 @@ app_name = "github_integration"
 
 urlpatterns = [
     path('list_repositories/', views.list_user_repositories, name='list_repositories'),
+    # CRUD de issues
     path('list_issues/', views.list_issues, name='list_issues'),
     path('create_issue/', views.create_issue, name='create_issue'),
+    path('update_issue/', views.update_issue, name='update_issue'),
+    # CRUD de contents 
     path("create_content/", views_contents.create_content, name="create_content"),
     path('get_content/', views_contents.get_content, name='get_content'),
     path('update_content/', views_contents.update_content, name='update_content'),
