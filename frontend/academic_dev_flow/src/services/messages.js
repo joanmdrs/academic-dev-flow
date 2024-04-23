@@ -39,3 +39,4 @@ export const SUCCESS_MESSAGE_ON_UPDATE_THE_ISSUE = "Issue atualizada com sucesso
 export const ERROR_MESSAGE_ON_CREATION_THE_ISSUE = "Falha durante a criação da issue, contate o suporte!"
 export const ERROR_MESSAGE_ON_UPDATE_THE_ISSUE = "Falha durante a atualização da issue, contate o suporte!"
 export const ERROR_MESSAGE_ON_LIST_ISSUES = "Não foram encontradas issues para o repositório deste projeto, contate o suporte!"
+export const ERROR_MESSAGE_ON_GET_LABELS = "Não foi possível carregar os labels do repositório, contate o suporte!"
