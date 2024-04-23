@@ -23,6 +23,8 @@ class Tarefa(models.Model):
     descricao = models.TextField(null=True, blank=True)
     concluida = models.BooleanField(default=False)
     tempo_gasto = models.IntegerField(default=0)
+    id_issue = models.IntegerField(null=True, blank=True)
+    number_issue = models.IntegerField(null=True, blank=True)
     tipo = models.ForeignKey(Tipo, on_delete=models.SET_NULL, null=True, blank=True)
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, null=True, blank=True)
     membros = models.ManyToManyField(MembroProjeto)
