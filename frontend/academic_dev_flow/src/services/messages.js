@@ -34,7 +34,7 @@ export const ERROR_MESSAGE_ON_SYNC = "Falha durante a sicronização, contate o 
 // Issues 
 
 export const SUCCESS_MESSAGE_ON_CREATION_THE_ISSUE = "Issue criada com sucesso!"
-export const SUCCESS_MESSAGe_ON_UPDATE_THE_ISSUE = "Issue atualizada com sucesso!"
+export const SUCCESS_MESSAGE_ON_UPDATE_THE_ISSUE = "Issue atualizada com sucesso!"
 
 export const ERROR_MESSAGE_ON_CREATION_THE_ISSUE = "Falha durante a criação da issue, contate o suporte!"
 export const ERROR_MESSAGE_ON_UPDATE_THE_ISSUE = "Falha durante a atualização da issue, contate o suporte!"
