@@ -7,6 +7,7 @@ import {
     ERROR_MESSAGE_ON_UPDATE_THE_ISSUE, 
     SUCCESS_MESSAGE_ON_CREATION_THE_ISSUE, 
     SUCCESS_MESSAGE_ON_UPDATE_THE_ISSUE, } from "../messages"
+import { Octokit } from "octokit"
 
 export const createIssue = async (dados) => {
     try {
@@ -35,9 +36,9 @@ export const listIssues = async () => {
     }
 }
 
-export const getLabels = async () => {
+export const getLabels = async (parametros) => {
     try {
-        const response = await api.get('github_integration/issues/get_labels/')
+        const response = await api.get('github_integration/issues/get_labels/', {params: parametros})
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_GET_LABELS)

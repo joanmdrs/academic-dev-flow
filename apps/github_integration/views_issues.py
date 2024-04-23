@@ -124,8 +124,10 @@ def get_repository_labels(request):
         repo = g.get_repo(repository)
         
         labels = repo.get_labels()
+        for label in labels:
+            print(label)
         
-        labels_list = [label.name for label in labels]
+        labels_list = [{'name': label.name} for label in labels]
         
         return JsonResponse(labels_list, safe=False, status=status.HTTP_200_OK)
         

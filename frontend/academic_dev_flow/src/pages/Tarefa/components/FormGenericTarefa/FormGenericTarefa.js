@@ -7,6 +7,8 @@ import { listarIteracoesPorProjeto } from '../../../../services/iteracaoService'
 import Loading from '../../../../components/Loading/Loading';
 import { customizeRequiredMark } from '../../../../components/LabelMask/LabelMask';
 import { listarTipos } from '../../../../services/tipoService';
+import { getLabels } from '../../../../services/githubIntegration/issueService';
+import { Octokit } from 'octokit';
 
 
 const baseStyle = {
@@ -23,6 +25,7 @@ function FormGenericTarefa ({onCancel, onSubmit, addtionalFields}) {
     const [optionsMembros, setOptionsMembros] = useState(null)
     const [optionsIteracoes, setOptionsIteracoes] = useState(null)
     const [optionsTipos, setOptionsTipos] = useState(null)
+    const [optionsLabels, setOptionsLabels] = useState(null)
     const [loading, setLoading] = useState(false)
 
     const handleGetMembros = async () => {
@@ -69,9 +72,36 @@ function FormGenericTarefa ({onCancel, onSubmit, addtionalFields}) {
                 }
             })
             setOptionsTipos(resultados)
-
         }
+    }
 
+    const handleGetLabels = async () => {
+        const octokit = new Octokit({
+            auth: dadosProjeto.token
+        });
+
+        const [owner, repo] = dadosProjeto.nome_repo.split("/");
+
+          
+        try {
+            const response = await octokit.request('GET /repos/:owner/:repo/labels', {
+                owner: owner,
+                repo: repo
+            });
+            
+            if (response.data && response.data.length > 0) {
+                const resultados = response.data.map((item) => {
+                    return {
+                        value: item.id,
+                        label: item.name
+                    }
+                })
+    
+                setOptionsLabels(resultados)
+            }
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     useEffect(() => {
@@ -80,6 +110,7 @@ function FormGenericTarefa ({onCancel, onSubmit, addtionalFields}) {
                 await handleGetMembros()
                 await handleGetIteracoes()
                 await handleGetTipos()
+                await handleGetLabels()
                 setLoading(false)
                 if (dadosTarefa !== null){
                     form.setFieldsValue(dadosTarefa)
@@ -152,6 +183,19 @@ function FormGenericTarefa ({onCancel, onSubmit, addtionalFields}) {
                         name="tipo"
                     />
 
+                </Form.Item>
+
+                <Form.Item label='Label' name='labels' required style={{flex: '1'}}>
+                    <Select
+                        mode="multiple"
+                        allowClear
+                        style={{
+                            width: '100%',
+                        }}
+                        placeholder="Selecione"
+                        options={optionsLabels}
+                        name="labels"
+                    />
                 </Form.Item>
             </div>
 
