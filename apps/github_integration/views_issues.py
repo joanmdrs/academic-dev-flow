@@ -110,3 +110,25 @@ def list_issues(request):
     except GithubException as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)    
     
+    
+def get_repository_labels(request):
+    try:
+        
+        github_token = request.GET.get('github_token')
+        repository = request.GET.get('repository')
+        
+        if not github_token or not repository:
+            return JsonResponse({'error': 'Ausência de parâmetros'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        g = get_github_client(github_token)
+        repo = g.get_repo(repository)
+        
+        labels = repo.get_labels()
+        
+        labels_list = [label.name for label in labels]
+        
+        return JsonResponse(labels_list, safe=False, status=status.HTTP_200_OK)
+        
+    except GithubException as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)    
+
