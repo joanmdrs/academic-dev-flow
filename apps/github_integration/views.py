@@ -22,25 +22,7 @@ def list_user_repositories(request):
         return JsonResponse({'error': 'Token não fornecido'}, status=status.HTTP_400_BAD_REQUEST)
     except GithubException as e:
         return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
-def create_issue(request):
-    try:
-        github_token = request.GET.get('github_token') 
-        repositorio = request.GET.get('repositorio')
-        titulo_issue = request.GET.get('titulo')
-        descricao_issue = request.GET.get('descricao')
-        autor = request.GET.get('autor')
-        
-        if github_token:
-            
-            g = get_github_client(github_token)
-            repo = g.get_repo(repositorio)
-            repo.create_issue(title={titulo_issue}, body={descricao_issue}, assignee={autor})
 
-            return JsonResponse('Issue criada com sucesso!', status=status.HTTP_201_CREATED)
-
-    except GithubException as e:
-        return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
     
 def list_issues(request):

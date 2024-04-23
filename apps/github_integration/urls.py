@@ -1,7 +1,7 @@
 # github_integration/urls.py
 
 from django.urls import path
-from . import views, views_contents
+from . import views, views_contents, views_issues
 
 app_name = "github_integration"
 
