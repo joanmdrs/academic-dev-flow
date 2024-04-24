@@ -181,7 +181,6 @@ const TabEquipe = () => {
   const rowSelection = {
     onChange: (selectedRowsKeys, selectedRows) => {
       setMembrosExcluir(selectedRows)
-      console.log(selectedRows)
     },
   };
 

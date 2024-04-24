@@ -49,7 +49,6 @@ const ListContents = ({contents, onSearchDocs}) => {
         if (record.tipo === "dir") {
             setCurrentPath(`${currentPath}/${record.caminho}`);
             onSearchDocs(record.caminho);
-            console.log(record.caminho)
         } else {
             setDocumentoSelecionado(record);
             setCurrentPage('visualizar');

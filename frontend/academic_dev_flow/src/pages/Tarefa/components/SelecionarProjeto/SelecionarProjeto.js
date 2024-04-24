@@ -32,7 +32,6 @@ const SelecionarProjeto = () => {
     };
 
     const handleProsseguir = async () => {
-        console.log(selectedItem)
         const response = await buscarProjetoPeloId(selectedItem)
         setDadosProjeto(response.data)
         setStep('1')

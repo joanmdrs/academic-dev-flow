@@ -58,7 +58,6 @@ const ListaDocumentos = ({docs, onSearch, onEdit, onDelete}) => {
         if (record.tipo === "dir") {
             setCurrentPath(`${currentPath}/${record.caminho}`);
             onSearch(record.caminho);
-            console.log(record.caminho)
         } else {
             setDocumentoSelecionado(record);
             setDadosDocumento(record)

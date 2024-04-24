@@ -47,7 +47,6 @@ const GerenciarArquivosGithub = () => {
     
                 if (!resArtefato.error) {
                     const existe = resArtefato.data
-                    console.log(resArtefato)
                     return { ...arquivo, existe }
                 }
                 return arquivo
@@ -94,7 +93,6 @@ const GerenciarArquivosGithub = () => {
 
         if (!resArtefato.error){
             handleExibirModal()
-            console.log("Dados: ", resArtefato)
             const parametros = {
                 id_artefato: resArtefato.data.id,
                 github_token: dadosProjeto.token,

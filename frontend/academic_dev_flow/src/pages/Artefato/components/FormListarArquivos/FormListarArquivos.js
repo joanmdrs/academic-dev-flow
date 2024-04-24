@@ -9,8 +9,6 @@ const  FormListarArquivos = ({onSearch, onClear}) => {
     const handleBuscarArquivos = async (dados) => {
         dados['github_token'] = dadosProjeto.token
         dados['repository'] = dadosProjeto.nome_repo
-
-        console.log(dados)
         onSearch(dados)
     }
 

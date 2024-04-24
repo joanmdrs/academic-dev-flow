@@ -11,7 +11,7 @@ import { getLabels } from '../../../../services/githubIntegration/issueService';
 import { Octokit } from 'octokit';
 
 
-function FormGenericTarefa ({onCancel, onSubmit, addtionalFields}) {
+function FormGenericTarefa ({onCancel, onSubmit}) {
 
     const [form] = useForm()
     const {dadosProjeto, dadosTarefa} = useContextoTarefa()
@@ -86,7 +86,8 @@ function FormGenericTarefa ({onCancel, onSubmit, addtionalFields}) {
                 const resultados = response.data.map((item) => {
                     return {
                         value: item.id,
-                        label: item.name
+                        label: item.name,
+                        color: item.color
                     }
                 })
     
@@ -136,7 +137,7 @@ function FormGenericTarefa ({onCancel, onSubmit, addtionalFields}) {
                     </Form.Item>
 
                     <Form.Item label="Descrição" name="descricao">
-                        <Input.TextArea rows={4} name='descricao' />
+                        <Input.TextArea rows={6} name='descricao' />
                     </Form.Item>
 
                     <Form.Item label="Data de Início" name="data_inicio" required>
@@ -190,12 +191,16 @@ function FormGenericTarefa ({onCancel, onSubmit, addtionalFields}) {
                             mode="multiple"
                             allowClear
                             style={{
-                                width: '100%',
+                                width: '100%'
                             }}
                             placeholder="Selecione"
-                            options={optionsLabels}
                             name="labels"
-                        />
+                        >
+                            {optionsLabels &&
+                                optionsLabels.map(option => (
+                                    <Select.Option key={option.value} style={{ backgroundColor: `#${option.color}`, color: '#fff', marginBottom: "10px"}}>{option.label}</Select.Option>
+                                ))}
+                        </Select>
                     </Form.Item>
 
                     
