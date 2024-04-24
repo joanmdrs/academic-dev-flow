@@ -11,13 +11,6 @@ import { getLabels } from '../../../../services/githubIntegration/issueService';
 import { Octokit } from 'octokit';
 
 
-const baseStyle = {
-    display: "flex",
-    gap: "20px",
-    flexDirection: "row"
-};
-
-
 function FormGenericTarefa ({onCancel, onSubmit, addtionalFields}) {
 
     const [form] = useForm()
@@ -135,73 +128,83 @@ function FormGenericTarefa ({onCancel, onSubmit, addtionalFields}) {
                 <h4> CADASTRAR TAREFA </h4>
             </Form.Item>
 
-            <div style={baseStyle}>
-                <Form.Item label="Nome" name="nome" required style={{flex: '1'}}>
-                    <Input type='text' name='nome' />
-                </Form.Item>
+            <div style={{display: 'flex', gap: "20px"}}> 
 
-                <Form.Item label="Data de Início" name="data_inicio" required>
-                    <Input type='date' name='data_inicio' />
-                </Form.Item>
+                <div style={{flex:"2"}}>
+                    <Form.Item label="Nome" name="nome" required style={{flex: '1'}}>
+                        <Input type='text' name='nome' />
+                    </Form.Item>
 
-                <Form.Item label="Data de Término (Previsão)" name="data_termino" required>
-                    <Input type='date' name='data_termino' />
-                </Form.Item>
+                    <Form.Item label="Descrição" name="descricao">
+                        <Input.TextArea rows={4} name='descricao' />
+                    </Form.Item>
+
+                    <Form.Item label="Data de Início" name="data_inicio" required>
+                        <Input type='date' name='data_inicio' style={{width: '25%'}}/>
+                    </Form.Item>
+
+                    <Form.Item label="Data de Término (Previsão)" name="data_termino" required>
+                        <Input type='date' name='data_termino'  style={{width: '25%'}}/>
+                    </Form.Item>
+                </div>
+
+                <div style={{flex:"1"}}>
+
+                    <Form.Item label="Iteração" name="iteracao" required style={{flex: '1'}}>
+                        <Select
+                            allowClear
+                            placeholder="Selecione"
+                            options={optionsIteracoes}
+                            name="iteracao"
+                        />
+                    </Form.Item>
+
+                    <Form.Item label="Atribuir à" name="membros" required style={{flex: '1'}}>
+                        <Select
+                            mode="multiple"
+                            allowClear
+                            style={{
+                                width: '100%',
+                            }}
+                            placeholder="Selecione"
+                            options={optionsMembros}
+                            name="membros"
+                        />
+                    </Form.Item>
+
+                    <Form.Item label='Tipo' name='tipo' required style={{flex: '1'}}>
+                        <Select
+                            allowClear
+                            style={{
+                                width: '100%',
+                            }}
+                            placeholder="Selecione"
+                            options={optionsTipos}
+                            name="tipo"
+                        />
+
+                    </Form.Item>
+
+                    <Form.Item label='Label' name='labels' required style={{flex: '1'}}>
+                        <Select
+                            mode="multiple"
+                            allowClear
+                            style={{
+                                width: '100%',
+                            }}
+                            placeholder="Selecione"
+                            options={optionsLabels}
+                            name="labels"
+                        />
+                    </Form.Item>
+
+                    
+                </div>
+
             </div>
 
-            <div style={baseStyle}> 
-                <Form.Item label="Iteração" name="iteracao" required style={{flex: '1'}}>
-                    <Select
-                        allowClear
-                        placeholder="Selecione"
-                        options={optionsIteracoes}
-                        name="iteracao"
-                    />
-                </Form.Item>
 
-                <Form.Item label="Atribuir à" name="membros" required style={{flex: '1'}}>
-                    <Select
-                        mode="multiple"
-                        allowClear
-                        style={{
-                            width: '100%',
-                        }}
-                        placeholder="Selecione"
-                        options={optionsMembros}
-                        name="membros"
-                    />
-                </Form.Item>
 
-                <Form.Item label='Tipo' name='tipo' required style={{flex: '1'}}>
-                    <Select
-                        allowClear
-                        style={{
-                            width: '100%',
-                        }}
-                        placeholder="Selecione"
-                        options={optionsTipos}
-                        name="tipo"
-                    />
-
-                </Form.Item>
-
-                <Form.Item label='Label' name='labels' required style={{flex: '1'}}>
-                    <Select
-                        mode="multiple"
-                        allowClear
-                        style={{
-                            width: '100%',
-                        }}
-                        placeholder="Selecione"
-                        options={optionsLabels}
-                        name="labels"
-                    />
-                </Form.Item>
-            </div>
-
-            <Form.Item label="Descrição" name="descricao">
-                <Input.TextArea rows={4} name='descricao' />
-            </Form.Item>
 
             <Form.Item>
                 <Button type="primary" htmlType='submit'> Salvar </Button>
