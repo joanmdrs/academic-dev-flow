@@ -6,6 +6,7 @@ from github import Github, GithubException
 from .github_auth import get_github_client
 from github import InputGitAuthor
 import base64
+import json
 
 def create_issue(request):
     
@@ -16,7 +17,7 @@ def create_issue(request):
         repository = data.get('repository')
         title = data.get('title')
         body = data.get('body')
-        labels = data.getlist('labels')
+        labels = data.get('labels') 
         assignee = data.get('assignee')
         
         if not github_token or not repository or not title:
