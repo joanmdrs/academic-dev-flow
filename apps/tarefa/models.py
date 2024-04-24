@@ -4,6 +4,14 @@ from apps.projeto.models import Projeto
 from apps.iteracao.models import Iteracao
 from apps.tipo.models import Tipo
 
+class Label(models.Model):
+    id_github = models.CharField()
+    nome = models.CharField()
+    color = models.CharField()
+    
+    def __str__(self):
+        return self.nome
+
 class Tarefa(models.Model):
     
     STATUS_CHOICES = [
@@ -25,13 +33,15 @@ class Tarefa(models.Model):
     tempo_gasto = models.IntegerField(default=0)
     id_issue = models.IntegerField(null=True, blank=True)
     number_issue = models.IntegerField(null=True, blank=True)
-    tipo = models.ForeignKey(Tipo, on_delete=models.SET_NULL, null=True, blank=True)
+    labels = models.ManyToManyField(Label)
+    # tipo = models.ForeignKey(Tipo, on_delete=models.SET_NULL, null=True, blank=True)
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, null=True, blank=True)
     membros = models.ManyToManyField(MembroProjeto)
     iteracao = models.ForeignKey(Iteracao, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.nome
+    
     
 class IntervaloTempo(models.Model):
     
