@@ -93,13 +93,25 @@ const MenuAdmin = () => {
           </Menu.Item>
         </SubMenu>
 
-        <Menu.Item
-          className="item-menu"
-          key="tarefa"
-          icon={<MdOutlineTaskAlt style={{fontSize: '20px'}}/>}
+        <SubMenu
+          className='item-menu'
+          key='tarefa'
+          icon={<MdOutlineTaskAlt style={{ fontSize: "20px" }} />}
+          title="Tarefas"
         >
-          <Link to="/admin/tarefas"> Tarefas </Link>
-        </Menu.Item>
+          <Menu.Item key="gerenciar-tarefas">
+            <Link to="/admin/tarefas/gerenciar">Gerenciar tarefas</Link>
+          </Menu.Item>
+
+          <Menu.Item key="gerenciar-issues">
+            <Link to="/admin/tarefas/issues">Issues</Link>
+          </Menu.Item>
+
+          <Menu.Item key="gerenciar-labels">
+            <Link to="/admin/tarefas/labels">Labels</Link>
+          </Menu.Item>
+
+        </SubMenu>
 
         <Menu.Item 
           className="item-menu"

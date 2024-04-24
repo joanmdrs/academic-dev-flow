@@ -21,6 +21,7 @@ import ScreenGerenciarTarefas from "./pages/Tarefa/screens/GerenciarTarefas";
 import ScreenGerenciarArtefatos from "./pages/Artefato/screens/GerenciarArtefatos";
 import ScreenVisualizarArtefato from "./pages/Artefato/screens/VisualizarArtefato";
 import ScreenGerenciarArquivosGithub from "./pages/Artefato/screens/GerenciarArquivosGithub";
+import ScreenGerenciarLabels from "./pages/Tarefa/screens/GerenciarLabels";
 
 function Routes() {
   return (
@@ -30,17 +31,32 @@ function Routes() {
 
       {/* Admin */}
       <Route element={<AdminRoutes />}>
-        
+        {/* Página de Home */}
         <Route path="/admin/home" Component={HomeAdministrador} exact />
+
+        {/* Menu Item Projetos */}
         <Route path="/admin/projetos" Component={Projeto} exact />
+
+        {/* Menu Item Fluxos */}
         <Route path="/admin/fluxos/gerenciar" Component={Fluxo} exact />
         <Route path="/admin/etapas" Component={Etapa} exact />
+
+        {/* Menu Item Membros */}
         <Route path="/admin/membros/gerenciar" Component={ScreenGerenciarMembros} exact />
         <Route path="/admin/membros/vincular-projeto" Component={ScreenVincularMembroAoProjeto} exact/>
+      
+        {/* Menu Item Artefatos */}
         <Route path="/admin/artefatos/gerenciar" Component={ScreenGerenciarArtefatos} exact />
         <Route path="/admin/artefatos/visualizar-artefato/" Component={ScreenVisualizarArtefato} exact/>
         <Route path="/admin/artefatos/gerenciar-arquivos/" Component={ScreenGerenciarArquivosGithub} exact/>
-        <Route path="/admin/tarefas" Component={ScreenGerenciarTarefas} exact/>
+
+        {/* Menu Item Tarefas */}
+
+        <Route path="/admin/tarefas/gerenciar" Component={ScreenGerenciarTarefas} exact/>
+        <Route path="/admin/tarefas/labels" Component={ScreenGerenciarLabels} exact/>
+
+         {/* Menu Item Tipos */}
+
         <Route path="/admin/tipos" Component={PageGerenciarTipos} exact/>
       </Route>
 
