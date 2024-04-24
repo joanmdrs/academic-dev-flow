@@ -7,9 +7,9 @@ import {
     ERROR_MESSAGE_ON_UPDATE_THE_ISSUE, 
     SUCCESS_MESSAGE_ON_CREATION_THE_ISSUE, 
     SUCCESS_MESSAGE_ON_UPDATE_THE_ISSUE, } from "../messages"
-import { Octokit } from "octokit"
 
 export const createIssue = async (dados) => {
+
     try {
         const response = await api.post('github_integration/issues/create_issue/', dados)
         return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION_THE_ISSUE)

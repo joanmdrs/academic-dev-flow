@@ -122,3 +122,13 @@ export const filtrarTarefasPeloNomeEPeloProjeto = async (nomeTarefa, idProjeto) 
 
     }
 }
+
+export const buscarLabelPeloId = async (id) => {
+    try {
+        const response = await api.get(`tarefa/labels/${encodeURIComponent(id)}/`)
+        return response
+        
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
+}
