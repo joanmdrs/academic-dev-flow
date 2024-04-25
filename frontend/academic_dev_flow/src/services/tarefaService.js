@@ -141,3 +141,12 @@ export const buscarLabelPeloId = async (id) => {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
     }
 }
+
+export const listarLabelsPorProjeto = async (id_projeto) => {
+    try {
+        const response = await api.get(`tarefa/labels/listar-por-projeto/${encodeURIComponent(id_projeto)}/`)
+        return response
+    } catch (error) {
+        handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
+}

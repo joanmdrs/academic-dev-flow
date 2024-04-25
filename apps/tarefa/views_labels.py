@@ -41,3 +41,15 @@ class BuscarLabelPeloIdView(APIView):
                                         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
+        
+        
+class ListarLabelsPorProjetoView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request, id_projeto):
+        try:
+            labels = Label.objects.filter(projeto=id_projeto)
+            serializer = LabelSerializer(labels, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
