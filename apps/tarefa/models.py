@@ -8,6 +8,7 @@ class Label(models.Model):
     id_github = models.CharField()
     nome = models.CharField()
     cor = models.CharField()
+    projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, null=True, blank=True)
     
     def __str__(self):
         return self.nome

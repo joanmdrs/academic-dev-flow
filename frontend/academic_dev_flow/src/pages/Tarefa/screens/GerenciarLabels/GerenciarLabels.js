@@ -98,7 +98,8 @@ const GerenciarLabels = () => {
                 return {
                     id_github: item.id,
                     nome: item.name,
-                    cor: item.color
+                    cor: item.color,
+                    projeto: dadosProjeto.id
                 };
             }
         }).filter(Boolean);
