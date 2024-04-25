@@ -9,7 +9,7 @@ const { Option } = Select;
 const SelecionarProjeto = () => {
     const [optionsProjetos, setOptionsProjetos] = useState([]);
     const [selectedItem, setSelectedItem] = useState(null);
-    const {setStep, setDadosProjeto} = useContextoTarefa()
+    const {setStep, dadosProjeto, setDadosProjeto} = useContextoTarefa()
 
     useEffect(() => {
         const fetchData = async () => {
@@ -37,6 +37,11 @@ const SelecionarProjeto = () => {
         setStep('1')
     }
 
+    const handleLimpar = () => {
+        setDadosProjeto(null)
+        handleChange(null)
+    }
+
     const filterOption = (input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
     return (
         <div style={{display: 'flex', flexDirection: 'column', gap:'20px', flex: "1"}}>
@@ -52,11 +57,21 @@ const SelecionarProjeto = () => {
                 filterOption={filterOption}
             />
 
-            <Button
-                onClick={handleProsseguir}
-                style={{width: 'fit-content'}} 
-                type="primary"> Prosseguir 
-            </Button>
+            { selectedItem && 
+                <div style={{display: 'flex', gap: '10px'}}>
+                    <Button
+                        onClick={handleProsseguir}
+                        style={{width: 'fit-content'}} 
+                        type="primary"> Prosseguir 
+                    </Button>
+
+                    <Button onClick={handleLimpar}
+                    >
+                        Limpar
+                    </Button>
+
+                </div>
+            }
        
         </div>
         
