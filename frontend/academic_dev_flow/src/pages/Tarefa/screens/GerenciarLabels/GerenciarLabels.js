@@ -6,7 +6,7 @@ import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProj
 import { useContextoTarefa } from "../../context/ContextoTarefa";
 import { Octokit } from "octokit";
 import { handleError } from "../../../../services/utils";
-import { buscarLabelPeloId } from "../../../../services/tarefaService";
+import { buscarLabelPeloId, cadastrarLabels } from "../../../../services/tarefaService";
 import { IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5";
 import { FaArrowsRotate } from "react-icons/fa6";
 
@@ -90,6 +90,17 @@ const GerenciarLabels = () => {
         fetchData()
     }, [dadosProjeto])
 
+    const handleSicronizarLabels = async () => {
+        const dados = dadosLabels.map((item) => ({
+            id_github: item.id,
+            nome: item.name,
+            cor: item.color
+        }));
+
+        await cadastrarLabels(dados)
+    
+    }
+
     return (
 
         <React.Fragment>
@@ -108,7 +119,14 @@ const GerenciarLabels = () => {
                 dadosProjeto !== null && dadosLabels.length > 0 ?
                 (
                     <div className="global-div"> 
-                        <Button icon={<FaArrowsRotate />} style={{marginBottom: '20px'}} type="primary" ghost> Sicronizar </Button>
+                        <Button 
+                            icon={<FaArrowsRotate />} 
+                            style={{marginBottom: '20px'}} 
+                            type="primary" ghost
+                            onClick={handleSicronizarLabels}
+                        > 
+                            Sicronizar 
+                        </Button>
                         <Table 
                             rowKey="id"
                             bordered
