@@ -9,27 +9,7 @@ import { customizeRequiredMark } from '../../../../components/LabelMask/LabelMas
 import { listarTipos } from '../../../../services/tipoService';
 import { getLabels } from '../../../../services/githubIntegration/issueService';
 import { Octokit } from 'octokit';
-
-const tagRender = (props) => {
-    const { label, value, closable, onClose } = props;
-    const onPreventMouseDown = (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-    };
-    return (
-      <Tag
-        color={value}
-        onMouseDown={onPreventMouseDown}
-        closable={closable}
-        onClose={onClose}
-        style={{
-          marginInlineEnd: 4,
-        }}
-      >
-        {label}
-      </Tag>
-    );
-};
+import { listarLabelsPorProjeto } from '../../../../services/tarefaService';
 
 function FormGenericTarefa ({onCancel, onSubmit}) {
 
@@ -89,32 +69,19 @@ function FormGenericTarefa ({onCancel, onSubmit}) {
     // }
 
     const handleGetLabels = async () => {
-        const octokit = new Octokit({
-            auth: dadosProjeto.token
-        });
+        const response = await listarLabelsPorProjeto(dadosProjeto.id)
 
-        const [owner, repo] = dadosProjeto.nome_repo.split("/");
+        if (response.data.length > 0){
+            const resultados = response.data.map((item) => {
 
-          
-        try {
-            const response = await octokit.request('GET /repos/:owner/:repo/labels', {
-                owner: owner,
-                repo: repo
-            });
-            
-            if (response.data && response.data.length > 0) {
-                const resultados = response.data.map((item) => {
-                    return {
-                        value: item.id,
-                        label: item.name,
-                        color: item.color
-                    }
-                })
-    
-                setOptionsLabels(resultados)
-            }
-        } catch (error) {
-            console.error(error);
+                return {
+                    value: item.id,
+                    label: item.nome,
+                    color: item.cor
+                }
+            })
+
+            setOptionsLabels(resultados)
         }
     }
 
