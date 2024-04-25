@@ -39,7 +39,7 @@ const SelecionarProjeto = () => {
 
     const filterOption = (input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
     return (
-        <div style={{display: 'flex', flexDirection: 'column', gap:'20px'}}>
+        <div style={{display: 'flex', flexDirection: 'column', gap:'20px', flex: "1"}}>
 
             <Select
                 showSearch
@@ -55,8 +55,9 @@ const SelecionarProjeto = () => {
             <Button
                 onClick={handleProsseguir}
                 style={{width: 'fit-content'}} 
-                type="primary"> Prosseguir </Button>
-        
+                type="primary"> Prosseguir 
+            </Button>
+       
         </div>
         
     );
