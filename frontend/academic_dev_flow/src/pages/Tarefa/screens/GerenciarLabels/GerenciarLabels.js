@@ -7,8 +7,9 @@ import { useContextoTarefa } from "../../context/ContextoTarefa";
 import { Octokit } from "octokit";
 import { handleError } from "../../../../services/utils";
 import { buscarLabelPeloId, cadastrarLabels } from "../../../../services/tarefaService";
-import { IoCheckmarkCircle, IoCloseCircle } from "react-icons/io5";
+import { IoCheckmark, IoCloseOutline } from "react-icons/io5";
 import { FaArrowsRotate } from "react-icons/fa6";
+import { NotificationManager } from "react-notifications";
 
 
 const GerenciarLabels = () => {
@@ -37,11 +38,12 @@ const GerenciarLabels = () => {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
+            align: 'center',
             render: (_, record) => (
                 <Space>
                     { record.existe ? 
-                        <span> <IoCheckmarkCircle color="green" size="15px"/></span>
-                        : <span> <IoCloseCircle color="red"  size="20px" /></span>
+                        <span> <IoCheckmark color="green" size="15px"/></span>
+                        : <span> <IoCloseOutline color="red"  size="20px" /></span>
                     }
                 </Space>
             )
@@ -49,7 +51,7 @@ const GerenciarLabels = () => {
         
     ]
 
-    const {dadosProjeto} = useContextoTarefa()
+    const {dadosProjeto, setDadosProjeto} = useContextoTarefa()
     const [dadosLabels, setDadosLabels] = useState([])
 
     const handleGetLabels = async () => {
@@ -91,14 +93,23 @@ const GerenciarLabels = () => {
     }, [dadosProjeto])
 
     const handleSicronizarLabels = async () => {
-        const dados = dadosLabels.map((item) => ({
-            id_github: item.id,
-            nome: item.name,
-            cor: item.color
-        }));
-
-        await cadastrarLabels(dados)
-    
+        const dados = dadosLabels.map((item) => {
+            if (!item.existe) {
+                return {
+                    id_github: item.id,
+                    nome: item.name,
+                    cor: item.color
+                };
+            }
+        }).filter(Boolean);
+        
+        if (dados.length > 0) {
+            await cadastrarLabels(dados);
+            await handleGetLabels()
+            
+        } else {
+            NotificationManager.info('Todos os labels do repositório deste projeto já estão salvos no bando de dados.')
+        }
     }
 
     return (
