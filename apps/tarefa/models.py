@@ -7,7 +7,7 @@ from apps.tipo.models import Tipo
 class Label(models.Model):
     id_github = models.CharField()
     nome = models.CharField()
-    color = models.CharField()
+    cor = models.CharField()
     
     def __str__(self):
         return self.nome
