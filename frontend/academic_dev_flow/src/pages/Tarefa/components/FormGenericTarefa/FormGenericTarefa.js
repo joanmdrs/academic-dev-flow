@@ -1,4 +1,4 @@
-import { Button, Form, Input, Select } from 'antd'
+import { Button, Form, Input, Select, Tag } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import React, { useEffect, useState } from 'react'
 import { useContextoTarefa } from '../../context/ContextoTarefa';
@@ -10,6 +10,26 @@ import { listarTipos } from '../../../../services/tipoService';
 import { getLabels } from '../../../../services/githubIntegration/issueService';
 import { Octokit } from 'octokit';
 
+const tagRender = (props) => {
+    const { label, value, closable, onClose } = props;
+    const onPreventMouseDown = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+    };
+    return (
+      <Tag
+        color={value}
+        onMouseDown={onPreventMouseDown}
+        closable={closable}
+        onClose={onClose}
+        style={{
+          marginInlineEnd: 4,
+        }}
+      >
+        {label}
+      </Tag>
+    );
+};
 
 function FormGenericTarefa ({onCancel, onSubmit}) {
 
@@ -17,7 +37,7 @@ function FormGenericTarefa ({onCancel, onSubmit}) {
     const {dadosProjeto, dadosTarefa} = useContextoTarefa()
     const [optionsMembros, setOptionsMembros] = useState(null)
     const [optionsIteracoes, setOptionsIteracoes] = useState(null)
-    const [optionsTipos, setOptionsTipos] = useState(null)
+    // const [optionsTipos, setOptionsTipos] = useState(null)
     const [optionsLabels, setOptionsLabels] = useState(null)
     const [loading, setLoading] = useState(false)
 
@@ -54,19 +74,19 @@ function FormGenericTarefa ({onCancel, onSubmit}) {
         }
     }
 
-    const handleGetTipos = async () => {
-        const response = await listarTipos()
+    // const handleGetTipos = async () => {
+    //     const response = await listarTipos()
 
-        if (response.data.length > 0){
-            const resultados = response.data.map((item) => {
-                return {
-                    value: item.id,
-                    label: item.nome
-                }
-            })
-            setOptionsTipos(resultados)
-        }
-    }
+    //     if (response.data.length > 0){
+    //         const resultados = response.data.map((item) => {
+    //             return {
+    //                 value: item.id,
+    //                 label: item.nome
+    //             }
+    //         })
+    //         setOptionsTipos(resultados)
+    //     }
+    // }
 
     const handleGetLabels = async () => {
         const octokit = new Octokit({
@@ -103,7 +123,7 @@ function FormGenericTarefa ({onCancel, onSubmit}) {
             if (dadosProjeto !== null ){
                 await handleGetMembros()
                 await handleGetIteracoes()
-                await handleGetTipos()
+                // await handleGetTipos()
                 await handleGetLabels()
                 setLoading(false)
                 if (dadosTarefa !== null){
@@ -156,7 +176,6 @@ function FormGenericTarefa ({onCancel, onSubmit}) {
                             allowClear
                             placeholder="Selecione"
                             options={optionsIteracoes}
-                            name="iteracao"
                         />
                     </Form.Item>
 
@@ -169,11 +188,10 @@ function FormGenericTarefa ({onCancel, onSubmit}) {
                             }}
                             placeholder="Selecione"
                             options={optionsMembros}
-                            name="membros"
                         />
                     </Form.Item>
 
-                    <Form.Item label='Tipo' name='tipo' required style={{flex: '1'}}>
+                    {/* <Form.Item label='Tipo' name='tipo' required style={{flex: '1'}}>
                         <Select
                             allowClear
                             style={{
@@ -184,7 +202,7 @@ function FormGenericTarefa ({onCancel, onSubmit}) {
                             name="tipo"
                         />
 
-                    </Form.Item>
+                    </Form.Item> */}
 
                     <Form.Item label='Label' name='labels' required style={{flex: '1'}}>
                         <Select
