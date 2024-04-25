@@ -9,7 +9,23 @@ from apps.api.permissions import IsAdminUserOrReadOnly
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
-
+class CadastrarLabelView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        
+        try:
+            labels = request.data.get('labels', [])
+            serializer = LabelSerializer(data=labels, many=True)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
 
 class BuscarLabelPeloIdView(APIView):
     permission_classes = [IsAuthenticated]

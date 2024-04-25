@@ -1,7 +1,7 @@
 import { NotificationManager } from "react-notifications";
 import api from "../api/api";
-import { handleError, handleInfo } from "./utils";
-import { ERROR_MESSAGE_ON_SEARCHING, INFO_MESSAGE_MANDATORY_PARAMETERS, INFO_MESSAGE_ON_SEARCHING } from "./messages";
+import { handleError, handleInfo, handleSuccess } from "./utils";
+import { ERROR_MESSAGE_ON_CREATION_THE_LABELS, ERROR_MESSAGE_ON_SEARCHING, INFO_MESSAGE_MANDATORY_PARAMETERS, INFO_MESSAGE_ON_SEARCHING, SUCCESS_MESSAGE_ON_CREATION_THE_LABELS } from "./messages";
 
 export const criarTarefa = async (dados) => {
     try {
@@ -120,6 +120,15 @@ export const filtrarTarefasPeloNomeEPeloProjeto = async (nomeTarefa, idProjeto) 
     } catch (error) {
         return handleError(error, INFO_MESSAGE_MANDATORY_PARAMETERS)
 
+    }
+}
+
+export const cadastrarLabels = async (dados) => {
+    try {
+        const response = await api.post('tarefa/labels/cadastrar/', {labels: dados})
+        return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION_THE_LABELS)
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_CREATION_THE_LABELS)
     }
 }
 

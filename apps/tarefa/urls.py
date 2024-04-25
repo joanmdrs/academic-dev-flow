@@ -15,5 +15,6 @@ urlpatterns = [
     path('listar/iteracao/<int:id_iteracao>/', ListarTarefasPorIteracaoView.as_view(), name='listar_tarefas_por_iteracao'),
     path('listar/', ListarTarefasView.as_view(), name='listar_tarefas'),
     path('filtrar/nome-projeto/', FiltrarTarefasPeloNomeEPeloProjeto.as_view(), name='filtrar_tarefas_pelo_nome_e_pelo_projeto'),
+    path('labels/cadastrar/', CadastrarLabelView.as_view(), name='cadastrar_label'),
     path('labels/buscar/<int:id>/', BuscarLabelPeloIdView.as_view(), name='buscar_label_pelo_id')
 ]
