@@ -32,7 +32,7 @@ class BuscarLabelPeloIdView(APIView):
     
     def get(self, request, id):
         try:
-            label = get_object_or_404(Label, id=id)
+            label = get_object_or_404(Label, id_github=id)
             serializer = LabelSerializer(label)
             return Response({'label': serializer.data, 'exists': True}, status=status.HTTP_200_OK)
         
