@@ -61,7 +61,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3001", 
+    "http://localhost:3000", 
 ]
 
 AUTH_USER_MODEL = 'usuario.Usuario'
