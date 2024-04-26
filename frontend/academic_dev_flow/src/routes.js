@@ -52,7 +52,11 @@ function Routes() {
 
         {/* Menu Item Tarefas */}
 
-        <Route path="/admin/tarefas/gerenciar" Component={ScreenGerenciarTarefas} exact/>
+        <Route path="/admin/tarefas/gerenciar" element={
+          <ProjetoProvider>
+            <ScreenGerenciarTarefas />
+          </ProjetoProvider>
+        } exact/>
         <Route path="/admin/tarefas/labels" Component={ScreenGerenciarLabels} exact/>
 
          {/* Menu Item Tipos */}
