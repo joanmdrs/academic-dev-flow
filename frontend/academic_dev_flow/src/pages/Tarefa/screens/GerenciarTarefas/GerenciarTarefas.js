@@ -14,6 +14,7 @@ import {
 import FormGenericTarefa from "../../components/FormGenericTarefa/FormGenericTarefa";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { createIssue } from "../../../../services/githubIntegration/issueService";
+import { useProjetoContext } from "../../../../context/ProjetoContext";
 
 const GerenciarTarefas = () => {
 
@@ -28,6 +29,8 @@ const GerenciarTarefas = () => {
         setDadosTarefa, 
         step, 
         setStep} = useContextoTarefa()
+
+    const {autor} = useProjetoContext()
 
     const handleCancelar = () => {
         setIsFormVisivel(false)
@@ -62,18 +65,19 @@ const GerenciarTarefas = () => {
         setDadosTarefa(null)
     }
 
-    const handleCriarIssue = async (record) => {
-        const dados = {
+    const handleCriarIssue = async (dadosForm) => {
+        const dadosEnviar = {
             github_token: dadosProjeto.token,
             repository: dadosProjeto.nome_repo,
-            title: record.nome,
-            body: record.descricao,
-            labels: record.labels,
-            assignee: record.assignee  
+            title: dadosForm.nome,
+            body: dadosForm.descricao,
+            labels: dadosForm.labelsNames,
+            assignee: autor.usuario_github
         }
 
-        const response = await createIssue(dados)
-        return response
+        console.log(dadosEnviar)
+
+        
     }
 
     const handleAtualizarTarefa = async (record) => {
@@ -84,14 +88,14 @@ const GerenciarTarefas = () => {
         setDadosTarefa(record)
     }
 
-    const handleSalvarTarefa = async (dados) => {
-        dados['projeto'] = dadosProjeto.id
+    const handleSalvarTarefa = async (dadosForm) => {
+        dadosForm['projeto'] = dadosProjeto.id
         if (acaoForm === 'criar'){
 
-            const resIssue = 
-            await criarTarefa(dados)
+            handleCriarIssue(dadosForm)
+            
         } else if (acaoForm === 'atualizar'){
-            await atualizarTarefa(dadosTarefa.id, dados)
+            await atualizarTarefa(dadosTarefa.id, dadosForm)
         }
         handleReload()
     }
