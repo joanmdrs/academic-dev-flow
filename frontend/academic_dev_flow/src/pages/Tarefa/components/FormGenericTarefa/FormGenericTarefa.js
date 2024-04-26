@@ -83,13 +83,14 @@ function FormGenericTarefa ({onCancel, onSubmit}) {
 
     const handleSubmitForm = () => {
         const dadosForm = form.getFieldsValue()
-        const nomesLabels = dadosForm.labels.map(labelId => {
-            const label = optionsLabels.find(option => option.value === labelId)
-            return label ? label.label : null
-        }).filter(Boolean)
+        const labelsSelecionadas = dadosForm.labels.map(label => parseInt(label))
+
+        const nomesLabels = optionsLabels
+            .filter(option => labelsSelecionadas.includes(option.value))
+            .map(option => option.label)
 
         dadosForm['labelsNames'] = nomesLabels
-
+        
         onSubmit(dadosForm)
     }
 
