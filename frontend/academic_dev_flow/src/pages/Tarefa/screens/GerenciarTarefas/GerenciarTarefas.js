@@ -13,6 +13,7 @@ import {
     filtrarTarefasPeloNomeEPeloProjeto } from "../../../../services/tarefaService";
 import FormGenericTarefa from "../../components/FormGenericTarefa/FormGenericTarefa";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
+import { createIssue } from "../../../../services/githubIntegration/issueService";
 
 const GerenciarTarefas = () => {
 
@@ -49,6 +50,11 @@ const GerenciarTarefas = () => {
         }
     }
 
+    const handleBuscarProjeto = async (id) => {
+        const response = await buscarProjetoPeloId(id)
+        setDadosProjeto(response.data)
+    }
+
     const handleAdicionarTarefa = () => {
         setIsFormVisivel(true)
         setIsFormBuscarVisivel(false)
@@ -56,9 +62,18 @@ const GerenciarTarefas = () => {
         setDadosTarefa(null)
     }
 
-    const handleBuscarProjeto = async (id) => {
-        const response = await buscarProjetoPeloId(id)
-        setDadosProjeto(response.data)
+    const handleCriarIssue = async (record) => {
+        const dados = {
+            github_token: dadosProjeto.token,
+            repository: dadosProjeto.nome_repo,
+            title: record.nome,
+            body: record.descricao,
+            labels: record.labels,
+            assignee: record.assignee  
+        }
+
+        const response = await createIssue(dados)
+        return response
     }
 
     const handleAtualizarTarefa = async (record) => {
@@ -72,6 +87,8 @@ const GerenciarTarefas = () => {
     const handleSalvarTarefa = async (dados) => {
         dados['projeto'] = dadosProjeto.id
         if (acaoForm === 'criar'){
+
+            const resIssue = 
             await criarTarefa(dados)
         } else if (acaoForm === 'atualizar'){
             await atualizarTarefa(dadosTarefa.id, dados)

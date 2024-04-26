@@ -126,9 +126,14 @@ class BuscarMembroPeloUserView(APIView):
     def get(self, request, id_user):
         try:
             membro = Membro.objects.get(usuario_id=id_user)
-           
             
             if membro: 
+                # Verifique se o membro está vinculado a um objeto UsuarioGithub
+                if membro.github:
+                    usuario_github = membro.github.usuario_github
+                else:
+                    usuario_github = None
+                
                 membro_projeto = MembroProjeto.objects.get(membro_id=membro.id)
                 
                 if membro_projeto: 
@@ -136,13 +141,13 @@ class BuscarMembroPeloUserView(APIView):
                         'id_membro': membro.id,
                         'id_membro_projeto': membro_projeto.id,
                         'nome': membro.nome,
+                        'usuario_github': usuario_github 
                     }
                     
                     return Response(autor, status=status.HTTP_200_OK)
                 
                 return Response({'error': 'Este membro não está vinculado a nenhum projeto'}, status=status.HTTP_404_NOT_FOUND)
 
-                
             return Response({'error': 'Membro não encontrado'}, status=status.HTTP_404_NOT_FOUND)
         
         except Exception as e:
