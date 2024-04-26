@@ -74,10 +74,8 @@ const GerenciarTarefas = () => {
             labels: dadosForm.labelsNames,
             assignee: autor.usuario_github
         }
-
-        console.log(dadosEnviar)
-
-        
+        const response = await createIssue(dadosEnviar)
+        return response    
     }
 
     const handleAtualizarTarefa = async (record) => {
@@ -91,9 +89,10 @@ const GerenciarTarefas = () => {
     const handleSalvarTarefa = async (dadosForm) => {
         dadosForm['projeto'] = dadosProjeto.id
         if (acaoForm === 'criar'){
-
-            handleCriarIssue(dadosForm)
-            
+            const resIssue = await handleCriarIssue(dadosForm)
+            if (!resIssue.error){
+                await criarTarefa(dadosForm)
+            }
         } else if (acaoForm === 'atualizar'){
             await atualizarTarefa(dadosTarefa.id, dadosForm)
         }
