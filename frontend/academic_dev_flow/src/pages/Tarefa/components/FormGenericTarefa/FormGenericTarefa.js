@@ -6,9 +6,6 @@ import { listarMembrosPeloIdProjeto } from '../../../../services/membroProjetoSe
 import { listarIteracoesPorProjeto } from '../../../../services/iteracaoService';
 import Loading from '../../../../components/Loading/Loading';
 import { customizeRequiredMark } from '../../../../components/LabelMask/LabelMask';
-import { listarTipos } from '../../../../services/tipoService';
-import { getLabels } from '../../../../services/githubIntegration/issueService';
-import { Octokit } from 'octokit';
 import { listarLabelsPorProjeto } from '../../../../services/tarefaService';
 
 function FormGenericTarefa ({onCancel, onSubmit}) {
@@ -17,7 +14,6 @@ function FormGenericTarefa ({onCancel, onSubmit}) {
     const {dadosProjeto, dadosTarefa} = useContextoTarefa()
     const [optionsMembros, setOptionsMembros] = useState(null)
     const [optionsIteracoes, setOptionsIteracoes] = useState(null)
-    // const [optionsTipos, setOptionsTipos] = useState(null)
     const [optionsLabels, setOptionsLabels] = useState(null)
     const [loading, setLoading] = useState(false)
 
@@ -26,13 +22,11 @@ function FormGenericTarefa ({onCancel, onSubmit}) {
 
         if (response.data.length > 0){
             const resultados = response.data.map((item) => {
-
                 return {
                     value: item.id_membro_projeto,
                     label: `${item.nome_membro} (${item.grupo_membro})`
                 }
             })
-            
             setOptionsMembros(resultados)
         } 
     }
@@ -42,45 +36,26 @@ function FormGenericTarefa ({onCancel, onSubmit}) {
 
         if (response.data.length > 0) {
             const iteracoesOrdenadas = response.data.sort((a, b) => a.numero - b.numero);
-
             const resultados = iteracoesOrdenadas.map((item) => {
                 return {
                     value: item.id,
                     label: item.nome
                 }
             })
-
             setOptionsIteracoes(resultados)
         }
     }
 
-    // const handleGetTipos = async () => {
-    //     const response = await listarTipos()
-
-    //     if (response.data.length > 0){
-    //         const resultados = response.data.map((item) => {
-    //             return {
-    //                 value: item.id,
-    //                 label: item.nome
-    //             }
-    //         })
-    //         setOptionsTipos(resultados)
-    //     }
-    // }
-
     const handleGetLabels = async () => {
         const response = await listarLabelsPorProjeto(dadosProjeto.id)
-
         if (response.data.length > 0){
             const resultados = response.data.map((item) => {
-
                 return {
                     value: item.id,
                     label: item.nome,
                     color: item.cor
                 }
             })
-
             setOptionsLabels(resultados)
         }
     }
@@ -90,7 +65,6 @@ function FormGenericTarefa ({onCancel, onSubmit}) {
             if (dadosProjeto !== null ){
                 await handleGetMembros()
                 await handleGetIteracoes()
-                // await handleGetTipos()
                 await handleGetLabels()
                 setLoading(false)
                 if (dadosTarefa !== null){
@@ -100,18 +74,34 @@ function FormGenericTarefa ({onCancel, onSubmit}) {
                 }
             }
         }
-
         fetchData()
-
     }, [dadosProjeto, dadosTarefa])
 
     if(loading){
         return <Loading />
     }
 
+    const handleSubmitForm = () => {
+        const dadosForm = form.getFieldsValue()
+        const nomesLabels = dadosForm.labels.map(labelId => {
+            const label = optionsLabels.find(option => option.value === labelId)
+            return label ? label.label : null
+        }).filter(Boolean)
+
+        dadosForm['labelsNames'] = nomesLabels
+
+        onSubmit(dadosForm)
+    }
+
     return (
 
-        <Form requiredMark={customizeRequiredMark} form={form} layout='vertical' className='global-form' onFinish={onSubmit}>
+        <Form 
+            requiredMark={customizeRequiredMark} 
+            form={form} 
+            layout='vertical' 
+            className='global-form' 
+            onFinish={handleSubmitForm}
+        >
             <Form.Item>
                 <h4> CADASTRAR TAREFA </h4>
             </Form.Item>
