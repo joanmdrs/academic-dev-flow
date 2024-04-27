@@ -22,6 +22,7 @@ import ScreenGerenciarArtefatos from "./pages/Artefato/screens/GerenciarArtefato
 import ScreenVisualizarArtefato from "./pages/Artefato/screens/VisualizarArtefato";
 import ScreenGerenciarArquivosGithub from "./pages/Artefato/screens/GerenciarArquivosGithub";
 import ScreenGerenciarLabels from "./pages/Tarefa/screens/GerenciarLabels";
+import ScreenGerenciarIssues from "./pages/Tarefa/screens/GerenciarIssues";
 
 function Routes() {
   return (
@@ -52,11 +53,8 @@ function Routes() {
 
         {/* Menu Item Tarefas */}
 
-        <Route path="/admin/tarefas/gerenciar" element={
-          <ProjetoProvider>
-            <ScreenGerenciarTarefas />
-          </ProjetoProvider>
-        } exact/>
+        <Route path="/admin/tarefas/gerenciar" Component={ScreenGerenciarTarefas} exact/>
+        <Route path="/admin/tarefas/issues" Component={ScreenGerenciarIssues} exact/>
         <Route path="/admin/tarefas/labels" Component={ScreenGerenciarLabels} exact/>
 
          {/* Menu Item Tipos */}

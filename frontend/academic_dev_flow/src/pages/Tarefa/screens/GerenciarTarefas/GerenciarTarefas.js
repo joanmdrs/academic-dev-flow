@@ -14,7 +14,6 @@ import {
 import FormGenericTarefa from "../../components/FormGenericTarefa/FormGenericTarefa";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { createIssue, updateIssue } from "../../../../services/githubIntegration/issueService";
-import { useProjetoContext } from "../../../../context/ProjetoContext";
 
 const GerenciarTarefas = () => {
 
@@ -29,8 +28,6 @@ const GerenciarTarefas = () => {
         setDadosTarefa, 
         step, 
         setStep} = useContextoTarefa()
-
-    const {autor} = useProjetoContext()
 
     const handleCancelar = () => {
         setIsFormVisivel(false)

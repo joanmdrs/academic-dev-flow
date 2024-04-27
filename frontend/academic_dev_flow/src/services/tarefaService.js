@@ -139,6 +139,19 @@ export const filtrarTarefasPeloNomeEPeloProjeto = async (nomeTarefa, idProjeto) 
     }
 }
 
+export const verificarExistenciaIssue = async (parametro) => {
+    try {
+        const response = await api.get('tarefa/verificar-existencia/', {params: {id_issue: parametro}})
+        return response
+    } catch (error) {
+        if (error.response && error.response.status === 400){
+            return handleError(error, 'Parâmetro não informado!')
+        } else {
+            return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+        }
+    }
+}
+
 export const cadastrarLabels = async (dados) => {
     try {
         const response = await api.post('tarefa/labels/cadastrar/', {labels: dados})

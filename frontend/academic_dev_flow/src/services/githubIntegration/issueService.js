@@ -27,9 +27,9 @@ export const updateIssue = async (numberIssue, dados) => {
     }
 }
 
-export const listIssues = async () => {
+export const listIssues = async (parametros) => {
     try {
-        const response = await api.get('github_integration/issues/list_issues/')
+        const response = await api.get('github_integration/issues/list_issues/', {params: parametros})
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_LIST_ISSUES)

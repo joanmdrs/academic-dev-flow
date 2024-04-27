@@ -51,7 +51,7 @@ const GerenciarLabels = () => {
         
     ]
 
-    const {dadosProjeto, setDadosProjeto} = useContextoTarefa()
+    const {dadosProjeto} = useContextoTarefa()
     const [dadosLabels, setDadosLabels] = useState([])
 
     const handleGetLabels = async () => {

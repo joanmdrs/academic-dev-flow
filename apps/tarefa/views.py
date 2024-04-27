@@ -9,7 +9,8 @@ from apps.membro.models import Membro
 from apps.fluxo.models import Fluxo
 from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
-
+from django.http import Http404
+from django.shortcuts import get_object_or_404
 
 class CadastrarTarefaView(APIView):
     permission_classes = [IsAuthenticated]
@@ -203,6 +204,23 @@ class ListarTarefasView(APIView):
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        
+class VerificarIssueExisteView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        try:
+            id_issue = request.GET.get('id_issue', None)
+            tarefa = get_object_or_404(Tarefa, id_issue=id_issue)
+            serializer = TarefaSerializer(tarefa)
+            return Response({'tarefa': serializer.data, 'exists': True}, status=status.HTTP_200_OK)
+        
+        except Http404:
+            return Response({'exists': False}, status=status.HTTP_200_OK)
+                                        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
         
 
 
