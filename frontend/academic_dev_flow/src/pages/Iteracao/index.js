@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Cronograma from "./Cronograma/Cronograma";
-import FormIteracao from "./FormIteracao/FormIteracao";
 import { Button } from "antd";
 import { IoAdd, IoClose } from "react-icons/io5";
 import { useProjetoContext } from "../../context/ProjetoContext";
 import { listarIteracoesPorProjeto } from "../../services/iteracaoService";
 import Loading from "../../components/Loading/Loading";
+import Cronograma from "./components/Cronograma/Cronograma";
+import FormIteracao from "./components/FormIteracao/FormIteracao";
 
 const CronogramaIteracoes = () => {
 
