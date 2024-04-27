@@ -52,7 +52,7 @@ def update_issue(request, issue_number):
         title = data.get('title')
         body = data.get('body')
         labels = data.get('labels')
-        assignee = data.get('assignee')
+        assignees = data.get('assignees')
         
         if not github_token or not repository or not issue_number:
             return JsonResponse({'error': 'Ausência de parâmetros'}, status=status.HTTP_400_BAD_REQUEST)
@@ -71,8 +71,8 @@ def update_issue(request, issue_number):
         if labels:
             issue.edit(labels=labels)
         
-        if assignee:
-            issue.edit(assignee=assignee)
+        if assignees:
+            issue.edit(assignees=assignees)
         
         return JsonResponse({'success': 'Issue atualizada com sucesso!'}, status=status.HTTP_200_OK)        
         
