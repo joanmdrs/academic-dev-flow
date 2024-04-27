@@ -7,6 +7,7 @@ import { listarIteracoesPorProjeto } from '../../../../services/iteracaoService'
 import Loading from '../../../../components/Loading/Loading';
 import { customizeRequiredMark } from '../../../../components/LabelMask/LabelMask';
 import { listarLabelsPorProjeto } from '../../../../services/tarefaService';
+import { optionsStatusTarefas } from '../../../../services/optionsStatus';
 
 function FormGenericTarefa ({onCancel, onSubmit}) {
 
@@ -16,33 +17,6 @@ function FormGenericTarefa ({onCancel, onSubmit}) {
     const [optionsIteracoes, setOptionsIteracoes] = useState(null)
     const [optionsLabels, setOptionsLabels] = useState(null)
     const [loading, setLoading] = useState(false)
-
-    const optionsStatus = [
-        {
-            value: 'criada', 
-            label: 'Criada'
-        },
-        {
-            value: 'andamento',
-            label: 'Em andamento'
-        },
-        {
-            value: 'concluida', 
-            label: 'Concluída'
-        },
-        {
-            value: 'cancelada',
-            label: 'Cancelada'
-        },
-        {
-            value: 'atrasada', 
-            label: 'Atrasada'
-        },
-        {
-            value: 'bloqueada', 
-            label: 'Bloqueada'
-        }
-    ]
 
     const handleGetMembros = async () => {
         const response = await listarMembrosPeloIdProjeto(dadosProjeto.id)
@@ -184,7 +158,7 @@ function FormGenericTarefa ({onCancel, onSubmit}) {
                             }}
                             placeholder='Selecione'
                             name='status'
-                            options={optionsStatus}
+                            options={optionsStatusTarefas}
         
                         
                         />
