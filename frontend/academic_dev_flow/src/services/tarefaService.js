@@ -3,9 +3,25 @@ import api from "../api/api";
 import { handleError, handleInfo, handleSuccess } from "./utils";
 import { ERROR_MESSAGE_ON_CREATION_THE_LABELS, ERROR_MESSAGE_ON_SEARCHING, INFO_MESSAGE_MANDATORY_PARAMETERS, INFO_MESSAGE_ON_SEARCHING, SUCCESS_MESSAGE_ON_CREATION_THE_LABELS } from "./messages";
 
-export const criarTarefa = async (dados) => {
+export const criarTarefa = async (dadosForm, dadosIssue) => {
+
+    const dadosEnviar = {
+        nome: dadosForm.nome,
+        data_inicio: dadosForm.data_inicio,
+        data_termino: dadosForm.data_termino,
+        status: dadosForm.status,
+        descricao: dadosForm.descricao,
+        id_issue: dadosIssue.issue_id,
+        number_issue: dadosIssue.issue_number,
+        issue_url: dadosIssue.issue_url,
+        labels: dadosForm.labels,
+        projeto: dadosForm.projeto,
+        membros: dadosForm.membros,
+        iteracao: dadosForm.iteracao
+    }
+    
     try {
-        const response = await api.post('tarefa/cadastrar/', dados)
+        const response = await api.post('tarefa/cadastrar/', dadosEnviar)
         
         if (response.status === 200){
             NotificationManager.success('Tarefa cadastrada com sucesso !')

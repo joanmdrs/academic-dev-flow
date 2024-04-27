@@ -32,7 +32,7 @@ class Tarefa(models.Model):
     descricao = models.TextField(null=True, blank=True)
     concluida = models.BooleanField(default=False)
     tempo_gasto = models.IntegerField(default=0)
-    id_issue = models.IntegerField(null=True, blank=True)
+    id_issue = models.BigIntegerField(null=True, blank=True)
     number_issue = models.IntegerField(null=True, blank=True)
     issue_url = models.URLField(null=True, blank=True)
     labels = models.ManyToManyField(Label)

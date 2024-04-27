@@ -91,7 +91,8 @@ const GerenciarTarefas = () => {
         if (acaoForm === 'criar'){
             const resIssue = await handleCriarIssue(dadosForm)
             if (!resIssue.error){
-                await criarTarefa(dadosForm)
+                const dadosIssue = resIssue.data
+                await criarTarefa(dadosForm, dadosIssue)
             }
         } else if (acaoForm === 'atualizar'){
             await atualizarTarefa(dadosTarefa.id, dadosForm)
@@ -144,7 +145,7 @@ const GerenciarTarefas = () => {
 
             <div className="global-div"> 
                 {isFormVisivel && acaoForm === 'criar' && (
-                    <React.Fragment> 
+                    <React.Fragment>
                         {step === "0" && <SelecionarProjeto />}
                         {step === "1" && <FormGenericTarefa onSubmit={handleSalvarTarefa} onCancel={handleCancelar}/>}
                     </React.Fragment>

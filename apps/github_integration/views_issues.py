@@ -51,7 +51,7 @@ def update_issue(request, issue_number):
         repository = data.get('repository')
         title = data.get('title')
         body = data.get('body')
-        labels = data.getlist('labels')
+        labels = data.get('labels')
         assignee = data.get('assignee')
         
         if not github_token or not repository or not issue_number:
