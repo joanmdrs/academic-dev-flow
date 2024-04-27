@@ -16,7 +16,7 @@ const ListaTarefas = ({onEdit, onDelete}) => {
             key: 'nome',
             render: (_, record) => (
                 <Space>
-                    <a href={record.issue_url} target="_blank"> {record.nome} </a>
+                    <a href={record.url_issue} target="_blank"> {record.nome} </a>
                 </Space>
             )
         },
