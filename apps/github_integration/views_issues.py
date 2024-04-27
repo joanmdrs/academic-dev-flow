@@ -91,7 +91,7 @@ def list_issues(request):
         repo = g.get_repo(repository)
         
         issues_list = []
-        issues = repo.get_issues(state='all')
+        issues = repo.get_issues(state='open')
         
         for issue in issues:
             issue_data = {
@@ -99,6 +99,7 @@ def list_issues(request):
                 'number': issue.number,
                 'title': issue.title,
                 'body': issue.body,
+                'url': issue.url,
                 'state': issue.state,
                 'labels': [label.name for label in issue.labels],
                 'assignee': issue.assignee.login if issue.assignee else None

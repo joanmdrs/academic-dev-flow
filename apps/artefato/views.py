@@ -149,7 +149,7 @@ class SicronizarArtefatosView(APIView):
             serializer = ArtefatoSerializer(data=request.data, many=True)
             
             if not serializer.is_valid(raise_exception=True):
-                return Response(artefatos_serializer.data, status=status.HTTP_400_BAD_REQUEST)
+                return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
             serializer.save()
             
             return Response(serializer.data, status=status.HTTP_201_CREATED)

@@ -36,6 +36,8 @@ export const ERROR_MESSAGE_ON_SYNC = "Falha durante a sicronização, contate o 
 export const SUCCESS_MESSAGE_ON_CREATION_THE_ISSUE = "Issue criada com sucesso!"
 export const SUCCESS_MESSAGE_ON_UPDATE_THE_ISSUE = "Issue atualizada com sucesso!"
 export const SUCCESS_MESSAGE_ON_CREATION_THE_LABELS = "Labels cadastrados com sucesso!"
+export const SUCCESS_MESSAGE_ON_SYNC_ISSUES = "Issues sicronizadas com sucesso!"
+
 
 export const ERROR_MESSAGE_ON_CREATION_THE_ISSUE = "Falha durante a criação da issue, contate o suporte!"
 export const ERROR_MESSAGE_ON_CREATION_THE_LABELS = "Falha durante o cadastro dos labels, contate o suporte!"

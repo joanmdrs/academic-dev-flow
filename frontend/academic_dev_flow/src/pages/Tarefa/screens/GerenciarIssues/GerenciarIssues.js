@@ -7,7 +7,7 @@ import { Button, Space, Table } from "antd";
 import { IoCheckmark, IoCloseOutline } from "react-icons/io5";
 import { listIssues } from "../../../../services/githubIntegration/issueService";
 import { NotificationManager } from "react-notifications";
-import { verificarExistenciaIssue } from "../../../../services/tarefaService";
+import { criarTarefa, sicronizarIssues, verificarExistenciaIssue } from "../../../../services/tarefaService";
 import { handleError } from "../../../../services/utils";
 
 const GerenciarIssues = () => {
@@ -39,6 +39,9 @@ const GerenciarIssues = () => {
         },
     ]
 
+    const [issues, setIssues] = useState([]);
+    const {dadosProjeto} = useContextoTarefa();
+
     const handleGetIssues = async () => {
 
         try {
@@ -64,10 +67,29 @@ const GerenciarIssues = () => {
         }
     }
 
-    
+    const handleSicronizarIssues = async () => {
+        const dados = issues.map((item) => {
+            if (!item.existe) {
+                return {
+                    nome: item.title,
+                    descricao: item.body,
+                    id_issue: item.id,
+                    number_issue: item.number,
+                    url_issue: item.url,
+                    projeto: dadosProjeto.id
+                };
+            }
+        }).filter(Boolean);
+        
+        if (dados) {
+            await sicronizarIssues(dados);
+            await handleGetIssues()
+            
+        } else {
+            NotificationManager.info('Todos as issues do repositório deste projeto já estão salvos no bando de dados.')
+        }
+    }
 
-    const [issues, setIssues] = useState([]);
-    const {dadosProjeto} = useContextoTarefa();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -100,6 +122,7 @@ const GerenciarIssues = () => {
                             icon={<FaArrowsRotate />} 
                             style={{marginBottom: '20px'}} 
                             type="primary" ghost
+                            onClick={handleSicronizarIssues}
                         > 
                             Sicronizar 
                         </Button>

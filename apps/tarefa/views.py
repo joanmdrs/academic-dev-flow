@@ -21,7 +21,7 @@ class CadastrarTarefaView(APIView):
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 
-                return Response(serializer.data, status=status.HTTP_200_OK)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
 
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
@@ -223,7 +223,21 @@ class VerificarIssueExisteView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
         
 
+class SicronizarIssuesView(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request): 
+        try:
+            serializer = TarefaSerializer(data=request.data, many=True)
+            
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
 
 
         

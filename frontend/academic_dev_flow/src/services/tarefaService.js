@@ -1,7 +1,7 @@
 import { NotificationManager } from "react-notifications";
 import api from "../api/api";
 import { handleError, handleInfo, handleSuccess } from "./utils";
-import { ERROR_MESSAGE_ON_CREATION_THE_LABELS, ERROR_MESSAGE_ON_SEARCHING, INFO_MESSAGE_MANDATORY_PARAMETERS, INFO_MESSAGE_ON_SEARCHING, SUCCESS_MESSAGE_ON_CREATION_THE_LABELS } from "./messages";
+import { ERROR_MESSAGE_ON_CREATION_THE_LABELS, ERROR_MESSAGE_ON_SEARCHING, ERROR_MESSAGE_ON_SYNC, INFO_MESSAGE_MANDATORY_PARAMETERS, INFO_MESSAGE_ON_SEARCHING, SUCCESS_MESSAGE_ON_CREATION_THE_LABELS, SUCCESS_MESSAGE_ON_SYNC_ISSUES } from "./messages";
 
 export const criarTarefa = async (dadosForm, dadosIssue) => {
 
@@ -13,7 +13,7 @@ export const criarTarefa = async (dadosForm, dadosIssue) => {
         descricao: dadosForm.descricao,
         id_issue: dadosIssue.issue_id,
         number_issue: dadosIssue.issue_number,
-        issue_url: dadosIssue.issue_url,
+        url_issue: dadosIssue.issue_url,
         labels: dadosForm.labels,
         projeto: dadosForm.projeto,
         membros: dadosForm.membros,
@@ -178,4 +178,13 @@ export const listarLabelsPorProjeto = async (id_projeto) => {
     } catch (error) {
         handleError(error, ERROR_MESSAGE_ON_SEARCHING)
     }
+}
+
+export const sicronizarIssues = async (dados) => {
+    try {
+        const response = await api.post('/tarefa/sicronizar-issues/', dados)
+        return handleSuccess(response, SUCCESS_MESSAGE_ON_SYNC_ISSUES)
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SYNC)
+    } 
 }
