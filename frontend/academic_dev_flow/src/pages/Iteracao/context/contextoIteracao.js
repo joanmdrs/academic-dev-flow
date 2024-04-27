@@ -6,6 +6,7 @@ export const useContextoIteracao = () => useContext(ContextoIteracao);
 export const ProviderIteracao = ({ children }) => {
 
     const [iteracoes, setIteracoes] = useState([])
+    const [dadosIteracao, setDadosIteracao] = useState(null)
     const [dadosProjeto, setDadosProjeto] = useState(null)
 
     return (
