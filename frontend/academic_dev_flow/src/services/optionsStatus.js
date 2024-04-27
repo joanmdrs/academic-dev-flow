@@ -24,3 +24,22 @@ export const optionsStatusTarefas = [
         label: 'Bloqueada'
     }
 ]
+
+export const optionsStatusIteracoes = [
+    {
+        value: 'planejamento',
+        label: 'Em Planejamento'
+    },
+    {
+        value: 'andamento',
+        label: 'Em andamento'
+    },
+    {
+        value: 'concluida',
+        label: 'Concluída'
+    },
+    {
+        value: 'cancelada',
+        label: 'Cancelada'
+    }
+]
