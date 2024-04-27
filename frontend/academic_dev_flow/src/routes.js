@@ -23,6 +23,7 @@ import ScreenVisualizarArtefato from "./pages/Artefato/screens/VisualizarArtefat
 import ScreenGerenciarArquivosGithub from "./pages/Artefato/screens/GerenciarArquivosGithub";
 import ScreenGerenciarLabels from "./pages/Tarefa/screens/GerenciarLabels";
 import ScreenGerenciarIssues from "./pages/Tarefa/screens/GerenciarIssues";
+import ScreenGerenciarIteracoes from "./pages/Iteracao/screens/GerenciarIteracoes";
 
 function Routes() {
   return (
@@ -60,10 +61,15 @@ function Routes() {
          {/* Menu Item Tipos */}
 
         <Route path="/admin/tipos" Component={PageGerenciarTipos} exact/>
+
+        {/* Menu Item Iterações */}
+
+        <Route path="admin/iteracoes" Component={ScreenGerenciarIteracoes} exact />
+
       </Route>
 
       {/* Aluno */}
-      <Route element={<StudentRoutes />}>
+      {/* <Route element={<StudentRoutes />}>
         <Route path="/aluno/home" Component={HomeAluno} exact />
         <Route
           path="/aluno/projetos"
@@ -80,10 +86,10 @@ function Routes() {
           }
           exact
         />
-      </Route>
+      </Route> */}
 
       {/* Professor */}
-      <Route element={<TeacherRoutes />}>
+      {/* <Route element={<TeacherRoutes />}>
         <Route path="/professor/home" Component={HomeProfessor} exact />
         <Route
           path="/professor/projetos"
@@ -100,7 +106,7 @@ function Routes() {
           }
           exact
         />
-      </Route>
+      </Route> */}
     </Switch>
   );
 }
