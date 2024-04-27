@@ -80,7 +80,7 @@ const GerenciarTarefas = () => {
             title: dadosForm.nome,
             body: dadosForm.descricao,
             labels: dadosForm.labelsNames,
-            assignee: autor.usuario_github
+            assignees: dadosForm.assignees 
         };
     
         const response = acaoForm === 'criar' ?

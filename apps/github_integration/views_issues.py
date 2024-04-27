@@ -18,7 +18,7 @@ def create_issue(request):
         title = data.get('title')
         body = data.get('body')
         labels = data.get('labels') 
-        assignee = data.get('assignee')
+        assignees = data.get('assignees')
         
         if not github_token or not repository or not title:
             return JsonResponse({'error': 'Ausência de parâmetros'}, status=status.HTTP_400_BAD_REQUEST)
@@ -26,7 +26,7 @@ def create_issue(request):
         g = get_github_client(github_token)
         repo = g.get_repo(repository)
         
-        create_result = repo.create_issue(title=title, body=body, labels=labels, assignee=assignee)
+        create_result = repo.create_issue(title=title, body=body, labels=labels, assignees=assignees)
         
         response_data = {
             'success': 'Issue criada com sucesso!',

@@ -8,6 +8,8 @@ import Loading from '../../../../components/Loading/Loading';
 import { customizeRequiredMark } from '../../../../components/LabelMask/LabelMask';
 import { listarLabelsPorProjeto } from '../../../../services/tarefaService';
 import { optionsStatusTarefas } from '../../../../services/optionsStatus';
+import { handleError } from '../../../../services/utils';
+import { ERROR_MESSAGE_ON_SEARCHING } from '../../../../services/messages';
 
 function FormGenericTarefa ({onCancel, onSubmit}) {
 
@@ -19,17 +21,21 @@ function FormGenericTarefa ({onCancel, onSubmit}) {
     const [loading, setLoading] = useState(false)
 
     const handleGetMembros = async () => {
-        const response = await listarMembrosPeloIdProjeto(dadosProjeto.id)
 
-        if (response.data.length > 0){
+        try {
+            const response = await listarMembrosPeloIdProjeto(dadosProjeto.id)
             const resultados = response.data.map((item) => {
                 return {
                     value: item.id_membro_projeto,
-                    label: `${item.nome_membro} (${item.grupo_membro})`
+                    label: `${item.nome_membro} (${item.grupo_membro})`,
+                    user: item.usuario_github
                 }
             })
             setOptionsMembros(resultados)
-        } 
+        
+        } catch (error) {   
+            return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+        }
     }
 
     const handleGetIteracoes = async () => {
@@ -90,7 +96,15 @@ function FormGenericTarefa ({onCancel, onSubmit}) {
             .filter(option => labelsSelecionadas.includes(option.value))
             .map(option => option.label)
 
+        const membrosSelecionados = dadosForm.membros
+
+        const usuariosGithub = optionsMembros
+            .filter(option => membrosSelecionados.includes(option.value))
+            .map(option => option.user)
+        
+        dadosForm['assignees'] = usuariosGithub
         dadosForm['labelsNames'] = nomesLabels
+
         
         onSubmit(dadosForm)
     }
