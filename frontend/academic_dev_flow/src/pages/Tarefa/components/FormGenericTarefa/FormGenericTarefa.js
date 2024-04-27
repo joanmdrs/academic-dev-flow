@@ -1,4 +1,4 @@
-import { Button, Form, Input, Select, Tag } from 'antd'
+import { Button, Form, Input, Select} from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import React, { useEffect, useState } from 'react'
 import { useContextoTarefa } from '../../context/ContextoTarefa';
@@ -16,6 +16,33 @@ function FormGenericTarefa ({onCancel, onSubmit}) {
     const [optionsIteracoes, setOptionsIteracoes] = useState(null)
     const [optionsLabels, setOptionsLabels] = useState(null)
     const [loading, setLoading] = useState(false)
+
+    const optionsStatus = [
+        {
+            value: 'criada', 
+            label: 'Criada'
+        },
+        {
+            value: 'andamento',
+            label: 'Em andamento'
+        },
+        {
+            value: 'concluida', 
+            label: 'Concluída'
+        },
+        {
+            value: 'cancelada',
+            label: 'Cancelada'
+        },
+        {
+            value: 'atrasada', 
+            label: 'Atrasada'
+        },
+        {
+            value: 'bloqueada', 
+            label: 'Bloqueada'
+        }
+    ]
 
     const handleGetMembros = async () => {
         const response = await listarMembrosPeloIdProjeto(dadosProjeto.id)
@@ -119,11 +146,11 @@ function FormGenericTarefa ({onCancel, onSubmit}) {
                     </Form.Item>
 
                     <Form.Item label="Data de Início" name="data_inicio" required>
-                        <Input type='date' name='data_inicio' style={{width: '25%'}}/>
+                        <Input type='date' name='data_inicio' style={{width: 'fit-content'}}/>
                     </Form.Item>
 
                     <Form.Item label="Data de Término (Previsão)" name="data_termino" required>
-                        <Input type='date' name='data_termino'  style={{width: '25%'}}/>
+                        <Input type='date' name='data_termino'  style={{width: 'fit-content'}}/>
                     </Form.Item>
                 </div>
 
@@ -149,18 +176,19 @@ function FormGenericTarefa ({onCancel, onSubmit}) {
                         />
                     </Form.Item>
 
-                    {/* <Form.Item label='Tipo' name='tipo' required style={{flex: '1'}}>
-                        <Select
+                    <Form.Item  label='Status' name='status' required style={{flex: '1'}}>
+                        <Select 
                             allowClear
                             style={{
-                                width: '100%',
+                                width: '100%'
                             }}
-                            placeholder="Selecione"
-                            options={optionsTipos}
-                            name="tipo"
+                            placeholder='Selecione'
+                            name='status'
+                            options={optionsStatus}
+        
+                        
                         />
-
-                    </Form.Item> */}
+                    </Form.Item>
 
                     <Form.Item label='Label' name='labels' required style={{flex: '1'}}>
                         <Select
@@ -171,12 +199,8 @@ function FormGenericTarefa ({onCancel, onSubmit}) {
                             }}
                             placeholder="Selecione"
                             name="labels"
-                        >
-                            {optionsLabels &&
-                                optionsLabels.map(option => (
-                                    <Select.Option key={option.value} style={{ backgroundColor: `#${option.color}`, color: '#fff', marginBottom: "10px"}}>{option.label}</Select.Option>
-                                ))}
-                        </Select>
+                            options={optionsLabels}
+                        />
                     </Form.Item>
 
                     
