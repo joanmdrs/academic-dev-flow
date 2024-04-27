@@ -13,7 +13,7 @@ import {
     filtrarTarefasPeloNomeEPeloProjeto } from "../../../../services/tarefaService";
 import FormGenericTarefa from "../../components/FormGenericTarefa/FormGenericTarefa";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
-import { createIssue } from "../../../../services/githubIntegration/issueService";
+import { createIssue, updateIssue } from "../../../../services/githubIntegration/issueService";
 import { useProjetoContext } from "../../../../context/ProjetoContext";
 
 const GerenciarTarefas = () => {
@@ -65,19 +65,6 @@ const GerenciarTarefas = () => {
         setDadosTarefa(null)
     }
 
-    const handleCriarIssue = async (dadosForm) => {
-        const dadosEnviar = {
-            github_token: dadosProjeto.token,
-            repository: dadosProjeto.nome_repo,
-            title: dadosForm.nome,
-            body: dadosForm.descricao,
-            labels: dadosForm.labelsNames,
-            assignee: autor.usuario_github
-        }
-        const response = await createIssue(dadosEnviar)
-        return response    
-    }
-
     const handleAtualizarTarefa = async (record) => {
         await handleBuscarProjeto(record.projeto)
         setIsFormVisivel(true)
@@ -86,19 +73,36 @@ const GerenciarTarefas = () => {
         setDadosTarefa(record)
     }
 
+    const handleSaveIssue = async (dadosForm) => {
+        const dadosEnviar = {
+            github_token: dadosProjeto.token,
+            repository: dadosProjeto.nome_repo,
+            title: dadosForm.nome,
+            body: dadosForm.descricao,
+            labels: dadosForm.labelsNames,
+            assignee: autor.usuario_github
+        };
+    
+        const response = acaoForm === 'criar' ?
+            await createIssue(dadosEnviar) :
+            await updateIssue(dadosTarefa.number_issue, dadosEnviar);
+    
+        return response;
+    };
+    
     const handleSalvarTarefa = async (dadosForm) => {
-        dadosForm['projeto'] = dadosProjeto.id
-        if (acaoForm === 'criar'){
-            const resIssue = await handleCriarIssue(dadosForm)
-            if (!resIssue.error){
-                const dadosIssue = resIssue.data
-                await criarTarefa(dadosForm, dadosIssue)
-            }
-        } else if (acaoForm === 'atualizar'){
-            await atualizarTarefa(dadosTarefa.id, dadosForm)
+        dadosForm['projeto'] = dadosProjeto.id;
+        const resIssue = await handleSaveIssue(dadosForm);
+    
+        if (acaoForm === 'criar' && !resIssue.error) {
+            const dadosIssue = resIssue.data;
+            await criarTarefa(dadosForm, dadosIssue);
+        } else if (acaoForm === 'atualizar') {
+            await atualizarTarefa(dadosTarefa.id, dadosForm);
         }
-        handleReload()
-    }
+        
+        handleReload();
+    };
 
     const handleExcluirTarefa = async (id) => {
         Modal.confirm({
