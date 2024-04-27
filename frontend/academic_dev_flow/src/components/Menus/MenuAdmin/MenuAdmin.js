@@ -9,6 +9,7 @@ import { RiFlowChart } from "react-icons/ri";
 import { IoPricetagsOutline } from "react-icons/io5";
 import { MdOutlineTaskAlt } from "react-icons/md";
 import { IoDocumentTextOutline } from "react-icons/io5";
+import { BsLayers } from "react-icons/bs";
 
 
 const { SubMenu } = Menu;
@@ -120,6 +121,14 @@ const MenuAdmin = () => {
         >
           <Link to="/admin/tipos">Tipos</Link>
 
+        </Menu.Item>
+
+        <Menu.Item
+          className="item-menu"
+          key="iteracoes"
+          icon={<BsLayers style={{fontSize: '20px'}} />}
+        >
+          <Link to="/admin/iteracoes"> Iterações </Link>
         </Menu.Item>
       </Menu>
     </Sider>
