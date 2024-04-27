@@ -1,7 +1,10 @@
-import { Space } from "antd";
+import { Space, Table } from "antd";
 import React, { useEffect } from "react";
-import { formatDate } from "../../../../services/utils";
+import { formatDate, handleError } from "../../../../services/utils";
 import { useContextoIteracao } from "../../context/contextoIteracao";
+import { listarIteracoes } from "../../../../services/iteracaoService";
+import { buscarProjetoPeloId } from "../../../../services/projetoService";
+import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 
 const ListaIteracoes = ({onEdit, onDelete}) => {
 
@@ -23,11 +26,11 @@ const ListaIteracoes = ({onEdit, onDelete}) => {
         },
         {
             title: 'Data de Término (Previsão)',
-            dataIndex: 'data_termino',
-            key: 'data_termino',
+            dataIndex: 'data_fim',
+            key: 'data_fim',
             render: (_, record) => (
                 <Space>
-                    <span> {formatDate(record.data_termino)}</span>
+                    <span> {formatDate(record.data_fim)}</span>
                 </Space>
             )
         },
@@ -60,7 +63,7 @@ const ListaIteracoes = ({onEdit, onDelete}) => {
     useEffect(() => {
         const fetchData = async () => {
             if (iteracoes.length === 0){
-                await handleListarTarefas()
+                await handleListarIteracoes()
             }
         }
 
@@ -69,24 +72,24 @@ const ListaIteracoes = ({onEdit, onDelete}) => {
 
     const handleListarIteracoes = async () => {
         try {
-            const response = await listarTarefas()
+            const response = await listarIteracoes()
 
             if (response.data.length > 0){
-                const dados = await Promise.all(response.data.map(async (tarefa) => {
-                    const resProjeto = await buscarProjetoPeloId(tarefa.projeto)
+                const dados = await Promise.all(response.data.map(async (iteracao) => {
+                    const resProjeto = await buscarProjetoPeloId(iteracao.projeto)
                     
                     if (!resProjeto.error){
-                        tarefa['nome_projeto'] = resProjeto.data.nome;
+                        iteracao['nome_projeto'] = resProjeto.data.nome;
                     }
-                    return tarefa
+                    return iteracao
                 }))
                 const resultado = await (Promise.resolve(dados))
-                setTarefas(resultado)
+                setIteracoes(resultado)
             } else {
-                setTarefas([])
+                setIteracoes([])
             }
         } catch (error) {
-            setTarefas([])
+            setIteracoes([])
             return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
         }
 
@@ -95,10 +98,10 @@ const ListaIteracoes = ({onEdit, onDelete}) => {
 
     return (
         <Table
-            dataSource={tarefas}
+            dataSource={iteracoes}
             columns={COLUNAS_TABELA_TAREFAS}
         />
     )
 }
 
-export default ListaTarefas
+export default ListaIteracoes
