@@ -1,6 +1,6 @@
 import "./ExibirPontuacao.css";
 import React from "react";
-import { useProjetoContext } from "../../../context/ProjetoContext";
+import { useProjetoContext } from "../../../context/ContextoGlobalProjeto";
 import { Button, Empty } from "antd";
 import { FaTrash } from "react-icons/fa6";
 import { FaEdit } from "react-icons/fa";

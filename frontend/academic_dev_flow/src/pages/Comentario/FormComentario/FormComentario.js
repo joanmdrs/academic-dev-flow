@@ -7,7 +7,7 @@ import { buscarMembroPeloUser } from "../../../services/membroService";
 import { criarComentario } from "../../../services/comentarioService";
 import { FaCircleUser } from "react-icons/fa6";
 import { useForm } from "antd/es/form/Form";
-import { useProjetoContext } from "../../../context/ProjetoContext";
+import { useProjetoContext } from "../../../context/ContextoGlobalProjeto";
 
                 
 const FormComentario = ({onSubmit}) => {

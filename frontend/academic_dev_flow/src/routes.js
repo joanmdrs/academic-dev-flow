@@ -7,7 +7,7 @@ import Fluxo from "./pages/Fluxo";
 import TeacherRoutes from "./router/TeacherRoutes/TeacherRoutes";
 import MeusProjetos from "./pages/Projeto/screens/MeusProjetos/MeusProjetos";
 import VisualizarProjeto from "./pages/Projeto/screens/VisualizarProjeto/VisualizarProjeto";
-import { ProjetoProvider } from "./context/ProjetoContext";
+import { ProjetoProvider } from "./context/ContextoGlobalProjeto";
 import HomeProfessor from "./pages/Perfis/Professor/Home";
 import HomeAdministrador from "./pages/Perfis/Administrador/Home";
 import HomeAluno from "./pages/Perfis/Aluno/Home";

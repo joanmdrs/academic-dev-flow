@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "antd";
 import { IoAdd, IoClose } from "react-icons/io5";
-import { useProjetoContext } from "../../context/ProjetoContext";
+import { useProjetoContext } from "../../context/ContextoGlobalProjeto";
 import { listarIteracoesPorProjeto } from "../../services/iteracaoService";
 import Loading from "../../components/Loading/Loading";
 import Cronograma from "./components/Cronograma/Cronograma";

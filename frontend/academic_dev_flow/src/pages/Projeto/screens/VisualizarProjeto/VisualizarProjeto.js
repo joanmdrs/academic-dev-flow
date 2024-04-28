@@ -5,7 +5,7 @@ import { IoDocumentTextOutline } from "react-icons/io5";
 import { GoTasklist } from "react-icons/go";
 import { useParams } from "react-router-dom";
 import { LuCalendarClock } from "react-icons/lu";
-import { useProjetoContext } from "../../../../context/ProjetoContext";
+import { useContextoGlobalProjeto, useProjetoContext } from "../../../../context/ContextoGlobalProjeto";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import Loading from "../../../../components/Loading/Loading";
 import MenuAluno from "../../../../components/Menus/MenuAluno/MenuAluno";
@@ -19,7 +19,7 @@ import GerenciarDocumentos from "../../../Documento";
 const VisualizarProjeto = ({grupo}) => {
 
     const { idProjeto } = useParams();
-    const { setDadosProjeto } = useProjetoContext()
+    const { setDadosProjeto } = useContextoGlobalProjeto()
     const [projeto, setProjeto] = useState(null)
     const [currentPage, setCurrentPage] = useState('default')
     const [loading, setLoading] = useState(true)
@@ -101,9 +101,9 @@ const VisualizarProjeto = ({grupo}) => {
                     </div>
 
                     <div className="content"> 
-                        {currentPage === "default" && <CronogramaIteracoes />}
-                        {/* {currentPage === "tarefas" && <GerenciarTarefas />} */}
-                        {currentPage === "documentos" && <GerenciarDocumentos/>}
+                        {/* {currentPage === "default" && <CronogramaIteracoes />}
+                        {currentPage === "tarefas" && <GerenciarTarefas />}
+                        {currentPage === "documentos" && <GerenciarDocumentos/>} */}
                     </div>
                 </div>
             </Layout>

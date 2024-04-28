@@ -4,7 +4,7 @@ import { Button, Modal } from "antd";
 import { IoAdd, IoCloseCircleOutline } from "react-icons/io5";
 import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
 import { buscarDocumentos } from "../../api/apiGitHubService";
-import { useProjetoContext } from "../../context/ProjetoContext";
+import { useProjetoContext } from "../../context/ContextoGlobalProjeto";
 import { atualizarDocumento, criarDocumento, excluirDocumentos, filtrarDocumentosPorProjeto } from "../../services/documentoService";
 import ListContents from "./GitHub/ListContents/ListContents";
 import ListaDocumentos from "./ListaDocumentos/ListaDocumentos";

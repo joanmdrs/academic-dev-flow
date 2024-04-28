@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import FormPontuacao from "./FormPontuacao/FormPontuacao";
-import { useProjetoContext } from "../../context/ProjetoContext";
+import { useProjetoContext } from "../../context/ContextoGlobalProjeto";
 import {
   atualizarDocumento,
   buscarDocumentoPeloId,

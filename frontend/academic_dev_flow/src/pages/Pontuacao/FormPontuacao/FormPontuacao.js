@@ -1,6 +1,6 @@
 import { Button, Checkbox, Form, Input } from "antd";
 import React, { useEffect } from "react";
-import { useProjetoContext } from "../../../context/ProjetoContext";
+import { useProjetoContext } from "../../../context/ContextoGlobalProjeto";
 import { useForm } from "antd/es/form/Form";
 
 const FormPontuacao = ({onSubmit, onCancel}) => {

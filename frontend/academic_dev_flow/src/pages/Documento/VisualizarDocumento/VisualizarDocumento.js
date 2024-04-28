@@ -9,7 +9,7 @@ import Loading from "../../../components/Loading/Loading";
 import { MenuUnfoldOutlined, MenuFoldOutlined, FileTextOutlined, StarOutlined, CommentOutlined } from '@ant-design/icons';
 import ArvoreComentarios from "../../Comentario/ArvoreComentarios/ArvoreComentarios";
 import GerenciarPontuacao from "../../Pontuacao";
-import { useProjetoContext } from "../../../context/ProjetoContext";
+import { useProjetoContext } from "../../../context/ContextoGlobalProjeto";
 
 const { Sider, Content } = Layout;
 

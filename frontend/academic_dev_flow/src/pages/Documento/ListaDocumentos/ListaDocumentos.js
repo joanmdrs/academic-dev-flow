@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { PiEye } from "react-icons/pi";
 import { GoCommentDiscussion } from "react-icons/go";
 import VisualizarDocumento from "../VisualizarDocumento/VisualizarDocumento";
-import { useProjetoContext } from "../../../context/ProjetoContext";
+import { useProjetoContext } from "../../../context/ContextoGlobalProjeto";
 import { FaTrash } from "react-icons/fa";
 import { Content } from "antd/es/layout/layout";
 

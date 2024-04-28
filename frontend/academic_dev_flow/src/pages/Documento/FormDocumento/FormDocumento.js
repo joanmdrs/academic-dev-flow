@@ -1,6 +1,6 @@
 import { Button, Form, Input, Select } from "antd";
 import React, { useEffect, useState } from "react";
-import { useProjetoContext } from "../../../context/ProjetoContext";
+import { useProjetoContext } from "../../../context/ContextoGlobalProjeto";
 import { listarIteracoesPorProjeto } from "../../../services/iteracaoService";
 import { listarArtefatos } from "../../../services/artefatoService";
 import { useForm } from "antd/es/form/Form";

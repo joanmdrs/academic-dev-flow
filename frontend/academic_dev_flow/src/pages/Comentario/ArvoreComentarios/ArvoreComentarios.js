@@ -6,7 +6,7 @@ import { atualizarComentario, criarComentario, excluirComentario, listarComentar
 import { Editor } from 'primereact/editor';
 import { SlOptions } from 'react-icons/sl';
 import { formatDate } from '../../../services/utils';
-import { useProjetoContext } from '../../../context/ProjetoContext';
+import { useProjetoContext } from '../../../context/ContextoGlobalProjeto';
 import { FaCircleUser, FaRegCircleUser } from 'react-icons/fa6';
 
 const ArvoreComentarios = ({ documento }) => {

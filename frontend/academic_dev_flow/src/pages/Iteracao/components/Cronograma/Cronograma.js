@@ -1,6 +1,6 @@
 import { Button, Modal, Table } from "antd";
 import React from "react";
-import { useProjetoContext } from "../../../../context/ProjetoContext";
+import { useProjetoContext } from "../../../../context/ContextoGlobalProjeto";
 import { excluirIteracoes } from "../../../../services/iteracaoService";
 import { formatDate } from "../../../../services/utils";
 import { FaTrash } from "react-icons/fa";
