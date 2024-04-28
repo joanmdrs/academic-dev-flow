@@ -1,4 +1,4 @@
-import { Button, Tabs } from "antd";
+import { Button, Spin } from "antd";
 import React, { useState } from "react";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
@@ -9,8 +9,6 @@ import { useContextoTarefa } from "../../context/ContextoTarefa";
 import { atualizarTarefa, criarTarefa } from "../../../../services/tarefaService";
 import { BsQuestionCircle } from "react-icons/bs";
 import Aviso from "../../../../components/Aviso/Aviso";
-import { NotificationManager } from "react-notifications";
-
 
 const QuadroTarefas = () => {
 
@@ -22,6 +20,7 @@ const QuadroTarefas = () => {
     const isBtnTrashDisabled = true
     const [acaoForm, setAcaoForm] = useState('criar')
     const [isAvisoVisivel, setIsAvisoVisivel] = useState(false);
+    const [isSaving, setIsSaving] = useState(false); // Estado para controlar a exibição do spinner
 
     const handleDuvidaClick = () => {
         setIsAvisoVisivel(true);
@@ -66,7 +65,7 @@ const QuadroTarefas = () => {
     };
     
     const handleSalvarTarefa = async (dadosForm) => {
-        NotificationManager.info('Esta ação pode demorar um pouco, pedimos que espere alguns instantes.')
+        setIsSaving(true); // Ativar o spinner enquanto a tarefa está sendo salva
         dadosForm['projeto'] = dadosProjeto.id;
         const resIssue = await handleSaveIssue(dadosForm);
     
@@ -78,6 +77,7 @@ const QuadroTarefas = () => {
         }
         
         handleReload();
+        setIsSaving(false);
     };
 
     return (
@@ -117,7 +117,12 @@ const QuadroTarefas = () => {
             </div>
 
             { isFormSalvarVisivel ? (
-                <div className="global-div">
+                <div className="global-div" style={{ position: 'relative' }}>
+                    {isSaving && ( // Renderizar o spinner se a tarefa estiver sendo salva
+                        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(255, 255, 255, 0.5)', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <Spin size="large" />
+                        </div>
+                    )}
                     <FormTarefa onSubmit={handleSalvarTarefa} onCancel={handleCancelar}  />
                 </div>
             ) : (
@@ -131,4 +136,4 @@ const QuadroTarefas = () => {
     )
 }   
 
-export default QuadroTarefas
+export default QuadroTarefas;

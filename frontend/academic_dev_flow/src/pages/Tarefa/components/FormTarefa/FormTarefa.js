@@ -198,9 +198,6 @@ function FormTarefa ({onCancel, onSubmit}) {
 
             </div>
 
-
-
-
             <Form.Item>
                 <Button type="primary" htmlType='submit'> Salvar </Button>
                 <Button style={{marginLeft: "10px"}} onClick={onCancel}> Cancelar </Button>

@@ -1,7 +1,7 @@
 import { NotificationManager } from "react-notifications";
 import api from "../api/api";
 import { handleError, handleInfo, handleSuccess } from "./utils";
-import { ERROR_MESSAGE_ON_CREATION_THE_LABELS, ERROR_MESSAGE_ON_SEARCHING, ERROR_MESSAGE_ON_SYNC, INFO_MESSAGE_MANDATORY_PARAMETERS, INFO_MESSAGE_ON_SEARCHING, SUCCESS_MESSAGE_ON_CREATION_THE_LABELS, SUCCESS_MESSAGE_ON_SYNC_ISSUES } from "./messages";
+import { ERROR_MESSAGE_ON_CREATION_THE_LABELS, ERROR_MESSAGE_ON_SEARCHING, ERROR_MESSAGE_ON_SYNC, INFO_MESSAGE_MANDATORY_PARAMETERS, INFO_MESSAGE_ON_SEARCHING, SUCCESS_MESSAGE_ON_CREATION, SUCCESS_MESSAGE_ON_CREATION_THE_LABELS, SUCCESS_MESSAGE_ON_SYNC_ISSUES } from "./messages";
 
 export const criarTarefa = async (dadosForm, dadosIssue) => {
 
@@ -22,11 +22,7 @@ export const criarTarefa = async (dadosForm, dadosIssue) => {
     
     try {
         const response = await api.post('tarefa/cadastrar/', dadosEnviar)
-        
-        if (response.status === 200){
-            NotificationManager.success('Tarefa cadastrada com sucesso !')
-            return response
-        }
+        return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION)
     } catch (error) {
         console.log(error)
         NotificationManager.error('Falha ao cadastrar a tarefa !')
