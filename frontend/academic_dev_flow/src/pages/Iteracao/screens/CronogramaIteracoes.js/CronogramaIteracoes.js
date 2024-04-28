@@ -10,11 +10,10 @@ import { atualizarIteracao, criarIteracao } from "../../../../services/iteracaoS
 const CronogramaIteracoes = () => {
 
     const {
-        iteracoes,
         dadosIteracao,
-        setDadosIteracao, 
-        iteracoesSelecionadas, 
-        setIteracoesSelecionadas} = useContextoIteracao()
+        setDadosIteracao,
+        setIteracoes, 
+        iteracoesSelecionadas} = useContextoIteracao()
 
     const {dadosProjeto} = useContextoGlobalProjeto()
 
@@ -25,11 +24,27 @@ const CronogramaIteracoes = () => {
     const handleCancelar = () => {
         setIsFormSalvarVisivel(false)
         setIsBtnPlusDisabled(false)
+        setDadosIteracao(null)
+        setAcaoForm('criar')
+    }
+
+    const handleReload = () => {
+        setIsFormSalvarVisivel(false)
+        setDadosIteracao(null)
+        setIteracoes([])
     }
 
     const handleAdicionarIteracao = () => {
         setIsFormSalvarVisivel(true)
         setIsBtnPlusDisabled(true)
+        setAcaoForm('criar')
+        setDadosIteracao(null)
+    }
+
+    const handleAtualizarIteracao = (record) => {
+        setIsFormSalvarVisivel(true)
+        setDadosIteracao(record)
+        setAcaoForm('atualizar')
     }
 
     const handleSalvarIteracao = async (dadosForm) => {
@@ -40,6 +55,7 @@ const CronogramaIteracoes = () => {
         } else if (acaoForm === 'atualizar'){
             await atualizarIteracao(dadosIteracao.id, dadosForm)
         }
+        handleReload()
     }
 
 
@@ -74,7 +90,7 @@ const CronogramaIteracoes = () => {
                     </div> 
 
                 ) : (
-                    <TableIteracoesSelect />
+                    <TableIteracoesSelect onEdit={handleAtualizarIteracao}/>
                 )}
 
             </React.Fragment>

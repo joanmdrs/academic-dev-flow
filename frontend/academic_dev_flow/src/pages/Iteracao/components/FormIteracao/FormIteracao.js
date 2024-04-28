@@ -68,6 +68,8 @@ const FormIteracao = ({onSubmit, onCancel, additionalFields}) => {
 
                 if (dadosIteracao !== null) {
                     form.setFieldsValue(dadosIteracao)
+                } else {
+                    form.resetFields()
                 }
 
             } else {
@@ -100,7 +102,7 @@ const FormIteracao = ({onSubmit, onCancel, additionalFields}) => {
                         </Form.Item>
 
                         <Form.Item label="Descrição" name="descricao">
-                            <Input.TextArea  rows={6} name="descricao" placeholder="descrição ..."/>
+                            <Input.TextArea rows={6} name="descricao" placeholder="descrição ..."/>
                         </Form.Item>
 
                         <div style={{display: 'flex', gap: '10px'}}> 

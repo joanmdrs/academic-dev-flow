@@ -14,7 +14,7 @@ class Iteracao(models.Model):
 
     nome = models.CharField(max_length=200)
     numero = models.IntegerField()
-    descricao = models.TextField(null=True)
+    descricao = models.TextField(null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='criada')
     data_inicio = models.DateField()
     data_fim = models.DateField()
