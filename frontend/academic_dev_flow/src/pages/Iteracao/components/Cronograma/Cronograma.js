@@ -1,10 +1,9 @@
 import { Button, Modal, Table } from "antd";
 import React from "react";
-import { useProjetoContext } from "../../../../context/ContextoGlobalProjeto";
 import { excluirIteracoes } from "../../../../services/iteracaoService";
 import { formatDate } from "../../../../services/utils";
 import { FaTrash } from "react-icons/fa";
-
+import { useContextoIteracao } from "../../context/contextoIteracao";
 
 const cronogramaStyle = {
     display: "flex",
@@ -13,7 +12,7 @@ const cronogramaStyle = {
     width: "100%"
 }
 
-const Cronograma = ({iteracoes, onShow, onReload}) => {
+const Cronograma = ({iteracoes, onEdit, onDelete}) => {
 
     const COLUNAS_ITERACOES = [
         {
@@ -21,7 +20,7 @@ const Cronograma = ({iteracoes, onShow, onReload}) => {
             dataIndex: 'nome',
             key: 'nome',
             render: (_, record) => (
-                <span style={{cursor: "pointer", color: "var(--primary-color)"}} onClick={() => handleEdit(record)}>
+                <span style={{cursor: "pointer", color: "var(--primary-color)"}} onClick={() => onEdit(record)}>
                     {record.nome}
                 </span>
 
@@ -54,7 +53,7 @@ const Cronograma = ({iteracoes, onShow, onReload}) => {
             )
         },
         {
-            title: 'Gerente',
+            title: 'Líder',
             dataIndex: 'nome_membro',
             key: 'nome_membro'
         },
@@ -65,35 +64,8 @@ const Cronograma = ({iteracoes, onShow, onReload}) => {
         }
     ]
 
-    const {setDadosIteracao, iteracoesSelecionadas, setIteracoesSelecionadas} = useProjetoContext()
+    const {setDadosIteracao, iteracoesSelecionadas, setIteracoesSelecionadas} = useContextoIteracao()
 
-    const handleEdit = (record) => {
-        onShow()
-        setDadosIteracao(record)
-    }
-
-    const handleDelete = async () => {
-
-        if (iteracoesSelecionadas !== null) {
-          const ids = iteracoesSelecionadas.map((item) => item.id)
-          await excluirIteracoes(ids)
-          setIteracoesSelecionadas([])
-        } 
-
-        onReload()
-      }
-  
-    const showDeleteConfirm = () => {
-  
-      Modal.confirm({
-          title: 'Confirmar exclusão',
-          content: 'Tem certeza que deseja excluir a(s) iteração(ões) ?',
-          okText: 'Sim',
-          cancelText: 'Não',
-          onOk: async () =>  await handleDelete()
-          
-        });
-    };
 
     const rowSelection = {
         onChange: (selectedRowsKeys, selectedRows) => {
@@ -108,13 +80,13 @@ const Cronograma = ({iteracoes, onShow, onReload}) => {
         
             <React.Fragment>
                 
-                <div style={{display: "flex", justifyContent: "flex-end", marginRight: "20px"}}>  
+                {/* <div style={{display: "flex", justifyContent: "flex-end", marginRight: "20px"}}>  
                     {
                         (iteracoesSelecionadas.length > 0) && <Button danger icon={<FaTrash />} onClick={() => showDeleteConfirm()}> Excluir </Button>
                     }
                 </div>
 
-                
+                 */}
 
                 {
                     iteracoes &&  
