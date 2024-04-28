@@ -3,55 +3,57 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "antd/es/form/Form";
 import { listarEtapasPorFluxo } from "../../../../services/fluxoEtapaService";
 import { buscarEtapaPeloId } from "../../../../services/etapaService";
-import { listarMembrosPorProjeto } from "../../../../services/membroProjetoService";
-import { buscarMembroPeloId } from "../../../../services/membroService";
-import { atualizarIteracao, criarIteracao } from "../../../../services/iteracaoService";
-import Loading from "../../../../components/Loading/Loading";
+import { listarMembrosPeloIdProjeto } from "../../../../services/membroProjetoService";
 import { optionsStatusIteracoes } from "../../../../services/optionsStatus";
 import { useContextoIteracao } from "../../context/contextoIteracao";
+import { handleError } from "../../../../services/utils";
+import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 
-const FormIteracao = ({onSubmit, onCancel, onReload, additionalFields}) => {
+const FormIteracao = ({onSubmit, onCancel, additionalFields}) => {
 
     const { dadosProjeto, dadosIteracao } = useContextoIteracao();
     const [form] = useForm();
     const [optionsEtapas, setOptionsEtapas] = useState([]);
     const [optionsMembros, setOptionsMembros] = useState([]);
-    
 
     const handleGetEtapas = async () => {
-        const response = await listarEtapasPorFluxo(dadosProjeto.fluxo)
+        try {
+            const response = await listarEtapasPorFluxo(dadosProjeto.fluxo)
 
-        if (response.status === 200){
+            if (response.status === 200){
 
-            const promises = await response.data.map( async (objeto) => {
-                const response2 = await buscarEtapaPeloId(objeto.etapa)
+                const promises = await response.data.map( async (objeto) => {
+                    const response2 = await buscarEtapaPeloId(objeto.etapa)
 
-                return {
-                    value: objeto.id,
-                    label: response2.data.nome
-                }
-            })
+                    return {
+                        value: objeto.id,
+                        label: response2.data.nome
+                    }
+                })
 
-            const results = (await Promise.all(promises))
-            setOptionsEtapas(results)
+                const results = (await Promise.all(promises))
+                setOptionsEtapas(results)
+            }
+            
+        } catch (error) {
+            return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
         }
     }
 
     const handleGetMembros = async () => {
-        const response = await listarMembrosPorProjeto(dadosProjeto.id)
 
-        if (response.status === 200){
-
-            const promises = await response.data.map(async (objeto) => {
-                const response2 = await buscarMembroPeloId(objeto.membro)
-
+        try {
+            const response = await listarMembrosPeloIdProjeto(dadosProjeto.id)
+            const resultados = response.data.map((item) => {
                 return {
-                    value: objeto.id,
-                    label: `${response2.data.nome} (${response2.data.grupo})`
+                    value: item.id_membro_projeto,
+                    label: `${item.nome_membro} (${item.grupo_membro})`,
                 }
             })
-            const results = (await Promise.all(promises))
-            setOptionsMembros(results)
+            setOptionsMembros(resultados)
+        
+        } catch (error) {   
+            return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
         }
     }
 
@@ -69,7 +71,7 @@ const FormIteracao = ({onSubmit, onCancel, onReload, additionalFields}) => {
         };
 
         fetchData();
-    }, [dadosProjeto, dadosIteracao, form]);
+    }, [dadosProjeto, dadosIteracao]);
     
     return (
             <Form layout="vertical" className="global-form" form={form} onFinish={onSubmit}>

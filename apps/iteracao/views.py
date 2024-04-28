@@ -10,6 +10,7 @@ from apps.projeto.models import Projeto
 from apps.fluxo_etapa.models import FluxoEtapa
 from apps.etapa.models import Etapa
 from apps.membro_projeto.models import MembroProjeto
+from apps.membro_projeto.models import FuncaoMembroProjeto
 from apps.membro.models import Membro
 from rest_framework.permissions import IsAuthenticated
     
@@ -19,22 +20,24 @@ class CadastrarIteracaoView(APIView):
     def post(self, request):
         try:
         
-            gerente_id = request.data.get('gerente', None)
-            print(gerente_id)
-            membro_projeto = MembroProjeto.objects.get(id=gerente_id)
-
-
-            if membro_projeto is not None: 
-                
-                membro_projeto.funcao = "gerente"
-                membro_projeto.save()
+            id_lider = request.data.get('lider', None)
+            if id_lider is None:
+                return Response({'error': 'ID do líder não fornecido'}, status=status.HTTP_400_BAD_REQUEST)
+    
+            membro_projeto = MembroProjeto.objects.get(id=id_lider)
             
-                serializer = IteracaoSerializer(data=request.data)
-                if serializer.is_valid(raise_exception=True):
-                    serializer.save()
-                    return Response(serializer.data, status=status.HTTP_200_OK)
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
+            funcao_membro_projeto = FuncaoMembroProjeto.objects.create(
+                membro_projeto=membro_projeto,
+                funcao='lider' 
+            )
+            
+            funcao_membro_projeto.save()
+            
+            serializer = IteracaoSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

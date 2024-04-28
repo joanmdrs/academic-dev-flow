@@ -13,6 +13,7 @@ export const ProviderIteracao = ({ children }) => {
         <ContextoIteracao.Provider
             value={{
                 iteracoes, setIteracoes,
+                dadosIteracao, setDadosIteracao,
                 dadosProjeto, setDadosProjeto
             }}
         >
