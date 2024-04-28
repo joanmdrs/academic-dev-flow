@@ -5,15 +5,13 @@ import { IoDocumentTextOutline } from "react-icons/io5";
 import { GoTasklist } from "react-icons/go";
 import { useParams } from "react-router-dom";
 import { LuCalendarClock } from "react-icons/lu";
-import { useContextoGlobalProjeto, useProjetoContext } from "../../../../context/ContextoGlobalProjeto";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import Loading from "../../../../components/Loading/Loading";
 import MenuAluno from "../../../../components/Menus/MenuAluno/MenuAluno";
 import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfessor";
 import MyHeader from "../../../../components/Header/Header";
 import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
-import CronogramaIteracoes from "../../../Iteracao";
-import GerenciarDocumentos from "../../../Documento";
 
 
 const VisualizarProjeto = ({grupo}) => {
