@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useContextoIteracao } from "../../context/contextoIteracao";
-import { Button } from "antd";
+import { Button, Modal } from "antd";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import TableIteracoesSelect from "../../components/TableIteracoesSelect/TableIteracoesSelect";
 import FormIteracao from "../../components/FormIteracao/FormIteracao";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
-import { atualizarIteracao, criarIteracao } from "../../../../services/iteracaoService";
+import { atualizarIteracao, criarIteracao, excluirIteracoes } from "../../../../services/iteracaoService";
+import BotaoAdicionar from "../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
+import BotaoExcluir from "../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
 
 const CronogramaIteracoes = () => {
 
@@ -13,12 +15,15 @@ const CronogramaIteracoes = () => {
         dadosIteracao,
         setDadosIteracao,
         setIteracoes, 
-        iteracoesSelecionadas} = useContextoIteracao()
+        iteracoesSelecionadas, 
+        setIteracoesSelecionadas
+    } = useContextoIteracao()
 
     const {dadosProjeto} = useContextoGlobalProjeto()
 
     const [isFormSalvarVisivel, setIsFormSalvarVisivel] = useState(false)
     const [isBtnPlusDisabled, setIsBtnPlusDisabled] = useState(false)
+    const isBtnTrashDisabled = iteracoesSelecionadas.length === 0
     const [acaoForm, setAcaoForm] = useState('criar')
 
     const handleCancelar = () => {
@@ -32,6 +37,7 @@ const CronogramaIteracoes = () => {
         setIsFormSalvarVisivel(false)
         setDadosIteracao(null)
         setIteracoes([])
+        setIteracoesSelecionadas([])
     }
 
     const handleAdicionarIteracao = () => {
@@ -58,31 +64,47 @@ const CronogramaIteracoes = () => {
         handleReload()
     }
 
+    const handleExcluirIteracoes = () => {
+  
+      Modal.confirm({
+          title: 'Confirmar exclusão',
+          content: 'Tem certeza que deseja excluir a(s) iteração(ões) ?',
+          okText: 'Sim',
+          cancelText: 'Não',
+          onOk: async () => {
+            if (iteracoesSelecionadas !== null) {
+                const ids = iteracoesSelecionadas.map((item) => item.id)
+                await excluirIteracoes(ids)
+            }
+            handleReload() 
+          }
+        });
+    };
+
 
     return (
         <React.Fragment>
 
-            <div> 
-        
+            <div style={{display: 'flex', justifyContent: 'flex-end', gap: '10px'}}> 
                 <Button 
-                    icon={<FaPlus />} 
+                    icon={<FaPlus />}
                     type="primary"
+                    onClick={handleAdicionarIteracao}
                     disabled={isBtnPlusDisabled}
-                    onClick={handleAdicionarIteracao} 
                 >
                     Criar Iteração
                 </Button>
-            </div>
 
-            <h4 style={{textAlign: "center"}}> Cronograma de Iterações </h4> 
-        
+                <Button
+                    icon={<FaTrash />}
+                    danger
+                    onClick={handleExcluirIteracoes}
+                    disabled={isBtnTrashDisabled}
+                >
+                    Excluir
+                </Button>
+            </div>
             <React.Fragment>
-                
-                <div style={{display: "flex", justifyContent: "flex-end", marginRight: "20px"}}>  
-                    {
-                        (iteracoesSelecionadas.length > 0) && <Button danger icon={<FaTrash />}> Excluir </Button>
-                    }
-                </div>
 
                 { isFormSalvarVisivel ? (
                     <div className="global-div"> 
@@ -90,7 +112,7 @@ const CronogramaIteracoes = () => {
                     </div> 
 
                 ) : (
-                    <TableIteracoesSelect onEdit={handleAtualizarIteracao}/>
+                    <TableIteracoesSelect onEdit={handleAtualizarIteracao} />
                 )}
 
             </React.Fragment>

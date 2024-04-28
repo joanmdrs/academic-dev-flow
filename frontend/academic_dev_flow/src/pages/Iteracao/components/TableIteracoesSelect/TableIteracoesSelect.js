@@ -59,7 +59,10 @@ const TableIteracoesSelect = ({onEdit, onDelete}) => {
 
     const {dadosProjeto} = useContextoGlobalProjeto()
 
-    const {iteracoes, setIteracoes, setIteracoesSelecionadas} = useContextoIteracao()
+    const {
+        iteracoes, 
+        setIteracoes,
+        setIteracoesSelecionadas} = useContextoIteracao()
 
     const rowSelection = {
         onChange: (selectedRowsKeys, selectedRows) => {
@@ -73,7 +76,6 @@ const TableIteracoesSelect = ({onEdit, onDelete}) => {
         setIteracoes(iteracoesOrdenadas)
     }
 
-
     useEffect(() => {
         const fetchData = async () => {
             if (dadosProjeto !== null) {
@@ -85,13 +87,17 @@ const TableIteracoesSelect = ({onEdit, onDelete}) => {
     }, [])
 
     return (
-        <Table 
-            className="style-table"
-            columns={COLUNAS_TABELA_ITERACOES}
-            dataSource={iteracoes}
-            rowKey={"id"}
-            rowSelection={rowSelection}
-        />
+        <div style={{}}>
+            <h4 style={{textAlign: "center"}}> Cronograma de Iterações </h4> 
+            <Table 
+                className="style-table"
+                columns={COLUNAS_TABELA_ITERACOES}
+                dataSource={iteracoes}
+                rowKey={"id"}
+                rowSelection={rowSelection}
+            />
+
+        </div>
 
     )
 
