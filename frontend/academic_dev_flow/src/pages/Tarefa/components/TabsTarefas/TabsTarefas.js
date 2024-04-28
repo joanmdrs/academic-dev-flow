@@ -1,9 +1,24 @@
 import { Tabs } from "antd";
 import React from "react";
+import { listarTarefasPorProjeto } from "../../../../services/tarefaService";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 
 const {TabPane} = Tabs
 
 const TabsTarefas = () => {
+
+    const {dadosProjeto} = useContextoGlobalProjeto()
+
+    const handleGetTarefas = async () => {
+
+        const response = await listarTarefasPorProjeto(dadosProjeto.id)
+  
+    }
+
+
+    
+
+
     return (
         <Tabs
             tabPosition="left"

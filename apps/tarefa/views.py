@@ -7,6 +7,7 @@ from .serializers import TarefaSerializer
 from apps.membro_projeto.models import MembroProjeto
 from apps.membro.models import Membro
 from apps.fluxo.models import Fluxo
+from apps.iteracao.models import Iteracao
 from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
 from django.http import Http404
@@ -70,24 +71,71 @@ class FiltrarTarefasPeloNomeEPeloProjeto(APIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)   
             
 class ListarTarefasPorProjetoView(APIView):
-    
     permission_classes = [IsAuthenticated]
+    
     def get(self, request, id_projeto): 
         try:
-            
-            tarefas = Tarefa.objects.filter(projeto_id=id_projeto)  # Buscamos as tarefas do projeto
+            tarefas = Tarefa.objects.filter(projeto_id=id_projeto)
             tarefas_info = []
-            
-            if tarefas is not None:
 
-                serializer = TarefaSerializer(tarefas, many=True)
-                    
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            
-            return Response(data=[], status=status.HTTP_204_NO_CONTENT)
+            for tarefa in tarefas:
+                membros_info = self.get_membros_info(tarefa, id_projeto)
+                iteracao_nome = self.get_iteracao_nome(tarefa)
+                labels_info = self.get_labels_info(tarefa)
+
+                tarefa_info = {
+                    'id': tarefa.id,
+                    'nome': tarefa.nome,
+                    'data_inicio': tarefa.data_inicio,
+                    'data_termino': tarefa.data_termino,
+                    'status': tarefa.status,
+                    'descricao': tarefa.descricao,
+                    'projeto': tarefa.projeto_id, 
+                    'iteracao': tarefa.iteracao_id,
+                    'nome_iteracao': iteracao_nome,
+                    'membros': membros_info,
+                    'labels': labels_info
+                }
+                tarefas_info.append(tarefa_info)
+                
+            return JsonResponse(tarefas_info, safe=False, json_dumps_params={'ensure_ascii': False})
                 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def get_membros_info(self, tarefa, id_projeto):
+        membros_info = []
+        membros_projeto = MembroProjeto.objects.filter(projeto_id=id_projeto, id__in=tarefa.membros.all())
+
+        for membro_projeto in membros_projeto:
+            membro_info = {
+                'id_membro_projeto': membro_projeto.id,
+                'id_membro': membro_projeto.membro.id,
+                'nome_membro': membro_projeto.membro.nome,
+                'grupo_membro': membro_projeto.membro.grupo
+            }
+            membros_info.append(membro_info)
+
+        return membros_info
+
+    def get_iteracao_nome(self, tarefa):
+        if tarefa.iteracao_id is not None:
+            iteracao = Iteracao.objects.get(id=tarefa.iteracao_id)
+            return iteracao.nome
+        else:
+            return "Iteração não encontrada"
+
+    def get_labels_info(self, tarefa):
+        labels_info = []
+        for label in tarefa.labels.all():
+            label_info = {
+                'id': label.id,
+                'nome': label.nome,
+                # Adicione outros campos necessários aqui
+            }
+            labels_info.append(label_info)
+
+        return labels_info
         
 class AtualizarTarefaView(APIView):
     permission_classes = [IsAuthenticated]
