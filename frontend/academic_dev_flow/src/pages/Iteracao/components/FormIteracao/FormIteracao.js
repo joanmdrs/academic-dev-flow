@@ -64,6 +64,10 @@ const FormIteracao = ({onSubmit, onCancel, additionalFields}) => {
                 await handleGetEtapas();
                 await handleGetMembros();
 
+                if (dadosIteracao !== null) {
+                    form.setFieldsValue(dadosIteracao)
+                }
+
             } else {
                 setOptionsEtapas([])
                 setOptionsMembros([])

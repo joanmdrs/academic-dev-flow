@@ -67,6 +67,7 @@ const GerenciarIteracoes = () => {
         } else {
             await atualizarIteracao(dadosIteracao.id, dadosForm)
         }
+        handleReload()
     }
 
     const handleExcluirIteracao = async (id) => {
@@ -115,7 +116,7 @@ const GerenciarIteracoes = () => {
             )}
 
             <div className="global-div"> 
-                {isFormSalvarVisivel && acaoForm === 'criar' && (
+                {isFormSalvarVisivel && (
                     <FormIteracao 
                         additionalFields={<SelecionarProjeto />} 
                         onCancel={handleCancelar}

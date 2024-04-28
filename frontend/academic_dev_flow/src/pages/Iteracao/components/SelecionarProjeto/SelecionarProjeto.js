@@ -8,7 +8,7 @@ const { Option } = Select;
 
 const SelecionarProjeto = () => {
     const [optionsProjetos, setOptionsProjetos] = useState([]);
-    const {setDadosProjeto} = useContextoIteracao()
+    const {dadosProjeto, setDadosProjeto} = useContextoIteracao()
 
     useEffect(() => {
         const fetchData = async () => {
@@ -45,6 +45,7 @@ const SelecionarProjeto = () => {
             <Select
                 showSearch
                 allowClear
+                value={dadosProjeto.id}
                 placeholder="Pesquise ou selecione o projeto"
                 optionFilterProp="children"
                 onChange={handleChange}
