@@ -86,3 +86,5 @@ const TableTarefasSelect = ({tasks, onEdit}) => {
         />
     )
 }
+
+export default TableTarefasSelect

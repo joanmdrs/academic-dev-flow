@@ -10,11 +10,13 @@ import { listarLabelsPorProjeto } from '../../../../services/tarefaService';
 import { optionsStatusTarefas } from '../../../../services/optionsStatus';
 import { handleError } from '../../../../services/utils';
 import { ERROR_MESSAGE_ON_SEARCHING } from '../../../../services/messages';
+import { useContextoGlobalProjeto } from '../../../../context/ContextoGlobalProjeto';
 
-function FormGenericTarefa ({onCancel, onSubmit}) {
+function FormTarefa ({onCancel, onSubmit}) {
 
     const [form] = useForm()
-    const {dadosProjeto, dadosTarefa} = useContextoTarefa()
+    const {dadosTarefa} = useContextoTarefa()
+    const {dadosProjeto} = useContextoGlobalProjeto()
     const [optionsMembros, setOptionsMembros] = useState(null)
     const [optionsIteracoes, setOptionsIteracoes] = useState(null)
     const [optionsLabels, setOptionsLabels] = useState(null)
@@ -207,4 +209,4 @@ function FormGenericTarefa ({onCancel, onSubmit}) {
     )
 }
 
-export default FormGenericTarefa
+export default FormTarefa

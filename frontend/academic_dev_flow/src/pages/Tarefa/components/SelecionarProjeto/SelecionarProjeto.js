@@ -3,13 +3,15 @@ import { buscarProjetoPeloId, listarProjetos } from "../../../../services/projet
 import { Select, Button } from "antd";
 import { FaLeaf } from "react-icons/fa";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 
 const { Option } = Select;
 
 const SelecionarProjeto = () => {
     const [optionsProjetos, setOptionsProjetos] = useState([]);
     const [selectedItem, setSelectedItem] = useState(null);
-    const {setStep, dadosProjeto, setDadosProjeto} = useContextoTarefa()
+    const {setStep} = useContextoTarefa()
+    const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
 
     useEffect(() => {
         const fetchData = async () => {

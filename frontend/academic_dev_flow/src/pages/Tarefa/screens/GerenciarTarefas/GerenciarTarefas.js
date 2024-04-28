@@ -11,9 +11,9 @@ import {
     criarTarefa, 
     excluirTarefas, 
     filtrarTarefasPeloNomeEPeloProjeto } from "../../../../services/tarefaService";
-import FormGenericTarefa from "../../components/FormGenericTarefa/FormGenericTarefa";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { createIssue, updateIssue } from "../../../../services/githubIntegration/issueService";
+import FormTarefa from "../../components/FormTarefa/FormTarefa";
 
 const GerenciarTarefas = () => {
 
@@ -148,12 +148,12 @@ const GerenciarTarefas = () => {
                 {isFormVisivel && acaoForm === 'criar' && (
                     <React.Fragment>
                         {step === "0" && <SelecionarProjeto />}
-                        {step === "1" && <FormGenericTarefa onSubmit={handleSalvarTarefa} onCancel={handleCancelar}/>}
+                        {step === "1" && <FormTarefa onSubmit={handleSalvarTarefa} onCancel={handleCancelar}/>}
                     </React.Fragment>
                 )}
 
                 {isFormVisivel && acaoForm === 'atualizar' && (
-                    <FormGenericTarefa onSubmit={handleSalvarTarefa} onCancel={handleCancelar} />
+                    <FormTarefa onSubmit={handleSalvarTarefa} onCancel={handleCancelar} />
                 )}
 
                 {!isFormVisivel  && (
