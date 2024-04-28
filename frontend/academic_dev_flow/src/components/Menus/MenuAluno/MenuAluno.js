@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { MdFormatListBulleted } from "react-icons/md";
 import { HiOutlineDocumentReport } from "react-icons/hi";
+import SubMenu from "antd/es/menu/SubMenu";
 
 const MenuAluno = () => {
     const [collapsed, setCollapsed] = useState(false);
@@ -21,13 +22,22 @@ const MenuAluno = () => {
             marginTop: "20px"
             }}
         >
-            <Menu.Item
+            <SubMenu
                 className='item-menu'
-                key="meus-projetos"
-                icon={<MdOutlineSpaceDashboard size="20px" />}
-           >
-                <Link to="/aluno/projetos">Projetos</Link>
-            </Menu.Item>
+                key='projeto'
+                icon={<MdOutlineSpaceDashboard style={{ fontSize: "20px" }} />}
+                title="Projetos"
+            >
+                <Menu.Item key="gerenciar-projetos">
+                    <Link to="/aluno/projetos/gerenciar">Gerenciar</Link>
+                </Menu.Item>
+                
+                <Menu.Item key="meus-projetos">
+                    <Link to="/aluno/projetos/meus-projetos">Meus Projetos</Link>
+                </Menu.Item>
+
+
+            </SubMenu>
 
             <Menu.Item
                 className='item-menu'

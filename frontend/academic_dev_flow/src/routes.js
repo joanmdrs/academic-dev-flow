@@ -37,7 +37,7 @@ function Routes() {
         <Route path="/admin/home" Component={HomeAdministrador} exact />
 
         {/* Menu Item Projetos */}
-        <Route path="/admin/projetos" Component={ScreenGerenciarProjetos} exact />
+        <Route path="/admin/projetos" element={<ScreenGerenciarProjetos grupo="admin" />} exact />
 
         {/* Menu Item Fluxos */}
         <Route path="/admin/fluxos/gerenciar" Component={Fluxo} exact />
@@ -71,8 +71,15 @@ function Routes() {
       
       <Route element={<StudentRoutes />}>
         <Route path="/aluno/home" Component={HomeAluno} exact />
+
         <Route
-          path="/aluno/projetos"
+          path="/aluno/projetos/gerenciar"
+          element={<ScreenGerenciarProjetos grupo="discente" />}
+          exact
+        />
+
+        <Route
+          path="/aluno/projetos/meus-projetos"
           element={<MeusProjetos grupo="aluno" />}
           exact
         />
