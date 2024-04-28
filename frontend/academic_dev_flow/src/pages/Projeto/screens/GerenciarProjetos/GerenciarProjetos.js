@@ -2,20 +2,20 @@ import React, { useEffect, useState } from "react";
 import Titulo from "../../../../components/Titulo/Titulo";
 import { Spin, Tabs } from "antd";
 import Item from "antd/es/list/Item";
-import TabProjeto from "./TabProjeto/TabProjeto";
-import TabEquipe from "./TabEquipe/TabEquipe";
-import TabFluxo from "./TabFluxo/TabFluxo";
+import { useContextoProjeto } from "../../context/ContextoProjeto";
+import { atualizarProjeto, buscarProjetoPeloNome, criarProjeto, excluirProjeto } from "../../../../services/projetoService";
+import { NotificationManager } from "react-notifications";
+import { recarregarPagina } from "../../../../services/utils";
 import BotaoBuscar from "../../../../components/Botoes/BotaoBuscar/BotaoBuscar";
 import BotaoAdicionar from "../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
 import BotaoExcluir from "../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
-import { useFormContext } from "../../context/ContextoProjeto";
 import ModalDeBusca from "../../../../components/Modals/ModalDeBusca/ModalDeBusca";
-import { atualizarProjeto, buscarProjetoPeloNome, criarProjeto, excluirProjeto } from "../../../../services/projetoService";
-import { NotificationManager } from "react-notifications";
 import { LoadingOutlined } from "@ant-design/icons";
-import { recarregarPagina } from "../../../../services/utils";
+import TabProjeto from "../TabsProjeto/TabProjeto/TabProjeto";
+import TabEquipe from "../TabsProjeto/TabEquipe/TabEquipe";
+import TabFluxo from "../TabsProjeto/TabFluxo/TabFluxo";
 
-const TabsProjeto = () => {
+const GerenciarProjetos = () => {
   
     const COLUNAS_MODAL = [
       {
@@ -45,7 +45,7 @@ const TabsProjeto = () => {
 
     const [current, setCurrent] = useState("1");
     const [acaoForm, setAcaoForm] = useState("criar")
-    const {hasProjeto, setHasProjeto} = useFormContext()
+    const {hasProjeto, setHasProjeto} = useContextoProjeto()
     const [isModalVisivel, setIsModalVisivel] = useState(false)
     const [isTabsAtivo, setIsTabsAtivo] = useState(false)
     const [isBotaoAdicionarVisivel, setIsBotaoAdicionarVisivel] = useState(false)
@@ -227,7 +227,7 @@ const TabsProjeto = () => {
                                 <TabEquipe />
                               </Item>
                               <Item tab="Fluxo" key="3" className="tab-item">
-                                  <TabFluxo />
+                                <TabFluxo />
                               </Item>
                             </Tabs>
                           </div>
@@ -242,4 +242,4 @@ const TabsProjeto = () => {
     );
   }
   
-  export default TabsProjeto;
+  export default GerenciarProjetos;

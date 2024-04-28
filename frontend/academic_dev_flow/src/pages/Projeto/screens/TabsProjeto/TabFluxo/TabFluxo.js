@@ -6,7 +6,7 @@ import ModalDeBusca from "../../../../../components/Modals/ModalDeBusca/ModalDeB
 import { buscarFluxoPeloId, buscarFluxoPeloNome } from "../../../../../services/fluxoService";
 import { NotificationManager } from "react-notifications";
 import { atualizarFluxoProjeto, buscarProjetoPeloId } from "../../../../../services/projetoService";
-import { useFormContext } from "../../../context/Provider/Provider";
+import { useContextoProjeto } from "../../../context/ContextoProjeto";
 
 const TabFluxo = () => {
 
@@ -54,7 +54,7 @@ const TabFluxo = () => {
         
     ];
     
-    const {hasProjeto, setHasProjeto} = useFormContext()
+    const {hasProjeto, setHasProjeto} = useContextoProjeto()
     const [isBotaoAdicionarVisivel, setIsBotaoAdicionarVisivel] = useState(true)
     const [isBotaoExcluirVisivel, setIsBotaoExcluirVisivel] = useState(true)
     const [isModalVisivel, setIsModalVisivel] = useState(false)

@@ -1,5 +1,5 @@
 import React from "react";
-import { ProjetoProvider } from "./context/Provider/Provider";
+import { ProjetoProvider } from "./context/ContextoProjeto";
 import TabsProjeto from "./screens/TabsProjeto/TabsProjeto";
 import MyHeader from "../../components/Header/Header";
 import { Layout } from "antd";

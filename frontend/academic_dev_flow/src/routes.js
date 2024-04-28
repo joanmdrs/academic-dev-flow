@@ -1,6 +1,5 @@
 import React from "react";
 import { Routes as Switch, Route } from "react-router-dom";
-import Projeto from "./pages/Projeto";
 import Etapa from "./pages/Etapa";
 import AdminRoutes from "./router/AdminRoutes/AdminRoutes";
 import StudentRoutes from "./router/StudentRoutes/StudentRoutes";
@@ -24,6 +23,7 @@ import ScreenGerenciarArquivosGithub from "./pages/Artefato/screens/GerenciarArq
 import ScreenGerenciarLabels from "./pages/Tarefa/screens/GerenciarLabels";
 import ScreenGerenciarIssues from "./pages/Tarefa/screens/GerenciarIssues";
 import ScreenGerenciarIteracoes from "./pages/Iteracao/screens/GerenciarIteracoes";
+import ScreenGerenciarProjetos from "./pages/Projeto/screens/GerenciarProjetos";
 
 function Routes() {
   return (
@@ -37,7 +37,7 @@ function Routes() {
         <Route path="/admin/home" Component={HomeAdministrador} exact />
 
         {/* Menu Item Projetos */}
-        <Route path="/admin/projetos" Component={Projeto} exact />
+        <Route path="/admin/projetos" Component={ScreenGerenciarProjetos} exact />
 
         {/* Menu Item Fluxos */}
         <Route path="/admin/fluxos/gerenciar" Component={Fluxo} exact />
@@ -68,8 +68,8 @@ function Routes() {
 
       </Route>
 
-      {/* Aluno */}
-      {/* <Route element={<StudentRoutes />}>
+      
+      <Route element={<StudentRoutes />}>
         <Route path="/aluno/home" Component={HomeAluno} exact />
         <Route
           path="/aluno/projetos"
@@ -86,9 +86,9 @@ function Routes() {
           }
           exact
         />
-      </Route> */}
+      </Route>
 
-      {/* Professor */}
+  
       {/* <Route element={<TeacherRoutes />}>
         <Route path="/professor/home" Component={HomeProfessor} exact />
         <Route

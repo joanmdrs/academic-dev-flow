@@ -18,29 +18,7 @@ import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfes
 import MyHeader from "../../../../components/Header/Header";
 import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
 
-
-
 const MeusProjetos = ({grupo}) => {
-
-  const [projetos, setProjetos] = useState(null)
-  const [token] = useState(localStorage.getItem("token") || null);
-
-  const breadcrumbRoutes = [
-    { title: 'Home', path: `/${grupo}/home` },
-    { title: 'Projetos', path: `/${grupo}/projetos` },
-  ];
-  useEffect(() => {
-      const searchData = async () => {
-          try {
-            await handleGetProjects()
-          } catch (error) {
-              console.error('Erro ao decodificar o token:', error);
-          }
-      };
-      if (token) {
-          searchData();
-      }
-  }, [token]);
 
   const columns = [
     {
@@ -111,8 +89,26 @@ const MeusProjetos = ({grupo}) => {
     }
   ];
 
+  const [projetos, setProjetos] = useState(null)
+  const [token] = useState(localStorage.getItem("token") || null);
 
-
+  const breadcrumbRoutes = [
+    { title: 'Home', path: `/${grupo}/home` },
+    { title: 'Projetos', path: `/${grupo}/projetos` },
+  ];
+  
+  useEffect(() => {
+      const searchData = async () => {
+          try {
+            await handleGetProjects()
+          } catch (error) {
+              console.error('Erro ao decodificar o token:', error);
+          }
+      };
+      if (token) {
+          searchData();
+      }
+  }, [token]);
 
   const handleGetProjects = async () => {
     const decoded = await decodeToken(token);

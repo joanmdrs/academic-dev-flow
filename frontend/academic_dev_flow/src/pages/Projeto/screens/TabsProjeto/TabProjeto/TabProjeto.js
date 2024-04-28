@@ -1,7 +1,7 @@
 import { Button, Form, Input, Select, Spin, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 import { LoadingOutlined } from '@ant-design/icons';
-import { useFormContext } from "../../../context/Provider/Provider";
+import { useContextoProjeto } from "../../../context/ContextoProjeto";
 
 const OPTIONS_STATUS = [
     {
@@ -27,7 +27,7 @@ const customizeRequiredMark = (label, { required }) => (
 
 const TabProjeto = ({ onSubmit, onCancel }) => {
 
-    const {hasProjeto} = useFormContext()
+    const {hasProjeto} = useContextoProjeto()
     const [carregando, setCarregando] = useState(false);
 
     const [form] = Form.useForm();

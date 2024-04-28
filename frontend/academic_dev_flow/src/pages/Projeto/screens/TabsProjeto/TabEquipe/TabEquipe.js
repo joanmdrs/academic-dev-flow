@@ -6,7 +6,7 @@ import { Table } from "antd";
 import { buscarMembroPeloId, buscarMembroPorGrupoENome } from "../../../../../services/membroService";
 import { NotificationManager } from "react-notifications";
 import { criarMembroProjeto, excluirMembroProjetoMany, excluirMembroProjetoOne, listarMembrosPorProjeto } from "../../../../../services/membroProjetoService";
-import { useFormContext } from "../../../context/Provider/Provider";
+import { useContextoProjeto } from "../../../context/ContextoProjeto";
 import ModalSelecionarObjetos from "../../../../../components/Modals/ModalSelecionarObjetos/ModalSelecionarObjetos";
 
 const TabEquipe = () => {
@@ -47,7 +47,7 @@ const TabEquipe = () => {
     },
   ];
 
-  const { hasProjeto } = useFormContext();
+  const { hasProjeto } = useContextoProjeto();
   const [isBotaoAdicionarVisivel, setIsBotaoAdicionarVisivel] = useState(true) 
   const [isBotaoExcluirVisivel, setIsBotaoExcluirVisivel] = useState(true);
   const [isModalVisivel, setIsModalVisivel] = useState(false);

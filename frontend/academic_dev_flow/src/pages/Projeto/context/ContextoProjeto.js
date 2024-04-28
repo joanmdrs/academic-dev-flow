@@ -1,22 +1,22 @@
 import React, { createContext, useContext, useState }  from "react";
 
-const ProjetoContext = createContext();
+const ContextoProjeto = createContext();
 
-export const useFormContext = () => useContext(ProjetoContext);
+export const useContextoProjeto = () => useContext(ContextoProjeto);
 
-export const ProjetoProvider = ({children}) => {
+export const ProviderProjeto = ({ children }) => {
 
     const [hasProjeto, setHasProjeto] = useState(null);
 
     return (
-        <ProjetoContext.Provider 
+        <ContextoProjeto.Provider 
             value={{ 
                 hasProjeto,
                 setHasProjeto 
             }}
         >
           {children}
-        </ProjetoContext.Provider>
+        </ContextoProjeto.Provider>
     )
 
 }
