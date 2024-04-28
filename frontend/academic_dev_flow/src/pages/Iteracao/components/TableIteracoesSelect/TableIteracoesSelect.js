@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { formatDate } from "../../../../services/utils";
 import { Table } from "antd";
 import { useContextoIteracao } from "../../context/contextoIteracao";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
+import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
 
 const TableIteracoesSelect = ({onEdit, onDelete}) => {
 
@@ -55,7 +57,9 @@ const TableIteracoesSelect = ({onEdit, onDelete}) => {
         }
     ]
 
-    const {iteracoes, setIteracoesSelecionadas} = useContextoIteracao()
+    const {dadosProjeto} = useContextoGlobalProjeto()
+
+    const {iteracoes, setIteracoes, setIteracoesSelecionadas} = useContextoIteracao()
 
     const rowSelection = {
         onChange: (selectedRowsKeys, selectedRows) => {
@@ -63,9 +67,25 @@ const TableIteracoesSelect = ({onEdit, onDelete}) => {
         },
     };
 
+    const handleGetIteracoes = async () => {
+        const response = await listarIteracoesPorProjeto(dadosProjeto.id)
+        const iteracoesOrdenadas = response.data.sort((a, b) => a.numero - b.numero);
+        setIteracoes(iteracoesOrdenadas)
+    }
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (dadosProjeto !== null) {
+                await handleGetIteracoes()
+            }
+        }
+
+        fetchData()
+    }, [])
+
     return (
         <Table 
-            bordered={true}
             className="style-table"
             columns={COLUNAS_TABELA_ITERACOES}
             dataSource={iteracoes}

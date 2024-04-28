@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { buscarProjetoPeloId, listarProjetos } from "../../../../services/projetoService";
-import { Select, Button } from "antd";
-import { FaLeaf } from "react-icons/fa";
-import { useContextoIteracao } from "../../context/contextoIteracao";
+import { Select } from "antd";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 
 const { Option } = Select;
 
 const SelecionarProjeto = () => {
     const [optionsProjetos, setOptionsProjetos] = useState([]);
-    const {dadosProjeto, setDadosProjeto} = useContextoIteracao()
+    const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
 
     useEffect(() => {
         const fetchData = async () => {
