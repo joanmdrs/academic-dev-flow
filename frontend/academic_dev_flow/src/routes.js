@@ -2,7 +2,6 @@ import React from "react";
 import { Routes as Switch, Route } from "react-router-dom";
 import Projeto from "./pages/Projeto";
 import Etapa from "./pages/Etapa";
-import Artefato from "./pages/Artefato";
 import AdminRoutes from "./router/AdminRoutes/AdminRoutes";
 import StudentRoutes from "./router/StudentRoutes/StudentRoutes";
 import Fluxo from "./pages/Fluxo";
@@ -17,6 +16,14 @@ import ScreenGerenciarMembros from "./pages/Membro/screens/GerenciarMembros";
 import ScreenVincularMembroAoProjeto from "./pages/Membro/screens/VincularMembroAoProjeto";
 import Login from "./pages/Auth/Login/Login";
 import Register from "./pages/Auth/Register";
+import PageGerenciarTipos from "./pages/Tipo";
+import ScreenGerenciarTarefas from "./pages/Tarefa/screens/GerenciarTarefas";
+import ScreenGerenciarArtefatos from "./pages/Artefato/screens/GerenciarArtefatos";
+import ScreenVisualizarArtefato from "./pages/Artefato/screens/VisualizarArtefato";
+import ScreenGerenciarArquivosGithub from "./pages/Artefato/screens/GerenciarArquivosGithub";
+import ScreenGerenciarLabels from "./pages/Tarefa/screens/GerenciarLabels";
+import ScreenGerenciarIssues from "./pages/Tarefa/screens/GerenciarIssues";
+import ScreenGerenciarIteracoes from "./pages/Iteracao/screens/GerenciarIteracoes";
 
 function Routes() {
   return (
@@ -26,18 +33,43 @@ function Routes() {
 
       {/* Admin */}
       <Route element={<AdminRoutes />}>
-        
+        {/* Página de Home */}
         <Route path="/admin/home" Component={HomeAdministrador} exact />
+
+        {/* Menu Item Projetos */}
         <Route path="/admin/projetos" Component={Projeto} exact />
+
+        {/* Menu Item Fluxos */}
         <Route path="/admin/fluxos/gerenciar" Component={Fluxo} exact />
         <Route path="/admin/etapas" Component={Etapa} exact />
+
+        {/* Menu Item Membros */}
         <Route path="/admin/membros/gerenciar" Component={ScreenGerenciarMembros} exact />
         <Route path="/admin/membros/vincular-projeto" Component={ScreenVincularMembroAoProjeto} exact/>
-        <Route path="/admin/artefatos" Component={Artefato} exact />
+      
+        {/* Menu Item Artefatos */}
+        <Route path="/admin/artefatos/gerenciar" Component={ScreenGerenciarArtefatos} exact />
+        <Route path="/admin/artefatos/visualizar-artefato/" Component={ScreenVisualizarArtefato} exact/>
+        <Route path="/admin/artefatos/gerenciar-arquivos/" Component={ScreenGerenciarArquivosGithub} exact/>
+
+        {/* Menu Item Tarefas */}
+
+        <Route path="/admin/tarefas/gerenciar" Component={ScreenGerenciarTarefas} exact/>
+        <Route path="/admin/tarefas/issues" Component={ScreenGerenciarIssues} exact/>
+        <Route path="/admin/tarefas/labels" Component={ScreenGerenciarLabels} exact/>
+
+         {/* Menu Item Tipos */}
+
+        <Route path="/admin/tipos" Component={PageGerenciarTipos} exact/>
+
+        {/* Menu Item Iterações */}
+
+        <Route path="admin/iteracoes" Component={ScreenGerenciarIteracoes} exact />
+
       </Route>
 
       {/* Aluno */}
-      <Route element={<StudentRoutes />}>
+      {/* <Route element={<StudentRoutes />}>
         <Route path="/aluno/home" Component={HomeAluno} exact />
         <Route
           path="/aluno/projetos"
@@ -54,10 +86,10 @@ function Routes() {
           }
           exact
         />
-      </Route>
+      </Route> */}
 
       {/* Professor */}
-      <Route element={<TeacherRoutes />}>
+      {/* <Route element={<TeacherRoutes />}>
         <Route path="/professor/home" Component={HomeProfessor} exact />
         <Route
           path="/professor/projetos"
@@ -74,7 +106,7 @@ function Routes() {
           }
           exact
         />
-      </Route>
+      </Route> */}
     </Switch>
   );
 }

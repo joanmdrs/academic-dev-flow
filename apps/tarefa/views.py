@@ -9,7 +9,8 @@ from apps.membro.models import Membro
 from apps.fluxo.models import Fluxo
 from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
-
+from django.http import Http404
+from django.shortcuts import get_object_or_404
 
 class CadastrarTarefaView(APIView):
     permission_classes = [IsAuthenticated]
@@ -20,9 +21,9 @@ class CadastrarTarefaView(APIView):
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 
-                return Response(serializer.data, status=status.HTTP_200_OK)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-            return Response(serializer.erros, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
@@ -39,6 +40,34 @@ class BuscarTarefaPeloIdView(APIView):
             
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
+        
+class FiltrarTarefasPeloNomeEPeloProjeto(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        try:
+            nome = request.GET.get('nome_tarefa')
+            projeto = request.GET.get('id_projeto')
+            
+            if not nome and not projeto:
+                return Response({'error': 'Pelo menos um parâmetro é necessário'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            if nome and projeto:
+                tarefas = Tarefa.objects.filter(nome__icontains=nome, projeto_id=projeto)
+            elif nome:
+                tarefas = Tarefa.objects.filter(nome__icontains=nome)
+            else: 
+                tarefas = Tarefa.objects.filter(projeto_id=projeto)
+                
+            if tarefas.exists():
+                
+                serializer = TarefaSerializer(tarefas, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response(data=[], status=status.HTTP_204_NO_CONTENT)
+                
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)   
             
 class ListarTarefasPorProjetoView(APIView):
     
@@ -48,35 +77,14 @@ class ListarTarefasPorProjetoView(APIView):
             
             tarefas = Tarefa.objects.filter(projeto_id=id_projeto)  # Buscamos as tarefas do projeto
             tarefas_info = []
+            
+            if tarefas is not None:
 
-            for tarefa in tarefas:
-                # Obtemos os dados dos objetos do relacionamento entre membro e projeto
-                membros_projeto = MembroProjeto.objects.filter(projeto_id=id_projeto, id__in=tarefa.membros.all())
-                
-                membros_info = []
-                
-                for membro_projeto in membros_projeto:
-                    membros_info.append({
-                        'id_membro_projeto': membro_projeto.id,
-                        'id_membro': membro_projeto.membro.id,
-                        'nome_membro': membro_projeto.membro.nome,
-                        'grupo_membro': membro_projeto.membro.grupo
-                    })
-
-                tarefas_info.append({
-                    'id': tarefa.id,
-                    'nome': tarefa.nome,
-                    'data_criacao': tarefa.data_criacao,
-                    'prazo': tarefa.prazo,
-                    'descricao': tarefa.descricao,
-                    'concluida': tarefa.concluida,
-                    'projeto': tarefa.projeto_id,   
-                    'iteracao': tarefa.iteracao_id,
-                    'membros': membros_info,
-                })
-                
-            return JsonResponse(tarefas_info, safe=False, json_dumps_params={'ensure_ascii': False})
-        
+                serializer = TarefaSerializer(tarefas, many=True)
+                    
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response(data=[], status=status.HTTP_204_NO_CONTENT)
                 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -106,17 +114,16 @@ class ExcluirTarefaView(APIView):
         try:
             ids_tasks = request.GET.getlist('ids[]', [])
 
-            if not ids_tasks:
-                return Response({'error': 'IDs das tarefas a serem excluídas não fornecidos'}, status=status.HTTP_400_BAD_REQUEST)
+            if ids_tasks is not None:
+                tarefas = Tarefa.objects.filter(id__in=ids_tasks)
+                
+                if tarefas.exists():
+                    tarefas.delete()
+                    return Response({"detail": "Tarefas excluídas com sucesso"}, status=status.HTTP_204_NO_CONTENT)
+                
+                return Response({'error': 'Nenhuma tarefa encontrada com os IDs fornecidos'}, status=status.HTTP_404_NOT_FOUND)
 
-            tarefas = Tarefa.objects.filter(id__in=ids_tasks)
-
-            if not tarefas.exists():
-                return JsonResponse({'error': 'Nenhuma tarefa encontrada com os IDs fornecidos'}, status=status.HTTP_404_NOT_FOUND)
-
-            tarefas.delete()
-
-            return Response({"detail": "Tarefas excluídas com sucesso"}, status=status.HTTP_204_NO_CONTENT)
+            return Response({'error': 'IDs das tarefas a serem excluídas não fornecidos'}, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -180,6 +187,58 @@ class ListarTarefasPorIteracaoView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
+            
+class ListarTarefasView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        try:
+            
+            tarefas = Tarefa.objects.all()
+            
+            if tarefas.exists():
+                serializer = TarefaSerializer(tarefas, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response(data=[], status=status.HTTP_204_NO_CONTENT)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        
+class VerificarIssueExisteView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        try:
+            id_issue = request.GET.get('id_issue', None)
+            tarefa = get_object_or_404(Tarefa, id_issue=id_issue)
+            serializer = TarefaSerializer(tarefa)
+            return Response({'tarefa': serializer.data, 'exists': True}, status=status.HTTP_200_OK)
+        
+        except Http404:
+            return Response({'exists': False}, status=status.HTTP_200_OK)
+                                        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
+        
+
+class SicronizarIssuesView(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request): 
+        try:
+            serializer = TarefaSerializer(data=request.data, many=True)
+            
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
+
 
         
         

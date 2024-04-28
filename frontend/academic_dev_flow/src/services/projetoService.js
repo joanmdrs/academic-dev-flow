@@ -1,4 +1,6 @@
 import api from "../api/api";
+import { ERROR_MESSAGE_ON_SEARCHING, INFO_MESSAGE_ON_SEARCHING } from "./messages";
+import { handleError, handleInfo, handleSuccess } from "./utils";
 
 export const criarProjeto = (dados) => {
     
@@ -34,4 +36,16 @@ export const atualizarProjeto = (dados, id) => {
 export const atualizarFluxoProjeto = (idFluxo, idProjeto ) => {
     const resposta = api.patch(`/projeto/atualizar/fluxo/${encodeURIComponent(idProjeto)}/`, { fluxo_id: idFluxo})
     return resposta
+}
+
+export const listarProjetos = async () => {
+    try {
+        const response = await api.get('projeto/listar/')
+        if (response.status === 204) {
+            return handleInfo(response, INFO_MESSAGE_ON_SEARCHING)
+        }
+        return response
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
 }

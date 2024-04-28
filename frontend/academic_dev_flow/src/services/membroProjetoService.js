@@ -1,5 +1,7 @@
 import { NotificationManager } from "react-notifications"
 import api from "../api/api"
+import { handleError, handleInfo } from "./utils"
+import { ERROR_MESSAGE_ON_SEARCHING, INFO_MESSAGE_ON_SEARCHING } from "./messages"
 
 export const criarMembroProjeto = async (dados) => {
     const resposta = await api.post('membro_projeto/cadastrar/', {membros: dados})
@@ -34,8 +36,17 @@ export const excluirMembroProjetoMany = async (id_projeto, lista_membros, grupo)
 }
 
 export const listarMembrosPorProjeto = async (idProjeto) => {
-    const resposta = await api.get(`membro_projeto/buscar/${encodeURIComponent(idProjeto)}/`)
-    return resposta
+    try {
+        const response = await api.get(`membro_projeto/buscar/${encodeURIComponent(idProjeto)}/`)
+
+        if (response.status === 204) {
+            return handleInfo(response, INFO_MESSAGE_ON_SEARCHING)
+        } 
+        return response
+
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
 }
 
 export const buscarQuantidadeMembrosPorProjeto = async (idProjeto) => {

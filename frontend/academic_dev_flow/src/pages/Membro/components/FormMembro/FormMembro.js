@@ -78,7 +78,7 @@ const FormMembro = ({onSubmit, onCancel}) => {
                     name="nome"
                     rules={[{ required: true, message: 'Por favor, insira o nome!' }]}
                 >
-                    <Input placeholder="Ex.: João "/>
+                    <Input placeholder="nome do membro"/>
                 </Form.Item>
 
                 <Form.Item 
@@ -100,7 +100,7 @@ const FormMembro = ({onSubmit, onCancel}) => {
                     rules={[{ required: true, message: 'Por favor, insira seu telefone!' }]}
                 >
                     <InputMask mask="(99) 99999-9999" maskChar={null}>
-                    {() => <Input placeholder="Ex.: (84) 99999-9999"/>}
+                    {() => <Input placeholder="telefone do membro"/>}
                     </InputMask>
                 </Form.Item>
 
@@ -113,24 +113,50 @@ const FormMembro = ({onSubmit, onCancel}) => {
                     { type: 'email', message: 'Por favor, insira um email válido!' },
                     ]}
                 >
-                    <Input placeholder="Ex.: nome@gmail.com" onChange={handleEmailChange}/>
+                    <Input placeholder="email do membro" onChange={handleEmailChange}/>
+                </Form.Item>
+            </div>
+            
+            <Form.Item>
+                <h3> Dados do Usuário GitHub </h3>
+            </Form.Item>
+
+            <div style={{display: "flex", gap: "20px"}}>
+                <Form.Item 
+                    style={{flex: "1"}}
+                    name="nome_github"
+                    label="Nome do Usuário"
+                >
+                    <Input name="nome_github" placeholder="nome do usuário do GitHub" />
                 </Form.Item>
 
                 <Form.Item 
                     style={{flex: "1"}}
-                    name="github"
-                    label="Usuário GitHub"
+                    name="email_github"
+                    label="Email do GitHub"
                 >
-                    <Input name="github" />
+                    <Input name="email_github" placeholder="email do usuario do GitHub"/>
+                </Form.Item>
+
+                <Form.Item 
+                    style={{flex: "1"}}
+                    name="usuario_github"
+                    label="Username do GitHub"
+                >
+                    <Input name="usuario_github" placeholder="username do GitHub" />
                 </Form.Item>
             </div>
+
+            <Form.Item>
+                <h3> LinkedIn/Currículo </h3>
+            </Form.Item>
 
             <Form.Item 
                 style={{width: "70%"}}
                 name="linkedin"
                 label="Perfil do Linkedin"
             >
-                <Input name="linkedin" />
+                <Input name="linkedin" placeholder="perfil do LinkedIn" />
             </Form.Item>
 
             <Form.Item 
@@ -138,7 +164,7 @@ const FormMembro = ({onSubmit, onCancel}) => {
                 name="lattes"
                 label="Currículo Lattes"
             >
-                <Input name="lattes" />
+                <Input name="lattes" placeholder="link do currículo Lattes" />
             </Form.Item>
 
             <div style={{width: '50%'}}>
@@ -159,7 +185,7 @@ const FormMembro = ({onSubmit, onCancel}) => {
                     label="Senha de Acesso"
                     rules={[{ required: true, message: 'Por favor, cadastre uma senha para acessar a plataforma'}]}
                 >
-                    <Input.Password name="senha"/>
+                    <Input.Password name="senha" placeholder="senha de acesso"/>
                 </Form.Item>
 
                 <Form.Item 

@@ -1,9 +1,27 @@
 import { NotificationManager } from "react-notifications";
 import api from "../api/api";
+import { handleError, handleInfo, handleSuccess } from "./utils";
+import { ERROR_MESSAGE_ON_CREATION_THE_LABELS, ERROR_MESSAGE_ON_SEARCHING, ERROR_MESSAGE_ON_SYNC, INFO_MESSAGE_MANDATORY_PARAMETERS, INFO_MESSAGE_ON_SEARCHING, SUCCESS_MESSAGE_ON_CREATION_THE_LABELS, SUCCESS_MESSAGE_ON_SYNC_ISSUES } from "./messages";
 
-export const criarTarefa = async (dados) => {
+export const criarTarefa = async (dadosForm, dadosIssue) => {
+
+    const dadosEnviar = {
+        nome: dadosForm.nome,
+        data_inicio: dadosForm.data_inicio,
+        data_termino: dadosForm.data_termino,
+        status: dadosForm.status,
+        descricao: dadosForm.descricao,
+        id_issue: dadosIssue.issue_id,
+        number_issue: dadosIssue.issue_number,
+        url_issue: dadosIssue.issue_url,
+        labels: dadosForm.labels,
+        projeto: dadosForm.projeto,
+        membros: dadosForm.membros,
+        iteracao: dadosForm.iteracao
+    }
+    
     try {
-        const response = await api.post('tarefa/cadastrar/', dados)
+        const response = await api.post('tarefa/cadastrar/', dadosEnviar)
         
         if (response.status === 200){
             NotificationManager.success('Tarefa cadastrada com sucesso !')
@@ -97,4 +115,76 @@ export const reabrirTarefas = async (ids) => {
         NotificationManager.error('Falha ao reabrir a(s) tarefa(s), contate o suporte!')
         return {error: 'Erro ao reabrir a(s) tarefa(s)!'}
     }
+}
+
+export const listarTarefas = async () => {
+    try {
+        const response = await api.get('tarefa/listar/')
+        return response
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
+}
+
+export const filtrarTarefasPeloNomeEPeloProjeto = async (nomeTarefa, idProjeto) => {
+    try {
+        const response = await api.get('tarefa/filtrar/nome-projeto/', {params: {nome_tarefa: nomeTarefa, id_projeto: idProjeto}})
+        if (response.status === 204) {
+            return handleInfo(response, INFO_MESSAGE_ON_SEARCHING)
+        }
+        return response 
+    } catch (error) {
+        return handleError(error, INFO_MESSAGE_MANDATORY_PARAMETERS)
+
+    }
+}
+
+export const verificarExistenciaIssue = async (parametro) => {
+    try {
+        const response = await api.get('tarefa/verificar-existencia/', {params: {id_issue: parametro}})
+        return response
+    } catch (error) {
+        if (error.response && error.response.status === 400){
+            return handleError(error, 'Parâmetro não informado!')
+        } else {
+            return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+        }
+    }
+}
+
+export const cadastrarLabels = async (dados) => {
+    try {
+        const response = await api.post('tarefa/labels/cadastrar/', {labels: dados})
+        return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION_THE_LABELS)
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_CREATION_THE_LABELS)
+    }
+}
+
+export const buscarLabelPeloId = async (id) => {
+    try {
+        const response = await api.get(`tarefa/labels/buscar/${encodeURIComponent(id)}/`)
+        return response
+        
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
+}
+
+export const listarLabelsPorProjeto = async (id_projeto) => {
+    try {
+        const response = await api.get(`tarefa/labels/listar-por-projeto/${encodeURIComponent(id_projeto)}/`)
+        return response
+    } catch (error) {
+        handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
+}
+
+export const sicronizarIssues = async (dados) => {
+    try {
+        const response = await api.post('/tarefa/sicronizar-issues/', dados)
+        return handleSuccess(response, SUCCESS_MESSAGE_ON_SYNC_ISSUES)
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SYNC)
+    } 
 }

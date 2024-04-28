@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { buscarMembroPeloUser } from "../services/membroService";
 import { decodeToken } from "react-jwt";
+import { handleError } from "../services/utils";
 
 const ProjetoContext = createContext();
 
@@ -16,12 +17,15 @@ export const ProjetoProvider = ({ children }) => {
               try {
                   const decodedToken = await decodeToken(token);
                   const response = await buscarMembroPeloUser(decodedToken.user_id);
-                  const idAutor = response.data.id_membro_projeto;
-                  setAutor(idAutor);
-                  setUserGroup(decodedToken.groups[0])
+
+                  if (!response.error) {
+                    setAutor(response.data)
+                    setUserGroup(decodedToken.groups[0])
+                  }
+        
                   
               } catch (error) {
-                  console.error("Erro ao buscar membro pelo usuário:", error);
+                  return handleError(error, "Falha ao decodificar o token")
               }
           }
           

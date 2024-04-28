@@ -50,11 +50,6 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
         form.setFieldsValue(dados)
     }
 
-    const handleSubmeterForm = async () => {
-        const dados = form.getFieldsValue()
-        await onSubmit(dados)
-    } 
-
     return (
 
        <React.Fragment>
@@ -80,16 +75,17 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
                         form={form}
                         layout="vertical"
                         className="global-form"  
+                        onFinish={onSubmit}
                         requiredMark={customizeRequiredMark}                  
                     >
-                        <Form.Item label="Nome" name="nome" required>
+                        <Form.Item label="Nome:" name="nome" required>
                             <Input
                                 name="nome"
                             />
                         </Form.Item>
 
                         <div style={{display: 'flex', gap: "20px"}}>
-                            <Form.Item label="Status" name="status" style={{width: "250px"}} required>
+                            <Form.Item label="Status:" name="status" style={{width: "250px"}} required>
                                 <Select
                                     name="status"
                                     defaultValue="Selecione"
@@ -97,33 +93,37 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
                                 />
                             </Form.Item>
 
-                            <Form.Item label="Data de Início" name="data_inicio" style={{width: "250px"}} required>
+                            <Form.Item label="Data de Início:" name="data_inicio" style={{width: "250px"}} required>
                                 <Input name="data_inicio" type="date" />
                             </Form.Item>
 
-                            <Form.Item label="Data de Término" name="data_fim" style={{width: "250px"}} required>
+                            <Form.Item label="Data de Término:" name="data_fim" style={{width: "250px"}} required>
                                 <Input name="data_fim" type="date" />
                             </Form.Item>
                         </div>
 
-                        <Form.Item label="Link do repositório" name="repositorio" style={{width: "70%"}}>
-                            <Input name="repositorio" />
+                        <Form.Item label="Informe (proprietário/repositório):" name="nome_repo">
+                            <Input name="nome_repo"/>
                         </Form.Item>
 
-                        <Form.Item label="Link do MVP" name="site" style={{width: "70%"}}>
-                            <Input name="site" />
+                        <Form.Item label="Link do repositório:" name="link_repo">
+                            <Input name="link_repo" />
                         </Form.Item>
 
-                        <Form.Item label="Token de acesso" name="token" style={{width: "70%"}}>
+                        <Form.Item label="Link do MVP:" name="link_site">
+                            <Input name="link_site" />
+                        </Form.Item>
+
+                        <Form.Item label="Token de acesso:" name="token">
                             <Input name="token" />
                         </Form.Item>
 
-                        <Form.Item label="Descrição" name="descricao">
+                        <Form.Item label="Descrição:" name="descricao">
                             <Input.TextArea id="descricao" name="descricao" rows={6} />
                         </Form.Item>
 
                         <div style={{display: 'flex', gap: "10px"}} >
-                            <Button type="primary" size="large" onClick={handleSubmeterForm}>
+                            <Button type="primary" size="large" htmlType="submit">
                                 Salvar
                             </Button >
 

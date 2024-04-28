@@ -9,8 +9,9 @@ class Projeto(models.Model):
     status = models.CharField(max_length=20)
     data_inicio = models.DateField("Data Início")
     data_fim = models.DateField("Data Fim")
-    repositorio = models.CharField(max_length=200, null=True, blank=True)
-    site = models.CharField(max_length=200, null=True, blank=True)
+    nome_repo = models.CharField(max_length=200, null=True, blank=True)
+    link_repo = models.CharField(max_length=200, null=True, blank=True)
+    link_site = models.CharField(max_length=200, null=True, blank=True)
     token = models.CharField(max_length=200, null=True, blank=True)
     fluxo = models.ForeignKey(Fluxo, on_delete=models.SET_NULL, related_name='projetos', null=True, blank=True)
     

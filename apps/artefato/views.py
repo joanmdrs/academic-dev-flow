@@ -8,13 +8,8 @@ from .serializers import ArtefatoSerializer
 from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
 
-class BaseArtefatoView(APIView):
-    permission_classes = [IsAuthenticated, IsAdminUserOrReadOnly]
-
-    def handle_exception(self, exc):
-        return Response({'error': str(exc)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-class CadastrarArtefatoView(BaseArtefatoView):
+class CadastrarArtefatoView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         try: 
             serializer = ArtefatoSerializer(data=request.data)
@@ -22,30 +17,60 @@ class CadastrarArtefatoView(BaseArtefatoView):
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)            
+
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)            
-
-class BuscarArtefatoPorNomeView(BaseArtefatoView):
+class BuscarArtefatoPorNomeView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         try:
-            parametro = request.GET.get('name', None)
+            parametro = request.GET.get('nome', None)
             
             if parametro is not None: 
                 artefatos = Artefato.objects.filter(nome__icontains=parametro)
             else:
                 artefatos = Artefato.objects.all()    
-                
-                
-            serializer = ArtefatoSerializer(artefatos, many=True) 
+
+            if artefatos.exists():
+                serializer = ArtefatoSerializer(artefatos, many=True) 
+                return Response(serializer.data, status=status.HTTP_200_OK)   
             
-            return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})   
+            return Response(data=[], status=status.HTTP_204_NO_CONTENT)
             
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-class AtualizarArtefatoView(BaseArtefatoView):
+class FiltrarArtefatoPeloNomeEProjeto(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        try:
+            nome = request.GET.get('nome_artefato')
+            projeto = request.GET.get('id_projeto')
+            
+            if not nome and not projeto:
+                return Response({'error': 'Pelo menos um parâmetro é necessário'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            if nome and projeto:
+                artefatos = Artefato.objects.filter(nome__icontains=nome, projeto_id=projeto)
+            elif nome:
+                artefatos = Artefato.objects.filter(nome__icontains=nome)
+            else: 
+                artefatos = Artefato.objects.filter(projeto_id=projeto)
+                
+            if artefatos.exists():
+                
+                serializer = ArtefatoSerializer(artefatos, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response(data=[], status=status.HTTP_204_NO_CONTENT)
+        except Exception as e: 
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class AtualizarArtefatoView(APIView):
+    permission_classes = [IsAuthenticated]
     def patch(self, request, id):
         try: 
             
@@ -55,13 +80,15 @@ class AtualizarArtefatoView(BaseArtefatoView):
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
+        
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+
              
         except Exception as e: 
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
-    
-class ExcluirArtefatoView(BaseArtefatoView):
+class ExcluirArtefatoView(APIView):
+    permission_classes = [IsAuthenticated]
     def delete(self, request, id): 
         try: 
             artefato = Artefato.objects.get(pk=id)
@@ -70,8 +97,7 @@ class ExcluirArtefatoView(BaseArtefatoView):
                 artefato.delete()
                 return Response({'detail': 'Artefato excluído com sucesso!'}, status=status.HTTP_204_NO_CONTENT)
             
-            else: 
-                return Response({'error': 'Objeto não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Objeto não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
             
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)        
@@ -83,9 +109,51 @@ class ListarArtefatosView(APIView):
         try: 
             artefatos = Artefato.objects.all()
             
-            serializer = ArtefatoSerializer(artefatos, many=True) 
+            if artefatos.exists():
+                serializer = ArtefatoSerializer(artefatos, many=True) 
+                return Response(serializer.data, status=status.HTTP_200_OK)   
             
-            return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})   
+            return Response(data=[], status=status.HTTP_204_NO_CONTENT)
 
         except Exception as e: 
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        
+class VerificarExistenciaArtefatoView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        try:
+            sha_file = request.GET.get('sha_file', None)
+            
+            if sha_file is None:
+                return Response({'error': 'O identificador do arquivo não foi informado.'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            artefato = Artefato.objects.filter(id_file=sha_file).first()
+            
+            if artefato:
+                serializer = ArtefatoSerializer(artefato)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'O arquivo não foi encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class SicronizarArtefatosView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        try: 
+            
+            serializer = ArtefatoSerializer(data=request.data, many=True)
+            
+            if not serializer.is_valid(raise_exception=True):
+                return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+            serializer.save()
+            
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+                 
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    

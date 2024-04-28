@@ -1,13 +1,21 @@
 from django.db import models
 from apps.usuario.models import Usuario
 
-class Membro(models.Model):
+class UsuarioGithub(models.Model):
+    nome = models.CharField(max_length=200)
+    email_github = models.EmailField()
+    usuario_github = models.CharField(max_length=200)  # Adicione o max_length
     
+    def __str__(self):
+        return self.usuario_github    
+
+
+class Membro(models.Model):
     nome = models.CharField(max_length=200)
     data_nascimento = models.DateField("Data de nascimento")
     telefone = models.CharField(max_length=20)
     email = models.EmailField(max_length=200)
-    github = models.CharField(max_length=20, null=True, blank=True)
+    github = models.ForeignKey(UsuarioGithub, on_delete=models.SET_NULL, null=True, blank=True)  # Corrija a referência ao modelo
     linkedin = models.CharField(max_length=200, null=True, blank=True)
     lattes = models.CharField(max_length=200, null=True, blank=True)
     grupo = models.CharField(max_length=100, blank=True, null=True)
@@ -15,4 +23,3 @@ class Membro(models.Model):
     
     def __str__(self):
         return self.nome
-    

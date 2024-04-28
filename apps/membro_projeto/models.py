@@ -15,7 +15,7 @@ class FuncaoMembroProjeto(models.Model):
     
     STATUS_CHOICES = [
         ('membro', 'Membro'),
-        ('gerente', 'Gerente de Projeto'),
+        ('lider', 'Líder de Projeto'),
         ('desenvolvedor', 'Desenvolvedor de Software'),
         ('desenvolvedor_frontend', 'Desenvolvedor Front-End'),
         ('desenvolvedor_backend', 'Desenvolvedor Back-End'),

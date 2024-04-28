@@ -1,5 +1,7 @@
 import { NotificationManager } from "react-notifications";
 import api from "../api/api";
+import { handleError } from "./utils";
+import { ERROR_MESSAGE_ON_SEARCHING } from "./messages";
 
 export const criarIteracao = async (dados) => {
     try {
@@ -50,5 +52,14 @@ export const excluirIteracoes = async (ids) => {
         console.log(error)
         NotificationManager.error('Falha ao excluir a(s) iteração(oes), contate o suporte!')
         return {error: 'Erro ao excluir a(s) iteração(oes)!'}
+    }
+}
+
+export const listarIteracoes = async () => {
+    try {
+        const response = api.get('/iteracao/listar/')
+        return response
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
     }
 }

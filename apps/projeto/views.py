@@ -131,3 +131,19 @@ class AtualizarFluxoProjetoView(APIView):
             return Response({'error': 'Projeto não encontrado.'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class ListarProjetosView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        
+        try:
+            projetos = Projeto.objects.all()
+            
+            if projetos.exists():
+                serializer = ProjetoSerializer(projetos, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response(data=[], status=status.HTTP_204_CONTENT)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

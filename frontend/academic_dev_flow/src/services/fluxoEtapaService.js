@@ -23,7 +23,6 @@ export const excluirFluxoEtapaOne = async (id) => {
 export const excluirFluxoEtapaMany = async (idFluxo, listaEtapas) => {
     const ids_etapas = listaEtapas.map(fluxoEtapa => fluxoEtapa.etapa);
 
-    console.log(ids_etapas)
     const resposta = await api.delete(`fluxo_etapa/excluir/many/${encodeURIComponent(idFluxo)}/`, {
         data: { ids_etapas: ids_etapas },
     });

@@ -78,12 +78,12 @@ const TabEquipe = () => {
 
   const handleBotaoAdicionarAluno = () => {
     handleExibirModal()
-    setGrupoMembro('Alunos')
+    setGrupoMembro('Discentes')
   }
 
   const handleBotaoAdicionarProfessor = () => {
     handleExibirModal()
-    setGrupoMembro('Professores')
+    setGrupoMembro('Docentes')
   }
 
   const handleBuscarMembro = async (parametro) => {
@@ -105,7 +105,7 @@ const TabEquipe = () => {
         const respostaMembro = await buscarMembroPeloId(membroProjeto.membro);
         const grupo = respostaMembro.data.grupo;
   
-        if (grupo === 'Alunos' || grupo === 'Professores') {
+        if (grupo === 'Discentes' || grupo === 'Docentes') {
           return {
             id: membroProjeto.id,
             projeto: hasProjeto.id,
@@ -125,8 +125,8 @@ const TabEquipe = () => {
   
     const resultados = (await Promise.all(promises)).filter(Boolean);
   
-    const alunos = resultados.filter((membro) => membro.grupo === 'Alunos');
-    const professores = resultados.filter((membro) => membro.grupo === 'Professores');
+    const alunos = resultados.filter((membro) => membro.grupo === 'Discentes');
+    const professores = resultados.filter((membro) => membro.grupo === 'Docentes');
   
     return { alunos, professores };
   };
@@ -181,7 +181,6 @@ const TabEquipe = () => {
   const rowSelection = {
     onChange: (selectedRowsKeys, selectedRows) => {
       setMembrosExcluir(selectedRows)
-      console.log(selectedRows)
     },
   };
 
@@ -264,7 +263,7 @@ const TabEquipe = () => {
         setAlunosVisiveis,
         handleBotaoAdicionarAluno,
         handleExcluirMembros,
-        'Alunos'
+        'Discentes'
       )}
 
       {renderSection(
@@ -274,7 +273,7 @@ const TabEquipe = () => {
         setProfessoresVisiveis,
         handleBotaoAdicionarProfessor,
         handleExcluirMembros,
-        'Professores'
+        'Docentes'
       )}
     </div>
   );

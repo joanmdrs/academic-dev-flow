@@ -6,6 +6,11 @@ import { BiGroup } from "react-icons/bi";
 import { SiAzureartifacts } from "react-icons/si";
 import Sider from "antd/es/layout/Sider";
 import { RiFlowChart } from "react-icons/ri";
+import { IoPricetagsOutline } from "react-icons/io5";
+import { MdOutlineTaskAlt } from "react-icons/md";
+import { IoDocumentTextOutline } from "react-icons/io5";
+import { BsLayers } from "react-icons/bs";
+
 
 const { SubMenu } = Menu;
 
@@ -65,21 +70,65 @@ const MenuAdmin = () => {
           icon={<BiGroup style={{ fontSize: "20px" }} />}
           title="Membros"
         >
-          <Menu.Item key="gerenciar-fluxos">
+          <Menu.Item key="gerenciar-membros">
             <Link to="/admin/membros/gerenciar">Gerenciar membros</Link>
           </Menu.Item>
 
-          <Menu.Item key="etapas">
+          <Menu.Item key="vincular-projeto">
             <Link to="/admin/membros/vincular-projeto">Vincular projeto</Link>
           </Menu.Item>
         </SubMenu>
 
+        <SubMenu
+          className='item-menu'
+          key='artefato'
+          icon={<IoDocumentTextOutline style={{ fontSize: "20px" }} />}
+          title="Artefatos"
+        >
+          <Menu.Item key="gerenciar-artefatos">
+            <Link to="/admin/artefatos/gerenciar">Gerenciar artefatos</Link>
+          </Menu.Item>
+
+          <Menu.Item key="gerenciar-arquivos">
+            <Link to="/admin/artefatos/gerenciar-arquivos">Gerenciar arquivos</Link>
+          </Menu.Item>
+        </SubMenu>
+
+        <SubMenu
+          className='item-menu'
+          key='tarefa'
+          icon={<MdOutlineTaskAlt style={{ fontSize: "20px" }} />}
+          title="Tarefas"
+        >
+          <Menu.Item key="gerenciar-tarefas">
+            <Link to="/admin/tarefas/gerenciar">Gerenciar tarefas</Link>
+          </Menu.Item>
+
+          <Menu.Item key="gerenciar-issues">
+            <Link to="/admin/tarefas/issues">Issues</Link>
+          </Menu.Item>
+
+          <Menu.Item key="gerenciar-labels">
+            <Link to="/admin/tarefas/labels">Labels</Link>
+          </Menu.Item>
+
+        </SubMenu>
+
+        <Menu.Item 
+          className="item-menu"
+          key="tipos"
+          icon={<IoPricetagsOutline style={{ fontSize: "20px" }} />}
+        >
+          <Link to="/admin/tipos">Tipos</Link>
+
+        </Menu.Item>
+
         <Menu.Item
           className="item-menu"
-          key="artefato"
-          icon={<SiAzureartifacts style={{ fontSize: "15px" }} />}
+          key="iteracoes"
+          icon={<BsLayers style={{fontSize: '20px'}} />}
         >
-          <Link to="/admin/artefatos">Artefatos</Link>
+          <Link to="/admin/iteracoes"> Iterações </Link>
         </Menu.Item>
       </Menu>
     </Sider>
