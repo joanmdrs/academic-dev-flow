@@ -1,20 +1,11 @@
-import { Button, Modal, Table } from "antd";
 import React from "react";
-import { excluirIteracoes } from "../../../../services/iteracaoService";
 import { formatDate } from "../../../../services/utils";
-import { FaTrash } from "react-icons/fa";
+import { Table } from "antd";
 import { useContextoIteracao } from "../../context/contextoIteracao";
 
-const cronogramaStyle = {
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-    width: "100%"
-}
+const TableIteracoesSelect = ({onEdit, onDelete}) => {
 
-const Cronograma = ({iteracoes, onEdit, onDelete}) => {
-
-    const COLUNAS_ITERACOES = [
+    const COLUNAS_TABELA_ITERACOES = [
         {
             title: 'Nome',
             dataIndex: 'nome',
@@ -64,8 +55,7 @@ const Cronograma = ({iteracoes, onEdit, onDelete}) => {
         }
     ]
 
-    const {setDadosIteracao, iteracoesSelecionadas, setIteracoesSelecionadas} = useContextoIteracao()
-
+    const {iteracoes, setIteracoesSelecionadas} = useContextoIteracao()
 
     const rowSelection = {
         onChange: (selectedRowsKeys, selectedRows) => {
@@ -74,37 +64,17 @@ const Cronograma = ({iteracoes, onEdit, onDelete}) => {
     };
 
     return (
-        <div style={{...cronogramaStyle}}>
+        <Table 
+            bordered={true}
+            className="style-table"
+            columns={COLUNAS_TABELA_ITERACOES}
+            dataSource={iteracoes}
+            rowKey={"id"}
+            rowSelection={rowSelection}
+        />
 
-            <h4 style={{textAlign: "center"}}> Cronograma de Iterações </h4> 
-        
-            <React.Fragment>
-                
-                {/* <div style={{display: "flex", justifyContent: "flex-end", marginRight: "20px"}}>  
-                    {
-                        (iteracoesSelecionadas.length > 0) && <Button danger icon={<FaTrash />} onClick={() => showDeleteConfirm()}> Excluir </Button>
-                    }
-                </div>
-
-                 */}
-
-                {
-                    iteracoes &&  
-                                        
-                    <Table 
-                        bordered={true}
-                        className="style-table"
-                        columns={COLUNAS_ITERACOES}
-                        dataSource={iteracoes}
-                        rowKey={"id"}
-                        rowSelection={rowSelection}
-                    />
-
-                }
-            </React.Fragment>
-            
-        </div>
     )
+
 }
 
-export default Cronograma
+export default TableIteracoesSelect
