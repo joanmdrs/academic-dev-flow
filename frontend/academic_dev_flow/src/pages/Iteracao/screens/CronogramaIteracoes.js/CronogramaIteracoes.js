@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { useContextoIteracao } from "../../context/contextoIteracao";
 import { Button } from "antd";
 import { FaTrash } from "react-icons/fa";
+import TableIteracoesSelect from "../../components/TableIteracoesSelect/TableIteracoesSelect";
 
 const CronogramaIteracoes = () => {
 
@@ -11,13 +12,7 @@ const CronogramaIteracoes = () => {
         iteracoesSelecionadas, 
         setIteracoesSelecionadas} = useContextoIteracao()
 
-
-    const rowSelection = {
-        onChange: (selectedRowsKeys, selectedRows) => {
-          setIteracoesSelecionadas(selectedRows)
-        },
-    };
-
+    const [isFormSalvarVisivel, setIsFormSalvarVisivel] = useState(false)
 
 
     return (
@@ -32,6 +27,12 @@ const CronogramaIteracoes = () => {
                         (iteracoesSelecionadas.length > 0) && <Button danger icon={<FaTrash />}> Excluir </Button>
                     }
                 </div>
+
+                { !isFormSalvarVisivel && (
+                    <TableIteracoesSelect />
+                )}
+
+
 
                 
 

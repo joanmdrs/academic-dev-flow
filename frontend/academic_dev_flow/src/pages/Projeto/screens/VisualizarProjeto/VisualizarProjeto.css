@@ -1,7 +1,6 @@
 .screen-view-project .content {
     display: flex;
     flex-direction: column;
-    margin: 20px;
 }
 
 .screen-view-project .title {

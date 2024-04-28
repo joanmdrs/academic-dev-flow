@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./VisualizarProjeto.css"
-import { Button, Layout } from "antd";
+import { Button, Layout, Tabs } from "antd";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { GoTasklist } from "react-icons/go";
 import { useParams } from "react-router-dom";
@@ -12,8 +12,10 @@ import MenuAluno from "../../../../components/Menus/MenuAluno/MenuAluno";
 import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfessor";
 import MyHeader from "../../../../components/Header/Header";
 import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
+import CronogramaIteracoes from "../../../Iteracao/screens/CronogramaIteracoes.js/CronogramaIteracoes";
+import ScreenCronogramaIteracoes from "../../../Iteracao/screens/CronogramaIteracoes.js";
 
-
+const {TabPane} = Tabs
 const VisualizarProjeto = ({grupo}) => {
 
     const { idProjeto } = useParams();
@@ -69,39 +71,32 @@ const VisualizarProjeto = ({grupo}) => {
                                 <h4>{projeto.nome} </h4>
                             ) : null
                         }
-
-                        <div style={{display: "flex", gap: "10px"}}>
-                            <Button
-                                type={currentPage === 'default' ? "primary" : "default"}
-                                icon={<LuCalendarClock />} 
-                                onClick={() => setCurrentPage("default")}
-                            >
-                                Iterações
-                            </Button> 
-                            <Button 
-                                type={currentPage === 'tarefas' ? "primary" : "default"}
-                                icon={<GoTasklist />} 
-                                onClick={() => setCurrentPage("tarefas")}
-                            >
-                                Tarefas
-                            </Button>
-
-                            <Button 
-                                type={currentPage === 'documentos' ? "primary" : "default"}
-                                icon={<IoDocumentTextOutline />}
-                                onClick={() => setCurrentPage("documentos")}
-                            > 
-                                Artefatos
-                            </Button>
-
-                        </div>
-
+                        
                     </div>
 
                     <div className="content"> 
-                        {/* {currentPage === "default" && <CronogramaIteracoes />}
-                        {currentPage === "tarefas" && <GerenciarTarefas />}
-                        {currentPage === "documentos" && <GerenciarDocumentos/>} */}
+                        <Tabs
+                            indicator={{
+                                align: "center"
+                            }}
+                            style={{ padding: "20px" }}
+                        >
+                             <TabPane tab='Projeto' key="1">
+                                Conteúdo da Outra Tab
+                            </TabPane>
+
+                            <TabPane tab='Iterações' key="2" icon={<LuCalendarClock />}>
+                                <ScreenCronogramaIteracoes />
+                            </TabPane>
+
+                            <TabPane tab='Tarefas' key="3" icon={<GoTasklist />} >
+                                Conteúdo da Outra Tab
+                            </TabPane>
+
+                            <TabPane tab='Artefatos' key="4" icon={<IoDocumentTextOutline />}>
+                                Conteúdo da Outra Tab
+                            </TabPane>
+                        </Tabs>
                     </div>
                 </div>
             </Layout>
