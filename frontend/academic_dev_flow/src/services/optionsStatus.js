@@ -8,6 +8,11 @@ export const optionsStatusTarefas = [
         label: 'Em andamento'
     },
     {
+        value: 'revisao',
+        label: 'Pendente de revisão'
+
+    },
+    {
         value: 'concluida', 
         label: 'Concluída'
     },
