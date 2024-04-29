@@ -81,7 +81,7 @@ const QuadroTarefas = () => {
     };
 
     return (
-        <React.Fragment>
+        <div>
 
             {isAvisoVisivel && (
                 <Aviso
@@ -92,7 +92,7 @@ const QuadroTarefas = () => {
                 />
             )}
 
-            <div style={{display: 'flex', justifyContent: 'flex-end', gap: '10px'}}> 
+            <div style={{display:'flex', justifyContent: 'flex-end', gap: '10px'}}> 
                 <Button 
                     icon={<FaPlus />}
                     type="primary"
@@ -111,13 +111,16 @@ const QuadroTarefas = () => {
                 </Button>
 
                 <Button
-                    icon={<BsQuestionCircle size="20px" />}
+                    icon={<BsQuestionCircle />}
                     onClick={handleDuvidaClick}
+                   
+            
                 />
             </div>
 
+
             { isFormSalvarVisivel ? (
-                <div className="global-div" style={{ position: 'relative' }}>
+                <div className="global-div">
                     {isSaving && ( // Renderizar o spinner se a tarefa estiver sendo salva
                         <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(255, 255, 255, 0.5)', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             <Spin size="large" />
@@ -126,13 +129,16 @@ const QuadroTarefas = () => {
                     <FormTarefa onSubmit={handleSalvarTarefa} onCancel={handleCancelar}  />
                 </div>
             ) : (
-                <TabsTarefas />
+                <div> 
+                    <TabsTarefas />
+                </div>
+
             )}
 
 
 
 
-        </React.Fragment>
+        </div>
     )
 }   
 

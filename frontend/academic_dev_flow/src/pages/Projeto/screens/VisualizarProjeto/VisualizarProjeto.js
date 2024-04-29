@@ -77,10 +77,8 @@ const VisualizarProjeto = ({grupo}) => {
 
                     <div className="content"> 
                         <Tabs
-                            indicator={{
-                                align: "center"
-                            }}
-                            style={{ padding: "20px" }}
+                           style={{width: '100%', padding: '2%'}}
+
                         >
                              <TabPane tab='Projeto' key="1">
                                 Conteúdo da Outra Tab

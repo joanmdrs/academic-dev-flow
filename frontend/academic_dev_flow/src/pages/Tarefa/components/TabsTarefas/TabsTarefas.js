@@ -1,52 +1,59 @@
 import { Tabs } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { listarTarefasPorProjeto } from "../../../../services/tarefaService";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
+import TableTarefasSelect from "../TableTarefasSelect/TableTarefasSelect";
 
 const {TabPane} = Tabs
 
 const TabsTarefas = () => {
 
     const {dadosProjeto} = useContextoGlobalProjeto()
+    const [allTasks, setAllTasks] = useState([])
 
     const handleGetTarefas = async () => {
 
         const response = await listarTarefasPorProjeto(dadosProjeto.id)
+        if (!response.error) {
+            setAllTasks(response.data)
+        }
   
     }
 
 
-    
-
-
     return (
         <Tabs
+            defaultActiveKey="1"
             tabPosition="left"
-            style={{marginTop: '20px'}}
+            style={{marginTop: '50px'}}
             
             >
             <TabPane tab='Criadas' key="1">
-                Tarefas criadas 
+                <TableTarefasSelect />
             </TabPane>
 
             <TabPane tab='Em andamento' key="2"> 
-                Tarefas em andamento
+                <TableTarefasSelect />
             </TabPane>
 
             <TabPane tab='Pendente de Revisão' key="3">
-                Tarefas em revisão
+                <TableTarefasSelect />
             </TabPane>
 
             <TabPane tab='Concluídas' key="4">
-                Tarefas concluídas
+                <TableTarefasSelect />
             </TabPane>
 
             <TabPane tab='Atrasadas' key="5">
-                Tarefas atrasadas
+                <TableTarefasSelect />
             </TabPane>
 
             <TabPane tab='Canceladas' key="6">
-                Tarefas bloqueadas
+                <TableTarefasSelect />
+            </TabPane>
+
+            <TabPane tab='Todas' key="7">
+                <TableTarefasSelect />
             </TabPane>
         </Tabs>
     )
