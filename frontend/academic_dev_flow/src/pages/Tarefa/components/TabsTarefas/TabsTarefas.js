@@ -3,12 +3,13 @@ import React, { useEffect, useState } from "react";
 import { listarTarefasPorProjeto } from "../../../../services/tarefaService";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import TableTarefasSelect from "../TableTarefasSelect/TableTarefasSelect";
+import { useContextoTarefa } from "../../context/ContextoTarefa";
 
 const {TabPane} = Tabs
 
 const TabsTarefas = ({onEdit}) => {
-    const { dadosProjeto } = useContextoGlobalProjeto();
-    const [todasTasks, setTodasTasks] = useState([]);
+    const {dadosProjeto} = useContextoGlobalProjeto();
+    const {tarefas, setTarefas} = useContextoTarefa()
     const [tasksCriadas, setTasksCriadas] = useState([]);
     const [tasksEmAndamento, setTasksEmAndamento] = useState([]);
     const [tasksPendentesRevisao, setTasksPendentesRevisao] = useState([]);
@@ -16,12 +17,24 @@ const TabsTarefas = ({onEdit}) => {
     const [tasksAtrasadas, setTasksAtrasadas] = useState([]);
     const [tasksCanceladas, setTasksCanceladas] = useState([]);
 
+    const handleLimparTasks = async () => {
+        setTasksCriadas([]);
+        setTasksEmAndamento([]);
+        setTasksPendentesRevisao([]);
+        setTasksConcluidas([]);
+        setTasksAtrasadas([]);
+        setTasksCanceladas([]);
+        setTarefas([]);
+    };
+
+    
     const handleGetTarefas = async () => {
+        handleLimparTasks()
         const response = await listarTarefasPorProjeto(dadosProjeto.id);
         if (!response.error) {
             const tasks = response.data;
 
-            setTodasTasks(tasks);
+            setTarefas(tasks);
             setTasksCriadas(tasks.filter(task => task.status === 'criada'));
             setTasksEmAndamento(tasks.filter(task => task.status === 'andamento'));
             setTasksPendentesRevisao(tasks.filter(task => task.status === 'pendente de revisão'));
@@ -33,10 +46,13 @@ const TabsTarefas = ({onEdit}) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            await handleGetTarefas();
+            if (tarefas.length === 0) {
+                await handleGetTarefas();
+            }
+
         };
         fetchData();
-    }, []);
+    }, [tarefas]);
 
     return (
         <Tabs defaultActiveKey="1" tabPosition="left" style={{ marginTop: '50px' }}>
@@ -59,7 +75,7 @@ const TabsTarefas = ({onEdit}) => {
                 <TableTarefasSelect tasks={tasksCanceladas} onEdit={onEdit}/>
             </TabPane>
             <TabPane tab="Todas" key="7">
-                <TableTarefasSelect tasks={todasTasks} onEdit={onEdit} />
+                <TableTarefasSelect tasks={tarefas} onEdit={onEdit} />
             </TabPane>
         </Tabs>
     );

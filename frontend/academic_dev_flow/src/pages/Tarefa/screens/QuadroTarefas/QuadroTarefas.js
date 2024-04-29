@@ -1,4 +1,4 @@
-import { Button, Spin } from "antd";
+import { Button, Modal, Spin } from "antd";
 import React, { useState } from "react";
 import { FaPlus, FaTheRedYeti, FaTrash } from "react-icons/fa";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
@@ -6,14 +6,14 @@ import TabsTarefas from "../../components/TabsTarefas/TabsTarefas";
 import FormTarefa from "../../components/FormTarefa/FormTarefa";
 import { createIssue, updateIssue } from "../../../../services/githubIntegration/issueService";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
-import { atualizarTarefa, criarTarefa } from "../../../../services/tarefaService";
+import { atualizarTarefa, criarTarefa, excluirTarefas } from "../../../../services/tarefaService";
 import { BsQuestionCircle } from "react-icons/bs";
 import Aviso from "../../../../components/Aviso/Aviso";
 
 const QuadroTarefas = () => {
 
     const {dadosProjeto} = useContextoGlobalProjeto()
-    const {dadosTarefa, setDadosTarefa, tarefasSelecionadas} = useContextoTarefa()
+    const {dadosTarefa, setDadosTarefa, tarefasSelecionadas, setTarefas} = useContextoTarefa()
 
     const [isFormSalvarVisivel, setIsFormSalvarVisivel] = useState(false)
     const [isBtnPlusDisabled, setIsBtnPlusDisabled] = useState(false)
@@ -39,6 +39,7 @@ const QuadroTarefas = () => {
     const handleReload = () => {
         setIsFormSalvarVisivel(false)
         setAcaoForm('criar')
+        setTarefas([])
     }
 
     const handleAdicionarTarefa = () => {
@@ -86,6 +87,23 @@ const QuadroTarefas = () => {
         setIsSaving(false);
     };
 
+    const handleExcluirTarefas = () => {
+  
+        Modal.confirm({
+            title: 'Confirmar exclusão',
+            content: 'Tem certeza que deseja excluir a(s) iteração(ões) ?',
+            okText: 'Sim',
+            cancelText: 'Não',
+            onOk: async () => {
+                if (tarefasSelecionadas !== null) {
+                    const ids = tarefasSelecionadas.map((item) => item.id)
+                    await excluirTarefas(ids)
+                }
+                handleReload() 
+            }
+        });
+    };
+
     return (
         <div>
 
@@ -113,6 +131,7 @@ const QuadroTarefas = () => {
                     type="primary"
                     danger
                     disabled={isBtnTrashDisabled}
+                    onClick={handleExcluirTarefas}
                 >
                     Excluir
                 </Button>

@@ -66,18 +66,18 @@ const CronogramaIteracoes = () => {
 
     const handleExcluirIteracoes = () => {
   
-      Modal.confirm({
-          title: 'Confirmar exclusão',
-          content: 'Tem certeza que deseja excluir a(s) iteração(ões) ?',
-          okText: 'Sim',
-          cancelText: 'Não',
-          onOk: async () => {
-            if (iteracoesSelecionadas !== null) {
-                const ids = iteracoesSelecionadas.map((item) => item.id)
-                await excluirIteracoes(ids)
+        Modal.confirm({
+            title: 'Confirmar exclusão',
+            content: 'Tem certeza que deseja excluir a(s) iteração(ões) ?',
+            okText: 'Sim',
+            cancelText: 'Não',
+            onOk: async () => {
+                if (iteracoesSelecionadas !== null) {
+                    const ids = iteracoesSelecionadas.map((item) => item.id)
+                    await excluirIteracoes(ids)
+                }
+                handleReload() 
             }
-            handleReload() 
-          }
         });
     };
 
