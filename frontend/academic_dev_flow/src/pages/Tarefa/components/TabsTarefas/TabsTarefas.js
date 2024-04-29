@@ -6,7 +6,7 @@ import TableTarefasSelect from "../TableTarefasSelect/TableTarefasSelect";
 
 const {TabPane} = Tabs
 
-const TabsTarefas = () => {
+const TabsTarefas = ({onEdit}) => {
     const { dadosProjeto } = useContextoGlobalProjeto();
     const [todasTasks, setTodasTasks] = useState([]);
     const [tasksCriadas, setTasksCriadas] = useState([]);
@@ -20,6 +20,7 @@ const TabsTarefas = () => {
         const response = await listarTarefasPorProjeto(dadosProjeto.id);
         if (!response.error) {
             const tasks = response.data;
+
             setTodasTasks(tasks);
             setTasksCriadas(tasks.filter(task => task.status === 'criada'));
             setTasksEmAndamento(tasks.filter(task => task.status === 'andamento'));
@@ -40,25 +41,25 @@ const TabsTarefas = () => {
     return (
         <Tabs defaultActiveKey="1" tabPosition="left" style={{ marginTop: '50px' }}>
             <TabPane tab="Criadas" key="1">
-                <TableTarefasSelect tasks={tasksCriadas} />
+                <TableTarefasSelect tasks={tasksCriadas} onEdit={onEdit} />
             </TabPane>
             <TabPane tab="Em andamento" key="2">
-                <TableTarefasSelect tasks={tasksEmAndamento} />
+                <TableTarefasSelect tasks={tasksEmAndamento} onEdit={onEdit}/>
             </TabPane>
             <TabPane tab="Pendente de Revisão" key="3">
-                <TableTarefasSelect tasks={tasksPendentesRevisao} />
+                <TableTarefasSelect tasks={tasksPendentesRevisao} onEdit={onEdit} />
             </TabPane>
             <TabPane tab="Concluídas" key="4">
-                <TableTarefasSelect tasks={tasksConcluidas} />
+                <TableTarefasSelect tasks={tasksConcluidas} onEdit={onEdit}/>
             </TabPane>
             <TabPane tab="Atrasadas" key="5">
-                <TableTarefasSelect tasks={tasksAtrasadas} />
+                <TableTarefasSelect tasks={tasksAtrasadas} onEdit={onEdit} />
             </TabPane>
             <TabPane tab="Canceladas" key="6">
-                <TableTarefasSelect tasks={tasksCanceladas} />
+                <TableTarefasSelect tasks={tasksCanceladas} onEdit={onEdit}/>
             </TabPane>
             <TabPane tab="Todas" key="7">
-                <TableTarefasSelect tasks={todasTasks} />
+                <TableTarefasSelect tasks={todasTasks} onEdit={onEdit} />
             </TabPane>
         </Tabs>
     );

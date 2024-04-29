@@ -79,9 +79,11 @@ class ListarTarefasPorProjetoView(APIView):
             tarefas_info = []
 
             for tarefa in tarefas:
-                membros_info = self.get_membros_info(tarefa, id_projeto)
+                membros_info = self.get_membros_info(tarefa)
+                membros = self.get_membros(tarefa)
                 iteracao_nome = self.get_iteracao_nome(tarefa)
                 labels_info = self.get_labels_info(tarefa)
+                labels = self.get_labels(tarefa)
 
                 tarefa_info = {
                     'id': tarefa.id,
@@ -90,11 +92,16 @@ class ListarTarefasPorProjetoView(APIView):
                     'data_termino': tarefa.data_termino,
                     'status': tarefa.status,
                     'descricao': tarefa.descricao,
+                    'id_issue': tarefa.id_issue,
+                    'number_issue': tarefa.number_issue,
+                    'url_issue': tarefa.url_issue,
                     'projeto': tarefa.projeto_id, 
                     'iteracao': tarefa.iteracao_id,
                     'nome_iteracao': iteracao_nome,
-                    'membros': membros_info,
-                    'labels': labels_info
+                    'membros_info': membros_info,
+                    'membros': membros,
+                    'labels_info': labels_info,
+                    'labels': labels
                 }
                 tarefas_info.append(tarefa_info)
                 
@@ -103,20 +110,36 @@ class ListarTarefasPorProjetoView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def get_membros_info(self, tarefa, id_projeto):
+    def get_membros_info(self, tarefa):
         membros_info = []
-        membros_projeto = MembroProjeto.objects.filter(projeto_id=id_projeto, id__in=tarefa.membros.all())
-
-        for membro_projeto in membros_projeto:
+        for membro in tarefa.membros.all():
             membro_info = {
-                'id_membro_projeto': membro_projeto.id,
-                'id_membro': membro_projeto.membro.id,
-                'nome_membro': membro_projeto.membro.nome,
-                'grupo_membro': membro_projeto.membro.grupo
+                'id_membro_projeto': membro.id,
+                'id_membro': membro.membro.id,
+                'nome_membro': membro.membro.nome,
+                'grupo_membro': membro.membro.grupo
             }
             membros_info.append(membro_info)
-
         return membros_info
+    
+    def get_membros(self, tarefa):
+        membros_ids = tarefa.membros.all().values_list('id', flat=True)
+        return list(membros_ids)
+
+    def get_labels_info(self, tarefa):
+        labels_info = []
+        for label in tarefa.labels.all():
+            label_info = {
+                'id': label.id,
+                'nome': label.nome,
+                # Outras informações dos labels que desejar incluir
+            }
+            labels_info.append(label_info)
+        return labels_info
+
+    def get_labels(self, tarefa):
+        labels_ids = tarefa.labels.all().values_list('id', flat=True)
+        return list(labels_ids)
 
     def get_iteracao_nome(self, tarefa):
         if tarefa.iteracao_id is not None:
@@ -125,17 +148,6 @@ class ListarTarefasPorProjetoView(APIView):
         else:
             return "Iteração não encontrada"
 
-    def get_labels_info(self, tarefa):
-        labels_info = []
-        for label in tarefa.labels.all():
-            label_info = {
-                'id': label.id,
-                'nome': label.nome,
-                # Adicione outros campos necessários aqui
-            }
-            labels_info.append(label_info)
-
-        return labels_info
         
 class AtualizarTarefaView(APIView):
     permission_classes = [IsAuthenticated]

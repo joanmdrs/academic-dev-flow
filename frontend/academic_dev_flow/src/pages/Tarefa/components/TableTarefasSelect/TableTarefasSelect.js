@@ -1,7 +1,8 @@
-import { Table } from "antd";
+import { Space, Table } from "antd";
 import React from "react";
 import { formatDate } from "../../../../services/utils";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
+import { useContextoTarefa } from "../../context/ContextoTarefa";
 
 const TableTarefasSelect = ({tasks, onEdit}) => {
 
@@ -11,44 +12,29 @@ const TableTarefasSelect = ({tasks, onEdit}) => {
             dataIndex: 'nome',
             key: 'nome',
             render: (_, record) => (
-                <a href={record.url_issue} target="blank"> 
-                    {record.nome}
-                </a>
-            )
-        },
-        {
-            title: 'Data de início',
-            dataIndex: 'data_inicio',
-            key: 'data_inicio',
-            render: (_, record) => (
-                <span>
-                    {formatDate(record.data_inicio)}
-                </span>
-            )
-        },
-        {
-            title: 'Data de término',
-            dataIndex: 'data_termino',
-            key: 'data_termino',
-            render: (_, record) => (
-                <span>
-                    {formatDate(record.data_termino)}
-                </span>
+                <Space style={{display: 'block'}}>
+                    <a href={record.url_issue} target="blank"> 
+                        {record.nome}
+                    </a>
+
+                    <span style={{color: '#585858', fontSize: '10px'}}>
+                        #{record.number_issue} {formatDate(record.data_inicio)} - {formatDate(record.data_termino)} 
+                    </span>
+                
+                </Space>
+        
             )
         },
         {
             title:  'Atribuída à',
-            dataIndex: 'membros',
-            key: 'membros',
-            render: (membros) => (
+            dataIndex: 'membros_info',
+            key: 'membros_info',
+            render: (membros_info) => (
             <span style={{display: "flex", gap: "10px"}}>
-                {membros.map((membro) => (
+                {membros_info.map((membro) => (
                 <span style={{
-                    border: "1px solid var(--primary-color)", 
-                    padding: "5px",
                     color: "var(--primary-color)",
-                    borderRadius: "5px"
-                    }} 
+                }} 
                     key={membro.id_membro_projeto}>
                     {membro.nome_membro} 
                 </span>
@@ -60,18 +46,32 @@ const TableTarefasSelect = ({tasks, onEdit}) => {
             title: 'Iteração',
             dataIndex: 'nome_iteracao',
             key: 'nome_iteracao'
+        },
+        {
+            title: 'Ações',
+            dataIndex: 'actions', 
+            key: 'actions', 
+            render: (_, record) => (
+                <Space>
+                    <a onClick={() => onEdit(record)}> Editar </a>
+                </Space>
+            )
         }
     ]
 
     const {dadosProjeto} = useContextoGlobalProjeto()
+    const {setTarefasSelecionadas} = useContextoTarefa()
 
     const rowSelection = {
         onChange: (selectedRowsKeys, selectedRows) => {
-          //setIteracoesSelecionadas(selectedRows)
+          setTarefasSelecionadas(selectedRows)
         },
     };
+
     return (
         <Table 
+            className="style-table"
+            bordered
             columns={COLUNAS_TABELA_TAREFAS}
             dataSource={tasks}
             rowKey={"id"}

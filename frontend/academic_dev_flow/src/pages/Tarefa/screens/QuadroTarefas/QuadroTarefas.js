@@ -1,6 +1,6 @@
 import { Button, Spin } from "antd";
 import React, { useState } from "react";
-import { FaPlus, FaTrash } from "react-icons/fa";
+import { FaPlus, FaTheRedYeti, FaTrash } from "react-icons/fa";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import TabsTarefas from "../../components/TabsTarefas/TabsTarefas";
 import FormTarefa from "../../components/FormTarefa/FormTarefa";
@@ -13,11 +13,11 @@ import Aviso from "../../../../components/Aviso/Aviso";
 const QuadroTarefas = () => {
 
     const {dadosProjeto} = useContextoGlobalProjeto()
-    const {dadosTarefa} = useContextoTarefa()
+    const {dadosTarefa, setDadosTarefa, tarefasSelecionadas} = useContextoTarefa()
 
     const [isFormSalvarVisivel, setIsFormSalvarVisivel] = useState(false)
     const [isBtnPlusDisabled, setIsBtnPlusDisabled] = useState(false)
-    const isBtnTrashDisabled = true
+    const isBtnTrashDisabled = tarefasSelecionadas.length === 0
     const [acaoForm, setAcaoForm] = useState('criar')
     const [isAvisoVisivel, setIsAvisoVisivel] = useState(false);
     const [isSaving, setIsSaving] = useState(false); // Estado para controlar a exibição do spinner
@@ -47,6 +47,12 @@ const QuadroTarefas = () => {
         setAcaoForm('criar')
     }
 
+    const handleAtualizarTarefa = (record) => {
+        setIsFormSalvarVisivel(true)
+        setAcaoForm('atualizar')
+        setDadosTarefa(record)
+    }
+
     const handleSaveIssue = async (dadosForm) => {
         const dadosEnviar = {
             github_token: dadosProjeto.token,
@@ -65,7 +71,7 @@ const QuadroTarefas = () => {
     };
     
     const handleSalvarTarefa = async (dadosForm) => {
-        setIsSaving(true); // Ativar o spinner enquanto a tarefa está sendo salva
+        setIsSaving(true);
         dadosForm['projeto'] = dadosProjeto.id;
         const resIssue = await handleSaveIssue(dadosForm);
     
@@ -104,6 +110,7 @@ const QuadroTarefas = () => {
 
                 <Button
                     icon={<FaTrash />}
+                    type="primary"
                     danger
                     disabled={isBtnTrashDisabled}
                 >
@@ -121,7 +128,7 @@ const QuadroTarefas = () => {
 
             { isFormSalvarVisivel ? (
                 <div className="global-div">
-                    {isSaving && ( // Renderizar o spinner se a tarefa estiver sendo salva
+                    {isSaving && ( 
                         <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(255, 255, 255, 0.5)', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             <Spin size="large" />
                         </div>
@@ -130,7 +137,7 @@ const QuadroTarefas = () => {
                 </div>
             ) : (
                 <div> 
-                    <TabsTarefas />
+                    <TabsTarefas onEdit={handleAtualizarTarefa}/>
                 </div>
 
             )}
