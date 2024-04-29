@@ -27,7 +27,7 @@ const TabsTarefas = ({onEdit}) => {
         setTarefas([]);
     };
 
-    
+
     const handleGetTarefas = async () => {
         handleLimparTasks()
         const response = await listarTarefasPorProjeto(dadosProjeto.id);
@@ -59,10 +59,10 @@ const TabsTarefas = ({onEdit}) => {
             <TabPane tab="Criadas" key="1">
                 <TableTarefasSelect tasks={tasksCriadas} onEdit={onEdit} />
             </TabPane>
-            <TabPane tab="Em andamento" key="2">
+            <TabPane tab="Andamento" key="2">
                 <TableTarefasSelect tasks={tasksEmAndamento} onEdit={onEdit}/>
             </TabPane>
-            <TabPane tab="Pendente de Revisão" key="3">
+            <TabPane tab="Revisão" key="3">
                 <TableTarefasSelect tasks={tasksPendentesRevisao} onEdit={onEdit} />
             </TabPane>
             <TabPane tab="Concluídas" key="4">

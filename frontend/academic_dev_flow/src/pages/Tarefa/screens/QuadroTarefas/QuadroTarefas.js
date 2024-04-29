@@ -13,7 +13,12 @@ import Aviso from "../../../../components/Aviso/Aviso";
 const QuadroTarefas = () => {
 
     const {dadosProjeto} = useContextoGlobalProjeto()
-    const {dadosTarefa, setDadosTarefa, tarefasSelecionadas, setTarefas} = useContextoTarefa()
+    const {
+        dadosTarefa, 
+        setDadosTarefa, 
+        tarefasSelecionadas,
+        setTarefasSelecionadas, 
+        setTarefas} = useContextoTarefa()
 
     const [isFormSalvarVisivel, setIsFormSalvarVisivel] = useState(false)
     const [isBtnPlusDisabled, setIsBtnPlusDisabled] = useState(false)
@@ -40,6 +45,7 @@ const QuadroTarefas = () => {
         setIsFormSalvarVisivel(false)
         setAcaoForm('criar')
         setTarefas([])
+        setTarefasSelecionadas([])
     }
 
     const handleAdicionarTarefa = () => {
