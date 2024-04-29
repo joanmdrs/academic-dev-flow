@@ -14,7 +14,9 @@ from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
 from django.contrib.auth.hashers import make_password
 from rest_framework.permissions import AllowAny
-    
+from django.contrib.auth.hashers import check_password
+
+
 class CadastrarMembroView(APIView):
     permission_classes = [AllowAny]
     
@@ -216,8 +218,10 @@ class AtualizarMembroView(APIView):
             user_validated = user_serializer.validated_data
             user.username = user_validated.get('username', user.username)
             new_password = user_validated.get('password')
-            if new_password:
+            
+            if new_password != user.password:
                 user.set_password(new_password)
+                
             user.save()
 
             if group_name:
