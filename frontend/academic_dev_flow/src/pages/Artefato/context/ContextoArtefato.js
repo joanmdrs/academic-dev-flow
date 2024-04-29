@@ -8,6 +8,7 @@ export const ProviderArtefato = ({ children }) => {
     const [step, setStep] = useState('0')
     const [artefatos, setArtefatos] = useState([])
     const [dadosArtefato, setDadosArtefato] = useState(null)
+    const [artefatosSelecionados, setArtefatosSelecionados] = useState([])
     const [dadosProjeto, setDadosProjeto] = useState(null)
 
     return (
@@ -16,6 +17,7 @@ export const ProviderArtefato = ({ children }) => {
                 step, setStep,
                 artefatos, setArtefatos,
                 dadosArtefato, setDadosArtefato,
+                artefatosSelecionados, setArtefatosSelecionados,
                 dadosProjeto, setDadosProjeto
             }}
         >
