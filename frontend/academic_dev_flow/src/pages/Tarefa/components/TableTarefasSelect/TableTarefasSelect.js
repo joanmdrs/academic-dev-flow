@@ -16,12 +16,6 @@ const TableTarefasSelect = ({tasks, onEdit}) => {
                 </a>
             )
         },
-
-        {
-            title: 'Status',
-            dataIndex: 'status',
-            key: 'status'
-        },
         {
             title: 'Data de início',
             dataIndex: 'data_inicio',
@@ -38,7 +32,7 @@ const TableTarefasSelect = ({tasks, onEdit}) => {
             key: 'data_termino',
             render: (_, record) => (
                 <span>
-                    {formatDate(record.data_fim)}
+                    {formatDate(record.data_termino)}
                 </span>
             )
         },
