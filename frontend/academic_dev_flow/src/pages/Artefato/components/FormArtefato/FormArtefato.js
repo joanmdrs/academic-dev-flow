@@ -28,7 +28,7 @@ const optionsStatus = [
     }
 ]
 
-const FormArtefato = ({onSubmit, onCancel, selectProjeto, inputsAdmin}) => {
+const FormArtefato = ({onSubmit, onCancel, selectProjeto, inputsAdmin, inputCommitMessage}) => {
 
     const {dadosProjeto} = useContextoGlobalProjeto()
     const {dadosArtefato} = useContextoArtefato()
@@ -83,9 +83,7 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto, inputsAdmin}) => {
 
             {inputsAdmin}
 
-            <Form.Item label="Mensagem de commit"  name="commit_message">
-                <Input type="text" name="commit_message" placeholder="mensagem de commit" />
-            </Form.Item>
+            {inputCommitMessage}
 
             <Form.Item label="Iteração" name="iteracao">
                 <Select options={optionsIteracao} name="iteracao" defaultValue="selecione" />
