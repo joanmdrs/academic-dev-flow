@@ -12,7 +12,16 @@ const MenuAluno = () => {
 
   return (
     <Sider width={250} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-        <div className="demo-logo-vertical">
+        <div 
+            style={{
+            display: "flex", 
+            flex: '1',
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "10px",
+            color: "#FFFFFF",
+            height: '64px',
+            }} className="demo-logo-vertical">
             Academic Dev Flow
         </div>
         <Menu

@@ -31,6 +31,7 @@ const MenuAdmin = () => {
           alignItems: "center",
           padding: "10px",
           color: "#FFFFFF",
+          height: '64px',
         }} className="demo-logo-vertical">
         Academic Dev Flow
       </div>
