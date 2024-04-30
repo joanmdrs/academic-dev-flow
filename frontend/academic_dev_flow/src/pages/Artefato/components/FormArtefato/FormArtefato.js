@@ -99,7 +99,12 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto, inputsAdmin, inputComm
 
             <Form.Item>
                 <Button type="primary" htmlType="submit" > Salvar </Button>
-                <Button onClick={() => onCancel()}> Cancelar </Button>
+                <Button 
+                    
+                    type="primary" 
+                    style={{marginLeft: '10px'}} 
+                    danger 
+                    onClick={() => onCancel()}> Cancelar </Button>
             </Form.Item>
         </Form>
     )
