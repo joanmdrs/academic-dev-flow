@@ -15,6 +15,7 @@ import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
 import CronogramaIteracoes from "../../../Iteracao/screens/CronogramaIteracoes.js/CronogramaIteracoes";
 import ScreenCronogramaIteracoes from "../../../Iteracao/screens/CronogramaIteracoes.js";
 import ScreenQuadroTarefas from "../../../Tarefa/screens/QuadroTarefas/index.js";
+import ScreenPainelArtefatos from "../../../Artefato/screens/PainelArtefatos/index.js";
 
 const {TabPane} = Tabs
 const VisualizarProjeto = ({grupo}) => {
@@ -93,7 +94,7 @@ const VisualizarProjeto = ({grupo}) => {
                             </TabPane>
 
                             <TabPane tab='Artefatos' key="4" icon={<IoDocumentTextOutline />}>
-                                Conteúdo da Outra Tab
+                                <ScreenPainelArtefatos />
                             </TabPane>
                         </Tabs>
                     </div>

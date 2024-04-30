@@ -20,6 +20,7 @@ export const ProviderGlobalProjeto = ({ children }) => {
 
                   if (!response.error) {
                     setAutor(response.data)
+                    console.log("Dados do usuário", response.data)
                     setGrupo(decodedToken.groups[0])
                   }
         

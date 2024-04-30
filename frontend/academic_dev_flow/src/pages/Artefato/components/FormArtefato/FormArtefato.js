@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "antd/es/form/Form";
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
-import SelectProjeto from "../SelectProjeto/SelectProjeto";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 
 const optionsStatus = [
     {
@@ -30,7 +30,8 @@ const optionsStatus = [
 
 const FormArtefato = ({onSubmit, onCancel, selectProjeto, inputsAdmin}) => {
 
-    const {dadosProjeto, dadosArtefato} = useContextoArtefato()
+    const {dadosProjeto} = useContextoGlobalProjeto()
+    const {dadosArtefato} = useContextoArtefato()
     const [optionsIteracao, setOptionsIteracao] = useState(null)
     const [form] = useForm()
 
@@ -82,6 +83,10 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto, inputsAdmin}) => {
 
             {inputsAdmin}
 
+            <Form.Item label="Mensagem de commit"  name="commit_message">
+                <Input type="text" name="commit_message" placeholder="mensagem de commit" />
+            </Form.Item>
+
             <Form.Item label="Iteração" name="iteracao">
                 <Select options={optionsIteracao} name="iteracao" defaultValue="selecione" />
             </Form.Item>
@@ -96,7 +101,7 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto, inputsAdmin}) => {
 
             <Form.Item>
                 <Button type="primary" htmlType="submit" > Salvar </Button>
-                <Button onClick={onCancel}> Cancelar </Button>
+                <Button onClick={() => onCancel()}> Cancelar </Button>
             </Form.Item>
         </Form>
     )

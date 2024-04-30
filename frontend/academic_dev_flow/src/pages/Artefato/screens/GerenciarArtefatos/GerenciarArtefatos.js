@@ -79,6 +79,7 @@ const GerenciarArtefatos = () => {
     const handleSalvarArtefato = async (dados) => {
         dados['projeto'] = dadosProjeto.id
         dados['github_token'] = dadosProjeto.token
+        dados['content'] = dados.descricao
         if (acaoForm === 'criar') {
             const response = await createContent(dados)
             if (!response.error){

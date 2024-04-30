@@ -133,8 +133,12 @@ class BuscarMembroPeloUserView(APIView):
                 # Verifique se o membro está vinculado a um objeto UsuarioGithub
                 if membro.github:
                     usuario_github = membro.github.usuario_github
+                    email_github = membro.github.email_github
+                    nome_github = membro.github.nome
                 else:
                     usuario_github = None
+                    email_github = None
+                    nome_github = None
                 
                 membro_projeto = MembroProjeto.objects.get(membro_id=membro.id)
                 
@@ -143,7 +147,9 @@ class BuscarMembroPeloUserView(APIView):
                         'id_membro': membro.id,
                         'id_membro_projeto': membro_projeto.id,
                         'nome': membro.nome,
-                        'usuario_github': usuario_github 
+                        'nome_github': nome_github,
+                        'email_github': email_github,
+                        'usuario_github': usuario_github
                     }
                     
                     return Response(autor, status=status.HTTP_200_OK)

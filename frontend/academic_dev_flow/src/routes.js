@@ -32,6 +32,7 @@ function Routes() {
       <Route path="/cadastre-se" Component={Register} />
 
       {/* Admin */}
+        
       <Route element={<AdminRoutes />}>
         {/* Página de Home */}
         <Route path="/admin/home" Component={HomeAdministrador} exact />

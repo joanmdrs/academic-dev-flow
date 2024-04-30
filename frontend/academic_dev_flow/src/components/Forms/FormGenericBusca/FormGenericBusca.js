@@ -6,8 +6,8 @@ import { ERROR_MESSAGE_ON_SEARCHING } from "../../../services/messages";
 
 const FormGenericBusca = ({onSearch}) => {
 
-    const [optionsProjetos, setOptionsProjetos] = useState([]);
-    const [selectedItem, setSelectedItem] = useState(null);
+    const [optionsProjetos, setOptionsProjetos] = useState(null);
+    const [selectedItem, setSelectedItem] = useState();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -34,7 +34,6 @@ const FormGenericBusca = ({onSearch}) => {
     const handleOnSearch = (values) => {
         onSearch(values)
     }
-
 
     return (
         <Form layout="vertical" className="global-form" onFinish={handleOnSearch}> 
