@@ -91,7 +91,7 @@ def list_issues(request):
         repo = g.get_repo(repository)
         
         issues_list = []
-        issues = repo.get_issues(state='open')
+        issues = repo.get_issues(state='all')
         
         for issue in issues:
             issue_data = {

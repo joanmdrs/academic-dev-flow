@@ -5,6 +5,7 @@ import { IoDocumentTextOutline } from "react-icons/io5";
 import { GoTasklist } from "react-icons/go";
 import { useParams } from "react-router-dom";
 import { LuCalendarClock } from "react-icons/lu";
+import { FaGithub } from "react-icons/fa6";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import Loading from "../../../../components/Loading/Loading";
@@ -16,6 +17,7 @@ import CronogramaIteracoes from "../../../Iteracao/screens/CronogramaIteracoes.j
 import ScreenCronogramaIteracoes from "../../../Iteracao/screens/CronogramaIteracoes.js";
 import ScreenQuadroTarefas from "../../../Tarefa/screens/QuadroTarefas/index.js";
 import ScreenPainelArtefatos from "../../../Artefato/screens/PainelArtefatos/index.js";
+import ScreenPainelGihtub from "../../../GitHub/screens/PainelGithub/index.js";
 
 const {TabPane} = Tabs
 const VisualizarProjeto = ({grupo}) => {
@@ -95,6 +97,10 @@ const VisualizarProjeto = ({grupo}) => {
 
                             <TabPane tab='Artefatos' key="4" icon={<IoDocumentTextOutline />}>
                                 <ScreenPainelArtefatos />
+                            </TabPane>
+
+                            <TabPane tab='GitHub' key="5" icon={<FaGithub />}>
+                                <ScreenPainelGihtub />
                             </TabPane>
                         </Tabs>
                     </div>
