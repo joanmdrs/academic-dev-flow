@@ -3,6 +3,10 @@ import React, { useEffect } from "react";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { listarArtefatos } from "../../../../services/artefatoService";
+import { optionsStatusArtefatos } from "../../../../services/optionsStatus";
+import { IoOpenOutline } from "react-icons/io5";
+import { BiSolidEditAlt } from "react-icons/bi";
+import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 
 const TableArtefatosSelect = ({onView, onEdit, onDelete}) => {
 
@@ -21,7 +25,12 @@ const TableArtefatosSelect = ({onView, onEdit, onDelete}) => {
         {
             title: 'Status',
             dataIndex: 'status',
-            key: 'status'
+            key: 'status',
+            render: (_, record) => (
+                <span>
+                    {optionsStatusArtefatos.find(status => status.value === record.status)?.label}
+                </span>
+            )
         },
         {
             title: 'Path',
@@ -31,11 +40,12 @@ const TableArtefatosSelect = ({onView, onEdit, onDelete}) => {
             title: 'Ações',
             dataIndex: 'action',
             key: 'action',
+            align: 'center',
             render: (_, record) => (
                 <Space size="middle">
-                    <a onClick={() => onView(record)}>Visualizar</a>
-                    <a onClick={() => onEdit(record)}>Editar</a>
-                    <a onClick={() => onDelete(record)}>Excluir</a>
+                    <a onClick={() => onView(record)}><FaEye color="green" size="20px" /></a>
+                    <a onClick={() => onEdit(record)}><FaEdit color="orange" size="20px" /></a>
+                    <a onClick={() => onDelete(record)}><FaTrash color="red" /></a>
                 </Space>
             )
         }
@@ -51,12 +61,6 @@ const TableArtefatosSelect = ({onView, onEdit, onDelete}) => {
             setArtefatos(response.data)
         }
     }
-
-    const rowSelection = {
-        onChange: (selectedRowsKeys, selectedRows) => {
-          setArtefatosSelecionados(selectedRows)
-        },
-    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -75,7 +79,6 @@ const TableArtefatosSelect = ({onView, onEdit, onDelete}) => {
             columns={COLUNAS_TABELA_ARTEFATOS}
             dataSource={artefatos}
             rowKey={"id"}
-            rowSelection={rowSelection}
         />
     )
 }

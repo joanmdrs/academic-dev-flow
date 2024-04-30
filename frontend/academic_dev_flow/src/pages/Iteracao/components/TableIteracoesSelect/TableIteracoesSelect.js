@@ -4,6 +4,7 @@ import { Table } from "antd";
 import { useContextoIteracao } from "../../context/contextoIteracao";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
+import { optionsStatusIteracoes } from "../../../../services/optionsStatus";
 
 const TableIteracoesSelect = ({onEdit, onDelete}) => {
 
@@ -23,7 +24,12 @@ const TableIteracoesSelect = ({onEdit, onDelete}) => {
         {
             title: 'Status',
             dataIndex: 'status',
-            key: 'status'
+            key: 'status',
+            render: (_, record) => (
+                <span>
+                    {optionsStatusIteracoes.find(status => status.value === record.status)?.label}
+                </span>
+            )
         },
         {
             title: 'Data de início',

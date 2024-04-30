@@ -4,29 +4,7 @@ import { useForm } from "antd/es/form/Form";
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
-
-const optionsStatus = [
-    {
-        value: 'criado',
-        label: 'Criado'
-    },
-    {
-        value: 'rascunho',
-        label: 'Em rascunho'
-    },
-    {
-        value: 'revisao',
-        label: 'Pendente de revisão'
-    },
-    {
-        value: 'aprovado',
-        label: 'Aprovado'
-    },
-    {
-        value: 'finalizado',
-        label: 'Finalizado'
-    }
-]
+import { optionsStatusArtefatos } from "../../../../services/optionsStatus";
 
 const FormArtefato = ({onSubmit, onCancel, selectProjeto, inputsAdmin, inputCommitMessage}) => {
 
@@ -90,7 +68,7 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto, inputsAdmin, inputComm
             </Form.Item>
             
             <Form.Item label="Status" name="status">
-                <Select options={optionsStatus} name="status" defaultValue="selecione" />
+                <Select options={optionsStatusArtefatos} name="status" defaultValue="selecione" />
             </Form.Item>
 
             <Form.Item label="Descrição" name="descricao">
