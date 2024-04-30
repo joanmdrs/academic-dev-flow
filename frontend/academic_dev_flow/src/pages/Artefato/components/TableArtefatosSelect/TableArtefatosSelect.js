@@ -4,7 +4,7 @@ import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProj
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { listarArtefatos } from "../../../../services/artefatoService";
 
-const TableArtefatosSelect = ({onView, onEdit}) => {
+const TableArtefatosSelect = ({onView, onEdit, onDelete}) => {
 
     const COLUNAS_TABELA_ARTEFATOS = [
         {
@@ -35,6 +35,7 @@ const TableArtefatosSelect = ({onView, onEdit}) => {
                 <Space size="middle">
                     <a onClick={() => onView(record)}>Visualizar</a>
                     <a onClick={() => onEdit(record)}>Editar</a>
+                    <a onClick={() => onDelete(record)}>Excluir</a>
                 </Space>
             )
         }

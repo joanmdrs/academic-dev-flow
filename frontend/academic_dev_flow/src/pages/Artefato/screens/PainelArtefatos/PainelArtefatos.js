@@ -1,15 +1,17 @@
 import React, { useState } from 'react'
 import Aviso from '../../../../components/Aviso/Aviso'
 import { Button, Form, Input, Spin } from 'antd'
-import { FaPlus, FaSearch, FaTrash } from 'react-icons/fa'
+import { FaPlus, FaSearch } from 'react-icons/fa'
 import { useContextoGlobalProjeto } from '../../../../context/ContextoGlobalProjeto'
 import { useContextoArtefato } from '../../context/ContextoArtefato'
 import { BsQuestionCircle } from 'react-icons/bs'
 import FormArtefato from '../../components/FormArtefato/FormArtefato'
 import TableArtefatosSelect from '../../components/TableArtefatosSelect/TableArtefatosSelect'
-import { createContent } from '../../../../services/githubIntegration'
-import { atualizarArtefato, criarArtefato, filtrarArtefatosPeloNomeEPeloProjeto } from '../../../../services/artefatoService'
+import { createContent, deleteContent } from '../../../../services/githubIntegration'
+import { atualizarArtefato, criarArtefato, excluirArtefato, filtrarArtefatosPeloNomeEPeloProjeto } from '../../../../services/artefatoService'
 import FormFiltrarArtefatos from '../../components/FormFiltrarArtefatos/FormFiltrarArtefatos'
+import ModalExcluirArtefato from '../../components/ModalExcluirArtefato/ModalExcluirArtefato'
+import { Await } from 'react-router-dom'
 
 const StyleSpin = {
     position: 'absolute', 
@@ -32,17 +34,17 @@ const PainelArtefatos = () => {
         dadosArtefato, 
         setDadosArtefato, 
         setArtefatos,
-        artefatosSelecionados, 
         setArtefatosSelecionados} = useContextoArtefato()
 
     const [isFormSalvarVisivel, setIsFormSalvarVisivel] = useState(false)
     const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false)
     const [isTableListVisivel, setIsTableListVisivel] = useState(true)
+    const [isModalExcluirVisivel, setIsModalExcluirVisivel] = useState(false)
     const [acaoForm, setAcaoForm] = useState('criar')
     const [isBtnPlusDisabled, setIsBtnPlusDisabled] = useState(false)
-    const isBtnTrashDisabled = artefatosSelecionados.length === 0
     const [isAvisoVisivel, setIsAvisoVisivel] = useState(false)
     const [isSaving, setIsSaving] = useState(false)
+    const [artefatoExcluir, setArtefatoExcluir] = useState(null)
 
     const handleAvisoClose = () => {
         setIsAvisoVisivel(false)
@@ -103,6 +105,7 @@ const PainelArtefatos = () => {
 
     const handleAdicionarArtefato = () => {
         setIsFormSalvarVisivel(true)
+        setIsFormBuscarVisivel(false)
         setIsTableListVisivel(false)
         setDadosArtefato(null)
         setAcaoForm('criar')
@@ -132,9 +135,33 @@ const PainelArtefatos = () => {
         handleReload()
         setIsSaving(false)
     }
-    
-    const handleExcluirArtefatos = async () => {
 
+    const handleExibirModal = () => setIsModalExcluirVisivel(true)
+    
+    const handleFecharModal = () => setIsModalExcluirVisivel(false)
+    
+    const handleExcluirArtefato = async (record) => {
+        handleExibirModal()
+        setDadosArtefato(record)
+    }
+
+    const handleConfirmarExclusao = async (commitMessage) => {
+        handleFecharModal()
+        setIsSaving(true)
+        const parametros = {
+            github_token: dadosProjeto.token,
+            repository: dadosProjeto.nome_repo,
+            path: dadosArtefato.path_file,
+            commit_message: commitMessage
+        }
+        const response = await deleteContent(parametros)
+        
+        if (!response.error) {
+            await excluirArtefato(dadosArtefato.id)
+        }
+
+        handleReload()
+        setIsSaving(false)
     }
 
     return (
@@ -168,16 +195,6 @@ const PainelArtefatos = () => {
                         disabled={isBtnPlusDisabled}
                     >
                         Criar Artefato
-                    </Button>
-
-                    <Button
-                        icon={<FaTrash />}
-                        type="primary"
-                        danger
-                        disabled={isBtnTrashDisabled}
-                        onClick={handleExcluirArtefatos}
-                    >
-                        Excluir
                     </Button>
 
                     <Button
@@ -227,9 +244,28 @@ const PainelArtefatos = () => {
                 </div>
             )}
 
+            { isTableListVisivel && 
+                <div>
+                    {isSaving && ( 
+                        <div style={StyleSpin}>
+                            <Spin size="large" />
+                        </div>
+                    )}
+                    <TableArtefatosSelect 
+                        onEdit={handleAtualizarArtefato} 
+                        onDelete={handleExcluirArtefato}
+                    />
+                </div>
+            }
+            
 
+            <ModalExcluirArtefato 
+                visible={isModalExcluirVisivel}
+                onCancel={handleFecharModal}
+                onDelete={handleConfirmarExclusao}
+            />
 
-            { isTableListVisivel && <TableArtefatosSelect onEdit={handleAtualizarArtefato} />}
+            
         </div>
         
     )
