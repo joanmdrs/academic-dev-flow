@@ -46,13 +46,13 @@ const TabsTarefas = ({onEdit}) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            if (tarefas.length === 0) {
+            if (dadosProjeto !== null) {
                 await handleGetTarefas();
             }
 
         };
         fetchData();
-    }, [tarefas]);
+    }, []);
 
     return (
         <Tabs defaultActiveKey="1" tabPosition="left" style={{ marginTop: '50px' }}>

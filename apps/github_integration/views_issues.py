@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from github import Github, GithubException
 from .github_auth import get_github_client
 from github import InputGitAuthor
+from apps.tarefa.models import Tarefa 
 import base64
 import json
 
@@ -83,6 +84,7 @@ def list_issues(request):
     try:
         github_token = request.GET.get('github_token')
         repository = request.GET.get('repository')
+        state = request.GET.get('state')
         
         if not github_token or not repository:
             return JsonResponse({'error': 'Ausência de parâmetros'}, status=status.HTTP_400_BAD_REQUEST)
@@ -91,7 +93,11 @@ def list_issues(request):
         repo = g.get_repo(repository)
         
         issues_list = []
-        issues = repo.get_issues(state='all')
+        
+        if not state:
+            issues = repo.get_issues(state='all')
+        elif state:
+            issues = repo.get_issues(state=state)
         
         for issue in issues:
             issue_data = {
@@ -99,18 +105,23 @@ def list_issues(request):
                 'number': issue.number,
                 'title': issue.title,
                 'body': issue.body,
-                'url': issue.url,
+                'url': issue.html_url,
                 'state': issue.state,
                 'labels': [label.name for label in issue.labels],
                 'assignee': issue.assignee.login if issue.assignee else None
             }
+            
+            # Verificar se a issue está vinculada a alguma tarefa no banco de dados
+            tarefa_vinculada = Tarefa.objects.filter(id_issue=issue.id).exists()
+            issue_data['exists'] = tarefa_vinculada
+            
             issues_list.append(issue_data)
         
         return JsonResponse(issues_list, safe=False, status=status.HTTP_200_OK)
     
-    
     except GithubException as e:
-        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)    
+        return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
     
     
 def get_repository_labels(request):

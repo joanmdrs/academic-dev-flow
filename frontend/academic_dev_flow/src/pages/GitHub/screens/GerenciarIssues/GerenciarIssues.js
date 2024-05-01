@@ -6,7 +6,7 @@ import { listIssues } from "../../../../services/githubIntegration/issueService"
 import { sicronizarIssues, verificarExistenciaIssue } from "../../../../services/tarefaService";
 import { handleError } from "../../../../services/utils";
 import { NotificationManager } from "react-notifications";
-import { FaArrowsRotate } from "react-icons/fa6";
+import { FaArrowsRotate, FaTheRedYeti } from "react-icons/fa6";
 import { BsQuestionCircle } from "react-icons/bs";
 import Aviso from "../../../../components/Aviso/Aviso";
 
@@ -16,8 +16,16 @@ const GerenciarIssues = () => {
         {
             title: ( 
                 <div style={{ display: 'flex'}}>
-                    <Button onClick={() => setStateIssue('open')} style={{border: 'none', boxShadow: 'none'}}>Open</Button>
-                    <Button onClick={() => setStateIssue('closed')} style={{border: 'none', boxShadow: 'none'}}>Closed</Button>
+
+                    <Button onClick={async () => {
+                        setStateIssue('open')
+                        await handleGetIssues('open')
+                    }} style={{border: 'none', boxShadow: 'none'}}>Open</Button>
+
+                    <Button onClick={async () => {
+                        setStateIssue('closed')
+                        await handleGetIssues('closed')
+                    }} style={{border: 'none', boxShadow: 'none'}}>Closed</Button>
                 </div>
             ),
             dataIndex: 'title',
@@ -28,7 +36,7 @@ const GerenciarIssues = () => {
                         {record.title}
                         <span>
                             {
-                                record.existe ? 
+                                record.exists ? 
                                 <IoCheckmark color="green" />
                                 : <IoCloseOutline color="red" />
                             }
@@ -55,35 +63,37 @@ const GerenciarIssues = () => {
         setIsAvisoVisivel(false);
     };
 
-    const handleGetIssues = async () => {
+    const handleGetIssues = async (state) => {
         try {
+            setClosedIssues([]);
+            setOpenIssues([]);
+            setIssues([]);            
+    
             const parametros = {
                 github_token: dadosProjeto.token,
-                repository: dadosProjeto.nome_repo
+                repository: dadosProjeto.nome_repo,
+                state: state
             };
     
             const response = await listIssues(parametros);
             
             if (!response.error && response.data) {
-                const openIssues = [];
-                const closedIssues = [];
+                const openIssuesList = [];
+                const closedIssuesList = [];
     
-                await Promise.all(response.data.map(async (item) => {
-                    const resTarefa = await verificarExistenciaIssue(item.id);
-                    const existe = resTarefa.data.exists ? true : false;
-                    
-                    if (item.state === 'open') {
-                        openIssues.push({ ...item, existe });
-                    } else if (item.state === 'closed') {
-                        closedIssues.push({ ...item, existe });
+                response.data.forEach(item => {
+                    const exists = item.exists ? true : false;
+    
+                    if (state === 'open') {
+                        openIssuesList.push({ ...item, exists });
+                    } else if (state === 'closed') {
+                        closedIssuesList.push({ ...item, exists });
                     }
-                }));
-                console.log(response.data)
+                });
     
-                setIssues(response.data); // Se precisar de todas as issues em uma variável
-    
-                setOpenIssues(openIssues);
-                setClosedIssues(closedIssues);
+                setIssues(response.data); 
+                setOpenIssues(openIssuesList);
+                setClosedIssues(closedIssuesList);
             }
         } catch (error) {
             handleError(error, "Não foi possível carregar os dados, contate o suporte!");
@@ -92,33 +102,36 @@ const GerenciarIssues = () => {
     
 
     const handleSicronizarIssues = async () => {
-        const dados = issues.map((item) => {
-            if (!item.existe) {
-                return {
+        try {
+            const novasIssues = issues.filter(item => !item.exists && item.state === 'open');
+    
+            if (novasIssues.length > 0) {
+                const dados = novasIssues.map(item => ({
                     nome: item.title,
                     descricao: item.body,
                     id_issue: item.id,
                     number_issue: item.number,
                     url_issue: item.url,
                     projeto: dadosProjeto.id
-                };
+                }));
+                
+                await sicronizarIssues(dados);
+                await handleGetIssues();
+                
+                NotificationManager.success('As novas issues foram sincronizadas com sucesso.');
+            } else {
+                NotificationManager.info('Todas as issues do repositório deste projeto já estão salvas no banco de dados.');
             }
-        }).filter(Boolean);
-        
-        if (dados) {
-            await sicronizarIssues(dados);
-            await handleGetIssues()
-            
-        } else {
-            NotificationManager.info('Todos as issues do repositório deste projeto já estão salvos no bando de dados.')
+        } catch (error) {
+            console.error('Ocorreu um erro ao sincronizar as issues:', error);
+            NotificationManager.error('Ocorreu um erro ao sincronizar as issues. Por favor, tente novamente mais tarde.');
         }
     }
-
 
     useEffect(() => {
         const fetchData = async () => {
             if (dadosProjeto) {
-                await handleGetIssues()
+                await handleGetIssues(stateIssue)
             }
         }
 
@@ -131,7 +144,9 @@ const GerenciarIssues = () => {
             {isAvisoVisivel && (
                 <Aviso
                     titulo="AVISO"
-                    descricao="Nesta tela, o usuário visualizará as issues do repositório vinculado a este projeto. A coluna de status da tabela indica que o ícone de cor verde significa que a issue está vinculada a uma tarefa, enquanto o ícone de cor vermelho indica que não está vinculada."
+                    descricao="Nesta tela, o usuário visualiza as issues do repositório vinculado a este projeto. O ícone verde indica que a issue está vinculada a uma tarefa do projeto, enquanto o ícone vermelho indica que a issue existe apenas no repositório do GitHub.
+
+                    O botão Sincronizar verifica as issues vinculadas às tarefas e aquelas que não estão vinculadas. Em seguida, ele cria as tarefas e as vincula às issues correspondentes."
                     visible={isAvisoVisivel}
                     onClose={handleAvisoClose}
                 />
@@ -144,6 +159,7 @@ const GerenciarIssues = () => {
                     style={{marginBottom: '20px'}} 
                     type="primary" ghost
                     onClick={handleSicronizarIssues}
+                    disabled={issues.length === 0 ? true : false}
                 > 
                     Sicronizar 
                 </Button>
