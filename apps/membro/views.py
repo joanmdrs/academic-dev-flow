@@ -74,7 +74,7 @@ class CadastrarMembroView(APIView):
             if user_created:
                 user_created.delete()
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+
 
 class BuscarMembroPorGrupoView(APIView):
     permission_classes = [IsAuthenticated]

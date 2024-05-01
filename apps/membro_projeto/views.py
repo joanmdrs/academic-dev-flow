@@ -26,6 +26,30 @@ class CadastrarMembroProjetoView(APIView):
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class BuscarMembroProjetoPeloUsuarioGithubView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        try:
+            usuario_github = request.GET.get('usuario_github')
+            id_projeto = request.GET.get('id_projeto')
+            
+            membro = get_object_or_404(Membro, github__usuario_github=usuario_github)
+            
+            membro_projeto = MembroProjeto.objects.filter(membro=membro.id, projeto=id_projeto).first()
+
+            membro_data = {
+                'id_membro_projeto': membro_projeto.id,
+            }
+
+            return JsonResponse(membro_data, status=200)
+        
+        except Membro.DoesNotExist:
+            return JsonResponse({'error': 'Membro não encontrado'}, status=status.HTTP_404_NOT_FOUND)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
                 
 class BuscarProjetosDoMembroView(APIView):
     permission_classes = [IsAuthenticated]
