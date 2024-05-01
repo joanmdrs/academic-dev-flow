@@ -70,3 +70,12 @@ export const listarMembrosPeloIdProjeto = async (idProjeto) => {
         return {error: 'Erro ao buscar os dados'}
     }
 }
+
+export const buscarMembroProjetoPeloUsuarioGithub = async (parametros) => {
+    try {
+        const response = await api.get('membro_projeto/buscar/usuario_github/', {params: parametros})
+        return response
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
+}

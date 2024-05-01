@@ -76,7 +76,7 @@ const GerenciarIssues = () => {
                     id_issue: item.id,
                     number_issue: item.number,
                     url_issue: item.url,
-                    projeto: dadosProjeto.id
+                    projeto: dadosProjeto.id,
                 };
             }
         }).filter(Boolean);

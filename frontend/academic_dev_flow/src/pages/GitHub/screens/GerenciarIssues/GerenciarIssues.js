@@ -72,7 +72,8 @@ const GerenciarIssues = () => {
             const parametros = {
                 github_token: dadosProjeto.token,
                 repository: dadosProjeto.nome_repo,
-                state: state
+                state: state,
+                projeto: dadosProjeto.id
             };
     
             const response = await listIssues(parametros);
@@ -90,7 +91,7 @@ const GerenciarIssues = () => {
                         closedIssuesList.push({ ...item, exists });
                     }
                 });
-    
+                console.log(response.data)
                 setIssues(response.data); 
                 setOpenIssues(openIssuesList);
                 setClosedIssues(closedIssuesList);
@@ -112,13 +113,18 @@ const GerenciarIssues = () => {
                     id_issue: item.id,
                     number_issue: item.number,
                     url_issue: item.url,
-                    projeto: dadosProjeto.id
+                    projeto: dadosProjeto.id,
+                    membros: item.membros_ids,
+                    labels: item.label_ids,
                 }));
+
+                console.log(dados)
+
+
                 
                 await sicronizarIssues(dados);
-                await handleGetIssues();
+                await handleGetIssues('open');
                 
-                NotificationManager.success('As novas issues foram sincronizadas com sucesso.');
             } else {
                 NotificationManager.info('Todas as issues do repositório deste projeto já estão salvas no banco de dados.');
             }
