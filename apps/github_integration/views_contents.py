@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from github import Github, GithubException
 from .github_auth import get_github_client
 from github import InputGitAuthor
+from apps.artefato.models import Artefato
 import base64
 import json
 
@@ -154,13 +155,20 @@ def list_contents(request):
                 documentos.append({
                     'sha': file_content.sha,
                     'name': file_content.name,
+                    'url': file_content.html_url,
                     'path': file_content.path,
                     'content': file_content.content,
                     'download_url': file_content.download_url,
                     'type': file_content.type
                 })
-                
-        return JsonResponse(documentos, safe=False, status=status.HTTP_200_OK)
+        documentos_list = []   
+        for documento in documentos:
+            
+            artefato = Artefato.objects.filter(id_file=documento['sha']).exists()
+            documento['exists'] = artefato
+            documentos_list.append(documento)
+               
+        return JsonResponse(documentos_list, safe=False, status=status.HTTP_200_OK)
                 
     except GithubException as e:
         return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

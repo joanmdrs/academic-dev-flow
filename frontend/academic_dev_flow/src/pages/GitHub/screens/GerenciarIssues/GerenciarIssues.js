@@ -3,10 +3,10 @@ import React, { useEffect, useState } from "react";
 import { IoCheckmark, IoCloseOutline } from "react-icons/io5";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { listIssues } from "../../../../services/githubIntegration/issueService";
-import { sicronizarIssues, verificarExistenciaIssue } from "../../../../services/tarefaService";
+import { sicronizarIssues } from "../../../../services/tarefaService";
 import { handleError } from "../../../../services/utils";
 import { NotificationManager } from "react-notifications";
-import { FaArrowsRotate, FaTheRedYeti } from "react-icons/fa6";
+import { FaArrowsRotate } from "react-icons/fa6";
 import { BsQuestionCircle } from "react-icons/bs";
 import Aviso from "../../../../components/Aviso/Aviso";
 
@@ -181,7 +181,6 @@ const GerenciarIssues = () => {
             <Table
                 loading={ issues.length === 0 ? true : false}
                 rowKey="id"
-                bordered
                 dataSource={ stateIssue === 'open' ? openIssues : closedIssues}
                 columns={COLUNAS_TABELA_ISSUES}
             />

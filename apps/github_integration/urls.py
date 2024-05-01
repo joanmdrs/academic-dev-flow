@@ -17,7 +17,7 @@ urlpatterns = [
     path('get_content/', views_contents.get_content, name='get_content'),
     path('update_content/', views_contents.update_content, name='update_content'),
     path('delete_content/', views_contents.delete_content, name='delete_content'),
-    path('list_contents/', views_contents.list_contents, name='list_contents'),
+    path('contents/list_contents/', views_contents.list_contents, name='list_contents'),
     path('list_commits_by_user/', views.user_commits_view, name='list_commits'),
 
 ]

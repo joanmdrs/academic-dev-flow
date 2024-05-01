@@ -1,27 +1,25 @@
 import React from "react";
 import {Form, Input, Button} from 'antd'
-import SelectProjeto from "../SelectProjeto/SelectProjeto";
-import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 
-const  FormListarArquivos = ({onSearch, onClear}) => {
+const  FormBuscarContents = ({onSearch, onClear, inputs}) => {
     const {dadosProjeto} = useContextoGlobalProjeto()
+    const [form] = Form.useForm()
 
-    const handleBuscarArquivos = async (dados) => {
-        dados['github_token'] = dadosProjeto.token
-        dados['repository'] = dadosProjeto.nome_repo
-        onSearch(dados)
+    const handleGetContents = async (dados) => {
+        const parametros = {
+            github_token: dadosProjeto.token,
+            repository: dadosProjeto.nome_repo,
+            folder: dados.folder
+        }
+        onSearch(parametros)
     }
 
     return (
-        <Form className="global-form" onFinish={handleBuscarArquivos} layout="vertical">
-            <Form.Item>
-                <h4> LISTAR ARQUIVOS </h4>
-            </Form.Item>
+        <Form form={form} onFinish={handleGetContents} layout="vertical">
 
-
-            <SelectProjeto />
-
+            {inputs}
+    
             <Form.Item name="folder" required>
                 <Input name="folder" placeholder="Informe a pasta dos artefatos do repositório" /> 
             </Form.Item>
@@ -35,7 +33,12 @@ const  FormListarArquivos = ({onSearch, onClear}) => {
                 </Form.Item>
 
                 <Form.Item>
-                    <Button onClick={onClear}>
+                    <Button 
+                        onClick={ () => {
+                            onClear()
+                            form.resetFields()
+                        }}
+                    >
                         Limpar
                     </Button>
                 </Form.Item>
@@ -49,4 +52,4 @@ const  FormListarArquivos = ({onSearch, onClear}) => {
     )
 }
 
-export default FormListarArquivos
+export default FormBuscarContents

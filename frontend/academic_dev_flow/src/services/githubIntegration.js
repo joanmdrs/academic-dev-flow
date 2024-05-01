@@ -67,11 +67,7 @@ export const deleteContent = async (parametros) => {
 
 export const listContents = async (parametros) => {
     try {
-        const response = await api.get('github_integration/list_contents/', {params: {
-            github_token: parametros.github_token,
-            repository: parametros.repository,
-            folder: parametros.folder,
-        }})
+        const response = await api.get('github_integration/contents/list_contents/', {params: parametros})
 
         return response
     } catch (error) {

@@ -1,6 +1,7 @@
 import { Tabs } from "antd";
 import React from "react";
 import GerenciarIssues from "../GerenciarIssues/GerenciarIssues";
+import GerenciarContents from "../GerenciarContents/GerenciarContents";
 
 const {TabPane} = Tabs
 
@@ -16,7 +17,7 @@ const PainelGithub = () => {
                 </TabPane>
 
                 <TabPane tab="Contents" key="2">
-
+                    <GerenciarContents />
                 </TabPane>
 
                 <TabPane tab="Labels" key="3">
