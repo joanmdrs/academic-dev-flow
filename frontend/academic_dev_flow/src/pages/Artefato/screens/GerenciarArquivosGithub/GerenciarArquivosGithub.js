@@ -8,7 +8,7 @@ import ListaArquivos from "../../components/ListaArquivos/ListaArquivos";
 import { NotificationManager } from "react-notifications";
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { FaArrowsRotate } from "react-icons/fa6";
-import { excluirArtefato, sicronizarArtefatos, verificarExistenciaArquivo } from "../../../../services/artefatoService";
+import { excluirArtefato, sicronizarContents, verificarExistenciaArquivo } from "../../../../services/artefatoService";
 import { handleError } from "../../../../services/utils";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 import ModalExcluirArtefato from "../../components/ModalExcluirArtefato/ModalExcluirArtefato";
@@ -75,7 +75,7 @@ const GerenciarArquivosGithub = () => {
             }
         })
 
-        await sicronizarArtefatos(dadosEnviar)
+        await sicronizarContents(dadosEnviar)
     }
 
     const handleConfirmarExclusao = (record) => {

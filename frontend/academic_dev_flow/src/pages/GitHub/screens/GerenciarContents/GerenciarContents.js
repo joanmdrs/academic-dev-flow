@@ -10,6 +10,9 @@ import FormBuscarContents from "../../components/FormBuscarContents/FormBuscarCo
 import { listContents } from "../../../../services/githubIntegration";
 import { BsQuestionCircle } from "react-icons/bs";
 import Aviso from "../../../../components/Aviso/Aviso";
+import { sicronizarContents } from "../../../../services/artefatoService";
+import { handleError } from "../../../../services/utils";
+import { NotificationManager } from "react-notifications";
 
 const GerenciarContents = () => {
 
@@ -49,6 +52,7 @@ const GerenciarContents = () => {
     const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false)
     const [isTableVisivel, setIsTableVisivel] = useState(false)
     const [isAvisoVisivel, setIsAvisoVisivel] = useState(false)
+    const [folder, setFolder] = useState(null)
 
     const handleDuvidaClick = () => {
         setIsAvisoVisivel(true);
@@ -68,17 +72,45 @@ const GerenciarContents = () => {
     }
 
     const handleGetContents = async (parametros) => {
+        setFolder(parametros.folder)
         setIsTableVisivel(true)
 
         const response = await listContents(parametros)
 
         if (!response.error && response.data){
             setContents(response.data)
+        } else {
+            setIsTableVisivel(false)
         }
     }
 
+    const handleScriconizarContents = async () => {
+        try {
+            const novosContents = contents.filter(item => !item.exists);
+    
+            if (novosContents.length > 0) {
+                const dados = novosContents.map(item => ({
+                    nome: item.name,
+                    id_file: item.sha,
+                    path_file: item.path,
+                    projeto: dadosProjeto.id
+                }))
+                await sicronizarContents(dados);
 
-
+                const parametros = {
+                    github_token: dadosProjeto.token,
+                    repository: dadosProjeto.nome_repo,
+                    folder: folder
+                }
+                setContents([])
+                await handleGetContents(parametros)
+            } else {
+                NotificationManager.info('Todos os arquivos listados já estão salvos no banco de dados.');
+            }
+        } catch (error) {
+            return handleError(error, "Falha ao tentar sicronizar os arquivos, contate o suporte!")
+        }
+    }
     
     return (
         <React.Fragment>
@@ -112,6 +144,7 @@ const GerenciarContents = () => {
                         type="primary"  
                         ghost                 
                         disabled={contents.length === 0 ? true : false}
+                        onClick={handleScriconizarContents}
                     > 
                         Sicronizar 
                     </Button>

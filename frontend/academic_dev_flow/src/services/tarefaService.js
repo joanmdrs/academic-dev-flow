@@ -148,7 +148,7 @@ export const verificarExistenciaIssue = async (parametro) => {
     }
 }
 
-export const cadastrarLabels = async (dados) => {
+export const criarLabels = async (dados) => {
     try {
         const response = await api.post('tarefa/labels/cadastrar/', {labels: dados})
         return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION_THE_LABELS)

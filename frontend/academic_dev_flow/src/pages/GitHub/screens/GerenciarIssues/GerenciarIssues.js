@@ -129,8 +129,7 @@ const GerenciarIssues = () => {
                 NotificationManager.info('Todas as issues do repositório deste projeto já estão salvas no banco de dados.');
             }
         } catch (error) {
-            console.error('Ocorreu um erro ao sincronizar as issues:', error);
-            NotificationManager.error('Ocorreu um erro ao sincronizar as issues. Por favor, tente novamente mais tarde.');
+            return handleError(error, 'Falha ao tentar sicronizar as issues, contate o suporte!')
         }
     }
 

@@ -6,7 +6,7 @@ import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProj
 import { useContextoTarefa } from "../../context/ContextoTarefa";
 import { Octokit } from "octokit";
 import { handleError } from "../../../../services/utils";
-import { buscarLabelPeloId, cadastrarLabels } from "../../../../services/tarefaService";
+import { buscarLabelPeloId, criarLabels } from "../../../../services/tarefaService";
 import { IoCheckmark, IoCloseOutline } from "react-icons/io5";
 import { FaArrowsRotate } from "react-icons/fa6";
 import { NotificationManager } from "react-notifications";
@@ -104,8 +104,8 @@ const GerenciarLabels = () => {
             }
         }).filter(Boolean);
         
-        if (dados.length > 0) {
-            await cadastrarLabels(dados);
+        if (dados.length> 0) {
+            await criarLabels(dados);
             await handleGetLabels()
             
         } else {

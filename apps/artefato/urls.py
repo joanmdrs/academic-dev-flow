@@ -11,5 +11,5 @@ urlpatterns = [
     path('listar/', ListarArtefatosView.as_view(), name="listar_artefatos"),
     path('filtrar/nome-projeto/', FiltrarArtefatoPeloNomeEProjeto.as_view(), name='filtrar_artefato_pelo_nome_e_pelo_projeto'),
     path('verificar-existencia/', VerificarExistenciaArtefatoView.as_view(), name='verificar-se-artefato-já-existe'),
-    path('sicronizar-artefatos/', SicronizarArtefatosView.as_view(), name="sicronizar-artefatos")
+    path('sicronizar-contents/', SicronizarContentsView.as_view(), name="sicronizar-contents")
 ]

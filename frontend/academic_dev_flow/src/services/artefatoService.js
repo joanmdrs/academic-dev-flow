@@ -89,9 +89,9 @@ export const verificarExistenciaArquivo = async (parametro) => {
     }
 }
 
-export const sicronizarArtefatos = async (dados) => {
+export const sicronizarContents = async (dados) => {
     try {
-        const response = await api.post('/artefato/sicronizar-artefatos/', dados)
+        const response = await api.post('/artefato/sicronizar-contents/', dados)
         return handleSuccess(response, SUCCESS_MESSAGE_ON_SYNC_ARTIFACTS)
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SYNC)
