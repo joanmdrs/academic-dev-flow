@@ -6,6 +6,7 @@ import { GoTasklist } from "react-icons/go";
 import { useParams } from "react-router-dom";
 import { LuCalendarClock } from "react-icons/lu";
 import { FaGithub } from "react-icons/fa6";
+import { MdOutlinePeopleAlt } from "react-icons/md";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import Loading from "../../../../components/Loading/Loading";
@@ -101,6 +102,10 @@ const VisualizarProjeto = ({grupo}) => {
 
                             <TabPane tab='GitHub' key="5" icon={<FaGithub />}>
                                 <ScreenPainelGihtub />
+                            </TabPane>
+
+                            <TabPane tab='Membros' key="6" icon={<MdOutlinePeopleAlt />}>
+                                
                             </TabPane>
                         </Tabs>
                     </div>
