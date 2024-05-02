@@ -3,8 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import JsonResponse
-from .models import MembroProjeto
-from .serializers import MembroProjetoSerializer
+from .models import MembroProjeto, FuncaoMembroProjetoAtual
+from .serializers import MembroProjetoSerializer, FuncaoMembroProjetoSerializer
 from apps.membro.models import Membro
 from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
@@ -21,8 +21,6 @@ class CadastrarMembroProjetoView(APIView):
                 return Response(serializer.data, status=status.HTTP_200_OK)
             
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)        
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -170,6 +168,7 @@ class ListarMembrosPorProjeto(APIView):
             for membro_projeto in membros_projeto:
                 membro = membro_projeto.membro
                 usuario_github = membro.github.usuario_github
+                funcao = FuncaoMembroProjetoAtual.objects.get(membro=membro_projeto['id'], ativo=True)
                 
                 membros_info.append({
                     'id_membro_projeto': membro_projeto.id,
@@ -177,7 +176,8 @@ class ListarMembrosPorProjeto(APIView):
                     'id_membro': membro.id,
                     'nome_membro': membro.nome,
                     'grupo_membro': membro.grupo,
-                    'usuario_github': usuario_github
+                    'usuario_github': usuario_github,
+                    'funcao': funcao
                 })
             
             
@@ -186,5 +186,21 @@ class ListarMembrosPorProjeto(APIView):
             
             return JsonResponse(membros_info, safe=False, status=status.HTTP_200_OK)
   
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class CadastrarFuncaoMembroView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        try:
+            funcoes = request.data.get('funcoes', [])
+            serializer = FuncaoMembroProjetoSerializer(data=funcoes, many=True)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)   
+            
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
