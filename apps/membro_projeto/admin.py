@@ -23,11 +23,11 @@ class FuncaoMembroProjetoAtualAdmin(admin.ModelAdmin):
     list_display = ('id', 'exibir_membro', 'exibir_funcao', 'data_inicio', 'data_termino')
     
     def exibir_membro(self, obj):
-        return obj.membro.nome
+        return obj.membro_projeto.membro.nome
     exibir_membro.short_description = 'Membro'
     
     def exibir_funcao(self, obj):
-        return obj.funcao.nome
+        return obj.funcao_membro.nome
     exibir_funcao.short_description = 'Funcao'
 
 admin.site.register(MembroProjeto, MembroProjetoAdmin)
