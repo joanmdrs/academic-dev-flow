@@ -1,7 +1,7 @@
 import { NotificationManager } from "react-notifications"
 import api from "../api/api"
-import { handleError, handleInfo } from "./utils"
-import { ERROR_MESSAGE_ON_SEARCHING, INFO_MESSAGE_ON_SEARCHING } from "./messages"
+import { handleError, handleInfo, handleSuccess } from "./utils"
+import { ERROR_MESSAGE_ON_CREATION, ERROR_MESSAGE_ON_SEARCHING, INFO_MESSAGE_ON_SEARCHING, SUCCESS_MESSAGE_ON_CREATION } from "./messages"
 
 export const criarMembroProjeto = async (dados) => {
     const resposta = await api.post('membro_projeto/cadastrar/', {membros: dados})
@@ -77,5 +77,23 @@ export const buscarMembroProjetoPeloUsuarioGithub = async (parametros) => {
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
+}
+
+export const cadastrarFuncoes = async (dados) => {
+    try {
+        const response = await api.post('membro_projeto/funcoes/cadastrar/', {funcoes: dados})
+        return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION)
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_CREATION)
+    }
+}
+
+export const cadastrarFuncaoAtual = async (dados) => {
+    try {
+        const response = await api.post('membro_projeto/cadastrar-funcao-atual/', dados)
+        return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION)
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_CREATION)
     }
 }
