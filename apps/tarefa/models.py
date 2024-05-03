@@ -35,9 +35,9 @@ class Tarefa(models.Model):
     id_issue = models.BigIntegerField(null=True, blank=True)
     number_issue = models.IntegerField(null=True, blank=True)
     url_issue = models.URLField(null=True, blank=True)
-    labels = models.ManyToManyField(Label, null=True, blank=True)
+    labels = models.ManyToManyField(Label)
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, null=True, blank=True)
-    membros = models.ManyToManyField(MembroProjeto, null=True, blank=True)
+    membros = models.ManyToManyField(MembroProjeto)
     iteracao = models.ForeignKey(Iteracao, on_delete=models.CASCADE, null=True, blank=True)
     # tipo = models.ForeignKey(Tipo, on_delete=models.SET_NULL, null=True, blank=True)
 

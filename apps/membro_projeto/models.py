@@ -20,11 +20,12 @@ class MembroProjeto(models.Model):
 
 class FuncaoMembroProjetoAtual(models.Model):
     membro_projeto = models.ForeignKey(MembroProjeto, on_delete=models.CASCADE)
-    funcao = models.ForeignKey(FuncaoMembroProjeto, on_delete=models.CASCADE)
-    data_inicio = models.DateTimeField(auto_now_add=True)
-    data_termino = models.DateTimeField(null=True, blank=True)
+    funcao_membro = models.ForeignKey(FuncaoMembroProjeto, on_delete=models.CASCADE)
+    data_inicio = models.DateField(auto_now_add=True)
+    data_termino = models.DateField(null=True, blank=True)
     ativo = models.BooleanField(default=True)
 
     class Meta:
         unique_together = ['membro_projeto', 'ativo']
+        
         
