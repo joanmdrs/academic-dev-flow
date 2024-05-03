@@ -13,5 +13,6 @@ urlpatterns = [
     path('excluir/many/<int:idProjeto>/', ExcluirMembroProjetoManyView.as_view(), name='excluir_membro_projeto_coletivo'),
     path('buscar/membros/quantidade/<int:id_projeto>/', QuantidadeMembrosPorProjetoView.as_view(), name='buscar_quantidade_membros_por_projeto'),
     path('listar/projeto/<int:id_projeto>/', ListarMembrosPorProjeto.as_view(), name='listar_membros_por_projeto'),
-    path('funcoes/cadastrar/', CadastrarFuncaoMembroView.as_view(), name='cadastrar_funcoes_membro_projeto')
+    path('funcoes/cadastrar/', CadastrarFuncaoMembroView.as_view(), name='cadastrar_funcoes_membro_projeto'),
+    path('cadastrar-funcao-atual/', CadastrarFuncaoAtualView.as_view(), name='cadastrar-funcao-atual')
 ]

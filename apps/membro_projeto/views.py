@@ -204,3 +204,20 @@ class CadastrarFuncaoMembroView(APIView):
             
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class CadastrarFuncaoAtualView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    
+    def post(self, request):
+        try:
+            serializer = FuncaoMembroProjetoSerializer(data=request.data)
+            
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
