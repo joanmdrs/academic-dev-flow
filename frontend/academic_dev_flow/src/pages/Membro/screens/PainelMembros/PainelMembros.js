@@ -4,6 +4,7 @@ import { Button, Space, Table } from "antd";
 import { cadastrarFuncaoAtual, listarMembrosPeloIdProjeto } from "../../../../services/membroProjetoService";
 import FormFuncao from "../../components/FormFuncao/FormFuncao";
 import { useMembroContexto } from "../../context/MembroContexto";
+import { formatDate } from "../../../../services/utils";
 
 const PainelMembros = () => {
 
@@ -20,6 +21,26 @@ const PainelMembros = () => {
             render: (_, record) => (
                 <Space>
                     {record.nome_funcao ? record.nome_funcao : 'À definir'}
+                </Space>
+            )
+        },
+        {
+            title: 'Início', 
+            dataIndex: 'data_inicio',
+            key: 'data_inicio',
+            render: (_, record) => (
+                <Space>
+                    <span> {formatDate(record.data_inicio)} </span>
+                </Space>
+            )
+        },
+        {
+            title: 'Fim', 
+            dataIndex: 'data_termino',
+            key: 'data_termino',
+            render: (_, record) => (
+                <Space>
+                    <span> {formatDate(record.data_termino)} </span>
                 </Space>
             )
         },

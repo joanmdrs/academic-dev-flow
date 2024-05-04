@@ -21,7 +21,7 @@ class MembroProjeto(models.Model):
 class FuncaoMembroProjetoAtual(models.Model):
     membro_projeto = models.ForeignKey(MembroProjeto, on_delete=models.CASCADE)
     funcao_membro = models.ForeignKey(FuncaoMembroProjeto, on_delete=models.CASCADE)
-    data_inicio = models.DateField(auto_now_add=True)
+    data_inicio = models.DateField(null=True, blank=True)
     data_termino = models.DateField(null=True, blank=True)
     ativo = models.BooleanField(default=True)
 

@@ -51,15 +51,19 @@ const FormFuncao = ({ onSubmit, onCancel }) => {
                 <h4> DEFINIR FUNÇÃO MEMBRO </h4>
             </Form.Item>
 
-            <Form.Item label="Membro" name="nome_membro">
+            <Form.Item label="Membro" name="nome_membro" style={{width: '25%'}}>
                 <Input name="nome_membro" />
             </Form.Item>
 
-            <Form.Item label="Função" name="id_funcao">
+            <Form.Item label="Função" name="id_funcao" style={{width: '25%'}}>
                 <Select options={optionsFuncoes} />
             </Form.Item>
 
-            <Form.Item label="Data de término" name="data_termino">
+            <Form.Item label="Início" name="data_inicio" style={{width: 'fit-content'}}>
+                <Input type="date" />
+            </Form.Item>
+
+            <Form.Item label="Fim" name="data_termino" style={{width: 'fit-content'}}>
                 <Input type="date" />
             </Form.Item>
 
