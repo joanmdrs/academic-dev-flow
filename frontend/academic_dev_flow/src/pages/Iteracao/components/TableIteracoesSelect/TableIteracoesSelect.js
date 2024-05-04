@@ -96,7 +96,6 @@ const TableIteracoesSelect = ({onEdit, onDelete}) => {
         <div style={{}}>
             <h4 style={{textAlign: "center"}}> Cronograma de Iterações </h4> 
             <Table 
-                className="style-table"
                 columns={COLUNAS_TABELA_ITERACOES}
                 dataSource={iteracoes}
                 rowKey={"id"}

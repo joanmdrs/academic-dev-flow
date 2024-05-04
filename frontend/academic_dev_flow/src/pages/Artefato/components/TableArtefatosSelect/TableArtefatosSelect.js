@@ -23,36 +23,22 @@ const TableArtefatosSelect = ({onView, onEdit, onDelete}) => {
             )
         },
         {
-            title: 'Status',
-            dataIndex: 'status',
-            key: 'status',
-            render: (_, record) => (
-                <span>
-                    {optionsStatusArtefatos.find(status => status.value === record.status)?.label}
-                </span>
-            )
-        },
-        {
-            title: 'Path',
-            dataIndex: 'path_file',
-        },
-        {
             title: 'Ações',
             dataIndex: 'action',
             key: 'action',
             align: 'center',
             render: (_, record) => (
                 <Space size="middle">
-                    <a onClick={() => onView(record)}><FaEye color="green" size="20px" /></a>
-                    <a onClick={() => onEdit(record)}><FaEdit color="orange" size="20px" /></a>
-                    <a onClick={() => onDelete(record)}><FaTrash color="red" /></a>
+                    <a onClick={() => onView(record)}><FaEye /></a>
+                    <a onClick={() => onEdit(record)}><FaEdit /></a>
+                    <a onClick={() => onDelete(record)}><FaTrash /></a>
                 </Space>
             )
         }
     ]
 
     const {dadosProjeto} = useContextoGlobalProjeto()
-    const {artefatos, setArtefatos, setArtefatosSelecionados} = useContextoArtefato()
+    const {artefatos, setArtefatos} = useContextoArtefato()
 
     const handleListarArtefatos = async () => {
         const response = await listarArtefatos();
@@ -74,8 +60,6 @@ const TableArtefatosSelect = ({onView, onEdit, onDelete}) => {
 
     return (
         <Table 
-            className="style-table"
-            bordered
             columns={COLUNAS_TABELA_ARTEFATOS}
             dataSource={artefatos}
             rowKey={"id"}

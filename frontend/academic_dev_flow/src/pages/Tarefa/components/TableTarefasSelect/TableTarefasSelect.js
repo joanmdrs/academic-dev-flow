@@ -70,8 +70,6 @@ const TableTarefasSelect = ({tasks, onEdit}) => {
 
     return (
         <Table 
-            className="style-table"
-            bordered
             columns={COLUNAS_TABELA_TAREFAS}
             dataSource={tasks}
             rowKey={"id"}

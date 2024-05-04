@@ -1,12 +1,13 @@
 import { Button, Space, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { IoCheckmark, IoCloseOutline } from "react-icons/io5";
+import { FaSearch } from "react-icons/fa";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { listIssues } from "../../../../services/githubIntegration/issueService";
 import { sicronizarIssues } from "../../../../services/tarefaService";
 import { handleError } from "../../../../services/utils";
 import { NotificationManager } from "react-notifications";
-import { FaArrowsRotate } from "react-icons/fa6";
+import { FaArrowRotateRight, FaArrowsRotate } from "react-icons/fa6";
 import { BsQuestionCircle } from "react-icons/bs";
 import Aviso from "../../../../components/Aviso/Aviso";
 
@@ -53,6 +54,7 @@ const GerenciarIssues = () => {
     const [closedIssues, setClosedIssues] = useState([])
     const {dadosProjeto} = useContextoGlobalProjeto();
     const [isAvisoVisivel, setIsAvisoVisivel] = useState(false)
+    const [isTableVisivel, setIsTableVisivel] = useState(false)
     const [stateIssue, setStateIssue] = useState('open')
 
     const handleDuvidaClick = () => {
@@ -63,8 +65,16 @@ const GerenciarIssues = () => {
         setIsAvisoVisivel(false);
     };
 
+    const handleResetar = () => {
+        setIsTableVisivel(false)
+        setIssues([])
+        setOpenIssues([])
+        setClosedIssues([])
+    }
+
     const handleGetIssues = async (state) => {
         try {
+            setIsTableVisivel(true)
             setClosedIssues([]);
             setOpenIssues([]);
             setIssues([]);            
@@ -133,16 +143,6 @@ const GerenciarIssues = () => {
         }
     }
 
-    useEffect(() => {
-        const fetchData = async () => {
-            if (dadosProjeto) {
-                await handleGetIssues(stateIssue)
-            }
-        }
-
-        fetchData()
-    }, [dadosProjeto])
-
     return (
         <React.Fragment>
 
@@ -157,32 +157,55 @@ const GerenciarIssues = () => {
                 />
             )}
 
-            <div style={{display:'flex', justifyContent: 'flex-end', gap: '10px'}}> 
+            <div style={{display:'flex', justifyContent: 'space-between'}}> 
 
-                <Button 
-                    icon={<FaArrowsRotate />} 
-                    style={{marginBottom: '20px'}} 
-                    type="primary" ghost
-                    onClick={handleSicronizarIssues}
-                    disabled={issues.length === 0 ? true : false}
-                > 
-                    Sicronizar 
-                </Button>
+                <div style={{display: 'flex', gap: '10px'}}> 
+                    <Button 
+                        type="primary"
+                        icon={<FaSearch />}
+                        onClick={async () => await handleGetIssues('open')}
+                    >
+                        Listar Issues
+                    </Button>
 
-                <Button
-                    icon={<BsQuestionCircle />}
-                    onClick={handleDuvidaClick}
-                   
-            
-                />
+                    <Button
+                        icon={<FaArrowRotateRight />}
+                        onClick={handleResetar}
+                        danger
+                        ghost
+                    >
+                        Resetar
+                    </Button>
+
+                </div>
+
+                <div style={{display:'flex', gap: '10px'}}> 
+                    <Button 
+                        icon={<FaArrowsRotate />} 
+                        style={{marginBottom: '20px'}} 
+                        type="primary" ghost
+                        onClick={handleSicronizarIssues}
+                        disabled={issues.length === 0 ? true : false}
+                    > 
+                        Sicronizar 
+                    </Button>
+
+                    <Button
+                        icon={<BsQuestionCircle />}
+                        onClick={handleDuvidaClick}           
+                    />
+                </div>
             </div>
 
-            <Table
-                loading={ issues.length === 0 ? true : false}
-                rowKey="id"
-                dataSource={ stateIssue === 'open' ? openIssues : closedIssues}
-                columns={COLUNAS_TABELA_ISSUES}
-            />
+            {isTableVisivel &&  
+                <Table
+                    loading={ issues.length === 0 ? true : false}
+                    rowKey="id"
+                    dataSource={ stateIssue === 'open' ? openIssues : closedIssues}
+                    columns={COLUNAS_TABELA_ISSUES}
+                />
+            }
+
         </React.Fragment>
     )
 }
