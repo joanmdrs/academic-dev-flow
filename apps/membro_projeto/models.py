@@ -26,6 +26,8 @@ class FuncaoMembroProjetoAtual(models.Model):
     ativo = models.BooleanField(default=True)
 
     class Meta:
-        unique_together = ['membro_projeto', 'ativo']
+        constraints = [
+            models.UniqueConstraint(fields=['membro_projeto'], condition=models.Q(ativo=True), name='unique_active_member_project')
+        ]
         
         

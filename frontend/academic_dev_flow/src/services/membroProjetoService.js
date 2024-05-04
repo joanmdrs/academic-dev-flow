@@ -91,9 +91,18 @@ export const cadastrarFuncoes = async (dados) => {
 
 export const cadastrarFuncaoAtual = async (dados) => {
     try {
-        const response = await api.post('membro_projeto/cadastrar-funcao-atual/', dados)
-        return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION)
+        const response = await api.post('membro_projeto/funcoes/cadastrar-funcao-atual/', dados)
+        return handleSuccess(response, 'Função do membro definida com sucesso!')
     } catch (error) {
-        return handleError(error, ERROR_MESSAGE_ON_CREATION)
+        return handleError(error, 'Falha ao tentar definir a função do membro, contate o suporte!')
+    }
+}
+
+export const listarFuncoes = async () => {
+    try {
+        const response = await api.get('membro_projeto/funcoes/listar/')
+        return response
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
     }
 }

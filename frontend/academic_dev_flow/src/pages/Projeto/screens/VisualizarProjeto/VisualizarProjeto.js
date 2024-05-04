@@ -19,6 +19,7 @@ import ScreenCronogramaIteracoes from "../../../Iteracao/screens/CronogramaItera
 import ScreenQuadroTarefas from "../../../Tarefa/screens/QuadroTarefas/index.js";
 import ScreenPainelArtefatos from "../../../Artefato/screens/PainelArtefatos/index.js";
 import ScreenPainelGihtub from "../../../GitHub/screens/PainelGithub/index.js";
+import ScreenPainelMembros from "../../../Membro/screens/PainelMembros/index.js";
 
 const {TabPane} = Tabs
 const VisualizarProjeto = ({grupo}) => {
@@ -105,7 +106,7 @@ const VisualizarProjeto = ({grupo}) => {
                             </TabPane>
 
                             <TabPane tab='Membros' key="6" icon={<MdOutlinePeopleAlt />}>
-                                
+                                <ScreenPainelMembros />
                             </TabPane>
                         </Tabs>
                     </div>

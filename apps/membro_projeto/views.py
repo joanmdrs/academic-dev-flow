@@ -171,12 +171,14 @@ class ListarMembrosPorProjeto(APIView):
                 
                 try:
                     funcao = FuncaoMembroProjetoAtual.objects.get(membro_projeto=membro_projeto.id, ativo=True)
-                    id_funcao = funcao.id
+                    id_funcao_atual = funcao.id
+                    id_funcao = funcao.funcao_membro.id
                     nome_funcao = funcao.funcao_membro.nome
                     data_inicio = funcao.data_inicio
                     data_termino = funcao.data_termino
                     ativo = funcao.ativo
                 except FuncaoMembroProjetoAtual.DoesNotExist:
+                    id_funcao_atual = None
                     id_funcao = None
                     nome_funcao = None
                     data_inicio = None
@@ -190,6 +192,7 @@ class ListarMembrosPorProjeto(APIView):
                     'nome_membro': membro.nome,
                     'grupo_membro': membro.grupo,
                     'usuario_github': usuario_github,
+                    'id_funcao_atual': id_funcao_atual,
                     'id_funcao': id_funcao,
                     'nome_funcao': nome_funcao,
                     'data_inicio': data_inicio,
