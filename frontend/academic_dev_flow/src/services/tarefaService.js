@@ -185,3 +185,21 @@ export const sicronizarIssues = async (dados) => {
         return handleError(error, ERROR_MESSAGE_ON_SYNC)
     } 
 }
+
+export const iniciarContagemTempo = async (parametros) => {
+    try {
+        const response = await api.post('tarefa/iniciar-contagem-tempo/', parametros)
+        return response
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar iniciar a tarefa, contate o suporte!')
+    }
+}
+
+export const pararContagemTempo = async (parametros) => {
+    try {
+        const response = await api.post('tarefa/parar-contagem-tempo/', parametros)
+        return response
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar pausar a tarefa, contate o suporte!')
+    }
+}
