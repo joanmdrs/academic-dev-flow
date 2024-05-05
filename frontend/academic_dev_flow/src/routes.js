@@ -95,7 +95,7 @@ function Routes() {
           exact
         />
 
-        <Route path="/aluno/tarefas" Component={ScreenMinhasTarefas} exact/>
+        <Route path="/aluno/tarefas" element={<ScreenMinhasTarefas grupo="aluno" />} exact/>
       </Route>
 
   

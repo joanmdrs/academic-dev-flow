@@ -21,7 +21,7 @@ const MinhasTarefas = () => {
     const {autor} = useContextoGlobalProjeto()
     const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
     const [optionsProjetos, setOptionsProjetos] = useState([])
-    const [selectProjeto, setSelectProjeto] = useState(null)
+    const [selectProjeto, setSelectProjeto] = useState('Projeto')
     const [tarefasParaFazer, setTarefasParaFazer] = useState([])
     const [tarefasEmAndamento, setTarefasEmAndamento] = useState([])
     const [tarefasEmRevisao, setTarefasEmRevisao] = useState([])
@@ -87,96 +87,72 @@ const MinhasTarefas = () => {
     return (
         <div>
 
-            <div style={{margin: '20px'}}>
-                <h2> Minhas Tarefas </h2>  
-            </div>
+            { dadosProjeto === null ? (
+                <Result 
+                    style={{margin: '0 auto'}}
+                    icon={<SmileOutlined />}
+                    title="Tarefas"
+                    subTitle="Selecione o projeto para poder exibir as suas tarefas."
+                    extra={
+                            <Select style={{width: '20%'}} allowClear onChange={handleSelectProjeto} defaultValue="Projeto" options={optionsProjetos} />
+                      }
+                />) : (
+                
+                <div>
 
-            <div style={{borderRadius: '20px', border: '1px solid #ddd', margin: '2%'}}>
-
-                <div style={{
-                    display: 'flex', 
-                    alignItems: 'baseline',
-                    justifyContent: 'space-between',
-                    margin: '20px', 
-                    marginTop: '30px',
-                }}>
-
-                    <div style={{width: '50%'}}> 
-                        {dadosProjeto !== null && (
-                            <h3 style={{
-                                border: '1px solid var(--primary-color)',
-                                backgroundColor: 'var(--primary-color)',
-                                color: '#fff',
-                                width: 'fit-content', 
-                                padding: '10px 20px',
-                                borderRadius: '20px',
-                                fontWeight: '400',
-                                fontSize: '15px'
-                            }}> {dadosProjeto.nome} </h3>
-                        )}
+                    <div style={{margin: '20px'}}>
+                        <h2> Minhas Tarefas </h2>  
                     </div>
 
-                    <div style={{display: 'flex', gap: '10px', width: '50%', justifyContent: 'flex-end'}}> 
-                        {/* <div style={{display: 'flex', gap: '10px'}}> 
-                            <Button icon={<FaThList />}></Button>
-                            <Button icon={<BsFillGrid1X2Fill />}></Button>
-                            <Button icon={<IoCalendarClearSharp />}></Button>
-                        </div> */}
-                        <Button 
-                            icon={<FaPlus />}
-                            type="primary"
-                        >
-                            Adicionar Tarefa
-                        </Button>
-                        <Form.Item>
-                            <Select
-                                allowClear
-                                onChange={handleSelectProjeto}
-                                defaultValue="Projeto"
-                                options={optionsProjetos}
-                            />
+                    <div style={{margin: '20px'}}>
 
-                        </Form.Item>
+                        <div style={{display: 'flex', gap: '10px',justifyContent: 'flex-end'}}> 
+                            {/* <div style={{display: 'flex', gap: '10px'}}> 
+                                <Button icon={<FaThList />}></Button>
+                                <Button icon={<BsFillGrid1X2Fill />}></Button>
+                                <Button icon={<IoCalendarClearSharp />}></Button>
+                            </div> */}
+                            <Button 
+                                icon={<FaPlus />}
+                                type="primary"
+                            >
+                                Adicionar Tarefa
+                            </Button>
+                            <Form.Item>
+                                <Select
+                                    allowClear
+                                    onChange={handleSelectProjeto}
+                                    value={selectProjeto}
+                                    options={optionsProjetos}
+                                />
+
+                            </Form.Item>
+                        </div>
                     </div>
-                </div>
 
-                <div style={{margin: '20px'}} className="minhas-tarefas-conteudo">
-                    <Tabs>
-                        <TabPane tab="Para fazer" key="1" style={{marginTop: '50px'}}>
-                            <ListTarefas dados={tarefasParaFazer} />
-                        </TabPane>
+                    <div className="minhas-tarefas-conteudo">
+                        <Tabs>
+                            <TabPane tab="Para fazer" key="1" style={{marginTop: '50px'}}>
+                                <ListTarefas dados={tarefasParaFazer} />
+                            </TabPane>
 
-                        <TabPane tab="Em andamento" key="2">
-                            <ListTarefas dados={tarefasEmAndamento} />
-                        </TabPane>
+                            <TabPane tab="Em andamento" key="2">
+                                <ListTarefas dados={tarefasEmAndamento} />
+                            </TabPane>
 
-                        <TabPane tab="Em revisão" key="3">
-                            <ListTarefas dados={tarefasEmRevisao} />
-                        </TabPane>
+                            <TabPane tab="Em revisão" key="3">
+                                <ListTarefas dados={tarefasEmRevisao} />
+                            </TabPane>
 
-                        <TabPane tab="Concluídas" key="4">
-                            <ListTarefas dados={tarefasConcluidas} />
-                        </TabPane>
+                            <TabPane tab="Concluídas" key="4">
+                                <ListTarefas dados={tarefasConcluidas} />
+                            </TabPane>
 
-                    </Tabs>
+                        </Tabs>
 
-                </div>
+                    </div>
 
-            </div>
-
-
-            
-
-            { dadosProjeto === null && (
-                <Result
-                icon={<SmileOutlined />}
-                title="Tarefas"
-                subTitle="Selecione o projeto para poder exibir as suas tarefas."
-              />
-            )
-
-            }
-
+                </div>)}
         </div>
     )
 }

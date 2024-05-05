@@ -14,6 +14,7 @@ export const criarTarefa = async (dadosForm, dadosIssue) => {
         id_issue: dadosIssue.issue_id,
         number_issue: dadosIssue.issue_number,
         url_issue: dadosIssue.issue_url,
+        tipo: dadosForm.tipo,
         labels: dadosForm.labels,
         projeto: dadosForm.projeto,
         membros: dadosForm.membros,

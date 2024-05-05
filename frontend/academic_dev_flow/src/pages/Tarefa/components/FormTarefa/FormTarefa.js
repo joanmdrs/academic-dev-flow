@@ -11,6 +11,7 @@ import { optionsStatusTarefas } from '../../../../services/optionsStatus';
 import { handleError } from '../../../../services/utils';
 import { ERROR_MESSAGE_ON_SEARCHING } from '../../../../services/messages';
 import { useContextoGlobalProjeto } from '../../../../context/ContextoGlobalProjeto';
+import { listarTipos } from '../../../../services/tipoService';
 
 function FormTarefa ({onCancel, onSubmit}) {
 
@@ -19,6 +20,7 @@ function FormTarefa ({onCancel, onSubmit}) {
     const {dadosProjeto} = useContextoGlobalProjeto()
     const [optionsMembros, setOptionsMembros] = useState(null)
     const [optionsIteracoes, setOptionsIteracoes] = useState(null)
+    const [optionsTipos, setOptionsTipos] = useState(null)
     const [optionsLabels, setOptionsLabels] = useState(null)
     const [loading, setLoading] = useState(false)
 
@@ -55,6 +57,20 @@ function FormTarefa ({onCancel, onSubmit}) {
         }
     }
 
+    const handleGetTipos = async () => {
+        const response = await listarTipos()
+        if(!response.error && response.data) {
+            const resultados = response.data.map((item) => {
+                return {
+                    value: item.id,
+                    label: item.nome,
+                    color: item.cor
+                }
+            })
+            setOptionsTipos(resultados)
+        }
+    }
+
     const handleGetLabels = async () => {
         const response = await listarLabelsPorProjeto(dadosProjeto.id)
         if (response.data.length > 0){
@@ -74,6 +90,7 @@ function FormTarefa ({onCancel, onSubmit}) {
             if (dadosProjeto !== null ){
                 await handleGetMembros()
                 await handleGetIteracoes()
+                await handleGetTipos()
                 await handleGetLabels()
                 setLoading(false)
                 if (dadosTarefa !== null){
@@ -177,6 +194,18 @@ function FormTarefa ({onCancel, onSubmit}) {
                             options={optionsStatusTarefas}
         
                         
+                        />
+                    </Form.Item>
+
+                    <Form.Item label='Categoria' name='tipo' required style={{flex: '1'}}>
+                        <Select
+                            allowClear
+                            style={{
+                                width: '100%'
+                            }}
+                            placeholder="Selecione"
+                            name="tipo"
+                            options={optionsTipos}
                         />
                     </Form.Item>
 
