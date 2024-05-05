@@ -145,6 +145,7 @@ class BuscarMembroPeloUserView(APIView):
                 if membro_projeto: 
                     autor = {
                         'id_membro': membro.id,
+                        'id_user': id_user,
                         'id_membro_projeto': membro_projeto.id,
                         'nome': membro.nome,
                         'nome_github': nome_github,

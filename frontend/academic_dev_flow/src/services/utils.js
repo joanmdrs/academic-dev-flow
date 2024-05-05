@@ -1,5 +1,4 @@
 import { NotificationManager } from "react-notifications";
-import {Modal} from 'antd'
 
 export const recarregarPagina = () => {
     setTimeout(() => {
@@ -23,6 +22,19 @@ export const converterData = (dataString) => {
   const dataFormatada = `${ano}-${mes}-${dia}`;
   return dataFormatada
   
+}
+
+export const limitarCaracteres = (texto, limite) => {
+
+  if (texto === null) {
+    return ""
+  }
+
+  if (texto.length <= limite) {
+      return texto;
+  } else {
+      return texto.slice(0, limite) + "...";
+  }
 }
 
 export const handleSuccess = (response, successMessage) => {

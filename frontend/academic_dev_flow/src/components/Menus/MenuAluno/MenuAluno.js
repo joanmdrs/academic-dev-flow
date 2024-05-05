@@ -5,6 +5,9 @@ import { Link } from 'react-router-dom';
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { MdFormatListBulleted } from "react-icons/md";
 import { HiOutlineDocumentReport } from "react-icons/hi";
+import { HiHome } from "react-icons/hi2";
+import { LuLayoutGrid } from "react-icons/lu";
+
 import SubMenu from "antd/es/menu/SubMenu";
 
 const MenuAluno = () => {
@@ -31,6 +34,15 @@ const MenuAluno = () => {
             marginTop: "20px"
             }}
         >
+
+            <Menu.Item
+                className='item-menu'
+                key='home'
+                icon={<HiHome size="20px"/>}
+            >
+                <Link to="/aluno/home">Dashboard</Link>
+            </Menu.Item>
+
             <SubMenu
                 className='item-menu'
                 key='projeto'
@@ -50,10 +62,10 @@ const MenuAluno = () => {
 
             <Menu.Item
                 className='item-menu'
-                key='minhas-atividades'
-                icon={<MdFormatListBulleted size="20px"/>}
+                key='minhas-tarefas'
+                icon={<LuLayoutGrid size="20px"/>}
             >
-                <Link to="/aluno/atividades">Atividades</Link>
+                <Link to="/aluno/tarefas">Tarefas</Link>
             </Menu.Item>
 
             <Menu.Item

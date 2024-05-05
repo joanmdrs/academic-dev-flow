@@ -24,6 +24,7 @@ import ScreenGerenciarLabels from "./pages/Tarefa/screens/GerenciarLabels";
 import ScreenGerenciarIssues from "./pages/Tarefa/screens/GerenciarIssues";
 import ScreenGerenciarIteracoes from "./pages/Iteracao/screens/GerenciarIteracoes";
 import ScreenGerenciarProjetos from "./pages/Projeto/screens/GerenciarProjetos";
+import ScreenMinhasTarefas from "./pages/Tarefa/screens/MinhasTarefas";
 
 function Routes() {
   return (
@@ -93,6 +94,8 @@ function Routes() {
           }
           exact
         />
+
+        <Route path="/aluno/tarefas" Component={ScreenMinhasTarefas} exact/>
       </Route>
 
   
