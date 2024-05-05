@@ -79,6 +79,7 @@ class ListarTarefasPorProjetoView(APIView):
             tarefas_info = []
 
             for tarefa in tarefas:
+                estado_contagem = tarefa.estado_contagem_tempo()
                 membros_info = self.get_membros_info(tarefa)
                 membros = self.get_membros(tarefa)
                 iteracao_nome = self.get_iteracao_nome(tarefa)
@@ -101,7 +102,8 @@ class ListarTarefasPorProjetoView(APIView):
                     'membros_info': membros_info,
                     'membros': membros,
                     'labels_info': labels_info,
-                    'labels': labels
+                    'labels': labels,
+                    'estado_contagem_tempo': estado_contagem
                 }
                 tarefas_info.append(tarefa_info)
                 
@@ -299,7 +301,7 @@ class SicronizarIssuesView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
 
-class IniciarContagemTempoView(View):
+class IniciarContagemTempoView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
         try:
@@ -311,7 +313,7 @@ class IniciarContagemTempoView(View):
         except Tarefa.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Tarefa não encontrada'})
 
-class PararContagemTempoView(View):
+class PararContagemTempoView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
         try:

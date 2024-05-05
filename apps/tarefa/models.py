@@ -48,6 +48,10 @@ class Tarefa(models.Model):
         ultimo_intervalo = self.intervalos.last()
         
         if not ultimo_intervalo or ultimo_intervalo.tipo == 'pausa':
+            if self.status == 'criada':
+                self.status = 'andamento'
+                self.save()
+                
             IntervaloTempo.objects.create(tipo='inicio', tarefa=self, membro_projeto=membro_projeto_id)
 
     def parar_contagem_tempo(self, membro_projeto_id):
