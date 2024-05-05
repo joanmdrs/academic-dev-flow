@@ -299,8 +299,28 @@ class SicronizarIssuesView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
 
+class IniciarContagemTempoView(View):
+    permission_classes = [IsAuthenticated]
+    def post(self, request):
+        try:
+            tarefa_id = request.GET.get('tarefa_id')
+            membro_projeto_id = request.GET.get('membro_projeto_id')
+            tarefa = Tarefa.objects.get(pk=tarefa_id)
+            tarefa.iniciar_contagem_tempo(membro_projeto=membro_projeto_id)
+            return JsonResponse({'success': True})
+        except Tarefa.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Tarefa não encontrada'})
 
-        
-        
-    
+class PararContagemTempoView(View):
+    permission_classes = [IsAuthenticated]
+    def post(self, request):
+        try:
+            tarefa_id = request.GET.get('tarefa_id')
+            membro_projeto_id = request.GET.get('membro_projeto_id')
+            tarefa = Tarefa.objects.get(pk=tarefa_id)
+            tarefa.parar_contagem_tempo(membro_projeto_id=request.user.membro_projeto.id)
+            return JsonResponse({'success': True})
+        except Tarefa.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Tarefa não encontrada'})
+
     
