@@ -44,7 +44,7 @@ class Tarefa(models.Model):
     def __str__(self):
         return self.nome
     
-    def iniciar_contagem_tempo(self, membro_projeto_id):
+    def iniciar_contagem_tempo(self, membro_projeto):
         ultimo_intervalo = self.intervalos.last()
         
         if not ultimo_intervalo or ultimo_intervalo.tipo == 'pausa':
@@ -52,20 +52,20 @@ class Tarefa(models.Model):
                 self.status = 'andamento'
                 self.save()
                 
-            IntervaloTempo.objects.create(tipo='inicio', tarefa=self, membro_projeto=membro_projeto_id)
+            IntervaloTempo.objects.create(tipo='inicio', tarefa=self, membro_projeto=membro_projeto)
 
-    def parar_contagem_tempo(self, membro_projeto_id):
+    def parar_contagem_tempo(self, membro_projeto):
         ultimo_intervalo = self.intervalos.last()
         
         if ultimo_intervalo and ultimo_intervalo.tipo == 'inicio':
-            IntervaloTempo.objects.create(tipo='pausa', tarefa=self, membro_projeto=membro_projeto_id)
+            IntervaloTempo.objects.create(tipo='pausa', tarefa=self, membro_projeto=membro_projeto)
             intervalo_inicio = self.intervalos.filter(tipo='inicio').latest('data_hora')
             intervalo_pausa = self.intervalos.filter(tipo='pausa').latest('data_hora')
             tempo_decorrido = intervalo_pausa.data_hora - intervalo_inicio.data_hora
 
-            tempo_decorrido_minutos = tempo_decorrido.total_seconds() // 60
-            
-            self.tempo_gasto += tempo_decorrido_minutos
+            tempo_decorrido_segundos = tempo_decorrido.total_seconds()
+        
+            self.tempo_gasto += tempo_decorrido_segundos
             self.save()
             
     def estado_contagem_tempo(self):

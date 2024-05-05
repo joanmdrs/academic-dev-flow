@@ -37,6 +37,23 @@ export const limitarCaracteres = (texto, limite) => {
   }
 }
 
+export const formatarTempo = (segundos) => {
+  const horas = Math.floor(segundos / 3600);
+  const minutos = Math.floor((segundos % 3600) / 60);
+  const segundosRestantes = segundos % 60;
+  
+  const horasFormatadas = horas.toString().padStart(2, '0');
+  
+  const minutosFormatados = minutos.toString().padStart(2, '0');
+  
+  const segundosFormatados = segundosRestantes.toString().padStart(2, '0');
+  
+  return `${horasFormatadas}:${minutosFormatados}:${segundosFormatados}`;
+};
+
+
+
+
 export const handleSuccess = (response, successMessage) => {
   if (response.status === 200 || response.status === 204 || response.status === 201) {
       NotificationManager.success(successMessage);

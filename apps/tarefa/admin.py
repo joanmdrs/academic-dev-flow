@@ -16,7 +16,7 @@ class LabelAdmin(admin.ModelAdmin):
     list_display = ('id', 'id_github', 'nome', 'cor')
     
 class IntervaloTempoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'exibir_tarefa')
+    list_display = ('id', 'exibir_tarefa', 'exibir_membro', 'data_hora')
     
     def exibir_tarefa(self, obj):
         return obj.tarefa.nome

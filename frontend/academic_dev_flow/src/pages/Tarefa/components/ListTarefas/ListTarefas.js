@@ -3,9 +3,10 @@ import { IoPlayOutline } from "react-icons/io5";
 import { IoMdTrash } from "react-icons/io";
 import { MdOpenInNew } from "react-icons/md";
 import React, { useState } from "react";
-import { limitarCaracteres } from "../../../../services/utils";
+import { formatarTempo, limitarCaracteres } from "../../../../services/utils";
+import { IoPauseOutline } from "react-icons/io5";
 
-const ListTarefas = ({ dados }) => {
+const ListTarefas = ({ dados, onStart, onPause }) => {
     const [paginaAtual, setPaginaAtual] = useState(1);
     const itensPorPagina = 10; // Defina o número de itens a serem exibidos por página
 
@@ -34,9 +35,23 @@ const ListTarefas = ({ dados }) => {
                     </div>
 
                     <div>
-                        <Tooltip title="Iniciar">
-                            <Button style={{ border: 'none', color: 'var(--primary-color)' }} icon={<IoPlayOutline />} />
-                        </Tooltip>
+                        <span>{`${formatarTempo(item.tempo_gasto)}`}</span>
+                    </div>
+                    <div>
+                        { item.estado_contagem_tempo === true ? (
+                            <Tooltip title="Pausar">
+                                <Button 
+                                    onClick={() => onPause(item.id)}
+                                    style={{ border: 'none', color: 'var(--primary-color)' }} 
+                                    icon={<IoPauseOutline />} 
+                                />
+                            </Tooltip>
+                        ) : (
+                            <Tooltip title="Iniciar">
+                                <Button onClick={() => onStart(item.id)} style={{ border: 'none', color: 'var(--primary-color)' }} icon={<IoPlayOutline />} />
+                            </Tooltip>
+                        )}
+
                         <Tooltip title="Abrir">
                             <Button style={{ border: 'none', color: 'var(--primary-color)' }} icon={<MdOpenInNew />} />
                         </Tooltip>

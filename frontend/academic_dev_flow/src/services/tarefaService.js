@@ -189,7 +189,7 @@ export const sicronizarIssues = async (dados) => {
 export const iniciarContagemTempo = async (parametros) => {
     try {
         const response = await api.post('tarefa/iniciar-contagem-tempo/', parametros)
-        return response
+        return handleSuccess(response, 'Você está iniciando uma tarefa !')
     } catch (error) {
         return handleError(error, 'Falha ao tentar iniciar a tarefa, contate o suporte!')
     }
@@ -198,7 +198,7 @@ export const iniciarContagemTempo = async (parametros) => {
 export const pararContagemTempo = async (parametros) => {
     try {
         const response = await api.post('tarefa/parar-contagem-tempo/', parametros)
-        return response
+        return handleSuccess(response, 'Você está pausando uma tarefa !')
     } catch (error) {
         return handleError(error, 'Falha ao tentar pausar a tarefa, contate o suporte!')
     }

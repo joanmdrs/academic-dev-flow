@@ -7,7 +7,7 @@ import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { ConsoleSqlOutlined, SmileOutlined } from "@ant-design/icons";
 import Titulo from "../../../../components/Titulo/Titulo";
 import CardTarefa from "../../components/CardTarefa/CardTarefa";
-import { listarTarefasPorProjeto } from "../../../../services/tarefaService";
+import { iniciarContagemTempo, listarTarefasPorProjeto, pararContagemTempo } from "../../../../services/tarefaService";
 import ListTarefas from "../../components/ListTarefas/ListTarefas";
 import { FaPlus, FaThList } from "react-icons/fa";
 import { BsFillGrid1X2Fill } from "react-icons/bs";
@@ -69,6 +69,29 @@ const MinhasTarefas = () => {
         }
     }
 
+    const handleStartTarefa = async (idTask) => {
+        const parametros = {
+            tarefa_id: idTask,
+            membro_projeto_id: autor.id_membro_projeto
+        }
+
+
+        await iniciarContagemTempo(parametros)
+        await handleGetTarefas()
+
+    }
+
+    const handlePauseTarefa = async (idTask) => {
+        const parametros = {
+            tarefa_id: idTask,
+            membro_projeto_id: autor.id_membro_projeto
+        }
+
+        console.log(parametros)
+        await pararContagemTempo(parametros)
+        await handleGetTarefas()
+    }
+
     useEffect(() => {
         const fetchData = async () => {
 
@@ -107,11 +130,6 @@ const MinhasTarefas = () => {
                     <div style={{margin: '20px'}}>
 
                         <div style={{display: 'flex', gap: '10px',justifyContent: 'flex-end'}}> 
-                            {/* <div style={{display: 'flex', gap: '10px'}}> 
-                                <Button icon={<FaThList />}></Button>
-                                <Button icon={<BsFillGrid1X2Fill />}></Button>
-                                <Button icon={<IoCalendarClearSharp />}></Button>
-                            </div> */}
                             <Button 
                                 icon={<FaPlus />}
                                 type="primary"
@@ -133,11 +151,11 @@ const MinhasTarefas = () => {
                     <div className="minhas-tarefas-conteudo">
                         <Tabs>
                             <TabPane tab="Para fazer" key="1" style={{marginTop: '50px'}}>
-                                <ListTarefas dados={tarefasParaFazer} />
+                                <ListTarefas dados={tarefasParaFazer} onStart={handleStartTarefa}   />
                             </TabPane>
 
                             <TabPane tab="Em andamento" key="2">
-                                <ListTarefas dados={tarefasEmAndamento} />
+                                <ListTarefas dados={tarefasEmAndamento} onStart={handleStartTarefa} onPause={handlePauseTarefa} />
                             </TabPane>
 
                             <TabPane tab="Em revisão" key="3">

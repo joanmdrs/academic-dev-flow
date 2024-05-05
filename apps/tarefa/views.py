@@ -103,7 +103,8 @@ class ListarTarefasPorProjetoView(APIView):
                     'membros': membros,
                     'labels_info': labels_info,
                     'labels': labels,
-                    'estado_contagem_tempo': estado_contagem
+                    'estado_contagem_tempo': estado_contagem,
+                    'tempo_gasto': tarefa.tempo_gasto
                 }
                 tarefas_info.append(tarefa_info)
                 
@@ -305,10 +306,11 @@ class IniciarContagemTempoView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
         try:
-            tarefa_id = request.GET.get('tarefa_id')
-            membro_projeto_id = request.GET.get('membro_projeto_id')
-            tarefa = Tarefa.objects.get(pk=tarefa_id)
-            tarefa.iniciar_contagem_tempo(membro_projeto=membro_projeto_id)
+            membro_projeto = MembroProjeto.objects.get(pk=request.data['membro_projeto_id'])
+            tarefa = Tarefa.objects.get(pk=request.data['tarefa_id'])
+            
+            tarefa.iniciar_contagem_tempo(membro_projeto=membro_projeto)
+            
             return JsonResponse({'success': True})
         except Tarefa.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Tarefa não encontrada'})
@@ -317,10 +319,11 @@ class PararContagemTempoView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
         try:
-            tarefa_id = request.GET.get('tarefa_id')
-            membro_projeto_id = request.GET.get('membro_projeto_id')
-            tarefa = Tarefa.objects.get(pk=tarefa_id)
-            tarefa.parar_contagem_tempo(membro_projeto_id=request.user.membro_projeto.id)
+            membro_projeto = MembroProjeto.objects.get(pk=request.data['membro_projeto_id'])
+            tarefa = Tarefa.objects.get(pk=request.data['tarefa_id'])
+            
+            tarefa.parar_contagem_tempo(membro_projeto=membro_projeto)
+            
             return JsonResponse({'success': True})
         except Tarefa.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Tarefa não encontrada'})
