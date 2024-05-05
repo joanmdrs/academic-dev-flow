@@ -63,6 +63,14 @@ class Tarefa(models.Model):
             
             self.tempo_gasto += tempo_decorrido_minutos
             self.save()
+            
+    def estado_contagem_tempo(self):
+        ultimo_intervalo = self.intervalos.last()
+
+        if ultimo_intervalo and ultimo_intervalo.tipo == 'inicio':
+            return True
+        elif not ultimo_intervalo or ultimo_intervalo.tipo == 'pausa':
+            return False
 
     
 class IntervaloTempo(models.Model):
