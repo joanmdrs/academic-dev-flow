@@ -1,17 +1,15 @@
-import { Button, Col, Form, Result, Row, Select, Tabs } from "antd";
+import { Button, Form, Modal, Result, Select, Tabs } from "antd";
 import "./MinhasTarefas.css"
 import React, { useEffect, useState } from "react";
 import { buscarProjetosDoMembro } from "../../../../services/membroProjetoService";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
-import { ConsoleSqlOutlined, SmileOutlined } from "@ant-design/icons";
-import Titulo from "../../../../components/Titulo/Titulo";
-import CardTarefa from "../../components/CardTarefa/CardTarefa";
-import { iniciarContagemTempo, listarTarefasPorProjeto, pararContagemTempo } from "../../../../services/tarefaService";
+import { atualizarTarefa, criarTarefa, excluirTarefas, iniciarContagemTempo, listarTarefasPorProjeto, pararContagemTempo } from "../../../../services/tarefaService";
 import ListTarefas from "../../components/ListTarefas/ListTarefas";
-import { FaPlus, FaThList } from "react-icons/fa";
-import { BsFillGrid1X2Fill } from "react-icons/bs";
-import { IoCalendarClearSharp } from "react-icons/io5";
+import { FaPlus } from "react-icons/fa";
+import { useContextoTarefa } from "../../context/ContextoTarefa";
+import FormTarefa from "../../components/FormTarefa/FormTarefa";
+import { createIssue, updateIssue } from "../../../../services/githubIntegration/issueService";
 
 
 const {TabPane} = Tabs
@@ -20,12 +18,15 @@ const MinhasTarefas = () => {
 
     const {autor} = useContextoGlobalProjeto()
     const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
+    const {dadosTarefa, setDadosTarefa} = useContextoTarefa()
     const [optionsProjetos, setOptionsProjetos] = useState([])
     const [selectProjeto, setSelectProjeto] = useState('Projeto')
     const [tarefasParaFazer, setTarefasParaFazer] = useState([])
     const [tarefasEmAndamento, setTarefasEmAndamento] = useState([])
     const [tarefasEmRevisao, setTarefasEmRevisao] = useState([])
     const [tarefasConcluidas, setTarefasConcluidas] = useState([])
+    const [isFormSalvarVisivel, setIsFormSalvarVisivel] = useState(false)
+    const [acaoForm, setAcaoForm] = useState('criar')
 
     const handleGetProjetos = async () => {
         const resMembroProjeto = await buscarProjetosDoMembro(autor.id_user);
@@ -74,8 +75,6 @@ const MinhasTarefas = () => {
             tarefa_id: idTask,
             membro_projeto_id: autor.id_membro_projeto
         }
-
-
         await iniciarContagemTempo(parametros)
         await handleGetTarefas()
 
@@ -86,10 +85,76 @@ const MinhasTarefas = () => {
             tarefa_id: idTask,
             membro_projeto_id: autor.id_membro_projeto
         }
-
-        console.log(parametros)
         await pararContagemTempo(parametros)
         await handleGetTarefas()
+    }
+
+    const handleCancelar = () => {
+        setIsFormSalvarVisivel(false)
+        setDadosTarefa(null)
+    }
+
+    const handleReload = async () => {
+        setIsFormSalvarVisivel(false)
+        setAcaoForm('criar')
+        await handleGetTarefas()
+    }
+
+    const handleAdicionarTarefa = () => {
+        setIsFormSalvarVisivel(true)
+        setAcaoForm('criar')
+        setDadosTarefa(null)
+    }
+
+    const handleAtualizarTarefa = async (record) => {
+        setIsFormSalvarVisivel(true)
+        setAcaoForm('atualizar')
+        setDadosTarefa(record)
+    }
+
+    const handleSaveIssue = async (dadosForm) => {
+        const dadosEnviar = {
+            github_token: dadosProjeto.token,
+            repository: dadosProjeto.nome_repo,
+            title: dadosForm.nome,
+            body: dadosForm.descricao,
+            labels: dadosForm.labelsNames,
+            assignees: dadosForm.assignees 
+        };
+    
+        const response = acaoForm === 'criar' ?
+            await createIssue(dadosEnviar) :
+            await updateIssue(dadosTarefa.number_issue, dadosEnviar);
+    
+        return response;
+    };
+    
+    const handleSalvarTarefa = async (dadosForm) => {
+        dadosForm['projeto'] = dadosProjeto.id;
+        const resIssue = await handleSaveIssue(dadosForm);
+    
+        if (acaoForm === 'criar' && !resIssue.error) {
+            const dadosIssue = resIssue.data;
+            await criarTarefa(dadosForm, dadosIssue);
+        } else if (acaoForm === 'atualizar') {
+            await atualizarTarefa(dadosTarefa.id, dadosForm);
+        }
+        
+        await handleReload();
+    };
+
+
+    const handleExcluirTarefa = async (id) => {
+        Modal.confirm({
+            title: 'Confirmar exclusão',
+            content: 'Você está seguro de que deseja excluir este(s) item(s) ?',
+            okText: 'Sim',
+            cancelText: 'Não',
+            onOk: async () => {
+                await excluirTarefas([id])
+                await handleReload()
+            }
+        });
     }
 
     useEffect(() => {
@@ -98,7 +163,6 @@ const MinhasTarefas = () => {
             if (autor && autor.id_user){
                 await handleGetProjetos()
             }
-
             if (dadosProjeto) {
                 await handleGetTarefas()
             }
@@ -113,7 +177,7 @@ const MinhasTarefas = () => {
             { dadosProjeto === null ? (
                 <Result 
                     style={{margin: '0 auto'}}
-                    icon={<SmileOutlined />}
+                    status="info"
                     title="Tarefas"
                     subTitle="Selecione o projeto para poder exibir as suas tarefas."
                     extra={
@@ -133,6 +197,7 @@ const MinhasTarefas = () => {
                             <Button 
                                 icon={<FaPlus />}
                                 type="primary"
+                                onClick={handleAdicionarTarefa}
                             >
                                 Adicionar Tarefa
                             </Button>
@@ -148,27 +213,45 @@ const MinhasTarefas = () => {
                         </div>
                     </div>
 
-                    <div className="minhas-tarefas-conteudo">
-                        <Tabs>
-                            <TabPane tab="Para fazer" key="1" style={{marginTop: '50px'}}>
-                                <ListTarefas dados={tarefasParaFazer} onStart={handleStartTarefa}   />
-                            </TabPane>
+                    { isFormSalvarVisivel ? (
+                        <div className="global-div">
+                            <FormTarefa onCancel={handleCancelar} onSubmit={handleSalvarTarefa} />
+                        </div>
+                    ) : (
+                        <div className="minhas-tarefas-conteudo">
+                            <Tabs>
+                                <TabPane tab="Para fazer" key="1" style={{marginTop: '50px'}}>
+                                    <ListTarefas 
+                                        dados={tarefasParaFazer} 
+                                        onStart={handleStartTarefa}
+                                        onOpen={handleAtualizarTarefa}
+                                        onDelete={handleExcluirTarefa}
+                                    />
+                                </TabPane>
 
-                            <TabPane tab="Em andamento" key="2">
-                                <ListTarefas dados={tarefasEmAndamento} onStart={handleStartTarefa} onPause={handlePauseTarefa} />
-                            </TabPane>
+                                <TabPane tab="Em andamento" key="2">
+                                    <ListTarefas 
+                                        dados={tarefasEmAndamento} 
+                                        onStart={handleStartTarefa}
+                                        onOpen={handleAtualizarTarefa}
+                                        onDelete={handleExcluirTarefa}
+                                    />
+                                </TabPane>
 
-                            <TabPane tab="Em revisão" key="3">
-                                <ListTarefas dados={tarefasEmRevisao} />
-                            </TabPane>
+                                <TabPane tab="Em revisão" key="3">
+                                    <ListTarefas dados={tarefasEmRevisao} />
+                                </TabPane>
 
-                            <TabPane tab="Concluídas" key="4">
-                                <ListTarefas dados={tarefasConcluidas} />
-                            </TabPane>
+                                <TabPane tab="Concluídas" key="4">
+                                    <ListTarefas dados={tarefasConcluidas} />
+                                </TabPane>
 
-                        </Tabs>
+                            </Tabs>
 
                     </div>
+                    )
+                
+                    }
 
                 </div>)}
         </div>

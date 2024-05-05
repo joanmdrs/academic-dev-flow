@@ -135,7 +135,6 @@ class ListarTarefasPorProjetoView(APIView):
             label_info = {
                 'id': label.id,
                 'nome': label.nome,
-                # Outras informações dos labels que desejar incluir
             }
             labels_info.append(label_info)
         return labels_info

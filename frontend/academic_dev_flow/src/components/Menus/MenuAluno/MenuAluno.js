@@ -3,10 +3,10 @@ import Sider from "antd/es/layout/Sider";
 import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 import { MdOutlineSpaceDashboard } from "react-icons/md";
-import { MdFormatListBulleted } from "react-icons/md";
-import { HiOutlineDocumentReport } from "react-icons/hi";
-import { HiHome } from "react-icons/hi2";
+import { HiOutlineHome } from "react-icons/hi2";
 import { LuLayoutGrid } from "react-icons/lu";
+import { IoDocumentOutline } from "react-icons/io5";
+import { VscGraph } from "react-icons/vsc";
 
 import SubMenu from "antd/es/menu/SubMenu";
 
@@ -38,7 +38,7 @@ const MenuAluno = () => {
             <Menu.Item
                 className='item-menu'
                 key='home'
-                icon={<HiHome size="20px"/>}
+                icon={<HiOutlineHome size="20px"/>}
             >
                 <Link to="/aluno/home">Dashboard</Link>
             </Menu.Item>
@@ -69,9 +69,17 @@ const MenuAluno = () => {
             </Menu.Item>
 
             <Menu.Item
+                className="item-menu"
+                key='artefatos'
+                icon={<IoDocumentOutline size="20px" />}
+            >
+                <Link to="/aluno/artefatos"> Artefatos </Link>
+            </Menu.Item>
+
+            <Menu.Item
                 className='item-menu'
                 key='meus-relatórios'
-                icon={<HiOutlineDocumentReport size="20px"/>}
+                icon={<VscGraph size="20px"/>}
             >
                 <Link to="/aluno/relatorios">Relatórios</Link>
             </Menu.Item>

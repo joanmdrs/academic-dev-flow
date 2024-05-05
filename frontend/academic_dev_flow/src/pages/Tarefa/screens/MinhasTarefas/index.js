@@ -5,6 +5,7 @@ import MenuAluno from "../../../../components/Menus/MenuAluno/MenuAluno";
 import MinhasTarefas from "./MinhasTarefas";
 import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
+import { ProviderTarefa } from "../../context/ContextoTarefa";
 const {Content} = Layout
 
 const ScreenMinhasTarefas = ({grupo}) => {
@@ -23,7 +24,9 @@ const ScreenMinhasTarefas = ({grupo}) => {
 
                 <Content>
                     <ProviderGlobalProjeto>
-                        <MinhasTarefas />
+                        <ProviderTarefa>
+                            <MinhasTarefas />
+                        </ProviderTarefa>
                     </ProviderGlobalProjeto>
                 </Content>
             </Layout>
