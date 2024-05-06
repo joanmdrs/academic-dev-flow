@@ -44,7 +44,7 @@ const SelecionarProjeto = () => {
             <Select
                 showSearch
                 allowClear
-                value={dadosProjeto.id}
+                value={ dadosProjeto ? dadosProjeto.id : null}
                 placeholder="Pesquise ou selecione o projeto"
                 optionFilterProp="children"
                 onChange={handleChange}

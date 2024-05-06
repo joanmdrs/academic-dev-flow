@@ -1,5 +1,4 @@
 import { Button, Form, Modal, Result, Select, Tabs } from "antd";
-import "./MinhasTarefas.css"
 import React, { useEffect, useState } from "react";
 import { buscarProjetosDoMembro } from "../../../../services/membroProjetoService";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
@@ -218,12 +217,13 @@ const MinhasTarefas = () => {
                             <FormTarefa onCancel={handleCancelar} onSubmit={handleSalvarTarefa} />
                         </div>
                     ) : (
-                        <div className="minhas-tarefas-conteudo">
+                        <div style={{margin: '20px'}}>
                             <Tabs>
                                 <TabPane tab="Para fazer" key="1" style={{marginTop: '50px'}}>
                                     <ListTarefas 
                                         dados={tarefasParaFazer} 
                                         onStart={handleStartTarefa}
+                                        onPause={handlePauseTarefa}
                                         onOpen={handleAtualizarTarefa}
                                         onDelete={handleExcluirTarefa}
                                     />
@@ -233,6 +233,7 @@ const MinhasTarefas = () => {
                                     <ListTarefas 
                                         dados={tarefasEmAndamento} 
                                         onStart={handleStartTarefa}
+                                        onPause={handlePauseTarefa}
                                         onOpen={handleAtualizarTarefa}
                                         onDelete={handleExcluirTarefa}
                                     />

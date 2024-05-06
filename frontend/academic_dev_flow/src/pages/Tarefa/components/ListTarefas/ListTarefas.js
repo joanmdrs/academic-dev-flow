@@ -5,6 +5,7 @@ import { MdOpenInNew } from "react-icons/md";
 import React, { useState } from "react";
 import { formatarTempo } from "../../../../services/utils";
 import { IoPauseOutline } from "react-icons/io5";
+import { MdComment } from "react-icons/md";
 
 const ListTarefas = ({ dados, onStart, onPause, onOpen, onDelete}) => {
     const [paginaAtual, setPaginaAtual] = useState(1);
@@ -45,6 +46,9 @@ const ListTarefas = ({ dados, onStart, onPause, onOpen, onDelete}) => {
                                 <span>{`${formatarTempo(item.tempo_gasto)}`}</span>
                             </div>
                             <div>
+                                <Tooltip title="Comentários">
+                                    <Button onClick={() => onOpen(item)} style={{ border: 'none', color: 'var(--primary-color)' }} icon={<MdComment />} />
+                                </Tooltip>
                                 { item.estado_contagem_tempo === true ? (
                                     <Tooltip title="Pausar">
                                         <Button 

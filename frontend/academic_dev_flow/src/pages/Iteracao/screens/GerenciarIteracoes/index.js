@@ -5,6 +5,7 @@ import MyHeader from "../../../../components/Header/Header";
 import { Content } from "antd/es/layout/layout";
 import GerenciarIteracoes from "./GerenciarIteracoes";
 import { ProviderIteracao } from "../../context/contextoIteracao";
+import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 
 const ScreenGerenciarIteracoes = () => {
 
@@ -14,9 +15,11 @@ const ScreenGerenciarIteracoes = () => {
             <Layout>
                 <MyHeader/>
                 <Content>
-                   <ProviderIteracao>
-                        <GerenciarIteracoes />
-                   </ProviderIteracao>
+                    <ProviderGlobalProjeto>
+                        <ProviderIteracao>
+                            <GerenciarIteracoes />
+                    </ProviderIteracao>
+                    </ProviderGlobalProjeto>
                 </Content>
             </Layout>
         </React.Fragment>   
