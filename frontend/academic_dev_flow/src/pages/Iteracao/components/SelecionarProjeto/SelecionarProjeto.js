@@ -3,8 +3,6 @@ import { buscarProjetoPeloId, listarProjetos } from "../../../../services/projet
 import { Select } from "antd";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 
-const { Option } = Select;
-
 const SelecionarProjeto = () => {
     const [optionsProjetos, setOptionsProjetos] = useState([]);
     const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()

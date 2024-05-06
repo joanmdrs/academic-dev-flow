@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Titulo from "../../../../components/Titulo/Titulo";
-import { Button, Modal, Spin } from "antd";
-import { FaGithub, FaSearch } from "react-icons/fa";
+import { Button, Modal } from "antd";
+import { FaSearch } from "react-icons/fa";
 import FormListarArquivos from "../../components/FormListarArquivos/FormListarArquivos";
 import { deleteContent, listContents } from "../../../../services/githubIntegration";
 import ListaArquivos from "../../components/ListaArquivos/ListaArquivos";
 import { NotificationManager } from "react-notifications";
-import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { FaArrowsRotate } from "react-icons/fa6";
 import { excluirArtefato, sicronizarContents, verificarExistenciaArquivo } from "../../../../services/artefatoService";
 import { handleError } from "../../../../services/utils";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 import ModalExcluirArtefato from "../../components/ModalExcluirArtefato/ModalExcluirArtefato";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 
 const GerenciarArquivosGithub = () => {
 
@@ -20,7 +20,7 @@ const GerenciarArquivosGithub = () => {
     const [isModalExcluirVisivel, setIsModalExcluirVisivel] = useState(false)
     const [exibirLista, setExibirLista] = useState(false);
     const [carregando, setCarregando] = useState(false);
-    const {dadosProjeto} = useContextoArtefato();
+    const {dadosProjeto} = useContextoGlobalProjeto()
     const [arquivoExcluir, setArquivoExcluir] = useState({})
 
     const handleExibirModal = () => setIsModalExcluirVisivel(true)

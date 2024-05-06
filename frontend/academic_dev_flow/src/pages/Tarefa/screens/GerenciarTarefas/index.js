@@ -4,6 +4,7 @@ import {Layout} from 'antd'
 import MyHeader from "../../../../components/Header/Header";
 import { ProviderTarefa } from "../../context/ContextoTarefa";
 import GerenciarTarefas from "./GerenciarTarefas"
+import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 const {Content} = Layout
 
 const ScreenGerenciarTarefas = () => {
@@ -14,9 +15,11 @@ const ScreenGerenciarTarefas = () => {
             <Layout>
                 <MyHeader/>
                 <Content>
-                    <ProviderTarefa>
-                        <GerenciarTarefas />
-                    </ProviderTarefa>
+                    <ProviderGlobalProjeto>
+                        <ProviderTarefa>
+                            <GerenciarTarefas />
+                        </ProviderTarefa>
+                    </ProviderGlobalProjeto>
                 </Content>
             </Layout>
         </React.Fragment>   

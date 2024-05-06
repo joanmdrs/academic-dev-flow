@@ -13,7 +13,7 @@ import { ERROR_MESSAGE_ON_SEARCHING } from '../../../../services/messages';
 import { useContextoGlobalProjeto } from '../../../../context/ContextoGlobalProjeto';
 import { listarTipos } from '../../../../services/tipoService';
 
-function FormTarefa ({onCancel, onSubmit}) {
+function FormTarefa ({onCancel, onSubmit, additionalFields}) {
 
     const [form] = useForm()
     const {dadosTarefa} = useContextoTarefa()
@@ -141,7 +141,12 @@ function FormTarefa ({onCancel, onSubmit}) {
                 <h4> CADASTRAR TAREFA </h4>
             </Form.Item>
 
-            <div style={{display: 'flex', gap: "20px"}}> 
+            {
+                <Form.Item>
+                    {additionalFields}
+                </Form.Item>
+            }
+            <div style={{display: 'flex', gap: "20px"}}>
 
                 <div style={{flex:"2"}}>
                     <Form.Item label="Nome" name="nome" required style={{flex: '1'}}>

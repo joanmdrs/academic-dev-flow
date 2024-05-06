@@ -2,28 +2,29 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {Button} from 'antd'
 import Titulo from "../../../../components/Titulo/Titulo";
-import { FaGithub, FaPlus, FaSearch } from "react-icons/fa";
+import { FaPlus, FaSearch } from "react-icons/fa";
 import FormGenericBusca from "../../../../components/Forms/FormGenericBusca/FormGenericBusca";
 import FormArtefato from "../../components/FormArtefato/FormArtefato";
 import ListaArtefatos from "../../components/ListaArtefatos/ListaArtefatos";
 import SelectProjeto from "../../components/SelectProjeto/SelectProjeto"
 import InputsAdmin from "../../components/InputsAdmin/InputsAdmin"
 import { useContextoArtefato } from "../../context/ContextoArtefato";
-import { createContent, deleteContent, listContents } from "../../../../services/githubIntegration";
+import { createContent, deleteContent } from "../../../../services/githubIntegration";
 import { atualizarArtefato, criarArtefato, filtrarArtefatosPeloNomeEPeloProjeto } from "../../../../services/artefatoService";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import ModalExcluirArtefato from "../../components/ModalExcluirArtefato/ModalExcluirArtefato";
-import FormListarArquivos from "../../components/FormListarArquivos/FormListarArquivos";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 
 const GerenciarArtefatos = () => {
 
     const [isFormVisivel, setIsFormVisivel] = useState(false)
     const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false)
-    const [isFormListarVisibel, setIsFormListarVisivel] = useState(false)
     const [isModalExcluirVisivel, setIsModalExcluirVisivel] = useState(false)
     const [acaoForm, setAcaoForm] = useState('criar')
     const [artefatoExcluir, setArtefatoExcluir] = useState(null)
-    const {dadosArtefato, setDadosArtefato, dadosProjeto, setDadosProjeto, setArtefatos} = useContextoArtefato()
+    const {dadosArtefato, setDadosArtefato, setArtefatos} = useContextoArtefato()
+    const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
+
     const navigate = useNavigate()
 
     const handleExibirModal = () => setIsModalExcluirVisivel(true)
