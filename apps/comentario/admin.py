@@ -1,14 +1,14 @@
 from django.contrib import admin
-from .models import Comentario
+from .models import ComentarioTarefa, ComentarioArtefato
 
-class ComentarioAdmin(admin.ModelAdmin):
-    list_display = ('texto', 'data_hora', 'exibir_autor' )
-    
-    def exibir_autor(self, obj):
-        if obj.autor:
-            return obj.autor.membro.nome
-        return None
-    exibir_autor.short_description = 'Autor'
-    
+@admin.register(ComentarioTarefa)
+class ComentarioTarefaAdmin(admin.ModelAdmin):
+    list_display = ('id', 'texto', 'data_hora', 'autor', 'tarefa')
+    search_fields = ('texto', 'autor__membro__nome', 'tarefa__nome')
+    list_filter = ('data_hora', 'autor', 'tarefa')
 
-admin.site.register(Comentario, ComentarioAdmin)
+@admin.register(ComentarioArtefato)
+class ComentarioArtefatoAdmin(admin.ModelAdmin):
+    list_display = ('id', 'texto', 'data_hora', 'autor', 'artefato')
+    search_fields = ('texto', 'autor__membro__nome', 'artefato__nome')
+    list_filter = ('data_hora', 'autor', 'artefato')
