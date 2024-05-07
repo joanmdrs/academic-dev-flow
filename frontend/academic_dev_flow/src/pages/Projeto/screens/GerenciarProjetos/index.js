@@ -5,6 +5,7 @@ import MyHeader from "../../../../components/Header/Header";
 import { ProviderProjeto } from "../../context/ContextoProjeto";
 import GerenciarProjetos from "./GerenciarProjetos";
 import MenuAluno from "../../../../components/Menus/MenuAluno/MenuAluno";
+import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfessor";
 
 const ScreenGerenciarProjetos = ({grupo}) => {
 
@@ -12,6 +13,7 @@ const ScreenGerenciarProjetos = ({grupo}) => {
     return (
         <React.Fragment>
             { grupo === "discente" && <MenuAluno />}
+            { grupo === "professor" && <MenuProfessor />}
             { grupo === "admin" && <MenuAdmin />}
             <Layout>
                 <MyHeader />

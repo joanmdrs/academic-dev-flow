@@ -6,11 +6,6 @@ import StudentRoutes from "./router/StudentRoutes/StudentRoutes";
 import Fluxo from "./pages/Fluxo";
 import TeacherRoutes from "./router/TeacherRoutes/TeacherRoutes";
 import MeusProjetos from "./pages/Projeto/screens/MeusProjetos/MeusProjetos";
-import VisualizarProjeto from "./pages/Projeto/screens/VisualizarProjeto/VisualizarProjeto";
-import {
-  ProjetoProvider,
-  ProviderGlobalProjeto,
-} from "./context/ContextoGlobalProjeto";
 import HomeProfessor from "./pages/Perfis/Professor/Home";
 import HomeAdministrador from "./pages/Perfis/Administrador/Home";
 import HomeAluno from "./pages/Perfis/Aluno/Home";
@@ -29,6 +24,7 @@ import ScreenGerenciarIteracoes from "./pages/Iteracao/screens/GerenciarIteracoe
 import ScreenGerenciarProjetos from "./pages/Projeto/screens/GerenciarProjetos";
 import ScreenMinhasTarefas from "./pages/Tarefa/screens/MinhasTarefas";
 import ScreenMeusArtefatos from "./pages/Artefato/screens/MeusArtefatos";
+import ScreenVisualizarProjeto from "./pages/Projeto/screens/VisualizarProjeto";
 
 function Routes() {
   return (
@@ -118,7 +114,7 @@ function Routes() {
 
         <Route
           path="/aluno/projetos/gerenciar"
-          element={<ScreenGerenciarProjetos grupo="discente" />}
+          element={<ScreenGerenciarProjetos grupo="aluno" />}
           exact
         />
 
@@ -127,12 +123,11 @@ function Routes() {
           element={<MeusProjetos grupo="aluno" />}
           exact
         />
+
         <Route
           path="/aluno/projetos/visualizar/:idProjeto"
           element={
-            <ProviderGlobalProjeto>
-              <VisualizarProjeto grupo={"aluno"} />
-            </ProviderGlobalProjeto>
+            <ScreenVisualizarProjeto grupo="aluno"/>
           }
           exact
         />
@@ -163,16 +158,15 @@ function Routes() {
           element={<MeusProjetos grupo="professor" />}
           exact
         />
+
         <Route
-          path="/aluno/projetos/visualizar/:idProjeto"
+          path="/professor/projetos/visualizar/:idProjeto"
           element={
-            <ProviderGlobalProjeto>
-              <VisualizarProjeto grupo={"professor"} />
-            </ProviderGlobalProjeto>
+            <ScreenVisualizarProjeto grupo="professor"/>
           }
           exact
         />
-
+    
         <Route
           path="/professor/tarefas"
           element={<ScreenMinhasTarefas grupo="professor" />}
