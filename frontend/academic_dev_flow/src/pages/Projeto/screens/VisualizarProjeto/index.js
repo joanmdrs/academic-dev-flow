@@ -13,7 +13,7 @@ const ScreenVisualizarProjeto = ({grupo}) => {
     
     const breadcrumbRoutes = [
         { title: 'Home', path: `/${grupo}/home` },
-        { title: 'Projetos', path: `/${grupo}/projetos`  },
+        { title: 'Projetos', path: `/${grupo}/projetos/meus-projetos`  },
         { title: 'Visualizar', path: `/${grupo}/projetos/visualizar` }
     ];
 
@@ -22,7 +22,7 @@ const ScreenVisualizarProjeto = ({grupo}) => {
             { grupo === "discente" && <MenuAluno />}
             { grupo === "professor" && <MenuProfessor />}
             { grupo === "admin" && <MenuAdmin />}
-            
+
             <Layout>
                 <MyHeader />
                 <CustomBreadcrumb routes={breadcrumbRoutes} />

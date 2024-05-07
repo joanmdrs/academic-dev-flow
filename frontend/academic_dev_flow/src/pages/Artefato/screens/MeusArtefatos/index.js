@@ -6,6 +6,7 @@ import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto
 import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
 import { ProviderArtefato } from "../../context/ContextoArtefato";
 import MeusArtefatos from "./MeusArtefatos";
+import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfessor";
 const {Content} = Layout
 
 const ScreenMeusArtefatos = ({grupo}) => {
@@ -17,7 +18,8 @@ const ScreenMeusArtefatos = ({grupo}) => {
 
     return (
         <React.Fragment>
-            <MenuAluno/>
+            { grupo === 'aluno' && <MenuAluno />}
+            { grupo === 'professor' && <MenuProfessor />}
             <Layout>
                 <MyHeader/>
                 <CustomBreadcrumb routes={breadcrumbRoutes} />

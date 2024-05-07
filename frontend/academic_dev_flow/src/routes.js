@@ -5,7 +5,6 @@ import AdminRoutes from "./router/AdminRoutes/AdminRoutes";
 import StudentRoutes from "./router/StudentRoutes/StudentRoutes";
 import Fluxo from "./pages/Fluxo";
 import TeacherRoutes from "./router/TeacherRoutes/TeacherRoutes";
-import MeusProjetos from "./pages/Projeto/screens/MeusProjetos/MeusProjetos";
 import HomeProfessor from "./pages/Perfis/Professor/Home";
 import HomeAdministrador from "./pages/Perfis/Administrador/Home";
 import HomeAluno from "./pages/Perfis/Aluno/Home";
@@ -25,6 +24,7 @@ import ScreenGerenciarProjetos from "./pages/Projeto/screens/GerenciarProjetos";
 import ScreenMinhasTarefas from "./pages/Tarefa/screens/MinhasTarefas";
 import ScreenMeusArtefatos from "./pages/Artefato/screens/MeusArtefatos";
 import ScreenVisualizarProjeto from "./pages/Projeto/screens/VisualizarProjeto";
+import ScreenMeusProjetos from "./pages/Projeto/screens/MeusProjetos";
 
 function Routes() {
   return (
@@ -120,7 +120,7 @@ function Routes() {
 
         <Route
           path="/aluno/projetos/meus-projetos"
-          element={<MeusProjetos grupo="aluno" />}
+          element={<ScreenMeusProjetos grupo="aluno" />}
           exact
         />
 
@@ -155,7 +155,7 @@ function Routes() {
 
         <Route
           path="/professor/projetos/meus-projetos"
-          element={<MeusProjetos grupo="professor" />}
+          element={<ScreenMeusProjetos grupo="professor" />}
           exact
         />
 
