@@ -71,9 +71,9 @@ class ExcluirComentarioArtefatoView(APIView):
         
 class ListarComentariosPorArtefatoView(APIView):
     permission_classes = [IsAuthenticated]
-    def get(self, request):
+    def get(self, request, id_artefato):
         try:
-            comentarios = ComentarioArtefato.objects.filter(artefato_id=request.GET.get('id_artefato'))
+            comentarios = ComentarioArtefato.objects.filter(artefato_id=id_artefato)
             comentarios_info = []
             
             for comentario in comentarios:

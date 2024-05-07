@@ -1,68 +1,93 @@
 import api from "../api/api";
-import { NotificationManager } from "react-notifications";
+import { handleError, handleSuccess } from "./utils";
 
-export const criarComentario = async (dados) => {
+export const criarComentarioTarefa = async (dados) => {
     try {
-        const response = await api.post('comentario/cadastrar/', dados)
-        if (response.status === 200){
-            NotificationManager.success('Comentário criado com sucesso !')
-            return response
-        }
+        const response = await api.post('/comentario/tarefa/cadastrar/', dados)
+        return handleSuccess(response, 'Comentário excluído com sucesso!')
     } catch (error) {
-        console.log(error)
-        NotificationManager.error('Falha ao criar o comentário, contate o suporte!')
-        return {error: 'Falha ao criar o comentário!'}
-    }   
+        return handleError(error, 'Falha ao tentar criar o comentário, contate o suporte!')
+    }
 }
 
-export const buscarComentarioPeloId = async (id) => {
+export const buscarComentarioTarefaPeloId = async (id) => {
     try {
-        const response = await api.get(`comentario/buscar/${encodeURIComponent(id)}/`)
+        const response = await api.get(`/comentario/tarefa/buscar/${encodeURIComponent(id)}/`)
         return response
     } catch (error) {
-        console.log(error)
-        NotificationManager.error('Falha ao buscar o comentário, contate o suporte!')
-        return {error: 'Falha ao buscar o comentário!'}
+        return handleError(error, 'Falha ao tentar buscar os dados, contate o suporte!')
     }
 }
 
-export const atualizarComentario = async (id, dados) => {
+export const atualizarComentarioTarefa = async (id, dados) => {
     try {
-        const response = await api.patch(`comentario/atualizar/${encodeURIComponent(id)}/`, dados)
-        if (response.status === 200){
-            NotificationManager.success('Comentário atualizado com sucesso!')
-            return response
-        }
+        const response = await api.patch(`/comentario/tarefa/atualizar/${encodeURIComponent(id)}`, dados)
+        return handleSuccess(response, 'Comentário excluído com sucesso!')
     } catch (error) {
-        console.log(error)
-        NotificationManager.error('Falha ao atualizar o comentário, contate o suporte!')
-        return {error: 'Falha ao atualizar o comentário!'}
+        return handleError(error, 'Falha ao tentar atualizar o comentário, contate o suporte!')        
     }
 }
 
-export const excluirComentario = async (id) => {
+export const excluirComentarioTarefa = async (id) => {
     try {
-        const response = await api.delete(`comentario/excluir/${encodeURIComponent(id)}/`)
-        if (response.status === 204){
-            NotificationManager.success('Comentário excluído com sucesso !')
-            return response
-        }
+        const response = await api.delete(`/comentario/tarefa/excluir/${encodeURIComponent(id)}/`)
+        return handleSuccess(response, 'Comentário excluído com sucesso!')
     } catch (error) {
-        console.log(error)
-        NotificationManager.error('Falha ao excluir o comentário, contate o suporte!')
-        return {error: 'Falha ao excluir o comentário'}
+        return handleError(error, 'Falha ao tentar excluir o comentário, contate o suporte!')
     }
 }
 
-export const listarComentariosPorDocumento = async (idDocumento) => {
+export const listarComentariosPorTarefa = async (id) => {
     try {
-        const response = await api.get(`comentario/listar/documento/${encodeURIComponent(idDocumento)}/`)
-        if (response.status === 200){
-            return response
-        }
-        
+        const response = await api.get(`/comentario/tarefa/listar/${encodeURIComponent(id)}/`)
+        return response
     } catch (error) {
-        console.log(error)
-        return {error: 'Falha ao excluir o comentário'}
+        return handleError(error, 'Falha ao tentar buscar os dados, contate o suporte!')
     }
 }
+
+export const criarComentarioArtefato = async (dados) => {
+    try {
+        const response = await api.post('/comentario/artefato/cadastrar/', dados)
+        return handleSuccess(response, 'Comentário excluído com sucesso!')
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar criar o comentário, contate o suporte!')
+    }
+}
+
+export const buscarComentarioArtefatoPeloId = async (id) => {
+    try {
+        const response = await api.get(`/comentario/artefato/buscar/${encodeURIComponent(id)}/`)
+        return response
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar buscar os dados, contate o suporte!')
+    }
+}
+
+export const atualizarComentarioArtefato = async (id, dados) => {
+    try {
+        const response = await api.patch(`/comentario/artefato/atualizar/${encodeURIComponent(id)}`, dados)
+        return handleSuccess(response, 'Comentário excluído com sucesso!')
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar atualizar o comentário, contate o suporte!')        
+    }
+}
+
+export const excluirComentarioArtefato = async (id) => {
+    try {
+        const response = await api.delete(`/comentario/artefato/excluir/${encodeURIComponent(id)}/`)
+        return handleSuccess(response, 'Comentário excluído com sucesso!')
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar excluir o comentário, contate o suporte!')
+    }
+}
+
+export const listarComentariosPorArtefato = async (id) => {
+    try {
+        const response = await api.get(`/comentario/artefato/listar/${encodeURIComponent(id)}/`)
+        return response
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar buscar os dados, contate o suporte!')
+    }
+}
+
