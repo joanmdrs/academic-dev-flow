@@ -150,6 +150,8 @@ function Routes() {
       </Route>
 
       <Route element={<TeacherRoutes />}>
+        <Route path="/professor/home" Component={HomeProfessor} exact />
+
         <Route
           path="/professor/projetos/gerenciar"
           element={<ScreenGerenciarProjetos grupo="professor" />}
@@ -172,12 +174,12 @@ function Routes() {
         />
 
         <Route
-          path="/aluno/tarefas"
+          path="/professor/tarefas"
           element={<ScreenMinhasTarefas grupo="professor" />}
           exact
         />
         <Route
-          path="/aluno/artefatos"
+          path="/professor/artefatos"
           element={<ScreenMeusArtefatos grupo="professor" />}
           exact
         />
