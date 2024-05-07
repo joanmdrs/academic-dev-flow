@@ -95,9 +95,9 @@ class ListarComentariosPorTarefaView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-class ComentarioTreeView(APIView):
-    permission_classes = [IsAuthenticated]
-    def get(self, request):
-        comentarios = Comentario.objects.filter(tarefa_id=id_documento, comentario_pai__isnull=True)
-        arvore_comentarios = Comentario.construir_arvore(comentarios)
-        return Response(arvore_comentarios)
+# class ComentarioTreeView(APIView):
+#     permission_classes = [IsAuthenticated]
+#     def get(self, request):
+#         comentarios = Comentario.objects.filter(tarefa_id=id_documento, comentario_pai__isnull=True)
+#         arvore_comentarios = Comentario.construir_arvore(comentarios)
+#         return Response(arvore_comentarios)
