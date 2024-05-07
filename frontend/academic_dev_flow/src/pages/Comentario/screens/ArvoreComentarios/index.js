@@ -8,13 +8,14 @@ import { Content } from "antd/es/layout/layout";
 import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { ProviderComentario } from "../../context/ContextoComentario";
 import ArvoreComentarios from "./ArvoreComentarios";
+import { transformCapitalize } from "../../../../services/utils";
 
 const ScreenArvoreComentarios = ({grupo, page}) => {
 
     const breadcrumbRoutes = [
         { title: 'Home', path: `/${grupo}/home` },
-        { title: {page}, path: `/${grupo}/${page}`},
-        { title: 'Comentários', path: `/${grupo}/{page}/comentarios` },
+        { title: transformCapitalize(page), path: `/${grupo}/${page}`},
+        { title: 'Comentários', path: '' },
     ];
 
     return (

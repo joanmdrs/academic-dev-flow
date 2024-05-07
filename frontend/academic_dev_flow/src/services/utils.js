@@ -52,6 +52,11 @@ export const formatarTempo = (segundos) => {
 };
 
 
+export const transformCapitalize = (str) => {
+  if (!str) return '';
+
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
 
 export const handleSuccess = (response, successMessage) => {

@@ -190,9 +190,24 @@ function Routes() {
           element={<ScreenMinhasTarefas grupo="professor" />}
           exact
         />
+
+        <Route 
+          path="/professor/tarefas/:idTarefa/comentarios"
+          element={<ScreenArvoreComentarios grupo="professor" page="tarefas" />}
+          exact
+        />
+
         <Route
           path="/professor/artefatos"
           element={<ScreenMeusArtefatos grupo="professor" />}
+          exact
+        />
+
+        {/* Comentários do artefato */}
+
+        <Route 
+          path="/professor/artefatos/:idArtefato/comentarios"
+          element={<ScreenArvoreComentarios grupo="professor" page="artefatos" />}
           exact
         />
       </Route>

@@ -4,7 +4,6 @@ import { Avatar, Button, Dropdown, Form, Input, Menu, Space } from 'antd';
 import { SlOptions } from 'react-icons/sl';
 import { useContextoComentario } from '../../context/ContextoComentario';
 import { useContextoGlobalProjeto } from '../../../../context/ContextoGlobalProjeto';
-import { atualizarComentario, criarComentario, excluirComentario, listarComentariosPorDocumento } from '../../../../services/comentarioService';
 import { formatDate } from '../../../../services/utils';
 import FormComentario from '../../components/FormComentario/FormComentario';
 
@@ -26,8 +25,8 @@ const ArvoreComentarios = ({ documento }) => {
   }, [documento]);
 
   const handleGetComments = async () => {
-    const response = await listarComentariosPorDocumento(documento.id);
-    setComentarios(response.data);
+    //const response = await listarComentariosPorDocumento(documento.id);
+    //setComentarios(response.data);
   };
 
   const handleEdit = (comentario) => {
@@ -42,7 +41,7 @@ const ArvoreComentarios = ({ documento }) => {
   };
 
   const handleUpdateComment = async (texto) => {
-    await atualizarComentario(dadosComentario.id, texto)
+    //await atualizarComentario(dadosComentario.id, texto)
     setComentarioEditado(null);
     setEditorVisible(false);
     await handleGetComments()
@@ -54,12 +53,12 @@ const ArvoreComentarios = ({ documento }) => {
       autor: autor.id_membro_projeto,
       documento: documento.id
     }
-    await criarComentario(dadosEnviar)
+    //await criarComentario(dadosEnviar)
     await handleGetComments()
   }
   
   const handleDeleteComment = async (idComentario) => {
-    await excluirComentario(idComentario)
+    //await excluirComentario(idComentario)
     await handleGetComments()
   }
 

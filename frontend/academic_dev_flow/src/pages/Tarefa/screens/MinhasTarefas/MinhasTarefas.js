@@ -9,14 +9,14 @@ import { FaPlus } from "react-icons/fa";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
 import FormTarefa from "../../components/FormTarefa/FormTarefa";
 import { createIssue, updateIssue } from "../../../../services/githubIntegration/issueService";
-
+import { useNavigate } from "react-router-dom";
 
 const {TabPane} = Tabs
 
 const MinhasTarefas = () => {
 
     const {autor} = useContextoGlobalProjeto()
-    const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
+    const {dadosProjeto, setDadosProjeto, grupo} = useContextoGlobalProjeto()
     const {dadosTarefa, setDadosTarefa} = useContextoTarefa()
     const [optionsProjetos, setOptionsProjetos] = useState([])
     const [selectProjeto, setSelectProjeto] = useState('Projeto')
@@ -26,6 +26,8 @@ const MinhasTarefas = () => {
     const [tarefasConcluidas, setTarefasConcluidas] = useState([])
     const [isFormSalvarVisivel, setIsFormSalvarVisivel] = useState(false)
     const [acaoForm, setAcaoForm] = useState('criar')
+    const navigate = useNavigate();
+
 
     const handleGetProjetos = async () => {
         const resMembroProjeto = await buscarProjetosDoMembro(autor.id_user);
@@ -156,6 +158,10 @@ const MinhasTarefas = () => {
         });
     }
 
+    const handleVisualizarComentarios = (idTarefa) => {
+        navigate(`/professor/tarefas/${idTarefa}/comentarios`)
+    }
+
     useEffect(() => {
         const fetchData = async () => {
 
@@ -226,6 +232,8 @@ const MinhasTarefas = () => {
                                         onPause={handlePauseTarefa}
                                         onOpen={handleAtualizarTarefa}
                                         onDelete={handleExcluirTarefa}
+                                        onViewComments={handleVisualizarComentarios}
+
                                     />
                                 </TabPane>
 
@@ -236,6 +244,7 @@ const MinhasTarefas = () => {
                                         onPause={handlePauseTarefa}
                                         onOpen={handleAtualizarTarefa}
                                         onDelete={handleExcluirTarefa}
+                                        onViewComments={handleVisualizarComentarios}
                                     />
                                 </TabPane>
 

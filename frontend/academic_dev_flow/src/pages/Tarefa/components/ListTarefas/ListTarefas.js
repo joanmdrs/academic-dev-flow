@@ -6,8 +6,10 @@ import React, { useState } from "react";
 import { formatarTempo } from "../../../../services/utils";
 import { IoPauseOutline } from "react-icons/io5";
 import { MdComment } from "react-icons/md";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 
-const ListTarefas = ({ dados, onStart, onPause, onOpen, onDelete}) => {
+const ListTarefas = ({ dados, onStart, onPause, onOpen, onDelete, onViewComments}) => {
+
     const [paginaAtual, setPaginaAtual] = useState(1);
     const itensPorPagina = 10;
 
@@ -47,7 +49,7 @@ const ListTarefas = ({ dados, onStart, onPause, onOpen, onDelete}) => {
                             </div>
                             <div>
                                 <Tooltip title="Comentários">
-                                    <Button onClick={() => onOpen(item)} style={{ border: 'none', color: 'var(--primary-color)' }} icon={<MdComment />} />
+                                    <Button onClick={() => onViewComments(item.id)} style={{ border: 'none', color: 'var(--primary-color)' }} icon={<MdComment />} />
                                 </Tooltip>
                                 { item.estado_contagem_tempo === true ? (
                                     <Tooltip title="Pausar">
