@@ -1,20 +1,20 @@
 import React from "react";
-import {Layout} from 'antd'
-import MyHeader from "../../../../components/Header/Header";
 import MenuAluno from "../../../../components/Menus/MenuAluno/MenuAluno";
 import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfessor";
-import MinhasTarefas from "./MinhasTarefas";
-import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
+import { Layout } from "antd";
+import MyHeader from "../../../../components/Header/Header";
 import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
-import { ProviderTarefa } from "../../context/ContextoTarefa";
+import { Content } from "antd/es/layout/layout";
+import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
+import { ProviderComentario } from "../../context/ContextoComentario";
+import ArvoreComentarios from "./ArvoreComentarios";
 
-const {Content} = Layout
-
-const ScreenMinhasTarefas = ({grupo}) => {
+const ScreenArvoreComentarios = ({grupo, page}) => {
 
     const breadcrumbRoutes = [
         { title: 'Home', path: `/${grupo}/home` },
-        { title: 'Tarefas', path: `/${grupo}/tarefas` },
+        { title: {page}, path: `/${grupo}/${page}`},
+        { title: 'Comentários', path: `/${grupo}/{page}/comentarios` },
     ];
 
     return (
@@ -27,9 +27,9 @@ const ScreenMinhasTarefas = ({grupo}) => {
 
                 <Content>
                     <ProviderGlobalProjeto>
-                        <ProviderTarefa>
-                            <MinhasTarefas />
-                        </ProviderTarefa>
+                        <ProviderComentario>
+                            <ArvoreComentarios />
+                        </ProviderComentario>
                     </ProviderGlobalProjeto>
                 </Content>
             </Layout>
@@ -37,4 +37,4 @@ const ScreenMinhasTarefas = ({grupo}) => {
     )
 }
 
-export default ScreenMinhasTarefas
+export default ScreenArvoreComentarios
