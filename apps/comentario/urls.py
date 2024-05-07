@@ -1,13 +1,14 @@
 from django.urls import path
-from .views import *
+from .views_tarefas import *
+from .views_artefatos import *
 
 app_name = 'comentario'
 
 urlpatterns = [
-    path('cadastrar/', CadastrarComentarioView.as_view(), name='cadastrar_comentario'),
-    path('buscar/<int:id>/', BuscarComentarioPeloIdView.as_view(), name='buscar_comentario_pelo_id'),
-    path('atualizar/<int:id>/', AtualizarComentarioView.as_view(), name='atualizar_comentario'),
-    path('excluir/<int:id>/', ExcluirComentarioView.as_view(), name='excluir_comentario'),
-    path('listar/documento/<int:id_documento>/', ListarComentariosPorDocumentoView.as_view(), name='filtrar_comentarios_por_documento')
+    path('tarefa/cadastrar/', CadastrarComentarioTarefaView.as_view(), name='cadastrar_comentario_para_a_tarefa'),
+    path('tarefa/buscar/', BuscarComentarioTarefaPeloIdView.as_view(), name='buscar_comentario_da_tarefa_pelo_id'),
+    path('tarefa/atualizar/<int:id>/', AtualizarComentarioTarefaView.as_view(), name='atualizar_comentario_da_tarefa'),
+    path('tarefa/excluir/<int:id>/', ExcluirComentarioTarefaView.as_view(), name='excluir_comentario_da_tarefa'),
+    path('tarefa/listar/', ListarComentariosPorTarefaView.as_view(), name='filtrar_comentarios_por_tarefa')
     
 ]
