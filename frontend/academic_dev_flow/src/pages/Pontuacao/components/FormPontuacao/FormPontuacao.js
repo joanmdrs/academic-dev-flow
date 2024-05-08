@@ -20,12 +20,13 @@ const FormPontuacao = ({onSubmit, onCancel}) => {
 
         fetchData()
     }, [])  
+    
     return (
-        <Form className="global-form" onFinish={onSubmit} form={form}>
+        <Form className="global-form" onFinish={onSubmit} form={form} layout="vertical">
 
             <Form.Item>
                 <h4 style={{margin: 0}}> 
-                    REGISTRAR PONTUAÇÃO - <span style={{color: "var(--primary-color)"}}>{dadosArtefato.titulo} </span>
+                    REGISTRAR PONTUAÇÃO - <span style={{color: "var(--primary-color)"}}>{dadosArtefato.nome} </span>
                 </h4>
             </Form.Item>
 

@@ -7,10 +7,14 @@ import BotaoVoltar from "../../../../components/Botoes/BotaoVoltar/BotaoVoltar";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getContent } from "../../../../services/githubIntegration";
 import Loading from "../../../../components/Loading/Loading";
+import ScreenGerencirPontuacao from "../../../Pontuacao/screens/GerenciarPontuacao";
+import { buscarArtefatoPeloId } from "../../../../services/artefatoService";
+import { useContextoArtefato } from "../../context/ContextoArtefato";
 
 const { Sider, Content } = Layout;
 
 const VisualizarArtefato = () => {
+    const {setDadosArtefato} = useContextoArtefato()
     const [conteutoArquivo, setConteudoArquivo] = useState('')
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState('document');
@@ -24,7 +28,15 @@ const VisualizarArtefato = () => {
         setCollapsed(!collapsed);
     };
 
-    const handleBuscarArquivo = async () => {
+    const handleBuscarArtefato = async () => {
+        const response = await buscarArtefatoPeloId(state.id)
+
+        if (!response.error){
+            setDadosArtefato(response.data)
+        }
+    }
+
+    const handleGetContent = async () => {
         const parametros = {
             github_token: state.github_token,
             repository: state.repository,
@@ -40,7 +52,8 @@ const VisualizarArtefato = () => {
     useEffect(() => {
         const fetchData = async () => {
             if (state) {
-                await handleBuscarArquivo()
+                await handleGetContent()
+                await handleBuscarArtefato()
             }
             setLoading(false);
         };
@@ -88,7 +101,7 @@ const VisualizarArtefato = () => {
 
                 
             <Layout className="site-layout">
-                <Content className="global-form">
+                <Content className="global-div">
                     <BotaoVoltar funcao={handleBack} />
 
                     {currentPage === 'document' && (
@@ -97,12 +110,10 @@ const VisualizarArtefato = () => {
                         </Markdown>
                     )}
                     {currentPage === 'score' && (
-                        <div>
-                            
-                        </div>
+                        <ScreenGerencirPontuacao />
                     )}
                     {currentPage === 'comments' && (
-                        
+                        <div></div>
                     )}
                 </Content>
             </Layout>

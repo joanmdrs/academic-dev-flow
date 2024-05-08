@@ -2,10 +2,10 @@ import { Space, Table, Tooltip } from "antd";
 import React, { useEffect } from "react";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { useContextoArtefato } from "../../context/ContextoArtefato";
-import { listarArtefatos } from "../../../../services/artefatoService";
+import { listarArtefatos, listarArtefatosPorProjeto } from "../../../../services/artefatoService";
 import { IoMdCreate, IoMdOpen, IoMdTrash } from "react-icons/io";
 
-const TableArtefatosSelect = ({onView, onEdit, onDelete}) => {
+const TableArtefatosProjeto = ({onView, onEdit, onDelete}) => {
 
     const COLUNAS_TABELA_ARTEFATOS = [
         {
@@ -43,7 +43,7 @@ const TableArtefatosSelect = ({onView, onEdit, onDelete}) => {
     const {artefatos, setArtefatos} = useContextoArtefato()
 
     const handleListarArtefatos = async () => {
-        const response = await listarArtefatos();
+        const response = await listarArtefatosPorProjeto(dadosProjeto.id);
     
         if (!response.error) { 
             setArtefatos(response.data)
@@ -69,4 +69,4 @@ const TableArtefatosSelect = ({onView, onEdit, onDelete}) => {
     )
 }
 
-export default TableArtefatosSelect
+export default TableArtefatosProjeto

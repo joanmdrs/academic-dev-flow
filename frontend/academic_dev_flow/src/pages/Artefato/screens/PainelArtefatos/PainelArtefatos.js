@@ -6,12 +6,12 @@ import { useContextoGlobalProjeto } from '../../../../context/ContextoGlobalProj
 import { useContextoArtefato } from '../../context/ContextoArtefato'
 import { BsQuestionCircle } from 'react-icons/bs'
 import FormArtefato from '../../components/FormArtefato/FormArtefato'
-import TableArtefatosSelect from '../../components/TableArtefatosSelect/TableArtefatosSelect'
 import { createContent, deleteContent } from '../../../../services/githubIntegration'
 import { atualizarArtefato, criarArtefato, excluirArtefato, filtrarArtefatosPeloNomeEPeloProjeto } from '../../../../services/artefatoService'
 import FormFiltrarArtefatos from '../../components/FormFiltrarArtefatos/FormFiltrarArtefatos'
 import ModalExcluirArtefato from '../../components/ModalExcluirArtefato/ModalExcluirArtefato'
 import { useNavigate } from "react-router-dom";
+import TableArtefatosProjeto from '../../components/TableArtefatosProjeto/TableArtefatosProjeto'
 
 const StyleSpin = {
     position: 'absolute', 
@@ -94,7 +94,8 @@ const PainelArtefatos = () => {
         const parametros = {
             github_token: dadosProjeto.token,
             repository: dadosProjeto.nome_repo,
-            path: record.path_file
+            path: record.path_file,
+            id: record.id
         }
 
         if (grupo === 'Docentes') {
@@ -274,7 +275,7 @@ const PainelArtefatos = () => {
                             <Spin size="large" />
                         </div>
                     )}
-                    <TableArtefatosSelect 
+                    <TableArtefatosProjeto 
                         onView={handleVisualizarArtefato}
                         onEdit={handleAtualizarArtefato} 
                         onDelete={handleExcluirArtefato}
