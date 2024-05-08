@@ -1,12 +1,9 @@
-import { Space, Table } from "antd";
+import { Space, Table, Tooltip } from "antd";
 import React, { useEffect } from "react";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { listarArtefatos } from "../../../../services/artefatoService";
-import { optionsStatusArtefatos } from "../../../../services/optionsStatus";
-import { IoOpenOutline } from "react-icons/io5";
-import { BiSolidEditAlt } from "react-icons/bi";
-import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
+import { IoMdCreate, IoMdOpen, IoMdTrash } from "react-icons/io";
 
 const TableArtefatosSelect = ({onView, onEdit, onDelete}) => {
 
@@ -26,12 +23,17 @@ const TableArtefatosSelect = ({onView, onEdit, onDelete}) => {
             title: 'Ações',
             dataIndex: 'action',
             key: 'action',
-            align: 'center',
             render: (_, record) => (
                 <Space size="middle">
-                    <a onClick={() => onView(record)}><FaEye /></a>
-                    <a onClick={() => onEdit(record)}><FaEdit /></a>
-                    <a onClick={() => onDelete(record)}><FaTrash /></a>
+                    <Tooltip title="Visualizar">
+                        <a onClick={() => onView(record)}><IoMdOpen /></a>
+                    </Tooltip>
+                    <Tooltip title="Editar">
+                        <a onClick={() => onEdit(record)}><IoMdCreate /></a>
+                    </Tooltip>
+                    <Tooltip title="Excluir">
+                        <a onClick={() => onDelete(record)}><IoMdTrash /></a>
+                    </Tooltip>
                 </Space>
             )
         }

@@ -14,7 +14,7 @@ urlpatterns = [
     path('artefato/buscar/<int:id>/', BuscarComentarioArtefatoPeloIdView.as_view(), name='buscar_comentario_do_artefato_pelo_id'),
     path('artefato/atualizar/<int:id>/', AtualizarComentarioArtefatoView.as_view(), name='atualizar_comentario_do_artefato'),
     path('artefato/excluir/<int:id>/', ExcluirComentarioArtefatoView.as_view(), name='excluir_comentario_do_artefato'),
-    path('artefato/listar/<int:id_artefato/', ListarComentariosPorArtefatoView.as_view(), name='filtrar_comentarios_por_artefato'),
+    path('artefato/listar/<int:id_artefato>/', ListarComentariosPorArtefatoView.as_view(), name='filtrar_comentarios_por_artefato'),
     
     
     

@@ -4,19 +4,28 @@ import MyHeader from "../../../../components/Header/Header";
 import {Layout} from 'antd'
 import { ProviderArtefato } from "../../context/ContextoArtefato";
 import VisualizarArtefato from "./VisualizarArtefato";
+import MenuAluno from "../../../../components/Menus/MenuAluno/MenuAluno";
+import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfessor";
+import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 
 const {Content} = Layout
 
-const ScreenVisualizarArtefato = () => {
+const ScreenVisualizarArtefato = ({grupo}) => {
+
+
     return (
         <React.Fragment>
-            <MenuAdmin/>
+            {grupo === 'aluno' && <MenuAluno/>}
+            {grupo === 'professor' && <MenuProfessor/>}
+            {grupo === 'admin' && <MenuAdmin/>}
             <Layout>
                 <MyHeader/>
                 <Content>
-                    <ProviderArtefato>
-                        <VisualizarArtefato />
-                    </ProviderArtefato>
+                    <ProviderGlobalProjeto>
+                        <ProviderArtefato>
+                            <VisualizarArtefato />
+                        </ProviderArtefato>
+                    </ProviderGlobalProjeto>
                 </Content>
             </Layout>
         </React.Fragment>   

@@ -71,7 +71,7 @@ function Routes() {
         />
         <Route
           path="/admin/artefatos/visualizar-artefato/"
-          Component={ScreenVisualizarArtefato}
+          element={<ScreenVisualizarArtefato grupo="admin" />}
           exact
         />
         <Route
@@ -163,6 +163,8 @@ function Routes() {
 
       </Route>
 
+      {/* Rotas do professor */}
+
       <Route element={<TeacherRoutes />}>
         <Route path="/professor/home" Component={HomeProfessor} exact />
 
@@ -202,6 +204,11 @@ function Routes() {
           path="/professor/artefatos"
           element={<ScreenMeusArtefatos grupo="professor" />}
           exact
+        />
+
+        <Route 
+          path="/professor/artefatos/visualizar"
+          element={<ScreenVisualizarArtefato grupo="professor" /> }
         />
 
         {/* Comentários do artefato */}

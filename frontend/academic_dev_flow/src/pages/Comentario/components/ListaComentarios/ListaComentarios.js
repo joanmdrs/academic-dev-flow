@@ -31,7 +31,7 @@ const ListaComentarios = ({ comentarios, onUpdate, onDelete }) => {
       {comentarios.length > 0 ? (
         <React.Fragment>
           {comentarios.map((comentario) => (
-            <div key={comentario.id} className="global-div" style={{width: '50%'}}>
+            <div key={comentario.id} className="global-div" style={{width: '50%', padding: '0'}}>
               <div className="header-comment">
                 <div className="info-comment">
                   <h4 className="autor-comment">{comentario.nome_autor}</h4>
@@ -86,8 +86,7 @@ const ListaComentarios = ({ comentarios, onUpdate, onDelete }) => {
                 </div>
               ) : (
                 <div className="content-comment">
-                  {comentario.texto}
-                  <Button type="primary"> Responder </Button>
+                  <p>{comentario.texto}</p>
                 </div>
             
               )}

@@ -11,7 +11,7 @@ import { createContent, deleteContent } from '../../../../services/githubIntegra
 import { atualizarArtefato, criarArtefato, excluirArtefato, filtrarArtefatosPeloNomeEPeloProjeto } from '../../../../services/artefatoService'
 import FormFiltrarArtefatos from '../../components/FormFiltrarArtefatos/FormFiltrarArtefatos'
 import ModalExcluirArtefato from '../../components/ModalExcluirArtefato/ModalExcluirArtefato'
-import { Await } from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 
 const StyleSpin = {
     position: 'absolute', 
@@ -28,7 +28,7 @@ const StyleSpin = {
 
 const PainelArtefatos = () => {
 
-    const {dadosProjeto, autor} = useContextoGlobalProjeto()
+    const {dadosProjeto, autor, grupo} = useContextoGlobalProjeto()
 
     const {
         dadosArtefato, 
@@ -44,7 +44,7 @@ const PainelArtefatos = () => {
     const [isBtnPlusDisabled, setIsBtnPlusDisabled] = useState(false)
     const [isAvisoVisivel, setIsAvisoVisivel] = useState(false)
     const [isSaving, setIsSaving] = useState(false)
-    const [artefatoExcluir, setArtefatoExcluir] = useState(null)
+    const navigate = useNavigate();
 
     const handleAvisoClose = () => {
         setIsAvisoVisivel(false)
@@ -86,6 +86,29 @@ const PainelArtefatos = () => {
         const response = await filtrarArtefatosPeloNomeEPeloProjeto(nomeArtefato, idProjeto)
         if (!response.error) {
             setArtefatos(response.data)
+        }
+    }
+
+    const handleVisualizarArtefato = async (record) => {
+
+        const parametros = {
+            github_token: dadosProjeto.token,
+            repository: dadosProjeto.nome_repo,
+            path: record.path_file
+        }
+
+        if (grupo === 'Docentes') {
+            navigate("/professor/artefatos/visualizar", {
+                state: parametros
+            });
+        } else if (grupo === 'Discentes') {
+            navigate("/aluno/artefatos/visualizar-", {
+                state: parametros
+            });
+        } else if (grupo === 'Administradores') {
+            navigate("/admin/artefatos/visualizar", {
+                state: parametros
+            });
         }
     }
 
@@ -252,6 +275,7 @@ const PainelArtefatos = () => {
                         </div>
                     )}
                     <TableArtefatosSelect 
+                        onView={handleVisualizarArtefato}
                         onEdit={handleAtualizarArtefato} 
                         onDelete={handleExcluirArtefato}
                     />

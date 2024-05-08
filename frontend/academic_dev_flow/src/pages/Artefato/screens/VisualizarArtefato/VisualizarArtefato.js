@@ -4,17 +4,18 @@ import remarkGfm from 'remark-gfm';
 import { Button, Layout, Menu } from "antd";
 import { MenuUnfoldOutlined, MenuFoldOutlined, FileTextOutlined, StarOutlined, CommentOutlined } from '@ant-design/icons';
 import BotaoVoltar from "../../../../components/Botoes/BotaoVoltar/BotaoVoltar";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getContent } from "../../../../services/githubIntegration";
 import Loading from "../../../../components/Loading/Loading";
 
 const { Sider, Content } = Layout;
 
-const VisualizarArtefato = ({ onBack }) => {
+const VisualizarArtefato = () => {
     const [conteutoArquivo, setConteudoArquivo] = useState('')
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState('document');
     const [collapsed, setCollapsed] = useState(true);
+    const navigate = useNavigate(); 
 
     const location = useLocation();
     const { state } = location;
@@ -55,6 +56,10 @@ const VisualizarArtefato = ({ onBack }) => {
         return <Loading />;
     }
 
+    const handleBack = () => {
+        navigate(-1); 
+    }
+
     return (
         <Layout style={{ minHeight: '100vh' }} className="screen-view-document">
             <Sider style={{marginRight: "20px"}} theme="light" collapsed={collapsed} className="global-form">
@@ -84,7 +89,7 @@ const VisualizarArtefato = ({ onBack }) => {
                 
             <Layout className="site-layout">
                 <Content className="global-form">
-                    <BotaoVoltar funcao={onBack} />
+                    <BotaoVoltar funcao={handleBack} />
 
                     {currentPage === 'document' && (
                         <Markdown className="conteudo-markdown" remarkPlugins={[remarkGfm]}>
@@ -97,8 +102,7 @@ const VisualizarArtefato = ({ onBack }) => {
                         </div>
                     )}
                     {currentPage === 'comments' && (
-                        <div>
-                        </div>
+                        
                     )}
                 </Content>
             </Layout>
