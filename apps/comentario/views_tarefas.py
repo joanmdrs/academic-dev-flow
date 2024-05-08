@@ -71,29 +71,32 @@ class ExcluirComentarioTarefaView(APIView):
         
 class ListarComentariosPorTarefaView(APIView):
     permission_classes = [IsAuthenticated]
+    
     def get(self, request, id_tarefa):
         try:
-            comentarios = ComentarioTarefa.objects.filter(tarefa_id=id_tarefa)
+            comentarios = ComentarioTarefa.objects.filter(tarefa=id_tarefa)
             comentarios_info = []
-            
+        
             for comentario in comentarios:
+            
+                membro_projeto = MembroProjeto.objects.get(pk=comentario.autor_id)
+                membro = Membro.objects.get(id=membro_projeto.membro_id)
                 
-                membro_projeto = MembroProjeto.objects.get(id=comentario.autor_id)
-                membro = Membro.objects.get(id=membro_projeto.membro_id)            
-                comentarios_info.append({
+                comentario_info = {
                     'id': comentario.id,
                     'texto': comentario.texto,
                     'data_hora': comentario.data_hora,
                     'comentario_pai': comentario.comentario_pai,
-                    'autor': comentario.autor_id,
+                    'autor': comentario.autor.id,
                     'nome_autor': membro.nome
-                    
-                })
+                }
+                
+                comentarios_info.append(comentario_info)
 
-            return Response(comentarios_info, status=status.HTTP_200_OK)
+            return JsonResponse(comentarios_info, safe=False, json_dumps_params={'ensure_ascii': False})
             
         except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # class ComentarioTreeView(APIView):
 #     permission_classes = [IsAuthenticated]

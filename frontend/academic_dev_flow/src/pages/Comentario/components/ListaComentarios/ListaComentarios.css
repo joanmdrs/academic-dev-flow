@@ -1,0 +1,25 @@
+.container-comment {
+    display: flex;
+    flex-direction: column;
+}
+
+.header-comment {
+    border-bottom: 1px solid #e6e6e6;
+    display: flex;
+    justify-content: space-between;
+}
+
+.info-comment {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+}
+
+.autor-comment {
+
+}
+
+.content-comment {
+    padding: 20px;
+
+}

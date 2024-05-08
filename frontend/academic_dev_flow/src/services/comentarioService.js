@@ -4,7 +4,7 @@ import { handleError, handleSuccess } from "./utils";
 export const criarComentarioTarefa = async (dados) => {
     try {
         const response = await api.post('/comentario/tarefa/cadastrar/', dados)
-        return handleSuccess(response, 'Comentário excluído com sucesso!')
+        return handleSuccess(response, 'Comentário cadastrado com sucesso!')
     } catch (error) {
         return handleError(error, 'Falha ao tentar criar o comentário, contate o suporte!')
     }
@@ -21,8 +21,8 @@ export const buscarComentarioTarefaPeloId = async (id) => {
 
 export const atualizarComentarioTarefa = async (id, dados) => {
     try {
-        const response = await api.patch(`/comentario/tarefa/atualizar/${encodeURIComponent(id)}`, dados)
-        return handleSuccess(response, 'Comentário excluído com sucesso!')
+        const response = await api.patch(`/comentario/tarefa/atualizar/${encodeURIComponent(id)}/`, dados)
+        return handleSuccess(response, 'Comentário atualizado com sucesso!')
     } catch (error) {
         return handleError(error, 'Falha ao tentar atualizar o comentário, contate o suporte!')        
     }
@@ -49,7 +49,7 @@ export const listarComentariosPorTarefa = async (id) => {
 export const criarComentarioArtefato = async (dados) => {
     try {
         const response = await api.post('/comentario/artefato/cadastrar/', dados)
-        return handleSuccess(response, 'Comentário excluído com sucesso!')
+        return handleSuccess(response, 'Comentário cadastrado com sucesso!')
     } catch (error) {
         return handleError(error, 'Falha ao tentar criar o comentário, contate o suporte!')
     }

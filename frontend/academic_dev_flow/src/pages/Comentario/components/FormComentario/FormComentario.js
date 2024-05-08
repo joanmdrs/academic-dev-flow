@@ -3,17 +3,17 @@ import './FormComentario.css'
 import { Button, Form, Input } from "antd";
 import { FaCircleUser } from "react-icons/fa6";
 import { useForm } from "antd/es/form/Form";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { useContextoComentario } from "../../context/ContextoComentario";
 
                 
-const FormComentario = ({onSubmit, onCancel}) => {
+const FormComentario = ({onSubmit, onCancel, titulo}) => {
 
     const [form] = useForm()
     const {dadosComentario} = useContextoComentario()
 
     const handleSubmitForm = (values) => {
-        
+        onSubmit(values)
+        form.resetFields()
     }
 
     useEffect(() => {
@@ -28,29 +28,27 @@ const FormComentario = ({onSubmit, onCancel}) => {
 
     return (
 
-        <Form form={form} className="global-form" layout="vertical" onFinish={onSubmit}>
+        <Form form={form} layout="vertical" onFinish={handleSubmitForm}>
 
-            <div>
-                <FaCircleUser size="25px" />
-            </div>
+            <Form.Item>
+                <h4> {titulo} </h4>
+            </Form.Item>
 
-            <div style={{flex: '1'}}>
+            <Form.Item name="texto">
+                <Input.TextArea rows={4} name="texto" placeholder="comentário ..." />
+            </Form.Item>
 
-                <Form.Item name="texto">
-                    <Input.TextArea rows={4} name="texto" />
-                </Form.Item>
+            <div style={{display: 'flex', gap: '10px'}}> 
 
-                <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                        Comentar
-                    </Button>
+                <Button type="primary" htmlType="submit">
+                    Comentar
+                </Button>
 
-                    <Button onClick={onCancel}>
-                        Cancelar
-                    </Button>
-                </Form.Item>
-            </div>
-            
+                <Button onClick={onCancel}>
+                    Cancelar
+                </Button>
+
+            </div>           
 
         </Form>
  

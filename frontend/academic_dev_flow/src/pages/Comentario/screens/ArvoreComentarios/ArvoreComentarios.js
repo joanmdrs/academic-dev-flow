@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import './ArvoreComentarios.css';
 import { Avatar, Button, Dropdown, Form, Input, Menu, Space } from 'antd';
 import { SlOptions } from 'react-icons/sl';
 import { useContextoComentario } from '../../context/ContextoComentario';

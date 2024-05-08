@@ -26,6 +26,7 @@ import ScreenMeusArtefatos from "./pages/Artefato/screens/MeusArtefatos";
 import ScreenVisualizarProjeto from "./pages/Projeto/screens/VisualizarProjeto";
 import ScreenMeusProjetos from "./pages/Projeto/screens/MeusProjetos";
 import ScreenArvoreComentarios from "./pages/Comentario/screens/ArvoreComentarios";
+import ScreenGerenciarComentariosTarefa from "./pages/Comentario/screens/GerenciarComentariosTarefa";
 
 function Routes() {
   return (
@@ -193,7 +194,7 @@ function Routes() {
 
         <Route 
           path="/professor/tarefas/:idTarefa/comentarios"
-          element={<ScreenArvoreComentarios grupo="professor" page="tarefas" />}
+          element={<ScreenGerenciarComentariosTarefa grupo="professor" />}
           exact
         />
 
@@ -205,11 +206,11 @@ function Routes() {
 
         {/* Comentários do artefato */}
 
-        <Route 
+        {/* <Route 
           path="/professor/artefatos/:idArtefato/comentarios"
-          element={<ScreenArvoreComentarios grupo="professor" page="artefatos" />}
+          element={<ScreenGerenciarComentariosTarefa grupo="professor"/>}
           exact
-        />
+        /> */}
       </Route>
     </Switch>
   );
