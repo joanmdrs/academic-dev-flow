@@ -7,14 +7,15 @@ import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
 import { Content } from "antd/es/layout/layout";
 import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { ProviderComentario } from "../../context/ContextoComentario";
-import GerenciarComentariosTarefa from "./GerenciarComentariosTarefa";
 import { useParams } from "react-router-dom";
+import ComentariosArtefato from "./ComentariosArtefato";
+import MenuAdmin from "../../../../components/Menus/MenuAdmin/MenuAdmin";
 
-const ScreenGerenciarComentariosTarefa = ({grupo}) => {
+const ScreenComentariosArtefato = ({grupo}) => {
 
     const breadcrumbRoutes = [
         { title: 'Home', path: `/${grupo}/home` },
-        { title: 'Tarefas', path: `/${grupo}/tarefas`},
+        { title: 'Artefatos', path: `/${grupo}/artefatos`},
         { title: 'Comentários', path: '' },
     ]
 
@@ -26,6 +27,7 @@ const ScreenGerenciarComentariosTarefa = ({grupo}) => {
         <React.Fragment>
             { grupo === 'aluno' && <MenuAluno />}
             { grupo === 'professor' && <MenuProfessor />}
+            { grupo === 'admin' && <MenuAdmin />}
             <Layout>
                 <MyHeader/>
                 <CustomBreadcrumb routes={breadcrumbRoutes} />
@@ -33,7 +35,7 @@ const ScreenGerenciarComentariosTarefa = ({grupo}) => {
                 <Content>
                     <ProviderGlobalProjeto>
                         <ProviderComentario>
-                            <GerenciarComentariosTarefa idTarefa={idTarefa} />
+                            <ComentariosArtefato />
                         </ProviderComentario>
                     </ProviderGlobalProjeto>
                 </Content>
@@ -42,4 +44,4 @@ const ScreenGerenciarComentariosTarefa = ({grupo}) => {
     )
 }
 
-export default ScreenGerenciarComentariosTarefa
+export default ScreenComentariosArtefato

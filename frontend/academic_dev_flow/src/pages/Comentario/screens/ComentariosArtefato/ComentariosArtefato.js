@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from "react";
-import FormComentario from "../../components/FormComentario/FormComentario";
-import { atualizarComentarioTarefa, criarComentarioTarefa, excluirComentarioTarefa, listarComentariosPorTarefa } from "../../../../services/comentarioService";
-import ListaComentarios from "../../components/ListaComentarios/ListaComentarios";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { useContextoComentario } from "../../context/ContextoComentario";
+import { atualizarComentarioArtefato, criarComentarioArtefato, excluirComentarioArtefato, listarComentariosPorArtefato } from "../../../../services/comentarioService";
 import { Modal } from "antd";
+import ListaComentarios from "../../components/ListaComentarios/ListaComentarios";
+import FormComentario from "../../components/FormComentario/FormComentario";
 
-const GerenciarComentariosTarefa = ({idTarefa}) => {
+const ComentariosArtefato = ({idArtefato}) => {
 
     const [comentarios, setComentarios] = useState([])
     const {autor} = useContextoGlobalProjeto()
     const {
-        dadosComentario,
         comentarioPai,
         setComentarioEditado,
         setEditorVisivel
     } = useContextoComentario()
 
     const handleGetComentarios = async () => {
-        const response = await listarComentariosPorTarefa(idTarefa)
+        const response = await listarComentariosPorArtefato(idArtefato)
         if (!response.error){
             setComentarios(response.data)
         }
@@ -26,7 +25,7 @@ const GerenciarComentariosTarefa = ({idTarefa}) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            if (idTarefa) {
+            if (idArtefato) {
                 await handleGetComentarios()
             }
         }
@@ -38,11 +37,11 @@ const GerenciarComentariosTarefa = ({idTarefa}) => {
         const dadosEnviar = {
             texto: dadosForm.texto,
             autor: autor.id_membro_projeto,
-            tarefa: idTarefa,
+            artefato: idArtefato,
             comentario_pai: comentarioPai
         }
 
-        await criarComentarioTarefa(dadosEnviar)
+        await criarComentarioArtefato(dadosEnviar)
         await handleGetComentarios()
     }
 
@@ -50,12 +49,12 @@ const GerenciarComentariosTarefa = ({idTarefa}) => {
         const dadosEnviar = {
             texto: texto,
             autor: autor.id_membro_projeto,
-            tarefa: idTarefa,
+            artefato: idArtefato,
             comentario_pai: comentarioPai
         }
 
         console.log(dadosEnviar)
-        await atualizarComentarioTarefa(id, dadosEnviar)
+        await atualizarComentarioArtefato(id, dadosEnviar)
         setComentarioEditado(null);
         setEditorVisivel(false);
         await handleGetComentarios()
@@ -68,7 +67,7 @@ const GerenciarComentariosTarefa = ({idTarefa}) => {
             okText: 'Sim',
             cancelText: 'Não',
             onOk: async () => {
-                await excluirComentarioTarefa(id)
+                await excluirComentarioArtefato(id)
                 await handleGetComentarios()
             }
         });
@@ -93,4 +92,4 @@ const GerenciarComentariosTarefa = ({idTarefa}) => {
     )
 }
 
-export default GerenciarComentariosTarefa
+export default ComentariosArtefato

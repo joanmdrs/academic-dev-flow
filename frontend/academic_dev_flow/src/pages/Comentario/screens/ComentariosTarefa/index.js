@@ -7,21 +7,27 @@ import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
 import { Content } from "antd/es/layout/layout";
 import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { ProviderComentario } from "../../context/ContextoComentario";
-import ArvoreComentarios from "./ArvoreComentarios";
-import { transformCapitalize } from "../../../../services/utils";
+import { useParams } from "react-router-dom";
+import ComentariosTarefa from "./ComentariosTarefa";
+import MenuAdmin from "../../../../components/Menus/MenuAdmin/MenuAdmin";
 
-const ScreenArvoreComentarios = ({grupo, page}) => {
+const ScreenComentariosTarefa = ({grupo}) => {
 
     const breadcrumbRoutes = [
         { title: 'Home', path: `/${grupo}/home` },
-        { title: transformCapitalize(page), path: `/${grupo}/${page}`},
+        { title: 'Tarefas', path: `/${grupo}/tarefas`},
         { title: 'Comentários', path: '' },
-    ];
+    ]
+
+    const { idTarefa } = useParams();
+
+    console.log(idTarefa)
 
     return (
         <React.Fragment>
             { grupo === 'aluno' && <MenuAluno />}
             { grupo === 'professor' && <MenuProfessor />}
+            { grupo === 'admin' && <MenuAdmin />}
             <Layout>
                 <MyHeader/>
                 <CustomBreadcrumb routes={breadcrumbRoutes} />
@@ -29,7 +35,7 @@ const ScreenArvoreComentarios = ({grupo, page}) => {
                 <Content>
                     <ProviderGlobalProjeto>
                         <ProviderComentario>
-                            <ArvoreComentarios />
+                            <ComentariosTarefa idTarefa={idTarefa} />
                         </ProviderComentario>
                     </ProviderGlobalProjeto>
                 </Content>
@@ -38,4 +44,4 @@ const ScreenArvoreComentarios = ({grupo, page}) => {
     )
 }
 
-export default ScreenArvoreComentarios
+export default ScreenComentariosTarefa

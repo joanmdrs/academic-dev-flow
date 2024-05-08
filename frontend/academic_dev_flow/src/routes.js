@@ -25,8 +25,9 @@ import ScreenMinhasTarefas from "./pages/Tarefa/screens/MinhasTarefas";
 import ScreenMeusArtefatos from "./pages/Artefato/screens/MeusArtefatos";
 import ScreenVisualizarProjeto from "./pages/Projeto/screens/VisualizarProjeto";
 import ScreenMeusProjetos from "./pages/Projeto/screens/MeusProjetos";
-import ScreenArvoreComentarios from "./pages/Comentario/screens/ArvoreComentarios";
-import ScreenGerenciarComentariosTarefa from "./pages/Comentario/screens/GerenciarComentariosTarefa";
+import ScreenGerenciarComentariosTarefa from "./pages/Comentario/screens/ComentariosTarefa";
+import ScreenComentariosArtefato from "./pages/Comentario/screens/ComentariosArtefato";
+import ScreenComentariosTarefa from "./pages/Comentario/screens/ComentariosTarefa";
 
 function Routes() {
   return (
@@ -69,11 +70,7 @@ function Routes() {
           Component={ScreenGerenciarArtefatos}
           exact
         />
-        <Route
-          path="/admin/artefatos/visualizar-artefato/"
-          element={<ScreenVisualizarArtefato grupo="admin" />}
-          exact
-        />
+        
         <Route
           path="/admin/artefatos/gerenciar-arquivos/"
           Component={ScreenGerenciarArquivosGithub}
@@ -105,11 +102,30 @@ function Routes() {
         {/* Menu Item Iterações */}
 
         <Route
-          path="admin/iteracoes"
+          path="/admin/iteracoes"
           Component={ScreenGerenciarIteracoes}
           exact
         />
+
+        <Route 
+          path="/admin/artefatos/visualizar"
+          element={<ScreenVisualizarArtefato grupo="admin" /> }
+        />
+
+        <Route 
+          path="/admin/tarefas/:idTarefa/comentarios"
+          element={<ScreenComentariosTarefa grupo="admin" />}
+          exact
+        />
+
+        <Route 
+          path="/admin/artefatos/:idArtefato/comentarios"
+          element={<ScreenComentariosArtefato grupo="admin" />}
+          exact
+        />
       </Route>
+
+      {/* Rotas do aluno */}
 
       <Route element={<StudentRoutes />}>
         <Route path="/aluno/home" Component={HomeAluno} exact />
@@ -151,23 +167,18 @@ function Routes() {
           element={<ScreenVisualizarArtefato grupo="aluno" /> }
         />
 
-        {/* Comentários da tarefa */}
+        <Route 
+          path="/aluno/tarefas/:idTarefa/comentarios"
+          element={<ScreenComentariosTarefa grupo="aluno" />}
+          exact
+        />
 
         <Route 
           path="/aluno/artefatos/:idArtefato/comentarios"
-          element={<ScreenArvoreComentarios grupo="aluno" page="artefatos" />}
+          element={<ScreenComentariosArtefato grupo="aluno" />}
           exact
         />
 
-
-
-        {/* Comentários do artefato */}
-
-        <Route 
-          path="/aluno/artefatos/:idTarefa/comentarios"
-          element={<ScreenArvoreComentarios grupo="aluno" page="tarefas" />}
-          exact
-        />
 
       </Route>
 
@@ -219,13 +230,11 @@ function Routes() {
           element={<ScreenVisualizarArtefato grupo="professor" /> }
         />
 
-        {/* Comentários do artefato */}
-
-        {/* <Route 
+        <Route 
           path="/professor/artefatos/:idArtefato/comentarios"
-          element={<ScreenGerenciarComentariosTarefa grupo="professor"/>}
+          element={<ScreenComentariosArtefato grupo="professor"/>}
           exact
-        /> */}
+        />
       </Route>
     </Switch>
   );
