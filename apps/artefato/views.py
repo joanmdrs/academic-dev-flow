@@ -43,6 +43,19 @@ class BuscarArtefatoPorNomeView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
+class BuscarArtefatoPeloIdView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request, id): 
+        try:
+            artefato = Artefato.objects.get(pk=id)
+            serializer = ArtefatoSerializer(artefato, many=False)
+            return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+            
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
+        
 class FiltrarArtefatoPeloNomeEProjeto(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):

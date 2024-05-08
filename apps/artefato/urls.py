@@ -5,7 +5,8 @@ app_name = 'artefato'
 
 urlpatterns = [
     path('cadastrar/', CadastrarArtefatoView.as_view(), name='cadastrar_artefato'),
-    path('buscar/', BuscarArtefatoPorNomeView.as_view(), name='buscar_artefato'),
+    path('buscar/', BuscarArtefatoPorNomeView.as_view(), name='buscar_artefato_pelo_nome'),
+    path('buscar/<int:id>/', BuscarArtefatoPeloIdView.as_view(), name='buscar_artefato_pelo_id'),
     path('atualizar/<int:id>/', AtualizarArtefatoView.as_view(), name='atualizar_artefato'),
     path('excluir/<int:id>/', ExcluirArtefatoView.as_view(), name='excluir_artefato'),
     path('listar/', ListarArtefatosView.as_view(), name="listar_artefatos"),
