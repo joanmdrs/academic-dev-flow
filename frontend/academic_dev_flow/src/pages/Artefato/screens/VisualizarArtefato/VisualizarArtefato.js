@@ -1,3 +1,4 @@
+import "./VisualizarArtefato.css"
 import React, { useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from 'remark-gfm';
@@ -105,7 +106,7 @@ const VisualizarArtefato = () => {
                     <BotaoVoltar funcao={handleBack} />
 
                     {currentPage === 'document' && (
-                        <Markdown className="conteudo-markdown" remarkPlugins={[remarkGfm]}>
+                        <Markdown className="conteudo-markdown table-markdown" remarkPlugins={[remarkGfm]}>
                             {conteutoArquivo}
                         </Markdown>
                     )}

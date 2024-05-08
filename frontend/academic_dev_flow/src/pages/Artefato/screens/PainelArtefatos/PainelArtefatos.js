@@ -103,7 +103,7 @@ const PainelArtefatos = () => {
                 state: parametros
             });
         } else if (grupo === 'Discentes') {
-            navigate("/aluno/artefatos/visualizar-", {
+            navigate("/aluno/artefatos/visualizar", {
                 state: parametros
             });
         } else if (grupo === 'Administradores') {
