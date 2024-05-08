@@ -139,10 +139,16 @@ function Routes() {
           element={<ScreenMinhasTarefas grupo="aluno" />}
           exact
         />
+
         <Route
           path="/aluno/artefatos"
           element={<ScreenMeusArtefatos grupo="aluno" />}
           exact
+        />
+
+        <Route 
+          path="/aluno/artefatos/visualizar"
+          element={<ScreenVisualizarArtefato grupo="aluno" /> }
         />
 
         {/* Comentários da tarefa */}
@@ -152,6 +158,8 @@ function Routes() {
           element={<ScreenArvoreComentarios grupo="aluno" page="artefatos" />}
           exact
         />
+
+
 
         {/* Comentários do artefato */}
 
