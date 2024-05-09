@@ -26,6 +26,9 @@ class CadastrarMembroView(APIView):
             user_data = request.data.get('usuario', {}) 
             github_data = request.data.get('github', {})
             member_data = request.data.get('membro', {})
+            
+            if (Usuario.objects.filter(username=user_data['username']).exists()):
+                return Response({'error': 'O nome de usuário já está sendo utilizado!'}, status=status.HTTP_409_CONFLICT)
 
             if not user_data:
                 raise ValueError("Dados do usuário não fornecidos")

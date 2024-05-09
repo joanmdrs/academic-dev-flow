@@ -14,7 +14,7 @@ const FormRegister = () => {
     const [form] = useForm();
     const navigate = useNavigate();
 
-    const {usuarioGithub, grupoUsuario} = useRegisterContexto()
+    const {infoGithub, grupoUsuario} = useRegisterContexto()
 
     const handleVerificarSenhas = (rule, value) => {
         const senha = form.getFieldValue('senha');
@@ -26,15 +26,17 @@ const FormRegister = () => {
     }
 
     const handleCriarConta = async (dados) => {
-        dados['github'] = usuarioGithub
-        dados['grupo'] = grupoUsuario
+        dados['usuario_github'] = infoGithub !== null ? infoGithub.usuario_github : null
+        dados['nome_github'] = infoGithub !== null ? infoGithub.nome_github : null
+        dados['email_github'] = infoGithub !== null ? infoGithub.email_github : null
+        dados['grupo'] = grupoUsuario 
         dados['usuario'] = dados.email
         dados['data_nascimento'] = converterData(dados.data_nascimento)
 
         await criarConta(dados)
-        setInterval(() => {
-            navigate("/")
-        }, 1500);
+        // setInterval(() => {
+        //     navigate("/")
+        // }, 1500);
 
     }
 
