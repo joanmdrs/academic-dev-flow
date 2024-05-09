@@ -28,6 +28,7 @@ import ScreenMeusProjetos from "./pages/Projeto/screens/MeusProjetos";
 import ScreenGerenciarComentariosTarefa from "./pages/Comentario/screens/ComentariosTarefa";
 import ScreenComentariosArtefato from "./pages/Comentario/screens/ComentariosArtefato";
 import ScreenComentariosTarefa from "./pages/Comentario/screens/ComentariosTarefa";
+import ScreenGerenciarRelatorios from "./pages/Relatorio/screens/GerenciarRelatorios";
 
 function Routes() {
   return (
@@ -123,6 +124,12 @@ function Routes() {
           element={<ScreenComentariosArtefato grupo="admin" />}
           exact
         />
+
+        <Route
+          path="/admin/relatorios"
+          element={<ScreenGerenciarRelatorios  grupo="admin" />}
+        
+        />
       </Route>
 
       {/* Rotas do aluno */}
@@ -177,6 +184,12 @@ function Routes() {
           path="/aluno/artefatos/:idArtefato/comentarios"
           element={<ScreenComentariosArtefato grupo="aluno" />}
           exact
+        />
+
+        <Route
+          path="/aluno/relatorios"
+          element={<ScreenGerenciarRelatorios  grupo="aluno" />}
+        
         />
 
 
@@ -234,6 +247,12 @@ function Routes() {
           path="/professor/artefatos/:idArtefato/comentarios"
           element={<ScreenComentariosArtefato grupo="professor"/>}
           exact
+        />
+
+        <Route
+          path="/professor/relatorios"
+          element={<ScreenGerenciarRelatorios  grupo="professor" />}
+        
         />
       </Route>
     </Switch>
