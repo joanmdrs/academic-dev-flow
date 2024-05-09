@@ -1,34 +1,28 @@
 import React, { useEffect, useState } from "react";
-import "./VisualizarProjeto.css"
-import { Button, Layout } from "antd";
+import { Tabs } from "antd";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { GoTasklist } from "react-icons/go";
 import { useParams } from "react-router-dom";
 import { LuCalendarClock } from "react-icons/lu";
-import { useContextoGlobalProjeto, useProjetoContext } from "../../../../context/ContextoGlobalProjeto";
+import { FaGithub } from "react-icons/fa6";
+import { MdOutlinePeopleAlt } from "react-icons/md";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import Loading from "../../../../components/Loading/Loading";
-import MenuAluno from "../../../../components/Menus/MenuAluno/MenuAluno";
-import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfessor";
-import MyHeader from "../../../../components/Header/Header";
-import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
-import CronogramaIteracoes from "../../../Iteracao";
-import GerenciarDocumentos from "../../../Documento";
+import ScreenCronogramaIteracoes from "../../../Iteracao/screens/CronogramaIteracoes.js";
+import ScreenQuadroTarefas from "../../../Tarefa/screens/QuadroTarefas/index.js";
+import ScreenPainelArtefatos from "../../../Artefato/screens/PainelArtefatos/index.js";
+import ScreenPainelGihtub from "../../../GitHub/screens/PainelGithub/index.js";
+import ScreenPainelMembros from "../../../Membro/screens/PainelMembros/index.js";
 
+const {TabPane} = Tabs
 
-const VisualizarProjeto = ({grupo}) => {
+const VisualizarProjeto = () => {
 
     const { idProjeto } = useParams();
     const { setDadosProjeto } = useContextoGlobalProjeto()
     const [projeto, setProjeto] = useState(null)
-    const [currentPage, setCurrentPage] = useState('default')
     const [loading, setLoading] = useState(true)
-
-    const breadcrumbRoutes = [
-        { title: 'Home', path: `/${grupo}/home` },
-        { title: 'Projetos', path: `/${grupo}/projetos`  },
-        { title: 'Visualizar', path: `/${grupo}/projetos/visualizar` }
-    ];
 
     const handleGetProject = async () => {
         const response1 = await buscarProjetoPeloId(idProjeto);
@@ -57,56 +51,54 @@ const VisualizarProjeto = ({grupo}) => {
     return (
         <React.Fragment>
 
-            {grupo === 'aluno' && <MenuAluno />}
-            {grupo === 'professor' && <MenuProfessor />}
-            
-            <Layout>
-                <MyHeader />
-                <CustomBreadcrumb routes={breadcrumbRoutes} />
-                <div className="screen-view-project">
+            <div className="screen-view-project">
 
-                    <div className="title"> 
-                        { 
-                            projeto !== null ? (
-                                <h4>{projeto.nome} </h4>
-                            ) : null
-                        }
-
-                        <div style={{display: "flex", gap: "10px"}}>
-                            <Button
-                                type={currentPage === 'default' ? "primary" : "default"}
-                                icon={<LuCalendarClock />} 
-                                onClick={() => setCurrentPage("default")}
-                            >
-                                Iterações
-                            </Button> 
-                            <Button 
-                                type={currentPage === 'tarefas' ? "primary" : "default"}
-                                icon={<GoTasklist />} 
-                                onClick={() => setCurrentPage("tarefas")}
-                            >
-                                Tarefas
-                            </Button>
-
-                            <Button 
-                                type={currentPage === 'documentos' ? "primary" : "default"}
-                                icon={<IoDocumentTextOutline />}
-                                onClick={() => setCurrentPage("documentos")}
-                            > 
-                                Artefatos
-                            </Button>
-
-                        </div>
-
-                    </div>
-
-                    <div className="content"> 
-                        {/* {currentPage === "default" && <CronogramaIteracoes />}
-                        {currentPage === "tarefas" && <GerenciarTarefas />}
-                        {currentPage === "documentos" && <GerenciarDocumentos/>} */}
-                    </div>
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'baseline',
+                    padding: '0 20px',
+                    borderBottom: '1px solid black'
+                }}> 
+                    { 
+                        projeto !== null ? (
+                            <h4 style={{color: 'var(--primary-color)'}}>{projeto.nome} </h4>
+                        ) : null
+                    }
+                    
                 </div>
-            </Layout>
+
+                <div className="content"> 
+                    <Tabs
+                        style={{width: '100%', padding: '2%'}}
+
+                    >
+                            <TabPane tab='Projeto' key="1">
+                            Conteúdo da Outra Tab
+                        </TabPane>
+
+                        <TabPane tab='Iterações' key="2" icon={<LuCalendarClock />}>
+                            <ScreenCronogramaIteracoes />
+                        </TabPane>
+
+                        <TabPane tab='Tarefas' key="3" icon={<GoTasklist />} >
+                            <ScreenQuadroTarefas />
+                        </TabPane>
+
+                        <TabPane tab='Artefatos' key="4" icon={<IoDocumentTextOutline />}>
+                            <ScreenPainelArtefatos />
+                        </TabPane>
+
+                        <TabPane tab='GitHub' key="5" icon={<FaGithub />}>
+                            <ScreenPainelGihtub />
+                        </TabPane>
+
+                        <TabPane tab='Membros' key="6" icon={<MdOutlinePeopleAlt />}>
+                            <ScreenPainelMembros />
+                        </TabPane>
+                    </Tabs>
+                </div>
+            </div>
         </React.Fragment>
     )
 }

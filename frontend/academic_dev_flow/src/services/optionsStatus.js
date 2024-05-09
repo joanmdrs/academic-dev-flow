@@ -8,6 +8,11 @@ export const optionsStatusTarefas = [
         label: 'Em andamento'
     },
     {
+        value: 'revisao',
+        label: 'Pendente de revisão'
+
+    },
+    {
         value: 'concluida', 
         label: 'Concluída'
     },
@@ -41,5 +46,28 @@ export const optionsStatusIteracoes = [
     {
         value: 'cancelada',
         label: 'Cancelada'
+    }
+]
+
+export const optionsStatusArtefatos = [
+    {
+        value: 'criado',
+        label: 'Criado'
+    },
+    {
+        value: 'rascunho',
+        label: 'Em rascunho'
+    },
+    {
+        value: 'revisao',
+        label: 'Pendente de revisão'
+    },
+    {
+        value: 'aprovado',
+        label: 'Aprovado'
+    },
+    {
+        value: 'finalizado',
+        label: 'Finalizado'
     }
 ]

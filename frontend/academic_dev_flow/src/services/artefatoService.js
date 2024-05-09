@@ -30,6 +30,15 @@ export const buscarArtefatoPeloNome =  async (parametro) => {
     }
 }
 
+export const buscarArtefatoPeloId = async (id) => {
+    try {
+        const response = await api.get(`artefato/buscar/${encodeURIComponent(id)}/`)
+        return response
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
+}
+
 export const atualizarArtefato = async (id, dados) => {
     try {
         const response = await api.patch(`/artefato/atualizar/${encodeURIComponent(id)}/`, dados)
@@ -56,6 +65,15 @@ export const listarArtefatos = async () => {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
     }
 }
+
+export const listarArtefatosPorProjeto = async (idProjeto) => {
+    try {
+        const response = await api.get(`/artefato/listar/projeto/${encodeURIComponent(idProjeto)}/`)
+        return response
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
+} 
 
 export const filtrarArtefatosPeloNomeEPeloProjeto = async (nomeArtefato, idProjeto) => {
     try {
@@ -89,9 +107,9 @@ export const verificarExistenciaArquivo = async (parametro) => {
     }
 }
 
-export const sicronizarArtefatos = async (dados) => {
+export const sicronizarContents = async (dados) => {
     try {
-        const response = await api.post('/artefato/sicronizar-artefatos/', dados)
+        const response = await api.post('/artefato/sicronizar-contents/', dados)
         return handleSuccess(response, SUCCESS_MESSAGE_ON_SYNC_ARTIFACTS)
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SYNC)

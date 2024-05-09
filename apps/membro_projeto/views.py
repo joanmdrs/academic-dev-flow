@@ -3,12 +3,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import JsonResponse
-from .models import MembroProjeto
-from .serializers import MembroProjetoSerializer
+from .models import MembroProjeto, FuncaoMembroProjetoAtual, FuncaoMembroProjeto
+from .serializers import MembroProjetoSerializer, FuncaoMembroProjetoSerializer, FuncaoMembroProjetoAtualSerializer
 from apps.membro.models import Membro
 from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
 from django.db.models import Count
+from django.core.exceptions import ObjectDoesNotExist
 
 class CadastrarMembroProjetoView(APIView):
     permission_classes = [IsAuthenticated]
@@ -21,9 +22,31 @@ class CadastrarMembroProjetoView(APIView):
                 return Response(serializer.data, status=status.HTTP_200_OK)
             
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)        
+
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class BuscarMembroProjetoPeloUsuarioGithubView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        try:
+            usuario_github = request.GET.get('usuario_github')
+            id_projeto = request.GET.get('id_projeto')
+            
+            membro = get_object_or_404(Membro, github__usuario_github=usuario_github)
+            
+            membro_projeto = MembroProjeto.objects.filter(membro=membro.id, projeto=id_projeto).first()
 
+            membro_data = {
+                'id_membro_projeto': membro_projeto.id,
+            }
+
+            return JsonResponse(membro_data, status=200)
+        
+        except Membro.DoesNotExist:
+            return JsonResponse({'error': 'Membro não encontrado'}, status=status.HTTP_404_NOT_FOUND)
+        
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
                 
@@ -139,7 +162,6 @@ class ListarMembrosPorProjeto(APIView):
     
     def get(self, request, id_projeto):
         try:
-            
             membros_projeto = MembroProjeto.objects.filter(projeto_id=id_projeto)
             membros_info = []
             
@@ -147,15 +169,36 @@ class ListarMembrosPorProjeto(APIView):
                 membro = membro_projeto.membro
                 usuario_github = membro.github.usuario_github
                 
+                try:
+                    funcao = FuncaoMembroProjetoAtual.objects.get(membro_projeto=membro_projeto.id, ativo=True)
+                    id_funcao_atual = funcao.id
+                    id_funcao = funcao.funcao_membro.id
+                    nome_funcao = funcao.funcao_membro.nome
+                    data_inicio = funcao.data_inicio
+                    data_termino = funcao.data_termino
+                    ativo = funcao.ativo
+                except FuncaoMembroProjetoAtual.DoesNotExist:
+                    id_funcao_atual = None
+                    id_funcao = None
+                    nome_funcao = None
+                    data_inicio = None
+                    data_termino = None
+                    ativo = None
+                
                 membros_info.append({
                     'id_membro_projeto': membro_projeto.id,
                     'id_projeto': membro_projeto.projeto.id,
                     'id_membro': membro.id,
                     'nome_membro': membro.nome,
                     'grupo_membro': membro.grupo,
-                    'usuario_github': usuario_github
+                    'usuario_github': usuario_github,
+                    'id_funcao_atual': id_funcao_atual,
+                    'id_funcao': id_funcao,
+                    'nome_funcao': nome_funcao,
+                    'data_inicio': data_inicio,
+                    'data_termino': data_termino,
+                    'ativo': ativo
                 })
-            
             
             if not membros_info:
                 return Response({'message': 'Nenhum membro encontrado.', 'results': []}, status=status.HTTP_200_OK)
@@ -164,3 +207,59 @@ class ListarMembrosPorProjeto(APIView):
   
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class CadastrarFuncaoMembroView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        try:
+            funcoes = request.data.get('funcoes', [])
+            serializer = FuncaoMembroProjetoSerializer(data=funcoes, many=True)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)   
+            
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class CadastrarFuncaoAtualView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        try:
+            membro_projeto_id = request.data.get('membro_projeto')
+            funcao_ativa = FuncaoMembroProjetoAtual.objects.filter(membro_projeto_id=membro_projeto_id, ativo=True).first()
+            
+            if funcao_ativa:
+                funcao_ativa.ativo = False
+                funcao_ativa.save()
+            
+            serializer = FuncaoMembroProjetoAtualSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class ListarFuncoesMembroView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        try:
+            
+            funcoes = FuncaoMembroProjeto.objects.all()
+            
+            if funcoes.exists():
+                serializer = FuncaoMembroProjetoSerializer(funcoes, many=True) 
+                return Response(serializer.data, status=status.HTTP_200_OK)   
+            
+            return Response(data=[], status=status.HTTP_204_NO_CONTENT)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        

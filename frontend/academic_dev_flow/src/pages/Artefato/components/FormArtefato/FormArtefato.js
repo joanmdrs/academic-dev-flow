@@ -3,34 +3,13 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "antd/es/form/Form";
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
-import SelectProjeto from "../SelectProjeto/SelectProjeto";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
+import { optionsStatusArtefatos } from "../../../../services/optionsStatus";
 
-const optionsStatus = [
-    {
-        value: 'criado',
-        label: 'Criado'
-    },
-    {
-        value: 'rascunho',
-        label: 'Em rascunho'
-    },
-    {
-        value: 'revisao',
-        label: 'Pendente de revisão'
-    },
-    {
-        value: 'aprovado',
-        label: 'Aprovado'
-    },
-    {
-        value: 'finalizado',
-        label: 'Finalizado'
-    }
-]
+const FormArtefato = ({onSubmit, onCancel, selectProjeto, inputsAdmin, inputCommitMessage}) => {
 
-const FormArtefato = ({onSubmit, onCancel, selectProjeto, inputsAdmin}) => {
-
-    const {dadosProjeto, dadosArtefato} = useContextoArtefato()
+    const {dadosProjeto} = useContextoGlobalProjeto()
+    const {dadosArtefato} = useContextoArtefato()
     const [optionsIteracao, setOptionsIteracao] = useState(null)
     const [form] = useForm()
 
@@ -82,12 +61,14 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto, inputsAdmin}) => {
 
             {inputsAdmin}
 
+            {inputCommitMessage}
+
             <Form.Item label="Iteração" name="iteracao">
                 <Select options={optionsIteracao} name="iteracao" defaultValue="selecione" />
             </Form.Item>
             
             <Form.Item label="Status" name="status">
-                <Select options={optionsStatus} name="status" defaultValue="selecione" />
+                <Select options={optionsStatusArtefatos} name="status" defaultValue="selecione" />
             </Form.Item>
 
             <Form.Item label="Descrição" name="descricao">
@@ -96,7 +77,12 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto, inputsAdmin}) => {
 
             <Form.Item>
                 <Button type="primary" htmlType="submit" > Salvar </Button>
-                <Button onClick={onCancel}> Cancelar </Button>
+                <Button 
+                    
+                    type="primary" 
+                    style={{marginLeft: '10px'}} 
+                    danger 
+                    onClick={() => onCancel()}> Cancelar </Button>
             </Form.Item>
         </Form>
     )

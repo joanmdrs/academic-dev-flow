@@ -1,7 +1,7 @@
 import "./MeusProjetos.css"
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Empty, Layout, Table } from 'antd';
+import { Button, Empty, Table } from 'antd';
 
 import { LuCalendarCheck2, LuCalendarX2 } from "react-icons/lu";
 import { TeamOutlined } from '@ant-design/icons';
@@ -13,10 +13,6 @@ import { decodeToken } from 'react-jwt';
 import { buscarProjetosDoMembro, buscarQuantidadeMembrosPorProjeto } from "../../../../services/membroProjetoService";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { buscarFluxoPeloId } from "../../../../services/fluxoService";
-import MenuAluno from "../../../../components/Menus/MenuAluno/MenuAluno";
-import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfessor";
-import MyHeader from "../../../../components/Header/Header";
-import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
 
 const MeusProjetos = ({grupo}) => {
 
@@ -91,11 +87,6 @@ const MeusProjetos = ({grupo}) => {
 
   const [projetos, setProjetos] = useState(null)
   const [token] = useState(localStorage.getItem("token") || null);
-
-  const breadcrumbRoutes = [
-    { title: 'Home', path: `/${grupo}/home` },
-    { title: 'Projetos', path: `/${grupo}/projetos` },
-  ];
   
   useEffect(() => {
       const searchData = async () => {
@@ -137,57 +128,38 @@ const MeusProjetos = ({grupo}) => {
     
   }
 
-
   return (
-    <React.Fragment>
-
-      {
-        grupo !== null && (
-          <React.Fragment>
-
-            { grupo === "aluno" &&  <MenuAluno />}
-            { grupo === "professor" && <MenuProfessor /> }
-           
-            <Layout>
-                <MyHeader />
-                <CustomBreadcrumb routes={breadcrumbRoutes} />
-                <div className="projects-section-layout">
-                    <div className='projects-section-title'>
-                      <h2> Meus Projetos </h2>  
-                    </div>
-                    <div className='projects-section-content'> 
-                    {
-                      projetos !== null ? (
-                        <Table
-                          className='meus-projetos-table'
-                          dataSource={projetos}
-                          columns={columns}
-                        />
-                      ) : (
-                        <Empty 
-                          description="Não há projetos para exibir"
-                          image={Empty.PRESENTED_IMAGE_SIMPLE}
-                          style={{
-                            display: 'flex',
-                            width: "100%",
-                            height: "100%",
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                          }}
-                        >
-                        </Empty>
-                    )}
-                      
-                    </div>
-                    
-                </div>
-            </Layout>
-          </React.Fragment>
-        )
-      }
+      <div className="projects-section-layout">
+          <div className='projects-section-title'>
+            <h2> Meus Projetos </h2>  
+          </div>
+          <div className='projects-section-content'> 
+          {
+            projetos !== null ? (
+              <Table
+                className='meus-projetos-table'
+                dataSource={projetos}
+                columns={columns}
+              />
+            ) : (
+              <Empty 
+                description="Não há projetos para exibir"
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                style={{
+                  display: 'flex',
+                  width: "100%",
+                  height: "100%",
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+              </Empty>
+          )}
             
-    </React.Fragment>
+          </div>
+          
+      </div>
     
   );
 };

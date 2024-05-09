@@ -7,12 +7,14 @@ export const createContent = async (dados) => {
     const dadosEnviar = {
         github_token: dados.github_token,
         repository: dados.repository,
-        content: dados.descricao,
+        content: dados.content,
         commit_message: dados.commit_message,
-        path: dados.path_github,
+        path: dados.path_file,
         author_name: dados.author_name,
         author_email: dados.author_email
     }
+
+    console.log(dadosEnviar)
 
     try {
         const response = await api.post('github_integration/create_content/', dadosEnviar)
@@ -65,11 +67,7 @@ export const deleteContent = async (parametros) => {
 
 export const listContents = async (parametros) => {
     try {
-        const response = await api.get('github_integration/list_contents/', {params: {
-            github_token: parametros.github_token,
-            repository: parametros.repository,
-            folder: parametros.folder,
-        }})
+        const response = await api.get('github_integration/contents/list_contents/', {params: parametros})
 
         return response
     } catch (error) {

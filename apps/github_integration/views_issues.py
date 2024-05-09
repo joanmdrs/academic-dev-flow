@@ -5,6 +5,10 @@ from rest_framework.response import Response
 from github import Github, GithubException
 from .github_auth import get_github_client
 from github import InputGitAuthor
+from apps.tarefa.models import Tarefa 
+from apps.tarefa.models import Label
+from apps.membro.models import Membro
+from apps.membro_projeto.models import MembroProjeto
 import base64
 import json
 
@@ -79,10 +83,31 @@ def update_issue(request, issue_number):
     except GithubException as e:
         return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+def filter_membro_projeto_by_assignee_and_by_projeto(assignee, projeto):
+    try:
+        membro = Membro.objects.get(github__usuario_github=assignee)
+        membro_projeto = MembroProjeto.objects.get(membro=membro.id, projeto=projeto)
+        return membro_projeto.id
+    except Membro.DoesNotExist:
+        return None
+
+def get_label_ids(labels):
+    label_ids = []
+    for label_name in labels:
+        try:
+            # Verificar se o label existe no banco de dados
+            label = Label.objects.get(nome=label_name)
+            label_ids.append(label.id)
+        except Label.DoesNotExist:
+            pass
+    return label_ids
+
 def list_issues(request):
     try:
         github_token = request.GET.get('github_token')
         repository = request.GET.get('repository')
+        state = request.GET.get('state')
+        projeto = request.GET.get('projeto')
         
         if not github_token or not repository:
             return JsonResponse({'error': 'Ausência de parâmetros'}, status=status.HTTP_400_BAD_REQUEST)
@@ -91,7 +116,11 @@ def list_issues(request):
         repo = g.get_repo(repository)
         
         issues_list = []
-        issues = repo.get_issues(state='open')
+        
+        if not state:
+            issues = repo.get_issues(state='all')
+        elif state:
+            issues = repo.get_issues(state=state)
         
         for issue in issues:
             issue_data = {
@@ -99,18 +128,31 @@ def list_issues(request):
                 'number': issue.number,
                 'title': issue.title,
                 'body': issue.body,
-                'url': issue.url,
+                'url': issue.html_url,
                 'state': issue.state,
                 'labels': [label.name for label in issue.labels],
-                'assignee': issue.assignee.login if issue.assignee else None
+                'assignees': [assignee.login for assignee in issue.assignees] if issue.assignees else []
             }
+            
+            tarefa_vinculada = Tarefa.objects.filter(id_issue=issue.id).exists()
+            issue_data['exists'] = tarefa_vinculada
+            
+            membros_ids = []
+            for assignee in issue_data['assignees']:
+                membro = filter_membro_projeto_by_assignee_and_by_projeto(assignee, projeto)
+                if membro:
+                    membros_ids.append(membro)
+            issue_data['membros_ids'] = membros_ids
+            
+            # Obter os IDs dos labels existentes no banco de dados
+            issue_data['label_ids'] = get_label_ids(issue_data['labels'])
+            
             issues_list.append(issue_data)
         
         return JsonResponse(issues_list, safe=False, status=status.HTTP_200_OK)
     
-    
     except GithubException as e:
-        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)    
+        return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
     
 def get_repository_labels(request):

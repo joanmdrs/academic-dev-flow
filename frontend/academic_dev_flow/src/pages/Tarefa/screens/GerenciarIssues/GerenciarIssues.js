@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Titulo from "../../../../components/Titulo/Titulo";
 import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProjeto";
-import { useContextoTarefa } from "../../context/ContextoTarefa";
 import { FaArrowsRotate } from "react-icons/fa6";
 import { Button, Space, Table } from "antd";
 import { IoCheckmark, IoCloseOutline } from "react-icons/io5";
 import { listIssues } from "../../../../services/githubIntegration/issueService";
 import { NotificationManager } from "react-notifications";
-import { criarTarefa, sicronizarIssues, verificarExistenciaIssue } from "../../../../services/tarefaService";
+import { sicronizarIssues, verificarExistenciaIssue } from "../../../../services/tarefaService";
 import { handleError } from "../../../../services/utils";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 
 const GerenciarIssues = () => {
 
@@ -40,7 +40,7 @@ const GerenciarIssues = () => {
     ]
 
     const [issues, setIssues] = useState([]);
-    const {dadosProjeto} = useContextoTarefa();
+    const {dadosProjeto} = useContextoGlobalProjeto();
 
     const handleGetIssues = async () => {
 
@@ -76,7 +76,7 @@ const GerenciarIssues = () => {
                     id_issue: item.id,
                     number_issue: item.number,
                     url_issue: item.url,
-                    projeto: dadosProjeto.id
+                    projeto: dadosProjeto.id,
                 };
             }
         }).filter(Boolean);

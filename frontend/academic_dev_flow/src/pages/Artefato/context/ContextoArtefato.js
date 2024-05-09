@@ -8,7 +8,7 @@ export const ProviderArtefato = ({ children }) => {
     const [step, setStep] = useState('0')
     const [artefatos, setArtefatos] = useState([])
     const [dadosArtefato, setDadosArtefato] = useState(null)
-    const [dadosProjeto, setDadosProjeto] = useState(null)
+    const [artefatosSelecionados, setArtefatosSelecionados] = useState([])
 
     return (
         <ContextoArtefato.Provider
@@ -16,7 +16,7 @@ export const ProviderArtefato = ({ children }) => {
                 step, setStep,
                 artefatos, setArtefatos,
                 dadosArtefato, setDadosArtefato,
-                dadosProjeto, setDadosProjeto
+                artefatosSelecionados, setArtefatosSelecionados,
             }}
         >
             {children}

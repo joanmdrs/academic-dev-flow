@@ -5,9 +5,6 @@ import AdminRoutes from "./router/AdminRoutes/AdminRoutes";
 import StudentRoutes from "./router/StudentRoutes/StudentRoutes";
 import Fluxo from "./pages/Fluxo";
 import TeacherRoutes from "./router/TeacherRoutes/TeacherRoutes";
-import MeusProjetos from "./pages/Projeto/screens/MeusProjetos/MeusProjetos";
-import VisualizarProjeto from "./pages/Projeto/screens/VisualizarProjeto/VisualizarProjeto";
-import { ProjetoProvider } from "./context/ContextoGlobalProjeto";
 import HomeProfessor from "./pages/Perfis/Professor/Home";
 import HomeAdministrador from "./pages/Perfis/Administrador/Home";
 import HomeAluno from "./pages/Perfis/Aluno/Home";
@@ -24,6 +21,13 @@ import ScreenGerenciarLabels from "./pages/Tarefa/screens/GerenciarLabels";
 import ScreenGerenciarIssues from "./pages/Tarefa/screens/GerenciarIssues";
 import ScreenGerenciarIteracoes from "./pages/Iteracao/screens/GerenciarIteracoes";
 import ScreenGerenciarProjetos from "./pages/Projeto/screens/GerenciarProjetos";
+import ScreenMinhasTarefas from "./pages/Tarefa/screens/MinhasTarefas";
+import ScreenMeusArtefatos from "./pages/Artefato/screens/MeusArtefatos";
+import ScreenVisualizarProjeto from "./pages/Projeto/screens/VisualizarProjeto";
+import ScreenMeusProjetos from "./pages/Projeto/screens/MeusProjetos";
+import ScreenGerenciarComentariosTarefa from "./pages/Comentario/screens/ComentariosTarefa";
+import ScreenComentariosArtefato from "./pages/Comentario/screens/ComentariosArtefato";
+import ScreenComentariosTarefa from "./pages/Comentario/screens/ComentariosTarefa";
 
 function Routes() {
   return (
@@ -32,88 +36,206 @@ function Routes() {
       <Route path="/cadastre-se" Component={Register} />
 
       {/* Admin */}
+
       <Route element={<AdminRoutes />}>
         {/* Página de Home */}
         <Route path="/admin/home" Component={HomeAdministrador} exact />
 
         {/* Menu Item Projetos */}
-        <Route path="/admin/projetos" element={<ScreenGerenciarProjetos grupo="admin" />} exact />
+        <Route
+          path="/admin/projetos"
+          element={<ScreenGerenciarProjetos grupo="admin" />}
+          exact
+        />
 
         {/* Menu Item Fluxos */}
         <Route path="/admin/fluxos/gerenciar" Component={Fluxo} exact />
         <Route path="/admin/etapas" Component={Etapa} exact />
 
         {/* Menu Item Membros */}
-        <Route path="/admin/membros/gerenciar" Component={ScreenGerenciarMembros} exact />
-        <Route path="/admin/membros/vincular-projeto" Component={ScreenVincularMembroAoProjeto} exact/>
-      
+        <Route
+          path="/admin/membros/gerenciar"
+          Component={ScreenGerenciarMembros}
+          exact
+        />
+        <Route
+          path="/admin/membros/vincular-projeto"
+          Component={ScreenVincularMembroAoProjeto}
+          exact
+        />
+
         {/* Menu Item Artefatos */}
-        <Route path="/admin/artefatos/gerenciar" Component={ScreenGerenciarArtefatos} exact />
-        <Route path="/admin/artefatos/visualizar-artefato/" Component={ScreenVisualizarArtefato} exact/>
-        <Route path="/admin/artefatos/gerenciar-arquivos/" Component={ScreenGerenciarArquivosGithub} exact/>
+        <Route
+          path="/admin/artefatos/gerenciar"
+          Component={ScreenGerenciarArtefatos}
+          exact
+        />
+        
+        <Route
+          path="/admin/artefatos/gerenciar-arquivos/"
+          Component={ScreenGerenciarArquivosGithub}
+          exact
+        />
 
         {/* Menu Item Tarefas */}
 
-        <Route path="/admin/tarefas/gerenciar" Component={ScreenGerenciarTarefas} exact/>
-        <Route path="/admin/tarefas/issues" Component={ScreenGerenciarIssues} exact/>
-        <Route path="/admin/tarefas/labels" Component={ScreenGerenciarLabels} exact/>
+        <Route
+          path="/admin/tarefas/gerenciar"
+          Component={ScreenGerenciarTarefas}
+          exact
+        />
+        <Route
+          path="/admin/tarefas/issues"
+          Component={ScreenGerenciarIssues}
+          exact
+        />
+        <Route
+          path="/admin/tarefas/labels"
+          Component={ScreenGerenciarLabels}
+          exact
+        />
 
-         {/* Menu Item Tipos */}
+        {/* Menu Item Tipos */}
 
-        <Route path="/admin/tipos" Component={PageGerenciarTipos} exact/>
+        <Route path="/admin/tipos" Component={PageGerenciarTipos} exact />
 
         {/* Menu Item Iterações */}
 
-        <Route path="admin/iteracoes" Component={ScreenGerenciarIteracoes} exact />
+        <Route
+          path="/admin/iteracoes"
+          Component={ScreenGerenciarIteracoes}
+          exact
+        />
 
+        <Route 
+          path="/admin/artefatos/visualizar"
+          element={<ScreenVisualizarArtefato grupo="admin" /> }
+        />
+
+        <Route 
+          path="/admin/tarefas/:idTarefa/comentarios"
+          element={<ScreenComentariosTarefa grupo="admin" />}
+          exact
+        />
+
+        <Route 
+          path="/admin/artefatos/:idArtefato/comentarios"
+          element={<ScreenComentariosArtefato grupo="admin" />}
+          exact
+        />
       </Route>
 
-      
+      {/* Rotas do aluno */}
+
       <Route element={<StudentRoutes />}>
         <Route path="/aluno/home" Component={HomeAluno} exact />
 
         <Route
           path="/aluno/projetos/gerenciar"
-          element={<ScreenGerenciarProjetos grupo="discente" />}
+          element={<ScreenGerenciarProjetos grupo="aluno" />}
           exact
         />
 
         <Route
           path="/aluno/projetos/meus-projetos"
-          element={<MeusProjetos grupo="aluno" />}
+          element={<ScreenMeusProjetos grupo="aluno" />}
           exact
         />
+
         <Route
           path="/aluno/projetos/visualizar/:idProjeto"
           element={
-            <ProjetoProvider>
-              {" "}
-              <VisualizarProjeto grupo={"aluno"} />{" "}
-            </ProjetoProvider>
+            <ScreenVisualizarProjeto grupo="aluno"/>
           }
           exact
         />
-      </Route>
 
-  
-      {/* <Route element={<TeacherRoutes />}>
-        <Route path="/professor/home" Component={HomeProfessor} exact />
         <Route
-          path="/professor/projetos"
-          element={<MeusProjetos grupo="professor" />}
+          path="/aluno/tarefas"
+          element={<ScreenMinhasTarefas grupo="aluno" />}
           exact
         />
+
+        <Route
+          path="/aluno/artefatos"
+          element={<ScreenMeusArtefatos grupo="aluno" />}
+          exact
+        />
+
+        <Route 
+          path="/aluno/artefatos/visualizar"
+          element={<ScreenVisualizarArtefato grupo="aluno" /> }
+        />
+
+        <Route 
+          path="/aluno/tarefas/:idTarefa/comentarios"
+          element={<ScreenComentariosTarefa grupo="aluno" />}
+          exact
+        />
+
+        <Route 
+          path="/aluno/artefatos/:idArtefato/comentarios"
+          element={<ScreenComentariosArtefato grupo="aluno" />}
+          exact
+        />
+
+
+      </Route>
+
+      {/* Rotas do professor */}
+
+      <Route element={<TeacherRoutes />}>
+        <Route path="/professor/home" Component={HomeProfessor} exact />
+
+        <Route
+          path="/professor/projetos/gerenciar"
+          element={<ScreenGerenciarProjetos grupo="professor" />}
+          exact
+        />
+
+        <Route
+          path="/professor/projetos/meus-projetos"
+          element={<ScreenMeusProjetos grupo="professor" />}
+          exact
+        />
+
         <Route
           path="/professor/projetos/visualizar/:idProjeto"
           element={
-            <ProjetoProvider>
-              {" "}
-              <VisualizarProjeto grupo={"professor"} />{" "}
-            </ProjetoProvider>
+            <ScreenVisualizarProjeto grupo="professor"/>
           }
           exact
         />
-      </Route> */}
+    
+        <Route
+          path="/professor/tarefas"
+          element={<ScreenMinhasTarefas grupo="professor" />}
+          exact
+        />
+
+        <Route 
+          path="/professor/tarefas/:idTarefa/comentarios"
+          element={<ScreenGerenciarComentariosTarefa grupo="professor" />}
+          exact
+        />
+
+        <Route
+          path="/professor/artefatos"
+          element={<ScreenMeusArtefatos grupo="professor" />}
+          exact
+        />
+
+        <Route 
+          path="/professor/artefatos/visualizar"
+          element={<ScreenVisualizarArtefato grupo="professor" /> }
+        />
+
+        <Route 
+          path="/professor/artefatos/:idArtefato/comentarios"
+          element={<ScreenComentariosArtefato grupo="professor"/>}
+          exact
+        />
+      </Route>
     </Switch>
   );
 }

@@ -4,6 +4,7 @@ import MyHeader from "../../../../components/Header/Header";
 import {Layout} from 'antd'
 import { ProviderArtefato } from "../../context/ContextoArtefato";
 import GerenciarArquivosGithub from "./GerenciarArquivosGithub";
+import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 
 const {Content} = Layout
 
@@ -14,9 +15,11 @@ const ScreenGerenciarArquivosGithub = () => {
             <Layout>
                 <MyHeader/>
                 <Content>
-                    <ProviderArtefato>
-                        <GerenciarArquivosGithub />
-                    </ProviderArtefato>
+                    <ProviderGlobalProjeto>
+                        <ProviderArtefato>
+                            <GerenciarArquivosGithub />
+                        </ProviderArtefato>
+                    </ProviderGlobalProjeto>
                 </Content>
             </Layout>
         </React.Fragment>   

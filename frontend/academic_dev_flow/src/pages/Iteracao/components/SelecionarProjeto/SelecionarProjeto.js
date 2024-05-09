@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { buscarProjetoPeloId, listarProjetos } from "../../../../services/projetoService";
-import { Select, Button } from "antd";
-import { FaLeaf } from "react-icons/fa";
-import { useContextoIteracao } from "../../context/contextoIteracao";
-
-const { Option } = Select;
+import { Select } from "antd";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 
 const SelecionarProjeto = () => {
     const [optionsProjetos, setOptionsProjetos] = useState([]);
-    const {dadosProjeto, setDadosProjeto} = useContextoIteracao()
+    const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
 
     useEffect(() => {
         const fetchData = async () => {
@@ -45,7 +42,7 @@ const SelecionarProjeto = () => {
             <Select
                 showSearch
                 allowClear
-                value={dadosProjeto.id}
+                value={ dadosProjeto ? dadosProjeto.id : null}
                 placeholder="Pesquise ou selecione o projeto"
                 optionFilterProp="children"
                 onChange={handleChange}

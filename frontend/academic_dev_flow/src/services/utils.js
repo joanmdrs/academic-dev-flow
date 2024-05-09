@@ -1,5 +1,4 @@
 import { NotificationManager } from "react-notifications";
-import {Modal} from 'antd'
 
 export const recarregarPagina = () => {
     setTimeout(() => {
@@ -24,6 +23,41 @@ export const converterData = (dataString) => {
   return dataFormatada
   
 }
+
+export const limitarCaracteres = (texto, limite) => {
+
+  if (texto === null) {
+    return ""
+  }
+
+  if (texto.length <= limite) {
+      return texto;
+  } else {
+      return texto.slice(0, limite) + "...";
+  }
+}
+
+export const formatarTempo = (segundos) => {
+  const horas = Math.floor(segundos / 3600);
+  const minutos = Math.floor((segundos % 3600) / 60);
+  const segundosRestantes = segundos % 60;
+  
+  const horasFormatadas = horas.toString().padStart(2, '0');
+  
+  const minutosFormatados = minutos.toString().padStart(2, '0');
+  
+  const segundosFormatados = segundosRestantes.toString().padStart(2, '0');
+  
+  return `${horasFormatadas}:${minutosFormatados}:${segundosFormatados}`;
+};
+
+
+export const transformCapitalize = (str) => {
+  if (!str) return '';
+
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 
 export const handleSuccess = (response, successMessage) => {
   if (response.status === 200 || response.status === 204 || response.status === 201) {

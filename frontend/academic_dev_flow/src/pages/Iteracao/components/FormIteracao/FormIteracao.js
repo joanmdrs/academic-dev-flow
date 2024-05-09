@@ -8,10 +8,12 @@ import { optionsStatusIteracoes } from "../../../../services/optionsStatus";
 import { useContextoIteracao } from "../../context/contextoIteracao";
 import { handleError } from "../../../../services/utils";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 
 const FormIteracao = ({onSubmit, onCancel, additionalFields}) => {
 
-    const { dadosProjeto, dadosIteracao } = useContextoIteracao();
+    const { dadosIteracao } = useContextoIteracao();
+    const { dadosProjeto } = useContextoGlobalProjeto();
     const [form] = useForm();
     const [optionsEtapas, setOptionsEtapas] = useState([]);
     const [optionsMembros, setOptionsMembros] = useState([]);
@@ -66,6 +68,8 @@ const FormIteracao = ({onSubmit, onCancel, additionalFields}) => {
 
                 if (dadosIteracao !== null) {
                     form.setFieldsValue(dadosIteracao)
+                } else {
+                    form.resetFields()
                 }
 
             } else {
@@ -83,9 +87,13 @@ const FormIteracao = ({onSubmit, onCancel, additionalFields}) => {
                     <h4> CADASTRAR ITERAÇÃO </h4>
                 </Form.Item>
 
-                <Form.Item>
-                    {additionalFields}
-                </Form.Item>
+                { additionalFields ? (
+                    <Form.Item>
+                        {additionalFields}
+                    </Form.Item>
+                ) : null}
+
+
 
                 <div style={{display: 'flex', gap: '20px'}}> 
                     <div style={{flex: '2'}}> 
@@ -94,7 +102,7 @@ const FormIteracao = ({onSubmit, onCancel, additionalFields}) => {
                         </Form.Item>
 
                         <Form.Item label="Descrição" name="descricao">
-                            <Input.TextArea  rows={6} name="descricao" placeholder="descrição ..."/>
+                            <Input.TextArea rows={6} name="descricao" placeholder="descrição ..."/>
                         </Form.Item>
 
                         <div style={{display: 'flex', gap: '10px'}}> 

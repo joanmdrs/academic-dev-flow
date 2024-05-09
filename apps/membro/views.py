@@ -14,7 +14,9 @@ from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
 from django.contrib.auth.hashers import make_password
 from rest_framework.permissions import AllowAny
-    
+from django.contrib.auth.hashers import check_password
+
+
 class CadastrarMembroView(APIView):
     permission_classes = [AllowAny]
     
@@ -72,7 +74,7 @@ class CadastrarMembroView(APIView):
             if user_created:
                 user_created.delete()
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+
 
 class BuscarMembroPorGrupoView(APIView):
     permission_classes = [IsAuthenticated]
@@ -101,24 +103,48 @@ class BuscarMembroPorGrupoView(APIView):
         
 class BuscarMembrosPorNomeView(APIView):
     permission_classes = [IsAuthenticated]
+
     def get(self, request):
         try:
-            parametro = request.GET.get('name', None)
+            parametro = request.GET.get('nome', None)
+            
+            membros_com_github = []  # Movido para fora do bloco try
             
             if parametro is not None: 
                 membros = Membro.objects.filter(nome__icontains=parametro)
-                
             else:
                 membros = Membro.objects.all()
                 
             if not membros: 
                 return Response({'message': 'Nenhum membro encontrado.', 'results': []}, status=status.HTTP_200_OK)
-
-            serializer = MembroSerializer(membros, many=True)
-            return Response({'message': 'Membros encontrados com sucesso.', 'results': serializer.data}, status=status.HTTP_200_OK)
+            
+            for membro in membros:
+                if membro.github:
+                    usuario_github = UsuarioGithub.objects.get(pk=membro.github.pk)
+                    
+                    item_membro = {
+                        "id": membro.id,
+                        "nome": membro.nome,
+                        "data_nascimento": membro.data_nascimento,
+                        "telefone": membro.telefone,
+                        "email": membro.email,
+                        "linkedin": membro.linkedin,
+                        "lattes": membro.lattes,
+                        "grupo": membro.grupo,
+                        "usuario": membro.usuario.id,
+                        "nome_github": membro.github.nome,
+                        "email_github": membro.github.email_github,
+                        "usuario_github": membro.github.usuario_github
+                    }    
+                    
+                    membros_com_github.append(item_membro)
+                
+            return Response({'message': 'Membros encontrados com sucesso.', 'results': membros_com_github}, status=status.HTTP_200_OK)
                 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
         
 class BuscarMembroPeloUserView(APIView):
     permission_classes = [IsAuthenticated]
@@ -131,17 +157,24 @@ class BuscarMembroPeloUserView(APIView):
                 # Verifique se o membro está vinculado a um objeto UsuarioGithub
                 if membro.github:
                     usuario_github = membro.github.usuario_github
+                    email_github = membro.github.email_github
+                    nome_github = membro.github.nome
                 else:
                     usuario_github = None
+                    email_github = None
+                    nome_github = None
                 
                 membro_projeto = MembroProjeto.objects.get(membro_id=membro.id)
                 
                 if membro_projeto: 
                     autor = {
                         'id_membro': membro.id,
+                        'id_user': id_user,
                         'id_membro_projeto': membro_projeto.id,
                         'nome': membro.nome,
-                        'usuario_github': usuario_github 
+                        'nome_github': nome_github,
+                        'email_github': email_github,
+                        'usuario_github': usuario_github
                     }
                     
                     return Response(autor, status=status.HTTP_200_OK)
@@ -216,8 +249,10 @@ class AtualizarMembroView(APIView):
             user_validated = user_serializer.validated_data
             user.username = user_validated.get('username', user.username)
             new_password = user_validated.get('password')
-            if new_password:
+            
+            if new_password != user.password:
                 user.set_password(new_password)
+                
             user.save()
 
             if group_name:

@@ -35,15 +35,47 @@ class Tarefa(models.Model):
     id_issue = models.BigIntegerField(null=True, blank=True)
     number_issue = models.IntegerField(null=True, blank=True)
     url_issue = models.URLField(null=True, blank=True)
-    labels = models.ManyToManyField(Label, null=True, blank=True)
+    labels = models.ManyToManyField(Label)
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, null=True, blank=True)
-    membros = models.ManyToManyField(MembroProjeto, null=True, blank=True)
+    membros = models.ManyToManyField(MembroProjeto)
     iteracao = models.ForeignKey(Iteracao, on_delete=models.CASCADE, null=True, blank=True)
-    # tipo = models.ForeignKey(Tipo, on_delete=models.SET_NULL, null=True, blank=True)
+    tipo = models.ForeignKey(Tipo, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return self.nome
     
+    def iniciar_contagem_tempo(self, membro_projeto):
+        ultimo_intervalo = self.intervalos.last()
+        
+        if not ultimo_intervalo or ultimo_intervalo.tipo == 'pausa':
+            if self.status == 'criada':
+                self.status = 'andamento'
+                self.save()
+                
+            IntervaloTempo.objects.create(tipo='inicio', tarefa=self, membro_projeto=membro_projeto)
+
+    def parar_contagem_tempo(self, membro_projeto):
+        ultimo_intervalo = self.intervalos.last()
+        
+        if ultimo_intervalo and ultimo_intervalo.tipo == 'inicio':
+            IntervaloTempo.objects.create(tipo='pausa', tarefa=self, membro_projeto=membro_projeto)
+            intervalo_inicio = self.intervalos.filter(tipo='inicio').latest('data_hora')
+            intervalo_pausa = self.intervalos.filter(tipo='pausa').latest('data_hora')
+            tempo_decorrido = intervalo_pausa.data_hora - intervalo_inicio.data_hora
+
+            tempo_decorrido_segundos = tempo_decorrido.total_seconds()
+        
+            self.tempo_gasto += tempo_decorrido_segundos
+            self.save()
+            
+    def estado_contagem_tempo(self):
+        ultimo_intervalo = self.intervalos.last()
+
+        if ultimo_intervalo and ultimo_intervalo.tipo == 'inicio':
+            return True
+        elif not ultimo_intervalo or ultimo_intervalo.tipo == 'pausa':
+            return False
+
     
 class IntervaloTempo(models.Model):
     

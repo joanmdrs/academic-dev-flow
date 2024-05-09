@@ -73,7 +73,7 @@ export const criarMembro = async (dados) => {
 export const buscarMembroPeloNome = async (nomeMembro) => {
 
     try {
-        const resposta = await api.get(`/membro/buscar/?name=${encodeURIComponent(nomeMembro)}`)
+        const resposta = await api.get('/membro/buscar/nome/', {params: {nome: nomeMembro}})
         return resposta
     } catch (error) {
         console.log(error)

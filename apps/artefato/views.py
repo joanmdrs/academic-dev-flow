@@ -43,6 +43,34 @@ class BuscarArtefatoPorNomeView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
+class BuscarArtefatoPeloIdView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request, id): 
+        try:
+            artefato = Artefato.objects.get(pk=id)
+            serializer = ArtefatoSerializer(artefato, many=False)
+            return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+            
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class ListarArtefatosPorProjeto(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, id_projeto):
+        try:
+            artefatos = Artefato.objects.filter(projeto_id=id_projeto)
+                
+            if artefatos.exists():
+                serializer = ArtefatoSerializer(artefatos, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response(data=[], status=status.HTTP_204_NO_CONTENT)
+        
+        except Exception as e: 
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
+
 class FiltrarArtefatoPeloNomeEProjeto(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
@@ -75,7 +103,7 @@ class AtualizarArtefatoView(APIView):
         try: 
             
             artefato = Artefato.objects.get(pk=id)
-            serializer = ArtefatoSerializer(artefato, data=request.data)
+            serializer = ArtefatoSerializer(artefato, data=request.data, partial=True)
             
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
@@ -140,7 +168,7 @@ class VerificarExistenciaArtefatoView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-class SicronizarArtefatosView(APIView):
+class SicronizarContentsView(APIView):
     permission_classes = [IsAuthenticated]
     
     def post(self, request):

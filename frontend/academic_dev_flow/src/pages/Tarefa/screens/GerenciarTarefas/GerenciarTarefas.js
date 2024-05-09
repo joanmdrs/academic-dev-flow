@@ -11,23 +11,23 @@ import {
     criarTarefa, 
     excluirTarefas, 
     filtrarTarefasPeloNomeEPeloProjeto } from "../../../../services/tarefaService";
-import FormGenericTarefa from "../../components/FormGenericTarefa/FormGenericTarefa";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { createIssue, updateIssue } from "../../../../services/githubIntegration/issueService";
+import FormTarefa from "../../components/FormTarefa/FormTarefa";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 
 const GerenciarTarefas = () => {
 
     const [isFormVisivel, setIsFormVisivel] = useState(false)
     const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false)
     const [acaoForm, setAcaoForm] = useState('criar')
+
+    const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
+
     const {
-        setTarefas, 
-        dadosProjeto, 
-        setDadosProjeto, 
+        setTarefas,
         dadosTarefa, 
-        setDadosTarefa, 
-        step, 
-        setStep} = useContextoTarefa()
+        setDadosTarefa } = useContextoTarefa()
 
     const handleCancelar = () => {
         setIsFormVisivel(false)
@@ -40,7 +40,6 @@ const GerenciarTarefas = () => {
         setAcaoForm('criar')
         setTarefas([])
         setDadosProjeto(null)
-        setStep('0')
     }
 
     const handleFiltrarTarefas = async (dados) => {
@@ -145,15 +144,10 @@ const GerenciarTarefas = () => {
             )}
 
             <div className="global-div"> 
-                {isFormVisivel && acaoForm === 'criar' && (
-                    <React.Fragment>
-                        {step === "0" && <SelecionarProjeto />}
-                        {step === "1" && <FormGenericTarefa onSubmit={handleSalvarTarefa} onCancel={handleCancelar}/>}
-                    </React.Fragment>
-                )}
-
-                {isFormVisivel && acaoForm === 'atualizar' && (
-                    <FormGenericTarefa onSubmit={handleSalvarTarefa} onCancel={handleCancelar} />
+                {isFormVisivel && (
+                    <FormTarefa additionalFields={
+                        <SelecionarProjeto />
+                    } onSubmit={handleSalvarTarefa} onCancel={handleCancelar}  />
                 )}
 
                 {!isFormVisivel  && (

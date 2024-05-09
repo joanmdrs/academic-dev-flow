@@ -1,20 +1,26 @@
+import "./VisualizarArtefato.css"
 import React, { useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from 'remark-gfm';
 import { Button, Layout, Menu } from "antd";
 import { MenuUnfoldOutlined, MenuFoldOutlined, FileTextOutlined, StarOutlined, CommentOutlined } from '@ant-design/icons';
 import BotaoVoltar from "../../../../components/Botoes/BotaoVoltar/BotaoVoltar";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getContent } from "../../../../services/githubIntegration";
 import Loading from "../../../../components/Loading/Loading";
+import ScreenGerencirPontuacao from "../../../Pontuacao/screens/GerenciarPontuacao";
+import { buscarArtefatoPeloId } from "../../../../services/artefatoService";
+import { useContextoArtefato } from "../../context/ContextoArtefato";
 
 const { Sider, Content } = Layout;
 
-const VisualizarArtefato = ({ onBack }) => {
+const VisualizarArtefato = () => {
+    const {setDadosArtefato} = useContextoArtefato()
     const [conteutoArquivo, setConteudoArquivo] = useState('')
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState('document');
     const [collapsed, setCollapsed] = useState(true);
+    const navigate = useNavigate(); 
 
     const location = useLocation();
     const { state } = location;
@@ -23,7 +29,15 @@ const VisualizarArtefato = ({ onBack }) => {
         setCollapsed(!collapsed);
     };
 
-    const handleBuscarArquivo = async () => {
+    const handleBuscarArtefato = async () => {
+        const response = await buscarArtefatoPeloId(state.id)
+
+        if (!response.error){
+            setDadosArtefato(response.data)
+        }
+    }
+
+    const handleGetContent = async () => {
         const parametros = {
             github_token: state.github_token,
             repository: state.repository,
@@ -39,7 +53,8 @@ const VisualizarArtefato = ({ onBack }) => {
     useEffect(() => {
         const fetchData = async () => {
             if (state) {
-                await handleBuscarArquivo()
+                await handleGetContent()
+                await handleBuscarArtefato()
             }
             setLoading(false);
         };
@@ -53,6 +68,10 @@ const VisualizarArtefato = ({ onBack }) => {
 
     if (loading) {
         return <Loading />;
+    }
+
+    const handleBack = () => {
+        navigate(-1); 
     }
 
     return (
@@ -83,22 +102,19 @@ const VisualizarArtefato = ({ onBack }) => {
 
                 
             <Layout className="site-layout">
-                <Content className="global-form">
-                    <BotaoVoltar funcao={onBack} />
+                <Content className="global-div">
+                    <BotaoVoltar funcao={handleBack} />
 
                     {currentPage === 'document' && (
-                        <Markdown className="conteudo-markdown" remarkPlugins={[remarkGfm]}>
+                        <Markdown className="conteudo-markdown table-markdown" remarkPlugins={[remarkGfm]}>
                             {conteutoArquivo}
                         </Markdown>
                     )}
                     {currentPage === 'score' && (
-                        <div>
-                            
-                        </div>
+                        <ScreenGerencirPontuacao />
                     )}
                     {currentPage === 'comments' && (
-                        <div>
-                        </div>
+                        <div></div>
                     )}
                 </Content>
             </Layout>

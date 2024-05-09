@@ -1,7 +1,7 @@
 import { NotificationManager } from "react-notifications";
 import api from "../api/api";
 import { handleError, handleInfo, handleSuccess } from "./utils";
-import { ERROR_MESSAGE_ON_CREATION_THE_LABELS, ERROR_MESSAGE_ON_SEARCHING, ERROR_MESSAGE_ON_SYNC, INFO_MESSAGE_MANDATORY_PARAMETERS, INFO_MESSAGE_ON_SEARCHING, SUCCESS_MESSAGE_ON_CREATION_THE_LABELS, SUCCESS_MESSAGE_ON_SYNC_ISSUES } from "./messages";
+import { ERROR_MESSAGE_ON_CREATION_THE_LABELS, ERROR_MESSAGE_ON_SEARCHING, ERROR_MESSAGE_ON_SYNC, INFO_MESSAGE_MANDATORY_PARAMETERS, INFO_MESSAGE_ON_SEARCHING, SUCCESS_MESSAGE_ON_CREATION, SUCCESS_MESSAGE_ON_CREATION_THE_LABELS, SUCCESS_MESSAGE_ON_SYNC_ISSUES } from "./messages";
 
 export const criarTarefa = async (dadosForm, dadosIssue) => {
 
@@ -14,6 +14,7 @@ export const criarTarefa = async (dadosForm, dadosIssue) => {
         id_issue: dadosIssue.issue_id,
         number_issue: dadosIssue.issue_number,
         url_issue: dadosIssue.issue_url,
+        tipo: dadosForm.tipo,
         labels: dadosForm.labels,
         projeto: dadosForm.projeto,
         membros: dadosForm.membros,
@@ -22,11 +23,7 @@ export const criarTarefa = async (dadosForm, dadosIssue) => {
     
     try {
         const response = await api.post('tarefa/cadastrar/', dadosEnviar)
-        
-        if (response.status === 200){
-            NotificationManager.success('Tarefa cadastrada com sucesso !')
-            return response
-        }
+        return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION)
     } catch (error) {
         console.log(error)
         NotificationManager.error('Falha ao cadastrar a tarefa !')
@@ -152,7 +149,7 @@ export const verificarExistenciaIssue = async (parametro) => {
     }
 }
 
-export const cadastrarLabels = async (dados) => {
+export const criarLabels = async (dados) => {
     try {
         const response = await api.post('tarefa/labels/cadastrar/', {labels: dados})
         return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION_THE_LABELS)
@@ -187,4 +184,22 @@ export const sicronizarIssues = async (dados) => {
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SYNC)
     } 
+}
+
+export const iniciarContagemTempo = async (parametros) => {
+    try {
+        const response = await api.post('tarefa/iniciar-contagem-tempo/', parametros)
+        return handleSuccess(response, 'Você está iniciando uma tarefa !')
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar iniciar a tarefa, contate o suporte!')
+    }
+}
+
+export const pararContagemTempo = async (parametros) => {
+    try {
+        const response = await api.post('tarefa/parar-contagem-tempo/', parametros)
+        return handleSuccess(response, 'Você está pausando uma tarefa !')
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar pausar a tarefa, contate o suporte!')
+    }
 }

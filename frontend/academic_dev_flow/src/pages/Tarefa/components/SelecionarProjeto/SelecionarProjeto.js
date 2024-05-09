@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { buscarProjetoPeloId, listarProjetos } from "../../../../services/projetoService";
-import { Select, Button } from "antd";
-import { FaLeaf } from "react-icons/fa";
-import { useContextoTarefa } from "../../context/ContextoTarefa";
-
-const { Option } = Select;
+import { Select } from "antd";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 
 const SelecionarProjeto = () => {
     const [optionsProjetos, setOptionsProjetos] = useState([]);
-    const [selectedItem, setSelectedItem] = useState(null);
-    const {setStep, dadosProjeto, setDadosProjeto} = useContextoTarefa()
+    const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
 
     useEffect(() => {
         const fetchData = async () => {
@@ -27,20 +23,17 @@ const SelecionarProjeto = () => {
         fetchData();
     }, []);
 
-    const handleChange = (value) => {
-        setSelectedItem(value);
+    const handleChange = async (value) => {
+
+        if (value !== undefined ) {
+            const response = await buscarProjetoPeloId(value)
+            setDadosProjeto(response.data)
+        } else {
+            setDadosProjeto(null)
+        }
+        
     };
 
-    const handleProsseguir = async () => {
-        const response = await buscarProjetoPeloId(selectedItem)
-        setDadosProjeto(response.data)
-        setStep('1')
-    }
-
-    const handleLimpar = () => {
-        setDadosProjeto(null)
-        handleChange(null)
-    }
 
     const filterOption = (input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
     return (
@@ -49,29 +42,13 @@ const SelecionarProjeto = () => {
             <Select
                 showSearch
                 allowClear
+                value={ dadosProjeto ? dadosProjeto.id : null}
                 placeholder="Pesquise ou selecione o projeto"
                 optionFilterProp="children"
-                value={selectedItem}
                 onChange={handleChange}
                 options={optionsProjetos}
                 filterOption={filterOption}
             />
-
-            { selectedItem && 
-                <div style={{display: 'flex', gap: '10px'}}>
-                    <Button
-                        onClick={handleProsseguir}
-                        style={{width: 'fit-content'}} 
-                        type="primary"> Prosseguir 
-                    </Button>
-
-                    <Button onClick={handleLimpar}
-                    >
-                        Limpar
-                    </Button>
-
-                </div>
-            }
        
         </div>
         

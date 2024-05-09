@@ -9,13 +9,15 @@ import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProj
 import { useContextoIteracao } from "../../context/contextoIteracao";
 import { atualizarIteracao, criarIteracao, excluirIteracoes } from "../../../../services/iteracaoService";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 
 const GerenciarIteracoes = () => {
 
     const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false)
     const [isFormSalvarVisivel, setIsFormSalvarVisivel] = useState(false)
     const [acaoForm, setAcaoForm] = useState('criar')
-    const {setIteracoes, dadosProjeto, setDadosProjeto, dadosIteracao, setDadosIteracao} = useContextoIteracao()
+    const {setIteracoes, dadosIteracao, setDadosIteracao} = useContextoIteracao()
+    const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
 
     const handleCancelar = () => {
         setIsFormBuscarVisivel(false)

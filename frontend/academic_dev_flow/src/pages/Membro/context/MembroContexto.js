@@ -6,10 +6,13 @@ export const useMembroContexto = () => useContext(MembroContexto);
 export const MembroProvider = ({ children }) => {
 
     const [dadosMembro, setDadosMembro] = useState(null)
+    const [dadosFuncao, setDadosFuncao] = useState(null)
+
     return (
         <MembroContexto.Provider
             value={{
-                dadosMembro, setDadosMembro
+                dadosMembro, setDadosMembro,
+                dadosFuncao, setDadosFuncao
             }}
         >
             {children}

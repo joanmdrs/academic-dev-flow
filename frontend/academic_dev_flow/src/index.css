@@ -69,8 +69,8 @@ body {
 }
 
 .style-table table thead th.ant-table-cell {
-  background-color: var(--primary-color);
-  color: #fff;
+  background-color: #002140;
+  color: #FFFFFF;
 }
 
 .button-menu {

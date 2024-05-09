@@ -42,6 +42,7 @@ class CadastrarIteracaoView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
+        
 class ListarIteracoesPorProjetoView(APIView):
     permission_classes = [IsAuthenticated]
     
@@ -62,6 +63,7 @@ class ListarIteracoesPorProjetoView(APIView):
                     iteracoes_info.append({
                         'id': iteracao.id,
                         'nome': iteracao.nome,
+                        'descricao': iteracao.descricao,
                         'numero': iteracao.numero,
                         'data_inicio': iteracao.data_inicio,
                         'data_fim': iteracao.data_fim,

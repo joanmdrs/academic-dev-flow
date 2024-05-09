@@ -2,9 +2,10 @@ import React from "react";
 import {Form, Input, Button} from 'antd'
 import SelectProjeto from "../SelectProjeto/SelectProjeto";
 import { useContextoArtefato } from "../../context/ContextoArtefato";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 
 const  FormListarArquivos = ({onSearch, onClear}) => {
-    const {dadosProjeto} = useContextoArtefato()
+    const {dadosProjeto} = useContextoGlobalProjeto()
 
     const handleBuscarArquivos = async (dados) => {
         dados['github_token'] = dadosProjeto.token
