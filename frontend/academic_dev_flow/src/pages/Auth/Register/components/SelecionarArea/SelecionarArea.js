@@ -41,7 +41,7 @@ const SelecionarArea = () => {
                 </Radio.Group>
             </div>
 
-            {option === "sim" && (
+            {option === "sim" ? (
 
                 <div className="global-div">
 
@@ -83,6 +83,10 @@ const SelecionarArea = () => {
 
                 </div>
                 
+            ) : (
+                <Button type="primary" htmlType="submit" onClick={handleProsseguir}>
+                    Prosseguir <IoIosArrowRoundForward />
+                </Button>
             )}
         </div>
     );
