@@ -29,6 +29,7 @@ import ScreenGerenciarComentariosTarefa from "./pages/Comentario/screens/Comenta
 import ScreenComentariosArtefato from "./pages/Comentario/screens/ComentariosArtefato";
 import ScreenComentariosTarefa from "./pages/Comentario/screens/ComentariosTarefa";
 import ScreenGerenciarRelatorios from "./pages/Relatorio/screens/GerenciarRelatorios";
+import ScreenVisualizarTarefa from "./pages/Tarefa/screens/VisualizarTarefa";
 
 function Routes() {
   return (
@@ -161,6 +162,12 @@ function Routes() {
           path="/aluno/tarefas"
           element={<ScreenMinhasTarefas grupo="aluno" />}
           exact
+        />
+
+        <Route
+          path="/aluno/tarefas/visualizar"
+          element = {<ScreenVisualizarTarefa  grupo='aluno' />}
+        
         />
 
         <Route

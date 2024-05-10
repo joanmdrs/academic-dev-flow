@@ -31,6 +31,15 @@ export const criarTarefa = async (dadosForm, dadosIssue) => {
     }
 }
 
+export const buscarTarefaPeloId = async (id) => {
+    try {
+        const response = await api.get(`tarefa/buscar/${encodeURIComponent(id)}/`)
+        return response
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
+}
+
 export const listarTarefasPorProjeto = async (idProjeto) => {
     try {
         const response = await api.get(`tarefa/listar/projeto/${encodeURIComponent(idProjeto)}/`)

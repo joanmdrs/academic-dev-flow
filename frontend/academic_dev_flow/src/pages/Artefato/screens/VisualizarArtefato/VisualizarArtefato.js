@@ -11,6 +11,7 @@ import Loading from "../../../../components/Loading/Loading";
 import ScreenGerencirPontuacao from "../../../Pontuacao/screens/GerenciarPontuacao";
 import { buscarArtefatoPeloId } from "../../../../services/artefatoService";
 import { useContextoArtefato } from "../../context/ContextoArtefato";
+import ScreenComentariosArtefato from "../../../Comentario/screens/ComentariosArtefato";
 
 const { Sider, Content } = Layout;
 
@@ -20,8 +21,8 @@ const VisualizarArtefato = () => {
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState('document');
     const [collapsed, setCollapsed] = useState(true);
+    
     const navigate = useNavigate(); 
-
     const location = useLocation();
     const { state } = location;
 
@@ -114,7 +115,7 @@ const VisualizarArtefato = () => {
                         <ScreenGerencirPontuacao />
                     )}
                     {currentPage === 'comments' && (
-                        <div></div>
+                        <ScreenComentariosArtefato />
                     )}
                 </Content>
             </Layout>

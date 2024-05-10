@@ -6,9 +6,8 @@ import React, { useState } from "react";
 import { formatarTempo } from "../../../../services/utils";
 import { IoPauseOutline } from "react-icons/io5";
 import { MdComment } from "react-icons/md";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 
-const ListTarefas = ({ dados, onStart, onPause, onOpen, onDelete, onViewComments}) => {
+const ListTarefas = ({ dados, onStart, onPause, onDelete, onView}) => {
 
     const [paginaAtual, setPaginaAtual] = useState(1);
     const itensPorPagina = 10;
@@ -48,9 +47,6 @@ const ListTarefas = ({ dados, onStart, onPause, onOpen, onDelete, onViewComments
                                 <span>{`${formatarTempo(item.tempo_gasto)}`}</span>
                             </div>
                             <div>
-                                <Tooltip title="Comentários">
-                                    <Button onClick={() => onViewComments(item.id)} style={{ border: 'none', color: 'var(--primary-color)' }} icon={<MdComment />} />
-                                </Tooltip>
                                 { item.estado_contagem_tempo === true ? (
                                     <Tooltip title="Pausar">
                                         <Button 
@@ -66,7 +62,7 @@ const ListTarefas = ({ dados, onStart, onPause, onOpen, onDelete, onViewComments
                                 )}
 
                                 <Tooltip title="Abrir">
-                                    <Button onClick={() => onOpen(item)} style={{ border: 'none', color: 'var(--primary-color)' }} icon={<MdOpenInNew />} />
+                                    <Button onClick={() => onView(item)} style={{ border: 'none', color: 'var(--primary-color)' }} icon={<MdOpenInNew />} />
                                 </Tooltip>
                                 <Tooltip title="Excluir">
                                     <Button onClick={() => onDelete(item.id)} style={{ border: 'none', color: 'var(--primary-color)' }} icon={<IoMdTrash />} />

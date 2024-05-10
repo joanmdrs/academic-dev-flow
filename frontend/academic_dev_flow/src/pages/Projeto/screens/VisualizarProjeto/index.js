@@ -19,7 +19,7 @@ const ScreenVisualizarProjeto = ({grupo}) => {
 
     return (
         <React.Fragment>
-            { grupo === "discente" && <MenuAluno />}
+            { grupo === "aluno" && <MenuAluno />}
             { grupo === "professor" && <MenuProfessor />}
             { grupo === "admin" && <MenuAdmin />}
 

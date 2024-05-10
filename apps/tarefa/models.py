@@ -40,7 +40,7 @@ class Tarefa(models.Model):
     membros = models.ManyToManyField(MembroProjeto)
     iteracao = models.ForeignKey(Iteracao, on_delete=models.CASCADE, null=True, blank=True)
     tipo = models.ForeignKey(Tipo, on_delete=models.SET_NULL, null=True, blank=True)
-
+    
     def __str__(self):
         return self.nome
     

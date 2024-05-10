@@ -15,8 +15,8 @@ const {TabPane} = Tabs
 
 const MinhasTarefas = () => {
 
-    const {autor} = useContextoGlobalProjeto()
-    const {dadosProjeto, setDadosProjeto, grupo} = useContextoGlobalProjeto()
+    const {autor, grupo} = useContextoGlobalProjeto()
+    const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
     const {dadosTarefa, setDadosTarefa} = useContextoTarefa()
     const [optionsProjetos, setOptionsProjetos] = useState([])
     const [selectProjeto, setSelectProjeto] = useState('Projeto')
@@ -158,8 +158,25 @@ const MinhasTarefas = () => {
         });
     }
 
-    const handleVisualizarComentarios = (idTarefa) => {
-        navigate(`/professor/tarefas/${idTarefa}/comentarios`)
+    const handleVisualizarTarefa = (record) => {
+        const parametros = {
+            id: record.id,
+            idProjeto: dadosProjeto.id
+        }
+
+        if (grupo === 'Docentes') {
+            navigate("/professor/tarefas/visualizar", {
+                state: parametros
+            });
+        } else if (grupo === 'Discentes') {
+            navigate("/aluno/tarefas/visualizar", {
+                state: parametros
+            });
+        } else if (grupo === 'Administradores') {
+            navigate("/admin/tarefas/visualizar", {
+                state: parametros
+            });
+        }
     }
 
     useEffect(() => {
@@ -218,12 +235,14 @@ const MinhasTarefas = () => {
                         </div>
                     </div>
 
-                    { isFormSalvarVisivel ? (
-                        <div className="global-div">
-                            <FormTarefa onCancel={handleCancelar} onSubmit={handleSalvarTarefa} />
-                        </div>
-                    ) : (
-                        <div style={{margin: '20px'}}>
+                    
+                    <div style={{margin: '20px'}}>
+
+                        { isFormSalvarVisivel ? (
+                            <div className="global-div"> 
+                                <FormTarefa onSubmit={handleSalvarTarefa} onCancel={handleCancelar} />
+                            </div>
+                        ) : (
                             <Tabs>
                                 <TabPane tab="Para fazer" key="1" style={{marginTop: '50px'}}>
                                     <ListTarefas 
@@ -232,7 +251,7 @@ const MinhasTarefas = () => {
                                         onPause={handlePauseTarefa}
                                         onOpen={handleAtualizarTarefa}
                                         onDelete={handleExcluirTarefa}
-                                        onViewComments={handleVisualizarComentarios}
+                                        onView={handleVisualizarTarefa}
 
                                     />
                                 </TabPane>
@@ -244,7 +263,7 @@ const MinhasTarefas = () => {
                                         onPause={handlePauseTarefa}
                                         onOpen={handleAtualizarTarefa}
                                         onDelete={handleExcluirTarefa}
-                                        onViewComments={handleVisualizarComentarios}
+                                        onView={handleVisualizarTarefa}
                                     />
                                 </TabPane>
 
@@ -257,12 +276,9 @@ const MinhasTarefas = () => {
                                 </TabPane>
 
                             </Tabs>
+                        )}
 
                     </div>
-                    )
-                
-                    }
-
                 </div>)}
         </div>
     )
