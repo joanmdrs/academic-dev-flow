@@ -2,21 +2,8 @@ import { Button, Form, Input, Select, Spin, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 import { LoadingOutlined } from '@ant-design/icons';
 import { useContextoProjeto } from "../../../context/ContextoProjeto";
+import { optionsStatusProjetos } from "../../../../../services/optionsStatus";
 
-const OPTIONS_STATUS = [
-    {
-        label: "Cancelado",
-        value: "cancelado"
-    },
-    {
-        label: "Em andamento",
-        value: "em_andamento"
-    },
-    {
-        label: "Concluído",
-        value: "concluido"
-    }
-]
 
 const customizeRequiredMark = (label, { required }) => (
     <>
@@ -34,13 +21,13 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-        try {
-            setCarregando(true);
-            handleAlterarCampos(hasProjeto)
-        } catch (error) {
-        } finally {
-            setCarregando(false);
-        }
+            try {
+                setCarregando(true);
+                handleAlterarCampos(hasProjeto)
+            } catch (error) {
+            } finally {
+                setCarregando(false);
+            }
         };
 
         fetchData();
@@ -89,7 +76,7 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
                                 <Select
                                     name="status"
                                     defaultValue="Selecione"
-                                    options={OPTIONS_STATUS}
+                                    options={optionsStatusProjetos}
                                 />
                             </Form.Item>
 

@@ -1,3 +1,24 @@
+export const optionsStatusProjetos = [
+    {
+        value: 'criado', 
+        label: 'Criado'
+    },
+    {
+        value: 'andamento',
+        label: 'Em andamento'
+    },
+    {
+        value: 'concluido', 
+        label: 'Concluído'
+    },
+    {
+        value: 'cancelado',
+        label: 'Cancelado'
+    },
+]
+
+
+
 export const optionsStatusTarefas = [
     {
         value: 'criada', 
