@@ -14,6 +14,7 @@ import ScreenQuadroTarefas from "../../../Tarefa/screens/QuadroTarefas/index.js"
 import ScreenPainelArtefatos from "../../../Artefato/screens/PainelArtefatos/index.js";
 import ScreenPainelGihtub from "../../../GitHub/screens/PainelGithub/index.js";
 import ScreenPainelMembros from "../../../Membro/screens/PainelMembros/index.js";
+import ScreenDashboardProjeto from "../DashboardProjeto/index.js";
 
 const {TabPane} = Tabs
 
@@ -73,8 +74,8 @@ const VisualizarProjeto = () => {
                         style={{width: '100%', padding: '2%'}}
 
                     >
-                            <TabPane tab='Projeto' key="1">
-                            Conteúdo da Outra Tab
+                        <TabPane tab='Projeto' key="1" style={{backgroundColor: '#F0F2F5', height: '100vh', padding: '1%'}}>
+                            <ScreenDashboardProjeto />
                         </TabPane>
 
                         <TabPane tab='Iterações' key="2" icon={<LuCalendarClock />}>

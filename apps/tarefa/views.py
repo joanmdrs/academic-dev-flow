@@ -326,5 +326,3 @@ class PararContagemTempoView(APIView):
             return JsonResponse({'success': True})
         except Tarefa.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Tarefa não encontrada'})
-
-    
