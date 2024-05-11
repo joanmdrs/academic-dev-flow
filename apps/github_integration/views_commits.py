@@ -5,25 +5,34 @@ from rest_framework.response import Response
 from github import Github, GithubException
 from .github_auth import get_github_client
 from github import InputGitAuthor
-
-from django.http import HttpResponse
 import json
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import permission_classes
 
-def list_user_repositories(request):
+@permission_classes([IsAuthenticated])
+def list_commits_by_repository(request):
     try:
-        github_token = request.GET.get('github_token') 
-
-        if github_token:
-            github_client = get_github_client(github_token)
-            user = github_client.get_user()  
-            repositories = [repo.name for repo in user.get_repos()]  
-            return JsonResponse({'repositories': repositories})
+        github_token = request.GET.get('github_token')
+        repository = request.GET.get('repository')
         
-        return JsonResponse({'error': 'Token não fornecido'}, status=status.HTTP_400_BAD_REQUEST)
+        if not github_token or not repository:
+            return JsonResponse({'error': 'Ausência de parâmetros'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        g = get_github_client(github_token)
+        repo = g.get_repo(repository)
+        
+        commits = list(repo.get_commits())
+        
+        # Retorna a quantidade total de commits
+        total_commits = len(commits)
+        
+        return JsonResponse({'total_commits': total_commits}, status=status.HTTP_200_OK)
+    
     except GithubException as e:
         return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
     
+
+@permission_classes([IsAuthenticated])
 def user_commits_view(request):
     try:
         repository = request.GET.get('repository')
