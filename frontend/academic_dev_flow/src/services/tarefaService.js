@@ -95,7 +95,6 @@ export const excluirTarefas = async (ids) => {
 }
 
 export const concluirTarefas = async (ids) => {
-    console.log(ids)
     try {
         const response = await api.patch('tarefa/concluir/', {ids})
         if (response.status === 200){

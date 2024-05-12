@@ -8,8 +8,6 @@ const ScreenComentariosTarefa = () => {
 
     const { idTarefa } = useParams();
 
-    console.log(idTarefa)
-
     return (
         <React.Fragment>
             <ProviderGlobalProjeto>

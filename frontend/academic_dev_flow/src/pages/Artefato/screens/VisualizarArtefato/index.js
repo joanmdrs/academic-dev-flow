@@ -21,11 +21,9 @@ const ScreenVisualizarArtefato = ({grupo}) => {
             <Layout>
                 <MyHeader/>
                 <Content>
-                    <ProviderGlobalProjeto>
-                        <ProviderArtefato>
-                            <VisualizarArtefato />
-                        </ProviderArtefato>
-                    </ProviderGlobalProjeto>
+                    <ProviderArtefato>
+                        <VisualizarArtefato />
+                    </ProviderArtefato>
                 </Content>
             </Layout>
         </React.Fragment>   

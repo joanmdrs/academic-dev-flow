@@ -23,11 +23,9 @@ const ScreenVisualizarTarefa = ({grupo}) => {
                 <MyHeader/>
 
                 <Content>
-                    <ProviderGlobalProjeto>
-                        <ProviderTarefa>
-                            <VisualizarTarefa />
-                        </ProviderTarefa>
-                    </ProviderGlobalProjeto>
+                    <ProviderTarefa>
+                        <VisualizarTarefa />
+                    </ProviderTarefa>
                 </Content>
             </Layout>
         </React.Fragment>   

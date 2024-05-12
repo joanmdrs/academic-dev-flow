@@ -26,11 +26,9 @@ const ScreenMinhasTarefas = ({grupo}) => {
                 <CustomBreadcrumb routes={breadcrumbRoutes} />
 
                 <Content>
-                    <ProviderGlobalProjeto>
-                        <ProviderTarefa>
-                            <MinhasTarefas />
-                        </ProviderTarefa>
-                    </ProviderGlobalProjeto>
+                    <ProviderTarefa>
+                        <MinhasTarefas />
+                    </ProviderTarefa>
                 </Content>
             </Layout>
         </React.Fragment>   

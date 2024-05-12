@@ -53,7 +53,6 @@ const ComentariosTarefa = ({idTarefa}) => {
             comentario_pai: comentarioPai
         }
 
-        console.log(dadosEnviar)
         await atualizarComentarioTarefa(id, dadosEnviar)
         setComentarioEditado(null);
         setEditorVisivel(false);

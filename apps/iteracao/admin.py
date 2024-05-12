@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Iteracao
 
 class IteracaoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nome', 'status', 'data_inicio', 'data_fim', 'exibir_projeto', 'exibir_lider', 'exibir_etapa')
+    list_display = ('id', 'nome', 'status', 'data_inicio', 'data_termino', 'exibir_projeto', 'exibir_lider', 'exibir_etapa')
     search_fields = ('nome', )
     
     def exibir_projeto(self, obj):

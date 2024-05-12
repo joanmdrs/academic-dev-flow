@@ -22,13 +22,15 @@ const FormIteracao = ({onSubmit, onCancel, additionalFields}) => {
         try {
             const response = await listarEtapasPorFluxo(dadosProjeto.fluxo)
 
-            if (response.status === 200){
+            if (!response.error){
 
-                const promises = await response.data.map( async (objeto) => {
-                    const response2 = await buscarEtapaPeloId(objeto.etapa)
+
+                console.log(response.data)
+                const promises = await response.data.map( async (item) => {
+                    const response2 = await buscarEtapaPeloId(item.etapa)
 
                     return {
-                        value: objeto.id,
+                        value: item.id,
                         label: response2.data.nome
                     }
                 })
@@ -58,7 +60,6 @@ const FormIteracao = ({onSubmit, onCancel, additionalFields}) => {
             return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
         }
     }
-
 
     useEffect(() => {
         const fetchData = async () => {
@@ -114,8 +115,8 @@ const FormIteracao = ({onSubmit, onCancel, additionalFields}) => {
                                 <Input type="date" name="data_inicio" style={{width: 'fit-content'}}/>
                             </Form.Item>
 
-                            <Form.Item label="Data de Término" name="data_fim">
-                                <Input type="date" name="data_fim" style={{width: 'fit-content'}}/>
+                            <Form.Item label="Data de Término" name="data_termino">
+                                <Input type="date" name="data_termino" style={{width: 'fit-content'}}/>
                             </Form.Item>
                         </div>
                     </div>

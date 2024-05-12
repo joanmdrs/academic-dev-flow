@@ -25,7 +25,7 @@ const QuadroTarefas = () => {
     const isBtnTrashDisabled = tarefasSelecionadas.length === 0
     const [acaoForm, setAcaoForm] = useState('criar')
     const [isAvisoVisivel, setIsAvisoVisivel] = useState(false);
-    const [isSaving, setIsSaving] = useState(false); // Estado para controlar a exibição do spinner
+    const [isSaving, setIsSaving] = useState(false);
 
     const handleDuvidaClick = () => {
         setIsAvisoVisivel(true);
@@ -145,8 +145,6 @@ const QuadroTarefas = () => {
                 <Button
                     icon={<BsQuestionCircle />}
                     onClick={handleDuvidaClick}
-                   
-            
                 />
             </div>
 

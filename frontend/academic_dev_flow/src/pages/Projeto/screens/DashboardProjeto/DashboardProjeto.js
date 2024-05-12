@@ -19,7 +19,6 @@ const DashboardProjeto = () => {
     const handleGetTarefas = async () => {
         const response = await listarTarefasPorProjeto(dadosProjeto.id)
         if (!response.error){
-            console.log(response.data)
             setQtdTarefas(response.data.length)
             setTarefas(response.data)
         }
@@ -29,9 +28,7 @@ const DashboardProjeto = () => {
         
         const response = await listarArtefatosPorProjeto(dadosProjeto.id)
 
-        console.log(response.data)
         if(!response.error) {
-            console.log(response.data)
             setQtdArtefatos(response.data.length)
         } 
 
@@ -74,7 +71,6 @@ const DashboardProjeto = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            console.log(dadosProjeto)
             if (dadosProjeto !== null){
                 await handleGetTarefas()
                 await handleGetArtefatos()
@@ -83,7 +79,6 @@ const DashboardProjeto = () => {
         }
 
         fetchData()
-        console.log(tarefas)
     }, [dadosProjeto])
 
     const formatter = (value) => <CountUp end={value} separator="," />;

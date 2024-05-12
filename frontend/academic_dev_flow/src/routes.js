@@ -30,6 +30,7 @@ import ScreenComentariosArtefato from "./pages/Comentario/screens/ComentariosArt
 import ScreenComentariosTarefa from "./pages/Comentario/screens/ComentariosTarefa";
 import ScreenGerenciarRelatorios from "./pages/Relatorio/screens/GerenciarRelatorios";
 import ScreenVisualizarTarefa from "./pages/Tarefa/screens/VisualizarTarefa";
+import { ProviderGlobalProjeto } from "./context/ContextoGlobalProjeto";
 
 function Routes() {
   return (
@@ -135,7 +136,15 @@ function Routes() {
 
       {/* Rotas do aluno */}
 
-      <Route element={<StudentRoutes />}>
+      <Route element={
+      
+      <ProviderGlobalProjeto>
+        <StudentRoutes />
+
+      </ProviderGlobalProjeto>
+      
+      
+      }>
         <Route path="/aluno/home" Component={HomeAluno} exact />
 
         <Route
@@ -171,15 +180,18 @@ function Routes() {
         />
 
         <Route
-          path="/aluno/artefatos"
-          element={<ScreenMeusArtefatos grupo="aluno" />}
-          exact
-        />
+            path="/aluno/artefatos"
+            element={<ScreenMeusArtefatos grupo="aluno" />}
+            exact
+          />
 
         <Route 
           path="/aluno/artefatos/visualizar"
           element={<ScreenVisualizarArtefato grupo="aluno" /> }
         />
+
+          
+    
 
         <Route 
           path="/aluno/tarefas/:idTarefa/comentarios"

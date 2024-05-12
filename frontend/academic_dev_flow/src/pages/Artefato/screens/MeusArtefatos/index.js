@@ -23,13 +23,10 @@ const ScreenMeusArtefatos = ({grupo}) => {
             <Layout>
                 <MyHeader/>
                 <CustomBreadcrumb routes={breadcrumbRoutes} />
-
                 <Content>
-                    <ProviderGlobalProjeto>
-                        <ProviderArtefato>
-                            <MeusArtefatos />
-                        </ProviderArtefato>
-                    </ProviderGlobalProjeto>
+                    <ProviderArtefato>
+                        <MeusArtefatos />
+                    </ProviderArtefato>
                 </Content>
             </Layout>
         </React.Fragment>   

@@ -166,7 +166,6 @@ const TabVincularEtapas = () => {
   const rowSelection = {
     onChange: (selectedRowsKeys, selectedRows) => {
       setEtapasExcluir(selectedRows)
-      console.log(selectedRows)
     },
   };
 

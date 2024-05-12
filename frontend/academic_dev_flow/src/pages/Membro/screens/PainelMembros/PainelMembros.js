@@ -102,9 +102,7 @@ const PainelMembros = () => {
             data_termino: dadosForm.data_termino,
             ativo: dadosForm.ativo
         }
-
-        console.log(dadosEnviar)
-
+        
         await cadastrarFuncaoAtual(dadosEnviar)
         await handleReload()
     }

@@ -43,11 +43,11 @@ const TableIteracoesSelect = ({onEdit, onDelete}) => {
         },
         {
             title: 'Data de término',
-            dataIndex: 'data_fim',
-            key: 'data_fim',
+            dataIndex: 'data_termino',
+            key: 'data_termino',
             render: (_, record) => (
                 <span>
-                    {formatDate(record.data_fim)}
+                    {formatDate(record.data_termino)}
                 </span>
             )
         },
@@ -67,20 +67,13 @@ const TableIteracoesSelect = ({onEdit, onDelete}) => {
 
     const {
         iteracoes, 
-        setIteracoes,
-        setIteracoesSelecionadas} = useContextoIteracao()
+        setIteracoesSelecionadas, handleGetIteracoes} = useContextoIteracao()
 
     const rowSelection = {
         onChange: (selectedRowsKeys, selectedRows) => {
           setIteracoesSelecionadas(selectedRows)
         },
     };
-
-    const handleGetIteracoes = async () => {
-        const response = await listarIteracoesPorProjeto(dadosProjeto.id)
-        const iteracoesOrdenadas = response.data.sort((a, b) => a.numero - b.numero);
-        setIteracoes(iteracoesOrdenadas)
-    }
 
     useEffect(() => {
         const fetchData = async () => {

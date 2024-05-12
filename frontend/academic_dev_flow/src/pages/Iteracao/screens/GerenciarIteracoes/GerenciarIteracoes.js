@@ -64,7 +64,6 @@ const GerenciarIteracoes = () => {
     const handleSalvarIteracao = async (dadosForm) => {
         dadosForm['projeto'] = dadosProjeto.id
         if (acaoForm === 'criar'){
-            console.log(dadosForm)
             await criarIteracao(dadosForm)
         } else {
             await atualizarIteracao(dadosIteracao.id, dadosForm)

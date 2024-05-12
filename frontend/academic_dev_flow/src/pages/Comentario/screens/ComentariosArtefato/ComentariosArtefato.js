@@ -53,7 +53,6 @@ const ComentariosArtefato = ({idArtefato}) => {
             comentario_pai: comentarioPai
         }
 
-        console.log(dadosEnviar)
         await atualizarComentarioArtefato(id, dadosEnviar)
         setComentarioEditado(null);
         setEditorVisivel(false);

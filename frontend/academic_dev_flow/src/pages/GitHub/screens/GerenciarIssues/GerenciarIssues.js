@@ -101,7 +101,6 @@ const GerenciarIssues = () => {
                         closedIssuesList.push({ ...item, exists });
                     }
                 });
-                console.log(response.data)
                 setIssues(response.data); 
                 setOpenIssues(openIssuesList);
                 setClosedIssues(closedIssuesList);
@@ -128,10 +127,7 @@ const GerenciarIssues = () => {
                     labels: item.label_ids,
                 }));
 
-                console.log(dados)
-
-
-                
+               
                 await sicronizarIssues(dados);
                 await handleGetIssues('open');
                 
