@@ -11,6 +11,7 @@ urlpatterns = [
     path('excluir/<int:id>/', ExcluirArtefatoView.as_view(), name='excluir_artefato'),
     path('listar/', ListarArtefatosView.as_view(), name="listar_artefatos"),
     path('listar/projeto/<int:id_projeto>/', ListarArtefatosPorProjeto.as_view(), name='listar_artefatos_por_projeto'),
+    path('listar/iteracao/<int:id_iteracao>/', ListarArtefatosPorIteracao.as_view(), name='listar_artefatos_por_iteracao'),
     path('filtrar/nome-projeto/', FiltrarArtefatoPeloNomeEProjeto.as_view(), name='filtrar_artefato_pelo_nome_e_pelo_projeto'),
     path('verificar-existencia/', VerificarExistenciaArtefatoView.as_view(), name='verificar-se-artefato-já-existe'),
     path('sicronizar-contents/', SicronizarContentsView.as_view(), name="sicronizar-contents")

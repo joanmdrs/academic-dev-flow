@@ -31,6 +31,7 @@ import ScreenComentariosTarefa from "./pages/Comentario/screens/ComentariosTaref
 import ScreenGerenciarRelatorios from "./pages/Relatorio/screens/GerenciarRelatorios";
 import ScreenVisualizarTarefa from "./pages/Tarefa/screens/VisualizarTarefa";
 import { ProviderGlobalProjeto } from "./context/ContextoGlobalProjeto";
+import ScreenVisualizarIteracao from "./pages/Iteracao/screens/VisualizarIteracao";
 
 function Routes() {
   return (
@@ -190,9 +191,6 @@ function Routes() {
           element={<ScreenVisualizarArtefato grupo="aluno" /> }
         />
 
-          
-    
-
         <Route 
           path="/aluno/tarefas/:idTarefa/comentarios"
           element={<ScreenComentariosTarefa grupo="aluno" />}
@@ -210,6 +208,13 @@ function Routes() {
           element={<ScreenGerenciarRelatorios  grupo="aluno" />}
         
         />
+
+        <Route 
+          path="/aluno/iteracoes/visualizar"
+          element={<ScreenVisualizarIteracao grupo="aluno" /> }
+        />
+
+
 
 
       </Route>
@@ -268,11 +273,18 @@ function Routes() {
           exact
         />
 
+        <Route 
+          path="/aluno/iteracoes/visualizar"
+          element={<ScreenVisualizarIteracao grupo="professor" /> }
+        />
+
         <Route
           path="/professor/relatorios"
           element={<ScreenGerenciarRelatorios  grupo="professor" />}
         
         />
+
+        
       </Route>
     </Switch>
   );

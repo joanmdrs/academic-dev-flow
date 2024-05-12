@@ -19,6 +19,15 @@ export const criarIteracao = async (dados) => {
     }
 }
 
+export const buscarIteracaoPeloId = async (idIteracao) => {
+    try {
+        const response = await api.get(`iteracao/buscar/${encodeURIComponent(idIteracao)}/`)
+        return response
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
+}
+
 export const listarIteracoesPorProjeto = async (idProjeto) => {
 
     const response = await api.get(`iteracao/listar/${encodeURIComponent(idProjeto)}/`)

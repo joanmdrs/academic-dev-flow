@@ -8,6 +8,7 @@ import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProj
 import { atualizarIteracao, criarIteracao, excluirIteracoes } from "../../../../services/iteracaoService";
 import Aviso from "../../../../components/Aviso/Aviso";
 import { BsQuestionCircle } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 const CronogramaIteracoes = () => {
 
@@ -20,13 +21,16 @@ const CronogramaIteracoes = () => {
         handleGetIteracoes
     } = useContextoIteracao()
 
-    const {dadosProjeto} = useContextoGlobalProjeto()
+    const {dadosProjeto, grupo} = useContextoGlobalProjeto()
 
     const [isFormSalvarVisivel, setIsFormSalvarVisivel] = useState(false)
     const [isBtnPlusDisabled, setIsBtnPlusDisabled] = useState(false)
     const isBtnTrashDisabled = iteracoesSelecionadas.length === 0
     const [acaoForm, setAcaoForm] = useState('criar')
     const [isAvisoVisivel, setIsAvisoVisivel] = useState(false);
+
+    const navigate = useNavigate();
+
 
     const handleDuvidaClick = () => {
         setIsAvisoVisivel(true);
@@ -92,6 +96,27 @@ const CronogramaIteracoes = () => {
         });
     };
 
+    const handleVisualizarIteracao = (record) => {
+        const parametros = {
+            id: record.id,
+            idProjeto: record.projeto
+        }
+
+        if (grupo === 'Docentes') {
+            navigate("/professor/iteracoes/visualizar", {
+                state: parametros
+            });
+        } else if (grupo === 'Discentes') {
+            navigate("/aluno/iteracoes/visualizar", {
+                state: parametros
+            });
+        } else if (grupo === 'Administradores') {
+            navigate("/admin/iteracoes/visualizar", {
+                state: parametros
+            });
+        }
+    }
+
 
     return (
         <React.Fragment>
@@ -136,7 +161,7 @@ const CronogramaIteracoes = () => {
                     </div> 
 
                 ) : (
-                    <TableIteracoesSelect onEdit={handleAtualizarIteracao} />
+                    <TableIteracoesSelect onEdit={handleAtualizarIteracao}  onView={handleVisualizarIteracao}/>
                 )}
 
             </React.Fragment>

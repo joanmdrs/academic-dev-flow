@@ -179,6 +179,19 @@ class ExcluirIteracaoView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
         
+class BuscarIteracaoPeloId(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request, id):
+        try:
+            iteracao = Iteracao.objects.get(pk=id)
+            
+            if iteracao:
+                serializer = IteracaoSerializer(iteracao, many=False)
+                return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
 class ListarIteracoesView(APIView):
     permission_classes = [IsAuthenticated]
     

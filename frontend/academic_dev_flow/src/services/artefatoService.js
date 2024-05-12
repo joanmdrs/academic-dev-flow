@@ -75,6 +75,15 @@ export const listarArtefatosPorProjeto = async (idProjeto) => {
     }
 } 
 
+export const listarArtefatosPorIteracao = async (idIteracao) => {
+    try {
+        const response = await api.get(`/artefato/listar/iteracao/${encodeURIComponent(idIteracao)}/`)
+        return response
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
+} 
+
 export const filtrarArtefatosPeloNomeEPeloProjeto = async (nomeArtefato, idProjeto) => {
     try {
         const response = await api.get('artefato/filtrar/nome-projeto/', {params: {nome_artefato: nomeArtefato, id_projeto: idProjeto}})

@@ -146,6 +146,21 @@ class ListarArtefatosView(APIView):
         except Exception as e: 
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
+class ListarArtefatosPorIteracao(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, id_iteracao):
+        try:
+            artefatos = Artefato.objects.filter(iteracao_id=id_iteracao)
+                
+            if artefatos.exists():
+                serializer = ArtefatoSerializer(artefatos, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response(data=[], status=status.HTTP_204_NO_CONTENT)
+        
+        except Exception as e: 
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
         
 class VerificarExistenciaArtefatoView(APIView):
     permission_classes = [IsAuthenticated]

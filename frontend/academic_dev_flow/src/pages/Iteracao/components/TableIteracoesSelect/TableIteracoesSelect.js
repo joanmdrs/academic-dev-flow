@@ -1,12 +1,14 @@
 import React, { useEffect } from "react";
 import { formatDate } from "../../../../services/utils";
-import { Table } from "antd";
+import { Button, Space, Table, Tooltip } from "antd";
 import { useContextoIteracao } from "../../context/contextoIteracao";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
-import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
 import { optionsStatusIteracoes } from "../../../../services/optionsStatus";
+import { FaRegUserCircle, FaUser } from "react-icons/fa";
+import { MdOpenInNew } from "react-icons/md";
 
-const TableIteracoesSelect = ({onEdit, onDelete}) => {
+
+const TableIteracoesSelect = ({onEdit, onView}) => {
 
     const COLUNAS_TABELA_ITERACOES = [
         {
@@ -54,12 +56,35 @@ const TableIteracoesSelect = ({onEdit, onDelete}) => {
         {
             title: 'Líder',
             dataIndex: 'nome_membro',
-            key: 'nome_membro'
+            key: 'nome_membro',
+            render: (_, record) => (
+                <Space> 
+                    <Tooltip title={record.nome_membro}> 
+                        <FaUser />
+
+                    </Tooltip>
+                </Space>
+            )
         },
         {
             title: 'Fase',
             dataIndex: 'nome_etapa',
             key: 'nome_etapa'
+        },
+        {
+            title: 'Ações',
+            dataIndex: 'actions',
+            key: 'actions', 
+            align: 'center',
+            render: (_, record) => (
+                <Tooltip title="Visualizar">
+                    <Button 
+                        style={{ border: 'none', color: 'var(--primary-color)' }}
+                        onClick={() => onView(record)} 
+                        icon={<MdOpenInNew />} 
+                    />
+                </Tooltip>
+            )
         }
     ]
 
