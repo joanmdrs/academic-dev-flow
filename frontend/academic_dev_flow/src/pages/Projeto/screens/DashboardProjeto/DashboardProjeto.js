@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { listarTarefasPorProjeto } from "../../../../services/tarefaService";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { listarArtefatosPorProjeto } from "../../../../services/artefatoService";
@@ -6,10 +6,12 @@ import { Octokit } from "octokit";
 import { handleError } from "../../../../services/utils";
 import { Card, Col, Row, Statistic } from 'antd';
 import CountUp from 'react-countup';
+import GraficoPizzaTarefaStatus from "../../../Graficos/GraficoPizzaTarefaStatus/GraficoPizzaTarefaStatus";
 
 const DashboardProjeto = () => {
 
     const {dadosProjeto} = useContextoGlobalProjeto()
+    const [tarefas, setTarefas] = useState([])
     const [qtdTarefas, setQtdTarefas] = useState(null)
     const [qtdArtefatos, setQtdArtefatos] = useState(null)
     const [qtdCommits, setQtdCommits] = useState(null)
@@ -19,6 +21,7 @@ const DashboardProjeto = () => {
         if (!response.error){
             console.log(response.data)
             setQtdTarefas(response.data.length)
+            setTarefas(response.data)
         }
     }
 
@@ -80,6 +83,7 @@ const DashboardProjeto = () => {
         }
 
         fetchData()
+        console.log(tarefas)
     }, [dadosProjeto])
 
     const formatter = (value) => <CountUp end={value} separator="," />;
@@ -118,6 +122,14 @@ const DashboardProjeto = () => {
                     </Card>
                 </Col>
             </Row>
+
+            <div className="global-div" style={{margin: '0', marginTop: '20px'}}> 
+                { tarefas.length > 0 && (
+                    <GraficoPizzaTarefaStatus taskData={tarefas} />
+                )}
+            </div>
+
+            
         </React.Fragment>
     )
 }
