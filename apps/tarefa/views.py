@@ -148,7 +148,7 @@ class ListarTarefasPorProjetoView(APIView):
             iteracao = Iteracao.objects.get(id=tarefa.iteracao_id)
             return iteracao.nome
         else:
-            return "Iteração não encontrada"
+            return None
 
         
 class AtualizarTarefaView(APIView):

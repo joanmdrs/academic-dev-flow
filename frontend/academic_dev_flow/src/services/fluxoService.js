@@ -1,4 +1,5 @@
 import api from "../api/api"
+import { handleError } from "./utils"
 
 export const criarFluxo = async (dados) => {
     const resposta = await api.post("/fluxo/cadastrar/", dados)
@@ -6,8 +7,12 @@ export const criarFluxo = async (dados) => {
 }
 
 export const buscarFluxoPeloNome = async (parametro) => {
-    const resposta = await api.get(`/fluxo/buscar/?name_fluxo=${encodeURIComponent(parametro)}`)
-    return resposta
+    try {
+        const response = await api.get(`/fluxo/buscar/?name_fluxo=${encodeURIComponent(parametro)}`)
+        return response
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar os fluxos, contate o suporte!')
+    }
 }
 
 export const buscarFluxoPeloId =  async (fluxo_id) => {

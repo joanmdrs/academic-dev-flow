@@ -3,6 +3,7 @@ import React from "react";
 import { formatDate } from "../../../../services/utils";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
 import { UserOutlined } from '@ant-design/icons';
+import { IoClose } from "react-icons/io5";
 
 const TableTarefasSelect = ({tasks, onEdit}) => {
 
@@ -42,7 +43,17 @@ const TableTarefasSelect = ({tasks, onEdit}) => {
         {
             title: 'Iteração',
             dataIndex: 'nome_iteracao',
-            key: 'nome_iteracao'
+            key: 'nome_iteracao',
+            align: 'center',
+            render: (_, record) => (
+                <Space>
+                    {record.nome_iteracao ? 
+                        record.nome_iteracao 
+                        : <Tooltip title="Nenhuma iteração vinculada">
+                            <IoClose color="red"/>
+                        </Tooltip>}
+                </Space>
+            )
         },
         {
             title: 'Ações',

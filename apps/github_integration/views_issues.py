@@ -90,6 +90,8 @@ def filter_membro_projeto_by_assignee_and_by_projeto(assignee, projeto):
         return membro_projeto.id
     except Membro.DoesNotExist:
         return None
+    except MembroProjeto.DoesNotExist:
+        return None
 
 def get_label_ids(labels):
     label_ids = []

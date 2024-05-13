@@ -7,8 +7,18 @@ export const recarregarPagina = () => {
 }
 
 export const formatDate = (dateString) => {
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  const formattedDate = new Date(dateString).toLocaleDateString('pt-BR', options);
+  const months = [
+    'jan', 'fev', 'mar', 'abr', 'mai', 'jun',
+    'jul', 'ago', 'set', 'out', 'nov', 'dez'
+  ];
+
+  const date = new Date(dateString);
+  const day = date.getDate();
+  const monthIndex = date.getMonth();
+  const year = date.getFullYear();
+
+  const formattedDate = `${day} ${months[monthIndex]}. ${year}`;
+
   return formattedDate;
 };
 

@@ -29,10 +29,10 @@ const ModalDeBusca = ({status, titulo, name, onCancel, onOk, colunas}) => {
 
             }}
             onOk={async () => {
-                const resposta = await onOk(parametro)
+                const response = await onOk(parametro)
                 setHasResposta(true)
-                if(resposta.status === 200) {
-                    setDados(resposta.data.results)
+                if(!response.error) {
+                    setDados(response.data.results)
                 } else {
                     setDados([])
                 }

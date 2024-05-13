@@ -1,18 +1,16 @@
 import "./MeusProjetos.css"
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Empty, Table } from 'antd';
+import { Button, Empty, Space, Table } from 'antd';
 import { LuCalendarCheck2, LuCalendarX2 } from "react-icons/lu";
 import { TeamOutlined } from '@ant-design/icons';
 import { CiCircleCheck } from "react-icons/ci";
 import { TiFlowChildren } from "react-icons/ti";
 import { PiEye } from "react-icons/pi";
-import { formatDate } from "../../../../services/utils"; 
 import { decodeToken } from 'react-jwt';
-import { buscarProjetosDoMembro, buscarQuantidadeMembrosPorProjeto } from "../../../../services/membroProjetoService";
-import { buscarProjetoPeloId } from "../../../../services/projetoService";
-import { buscarFluxoPeloId } from "../../../../services/fluxoService";
+import { buscarProjetosDoMembro } from "../../../../services/membroProjetoService";
 import { optionsStatusProjetos } from "../../../../services/optionsStatus";
+import { formatDate, handleError } from "../../../../services/utils";
 
 const MeusProjetos = ({grupo}) => {
 
@@ -44,6 +42,11 @@ const MeusProjetos = ({grupo}) => {
             ),
             dataIndex: 'data_inicio',
             key: 'data_inicio',
+            render: (_, record) => (
+                <Space>
+                    {formatDate(record.data_inicio)}
+                </Space>
+            )
         },
         {
             title: (
@@ -53,6 +56,11 @@ const MeusProjetos = ({grupo}) => {
             ),
             dataIndex: 'data_fim',
             key: 'data_fim',
+            render: (_, record) => (
+                <Space>
+                    {formatDate(record.data_fim)}
+                </Space>
+            )
         },
         {
             title: (
@@ -70,8 +78,8 @@ const MeusProjetos = ({grupo}) => {
                 <TiFlowChildren/> Fluxo
                 </>
             ),
-            dataIndex: 'fluxo',
-            key: 'fluxo'
+            dataIndex: 'fluxo_nome',
+            key: 'fluxo_nome'
         },
         {
             title: (
@@ -82,7 +90,7 @@ const MeusProjetos = ({grupo}) => {
             key: 'action',
             render: (_, record) => (
                 <Button>
-                <Link to={`/${grupo}/projetos/visualizar/${record.idProject}`}>Visualizar</Link>
+                <Link to={`/${grupo}/projetos/visualizar/${record.id}`}>Visualizar</Link>
                 </Button>
             ),
         }
@@ -96,7 +104,7 @@ const MeusProjetos = ({grupo}) => {
             try {
                 await handleGetProjects()
             } catch (error) {
-                console.error('Erro ao decodificar o token:', error);
+                return handleError(error, 'Falha ao tentar buscar os dados dos projetos, contate o suporte!')
             }
         };
         if (token) {
@@ -105,29 +113,12 @@ const MeusProjetos = ({grupo}) => {
     }, [token]);
 
     const handleGetProjects = async () => {
-        const decoded = await decodeToken(token);
-        const response1 = await buscarProjetosDoMembro(decoded.user_id);
+        const decodedToken = await decodeToken(token);
+        const response = await buscarProjetosDoMembro(decodedToken.user_id)
 
-        const promises = response1.data.map(async (membroProjeto) => {
-
-            const response2 = await buscarProjetoPeloId(membroProjeto.projeto)
-            const response3 = await buscarQuantidadeMembrosPorProjeto(membroProjeto.projeto)
-            const response4 = await buscarFluxoPeloId(response2.data.fluxo)
-
-            return {
-                id: membroProjeto.id,
-                idProject: response2.data.id,
-                nome: response2.data.nome,
-                status: response2.data.status,
-                data_inicio: formatDate(response2.data.data_inicio),
-                data_fim: formatDate(response2.data.data_fim),
-                qtd_membros: response3.data.quantidade_membros,
-                fluxo: response4.data.nome
-            }
-        })
-
-        const resultados = (await Promise.all(promises))
-        setProjetos(resultados)
+        if (!response.error) {
+            setProjetos(response.data)
+        }
         
     }
 
