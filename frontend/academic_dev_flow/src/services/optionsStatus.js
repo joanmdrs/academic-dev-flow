@@ -81,7 +81,7 @@ export const optionsStatusArtefatos = [
     },
     {
         value: 'revisao',
-        label: 'Pendente de revisão'
+        label: 'Em revisão'
     },
     {
         value: 'aprovado',

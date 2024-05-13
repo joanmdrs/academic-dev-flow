@@ -1,10 +1,11 @@
 import { Form, Select, Space, Table, Tooltip } from "antd";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import {listarArtefatosPorProjeto } from "../../../../services/artefatoService";
 import { IoMdCreate, IoMdOpen, IoMdTrash } from "react-icons/io";
-import { optionsStatusArtefatos } from "../../../../services/optionsStatus";
+import { optionsStatusArtefatos, optionsStatusIteracoes } from "../../../../services/optionsStatus";
+import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
 
 const TableArtefatosProjeto = ({onView, onEdit, onDelete, onUpdateStatus}) => {
 
@@ -23,7 +24,7 @@ const TableArtefatosProjeto = ({onView, onEdit, onDelete, onUpdateStatus}) => {
         {
             title: 'Status',
             dataIndex: 'status',
-            key: 'statu',
+            key: 'status',
             render: (_, record) => (
                 <Select 
                     style={{width: '150px'}} 
@@ -32,6 +33,17 @@ const TableArtefatosProjeto = ({onView, onEdit, onDelete, onUpdateStatus}) => {
                     onChange={(value) => onUpdateStatus(record, value)}
                 /> 
             )
+        },
+        {
+            title: 'Iteração',
+            dataIndex: 'iteracao',
+            key: 'iteracao',
+            render: (_, record) => (
+                <span>
+                    {optionsIteracao.find(iteracao => iteracao.value === record.iteracao)?.label}
+                </span>
+            )
+
         },
         {
             title: 'Ações',
@@ -53,6 +65,23 @@ const TableArtefatosProjeto = ({onView, onEdit, onDelete, onUpdateStatus}) => {
         }
     ]
 
+    const [optionsIteracao, setOptionsIteracao] = useState([])
+
+
+    const handleGetIteracoes = async () => {
+        const response = await listarIteracoesPorProjeto(dadosProjeto.id)
+        const iteracoesOrdenadas = response.data.sort((a, b) => a.numero - b.numero);
+
+        const resultados = iteracoesOrdenadas.map((item) => {
+            return {
+                value: item.id,
+                label: item.nome
+            }
+        })
+
+        setOptionsIteracao(resultados)
+    }
+
     const {dadosProjeto} = useContextoGlobalProjeto()
     const {artefatos, setArtefatos, setArtefatosSelecionados} = useContextoArtefato()
 
@@ -68,11 +97,14 @@ const TableArtefatosProjeto = ({onView, onEdit, onDelete, onUpdateStatus}) => {
         const fetchData = async () => {
             if (artefatos.length === 0){
                 await handleListarArtefatos()
+            } 
+            if (dadosProjeto !== null) {
+                await handleGetIteracoes()
             }
         }   
 
         fetchData()
-    })
+    }, [dadosProjeto])
 
     const rowSelection = {
         onChange: (selectedRowsKeys, selectedRows) => {

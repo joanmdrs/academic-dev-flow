@@ -1,7 +1,8 @@
-import { Space, Table } from "antd";
+import { Space, Table, Tooltip } from "antd";
 import React from "react";
 import { formatDate } from "../../../../services/utils";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
+import { UserOutlined } from '@ant-design/icons';
 
 const TableTarefasSelect = ({tasks, onEdit}) => {
 
@@ -29,16 +30,13 @@ const TableTarefasSelect = ({tasks, onEdit}) => {
             dataIndex: 'membros_info',
             key: 'membros_info',
             render: (membros_info) => (
-            <span style={{display: "flex", gap: "10px"}}>
-                {membros_info.map((membro) => (
-                <span style={{
-                    color: "var(--primary-color)",
-                }} 
-                    key={membro.id_membro_projeto}>
-                    {membro.nome_membro} 
+                <span style={{ display: "flex", gap: "10px" }}>
+                    {membros_info.map((membro) => (
+                        <Tooltip title={membro.nome_membro} key={membro.id_membro_projeto}>
+                            <UserOutlined style={{ color: "var(--primary-color)" }} />
+                        </Tooltip>
+                    ))}
                 </span>
-                ))}
-            </span>
             ),
         },
         {
