@@ -60,7 +60,7 @@ class ListarArtefatosPorProjeto(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, id_projeto):
         try:
-            artefatos = Artefato.objects.filter(projeto_id=id_projeto)
+            artefatos = Artefato.objects.filter(projeto_id=id_projeto).order_by('id')
                 
             if artefatos.exists():
                 serializer = ArtefatoSerializer(artefatos, many=True)
