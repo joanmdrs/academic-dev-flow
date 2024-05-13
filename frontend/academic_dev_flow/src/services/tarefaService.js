@@ -211,3 +211,12 @@ export const pararContagemTempo = async (parametros) => {
         return handleError(error, 'Falha ao tentar pausar a tarefa, contate o suporte!')
     }
 }
+
+export const vincularIteracaoAsTarefas = async (dados) => {
+    try {
+        const response = await api.patch('tarefa/atualizar-iteracao/', dados)
+        return handleSuccess(response, 'Atribuição de tarefas a iteração realizada com sucesso!')
+    } catch (error) {
+        return handleError(error, 'Falha durante a atribuição das tarefas a iteração, contate o suporte!')
+    }
+}

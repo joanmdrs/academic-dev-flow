@@ -1,14 +1,16 @@
 import { Button, Modal, Spin } from "antd";
 import React, { useState } from "react";
-import { FaPlus, FaTheRedYeti, FaTrash } from "react-icons/fa";
+import { FaPlus, FaLink, FaTrash } from "react-icons/fa";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import TabsTarefas from "../../components/TabsTarefas/TabsTarefas";
 import FormTarefa from "../../components/FormTarefa/FormTarefa";
 import { createIssue, updateIssue } from "../../../../services/githubIntegration/issueService";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
-import { atualizarTarefa, criarTarefa, excluirTarefas } from "../../../../services/tarefaService";
+import { atualizarTarefa, criarTarefa, excluirTarefas, vincularIteracaoAsTarefas } from "../../../../services/tarefaService";
 import { BsQuestionCircle } from "react-icons/bs";
 import Aviso from "../../../../components/Aviso/Aviso";
+import ModalVincularItercao from "../../components/ModalVincularIteracao/ModalVincularIteracao";
+import ModalVincularIteracao from "../../components/ModalVincularIteracao/ModalVincularIteracao";
 
 const QuadroTarefas = () => {
 
@@ -26,6 +28,7 @@ const QuadroTarefas = () => {
     const [acaoForm, setAcaoForm] = useState('criar')
     const [isAvisoVisivel, setIsAvisoVisivel] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
+    const [isModalVincularIteracaoVisivel, setIsModalVincularIteracaoVisivel] = useState(false)
 
     const handleDuvidaClick = () => {
         setIsAvisoVisivel(true);
@@ -39,6 +42,7 @@ const QuadroTarefas = () => {
         setIsFormSalvarVisivel(false)
         setIsBtnPlusDisabled(false)
         setAcaoForm('criar')
+        setIsModalVincularIteracaoVisivel(false)
     }
 
     const handleReload = () => {
@@ -46,6 +50,7 @@ const QuadroTarefas = () => {
         setAcaoForm('criar')
         setTarefas([])
         setTarefasSelecionadas([])
+        setIsModalVincularIteracaoVisivel(false)
     }
 
     const handleAdicionarTarefa = () => {
@@ -110,6 +115,18 @@ const QuadroTarefas = () => {
         });
     };
 
+    const handleVincularIteracaoAsTarefas = async (idIteracao) => {
+        if (tarefasSelecionadas !== null) {
+            const ids = tarefasSelecionadas.map((item) => item.id)
+            const dados = {
+                ids_tarefas: ids,
+                id_iteracao: idIteracao
+            }
+            await vincularIteracaoAsTarefas(dados)
+            handleReload()
+        }
+    }
+
     return (
         <div>
 
@@ -122,30 +139,46 @@ const QuadroTarefas = () => {
                 />
             )}
 
-            <div style={{display:'flex', justifyContent: 'flex-end', gap: '10px'}}> 
-                <Button 
-                    icon={<FaPlus />}
-                    type="primary"
-                    onClick={handleAdicionarTarefa}
-                    disabled={isBtnPlusDisabled}
-                >
-                    Criar Tarefa
-                </Button>
+            <div style={{display:'flex', justifyContent: 'space-between'}}> 
 
-                <Button
-                    icon={<FaTrash />}
-                    type="primary"
-                    danger
-                    disabled={isBtnTrashDisabled}
-                    onClick={handleExcluirTarefas}
-                >
-                    Excluir
-                </Button>
+                <div>
+                    <Button 
+                        type="primary"
+                        icon={<FaLink />}
+                        ghost
+                        onClick={() => setIsModalVincularIteracaoVisivel(true)}
+                        disabled={tarefasSelecionadas.length > 0 ? false : true}
+                    > 
+                        Vincular Iteração
+                    </Button>
 
-                <Button
-                    icon={<BsQuestionCircle />}
-                    onClick={handleDuvidaClick}
-                />
+                </div>
+
+                <div style={{display:'flex', justifyContent: 'flex-end', gap: '10px'}}> 
+                    <Button 
+                        icon={<FaPlus />}
+                        type="primary"
+                        onClick={handleAdicionarTarefa}
+                        disabled={isBtnPlusDisabled}
+                    >
+                        Criar Tarefa
+                    </Button>
+
+                    <Button
+                        icon={<FaTrash />}
+                        type="primary"
+                        danger
+                        disabled={isBtnTrashDisabled}
+                        onClick={handleExcluirTarefas}
+                    >
+                        Excluir
+                    </Button>
+
+                    <Button
+                        icon={<BsQuestionCircle />}
+                        onClick={handleDuvidaClick}
+                    />
+                </div>
             </div>
 
 
@@ -164,6 +197,12 @@ const QuadroTarefas = () => {
                 </div>
 
             )}
+
+            <ModalVincularIteracao
+                visible={isModalVincularIteracaoVisivel}
+                onCancel={handleCancelar}
+                onUpdate={handleVincularIteracaoAsTarefas}
+            />
 
 
 
