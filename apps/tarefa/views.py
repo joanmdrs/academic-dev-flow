@@ -75,7 +75,7 @@ class ListarTarefasPorProjetoView(APIView):
     
     def get(self, request, id_projeto): 
         try:
-            tarefas = Tarefa.objects.filter(projeto_id=id_projeto)
+            tarefas = Tarefa.objects.filter(projeto_id=id_projeto).order_by('id')
             tarefas_info = []
 
             for tarefa in tarefas:
@@ -238,7 +238,7 @@ class ListarTarefasPorIteracaoView(APIView):
         
         try:
             
-            tarefas = Tarefa.objects.filter(iteracao_id=id_iteracao)
+            tarefas = Tarefa.objects.filter(iteracao_id=id_iteracao).order_by('id')
             
             if tarefas.exists():  
                 serializer = TarefaSerializer(tarefas, many=True)
