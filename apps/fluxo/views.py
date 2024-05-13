@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
 
 class BaseFluxoView(APIView):
-    permission_classes = [IsAuthenticated, IsAdminUserOrReadOnly]
+    permission_classes = [IsAuthenticated]
 
     def handle_exception(self, exc):
         return Response({'error': str(exc)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

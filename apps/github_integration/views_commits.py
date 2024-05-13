@@ -33,13 +33,14 @@ def list_commits_by_repository(request):
     
 
 @permission_classes([IsAuthenticated])
-def user_commits_view(request):
+def user_commits_view_by_user(request):
     try:
         repository = request.GET.get('repository')
         username = request.GET.get('username')
+        period = request.GET.get('period')  # Pode ser 'day', 'week' ou 'month'
 
-        if not repository or not username:
-            return JsonResponse({'error': 'Os parâmetros de consulta repository e username são obrigatórios'}, status=400)
+        if not repository or not username or not period:
+            return JsonResponse({'error': 'Os parâmetros de consulta repository, username e period são obrigatórios'}, status=status.HTTP_400_BAD_REQUEST)
 
         g = get_github_client()
 
@@ -48,16 +49,28 @@ def user_commits_view(request):
         user = g.get_user(username)
 
         user_commits = []
+        today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+
+        if period == 'day':
+            start_date = today
+        elif period == 'week':
+            start_date = today - timedelta(days=today.weekday())
+        elif period == 'month':
+            start_date = today.replace(day=1)
+        else:
+            return JsonResponse({'error': 'O período deve ser "day", "week" ou "month"'}, status=status.HTTP_400_BAD_REQUEST)
+
         for commit in repo.get_commits(author=user):
-            user_commits.append({
-                'sha': commit.sha,
-                'message': commit.commit.message,
-                'author': commit.commit.author.name,
-                'date': commit.commit.author.date.isoformat()
-            })
+            commit_date = commit.commit.author.date.replace(hour=0, minute=0, second=0, microsecond=0)
+            if start_date <= commit_date:
+                user_commits.append({
+                    'sha': commit.sha,
+                    'message': commit.commit.message,
+                    'author': commit.commit.author.name,
+                    'date': commit_date.isoformat()
+                })
 
         return JsonResponse(user_commits, safe=False)
 
     except GithubException as e:
-        return JsonResponse({'error': str(e)}, status=500)
-    
+        return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -166,24 +166,19 @@ class BuscarMembroPeloUserView(APIView):
                     usuario_github = None
                     email_github = None
                     nome_github = None
+                                
+               
+                autor = {
+                    'id_membro': membro.id,
+                    'id_user': id_user,
+                    'nome': membro.nome,
+                    'nome_github': nome_github,
+                    'email_github': email_github,
+                    'usuario_github': usuario_github
+                }
                 
-                membro_projeto = MembroProjeto.objects.get(membro_id=membro.id)
-                
-                if membro_projeto: 
-                    autor = {
-                        'id_membro': membro.id,
-                        'id_user': id_user,
-                        'id_membro_projeto': membro_projeto.id,
-                        'nome': membro.nome,
-                        'nome_github': nome_github,
-                        'email_github': email_github,
-                        'usuario_github': usuario_github
-                    }
-                    
-                    return Response(autor, status=status.HTTP_200_OK)
-                
-                return Response({'error': 'Este membro não está vinculado a nenhum projeto'}, status=status.HTTP_404_NOT_FOUND)
-
+                return Response(autor, status=status.HTTP_200_OK)
+            
             return Response({'error': 'Membro não encontrado'}, status=status.HTTP_404_NOT_FOUND)
         
         except Exception as e:
