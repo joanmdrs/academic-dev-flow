@@ -40,7 +40,7 @@ const TableArtefatosProjeto = ({onView, onEdit, onDelete}) => {
     ]
 
     const {dadosProjeto} = useContextoGlobalProjeto()
-    const {artefatos, setArtefatos} = useContextoArtefato()
+    const {artefatos, setArtefatos, setArtefatosSelecionados} = useContextoArtefato()
 
     const handleListarArtefatos = async () => {
         const response = await listarArtefatosPorProjeto(dadosProjeto.id);
@@ -60,11 +60,18 @@ const TableArtefatosProjeto = ({onView, onEdit, onDelete}) => {
         fetchData()
     })
 
+    const rowSelection = {
+        onChange: (selectedRowsKeys, selectedRows) => {
+          setArtefatosSelecionados(selectedRows)
+        },
+    };
+
     return (
         <Table 
             columns={COLUNAS_TABELA_ARTEFATOS}
             dataSource={artefatos}
             rowKey={"id"}
+            rowSelection={rowSelection}
         />
     )
 }

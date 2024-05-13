@@ -1,17 +1,18 @@
 import React, { useState } from 'react'
 import Aviso from '../../../../components/Aviso/Aviso'
 import { Button, Form, Input, Spin } from 'antd'
-import { FaPlus, FaSearch } from 'react-icons/fa'
+import { FaLink, FaPlus, FaSearch } from 'react-icons/fa'
 import { useContextoGlobalProjeto } from '../../../../context/ContextoGlobalProjeto'
 import { useContextoArtefato } from '../../context/ContextoArtefato'
 import { BsQuestionCircle } from 'react-icons/bs'
 import FormArtefato from '../../components/FormArtefato/FormArtefato'
 import { createContent, deleteContent } from '../../../../services/githubIntegration'
-import { atualizarArtefato, criarArtefato, excluirArtefato, filtrarArtefatosPeloNomeEPeloProjeto } from '../../../../services/artefatoService'
+import { atualizarArtefato, atualizarIteracaoDosArtefatos, criarArtefato, excluirArtefato, filtrarArtefatosPeloNomeEPeloProjeto } from '../../../../services/artefatoService'
 import FormFiltrarArtefatos from '../../components/FormFiltrarArtefatos/FormFiltrarArtefatos'
 import ModalExcluirArtefato from '../../components/ModalExcluirArtefato/ModalExcluirArtefato'
 import { useNavigate } from "react-router-dom";
 import TableArtefatosProjeto from '../../components/TableArtefatosProjeto/TableArtefatosProjeto'
+import ModalVincularIteracao from '../../components/ModalVincularIteracao/ModalVincularIteracao'
 
 const StyleSpin = {
     position: 'absolute', 
@@ -34,7 +35,9 @@ const PainelArtefatos = () => {
         dadosArtefato, 
         setDadosArtefato, 
         setArtefatos,
-        setArtefatosSelecionados} = useContextoArtefato()
+        artefatosSelecionados,
+        setArtefatosSelecionados
+    } = useContextoArtefato()
 
     const [isFormSalvarVisivel, setIsFormSalvarVisivel] = useState(false)
     const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false)
@@ -44,6 +47,8 @@ const PainelArtefatos = () => {
     const [isBtnPlusDisabled, setIsBtnPlusDisabled] = useState(false)
     const [isAvisoVisivel, setIsAvisoVisivel] = useState(false)
     const [isSaving, setIsSaving] = useState(false)
+    const [isModalVincularIteracaoVisivel, setIsModalVincularIteracaoVisivel] = useState(false)
+
     const navigate = useNavigate();
 
     const handleAvisoClose = () => {
@@ -70,6 +75,7 @@ const PainelArtefatos = () => {
         setIsTableListVisivel(true)
         setIsFormSalvarVisivel(false)
         setIsFormBuscarVisivel(false)
+        setIsModalVincularIteracaoVisivel(false)
         setArtefatos([])
         setArtefatosSelecionados([])
     }
@@ -188,6 +194,18 @@ const PainelArtefatos = () => {
         setIsSaving(false)
     }
 
+    const handleAtualizarIteracaoDosArtefatos = async (idIteracao) => {
+        if (artefatosSelecionados !== null) {
+            const ids = artefatosSelecionados.map((item) => item.id)
+            const dados = {
+                ids_artefatos: ids,
+                id_iteracao: idIteracao
+            }
+            await atualizarIteracaoDosArtefatos(dados)
+            handleReload()
+        }
+    }
+
     return (
         <div>
 
@@ -201,7 +219,7 @@ const PainelArtefatos = () => {
             )}
 
             <div style={{display:'flex', justifyContent:'space-between', gap: '10px', marginBottom: '40px'}}>
-                <div>
+                <div style={{display: 'flex', gap: '10px'}}>
                     <Button
                         icon={<FaSearch />}
                         type='primary'
@@ -209,6 +227,17 @@ const PainelArtefatos = () => {
                     >
                         Buscar
                     </Button>
+
+                    <Button 
+                        type="primary"
+                        icon={<FaLink />}
+                        ghost
+                        onClick={() => setIsModalVincularIteracaoVisivel(true)}
+                        disabled={artefatosSelecionados.length > 0 ? false : true}
+                    > 
+                        Vincular Iteração
+                    </Button>
+
                 </div> 
 
                 <div className='grouped-buttons'>
@@ -288,6 +317,12 @@ const PainelArtefatos = () => {
                 visible={isModalExcluirVisivel}
                 onCancel={handleFecharModal}
                 onDelete={handleConfirmarExclusao}
+            />
+
+            <ModalVincularIteracao
+                visible={isModalVincularIteracaoVisivel}
+                onCancel={handleCancelar}
+                onUpdate={handleAtualizarIteracaoDosArtefatos}
             />
 
             

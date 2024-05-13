@@ -1,7 +1,6 @@
 import { Space, Table } from "antd";
 import React from "react";
 import { formatDate } from "../../../../services/utils";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
 
 const TableTarefasSelect = ({tasks, onEdit}) => {
@@ -59,7 +58,6 @@ const TableTarefasSelect = ({tasks, onEdit}) => {
         }
     ]
 
-    const {dadosProjeto} = useContextoGlobalProjeto()
     const {setTarefasSelecionadas} = useContextoTarefa()
 
     const rowSelection = {
