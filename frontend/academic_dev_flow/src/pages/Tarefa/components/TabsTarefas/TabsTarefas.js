@@ -59,10 +59,10 @@ const TabsTarefas = ({onEdit}) => {
             <TabPane tab="Criadas" key="1">
                 <TableTarefasSelect tasks={tasksCriadas} onEdit={onEdit} />
             </TabPane>
-            <TabPane tab="Andamento" key="2">
+            <TabPane tab="Em andamento" key="2">
                 <TableTarefasSelect tasks={tasksEmAndamento} onEdit={onEdit}/>
             </TabPane>
-            <TabPane tab="Revisão" key="3">
+            <TabPane tab="Em revisão" key="3">
                 <TableTarefasSelect tasks={tasksPendentesRevisao} onEdit={onEdit} />
             </TabPane>
             <TabPane tab="Concluídas" key="4">
@@ -71,10 +71,7 @@ const TabsTarefas = ({onEdit}) => {
             <TabPane tab="Atrasadas" key="5">
                 <TableTarefasSelect tasks={tasksAtrasadas} onEdit={onEdit} />
             </TabPane>
-            <TabPane tab="Canceladas" key="6">
-                <TableTarefasSelect tasks={tasksCanceladas} onEdit={onEdit}/>
-            </TabPane>
-            <TabPane tab="Todas" key="7">
+            <TabPane tab="Todas" key="6">
                 <TableTarefasSelect tasks={tarefas} onEdit={onEdit} />
             </TabPane>
         </Tabs>

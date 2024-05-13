@@ -1,11 +1,12 @@
-import { Space, Table, Tooltip } from "antd";
+import { Form, Select, Space, Table, Tooltip } from "antd";
 import React, { useEffect } from "react";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { useContextoArtefato } from "../../context/ContextoArtefato";
-import { listarArtefatos, listarArtefatosPorProjeto } from "../../../../services/artefatoService";
+import {listarArtefatosPorProjeto } from "../../../../services/artefatoService";
 import { IoMdCreate, IoMdOpen, IoMdTrash } from "react-icons/io";
+import { optionsStatusArtefatos } from "../../../../services/optionsStatus";
 
-const TableArtefatosProjeto = ({onView, onEdit, onDelete}) => {
+const TableArtefatosProjeto = ({onView, onEdit, onDelete, onUpdateStatus}) => {
 
     const COLUNAS_TABELA_ARTEFATOS = [
         {
@@ -17,6 +18,19 @@ const TableArtefatosProjeto = ({onView, onEdit, onDelete}) => {
                     href={`https://github.com/${dadosProjeto.nome_repo}/tree/main/${record.path_file}`}
                     target="blank"
                 > {record.nome} </a>
+            )
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'statu',
+            render: (_, record) => (
+                <Select 
+                    style={{width: '150px'}} 
+                    value={record.status} 
+                    options={optionsStatusArtefatos} 
+                    onChange={(value) => onUpdateStatus(record, value)}
+                /> 
             )
         },
         {

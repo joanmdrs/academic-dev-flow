@@ -206,6 +206,15 @@ const PainelArtefatos = () => {
         }
     }
 
+    const handleAtualizarStatusArtefato = async (record, value) => {
+
+        const dados = {
+            status: value
+        }
+        await atualizarArtefato(record.id, dados)
+        handleReload()
+    }
+
     return (
         <div>
 
@@ -308,6 +317,7 @@ const PainelArtefatos = () => {
                         onView={handleVisualizarArtefato}
                         onEdit={handleAtualizarArtefato} 
                         onDelete={handleExcluirArtefato}
+                        onUpdateStatus={handleAtualizarStatusArtefato}
                     />
                 </div>
             }
