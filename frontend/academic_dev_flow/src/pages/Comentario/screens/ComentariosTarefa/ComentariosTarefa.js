@@ -5,16 +5,18 @@ import ListaComentarios from "../../components/ListaComentarios/ListaComentarios
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { useContextoComentario } from "../../context/ContextoComentario";
 import { Modal } from "antd";
+import { buscarMembroProjetoPeloUsuarioGithub } from "../../../../services/membroProjetoService";
 
 const ComentariosTarefa = ({idTarefa}) => {
 
     const [comentarios, setComentarios] = useState([])
-    const {autor} = useContextoGlobalProjeto()
+    const {dadosProjeto, autor} = useContextoGlobalProjeto()
     const {
         comentarioPai,
         setComentarioEditado,
         setEditorVisivel
     } = useContextoComentario()
+    const [membroProjeto, setMembroProjeto] = useState(null)
 
     const handleGetComentarios = async () => {
         const response = await listarComentariosPorTarefa(idTarefa)
@@ -23,10 +25,23 @@ const ComentariosTarefa = ({idTarefa}) => {
         }
     }
 
+    const handleGetMembroProjeto = async () => {
+
+        const parametros = {
+            usuario_github: autor.usuario_github,
+            id_projeto: dadosProjeto.id
+        }
+        const response = await buscarMembroProjetoPeloUsuarioGithub(parametros)
+        if (!response.error){
+            setMembroProjeto(response.data)
+        }
+    }
+
     useEffect(() => {
         const fetchData = async () => {
-            if (idTarefa) {
+            if (idTarefa && dadosProjeto) {
                 await handleGetComentarios()
+                await handleGetMembroProjeto()
             }
         }
 
@@ -36,7 +51,7 @@ const ComentariosTarefa = ({idTarefa}) => {
     const handleCriarComentario = async (dadosForm) => {
         const dadosEnviar = {
             texto: dadosForm.texto,
-            autor: autor.id_membro_projeto,
+            autor: membroProjeto.id_membro_projeto,
             tarefa: idTarefa,
             comentario_pai: comentarioPai
         }
@@ -48,7 +63,7 @@ const ComentariosTarefa = ({idTarefa}) => {
     const handleAtualizarComentario = async (id, texto) => {
         const dadosEnviar = {
             texto: texto,
-            autor: autor.id_membro_projeto,
+            autor: membroProjeto.id_membro_projeto,
             tarefa: idTarefa,
             comentario_pai: comentarioPai
         }

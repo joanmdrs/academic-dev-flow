@@ -1,6 +1,6 @@
 import { Button, Form, Modal, Result, Select, Tabs } from "antd";
 import React, { useEffect, useState } from "react";
-import { buscarProjetosDoMembro } from "../../../../services/membroProjetoService";
+import { buscarMembroProjetoPeloUsuarioGithub, buscarProjetosDoMembro } from "../../../../services/membroProjetoService";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { atualizarTarefa, criarTarefa, excluirTarefas, iniciarContagemTempo, listarTarefasPorProjeto, pararContagemTempo } from "../../../../services/tarefaService";
@@ -27,6 +27,7 @@ const MinhasTarefas = () => {
     const [isFormSalvarVisivel, setIsFormSalvarVisivel] = useState(false)
     const [acaoForm, setAcaoForm] = useState('criar')
     const navigate = useNavigate();
+    const [membroProjeto, setMembroProjeto] = useState(null)
 
 
     const handleGetProjetos = async () => {
@@ -74,7 +75,7 @@ const MinhasTarefas = () => {
     const handleStartTarefa = async (idTask) => {
         const parametros = {
             tarefa_id: idTask,
-            membro_projeto_id: autor.id_membro_projeto
+            membro_projeto_id: membroProjeto.id_membro_projeto
         }
         await iniciarContagemTempo(parametros)
         await handleGetTarefas()
@@ -84,7 +85,7 @@ const MinhasTarefas = () => {
     const handlePauseTarefa = async (idTask) => {
         const parametros = {
             tarefa_id: idTask,
-            membro_projeto_id: autor.id_membro_projeto
+            membro_projeto_id: membroProjeto.id_membro_projeto
         }
         await pararContagemTempo(parametros)
         await handleGetTarefas()
@@ -179,14 +180,25 @@ const MinhasTarefas = () => {
         }
     }
 
+    const handleGetMembroProjeto = async () => {
+
+        const parametros = {
+            usuario_github: autor.usuario_github,
+            id_projeto: dadosProjeto.id
+        }
+        const response = await buscarMembroProjetoPeloUsuarioGithub(parametros)
+        if (!response.error){
+            setMembroProjeto(response.data)
+        }
+    }
+
     useEffect(() => {
         const fetchData = async () => {
 
-            if (autor && autor.id_user){
+            if (autor && autor.id_user && dadosProjeto){
                 await handleGetProjetos()
-            }
-            if (dadosProjeto) {
                 await handleGetTarefas()
+                await handleGetMembroProjeto()
             }
         }
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Modal } from "antd";
 import FormPontuacao from "../FormPontuacao/FormPontuacao";
 import { useContextoPontuacao } from "../../context/ContextoPontuacao";
@@ -7,14 +7,16 @@ import { atualizarPontuacao, excluirPontuacao, registrarPontuacao } from "../../
 import { atualizarArtefato } from "../../../../services/artefatoService";
 import { useContextoArtefato } from "../../../Artefato/context/ContextoArtefato";
 import ExibirPontuacao from "../ExibirPontuacao/ExibirPontuacao";
+import { buscarMembroProjetoPeloUsuarioGithub } from "../../../../services/membroProjetoService";
 
 const PainelPontuacaoProfessor = ({onReload}) => {
 
-    const {autor} = useContextoGlobalProjeto()
+    const {autor, dadosProjeto} = useContextoGlobalProjeto()
     const {dadosArtefato} = useContextoArtefato()
-    const { dadosPontuacao, setDadosPontuacao } = useContextoPontuacao();
+    const {dadosPontuacao, setDadosPontuacao } = useContextoPontuacao();
     const [isFormEditarVisivel, setIsFormEditarVisivel] = useState(false);
     const [acaoForm, setAcaoForm] = useState('criar')
+    const [membroProjeto, setMembroProjeto] = useState(null)
 
     const handleCancelar = () => {
         setIsFormEditarVisivel(false)
@@ -26,7 +28,7 @@ const PainelPontuacaoProfessor = ({onReload}) => {
     }
 
     const handleSalvarPontuacao = async (dados) => {
-        dados['autor'] = autor.id_membro_projeto
+        dados['autor'] = membroProjeto.id_membro_projeto
 
         if (acaoForm === "criar") {
             const response = await registrarPontuacao(dados)
@@ -57,6 +59,28 @@ const PainelPontuacaoProfessor = ({onReload}) => {
             }
         });
     };
+
+    const handleGetMembroProjeto = async () => {
+
+        const parametros = {
+            usuario_github: autor.usuario_github,
+            id_projeto: dadosProjeto.id
+        }
+        const response = await buscarMembroProjetoPeloUsuarioGithub(parametros)
+        if (!response.error){
+            setMembroProjeto(response.data)
+        }
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (dadosProjeto) {
+                await handleGetMembroProjeto()
+            }
+        }
+
+        fetchData()
+    }, [])
 
     return (
         <div>

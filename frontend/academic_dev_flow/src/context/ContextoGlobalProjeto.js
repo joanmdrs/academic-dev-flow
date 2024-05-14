@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { buscarMembroPeloUser } from "../services/membroService";
 import { decodeToken } from "react-jwt";
 import { handleError } from "../services/utils";
+import { buscarMembroProjetoPeloUsuarioGithub } from "../services/membroProjetoService";
 
 const ContextoGlobalProjeto = createContext();
 
@@ -43,7 +44,7 @@ export const ProviderGlobalProjeto = ({ children }) => {
       value={{
         autor, setAutor,
         grupo, setGrupo, 
-        dadosProjeto, setDadosProjeto
+        dadosProjeto, setDadosProjeto,
       }}
     >
       {children}

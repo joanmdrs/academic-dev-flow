@@ -5,16 +5,19 @@ import { atualizarComentarioArtefato, criarComentarioArtefato, excluirComentario
 import { Modal } from "antd";
 import ListaComentarios from "../../components/ListaComentarios/ListaComentarios";
 import FormComentario from "../../components/FormComentario/FormComentario";
+import { buscarMembroProjetoPeloUsuarioGithub } from "../../../../services/membroProjetoService";
 
 const ComentariosArtefato = ({idArtefato}) => {
 
-    const [comentarios, setComentarios] = useState([])
-    const {autor} = useContextoGlobalProjeto()
+    const [ comentarios, setComentarios] = useState([])
+    const {autor, dadosProjeto} = useContextoGlobalProjeto()
     const {
         comentarioPai,
         setComentarioEditado,
         setEditorVisivel
     } = useContextoComentario()
+
+    const [membroProjeto, setMembroProjeto] = useState(null)
 
     const handleGetComentarios = async () => {
         const response = await listarComentariosPorArtefato(idArtefato)
@@ -23,10 +26,23 @@ const ComentariosArtefato = ({idArtefato}) => {
         }
     }
 
+    const handleGetMembroProjeto = async () => {
+
+        const parametros = {
+            usuario_github: autor.usuario_github,
+            id_projeto: dadosProjeto.id
+        }
+        const response = await buscarMembroProjetoPeloUsuarioGithub(parametros)
+        if (!response.error){
+            setMembroProjeto(response.data)
+        }
+    }
+
     useEffect(() => {
         const fetchData = async () => {
-            if (idArtefato) {
+            if (idArtefato && dadosProjeto) {
                 await handleGetComentarios()
+                await handleGetMembroProjeto()
             }
         }
 
@@ -36,7 +52,7 @@ const ComentariosArtefato = ({idArtefato}) => {
     const handleCriarComentario = async (dadosForm) => {
         const dadosEnviar = {
             texto: dadosForm.texto,
-            autor: autor.id_membro_projeto,
+            autor: membroProjeto.id_membro_projeto,
             artefato: idArtefato,
             comentario_pai: comentarioPai
         }
@@ -48,7 +64,7 @@ const ComentariosArtefato = ({idArtefato}) => {
     const handleAtualizarComentario = async (id, texto) => {
         const dadosEnviar = {
             texto: texto,
-            autor: autor.id_membro_projeto,
+            autor: membroProjeto.id_membro_projeto,
             artefato: idArtefato,
             comentario_pai: comentarioPai
         }

@@ -42,11 +42,15 @@ class BuscarMembroProjetoPeloUsuarioGithubView(APIView):
 
             membro_data = {
                 'id_membro_projeto': membro_projeto.id,
+                'nome_membro_projeto': membro.nome
             }
 
             return JsonResponse(membro_data, status=200)
         
         except Membro.DoesNotExist:
+            return JsonResponse({'error': 'Membro não encontrado'}, status=status.HTTP_404_NOT_FOUND)
+        
+        except MembroProjeto.DoesNotExist:
             return JsonResponse({'error': 'Membro não encontrado'}, status=status.HTTP_404_NOT_FOUND)
         
         except Exception as e:
