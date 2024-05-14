@@ -30,7 +30,14 @@ const PainelMembros = () => {
             key: 'data_inicio',
             render: (_, record) => (
                 <Space>
-                    <span> {formatDate(record.data_inicio)} </span>
+                    {
+                        record.data_inicio !== null ? (
+                            <span> {formatDate(record.data_inicio)} </span>
+                        ) : (
+                            <span> - </span>
+                        )
+                    }
+                    
                 </Space>
             )
         },
@@ -40,7 +47,14 @@ const PainelMembros = () => {
             key: 'data_termino',
             render: (_, record) => (
                 <Space>
-                    <span> {formatDate(record.data_termino)} </span>
+                    {
+                        record.data_termino !== null ? (
+                            <span> {formatDate(record.data_termino)} </span>
+                        ) : (
+                            <span> - </span>
+                        )
+                    }
+                    
                 </Space>
             )
         },
@@ -99,6 +113,7 @@ const PainelMembros = () => {
         const dadosEnviar = {
             membro_projeto: dadosFuncao.id_membro_projeto,
             funcao_membro: dadosForm.id_funcao,
+            data_inicio: dadosForm.data_inicio,
             data_termino: dadosForm.data_termino,
             ativo: dadosForm.ativo
         }
