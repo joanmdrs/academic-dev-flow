@@ -70,39 +70,58 @@ class ListarIteracoesPorProjetoView(APIView):
             iteracoes = Iteracao.objects.filter(projeto=id_projeto)
             iteracoes_info = []
             
-            if iteracoes is not None:
-            
+            if iteracoes:
                 for iteracao in iteracoes:
-
-                    lider = MembroProjeto.objects.get(id=iteracao.lider_id)
-                    membro = Membro.objects.get(id=lider.membro_id)
-                    fase = FluxoEtapa.objects.get(id=iteracao.fase_id)
-                    etapa = Etapa.objects.get(id=fase.etapa_id)
-                    
-                    iteracoes_info.append({
-                        'id': iteracao.id,
-                        'nome': iteracao.nome,
-                        'descricao': iteracao.descricao,
-                        'numero': iteracao.numero,
-                        'data_inicio': iteracao.data_inicio,
-                        'data_termino': iteracao.data_termino,
-                        'status': iteracao.status,
-                        'projeto': iteracao.projeto_id,
-                        'lider': lider.id,
-                        'id_membro': membro.id,
-                        'nome_membro': membro.nome,
-                        'fase': fase.id,
-                        'id_etapa': etapa.id,
-                        'nome_etapa': etapa.nome,
-                    })
+                    try:
+                        lider = MembroProjeto.objects.get(id=iteracao.lider_id)
+                        membro = Membro.objects.get(id=lider.membro_id)
+                        fase = FluxoEtapa.objects.get(id=iteracao.fase_id)
+                        etapa = Etapa.objects.get(id=fase.etapa_id)
+                        
+                        iteracoes_info.append({
+                            'id': iteracao.id,
+                            'nome': iteracao.nome,
+                            'descricao': iteracao.descricao,
+                            'numero': iteracao.numero,
+                            'data_inicio': iteracao.data_inicio,
+                            'data_termino': iteracao.data_termino,
+                            'status': iteracao.status,
+                            'projeto': iteracao.projeto_id,
+                            'lider': lider.id,
+                            'id_membro': membro.id,
+                            'nome_membro': membro.nome,
+                            'fase': fase.id,
+                            'id_etapa': etapa.id,
+                            'nome_etapa': etapa.nome,
+                        })
+                    except (MembroProjeto.DoesNotExist, Membro.DoesNotExist, FluxoEtapa.DoesNotExist, Etapa.DoesNotExist) as e:
+                        # Tratamento de exceção para objetos não encontrados
+                        # Você pode definir um valor padrão ou retornar uma resposta indicando o erro
+                        iteracoes_info.append({
+                            'id': iteracao.id,
+                            'nome': iteracao.nome,
+                            'descricao': iteracao.descricao,
+                            'numero': iteracao.numero,
+                            'data_inicio': iteracao.data_inicio,
+                            'data_termino': iteracao.data_termino,
+                            'status': iteracao.status,
+                            'projeto': iteracao.projeto_id,
+                            'lider': None,
+                            'id_membro': None,
+                            'nome_membro': None,
+                            'fase': None,
+                            'id_etapa': None,
+                            'nome_etapa': None,
+                            'error': str(e)  # Adiciona uma chave 'error' com a mensagem de erro
+                        })
                     
                 return Response(data=iteracoes_info, status=status.HTTP_200_OK)
             
             return Response(data=[], status=status.HTTP_204_NO_CONTENT)
                     
-            
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         
 class AtualizarIteracaoView(APIView):
     permission_classes = [IsAuthenticated]

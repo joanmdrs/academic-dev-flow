@@ -18,6 +18,7 @@ urlpatterns = [
     path('delete_content/', views_contents.delete_content, name='delete_content'),
     path('contents/list_contents/', views_contents.list_contents, name='list_contents'),
     # commits 
-    path('commits/list_commits_by_repository/', views_commits.list_commits_by_repository, name='list_commits_by_repository')
+    path('commits/list_commits_by_repository/', views_commits.list_commits_by_repository, name='list_commits_by_repository'),
+    path('commits/filter_commits/', views_commits.filter_commits_by_period_and_assignee, name='filter_commits')
 
 ]
