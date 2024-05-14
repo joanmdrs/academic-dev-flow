@@ -7,7 +7,7 @@ from github import Github, GithubException
 from .github_auth import get_github_client
 from github import InputGitAuthor
 from datetime import datetime, timedelta
-
+import calendar
 import json
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
@@ -52,8 +52,9 @@ def filter_commits_by_period_and_assignee(request):
         user_commits = []
 
         if period == 'day':
-            day = request.GET.get('day', today.day)
-            start_date = today.replace(day=int(day), hour=0, minute=0, second=0, microsecond=0)
+            date = request.GET.get('day', today.day)
+            year, month, day = map(int, date.split('-'))
+            start_date = today.replace(year=year, month=month, day=day, hour=0, minute=0, second=0, microsecond=0)
             end_date = start_date.replace(hour=23, minute=59, second=59, microsecond=999999)
             
         elif period == 'month':
