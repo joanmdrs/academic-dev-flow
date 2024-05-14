@@ -61,7 +61,6 @@ const TableIteracoesSelect = ({onEdit, onView}) => {
                 <Space> 
                     <Tooltip title={record.nome_membro}> 
                         <FaUser />
-
                     </Tooltip>
                 </Space>
             )

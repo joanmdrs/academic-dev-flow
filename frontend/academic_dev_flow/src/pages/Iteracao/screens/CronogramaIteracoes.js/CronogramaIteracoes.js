@@ -15,7 +15,6 @@ const CronogramaIteracoes = () => {
     const {
         dadosIteracao,
         setDadosIteracao,
-        setIteracoes, 
         iteracoesSelecionadas, 
         setIteracoesSelecionadas,
         handleGetIteracoes

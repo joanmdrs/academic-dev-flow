@@ -42,19 +42,22 @@ const ExibirTarefa = ({ dadosTarefa, dadosProjeto }) => {
     };
 
     const handleGetIteracoes = async () => {
-        const response = await listarIteracoesPorProjeto(dadosProjeto.id);
+        const response = await listarIteracoesPorProjeto(dadosProjeto.id)
 
-        if (response.data.length > 0) {
+        if (!response.error && response.data.length > 0){
             const iteracoesOrdenadas = response.data.sort((a, b) => a.numero - b.numero);
+
             const resultados = iteracoesOrdenadas.map((item) => {
                 return {
                     value: item.id,
-                    label: item.nome,
-                };
-            });
-            setOptionsIteracoes(resultados);
+                    label: item.nome
+                }
+            })
+
+            setOptionsIteracoes(resultados)
         }
-    };
+    }
+    
 
     const handleGetTipos = async () => {
         const response = await listarTipos();

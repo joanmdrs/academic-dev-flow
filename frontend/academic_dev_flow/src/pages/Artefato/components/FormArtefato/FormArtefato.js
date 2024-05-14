@@ -16,16 +16,19 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto, inputsAdmin, inputComm
 
     const handleGetIteracoes = async () => {
         const response = await listarIteracoesPorProjeto(dadosProjeto.id)
-        const iteracoesOrdenadas = response.data.sort((a, b) => a.numero - b.numero);
 
-        const resultados = iteracoesOrdenadas.map((item) => {
-            return {
-                value: item.id,
-                label: item.nome
-            }
-        })
+        if (!response.error && response.data.length > 0){
+            const iteracoesOrdenadas = response.data.sort((a, b) => a.numero - b.numero);
 
-        setOptionsIteracao(resultados)
+            const resultados = iteracoesOrdenadas.map((item) => {
+                return {
+                    value: item.id,
+                    label: item.nome
+                }
+            })
+
+            setOptionsIteracao(resultados)
+        }
     }
 
     useEffect(() => {

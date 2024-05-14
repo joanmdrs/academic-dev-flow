@@ -70,18 +70,21 @@ const TableArtefatosProjeto = ({onView, onEdit, onDelete, onUpdateStatus}) => {
 
     const handleGetIteracoes = async () => {
         const response = await listarIteracoesPorProjeto(dadosProjeto.id)
-        const iteracoesOrdenadas = response.data.sort((a, b) => a.numero - b.numero);
 
-        const resultados = iteracoesOrdenadas.map((item) => {
-            return {
-                value: item.id,
-                label: item.nome
-            }
-        })
+        if (!response.error && response.data.length > 0){
+            const iteracoesOrdenadas = response.data.sort((a, b) => a.numero - b.numero);
 
-        setOptionsIteracao(resultados)
+            const resultados = iteracoesOrdenadas.map((item) => {
+                return {
+                    value: item.id,
+                    label: item.nome
+                }
+            })
+
+            setOptionsIteracao(resultados)
+        }
     }
-
+    
     const {dadosProjeto} = useContextoGlobalProjeto()
     const {artefatos, setArtefatos, setArtefatosSelecionados} = useContextoArtefato()
 
