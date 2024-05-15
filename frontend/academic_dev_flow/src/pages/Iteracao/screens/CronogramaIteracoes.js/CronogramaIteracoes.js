@@ -5,7 +5,7 @@ import { FaPlus, FaTrash } from "react-icons/fa";
 import TableIteracoesSelect from "../../components/TableIteracoesSelect/TableIteracoesSelect";
 import FormIteracao from "../../components/FormIteracao/FormIteracao";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
-import { atualizarIteracao, criarIteracao, excluirIteracoes } from "../../../../services/iteracaoService";
+import { atualizarIteracao, criarIteracao, excluirIteracoes, listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
 import Aviso from "../../../../components/Aviso/Aviso";
 import { BsQuestionCircle } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
@@ -17,7 +17,7 @@ const CronogramaIteracoes = () => {
         setDadosIteracao,
         iteracoesSelecionadas, 
         setIteracoesSelecionadas,
-        handleGetIteracoes
+        setIteracoes
     } = useContextoIteracao()
 
     const {dadosProjeto, grupo} = useContextoGlobalProjeto()
@@ -73,6 +73,8 @@ const CronogramaIteracoes = () => {
         if (acaoForm === 'criar'){
             await criarIteracao(dadosForm)
         } else if (acaoForm === 'atualizar'){
+            console.log(dadosIteracao)
+            console.log(dadosForm)
             await atualizarIteracao(dadosIteracao.id, dadosForm)
         }
         await handleReload()
@@ -94,6 +96,18 @@ const CronogramaIteracoes = () => {
             }
         });
     };
+
+    const handleGetIteracoes = async () => {
+        const response = await listarIteracoesPorProjeto(dadosProjeto.id)
+        console.log(response.data)
+
+        if (!response.error && response.data.length > 0){
+            const iteracoesOrdenadas = response.data.sort((a, b) => a.numero - b.numero);
+            setIteracoes(iteracoesOrdenadas)
+        } else if (!response.error && response.data.length === 0){
+            setIteracoes([])
+        }
+    }
 
     const handleVisualizarIteracao = (record) => {
         const parametros = {
@@ -160,7 +174,7 @@ const CronogramaIteracoes = () => {
                     </div> 
 
                 ) : (
-                    <TableIteracoesSelect onEdit={handleAtualizarIteracao}  onView={handleVisualizarIteracao}/>
+                    <TableIteracoesSelect onEdit={handleAtualizarIteracao} onView={handleVisualizarIteracao}/>
                 )}
 
             </React.Fragment>

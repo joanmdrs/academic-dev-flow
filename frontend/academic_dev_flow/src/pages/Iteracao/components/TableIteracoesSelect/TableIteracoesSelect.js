@@ -6,6 +6,7 @@ import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProj
 import { optionsStatusIteracoes } from "../../../../services/optionsStatus";
 import { FaRegUserCircle, FaUser } from "react-icons/fa";
 import { MdOpenInNew } from "react-icons/md";
+import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
 
 
 const TableIteracoesSelect = ({onEdit, onView}) => {
@@ -90,14 +91,27 @@ const TableIteracoesSelect = ({onEdit, onView}) => {
     const {dadosProjeto} = useContextoGlobalProjeto()
 
     const {
-        iteracoes, 
-        setIteracoesSelecionadas, handleGetIteracoes} = useContextoIteracao()
+        iteracoes,
+        setIteracoes,
+        setIteracoesSelecionadas} = useContextoIteracao()
 
     const rowSelection = {
         onChange: (selectedRowsKeys, selectedRows) => {
           setIteracoesSelecionadas(selectedRows)
         },
     };
+
+    const handleGetIteracoes = async () => {
+        const response = await listarIteracoesPorProjeto(dadosProjeto.id)
+        console.log(response.data)
+
+        if (!response.error && response.data.length > 0){
+            const iteracoesOrdenadas = response.data.sort((a, b) => a.numero - b.numero);
+            setIteracoes(iteracoesOrdenadas)
+        } else if (!response.error && response.data.length === 0){
+            setIteracoes([])
+        }
+    }
 
     useEffect(() => {
         const fetchData = async () => {
