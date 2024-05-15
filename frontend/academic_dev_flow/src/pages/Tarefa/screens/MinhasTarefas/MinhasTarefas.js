@@ -1,6 +1,6 @@
 import { Button, Form, Modal, Result, Select, Tabs } from "antd";
 import React, { useEffect, useState } from "react";
-import { buscarMembroProjetoPeloUsuarioGithub, buscarProjetosDoMembro } from "../../../../services/membroProjetoService";
+import { buscarMembroProjetoPeloIdMembro, buscarMembroProjetoPeloUsuarioGithub, buscarProjetosDoMembro } from "../../../../services/membroProjetoService";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { atualizarTarefa, criarTarefa, excluirTarefas, iniciarContagemTempo, listarTarefasPorProjeto, pararContagemTempo } from "../../../../services/tarefaService";
@@ -10,6 +10,7 @@ import { useContextoTarefa } from "../../context/ContextoTarefa";
 import FormTarefa from "../../components/FormTarefa/FormTarefa";
 import { createIssue, updateIssue } from "../../../../services/githubIntegration/issueService";
 import { useNavigate } from "react-router-dom";
+import { handleError } from "../../../../services/utils";
 
 const {TabPane} = Tabs
 
@@ -32,19 +33,22 @@ const MinhasTarefas = () => {
 
     const handleGetProjetos = async () => {
         const resMembroProjeto = await buscarProjetosDoMembro(autor.id_user);
+ 
+        if (!resMembroProjeto.error){
+            const dados = await Promise.all(resMembroProjeto.data.map(async (membroProjeto) => {
 
-        const dados = await Promise.all(resMembroProjeto.data.map(async (membroProjeto) => {
-
-            const resProjeto = await buscarProjetoPeloId(membroProjeto.projeto)
-
-            if (!resProjeto.error) {
-                return {
-                    value: resProjeto.data.id,
-                    label: resProjeto.data.nome
-                }
-            }      
-        }))
-        setOptionsProjetos(dados)
+                const resProjeto = await buscarProjetoPeloId(membroProjeto.id)
+    
+                if (!resProjeto.error) {
+                    return {
+                        value: resProjeto.data.id,
+                        label: resProjeto.data.nome
+                    }
+                }      
+            }))
+            setOptionsProjetos(dados)
+        }
+    
     }
 
     const handleGetTarefas = async () => {
@@ -58,6 +62,21 @@ const MinhasTarefas = () => {
             setTarefasConcluidas(tasks.filter(task => task.status === 'concluida'));
         }
     };
+
+    const handleGetMembroProjeto = async () => {
+
+        const parametros = {
+            id_membro: autor.id_membro,
+            id_projeto: dadosProjeto.id
+        }
+        const response = await buscarMembroProjetoPeloIdMembro(parametros)
+        if (!response.error){
+            setMembroProjeto(response.data)
+        }
+
+        console.log(membroProjeto)
+    }
+
 
     const handleSelectProjeto = async (value) => {
         setSelectProjeto(value)
@@ -75,7 +94,7 @@ const MinhasTarefas = () => {
     const handleStartTarefa = async (idTask) => {
         const parametros = {
             tarefa_id: idTask,
-            membro_projeto_id: membroProjeto.id_membro_projeto
+            membro_projeto_id: membroProjeto.id
         }
         await iniciarContagemTempo(parametros)
         await handleGetTarefas()
@@ -83,12 +102,16 @@ const MinhasTarefas = () => {
     }
 
     const handlePauseTarefa = async (idTask) => {
-        const parametros = {
-            tarefa_id: idTask,
-            membro_projeto_id: membroProjeto.id_membro_projeto
+        try {
+            const parametros = {
+                tarefa_id: idTask,
+                membro_projeto_id: membroProjeto.id
+            }
+            await pararContagemTempo(parametros)
+            await handleGetTarefas()
+        } catch (error) {
+            return handleError(error, 'Falha ao tentar iniciar pausar a tarefa, contate o suporte')
         }
-        await pararContagemTempo(parametros)
-        await handleGetTarefas()
     }
 
     const handleCancelar = () => {
@@ -180,23 +203,14 @@ const MinhasTarefas = () => {
         }
     }
 
-    const handleGetMembroProjeto = async () => {
-
-        const parametros = {
-            usuario_github: autor.usuario_github,
-            id_projeto: dadosProjeto.id
-        }
-        const response = await buscarMembroProjetoPeloUsuarioGithub(parametros)
-        if (!response.error){
-            setMembroProjeto(response.data)
-        }
-    }
-
     useEffect(() => {
         const fetchData = async () => {
 
-            if (autor && autor.id_user && dadosProjeto){
+            if (autor && autor.id_user){
                 await handleGetProjetos()
+            }
+
+            if (dadosProjeto !== null) {
                 await handleGetTarefas()
                 await handleGetMembroProjeto()
             }

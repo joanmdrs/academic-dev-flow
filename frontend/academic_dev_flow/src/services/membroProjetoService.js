@@ -80,6 +80,15 @@ export const buscarMembroProjetoPeloUsuarioGithub = async (parametros) => {
     }
 }
 
+export const buscarMembroProjetoPeloIdMembro = async (parametros) => {
+    try {
+        const response = await api.get('membro_projeto/buscar/membro-e-projeto/', {params: parametros})
+        return response
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
+}
+
 export const cadastrarFuncoes = async (dados) => {
     try {
         const response = await api.post('membro_projeto/funcoes/cadastrar/', {funcoes: dados})

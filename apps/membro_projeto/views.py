@@ -55,6 +55,32 @@ class BuscarMembroProjetoPeloUsuarioGithubView(APIView):
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class BuscarMembroProjetoPeloIdMembro(APIView):
+    permission_classes =[IsAuthenticated]
+    
+    def get(self, request):
+        
+        try:
+        
+            id_membro = request.GET.get('id_membro', None)
+            id_projeto = request.GET.get('id_projeto', None)
+            
+            
+            if id_membro is None or id_projeto is None:
+                return Response({'error': 'Os parâmetros referentes ao id do membro e do projeto são obrigatórios'}, status=status.HTTP_400_BAD_REQUEST)
+
+            membro_projeto = MembroProjeto.objects.get(projeto=id_projeto, membro=id_membro)
+            
+            serializer = MembroProjetoSerializer(membro_projeto, many=False)
+            
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        except MembroProjeto.DoesNotExist:
+            return JsonResponse({'error': 'Membro não encontrado'}, status=status.HTTP_404_NOT_FOUND)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class BuscarProjetosDoMembroView(APIView):
     permission_classes = [IsAuthenticated]

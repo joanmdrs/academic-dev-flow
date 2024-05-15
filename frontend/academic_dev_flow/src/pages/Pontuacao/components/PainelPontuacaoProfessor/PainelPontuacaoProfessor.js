@@ -7,7 +7,7 @@ import { atualizarPontuacao, excluirPontuacao, registrarPontuacao } from "../../
 import { atualizarArtefato } from "../../../../services/artefatoService";
 import { useContextoArtefato } from "../../../Artefato/context/ContextoArtefato";
 import ExibirPontuacao from "../ExibirPontuacao/ExibirPontuacao";
-import { buscarMembroProjetoPeloUsuarioGithub } from "../../../../services/membroProjetoService";
+import { buscarMembroProjetoPeloIdMembro, buscarMembroProjetoPeloUsuarioGithub } from "../../../../services/membroProjetoService";
 
 const PainelPontuacaoProfessor = ({onReload}) => {
 
@@ -28,7 +28,7 @@ const PainelPontuacaoProfessor = ({onReload}) => {
     }
 
     const handleSalvarPontuacao = async (dados) => {
-        dados['autor'] = membroProjeto.id_membro_projeto
+        dados['autor'] = membroProjeto.id
 
         if (acaoForm === "criar") {
             const response = await registrarPontuacao(dados)
@@ -63,10 +63,10 @@ const PainelPontuacaoProfessor = ({onReload}) => {
     const handleGetMembroProjeto = async () => {
 
         const parametros = {
-            usuario_github: autor.usuario_github,
+            id_membro: autor.id_membro,
             id_projeto: dadosProjeto.id
         }
-        const response = await buscarMembroProjetoPeloUsuarioGithub(parametros)
+        const response = await buscarMembroProjetoPeloIdMembro(parametros)
         if (!response.error){
             setMembroProjeto(response.data)
         }

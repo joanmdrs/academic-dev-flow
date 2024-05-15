@@ -12,19 +12,22 @@ const MeusArtefatos = () => {
 
     const handleGetProjetos = async () => {
         const resMembroProjeto = await buscarProjetosDoMembro(autor.id_user);
+ 
+        if (!resMembroProjeto.error){
+            const dados = await Promise.all(resMembroProjeto.data.map(async (membroProjeto) => {
 
-        const dados = await Promise.all(resMembroProjeto.data.map(async (membroProjeto) => {
-
-            const resProjeto = await buscarProjetoPeloId(membroProjeto.projeto)
-
-            if (!resProjeto.error) {
-                return {
-                    value: resProjeto.data.id,
-                    label: resProjeto.data.nome
-                }
-            }      
-        }))
-        setOptionsProjetos(dados)
+                const resProjeto = await buscarProjetoPeloId(membroProjeto.id)
+    
+                if (!resProjeto.error) {
+                    return {
+                        value: resProjeto.data.id,
+                        label: resProjeto.data.nome
+                    }
+                }      
+            }))
+            setOptionsProjetos(dados)
+        }
+    
     }
 
     const handleSelectProjeto = async (value) => {

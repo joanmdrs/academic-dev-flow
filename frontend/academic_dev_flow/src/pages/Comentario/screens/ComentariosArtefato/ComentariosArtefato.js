@@ -5,7 +5,7 @@ import { atualizarComentarioArtefato, criarComentarioArtefato, excluirComentario
 import { Modal } from "antd";
 import ListaComentarios from "../../components/ListaComentarios/ListaComentarios";
 import FormComentario from "../../components/FormComentario/FormComentario";
-import { buscarMembroProjetoPeloUsuarioGithub } from "../../../../services/membroProjetoService";
+import { buscarMembroProjetoPeloIdMembro } from "../../../../services/membroProjetoService";
 
 const ComentariosArtefato = ({idArtefato}) => {
 
@@ -29,10 +29,10 @@ const ComentariosArtefato = ({idArtefato}) => {
     const handleGetMembroProjeto = async () => {
 
         const parametros = {
-            usuario_github: autor.usuario_github,
+            id_membro: autor.id_membro,
             id_projeto: dadosProjeto.id
         }
-        const response = await buscarMembroProjetoPeloUsuarioGithub(parametros)
+        const response = await buscarMembroProjetoPeloIdMembro(parametros)
         if (!response.error){
             setMembroProjeto(response.data)
         }
@@ -52,7 +52,7 @@ const ComentariosArtefato = ({idArtefato}) => {
     const handleCriarComentario = async (dadosForm) => {
         const dadosEnviar = {
             texto: dadosForm.texto,
-            autor: membroProjeto.id_membro_projeto,
+            autor: membroProjeto.id,
             artefato: idArtefato,
             comentario_pai: comentarioPai
         }
@@ -64,7 +64,7 @@ const ComentariosArtefato = ({idArtefato}) => {
     const handleAtualizarComentario = async (id, texto) => {
         const dadosEnviar = {
             texto: texto,
-            autor: membroProjeto.id_membro_projeto,
+            autor: membroProjeto.id,
             artefato: idArtefato,
             comentario_pai: comentarioPai
         }

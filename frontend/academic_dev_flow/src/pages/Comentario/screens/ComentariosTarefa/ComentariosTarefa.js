@@ -5,7 +5,7 @@ import ListaComentarios from "../../components/ListaComentarios/ListaComentarios
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { useContextoComentario } from "../../context/ContextoComentario";
 import { Modal } from "antd";
-import { buscarMembroProjetoPeloUsuarioGithub } from "../../../../services/membroProjetoService";
+import { buscarMembroProjetoPeloIdMembro, buscarMembroProjetoPeloUsuarioGithub } from "../../../../services/membroProjetoService";
 
 const ComentariosTarefa = ({idTarefa}) => {
 
@@ -28,10 +28,10 @@ const ComentariosTarefa = ({idTarefa}) => {
     const handleGetMembroProjeto = async () => {
 
         const parametros = {
-            usuario_github: autor.usuario_github,
+            id_membro: autor.id_membro,
             id_projeto: dadosProjeto.id
         }
-        const response = await buscarMembroProjetoPeloUsuarioGithub(parametros)
+        const response = await buscarMembroProjetoPeloIdMembro(parametros)
         if (!response.error){
             setMembroProjeto(response.data)
         }
@@ -51,7 +51,7 @@ const ComentariosTarefa = ({idTarefa}) => {
     const handleCriarComentario = async (dadosForm) => {
         const dadosEnviar = {
             texto: dadosForm.texto,
-            autor: membroProjeto.id_membro_projeto,
+            autor: membroProjeto.id,
             tarefa: idTarefa,
             comentario_pai: comentarioPai
         }
@@ -63,7 +63,7 @@ const ComentariosTarefa = ({idTarefa}) => {
     const handleAtualizarComentario = async (id, texto) => {
         const dadosEnviar = {
             texto: texto,
-            autor: membroProjeto.id_membro_projeto,
+            autor: membroProjeto.id,
             tarefa: idTarefa,
             comentario_pai: comentarioPai
         }

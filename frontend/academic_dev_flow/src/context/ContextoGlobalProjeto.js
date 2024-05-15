@@ -32,6 +32,8 @@ export const ProviderGlobalProjeto = ({ children }) => {
           
       };
       fetchData();
+      console.log(autor)
+
       
   }, [token]);
 
