@@ -5,7 +5,6 @@ import { useContextoTarefa } from '../../context/ContextoTarefa';
 import { listarMembrosPeloIdProjeto } from '../../../../services/membroProjetoService';
 import { listarIteracoesPorProjeto } from '../../../../services/iteracaoService';
 import Loading from '../../../../components/Loading/Loading';
-import { customizeRequiredMark } from '../../../../components/LabelMask/LabelMask';
 import { listarLabelsPorProjeto } from '../../../../services/tarefaService';
 import { optionsStatusTarefas } from '../../../../services/optionsStatus';
 import { handleError } from '../../../../services/utils';
@@ -23,6 +22,7 @@ function FormTarefa ({onCancel, onSubmit, additionalFields}) {
     const [optionsTipos, setOptionsTipos] = useState(null)
     const [optionsLabels, setOptionsLabels] = useState(null)
     const [loading, setLoading] = useState(false)
+    const [titulo, setTitulo] = useState('CADASTRAR TAREFA')
 
     const handleGetMembros = async () => {
 
@@ -95,8 +95,11 @@ function FormTarefa ({onCancel, onSubmit, additionalFields}) {
                 setLoading(false)
                 if (dadosTarefa !== null){
                     form.setFieldsValue(dadosTarefa)
+                    setTitulo('ATUALIZAR TAREFA')
+
                 } else {
                     form.resetFields()
+                    setTitulo('CADASTRAR TAREFA')
                 }
             }
         }
@@ -131,44 +134,66 @@ function FormTarefa ({onCancel, onSubmit, additionalFields}) {
     return (
 
         <Form 
-            requiredMark={customizeRequiredMark} 
             form={form} 
             layout='vertical' 
             className='global-form' 
             onFinish={handleSubmitForm}
         >
             <Form.Item>
-                <h4> CADASTRAR TAREFA </h4>
+                <h4> {titulo} </h4>
             </Form.Item>
 
-            {
+            { additionalFields && (
                 <Form.Item>
                     {additionalFields}
                 </Form.Item>
-            }
+            )}
+
             <div style={{display: 'flex', gap: "20px"}}>
 
                 <div style={{flex:"2"}}>
-                    <Form.Item label="Nome" name="nome" required style={{flex: '1'}}>
+                    <Form.Item 
+                        label="Nome" 
+                        name="nome" 
+                        style={{flex: '1'}} 
+                        rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
+                    >
                         <Input type='text' name='nome' />
                     </Form.Item>
 
-                    <Form.Item label="Descrição" name="descricao">
+                    <Form.Item 
+                        label="Descrição" 
+                        name="descricao"
+                        style={{flex: '1'}} 
+                    >
                         <Input.TextArea rows={6} name='descricao' />
                     </Form.Item>
 
-                    <Form.Item label="Data de Início" name="data_inicio" required>
+                    <Form.Item 
+                        label="Data de Início" 
+                        name="data_inicio"
+                        rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
+                    >
                         <Input type='date' name='data_inicio' style={{width: 'fit-content'}}/>
                     </Form.Item>
 
-                    <Form.Item label="Data de Término (Previsão)" name="data_termino" required>
+                    <Form.Item 
+                        label="Data de Término (Previsão)" 
+                        name="data_termino" 
+                        rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
+                    >
                         <Input type='date' name='data_termino'  style={{width: 'fit-content'}}/>
                     </Form.Item>
                 </div>
 
                 <div style={{flex:"1"}}>
 
-                    <Form.Item label="Iteração" name="iteracao" required style={{flex: '1'}}>
+                    <Form.Item 
+                        label="Iteração" 
+                        name="iteracao" 
+                        style={{flex: '1'}}
+                        rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}    
+                    >
                         <Select
                             allowClear
                             placeholder="Selecione"
@@ -176,7 +201,12 @@ function FormTarefa ({onCancel, onSubmit, additionalFields}) {
                         />
                     </Form.Item>
 
-                    <Form.Item label="Atribuir à" name="membros" required style={{flex: '1'}}>
+                    <Form.Item 
+                        label="Atribuir à" 
+                        name="membros" 
+                        style={{flex: '1'}}
+                        rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
+                    >
                         <Select
                             mode="multiple"
                             allowClear
@@ -188,7 +218,12 @@ function FormTarefa ({onCancel, onSubmit, additionalFields}) {
                         />
                     </Form.Item>
 
-                    <Form.Item  label='Status' name='status' required style={{flex: '1'}}>
+                    <Form.Item  
+                        label='Status' 
+                        name='status' 
+                        style={{flex: '1'}}
+                        rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
+                    >
                         <Select 
                             allowClear
                             style={{
@@ -202,7 +237,12 @@ function FormTarefa ({onCancel, onSubmit, additionalFields}) {
                         />
                     </Form.Item>
 
-                    <Form.Item label='Categoria' name='tipo' required style={{flex: '1'}}>
+                    <Form.Item 
+                        label='Categoria' 
+                        name='tipo'
+                        style={{flex: '1'}}
+                        rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
+                    >
                         <Select
                             allowClear
                             style={{
@@ -214,7 +254,12 @@ function FormTarefa ({onCancel, onSubmit, additionalFields}) {
                         />
                     </Form.Item>
 
-                    <Form.Item label='Label' name='labels' required style={{flex: '1'}}>
+                    <Form.Item 
+                        label='Label' 
+                        name='labels' 
+                        style={{flex: '1'}}
+                        rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
+                    >
                         <Select
                             mode="multiple"
                             allowClear
@@ -234,7 +279,7 @@ function FormTarefa ({onCancel, onSubmit, additionalFields}) {
 
             <Form.Item>
                 <Button type="primary" htmlType='submit'> Salvar </Button>
-                <Button style={{marginLeft: "10px"}} onClick={onCancel}> Cancelar </Button>
+                <Button style={{marginLeft: "10px"}} onClick={onCancel} type='primary' danger> Cancelar </Button>
             </Form.Item>
         </Form>
     )

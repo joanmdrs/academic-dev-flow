@@ -4,7 +4,7 @@ import { Button, Space, Table, Tooltip } from "antd";
 import { useContextoIteracao } from "../../context/contextoIteracao";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { optionsStatusIteracoes } from "../../../../services/optionsStatus";
-import { FaRegUserCircle, FaUser } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
 import { MdOpenInNew } from "react-icons/md";
 import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
 

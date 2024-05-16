@@ -17,6 +17,7 @@ const FormIteracao = ({onSubmit, onCancel, additionalFields}) => {
     const [form] = useForm();
     const [optionsEtapas, setOptionsEtapas] = useState([]);
     const [optionsMembros, setOptionsMembros] = useState([]);
+    const [titulo, setTitulo] = useState('CADASTRAR ITERAÇÃO')
 
     const handleGetEtapas = async () => {
         try {
@@ -66,8 +67,10 @@ const FormIteracao = ({onSubmit, onCancel, additionalFields}) => {
 
                 if (dadosIteracao !== null) {
                     form.setFieldsValue(dadosIteracao)
+                    setTitulo("ATUALIZAR ITERAÇÃO")
                 } else {
                     form.resetFields()
+                    setTitulo('CADASTRAR ITERAÇÃO')
                 }
 
             } else {
@@ -82,7 +85,7 @@ const FormIteracao = ({onSubmit, onCancel, additionalFields}) => {
     return (
         <Form layout="vertical" className="global-form" form={form} onFinish={onSubmit}>
             <Form.Item>
-                <h4> CADASTRAR ITERAÇÃO </h4>
+                <h4> {titulo} </h4>
             </Form.Item>
 
             { additionalFields ? (
@@ -133,7 +136,7 @@ const FormIteracao = ({onSubmit, onCancel, additionalFields}) => {
                   
             <Form.Item>
                 <Button style={{marginRight: '10px'}} type="primary" htmlType="submit"> Salvar </Button>
-                <Button onClick={onCancel}> Cancelar </Button>
+                <Button onClick={onCancel} type="primary" danger> Cancelar </Button>
             </Form.Item>
         </Form>
     )

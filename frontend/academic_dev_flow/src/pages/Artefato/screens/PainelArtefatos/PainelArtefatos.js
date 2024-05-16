@@ -284,7 +284,10 @@ const PainelArtefatos = () => {
                         onSubmit={handleSalvarArtefato} 
                         onCancel={handleReload} 
                         inputCommitMessage={
-                            <Form.Item label="Mensagem de commit" name="commit_message">
+                            <Form.Item 
+                                label="Mensagem de commit" 
+                                name="commit_message" 
+                                rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}>
                                 <Input name="commit_message" placeholder="mensagem de commit"/>
                             </Form.Item>
                         } 
