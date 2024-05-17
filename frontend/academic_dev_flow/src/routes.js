@@ -171,6 +171,9 @@ function Routes() {
           exact
         />
 
+        <Route path="/admin/fluxos/gerenciar" Component={Fluxo} exact />
+        <Route path="/admin/etapas" Component={Etapa} exact />
+
         <Route
           path="/aluno/tarefas"
           element={<ScreenMinhasTarefas grupo="aluno" />}
@@ -216,16 +219,18 @@ function Routes() {
           path="/aluno/iteracoes/visualizar"
           element={<ScreenVisualizarIteracao grupo="aluno" /> }
         />
-
-
-
-
       </Route>
 
       {/* Rotas do professor */}
 
-      <Route element={<TeacherRoutes />}>
+      <Route element={
+        <ProviderGlobalProjeto>
+          <TeacherRoutes />
+        </ProviderGlobalProjeto>}
+      >
         <Route path="/professor/home" Component={HomeProfessor} exact />
+
+        <Route path="/professor/perfil" element={<ScreenPerfilMembro grupo="professor" />} exact/>
 
         <Route
           path="/professor/projetos/gerenciar"

@@ -7,6 +7,7 @@ import { HiOutlineHome } from "react-icons/hi2";
 import { LuLayoutGrid } from "react-icons/lu";
 import { IoDocumentOutline } from "react-icons/io5";
 import { VscGraph } from "react-icons/vsc";
+import { RiFlowChart } from "react-icons/ri";
 
 const { SubMenu } = Menu
 
@@ -58,8 +59,21 @@ const MenuAluno = () => {
                     <Menu.Item key="/aluno/projetos/meus-projetos">
                         <Link to="/aluno/projetos/meus-projetos">Meus Projetos</Link>
                     </Menu.Item>
+                </SubMenu>
 
+                <SubMenu
+                    className="item-menu"
+                    key="/aluno/fluxos"
+                    icon={<RiFlowChart style={{ fontSize: "20px" }} />}
+                    title="Fluxos"
+                >
+                    <Menu.Item key="gerenciar-fluxos">
+                        <Link to="/aluno/fluxos/gerenciar">Gerenciar fluxos</Link>
+                    </Menu.Item>
 
+                    <Menu.Item key="etapas">
+                        <Link to="/aluno/etapas">Gerenciar etapas</Link>
+                    </Menu.Item>
                 </SubMenu>
 
                 <Menu.Item
