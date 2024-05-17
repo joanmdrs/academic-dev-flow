@@ -172,6 +172,12 @@ class BuscarMembroPeloUserView(APIView):
                     'id_membro': membro.id,
                     'id_user': id_user,
                     'nome': membro.nome,
+                    'data_nascimento': membro.data_nascimento,
+                    'telefone': membro.telefone,
+                    'email': membro.email,
+                    'linkedin': membro.linkedin,
+                    'lattes': membro.lattes,
+                    'grupo': membro.grupo,
                     'nome_github': nome_github,
                     'email_github': email_github,
                     'usuario_github': usuario_github

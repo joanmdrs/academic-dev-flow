@@ -32,6 +32,7 @@ import ScreenGerenciarRelatorios from "./pages/Relatorio/screens/GerenciarRelato
 import ScreenVisualizarTarefa from "./pages/Tarefa/screens/VisualizarTarefa";
 import { ProviderGlobalProjeto } from "./context/ContextoGlobalProjeto";
 import ScreenVisualizarIteracao from "./pages/Iteracao/screens/VisualizarIteracao";
+import ScreenPerfilMembro from "./pages/Membro/screens/PerfilMembro";
 
 function Routes() {
   return (
@@ -147,6 +148,8 @@ function Routes() {
       
       }>
         <Route path="/aluno/home" Component={HomeAluno} exact />
+
+        <Route path="/aluno/perfil" element={<ScreenPerfilMembro grupo="aluno" />} exact/>
 
         <Route
           path="/aluno/projetos/gerenciar"

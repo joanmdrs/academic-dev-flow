@@ -1,8 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { buscarMembroPeloUser } from "../services/membroService";
 import { decodeToken } from "react-jwt";
 import { handleError } from "../services/utils";
-import { buscarMembroProjetoPeloUsuarioGithub } from "../services/membroProjetoService";
+import { buscarMembroPeloUser } from "../services/membroService";
 
 const ContextoGlobalProjeto = createContext();
 

@@ -1,10 +1,8 @@
 import { Button, Form, Input, Select } from "antd"
 import InputMask from 'react-input-mask';
-
 import { useEffect, useState } from "react";
 import { useMembroContexto } from "../../context/MembroContexto";
 import Loading from "../../../../components/Loading/Loading";
-import { customizeRequiredMark } from "../../../../components/LabelMask/LabelMask";
 
 const OPTIONS_GROUP = [
     {
@@ -198,11 +196,11 @@ const FormMembro = ({onSubmit, onCancel}) => {
             </div>
 
             <div style={{display: 'flex', gap: "10px", marginTop: "20px"}} >
-                <Button type="primary" size="large" htmlType="submit">
+                <Button type="primary" htmlType="submit">
                     Salvar
                 </Button >
 
-                <Button type="primary" size="large" onClick={onCancel} danger >
+                <Button type="primary" onClick={onCancel} danger >
                     Cancelar
                 </Button>
             </div>

@@ -7,16 +7,10 @@ from .serializers import UsuarioSerializer
 from .models import Usuario
 from django.contrib.auth.models import Group
 from rest_framework.permissions import IsAuthenticated
-from apps.api.permissions import IsAdminUserOrReadOnly 
 
-class BaseUsuarioView(APIView):
-    permission_classes = [IsAuthenticated, IsAdminUserOrReadOnly]
-
-    def handle_exception(self, exc):
-        return Response({'error': str(exc)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-class CadastrarUsuarioView(BaseUsuarioView):
-    def post(self, request, *args, **kwargs):
+class CadastrarUsuarioView(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request):
         try:
             grupo_nome = request.data.get('grupo', None)
             
@@ -45,10 +39,11 @@ class CadastrarUsuarioView(BaseUsuarioView):
 
         except Exception as e:
             # Adicione logs ou imprima mensagens de erro
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     
-class BuscarUsuarioPorIdView(BaseUsuarioView):
+class BuscarUsuarioPorIdView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request, id):
         try:
             usuario = get_object_or_404(Usuario, id=id)
@@ -56,13 +51,14 @@ class BuscarUsuarioPorIdView(BaseUsuarioView):
             if usuario is not None: 
                 serializer = UsuarioSerializer(usuario)
                 return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response({"detail": "Usuário não encontrado."}, status=status.HTTP_404_NOT_FOUND)
+    
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-        return Response({"detail": "Usuário não encontrado."}, status=status.HTTP_404_NOT_FOUND)
-    
                 
-class ExcluirUsuarioView(BaseUsuarioView):
+class ExcluirUsuarioView(APIView):
+    permission_classes = [IsAuthenticated]
     def delete(self, request, id):
         try:
             usuario = get_object_or_404(Usuario, id=id)
@@ -70,12 +66,16 @@ class ExcluirUsuarioView(BaseUsuarioView):
             if usuario is not None:
                 usuario.delete()
                 return Response({"detail": "Usuário excluído com sucesso!"}, status=status.HTTP_204_NO_CONTENT)
+            
+            return Response({"detail": "Usuário não encontrado."}, status=status.HTTP_404_NOT_FOUND)
+        
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-        return Response({"detail": "Usuário não encontrado."}, status=status.HTTP_404_NOT_FOUND)
     
-class AtualizarUsuarioView(BaseUsuarioView):
+    
+class AtualizarUsuarioView(APIView):
+    permission_classes = [IsAuthenticated]
+  
     def patch(self, request, id):
         try:
             usuario = Usuario.objects.get(membro_id=id)
@@ -89,9 +89,10 @@ class AtualizarUsuarioView(BaseUsuarioView):
                 else: 
                     return JsonResponse({'error': 'Dados inválidos'}, status=400)
                 
+            return Response({"detail": "Usuário não encontrado."}, status=status.HTTP_404_NOT_FOUND)
+                
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-            
-        return Response({"detail": "Usuário não encontrado."}, status=status.HTTP_404_NOT_FOUND)
+        
 
 

@@ -68,6 +68,7 @@ const PainelArtefatos = () => {
         setIsBtnPlusDisabled(false)
         setIsFormSalvarVisivel(false)
         setIsFormBuscarVisivel(false)
+        setIsModalVincularIteracaoVisivel(false)
         setIsSaving(false)
     }
 

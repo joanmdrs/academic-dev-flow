@@ -4,7 +4,7 @@ from apps.usuario.models import Usuario
 class UsuarioGithub(models.Model):
     nome = models.CharField(max_length=200)
     email_github = models.EmailField()
-    usuario_github = models.CharField(max_length=200)  # Adicione o max_length
+    usuario_github = models.CharField(max_length=200) 
     
     def __str__(self):
         return self.usuario_github    

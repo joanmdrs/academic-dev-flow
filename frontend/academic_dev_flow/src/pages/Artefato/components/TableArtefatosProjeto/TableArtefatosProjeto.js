@@ -1,11 +1,12 @@
-import { Form, Select, Space, Table, Tooltip } from "antd";
+import { Select, Space, Table, Tooltip } from "antd";
 import React, { useEffect, useState } from "react";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import {listarArtefatosPorProjeto } from "../../../../services/artefatoService";
 import { IoMdCreate, IoMdOpen, IoMdTrash } from "react-icons/io";
-import { optionsStatusArtefatos, optionsStatusIteracoes } from "../../../../services/optionsStatus";
+import { optionsStatusArtefatos } from "../../../../services/optionsStatus";
 import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
+import { IoClose } from "react-icons/io5";
 
 const TableArtefatosProjeto = ({onView, onEdit, onDelete, onUpdateStatus}) => {
 
@@ -28,6 +29,7 @@ const TableArtefatosProjeto = ({onView, onEdit, onDelete, onUpdateStatus}) => {
             render: (_, record) => (
                 <Select 
                     style={{width: '150px'}} 
+                    placeholder="Selecione"
                     value={record.status} 
                     options={optionsStatusArtefatos} 
                     onChange={(value) => onUpdateStatus(record, value)}
@@ -38,10 +40,18 @@ const TableArtefatosProjeto = ({onView, onEdit, onDelete, onUpdateStatus}) => {
             title: 'Iteração',
             dataIndex: 'iteracao',
             key: 'iteracao',
+            align: 'center',
             render: (_, record) => (
-                <span>
-                    {optionsIteracao.find(iteracao => iteracao.value === record.iteracao)?.label}
-                </span>
+                <Space>
+                    {record.iteracao ? (
+                        <span>
+                            {optionsIteracao.find(iteracao => iteracao.value === record.iteracao)?.label}
+                        </span>
+                    ) : (<Tooltip title="Nenhuma iteração vinculada">
+                            <IoClose color="red"/>
+                        </Tooltip>)
+                    }
+                </Space>
             )
 
         },
