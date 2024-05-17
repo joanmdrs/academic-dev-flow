@@ -171,8 +171,8 @@ function Routes() {
           exact
         />
 
-        <Route path="/admin/fluxos/gerenciar" Component={Fluxo} exact />
-        <Route path="/admin/etapas" Component={Etapa} exact />
+        <Route path="/aluno/fluxos/gerenciar" Component={Fluxo} exact />
+        <Route path="/aluno/etapas" Component={Etapa} exact />
 
         <Route
           path="/aluno/tarefas"
@@ -251,6 +251,9 @@ function Routes() {
           }
           exact
         />
+
+        <Route path="/professor/fluxos/gerenciar" Component={Fluxo} exact />
+        <Route path="/professor/etapas" Component={Etapa} exact />
     
         <Route
           path="/professor/tarefas"
