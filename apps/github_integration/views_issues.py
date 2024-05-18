@@ -20,9 +20,9 @@ def create_issue(request):
         github_token = data.get('github_token')
         repository = data.get('repository')
         title = data.get('title')
-        body = data.get('body')
-        labels = data.get('labels') 
-        assignees = data.get('assignees')
+        body = data.get('body', '') 
+        labels = data.get('labels', [])
+        assignees = data.get('assignees', [])
         
         if not github_token or not repository or not title:
             return JsonResponse({'error': 'Ausência de parâmetros'}, status=status.HTTP_400_BAD_REQUEST)
@@ -54,9 +54,9 @@ def update_issue(request, issue_number):
         github_token = data.get('github_token')
         repository = data.get('repository')
         title = data.get('title')
-        body = data.get('body')
-        labels = data.get('labels')
-        assignees = data.get('assignees')
+        body = data.get('body', '')
+        labels = data.get('labels', [])
+        assignees = data.get('assignees', [])
         
         if not github_token or not repository or not issue_number:
             return JsonResponse({'error': 'Ausência de parâmetros'}, status=status.HTTP_400_BAD_REQUEST)
