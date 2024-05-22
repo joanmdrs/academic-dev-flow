@@ -114,28 +114,33 @@ const MinhasTarefas = () => {
         }
     }
 
-    const handleCancelar = () => {
-        setIsFormSalvarVisivel(false)
+    const handleCancelar = async () => {
         setDadosTarefa(null)
+        setIsFormSalvarVisivel(false)
+        setAcaoForm('criar')
+        await handleGetTarefas()
     }
 
     const handleReload = async () => {
+        setDadosTarefa(null)
         setIsFormSalvarVisivel(false)
         setAcaoForm('criar')
         await handleGetTarefas()
     }
 
     const handleAdicionarTarefa = () => {
-        setIsFormSalvarVisivel(true)
-        setAcaoForm('criar')
-        setDadosTarefa(null)
-    }
+        setDadosTarefa(null);
+        setIsFormSalvarVisivel(false);
+        setIsFormSalvarVisivel(true);
+        setAcaoForm('criar');
+    };
 
     const handleAtualizarTarefa = async (record) => {
-        setIsFormSalvarVisivel(true)
-        setAcaoForm('atualizar')
-        setDadosTarefa(record)
-    }
+        setIsFormSalvarVisivel(false);
+        setIsFormSalvarVisivel(true);
+        setAcaoForm('atualizar');
+        setDadosTarefa(record);
+    };
 
     const handleSaveIssue = async (dadosForm) => {
         const dadosEnviar = {
@@ -217,7 +222,7 @@ const MinhasTarefas = () => {
         }
 
         fetchData()
-    }, [autor, dadosProjeto])
+    }, [])
 
     return (
         <div>

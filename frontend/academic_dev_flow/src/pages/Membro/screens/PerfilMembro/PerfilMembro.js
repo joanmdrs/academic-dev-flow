@@ -6,6 +6,7 @@ import { buscarUsuarioPeloId } from "../../../../services/usuarioService";
 import Loading from "../../../../components/Loading/Loading";
 import { atualizarMembro, buscarMembroPeloUser } from "../../../../services/membroService";
 import { Navigate, useNavigate } from "react-router-dom";
+import BotaoVoltar from "../../../../components/Botoes/BotaoVoltar/BotaoVoltar";
 
 const PerfilMembro = () => {
 
@@ -67,6 +68,7 @@ const PerfilMembro = () => {
         <React.Fragment>
             <h2 style={{marginLeft: '20px'}}> Meu Perfil </h2>  
             <div className="global-div"> 
+                <BotaoVoltar funcao={handleCancelar} />
                 <FormMembro onSubmit={handleAtualizarMembro} onCancel={handleCancelar}/>
             </div>
     

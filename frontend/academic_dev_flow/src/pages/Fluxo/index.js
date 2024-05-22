@@ -4,12 +4,16 @@ import MyHeader from "../../components/Header/Header";
 import { FluxoProvider } from "./context/Provider/Provider";
 import TabsFluxo from "./screens/TabsFluxo/TabsFluxo"
 import MenuAdmin from "../../components/Menus/MenuAdmin/MenuAdmin";
+import MenuAluno from "../../components/Menus/MenuAluno/MenuAluno";
+import MenuProfessor from "../../components/Menus/MenuProfessor/MenuProfessor";
 
-const Fluxo = () => {
+const ScreenGerenciarFluxos = ({grupo}) => {
+
     return (
-
         <React.Fragment>
-            <MenuAdmin />
+            { grupo === 'admin' && <MenuAdmin /> }
+            { grupo === 'aluno' && <MenuAluno />}
+            { grupo === 'professor' && <MenuProfessor />}
             <Layout>
                 <MyHeader />
                 <FluxoProvider> <TabsFluxo /> </FluxoProvider>
@@ -18,4 +22,4 @@ const Fluxo = () => {
     )
 }
 
-export default Fluxo
+export default ScreenGerenciarFluxos

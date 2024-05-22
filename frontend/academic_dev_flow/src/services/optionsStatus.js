@@ -30,7 +30,7 @@ export const optionsStatusTarefas = [
     },
     {
         value: 'revisao',
-        label: 'Pendente de revisão'
+        label: 'Em revisão'
 
     },
     {
@@ -40,14 +40,6 @@ export const optionsStatusTarefas = [
     {
         value: 'cancelada',
         label: 'Cancelada'
-    },
-    {
-        value: 'atrasada', 
-        label: 'Atrasada'
-    },
-    {
-        value: 'bloqueada', 
-        label: 'Bloqueada'
     }
 ]
 

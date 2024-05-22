@@ -4,9 +4,9 @@ import { Button, Space, Table, Tooltip } from "antd";
 import { useContextoIteracao } from "../../context/contextoIteracao";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { optionsStatusIteracoes } from "../../../../services/optionsStatus";
-import { FaUser } from "react-icons/fa";
 import { MdOpenInNew } from "react-icons/md";
 import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
+import { UserOutlined } from "@ant-design/icons";
 
 
 const TableIteracoesSelect = ({onEdit, onView}) => {
@@ -61,7 +61,7 @@ const TableIteracoesSelect = ({onEdit, onView}) => {
             render: (_, record) => (
                 <Space> 
                     <Tooltip title={record.nome_membro}> 
-                        <FaUser />
+                        <UserOutlined style={{ color: "var(--primary-color)" }} />
                     </Tooltip>
                 </Space>
             )

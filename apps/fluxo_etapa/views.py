@@ -9,6 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
 
 class CadastrarFluxoEtapaView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         try:
             etapas_data = request.data.get('etapas', [])
@@ -40,6 +41,7 @@ class BuscarFluxoEtapaPeloIdFluxoView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 class AtualizarEtapaFluxoView(APIView):
+    permission_classes = [IsAuthenticated]
     def patch(self, request, id): 
         try: 
             
@@ -58,6 +60,7 @@ class AtualizarEtapaFluxoView(APIView):
             
 
 class ExcluirEtapaFluxoOneView(APIView):
+    permission_classes = [IsAuthenticated]
     def delete(self, request, id):
         try:
             fluxoEtapa = FluxoEtapa.objects.get(pk=id)
@@ -75,6 +78,7 @@ class ExcluirEtapaFluxoOneView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)  
         
 class ExcluirEtapaFluxoManyView(APIView):
+    permission_classes = [IsAuthenticated]
     def delete(self, request, idFluxo):
         try:
             ids_etapas = request.data.get('ids_etapas', [])

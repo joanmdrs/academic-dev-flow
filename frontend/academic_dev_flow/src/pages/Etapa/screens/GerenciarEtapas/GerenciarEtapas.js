@@ -9,9 +9,9 @@ import ListaDados from "../../../../components/Listas/ListaDados/ListaDados";
 import { recarregarPagina } from "../../../../services/utils";
 import { buscarEtapaPeloNome, excluirEtapa, listarEtapas } from "../../../../services/etapaService";
 import FormDeBusca from "../../../../components/Forms/FormDeBusca/FormDeBusca";
-import ScreenSalvarEtapa from "../ScreenSalvarEtapa/ScreenSalvarEtapa";
+import FormEtapa from "../../components/FormEtapa/FormEtapa";
 
-const ScreenGerenciarEtapas = () => {
+const GerenciarEtapas = () => {
 
     const [acaoForm, setAcaoForm] = useState("criar");
     const [isFormVisivel, setIsFormVisivel] = useState(false);
@@ -126,7 +126,7 @@ const ScreenGerenciarEtapas = () => {
 
             {isFormVisivel ? (
 
-                <ScreenSalvarEtapa 
+                <FormEtapa 
                     acaoBotaoVoltar={handleCliqueBotaoVoltar} 
                     acaoForm={acaoForm} 
                     etapaSelecionada={etapaSelecionada}
@@ -169,4 +169,4 @@ const ScreenGerenciarEtapas = () => {
     )
 }
 
-export default ScreenGerenciarEtapas;
+export default GerenciarEtapas;

@@ -45,7 +45,18 @@ def create_issue(request):
         return JsonResponse(response_data, status=status.HTTP_201_CREATED)        
         
     except GithubException as e:
-        return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        error_message = str(e.data.get('message', str(e)))
+        errors = e.data.get('errors', [])
+
+        if 'Validation Failed' in error_message:
+            error_details = []
+            for error in errors:
+                if error['resource'] == 'Issue' and error['field'] == 'assignees' and error['code'] == 'invalid':
+                    error_details.append(f"Assignee inválido: {error['value']}")
+
+            return JsonResponse({'error': 'Erro de validação', 'details': error_details}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        
+        return JsonResponse({'error': error_message}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 def update_issue(request, issue_number):
     try:
@@ -81,7 +92,18 @@ def update_issue(request, issue_number):
         return JsonResponse({'success': 'Issue atualizada com sucesso!'}, status=status.HTTP_200_OK)        
         
     except GithubException as e:
-        return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        error_message = str(e.data.get('message', str(e)))
+        errors = e.data.get('errors', [])
+
+        if 'Validation Failed' in error_message:
+            error_details = []
+            for error in errors:
+                if error['resource'] == 'Issue' and error['field'] == 'assignees' and error['code'] == 'invalid':
+                    error_details.append(f"Assignee inválido: {error['value']}")
+
+            return JsonResponse({'error': 'Erro de validação', 'details': error_details}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        
+        return JsonResponse({'error': error_message}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 def filter_membro_projeto_by_assignee_and_by_projeto(assignee, projeto):
     try:
@@ -132,7 +154,6 @@ def list_issues(request):
                 'body': issue.body,
                 'url': issue.html_url,
                 'state': issue.state,
-                'labels': [label.name for label in issue.labels],
                 'assignees': [assignee.login for assignee in issue.assignees] if issue.assignees else []
             }
             
@@ -145,9 +166,6 @@ def list_issues(request):
                 if membro:
                     membros_ids.append(membro)
             issue_data['membros_ids'] = membros_ids
-            
-            # Obter os IDs dos labels existentes no banco de dados
-            issue_data['label_ids'] = get_label_ids(issue_data['labels'])
             
             issues_list.append(issue_data)
         

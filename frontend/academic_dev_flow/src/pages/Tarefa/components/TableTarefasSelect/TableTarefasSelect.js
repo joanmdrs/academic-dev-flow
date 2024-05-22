@@ -4,6 +4,8 @@ import { formatDate } from "../../../../services/utils";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
 import { UserOutlined } from '@ant-design/icons';
 import { IoClose } from "react-icons/io5";
+import { MdOpenInNew } from "react-icons/md";
+
 
 const TableTarefasSelect = ({tasks, onEdit}) => {
 
@@ -14,14 +16,17 @@ const TableTarefasSelect = ({tasks, onEdit}) => {
             key: 'nome',
             render: (_, record) => (
                 <Space style={{display: 'block'}}>
-                    <a href={record.url_issue} target="blank"> 
+                    <a onClick={() => onEdit(record)} target="blank"> 
                         {record.nome}
                     </a>
 
-                    <span style={{color: '#585858', fontSize: '10px'}}>
-                        #{record.number_issue} {formatDate(record.data_inicio)} - {formatDate(record.data_termino)} 
-                    </span>
+                    { record.data_inicio && record.data_termino ? (
+                        <span style={{color: '#585858', fontSize: '10px'}}>
+                            #{record.number_issue} {formatDate(record.data_inicio)} - {formatDate(record.data_termino)} 
+                        </span>
+                    ) : null
                 
+                    }
                 </Space>
         
             )
@@ -59,9 +64,10 @@ const TableTarefasSelect = ({tasks, onEdit}) => {
             title: 'Ações',
             dataIndex: 'actions', 
             key: 'actions', 
+            align: 'center',
             render: (_, record) => (
                 <Space>
-                    <a onClick={() => onEdit(record)}> Editar </a>
+                    <a href={record.url_issue} target="blank"> <MdOpenInNew /> </a>
                 </Space>
             )
         }

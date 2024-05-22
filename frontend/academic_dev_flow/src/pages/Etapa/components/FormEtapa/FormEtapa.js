@@ -1,13 +1,13 @@
 import { Button, Form, Input } from "antd";
 import React, { useEffect } from "react";
+import { NotificationManager } from "react-notifications";
+import { useNavigate } from "react-router-dom";
+import { atualizarEtapa, criarEtapa } from "../../../../services/etapaService";
+import { recarregarPagina } from "../../../../services/utils";
 import Titulo from "../../../../components/Titulo/Titulo";
 import BotaoVoltar from "../../../../components/Botoes/BotaoVoltar/BotaoVoltar";
-import { NotificationManager } from "react-notifications";
-import { recarregarPagina } from "../../../../services/utils";
-import { atualizarEtapa, criarEtapa } from "../../../../services/etapaService";
-import { useNavigate } from "react-router-dom";
 
-const ScreenSalvarEtapa = ({acaoBotaoVoltar, acaoForm, etapaSelecionada}) => {
+const FormEtapa = ({acaoBotaoVoltar, acaoForm, etapaSelecionada}) => {
 
     const [form] = Form.useForm();
     const navigate = useNavigate();
@@ -116,4 +116,4 @@ const ScreenSalvarEtapa = ({acaoBotaoVoltar, acaoForm, etapaSelecionada}) => {
     )
 }
 
-export default ScreenSalvarEtapa;
+export default FormEtapa;

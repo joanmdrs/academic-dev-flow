@@ -9,6 +9,7 @@ from .serializers import EtapaSerializer
 from rest_framework.permissions import IsAuthenticated
 
 class CadastrarEtapaView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         try:
             serializer = EtapaSerializer(data=request.data)
@@ -21,6 +22,7 @@ class CadastrarEtapaView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class BuscarEtapaPeloNomeView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         try:
             parametro = request.GET.get('nome', None)
@@ -51,6 +53,7 @@ class BuscarEtapaPeloIdView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 class ListarEtapasView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         try: 
             etapas = Etapa.objects.all()
@@ -60,6 +63,7 @@ class ListarEtapasView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
 class AtualizarEtapaView(APIView): 
+    permission_classes = [IsAuthenticated]
     def patch(self, request, id):
         try: 
             print(id)
@@ -77,6 +81,7 @@ class AtualizarEtapaView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
 class ExcluirEtapaView(APIView):
+    permission_classes = [IsAuthenticated]
     def delete(self, request, id): 
         try:
             etapa = Etapa.objects.get(pk=id)

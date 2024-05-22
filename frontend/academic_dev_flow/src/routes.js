@@ -1,9 +1,8 @@
 import React from "react";
 import { Routes as Switch, Route } from "react-router-dom";
-import Etapa from "./pages/Etapa";
+import Etapa from "./pages/Etapa/screens/GerenciarEtapas";
 import AdminRoutes from "./router/AdminRoutes/AdminRoutes";
 import StudentRoutes from "./router/StudentRoutes/StudentRoutes";
-import Fluxo from "./pages/Fluxo";
 import TeacherRoutes from "./router/TeacherRoutes/TeacherRoutes";
 import HomeProfessor from "./pages/Perfis/Professor/Home";
 import HomeAdministrador from "./pages/Perfis/Administrador/Home";
@@ -33,6 +32,8 @@ import ScreenVisualizarTarefa from "./pages/Tarefa/screens/VisualizarTarefa";
 import { ProviderGlobalProjeto } from "./context/ContextoGlobalProjeto";
 import ScreenVisualizarIteracao from "./pages/Iteracao/screens/VisualizarIteracao";
 import ScreenPerfilMembro from "./pages/Membro/screens/PerfilMembro";
+import ScreenGerenciarFluxos from "./pages/Fluxo";
+import ScreenGerenciarEtapas from "./pages/Etapa/screens/GerenciarEtapas";
 
 function Routes() {
   return (
@@ -54,8 +55,8 @@ function Routes() {
         />
 
         {/* Menu Item Fluxos */}
-        <Route path="/admin/fluxos/gerenciar" Component={Fluxo} exact />
-        <Route path="/admin/etapas" Component={Etapa} exact />
+        <Route path="/admin/fluxos/gerenciar" element={<ScreenGerenciarFluxos grupo="admin" />} exact />
+        <Route path="/admin/etapas" element={<ScreenGerenciarEtapas  grupo="admin" />} exact />
 
         {/* Menu Item Membros */}
         <Route
@@ -171,8 +172,8 @@ function Routes() {
           exact
         />
 
-        <Route path="/aluno/fluxos/gerenciar" Component={Fluxo} exact />
-        <Route path="/aluno/etapas" Component={Etapa} exact />
+        <Route path="/aluno/fluxos/gerenciar" element={<ScreenGerenciarFluxos grupo="aluno" />} exact />
+        <Route path="/aluno/etapas" element={<ScreenGerenciarEtapas  grupo="aluno" />} exact />
 
         <Route
           path="/aluno/tarefas"
@@ -252,8 +253,8 @@ function Routes() {
           exact
         />
 
-        <Route path="/professor/fluxos/gerenciar" Component={Fluxo} exact />
-        <Route path="/professor/etapas" Component={Etapa} exact />
+        <Route path="/professor/fluxos/gerenciar" element={<ScreenGerenciarFluxos grupo="professor" />} exact />
+        <Route path="/professor/etapas" element={<ScreenGerenciarEtapas  grupo="professor" />} exact />
     
         <Route
           path="/professor/tarefas"

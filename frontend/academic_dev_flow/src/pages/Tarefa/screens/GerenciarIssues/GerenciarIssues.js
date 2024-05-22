@@ -82,8 +82,9 @@ const GerenciarIssues = () => {
         }).filter(Boolean);
         
         if (dados) {
-            await sicronizarIssues(dados);
-            await handleGetIssues()
+            console.log(dados)
+            // await sicronizarIssues(dados);
+            // await handleGetIssues()
             
         } else {
             NotificationManager.info('Todos as issues do repositório deste projeto já estão salvos no bando de dados.')

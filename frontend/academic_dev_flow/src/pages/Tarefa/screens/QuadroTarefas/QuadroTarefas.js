@@ -20,7 +20,9 @@ const QuadroTarefas = () => {
         setDadosTarefa, 
         tarefasSelecionadas,
         setTarefasSelecionadas, 
-        setTarefas} = useContextoTarefa()
+        reload,
+        setReload
+    } = useContextoTarefa()
 
     const [isFormSalvarVisivel, setIsFormSalvarVisivel] = useState(false)
     const [isBtnPlusDisabled, setIsBtnPlusDisabled] = useState(false)
@@ -45,15 +47,16 @@ const QuadroTarefas = () => {
         setIsModalVincularIteracaoVisivel(false)
     }
 
-    const handleReload = () => {
+    const handleReload = async () => {
         setIsFormSalvarVisivel(false)
+        setIsBtnPlusDisabled(false)
         setAcaoForm('criar')
-        setTarefas([])
         setTarefasSelecionadas([])
         setIsModalVincularIteracaoVisivel(false)
     }
 
     const handleAdicionarTarefa = () => {
+        setDadosTarefa(null)
         setIsFormSalvarVisivel(true)
         setIsBtnPlusDisabled(true)
         setAcaoForm('criar')
@@ -90,7 +93,7 @@ const QuadroTarefas = () => {
         if (acaoForm === 'criar' && !resIssue.error) {
             const dadosIssue = resIssue.data;
             await criarTarefa(dadosForm, dadosIssue);
-        } else if (acaoForm === 'atualizar') {
+        } else if (acaoForm === 'atualizar' && !resIssue.error) {
             await atualizarTarefa(dadosTarefa.id, dadosForm);
         }
         
@@ -102,15 +105,18 @@ const QuadroTarefas = () => {
   
         Modal.confirm({
             title: 'Confirmar exclusão',
-            content: 'Tem certeza que deseja excluir a(s) iteração(ões) ?',
+            content: 'Tem certeza que deseja excluir este(s) item(s) ?',
             okText: 'Sim',
             cancelText: 'Não',
             onOk: async () => {
+                setReload(true)
                 if (tarefasSelecionadas !== null) {
                     const ids = tarefasSelecionadas.map((item) => item.id)
                     await excluirTarefas(ids)
+                    handleReload() 
+                    
                 }
-                handleReload() 
+                setReload(false)
             }
         });
     };

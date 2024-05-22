@@ -23,9 +23,9 @@ const PainelGithub = () => {
                     <GerenciarContents />
                 </TabPane>
 
-                <TabPane tab="Labels" key="3">
+                {/* <TabPane tab="Labels" key="3">
                     <GerenciarLabels />
-                </TabPane>
+                </TabPane> */}
 
                 <TabPane tab="Commits" key="4">
                     <ScreenGerenciarCommits />

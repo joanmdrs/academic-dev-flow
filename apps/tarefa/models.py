@@ -18,10 +18,9 @@ class Tarefa(models.Model):
     STATUS_CHOICES = [
         ('criada', 'Criada'),
         ('andamento', 'Em Andamento'),
+        ('revisao', 'Em Revisão'),
         ('concluida', 'Concluída'),
         ('cancelada', 'Cancelada'),
-        ('atrasada', 'Atrasada'),
-        ('bloqueada', 'Bloqueada')
     ]
     
     nome = models.CharField(max_length=255)
@@ -35,9 +34,9 @@ class Tarefa(models.Model):
     id_issue = models.BigIntegerField(null=True, blank=True)
     number_issue = models.IntegerField(null=True, blank=True)
     url_issue = models.URLField(null=True, blank=True)
-    labels = models.ManyToManyField(Label)
+    # labels = models.ManyToManyField(Label)
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, null=True, blank=True)
-    membros = models.ManyToManyField(MembroProjeto)
+    membros = models.ManyToManyField(MembroProjeto, blank=True)
     iteracao = models.ForeignKey(Iteracao, on_delete=models.CASCADE, null=True, blank=True)
     tipo = models.ForeignKey(Tipo, on_delete=models.SET_NULL, null=True, blank=True)
     

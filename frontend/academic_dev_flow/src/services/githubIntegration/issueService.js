@@ -14,6 +14,10 @@ export const createIssue = async (dados) => {
         const response = await api.post('github_integration/issues/create_issue/', dados)
         return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION_THE_ISSUE)
     } catch (error) {
+
+        if (error && error.status === 422) {
+            return handleError(error, 'Falha de validação: Certifique-se de que todos os campos estão preenchidos corretamente.')
+        }
         return handleError(error, ERROR_MESSAGE_ON_CREATION_THE_ISSUE)
     }
 }
@@ -23,6 +27,9 @@ export const updateIssue = async (numberIssue, dados) => {
         const response = await api.put(`github_integration/issues/update_issue/${numberIssue}/`, dados)
         return handleSuccess(response, SUCCESS_MESSAGE_ON_UPDATE_THE_ISSUE)
     } catch (error) {
+        if (error.response && error.response.status === 422) {
+            return handleError(error, 'Falha de validação: Certifique-se de que todos os campos estão preenchidos corretamente.');
+        }
         return handleError(error, ERROR_MESSAGE_ON_UPDATE_THE_ISSUE)
     }
 }
