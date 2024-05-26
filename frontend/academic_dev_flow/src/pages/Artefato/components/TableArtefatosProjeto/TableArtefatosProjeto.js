@@ -2,7 +2,6 @@ import { Select, Space, Table, Tooltip } from "antd";
 import React, { useEffect, useState } from "react";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { useContextoArtefato } from "../../context/ContextoArtefato";
-import {listarArtefatosPorProjeto } from "../../../../services/artefatoService";
 import { IoMdCreate, IoMdOpen, IoMdTrash } from "react-icons/io";
 import { optionsStatusArtefatos } from "../../../../services/optionsStatus";
 import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
@@ -96,20 +95,13 @@ const TableArtefatosProjeto = ({onView, onEdit, onDelete, onUpdateStatus}) => {
     }
     
     const {dadosProjeto} = useContextoGlobalProjeto()
-    const {artefatos, setArtefatos, setArtefatosSelecionados} = useContextoArtefato()
+    const {artefatos, setArtefatosSelecionados, handleListarArtefatos} = useContextoArtefato()
 
-    const handleListarArtefatos = async () => {
-        const response = await listarArtefatosPorProjeto(dadosProjeto.id);
-    
-        if (!response.error) { 
-            setArtefatos(response.data)
-        }
-    }
 
     useEffect(() => {
         const fetchData = async () => {
             if (artefatos.length === 0){
-                await handleListarArtefatos()
+                await handleListarArtefatos(dadosProjeto.id)
             } 
             if (dadosProjeto !== null) {
                 await handleGetIteracoes()

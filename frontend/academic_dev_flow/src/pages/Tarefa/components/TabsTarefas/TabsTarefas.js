@@ -26,8 +26,6 @@ const TabsTarefas = ({ onEdit }) => {
     useEffect(() => {
         const fetchData = async () => {
             await handleGetTarefas(dadosProjeto.id);
-            console.log('Use effect chamado!')
-            console.log('Reload', reload)
         };
         fetchData();
     }, [reload]);

@@ -36,7 +36,8 @@ const PainelArtefatos = () => {
         setDadosArtefato, 
         setArtefatos,
         artefatosSelecionados,
-        setArtefatosSelecionados
+        setArtefatosSelecionados,
+        handleListarArtefatos
     } = useContextoArtefato()
 
     const [isFormSalvarVisivel, setIsFormSalvarVisivel] = useState(false)
@@ -72,13 +73,14 @@ const PainelArtefatos = () => {
         setIsSaving(false)
     }
 
-    const handleReload = () => {
+    const handleReload = async () => {
         setIsTableListVisivel(true)
         setIsFormSalvarVisivel(false)
         setIsFormBuscarVisivel(false)
         setIsModalVincularIteracaoVisivel(false)
         setArtefatos([])
         setArtefatosSelecionados([])
+        await handleListarArtefatos(dadosProjeto.id)
     }
 
     const handleBuscarArtefato = () => {
@@ -98,12 +100,17 @@ const PainelArtefatos = () => {
 
     const handleVisualizarArtefato = async (record) => {
 
+        setDadosArtefato(record)
+
         const parametros = {
             github_token: dadosProjeto.token,
             repository: dadosProjeto.nome_repo,
-            path: record.path_file,
-            id: record.id
+            id_projeto: dadosProjeto.id,
+            id_artefato: record.id,
+            path: record.path_file
         }
+
+        console.log(parametros)
 
         if (grupo === 'Docentes') {
             navigate("/professor/artefatos/visualizar", {

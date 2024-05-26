@@ -19,9 +19,8 @@ const QuadroTarefas = () => {
         dadosTarefa, 
         setDadosTarefa, 
         tarefasSelecionadas,
-        setTarefasSelecionadas, 
-        reload,
-        setReload
+        setTarefasSelecionadas,
+        handleGetTarefas
     } = useContextoTarefa()
 
     const [isFormSalvarVisivel, setIsFormSalvarVisivel] = useState(false)
@@ -53,6 +52,7 @@ const QuadroTarefas = () => {
         setAcaoForm('criar')
         setTarefasSelecionadas([])
         setIsModalVincularIteracaoVisivel(false)
+        await handleGetTarefas(dadosProjeto.id)
     }
 
     const handleAdicionarTarefa = () => {
@@ -109,14 +109,12 @@ const QuadroTarefas = () => {
             okText: 'Sim',
             cancelText: 'Não',
             onOk: async () => {
-                setReload(true)
                 if (tarefasSelecionadas !== null) {
                     const ids = tarefasSelecionadas.map((item) => item.id)
                     await excluirTarefas(ids)
                     handleReload() 
                     
                 }
-                setReload(false)
             }
         });
     };

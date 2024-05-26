@@ -143,7 +143,6 @@ function Routes() {
       
       <ProviderGlobalProjeto>
         <StudentRoutes />
-
       </ProviderGlobalProjeto>
       
       

@@ -6,10 +6,12 @@ import { Modal } from "antd";
 import ListaComentarios from "../../components/ListaComentarios/ListaComentarios";
 import FormComentario from "../../components/FormComentario/FormComentario";
 import { buscarMembroProjetoPeloIdMembro } from "../../../../services/membroProjetoService";
+import { useContextoArtefato } from "../../../Artefato/context/ContextoArtefato";
 
-const ComentariosArtefato = ({idArtefato}) => {
+const ComentariosArtefato = () => {
 
     const [ comentarios, setComentarios] = useState([])
+    const {dadosArtefato} = useContextoArtefato()
     const {autor, dadosProjeto} = useContextoGlobalProjeto()
     const {
         comentarioPai,
@@ -20,7 +22,7 @@ const ComentariosArtefato = ({idArtefato}) => {
     const [membroProjeto, setMembroProjeto] = useState(null)
 
     const handleGetComentarios = async () => {
-        const response = await listarComentariosPorArtefato(idArtefato)
+        const response = await listarComentariosPorArtefato(dadosArtefato.id)
         if (!response.error){
             setComentarios(response.data)
         }
@@ -36,14 +38,14 @@ const ComentariosArtefato = ({idArtefato}) => {
         if (!response.error){
             setMembroProjeto(response.data)
         }
+        console.log(membroProjeto)
     }
 
     useEffect(() => {
         const fetchData = async () => {
-            if (idArtefato && dadosProjeto) {
-                await handleGetComentarios()
-                await handleGetMembroProjeto()
-            }
+            await handleGetComentarios()
+            await handleGetMembroProjeto()
+            
         }
 
         fetchData()
@@ -53,7 +55,7 @@ const ComentariosArtefato = ({idArtefato}) => {
         const dadosEnviar = {
             texto: dadosForm.texto,
             autor: membroProjeto.id,
-            artefato: idArtefato,
+            artefato: dadosArtefato.id,
             comentario_pai: comentarioPai
         }
 
@@ -65,7 +67,7 @@ const ComentariosArtefato = ({idArtefato}) => {
         const dadosEnviar = {
             texto: texto,
             autor: membroProjeto.id,
-            artefato: idArtefato,
+            artefato: dadosArtefato.id,
             comentario_pai: comentarioPai
         }
 
@@ -99,8 +101,12 @@ const ComentariosArtefato = ({idArtefato}) => {
                 />
             )}
 
-            <div className="global-div" style={{width: '50%'}}> 
-                <FormComentario titulo="CADASTRAR COMENTÁRIO" onSubmit={handleCriarComentario} />
+            <div style={{height: '2px', width: '100%', backgroundColor: '#F0F0F0', marginTop: '20px'}}> 
+
+            </div>
+
+            <div style={{width: '50%'}}> 
+                <FormComentario titulo="Adicione um comentário" onSubmit={handleCriarComentario} />
             </div>
 
         </React.Fragment>

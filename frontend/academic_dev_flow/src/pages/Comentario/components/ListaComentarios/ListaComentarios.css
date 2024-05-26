@@ -8,8 +8,11 @@
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    background-color: #ddd;
+    background-color: #DDF4FF;
     padding: 5px 10px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    color: #585858;
 }
 
 .info-comment {

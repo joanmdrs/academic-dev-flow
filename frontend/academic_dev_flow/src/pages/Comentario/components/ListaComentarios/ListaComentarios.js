@@ -31,7 +31,15 @@ const ListaComentarios = ({ comentarios, onUpdate, onDelete }) => {
       {comentarios.length > 0 ? (
         <React.Fragment>
           {comentarios.map((comentario) => (
-            <div key={comentario.id} className="global-div" style={{width: '50%', padding: '0'}}>
+            <div 
+              key={comentario.id} 
+              style={{
+                width: '50%', 
+                padding: '0', 
+                border: '1px solid #F0F0F0', 
+                borderRadius: '10px',
+                marginTop: '20px'
+              }}>
               <div className="header-comment">
                 <div className="info-comment">
                   <h4 className="autor-comment">{comentario.nome_autor}</h4>
@@ -56,9 +64,9 @@ const ListaComentarios = ({ comentarios, onUpdate, onDelete }) => {
                     </Menu>
                   }
                 >
-                  <Button onClick={(e) => e.preventDefault()}>
+                  <Button style={{backgroundColor: 'transparent', border: 'none'}} onClick={(e) => e.preventDefault()}>
                     <Space>
-                      <SlOptions />
+                      <SlOptions color="#585858" />
                     </Space>
                   </Button>
                 </Dropdown>
@@ -79,7 +87,7 @@ const ListaComentarios = ({ comentarios, onUpdate, onDelete }) => {
                     <Button onClick={() => onUpdate(comentario.id, comentarioEditado.texto)} type="primary">
                       Atualizar Comentário
                     </Button>
-                    <Button onClick={handleCancelarEdicao} danger>
+                    <Button onClick={handleCancelarEdicao} type="primary" danger>
                       Cancelar
                     </Button>
                   </div>

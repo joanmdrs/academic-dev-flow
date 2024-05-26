@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
+import { listarArtefatosPorProjeto } from "../../../services/artefatoService";
 const ContextoArtefato = createContext();
 
 export const useContextoArtefato = () => useContext(ContextoArtefato);
@@ -10,6 +11,14 @@ export const ProviderArtefato = ({ children }) => {
     const [dadosArtefato, setDadosArtefato] = useState(null)
     const [artefatosSelecionados, setArtefatosSelecionados] = useState([])
 
+    const handleListarArtefatos = async (idProjeto) => {
+        const response = await listarArtefatosPorProjeto(idProjeto);
+    
+        if (!response.error) { 
+            setArtefatos(response.data)
+        }
+    }
+
     return (
         <ContextoArtefato.Provider
             value={{
@@ -17,6 +26,7 @@ export const ProviderArtefato = ({ children }) => {
                 artefatos, setArtefatos,
                 dadosArtefato, setDadosArtefato,
                 artefatosSelecionados, setArtefatosSelecionados,
+                handleListarArtefatos
             }}
         >
             {children}
