@@ -4,35 +4,30 @@ import { formatDate } from "../../../../services/utils";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
 import { UserOutlined } from '@ant-design/icons';
 import { IoClose } from "react-icons/io5";
-import { MdOpenInNew } from "react-icons/md";
+import { IoMdCreate, IoMdOpen, IoMdTrash } from "react-icons/io";
+import { FaCirclePlay } from "react-icons/fa6";
+import { FaCirclePause } from "react-icons/fa6";
 
+const TableTarefasSelect = ({ tasks, onView, onEdit, onDelete, onStart, onPause }) => {
 
-const TableTarefasSelect = ({tasks, onEdit}) => {
-
-    const COLUNAS_TABELA_TAREFAS= [
+    const COLUNAS_TABELA_TAREFAS = [
         {
             title: 'Nome',
             dataIndex: 'nome',
             key: 'nome',
             render: (_, record) => (
-                <Space style={{display: 'block'}}>
-                    <a onClick={() => onEdit(record)} target="blank"> 
-                        {record.nome}
-                    </a>
-
-                    { record.data_inicio && record.data_termino ? (
-                        <span style={{color: '#585858', fontSize: '10px'}}>
-                            #{record.number_issue} {formatDate(record.data_inicio)} - {formatDate(record.data_termino)} 
+                <Space style={{ display: 'block' }}>
+                    <a href={record.url_issue} target="_blank" rel="noopener noreferrer"> {record.nome} </a>
+                    {record.data_inicio && record.data_termino ? (
+                        <span style={{ color: '#585858', fontSize: '10px' }}>
+                            #{record.number_issue} {formatDate(record.data_inicio)} - {formatDate(record.data_termino)}
                         </span>
-                    ) : null
-                
-                    }
+                    ) : null}
                 </Space>
-        
             )
         },
         {
-            title:  'Atribuída à',
+            title: 'Atribuída à',
             dataIndex: 'membros_info',
             key: 'membros_info',
             render: (membros_info) => (
@@ -52,43 +47,64 @@ const TableTarefasSelect = ({tasks, onEdit}) => {
             align: 'center',
             render: (_, record) => (
                 <Space>
-                    {record.nome_iteracao ? 
-                        record.nome_iteracao 
+                    {record.nome_iteracao ?
+                        record.nome_iteracao
                         : <Tooltip title="Nenhuma iteração vinculada">
-                            <IoClose color="red"/>
+                            <IoClose color="red" />
                         </Tooltip>}
                 </Space>
             )
         },
         {
             title: 'Ações',
-            dataIndex: 'actions', 
-            key: 'actions', 
+            dataIndex: 'actions',
+            key: 'actions',
             align: 'center',
             render: (_, record) => (
                 <Space>
-                    <a href={record.url_issue} target="blank"> <MdOpenInNew /> </a>
+                    <Tooltip title={record.estado_contagem_tempo === true ? 'Pausar' : 'Iniciar'}>
+                        {record.estado_contagem_tempo === true ? 
+                            <a onClick={() => onPause(record.id)}>
+                                <FaCirclePause />
+                            </a>
+
+                            :
+
+                            <a onClick={() => onStart(record.id)}>
+                                <FaCirclePlay />
+                            </a>
+                        }
+                    </Tooltip>
+                    <Tooltip title="Visualizar">
+                        <a onClick={() => onView(record)}><IoMdOpen /></a>
+                    </Tooltip>
+                    <Tooltip title="Editar">
+                        <a onClick={() => onEdit(record)}><IoMdCreate /></a>
+                    </Tooltip>
+                    <Tooltip title="Excluir">
+                        <a onClick={() => onDelete(record.id)}><IoMdTrash /></a>
+                    </Tooltip>
                 </Space>
             )
         }
-    ]
+    ];
 
-    const {setTarefasSelecionadas} = useContextoTarefa()
+    const { setTarefasSelecionadas } = useContextoTarefa();
 
     const rowSelection = {
         onChange: (selectedRowsKeys, selectedRows) => {
-          setTarefasSelecionadas(selectedRows)
+            setTarefasSelecionadas(selectedRows);
         },
     };
 
     return (
-        <Table 
+        <Table
             columns={COLUNAS_TABELA_TAREFAS}
             dataSource={tasks}
             rowKey={"id"}
             rowSelection={rowSelection}
         />
-    )
-}
+    );
+};
 
-export default TableTarefasSelect
+export default TableTarefasSelect;

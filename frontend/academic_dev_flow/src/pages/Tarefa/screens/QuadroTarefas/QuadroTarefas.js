@@ -1,27 +1,40 @@
-import { Button, Modal, Spin } from "antd";
-import React, { useState } from "react";
+import { Button, Modal, Spin, Tabs } from "antd";
+import React, { useEffect, useState } from "react";
 import { FaPlus, FaLink, FaTrash } from "react-icons/fa";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
-import TabsTarefas from "../../components/TabsTarefas/TabsTarefas";
 import FormTarefa from "../../components/FormTarefa/FormTarefa";
 import { createIssue, updateIssue } from "../../../../services/githubIntegration/issueService";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
-import { atualizarTarefa, criarTarefa, excluirTarefas, vincularIteracaoAsTarefas } from "../../../../services/tarefaService";
+import { atualizarTarefa, criarTarefa, excluirTarefas, iniciarContagemTempo, pararContagemTempo, vincularIteracaoAsTarefas } from "../../../../services/tarefaService";
 import { BsQuestionCircle } from "react-icons/bs";
 import Aviso from "../../../../components/Aviso/Aviso";
-import ModalVincularItercao from "../../components/ModalVincularIteracao/ModalVincularIteracao";
 import ModalVincularIteracao from "../../components/ModalVincularIteracao/ModalVincularIteracao";
+import { useNavigate } from "react-router-dom";
+import { buscarMembroProjetoPeloIdMembro } from "../../../../services/membroProjetoService";
+import TableTarefasSelect from "../../components/TableTarefasSelect/TableTarefasSelect";
+
+const { TabPane } = Tabs;
 
 const QuadroTarefas = () => {
 
-    const {dadosProjeto} = useContextoGlobalProjeto()
+    const {dadosProjeto, grupo, autor} = useContextoGlobalProjeto()
+
     const {
+        tarefas, 
+        reload,
+        tasksCriadas,
+        tasksEmAndamento,
+        tasksPendentesRevisao,
+        tasksConcluidas,
+        tasksAtrasadas,
+        tasksCanceladas,
         dadosTarefa, 
         setDadosTarefa, 
         tarefasSelecionadas,
         setTarefasSelecionadas,
         handleGetTarefas
     } = useContextoTarefa()
+
 
     const [isFormSalvarVisivel, setIsFormSalvarVisivel] = useState(false)
     const [isBtnPlusDisabled, setIsBtnPlusDisabled] = useState(false)
@@ -30,6 +43,10 @@ const QuadroTarefas = () => {
     const [isAvisoVisivel, setIsAvisoVisivel] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [isModalVincularIteracaoVisivel, setIsModalVincularIteracaoVisivel] = useState(false)
+    const [membroProjeto, setMembroProjeto] = useState(null)
+
+    const navigate = useNavigate();
+
 
     const handleDuvidaClick = () => {
         setIsAvisoVisivel(true);
@@ -97,7 +114,7 @@ const QuadroTarefas = () => {
             await atualizarTarefa(dadosTarefa.id, dadosForm);
         }
         
-        handleReload();
+        await handleReload();
         setIsSaving(false);
     };
 
@@ -112,12 +129,29 @@ const QuadroTarefas = () => {
                 if (tarefasSelecionadas !== null) {
                     const ids = tarefasSelecionadas.map((item) => item.id)
                     await excluirTarefas(ids)
-                    handleReload() 
+                    await handleReload() 
                     
                 }
             }
         });
     };
+
+    const handleExcluirTarefa = (idTarefa) => {
+        Modal.confirm({
+            title: 'Confirmar exclusão',
+            content: 'Tem certeza que deseja excluir esta tarefa ?',
+            okText: 'Sim',
+            cancelText: 'Não',
+            onOk: async () => {
+                if (idTarefa !== null) {
+                    const ids = [idTarefa]
+                    await excluirTarefas(ids)
+                    await handleReload() 
+                    
+                }
+            }
+        });
+    }
 
     const handleVincularIteracaoAsTarefas = async (idIteracao) => {
         if (tarefasSelecionadas !== null) {
@@ -130,6 +164,68 @@ const QuadroTarefas = () => {
             handleReload()
         }
     }
+
+    const handleVisualizarTarefa = (record) => {
+        const parametros = {
+            id: record.id,
+            idProjeto: dadosProjeto.id
+        }
+
+        if (grupo === 'Docentes') {
+            navigate("/professor/tarefas/visualizar", {
+                state: parametros
+            });
+        } else if (grupo === 'Discentes') {
+            navigate("/aluno/tarefas/visualizar", {
+                state: parametros
+            });
+        } else if (grupo === 'Administradores') {
+            navigate("/admin/tarefas/visualizar", {
+                state: parametros
+            });
+        }
+    }
+
+    const handleStartTarefa = async (idTask) => {
+        const parametros = {
+            tarefa_id: idTask,
+            membro_projeto_id: membroProjeto.id
+        }
+        await iniciarContagemTempo(parametros)
+        await handleReload() 
+
+    }
+
+    const handlePauseTarefa = async (idTask) => {
+       
+        const parametros = {
+            tarefa_id: idTask,
+            membro_projeto_id: membroProjeto.id
+        }
+        await pararContagemTempo(parametros)
+        await handleReload()
+    }
+
+    const handleGetMembroProjeto = async () => {
+
+        const parametros = {
+            id_membro: autor.id_membro,
+            id_projeto: dadosProjeto.id
+        }
+        const response = await buscarMembroProjetoPeloIdMembro(parametros)
+        if (!response.error){
+            setMembroProjeto(response.data)
+        }
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            await handleGetMembroProjeto()    
+            await handleGetTarefas(dadosProjeto.id);        
+        }
+
+        fetchData()
+    }, [reload])
 
     return (
         <div>
@@ -197,7 +293,68 @@ const QuadroTarefas = () => {
                 </div>
             ) : (
                 <div> 
-                    <TabsTarefas onEdit={handleAtualizarTarefa}/>
+                    <Tabs defaultActiveKey="1" tabPosition="left" style={{ marginTop: '50px' }}>
+                        <TabPane tab="Criadas" key="1">
+                            <TableTarefasSelect 
+                                tasks={tasksCriadas} 
+                                onEdit={handleAtualizarTarefa} 
+                                onDelete={handleExcluirTarefa} 
+                                onView={handleVisualizarTarefa}
+                                onPause={handlePauseTarefa} 
+                                onStart={handleStartTarefa}
+                            />
+                        </TabPane>
+                        <TabPane tab="Em andamento" key="2">
+                            <TableTarefasSelect 
+                                tasks={tasksEmAndamento} 
+                                onEdit={handleAtualizarTarefa} 
+                                onDelete={handleExcluirTarefa} 
+                                onView={handleVisualizarTarefa} 
+                                onPause={handlePauseTarefa} 
+                                onStart={handleStartTarefa}
+                            />
+                        </TabPane>
+                        <TabPane tab="Em revisão" key="3">
+                            <TableTarefasSelect 
+                                tasks={tasksPendentesRevisao} 
+                                onEdit={handleAtualizarTarefa} 
+                                onDelete={handleExcluirTarefa} 
+                                onView={handleVisualizarTarefa}
+                                onPause={handlePauseTarefa} 
+                                onStart={handleStartTarefa} 
+                            />
+                        </TabPane>
+                        <TabPane tab="Concluídas" key="4">
+                            <TableTarefasSelect 
+                                tasks={tasksConcluidas} 
+                                onEdit={handleAtualizarTarefa} 
+                                onDelete={handleExcluirTarefa} 
+                                onView={handleVisualizarTarefa}
+                                onPause={handlePauseTarefa} 
+                                onStart={handleStartTarefa}  
+                            />
+                        </TabPane>
+                        <TabPane tab="Atrasadas" key="5">
+                            <TableTarefasSelect 
+                                tasks={tasksAtrasadas} 
+                                onEdit={handleAtualizarTarefa} 
+                                onDelete={handleExcluirTarefa} 
+                                onView={handleVisualizarTarefa}
+                                onPause={handlePauseTarefa} 
+                                onStart={handleStartTarefa}  
+                            />
+                        </TabPane>
+                        <TabPane tab="Todas" key="6">
+                            <TableTarefasSelect 
+                                tasks={tarefas} 
+                                onEdit={handleAtualizarTarefa} 
+                                onDelete={handleExcluirTarefa} 
+                                onView={handleVisualizarTarefa}
+                                onPause={handlePauseTarefa} 
+                                onStart={handleStartTarefa}
+                            />
+                        </TabPane>
+                    </Tabs>
                 </div>
 
             )}
@@ -207,10 +364,6 @@ const QuadroTarefas = () => {
                 onCancel={handleCancelar}
                 onUpdate={handleVincularIteracaoAsTarefas}
             />
-
-
-
-
         </div>
     )
 }   

@@ -12,12 +12,10 @@ const ExibirTarefa = ({ dadosTarefa, dadosProjeto }) => {
     const [optionsMembros, setOptionsMembros] = useState([]);
     const [optionsIteracoes, setOptionsIteracoes] = useState([]);
     const [optionsTipos, setOptionsTipos] = useState([]);
-    const [optionsLabels, setOptionsLabels] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             await handleGetIteracoes();
-            await handleGetLabels();
             await handleGetMembros();
             await handleGetTipos();
         };
@@ -73,27 +71,10 @@ const ExibirTarefa = ({ dadosTarefa, dadosProjeto }) => {
         }
     };
 
-    const handleGetLabels = async () => {
-        const response = await listarLabelsPorProjeto(dadosProjeto.id);
-        if (response.data.length > 0) {
-            const resultados = response.data.map((item) => {
-                return {
-                    value: item.id,
-                    label: item.nome,
-                    color: item.cor,
-                };
-            });
-            setOptionsLabels(resultados);
-        }
-    };
-
     const findMembroLabel = (membroId) => {
         return optionsMembros.find((membro) => membro.value === membroId)?.label;
     };
 
-    const findLabelName = (labelId) => {
-        return optionsLabels.find((label) => label.value === labelId)?.label;
-    };
 
     const items = [
         {
@@ -128,16 +109,11 @@ const ExibirTarefa = ({ dadosTarefa, dadosProjeto }) => {
         },
         {
             key: "7",
-            label: "Label",
-            children: dadosTarefa.labels.map((labelId) => findLabelName(labelId)).join(", "),
-        },
-        {
-            key: "8",
             label: "Tipo",
             children: optionsTipos.find((tipo) => tipo.value === dadosTarefa.tipo)?.label,
         },
         {
-            key: "9",
+            key: "8",
             label: "Descrição",
             children: dadosTarefa.descricao,
         },
