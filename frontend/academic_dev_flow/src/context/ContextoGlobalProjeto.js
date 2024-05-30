@@ -16,12 +16,18 @@ export const ProviderGlobalProjeto = ({ children }) => {
           if (token !== null){
               try {
                   const decodedToken = await decodeToken(token);
-                  const response = await buscarMembroPeloUser(decodedToken.user_id);
 
-                  if (!response.error) {
-                    setAutor(response.data)
-                    setGrupo(decodedToken.groups[0])
+                  if (decodedToken.groups[0] !== 'Administradores'){
+                    const response = await buscarMembroPeloUser(decodedToken.user_id);
+
+                    if (!response.error) {
+                      setAutor(response.data)
+
+                    }
                   }
+
+                  setGrupo(decodedToken.groups[0])
+                 
         
                   
               } catch (error) {
@@ -31,6 +37,7 @@ export const ProviderGlobalProjeto = ({ children }) => {
           
       };
       fetchData();
+      console.log(grupo)
       console.log(autor)
 
       

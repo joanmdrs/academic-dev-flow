@@ -1,4 +1,4 @@
-import React, { isValidElement } from 'react';
+import React from 'react';
 import { Button, Layout } from 'antd';
 import logo_ufrn from "../../assets/logo-ufrn.png";
 import './Header.css';
@@ -20,6 +20,8 @@ const MyHeader = () => {
 
 
     const handleAcessarPerfil = async () => {
+
+        console.log(grupo)
 
         if (grupo === 'Docentes') {
             navigate("/professor/perfil")

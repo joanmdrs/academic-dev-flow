@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
-import { Button, Space, Table } from "antd";
+import { Space, Table, Tooltip } from "antd";
 import { cadastrarFuncaoAtual, listarMembrosPeloIdProjeto } from "../../../../services/membroProjetoService";
 import FormFuncao from "../../components/FormFuncao/FormFuncao";
 import { useMembroContexto } from "../../context/MembroContexto";
 import { formatDate } from "../../../../services/utils";
+import { IoMdCreate, IoMdOpen } from "react-icons/io";
 
 const PainelMembros = () => {
 
@@ -62,9 +63,15 @@ const PainelMembros = () => {
             title: 'Ações',
             dataIndex: 'actions',
             key: 'actions',
+            align: 'center',
             render: (_, record) => (
                 <Space>
-                    <Button type="primary" onClick={() => handleEditarFuncao(record)} >Editar</Button>
+                    <Tooltip title="Visualizar">
+                        <a><IoMdOpen /></a>
+                    </Tooltip>
+                    <Tooltip title="Editar">
+                        <a onClick={() => handleEditarFuncao(record)}><IoMdCreate /></a>
+                    </Tooltip>
                 </Space>
             )
         }

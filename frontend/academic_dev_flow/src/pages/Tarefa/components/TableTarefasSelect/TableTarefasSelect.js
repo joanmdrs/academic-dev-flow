@@ -1,6 +1,6 @@
 import { Space, Table, Tooltip } from "antd";
 import React from "react";
-import { formatDate } from "../../../../services/utils";
+import { formatDate, formatarTempo } from "../../../../services/utils";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
 import { UserOutlined } from '@ant-design/icons';
 import { IoClose } from "react-icons/io5";
@@ -52,6 +52,17 @@ const TableTarefasSelect = ({ tasks, onView, onEdit, onDelete, onStart, onPause 
                         : <Tooltip title="Nenhuma iteração vinculada">
                             <IoClose color="red" />
                         </Tooltip>}
+                </Space>
+            )
+        },
+        {
+            title: 'Tempo Gasto',
+            dataIndex: 'tempo_gasto',
+            key: 'tempo_gasto',
+            align: 'center',
+            render: (_, record) => (
+                <Space>
+                    <span> {formatarTempo(record.tempo_gasto)}</span>
                 </Space>
             )
         },

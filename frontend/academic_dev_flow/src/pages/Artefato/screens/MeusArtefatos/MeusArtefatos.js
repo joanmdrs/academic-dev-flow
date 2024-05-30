@@ -4,11 +4,16 @@ import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProj
 import { Form, Result, Select } from "antd";
 import { buscarProjetosDoMembro } from "../../../../services/membroProjetoService";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
+import { useContextoArtefato } from "../../context/ContextoArtefato";
+import Loading from "../../../../components/Loading/Loading";
 
 const MeusArtefatos = () => {
+
+    const {handleListarArtefatos} = useContextoArtefato()
     const {autor, dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
     const [optionsProjetos, setOptionsProjetos] = useState([])
     const [selectProjeto, setSelectProjeto] = useState('Projeto')
+    const [loading, setLoading] = useState(false)
 
     const handleGetProjetos = async () => {
         const resMembroProjeto = await buscarProjetosDoMembro(autor.id_user);
@@ -31,16 +36,19 @@ const MeusArtefatos = () => {
     }
 
     const handleSelectProjeto = async (value) => {
+        setLoading(true)
         setSelectProjeto(value)
 
         if (value !== undefined) {
             const response = await buscarProjetoPeloId(value)
             if (!response.error){
                 setDadosProjeto(response.data)
+                await handleListarArtefatos(response.data.id)
             }
         } else {
             setDadosProjeto(null)
         }
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -87,9 +95,13 @@ const MeusArtefatos = () => {
                             </div>
                         </div>
 
-                        <div style={{margin: '20px'}}> 
-                            <PainelArtefatos />
-                        </div>
+                        { loading ? 
+                            <Loading />
+                            : 
+                            <div style={{margin: '20px'}}> 
+                                <PainelArtefatos />
+                            </div>
+                        }
 
                     </div>
                 )}

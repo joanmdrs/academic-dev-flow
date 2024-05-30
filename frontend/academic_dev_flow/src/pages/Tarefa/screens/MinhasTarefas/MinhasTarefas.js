@@ -5,6 +5,7 @@ import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import QuadroTarefas from "../QuadroTarefas/QuadroTarefas";
 import { buscarProjetosDoMembro } from "../../../../services/membroProjetoService";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
+import Loading from "../../../../components/Loading/Loading";
 
 const MinhasTarefas = () => {
 
@@ -12,6 +13,7 @@ const MinhasTarefas = () => {
     const {handleGetTarefas} = useContextoTarefa()
     const [optionsProjetos, setOptionsProjetos] = useState([])
     const [selectProjeto, setSelectProjeto] = useState('Projeto')
+    const [loading, setLoading] = useState(false)
 
     const handleGetProjetos = async () => {
         const resMembroProjeto = await buscarProjetosDoMembro(autor.id_user);
@@ -34,6 +36,7 @@ const MinhasTarefas = () => {
     }
 
     const handleSelectProjeto = async (value) => {
+        setLoading(true)
         setSelectProjeto(value)
 
         if (value !== undefined) {
@@ -46,6 +49,7 @@ const MinhasTarefas = () => {
         } else {
             setDadosProjeto(null)
         }
+        setLoading(false)
     }
 
     
@@ -95,9 +99,14 @@ const MinhasTarefas = () => {
                             </div>
                         </div>
 
-                        <div style={{margin: '20px'}}> 
-                            <QuadroTarefas />
-                        </div>
+                        { loading ? 
+                            <Loading />
+                            : 
+                            <div style={{margin: '20px'}}> 
+                                <QuadroTarefas />
+                            </div>
+                        }
+
                     </div>
                 )}
         </div>
