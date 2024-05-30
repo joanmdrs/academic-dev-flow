@@ -21,6 +21,10 @@
     gap: 5px;
 }
 
+.info-comment h4 {
+    margin: 0;
+}
+
 .autor-comment {
 
 }

@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Titulo from "../../../../components/Titulo/Titulo";
-import { Spin, Tabs } from "antd";
+import { Button, Modal, Spin, Tabs } from "antd";
 import Item from "antd/es/list/Item";
 import { useContextoProjeto } from "../../context/ContextoProjeto";
 import { atualizarProjeto, buscarProjetoPeloNome, criarProjeto, excluirProjeto } from "../../../../services/projetoService";
 import { NotificationManager } from "react-notifications";
-import { recarregarPagina } from "../../../../services/utils";
-import BotaoBuscar from "../../../../components/Botoes/BotaoBuscar/BotaoBuscar";
-import BotaoAdicionar from "../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
-import BotaoExcluir from "../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
 import ModalDeBusca from "../../../../components/Modals/ModalDeBusca/ModalDeBusca";
 import { LoadingOutlined } from "@ant-design/icons";
 import TabProjeto from "../TabsProjeto/TabProjeto/TabProjeto";
 import TabEquipe from "../TabsProjeto/TabEquipe/TabEquipe";
 import TabFluxo from "../TabsProjeto/TabFluxo/TabFluxo";
+import { FaPlus, FaSearch, FaTrash } from "react-icons/fa";
 
 const GerenciarProjetos = () => {
   
@@ -146,20 +143,13 @@ const GerenciarProjetos = () => {
     }
 
     const handleExcluirProjeto = async () => {
-        try {
-            const response = await excluirProjeto(hasProjeto.id)
-
-            if (response.status === 204){
-                NotificationManager.success("Projeto excluído com sucesso !")
-                recarregarPagina()
-            } else {
-                NotificationManager.error("Falha ao excluir o projeto, contate o suporte !")
-            }
-        } catch (error) {
-            console.log(error)
-            NotificationManager.error("Falha durante a operação, contate o suporte !")
-
-        }
+        Modal.confirm({
+            title: 'Confirmar exclusão',
+            content: 'Tem certeza que deseja excluir o projeto ? Esta ação é irreversível !',
+            okText: 'Sim',
+            cancelText: 'Não',
+            onOk: async () =>  await excluirProjeto(hasProjeto.id)
+        });
     }
 
     return ( 
@@ -170,10 +160,32 @@ const GerenciarProjetos = () => {
             />
 
             <div className="button-menu"> 
-                <BotaoBuscar nome="BUSCAR PROJETO" funcao={handleExibirModal} status={isBotaoBuscarVisivel}/>
-                <div className="grouped-buttons"> 
-                    <BotaoAdicionar funcao={handleBotaoAdicionar} status={isBotaoAdicionarVisivel}/>
-                    <BotaoExcluir funcao={handleExcluirProjeto} status={isBotaoExcluirVisivel}/>
+                <Button 
+                    type="primary"
+                    onClick={() => handleExibirModal()} 
+                    disabled={isBotaoBuscarVisivel}
+                    icon={<FaSearch />}
+                >
+                    Buscar Projeto
+                </Button>
+                <div className="grouped-buttons">
+                    <Button 
+                        type="primary" 
+                        icon={<FaPlus />} 
+                        onClick={() => handleBotaoAdicionar()}  
+                        disabled={isBotaoAdicionarVisivel}
+                    >
+                        Criar Projeto
+                    </Button> 
+                    <Button 
+                        type="primary"
+                        danger
+                        icon={<FaTrash />}
+                        onClick={handleExcluirProjeto} 
+                        disabled={isBotaoExcluirVisivel}
+                    >
+                        Excluir
+                    </Button>
                 </div>
             </div>
 
