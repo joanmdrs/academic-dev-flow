@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Descriptions } from 'antd';
 import { optionsStatusTarefas } from "../../../../services/optionsStatus";
 import { listarMembrosPeloIdProjeto } from "../../../../services/membroProjetoService";
-import { handleError } from "../../../../services/utils";
+import { formatDate, handleError } from "../../../../services/utils";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
 import { listarTipos } from "../../../../services/tipoService";
 import { listarLabelsPorProjeto } from "../../../../services/tarefaService";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import OptionWithColor from "../../../../components/OptionStyle/OptionStyle";
 
 const ExibirTarefa = ({ dadosTarefa, dadosProjeto }) => {
     const [optionsMembros, setOptionsMembros] = useState([]);
@@ -75,6 +78,9 @@ const ExibirTarefa = ({ dadosTarefa, dadosProjeto }) => {
         return optionsMembros.find((membro) => membro.value === membroId)?.label;
     };
 
+    const tipoTarefa = optionsTipos.find((option) => option.value === dadosTarefa.tipo);
+
+
 
     const items = [
         {
@@ -85,12 +91,12 @@ const ExibirTarefa = ({ dadosTarefa, dadosProjeto }) => {
         {
             key: "2",
             label: "Início",
-            children: dadosTarefa.data_inicio,
+            children: formatDate(dadosTarefa.data_inicio),
         },
         {
             key: "3",
             label: "Término",
-            children: dadosTarefa.data_termino,
+            children: formatDate(dadosTarefa.data_termino),
         },
         {
             key: "4",
@@ -110,12 +116,14 @@ const ExibirTarefa = ({ dadosTarefa, dadosProjeto }) => {
         {
             key: "7",
             label: "Tipo",
-            children: optionsTipos.find((tipo) => tipo.value === dadosTarefa.tipo)?.label,
+            children: tipoTarefa ? (
+                <OptionWithColor label={tipoTarefa.label} color={tipoTarefa.color} />
+            ) : null,
         },
         {
             key: "8",
             label: "Descrição",
-            children: dadosTarefa.descricao,
+            children: dadosTarefa.descricao
         },
     ];
 

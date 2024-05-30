@@ -1,7 +1,6 @@
 import { Button, Layout, Result } from "antd";
 import React, { useEffect, useState } from "react";
 import BotaoVoltar from "../../../../components/Botoes/BotaoVoltar/BotaoVoltar";
-import FormTarefa from "../../components/FormTarefa/FormTarefa";
 import ScreenComentariosTarefa from "../../../Comentario/screens/ComentariosTarefa";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Collapse } from 'antd';
@@ -32,7 +31,7 @@ const VisualizarTarefa = () => {
     }
 
     const handleBuscarTarefa = async () => {
-        const response = await buscarTarefaPeloId(state.id)
+        const response = await buscarTarefaPeloId(state.idTarefa)
         if (!response.error){
             setDadosTarefa(response.data)
         }

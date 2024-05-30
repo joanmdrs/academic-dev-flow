@@ -5,7 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { HiOutlineHome } from "react-icons/hi2";
 import { LuLayoutGrid } from "react-icons/lu";
-import { IoDocumentOutline } from "react-icons/io5";
+import { IoDocumentOutline, IoDocumentTextOutline } from "react-icons/io5";
 import { VscGraph } from "react-icons/vsc";
 import { RiFlowChart } from "react-icons/ri";
 
@@ -87,7 +87,7 @@ const MenuAluno = () => {
                 <Menu.Item
                     className="item-menu"
                     key='/aluno/artefatos'
-                    icon={<IoDocumentOutline size="20px" />}
+                    icon={<IoDocumentTextOutline size="20px" />}
                 >
                     <Link to="/aluno/artefatos"> Artefatos </Link>
                 </Menu.Item>

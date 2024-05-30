@@ -19,6 +19,9 @@ const MeusProjetos = ({grupo}) => {
             title: 'Nome',
             dataIndex: 'nome',
             key: 'nome',
+            render: (_, record) => (
+                <Link to={`/${grupo}/projetos/visualizar/${record.id}`}>{record.nome}</Link>
+            )
         },
         {
             title: (
@@ -81,19 +84,6 @@ const MeusProjetos = ({grupo}) => {
             dataIndex: 'fluxo_nome',
             key: 'fluxo_nome'
         },
-        {
-            title: (
-                <>
-                <PiEye /> Ações
-                </>
-            ),
-            key: 'action',
-            render: (_, record) => (
-                <Button>
-                <Link to={`/${grupo}/projetos/visualizar/${record.id}`}>Visualizar</Link>
-                </Button>
-            ),
-        }
     ];
 
     const [projetos, setProjetos] = useState(null)

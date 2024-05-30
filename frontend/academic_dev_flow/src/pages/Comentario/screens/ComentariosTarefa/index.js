@@ -6,15 +6,11 @@ import ComentariosTarefa from "./ComentariosTarefa";
 
 const ScreenComentariosTarefa = () => {
 
-    const { idTarefa } = useParams();
-
     return (
         <React.Fragment>
-            <ProviderGlobalProjeto>
-                <ProviderComentario>
-                    <ComentariosTarefa idTarefa={idTarefa} />
-                </ProviderComentario>
-            </ProviderGlobalProjeto>
+            <ProviderComentario>
+                <ComentariosTarefa />
+            </ProviderComentario>
         </React.Fragment>   
     )
 }

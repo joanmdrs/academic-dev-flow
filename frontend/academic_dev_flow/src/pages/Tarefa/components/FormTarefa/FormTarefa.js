@@ -79,13 +79,20 @@ function FormTarefa({ onCancel, onSubmit, additionalFields }) {
         }
     };
 
+    const renderOptionWithColor = (label, color) => (
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div style={{ backgroundColor: color, width: 12, height: 12, borderRadius: '50%', marginRight: 8 }}></div>
+            {label}
+        </div>
+    );
+
     const handleGetTipos = async () => {
         try {
             const response = await listarTipos();
             if (!response.error && response.data) {
                 const resultados = response.data.map((item) => ({
                     value: item.id,
-                    label: item.nome,
+                    label: renderOptionWithColor(item.nome, item.cor),
                     color: item.cor,
                 }));
                 setOptionsTipos(resultados);

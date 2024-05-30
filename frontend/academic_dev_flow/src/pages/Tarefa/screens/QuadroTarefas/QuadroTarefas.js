@@ -167,7 +167,7 @@ const QuadroTarefas = () => {
 
     const handleVisualizarTarefa = (record) => {
         const parametros = {
-            id: record.id,
+            idTarefa: record.id,
             idProjeto: dadosProjeto.id
         }
 
