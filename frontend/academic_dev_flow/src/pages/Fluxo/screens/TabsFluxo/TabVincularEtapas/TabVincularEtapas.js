@@ -1,239 +1,199 @@
 import React, { useEffect, useState } from "react";
-import "./TabVincularEtapas.css";
-import { NotificationManager } from "react-notifications";
-import { Table, Form, Select } from "antd";
-import { useFormContext } from "../../../context/Provider/Provider";
-import { listarFluxos } from "../../../../../services/fluxoService"; 
+import { Table, Form, Select, Modal, Button } from "antd";
+import { buscarFluxoPeloId, listarFluxos } from "../../../../../services/fluxoService"; 
 import { buscarEtapaPeloId, buscarEtapaPeloNome } from "../../../../../services/etapaService";
 import BotaoAdicionar from "../../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
 import BotaoExcluir from "../../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
-import {  excluirFluxoEtapaMany, excluirFluxoEtapaOne, listarEtapasPorFluxo, vincularEtapaFluxo } from "../../../../../services/fluxoEtapaService";
+import {  desvincularEtapaFluxo, listarEtapasPorFluxo, vincularEtapaFluxo } from "../../../../../services/fluxoEtapaService";
 import ModalSelecionarObjetos from "../../../../../components/Modals/ModalSelecionarObjetos/ModalSelecionarObjetos";
-
-const { Option } = Select;
+import { useContextoFluxo } from "../../../context/ContextoFluxo";
+import { handleError, handleInfo } from "../../../../../services/utils";
+import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../../services/messages";
+import { FaLink, FaTrash } from "react-icons/fa";
 
 const TabVincularEtapas = () => {
 
-  const [etapasVinculadas, setEtapasVinculadas] = useState([])
-  const [fluxos, setFluxos] = useState([]);
-  const [fluxoSelecionado, setFluxoSelecionado] = useState(null);
-  const {hasDadosFluxo, setHasDadosFluxo} = useFormContext()
-  const [isModalVisivel, setIsModalVisivel] = useState(false)
-  const [etapasExcluir, setEtapasExcluir] = useState([])
- 
-  const COLUNAS_TABELA = [
-    { title: "Código", dataIndex: "id", key: "id" },
-    { title: "Nome", dataIndex: "nome", key: "nome" },
-    { title: "Descrição", dataIndex: "descricao", key: "descricao"}
-  ];
-
-  const handleExibirModal = () => setIsModalVisivel(true)
-  const handleFecharModal = () =>  setIsModalVisivel(false)
-
-  const handleListarFluxos = async () => {
-    try {
-      const resposta = await listarFluxos();
-
-      if (resposta.status === 200) {
-        setFluxos(resposta.data);
-      } else {
-        NotificationManager.error(
-          "Ocorreu um problema durante a busca dos dados, contate o suporte!"
-        );
-      }
-    } catch (error) {
-      NotificationManager.error(
-        "Ocorreu um problema durante a busca dos dados, contate o suporte!"
-      );
-    }
-  };
-
-  const handleListarEtapasPorFluxo = async (idFluxo) => {
-    try {
-      const resposta = await listarEtapasPorFluxo(idFluxo);
-
-      if (resposta.status === 200) {
-        const etapasVinculadas = resposta.data 
-
-        if (etapasVinculadas.length === 0) {
-          setEtapasVinculadas([])
-
-        } else {
-
-          const promisesEtapas = etapasVinculadas.map(async (fluxoEtapa) => {
-            const respostaEtapa = await buscarEtapaPeloId(fluxoEtapa.etapa);
-            return {
-              id: fluxoEtapa.id,
-              fluxo: fluxoEtapa.fluxo,
-              etapa: fluxoEtapa.etapa,
-              nome: respostaEtapa.data.nome,
-              descricao: respostaEtapa.data.descricao,
-            };
-          });
-  
-          const etapasResolvidas = await Promise.all(promisesEtapas);
-          
-          setEtapasVinculadas(etapasResolvidas);
-        }
-
-      } else {
-        NotificationManager.error(
-          "Ocorreu um problema durante a busca dos dados, contate o suporte!"
-        );
-      }
-    } catch (error) {
-      NotificationManager.error(
-        "Ocorreu um problema durante a busca dos dados, contate o suporte!"
-      );
-    }
-  };
-  
-  const handleFluxoChange = async (value) => {
-
-    if (value !== undefined) {
-      setFluxoSelecionado(value);
-      const fluxo = JSON.parse(value);
-      setHasDadosFluxo(fluxo);
-      await handleListarEtapasPorFluxo(fluxo.id);
-    } else {
-      setFluxoSelecionado(null)
-      setHasDadosFluxo(null)
-    }
-     
+    const [etapasVinculadas, setEtapasVinculadas] = useState([])
+    const [optionsFluxos, setOptionsFluxos] = useState([]);
+    const {dadosFluxo, setDadosFluxo} = useContextoFluxo()
+    const [isModalVisivel, setIsModalVisivel] = useState(false)
+    const [etapasExcluir, setEtapasExcluir] = useState([])
     
-  };
+    const COLUNAS_TABELA = [
+        { title: "Código", dataIndex: "id", key: "id" },
+        { title: "Nome", dataIndex: "nome", key: "nome" },
+        { title: "Descrição", dataIndex: "descricao", key: "descricao"}
+    ];
 
-  const handleBuscarEtapas = async (parametro) => {
-    try {
-      const resposta = await buscarEtapaPeloNome(parametro)
+    const handleExibirModal = () => setIsModalVisivel(true)
+    const handleFecharModal = () =>  setIsModalVisivel(false)
 
-      if(resposta.status !== 200){
-        NotificationManager.success("Falha ao buscar os dados, contate o suporte!")
-      } else {
-        return resposta
-      }
-    } catch (error) {
-      console.log(error)
-      NotificationManager.error("Ocorreu um problema durante a operação, contate o suporte!")
-    }
-  }
-
-  const handleSelecionarEtapas = async (dados) => {
-    try {
-      const dadosEnviar = dados.map((item) => {
-        return {
-          fluxo: hasDadosFluxo.id,
-          etapa: item.id,
-        };
-      });
-      const resposta = await vincularEtapaFluxo(dadosEnviar);
-
-      if (resposta.status === 200) {
-        NotificationManager.success("Etapa(s) vinculada(s) ao fluxo com sucesso !");
-        await handleListarEtapasPorFluxo(hasDadosFluxo.id);
-      } else {
-        NotificationManager.error("Falha ao vincular a(s) etapa(s) ao fluxo, contate o suporte!");
-      }
-    } catch (error) {
-      console.log(error);
-      NotificationManager.error("Ocorreu um problema durante a operação, contate o suporte!");
-    }
-  };
-
-  const handleExcluirEtapas = async () => {
-    try {
-      const resposta = etapasExcluir.length === 1
-        ? await excluirFluxoEtapaOne(etapasExcluir[0].id)
-        : await excluirFluxoEtapaMany(hasDadosFluxo.id, etapasExcluir);
-  
-      if (resposta.status === 204) {
-        await handleListarEtapasPorFluxo(hasDadosFluxo.id)
-        NotificationManager.success(`Etapa${etapasExcluir.length > 1 ? 's' : ''} desvinculado${etapasExcluir.length > 1 ? 's' : ''} do fluxo com sucesso!`);
-      } else {
-        NotificationManager.error(`Falha ao desvincular a${etapasExcluir.length > 1 ? 's' : ''} etapa${etapasExcluir.length > 1 ? 's' : ''} do fluxo, contate o suporte!`);
-      }
-    } catch (error) {
-      console.log(error);
-      NotificationManager.error("Ocorreu um problema durante a operação, contate o suporte!");
-    }
-  };
-
-  useEffect(() => {
-    handleListarFluxos();
-  }, []);
-
-
-  const rowSelection = {
-    onChange: (selectedRowsKeys, selectedRows) => {
-      setEtapasExcluir(selectedRows)
-    },
-  };
-
-
-  return (
-    <div className="tab-vincular-etapas global-form">
-      <div className="form-selecionar-fluxo">
-        <Form layout="vertical">
-          <Form.Item label={<span style={{fontSize: "13px", color: "var(--primary-color)" }}> Selecione o fluxo </span>}>
-            
-            <Select
-              style={{width: "50%", fontSize: '13px'}}
-              onChange={handleFluxoChange}
-              value={fluxoSelecionado}
-              allowClear
-            
-            >
-              {fluxos.map((fluxo) => (
-                <Option style={{fontSize: "13px"}} key={fluxo.id} value={JSON.stringify(fluxo)}>
-                  {fluxo.nome}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Form>
-      </div>
-
-      <div className="tabela-etapas-vinculadas">
-
-        {
-          fluxoSelecionado !== null ? 
-          (
-            <React.Fragment>
-              <div className="div-botoes-acao-vincular-etapas"> 
-                <BotaoAdicionar funcao={handleExibirModal} />
-                <BotaoExcluir  status={false} funcao={handleExcluirEtapas} />
-              </div>
-
-              <ModalSelecionarObjetos
-                title="Buscar etapas" 
-                onOk={handleBuscarEtapas}
-                onCancel={handleFecharModal}
-                onSelect={handleSelecionarEtapas}
-                colunas={COLUNAS_TABELA}
-                status={isModalVisivel}
-              />
-
-              <Table
-                className="global-table" 
-                columns={COLUNAS_TABELA}
-                dataSource={etapasVinculadas}
-                rowSelection={rowSelection}
-                rowKey="id"
-
-              />
-
-            </React.Fragment>
-          
-          )
-
-          : null
+    const handleListarFluxos = async () => {
+        try {
+            const response = await listarFluxos();
+            const resultados = response.data.map((item) => ({
+                value: item.id,
+                label: item.nome,
+            }));
+            setOptionsFluxos(resultados);
+        } catch (error) {
+            return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
         }
-        
-      </div>
+    };
 
-      <div></div>
-    </div>
-  );
+    const handleListarEtapasPorFluxo = async (idFluxo) => {
+        const response = await listarEtapasPorFluxo(idFluxo);
+
+        if (!response.error) {
+            const etapasVinculadas = response.data 
+
+            if (etapasVinculadas.length === 0) {
+                setEtapasVinculadas([])
+
+            } else {
+                const promisesEtapas = await Promise.all(etapasVinculadas.map(async (fluxoEtapa) => {
+                    const resEtapa = await buscarEtapaPeloId(fluxoEtapa.etapa);
+                    return {
+                        id: fluxoEtapa.id,
+                        fluxo: fluxoEtapa.fluxo,
+                        etapa: fluxoEtapa.etapa,
+                        nome: resEtapa.data.nome,
+                        descricao: resEtapa.data.descricao,
+                    };
+                }));
+        
+                setEtapasVinculadas(promisesEtapas);
+            }
+        }
+    };
+  
+    const handleSelecionarFluxo = async (value) => {
+
+        if (value !== undefined) {
+            const response = await buscarFluxoPeloId(value)
+            if(!response.error){
+                setDadosFluxo(response.data);
+                await handleListarEtapasPorFluxo(value);
+            }
+        } else {
+            setDadosFluxo(null)
+        }    
+    };
+
+    const handleBuscarEtapas = async (parametro) => {
+        const response = await buscarEtapaPeloNome(parametro)
+        return response
+    }
+
+    const handleSelecionarEtapas = async (dados) => {
+        const dadosEnviar = dados.map((item) => {
+            return {
+                fluxo: dadosFluxo.id,
+                etapa: item.id,
+            };
+        });
+
+        const response = await vincularEtapaFluxo(dadosEnviar);
+
+        if (!response.error) {
+            await handleListarEtapasPorFluxo(dadosFluxo.id);
+        }
+    };
+
+    const handleExcluirEtapas = async () => {
+        Modal.confirm({
+            title: 'Confirmar exclusão',
+            content: 'Você está seguro de que deseja excluir este(s) item(s) ?',
+            okText: 'Sim',
+            cancelText: 'Não',
+            onOk: async () => {
+
+                if (etapasExcluir.length > 0){
+                    const ids = etapasExcluir.map((item) => item.etapa)
+                    await desvincularEtapaFluxo(dadosFluxo.id, ids)
+                    await handleListarEtapasPorFluxo(dadosFluxo.id)
+                } else {
+                    return handleInfo(null, "Não há etapas para excluir !")
+                }
+            }
+        });
+    };
+
+    useEffect(() => {
+        handleListarFluxos();
+    }, []);
+
+
+    const rowSelection = {
+        onChange: (selectedRowsKeys, selectedRows) => {
+        setEtapasExcluir(selectedRows)
+        },
+    };
+
+    return (
+        <div className="global-form">
+            <Form layout="vertical">
+                <Form.Item>
+                    <Select
+                        style={{width: "50%"}}
+                        onChange={handleSelecionarFluxo}
+                        allowClear
+                        defaultValue="Selecione o fluxo"
+                        options={optionsFluxos}
+                    />
+                </Form.Item>
+            </Form>
+
+            <div>
+                { dadosFluxo !== null ? 
+                    (
+                        <React.Fragment>
+                            <div style={{
+                                display: "flex",
+                                justifyContent: "flex-end",
+                                gap: "10px",
+                                margin: "20px"
+                            }}> 
+                                <Button 
+                                    type="primary" 
+                                    icon={<FaLink />} 
+                                    onClick={() => handleExibirModal()}> 
+                                    Vincular etapas 
+                                </Button>
+
+                                <Button 
+                                    type="primary"
+                                    danger
+                                    icon={<FaTrash />}
+                                    onClick={() => handleExcluirEtapas()}
+                                    disabled={etapasExcluir.length === 0 ? true : false}
+                                >
+                                    Excluir
+                                </Button>
+                            </div>
+
+                            <ModalSelecionarObjetos
+                                title="Buscar etapas" 
+                                onOk={handleBuscarEtapas}
+                                onCancel={handleFecharModal}
+                                onSelect={handleSelecionarEtapas}
+                                colunas={COLUNAS_TABELA}
+                                status={isModalVisivel}
+                            />
+
+                            <Table
+                                columns={COLUNAS_TABELA}
+                                dataSource={etapasVinculadas}
+                                rowSelection={rowSelection}
+                                rowKey="id"
+                            />
+                        </React.Fragment>
+                    )
+
+                : null }  
+            </div>
+        </div>
+    );
 };
 
 export default TabVincularEtapas;

@@ -1,30 +1,43 @@
 import api from "../api/api"
+import { ERROR_MESSAGE_ON_SEARCHING } from "./messages"
+import { handleError, handleSuccess } from "./utils"
 
 export const vincularEtapaFluxo = async (dados) => {
-    const resposta = await api.post("fluxo_etapa/cadastrar/", {etapas: dados})
-    return resposta 
+    try {
+        const response = await api.post("fluxo_etapa/cadastrar/", {etapas: dados})
+        return handleSuccess(response, "Etapa(s) vinculada(s) ao fluxo com sucesso !")
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar vincular a etapa ao fluxo, contate o suporte!')
+    } 
 }
 
 export const atualizarEtapaFluxo = async (dados, id) => {
-    const resposta = await api.patch(`fluxo_etapa/atualizar/${encodeURIComponent(id)}/`, dados)
-    return resposta
+    try {
+        const response = await api.patch(`fluxo_etapa/atualizar/${encodeURIComponent(id)}/`, dados)
+        return response
+    } catch (error) {
+        return handleError(error, 'Ocorreu um problema durante a operação, contate o suporte!')
+    }
 }
 
 export const listarEtapasPorFluxo = async (idFluxo) => {
-    const resposta = await api.get(`fluxo_etapa/buscar/${encodeURIComponent(idFluxo)}/`)
-    return resposta
+    try {
+        const response = await api.get(`fluxo_etapa/buscar/${encodeURIComponent(idFluxo)}/`)
+        return response
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
 }
 
-export const excluirFluxoEtapaOne = async (id) => {
-    const resposta = await api.delete(`fluxo_etapa/excluir/one/${encodeURIComponent(id)}/`)
-    return resposta
-}
+export const desvincularEtapaFluxo = async (idFluxo, idsEtapas) => {
+    try {
+        const response = await api.delete('fluxo_etapa/excluir/', {params: {
+            id_fluxo: idFluxo,
+            ids_etapas: idsEtapas
+        }})
 
-export const excluirFluxoEtapaMany = async (idFluxo, listaEtapas) => {
-    const ids_etapas = listaEtapas.map(fluxoEtapa => fluxoEtapa.etapa);
-
-    const resposta = await api.delete(`fluxo_etapa/excluir/many/${encodeURIComponent(idFluxo)}/`, {
-        data: { ids_etapas: ids_etapas },
-    });
-    return resposta
+        return handleSuccess(response, 'O vínculo entre o fluxo e a(s) etapa(s) foi excluído com sucesso!')
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar excluir o vínculo entre o fluxo e a(s) etapa(s) !')
+    }
 }
