@@ -1,35 +1,46 @@
 import { Button, Form, Input } from "antd";
-import React from "react";
-import BotaoVoltar from "../../../../components/Botoes/BotaoVoltar/BotaoVoltar";
+import React, { useEffect, useState } from "react";
+import { useContextoFluxo } from "../../context/ContextoFluxo";
 
-const FormFluxo = ({onSubmit, onBack, valoresIniciais}) => {
+const FormFluxo = ({onSubmit, onCancel}) => {
 
     const [form] = Form.useForm()
+    const {dadosFluxo} = useContextoFluxo()
+    const [titulo, setTitulo] = useState('CADASTRAR FLUXO')
 
-    const handleSubmeterForm = async () => {
-        const dados = form.getFieldsValue()
-        await onSubmit(dados)
-    }   
+    useEffect(() => {
+        const fetchData = async () => {
+            if (dadosFluxo !== null){
+                form.setFieldsValue(dadosFluxo)
+                setTitulo('ATUALIZAR FLUXO')
+            } else {
+                form.resetFields()
+                setTitulo('CADASTRAR FLUXO')
+            }
+        }
+
+        fetchData()
+    }, [])
 
     return (
         <div className="global-form">
-            <div> 
-                <BotaoVoltar funcao={onBack}/>
-            </div>
-            <h4>CADASTRAR FLUXO</h4>
+
             <Form
-                name="myForm"
                 layout="vertical"
                 form = {form}
                 labelCol={{
                     span: 4,
-                  }}
-                  wrapperCol={{
+                }}
+                wrapperCol={{
                     span: 14,
-                  }}
-                initialValues={valoresIniciais}               
+                }}
+                onFinish={onSubmit}
             >
-                <Form.Item name="nome" label="Nome">
+                <Form.Item>
+                    <h4> {titulo} </h4>
+                </Form.Item>
+
+                <Form.Item name="nome" label="Nome" rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}>
                     <Input placeholder="Ex.: Modelo Scrum"/>
                 </Form.Item>
 
@@ -43,11 +54,14 @@ const FormFluxo = ({onSubmit, onBack, valoresIniciais}) => {
                 
                 <div style={{
                     display: "flex",
-                    justifyContent: "space-between",
-                    marginBottom: "20px"
+                    gap: '10px'
                 }}>
-                    <Button type="primary" onClick={handleSubmeterForm}> 
+                    <Button type="primary" htmlType="submit"> 
                         Salvar
+                    </Button>
+
+                    <Button type="primary" danger onClick={onCancel}> 
+                        Cancelar
                     </Button>
                 </div>
             </Form>

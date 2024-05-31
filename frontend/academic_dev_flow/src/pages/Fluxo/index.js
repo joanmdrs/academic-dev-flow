@@ -6,6 +6,7 @@ import TabsFluxo from "./screens/TabsFluxo/TabsFluxo"
 import MenuAdmin from "../../components/Menus/MenuAdmin/MenuAdmin";
 import MenuAluno from "../../components/Menus/MenuAluno/MenuAluno";
 import MenuProfessor from "../../components/Menus/MenuProfessor/MenuProfessor";
+import { ProviderFluxo } from "./context/ContextoFluxo";
 
 const ScreenGerenciarFluxos = ({grupo}) => {
 
@@ -16,7 +17,9 @@ const ScreenGerenciarFluxos = ({grupo}) => {
             { grupo === 'professor' && <MenuProfessor />}
             <Layout>
                 <MyHeader />
-                <FluxoProvider> <TabsFluxo /> </FluxoProvider>
+                <ProviderFluxo>
+                    <FluxoProvider> <TabsFluxo /> </FluxoProvider>
+                </ProviderFluxo>
             </Layout>
         </React.Fragment>
     )

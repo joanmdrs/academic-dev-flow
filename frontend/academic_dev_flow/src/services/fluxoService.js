@@ -1,9 +1,21 @@
 import api from "../api/api"
-import { handleError } from "./utils"
+import { 
+    ERROR_MESSAGE_ON_CREATION, 
+    ERROR_MESSAGE_ON_DELETION, 
+    ERROR_MESSAGE_ON_SEARCHING, 
+    ERROR_MESSAGE_ON_UPDATE, 
+    SUCCESS_MESSAGE_ON_CREATION, 
+    SUCCESS_MESSAGE_ON_DELETION, 
+    SUCCESS_MESSAGE_ON_UPDATE } from "./messages"
+import { handleError, handleSuccess } from "./utils"
 
 export const criarFluxo = async (dados) => {
-    const resposta = await api.post("/fluxo/cadastrar/", dados)
-    return resposta
+    try {
+        const response = await api.post("/fluxo/cadastrar/", dados)
+        return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION)
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_CREATION)
+    }
 }
 
 export const buscarFluxoPeloNome = async (parametro) => {
@@ -16,21 +28,38 @@ export const buscarFluxoPeloNome = async (parametro) => {
 }
 
 export const buscarFluxoPeloId =  async (fluxo_id) => {
-    const resposta = await api.get(`fluxo/buscar/${encodeURIComponent(fluxo_id)}/`)
-    return resposta
+    try {
+        const response = await api.get(`fluxo/buscar/${encodeURIComponent(fluxo_id)}/`) 
+        return response
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
 }
 
 export const atualizarFluxo = async (dadosFluxo, idFluxo) => {
-    const resposta = await api.patch(`fluxo/atualizar/${encodeURIComponent(idFluxo)}/`, dadosFluxo)
-    return resposta
+    try {
+        const response = await api.patch(`fluxo/atualizar/${encodeURIComponent(idFluxo)}/`, dadosFluxo)
+        return handleSuccess(response, SUCCESS_MESSAGE_ON_UPDATE)
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_UPDATE)
+    }
+    
 }
 
 export const excluirFluxo = async (idFluxo) => {
-    const resposta = await api.delete(`fluxo/excluir/${encodeURIComponent(idFluxo)}/`)
-    return resposta
+    try {
+        const response = await api.delete(`fluxo/excluir/${encodeURIComponent(idFluxo)}/`)
+        return handleSuccess(response, SUCCESS_MESSAGE_ON_DELETION)
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_DELETION)
+    }
 }
 
 export const listarFluxos = async () => {
-    const resposta = await api.get('fluxo/listar/')
-    return resposta
+    try {
+        const response = await api.get('fluxo/listar/')
+        return response
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
 }
