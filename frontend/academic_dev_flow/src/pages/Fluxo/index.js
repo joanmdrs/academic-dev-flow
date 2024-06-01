@@ -1,7 +1,6 @@
 import React from "react";
 import { Layout } from 'antd';
 import MyHeader from "../../components/Header/Header";
-import { FluxoProvider } from "./context/Provider/Provider";
 import TabsFluxo from "./screens/TabsFluxo/TabsFluxo"
 import MenuAdmin from "../../components/Menus/MenuAdmin/MenuAdmin";
 import MenuAluno from "../../components/Menus/MenuAluno/MenuAluno";
@@ -18,7 +17,7 @@ const ScreenGerenciarFluxos = ({grupo}) => {
             <Layout>
                 <MyHeader />
                 <ProviderFluxo>
-                    <FluxoProvider> <TabsFluxo /> </FluxoProvider>
+                    <TabsFluxo /> 
                 </ProviderFluxo>
             </Layout>
         </React.Fragment>
