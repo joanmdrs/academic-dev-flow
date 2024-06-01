@@ -5,6 +5,7 @@ import MenuAluno from "../../../../components/Menus/MenuAluno/MenuAluno";
 import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfessor";
 import MyHeader from "../../../../components/Header/Header";
 import GerenciarEtapas from "./GerenciarEtapas";
+import { ProviderEtapa } from "../../context/ContextoEtapa";
 
 const ScreenGerenciarEtapas = ({grupo}) => {
 
@@ -15,7 +16,9 @@ const ScreenGerenciarEtapas = ({grupo}) => {
             { grupo === 'professor' && <MenuProfessor />}
             <Layout>
                 <MyHeader/>
-                <GerenciarEtapas />
+                <ProviderEtapa>
+                    <GerenciarEtapas />
+                </ProviderEtapa>
             </Layout>
         </React.Fragment>
       

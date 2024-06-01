@@ -69,9 +69,11 @@ export const atualizarEtapa = async (dadosEtapa, idEtapa) => {
     }
 }
 
-export const excluirEtapa = async (idEtapa) => {
+export const excluirEtapas = async (idsEtapas) => {
     try {
-        const response = await api.delete(`etapa/excluir/${encodeURIComponent(idEtapa)}/`)
+        const response = await api.delete('etapa/excluir/', {params: {
+            ids_etapas: idsEtapas
+        }})
         return handleSuccess(response, SUCCESS_MESSAGE_ON_DELETION)
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_DELETION)

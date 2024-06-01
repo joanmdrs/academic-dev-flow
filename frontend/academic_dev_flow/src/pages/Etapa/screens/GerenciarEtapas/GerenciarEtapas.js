@@ -1,29 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { NotificationContainer, NotificationManager } from "react-notifications";
 import Titulo from "../../../../components/Titulo/Titulo";
-import BotaoAdicionar from "../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
-import BotaoExcluir from "../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
-import BotaoAtualizar from "../../../../components/Botoes/BotaoAtualizar/BotaoAtualizar";
-import BotaoFiltrar from "../../../../components/Botoes/BotaoFiltrar/BotaoFiltrar";
-import ListaDados from "../../../../components/Listas/ListaDados/ListaDados";
-import { recarregarPagina } from "../../../../services/utils";
-import { buscarEtapaPeloNome, excluirEtapa, listarEtapas } from "../../../../services/etapaService";
+import { atualizarEtapa, buscarEtapaPeloNome, criarEtapa, excluirEtapas, listarEtapas } from "../../../../services/etapaService";
 import FormDeBusca from "../../../../components/Forms/FormDeBusca/FormDeBusca";
 import FormEtapa from "../../components/FormEtapa/FormEtapa";
+import { useContextoEtapa } from "../../context/ContextoEtapa";
+import { Button, Modal, Table } from "antd";
+import { FaFilter, FaPlus, FaTrash } from "react-icons/fa";
 
 const GerenciarEtapas = () => {
 
+    const {dadosEtapa, setDadosEtapa} = useContextoEtapa()
+    const [etapas, setEtapas] = useState([])
+    const [etapasSelecionadas, setEtapasSelecionadas] = useState([])
     const [acaoForm, setAcaoForm] = useState("criar");
     const [isFormVisivel, setIsFormVisivel] = useState(false);
     const [isFormFiltrarVisivel, setIsFormFiltrarVisivel] = useState(false);
-    const [isBotaoAdicionarVisivel, setIsBotaoAdicionarVisivel] = useState(false);
-    const [isBotaoEditarVisivel, setIsBotaoEditarVisivel] = useState(true);
-    const [isBotaoExcluirVisivel, setIsBotaoExcluirVisivel] = useState(true);
+    const isBotaoExcluirVisivel = etapasSelecionadas.length !== 0 ? false : true
 
-    const [dadosEtapas, setDadosEtapas] = useState([]);
-    const [etapaSelecionada, setEtapaSelecionada] = useState({id: "", nome: "", descricao: ""});
-
-    const COLUNAS_LISTA = [
+    const COLUNAS_TABELA_ETAPAS = [
         {
             title: "Código",
             key: "codigo",
@@ -33,6 +27,14 @@ const GerenciarEtapas = () => {
             title: "Nome",
             dataIndex: "nome",
             key: "nome",
+            render: (_, record) => (
+                <span 
+                    style={{cursor: 'pointer', color: 'var(--primary-color)'}} 
+                    onClick={() => handleAtualizarEtapa(record)}
+                >
+                    {record.nome}
+                </span>
+            )
         },
         {
             title: "Descrição",
@@ -43,16 +45,10 @@ const GerenciarEtapas = () => {
 
     const handleListarEtapas = async () => { 
         
-        try {
-            const resposta = await listarEtapas()
+        const response = await listarEtapas()
 
-            if(resposta.status === 200) {
-                setDadosEtapas(resposta.data)
-            } else {
-                NotificationManager.error("Ocorreu um problema durante a busca dos dados, contate o suporte!");
-            }
-        } catch (error) {
-            NotificationManager.error("Ocorreu um problema durante a busca dos dados, contate o suporte!");
+        if(!response.error) {
+            setEtapas(response.data)
         }
     }
 
@@ -60,108 +56,141 @@ const GerenciarEtapas = () => {
         handleListarEtapas();
     }, []);
 
+    const handleCancelar = async () => {
+        setIsFormVisivel(false)
+        setDadosEtapa(null)
+        setEtapasSelecionadas([])
+    }
+
+    const handleReload = async () => {
+        setIsFormVisivel(false)
+        setDadosEtapa(null)
+        setEtapasSelecionadas([])
+        await handleListarEtapas()
+    }
+
     const handleCliqueBotaoFiltrar = () => {
         setIsFormFiltrarVisivel((prevIsFormFiltrarVisivel) => !prevIsFormFiltrarVisivel);
     }
 
     const handleFiltrarEtapas = async (parametro) => {
 
-        try {
-            const resposta = await buscarEtapaPeloNome(parametro)
-            if(resposta.status === 200) {
-                setDadosEtapas(resposta.data.results)
-
-            } else {
-                NotificationManager.error("Ocorreu um problema, contate o suporte!");
-            }
-        } catch (error) {
-            NotificationManager.error("Ocorreu um problema, contate o suporte!");
+        const response = await buscarEtapaPeloNome(parametro)
+        if(!response.error) {
+            setEtapas(response.data.results)
         }
     }   
 
-    const handleCliqueEtapaSelecionada = (dados) => {
-        setIsBotaoEditarVisivel(false)
-        setEtapaSelecionada(dados)
-        setIsBotaoExcluirVisivel(false)
-    }
-
-    const handleCliqueBotaoAdicionar = () => {
+    const handleCriarEtapa = () => {
         setAcaoForm('criar')
         setIsFormVisivel(true);
+        setDadosEtapa(null)
     };
 
-    const handleCliqueBotaoEditar = () => {
+    const handleAtualizarEtapa = (record) => {
         setAcaoForm("atualizar")
         setIsFormVisivel(true)
+        setDadosEtapa(record)
     }
 
-    const handleCliqueBotaoExcluir = async () => {
-
-        try {
-            const idEtapa = etapaSelecionada.id
-            const resposta = await excluirEtapa(idEtapa)
-
-            if(resposta.status === 204) {
-                NotificationManager.success("Etapa excluída com sucesso!");
-                recarregarPagina();
-        } else {
-            NotificationManager.error("Ocorreu um problema, contate o suporte!");
+    const handleSalvarEtapa = async (dados) => {
+        
+        if (acaoForm === 'criar'){
+            await criarEtapa(dados)
+        } else if (acaoForm === 'atualizar'){
+            await atualizarEtapa(dados, dadosEtapa.id)
         }
-        } catch (error) {
-            NotificationManager.error("Ocorreu um problema, contate o suporte!");
-        }
+        await handleReload()
     }
 
-    const handleCliqueBotaoVoltar = () => {
-        setIsFormVisivel(false)
-        setIsBotaoAdicionarVisivel(false)
-        setIsBotaoEditarVisivel(true)
-        setIsBotaoExcluirVisivel(true)
-        setEtapaSelecionada({id: "", nome: "", descricao: ""})
+    const handleExcluirEtapa = async () => {
+        Modal.confirm({
+            title: 'Confirmar exclusão',
+            content: 'Tem certeza que deseja excluir este(s) item(s) ?',
+            okText: 'Sim',
+            cancelText: 'Não',
+            onOk: async () => {
+                if (etapasSelecionadas !== null) {
+                    const ids = etapasSelecionadas.map((item) => item.id)
+                    await excluirEtapas(ids)
+                    await handleReload() 
+                }
+            }
+        });
     }
+
+    const rowSelection = {
+        onChange: (selectedRowsKeys, selectedRows) => {
+          setEtapasSelecionadas(selectedRows)
+        },
+    };
 
     return (
         <React.Fragment>
-            <NotificationContainer />
+
+            <Titulo
+                titulo='Etapas'
+                paragrafo='Etapas > Gerenciar etapas'
+            />
 
             {isFormVisivel ? (
-
-                <FormEtapa 
-                    acaoBotaoVoltar={handleCliqueBotaoVoltar} 
-                    acaoForm={acaoForm} 
-                    etapaSelecionada={etapaSelecionada}
-                />
+                <div className="global-div">
+                    <FormEtapa 
+                        onSubmit={handleSalvarEtapa} 
+                        onCancel={handleCancelar}
+                    />
+                </div>
 
             ) : (
-                <div className="screen-gerenciar-etapas">
-                    <Titulo
-                        titulo='Etapas'
-                        paragrafo='Etapas > Gerenciar etapas'
-                    />
 
-                    <div className="screen-gerenciar-etapas-content global-div">
-                        <div className="button-menu">
-                            <div id="botao-filtrar"> 
-                                <BotaoFiltrar funcao={handleCliqueBotaoFiltrar}  />
-                            </div>
-                            <div className="grouped-buttons"> 
-                                <BotaoAdicionar funcao={handleCliqueBotaoAdicionar} status={isBotaoAdicionarVisivel}/>
-                                <BotaoAtualizar funcao={handleCliqueBotaoEditar} status={isBotaoEditarVisivel}/>
-                                <BotaoExcluir funcao={handleCliqueBotaoExcluir} status={isBotaoExcluirVisivel}/>
-                            </div>
+                <div>
+                    <div className="button-menu">
+                        <div id="botao-filtrar"> 
+                            <Button 
+                                type="primary"
+                                icon={<FaFilter />}
+                                onClick={() => handleCliqueBotaoFiltrar()}
+                            >
+                                Filtrar
+                            </Button>
                         </div>
+                        <div className="grouped-buttons"> 
+                            <Button
+                                type="primary"
+                                onClick={() => handleCriarEtapa()} 
+                                icon={<FaPlus />}
+                            >
+                                Criar Etapa
+                            </Button>
 
-                        {isFormFiltrarVisivel && (<FormDeBusca executeFuncao={handleFiltrarEtapas}/>)}
-                    
-                        <ListaDados 
-                            colunas={COLUNAS_LISTA} 
-                            dados={dadosEtapas} 
-                            onClickRow={handleCliqueEtapaSelecionada}
-                        />
+                            <Button
+                                type="primary"
+                                danger
+                                icon={<FaTrash />}
+                                disabled={isBotaoExcluirVisivel}
+                                onClick={async () => await handleExcluirEtapa()}
+                            
+                            >
+                                Excluir
+                            </Button>
+                        </div>
                     </div>
 
-                    
-                </div>
+                    {isFormFiltrarVisivel && (
+                        <div className="global-div" style={{width: '50%'}}>
+                            <FormDeBusca executeFuncao={handleFiltrarEtapas}/>
+                        </div>
+                    )}
+
+                    <div className="global-div"> 
+                        <Table 
+                            columns={COLUNAS_TABELA_ETAPAS}
+                            dataSource={etapas}
+                            rowKey="id"
+                            rowSelection={rowSelection}
+                        />
+                    </div>
+                </div> 
             )}
             
         </React.Fragment>

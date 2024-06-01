@@ -130,7 +130,6 @@ const QuadroTarefas = () => {
                     const ids = tarefasSelecionadas.map((item) => item.id)
                     await excluirTarefas(ids)
                     await handleReload() 
-                    
                 }
             }
         });
