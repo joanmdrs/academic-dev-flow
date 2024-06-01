@@ -164,9 +164,13 @@ const TabGerenciarFluxos = () => {
                         </div>
                     </div>
 
-                    { isFormFiltrarVisivel && (<FormDeBusca executeFuncao={handleBuscarFluxo}/>) }
+                    { isFormFiltrarVisivel && (
+                        <div className="global-div" style={{width: '50%'}}> 
+                            <FormDeBusca executeFuncao={handleBuscarFluxo}/>
+                        </div>
+                    ) }
                 
-                    <div>
+                    <div className="global-div">
                         <Table 
                             dataSource={fluxos} 
                             columns={COLUNAS_FLUXOS} 
