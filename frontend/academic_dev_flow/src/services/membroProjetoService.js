@@ -38,10 +38,6 @@ export const excluirMembroProjetoMany = async (id_projeto, lista_membros, grupo)
 export const listarMembrosPorProjeto = async (idProjeto) => {
     try {
         const response = await api.get(`membro_projeto/buscar/${encodeURIComponent(idProjeto)}/`)
-
-        if (response.status === 204) {
-            return handleInfo(response, INFO_MESSAGE_ON_SEARCHING)
-        } 
         return response
 
     } catch (error) {

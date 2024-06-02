@@ -14,6 +14,7 @@ import { atualizarArtefato, criarArtefato, filtrarArtefatosPeloNomeEPeloProjeto 
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import ModalExcluirArtefato from "../../components/ModalExcluirArtefato/ModalExcluirArtefato";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
+import { buscarUsuarioPeloIdMembroProjeto } from "../../../../services/membroService";
 
 const GerenciarArtefatos = () => {
 
@@ -79,10 +80,23 @@ const GerenciarArtefatos = () => {
         setDadosArtefato(record)
     }
 
+    const handleBuscarAutor = async (idMembroProjeto) => {
+
+        const response = await buscarUsuarioPeloIdMembroProjeto(idMembroProjeto)
+        return response
+    }
+
     const handleSalvarArtefato = async (dados) => {
+
+        const resAutor = await handleBuscarAutor(dados.membro)
+
         dados['projeto'] = dadosProjeto.id
         dados['github_token'] = dadosProjeto.token
+        dados['repository'] = dadosProjeto.nome_repo
         dados['content'] = dados.descricao
+        dados['author_name'] = resAutor.data.nome
+        dados['author_email'] = resAutor.data.email_github
+
         if (acaoForm === 'criar') {
             const response = await createContent(dados)
             if (!response.error){

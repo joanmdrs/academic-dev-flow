@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {Form, Select, Button, Input } from "antd";
-import { useContextoArtefato } from "../../context/ContextoArtefato";
+import {Form, Select } from "antd";
 import { buscarProjetoPeloId, listarProjetos } from "../../../../services/projetoService";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 
 const SelectProjeto = () => {
     const [optionsProjetos, setOptionsProjetos] = useState([]);
     const [selectedItem, setSelectedItem] = useState(null);
-    const {setDadosProjeto} = useContextoArtefato()
+    const {setDadosProjeto} = useContextoGlobalProjeto()
 
     useEffect(() => {
         const fetchData = async () => {
@@ -27,12 +27,17 @@ const SelectProjeto = () => {
     const handleChange = async (value) => {
         setSelectedItem(value);
         const response = await buscarProjetoPeloId(value)
-        setDadosProjeto(response.data)
+
+        if (!response.error) {
+            setDadosProjeto(response.data)
+        }
     };
 
     const filterOption = (input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
     return (
-            <Form.Item>
+            <Form.Item 
+                rules={[{ required: true, message: 'Por favor, selecione uma opção !' }]}
+            >
                 <Select
                     showSearch
                     allowClear

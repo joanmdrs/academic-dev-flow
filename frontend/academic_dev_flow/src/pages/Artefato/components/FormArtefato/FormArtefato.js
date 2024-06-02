@@ -5,6 +5,9 @@ import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { optionsStatusArtefatos } from "../../../../services/optionsStatus";
+import { listarMembrosPeloIdProjeto } from "../../../../services/membroProjetoService";
+import { handleError, handleInfo } from "../../../../services/utils";
+import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 
 const FormArtefato = ({onSubmit, onCancel, selectProjeto, inputsAdmin, inputCommitMessage}) => {
 
@@ -28,9 +31,10 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto, inputsAdmin, inputComm
             })
 
             setOptionsIteracao(resultados)
+        } else {
+            return handleInfo(response, "Este projeto não possui iterações cadastradas, cadastre as iterações antes de criar o artefato.")
         }
     }
-
     useEffect(() => {
         const fetchData = async () => {
             if (dadosProjeto !== null){

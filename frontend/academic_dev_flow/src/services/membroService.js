@@ -124,6 +124,15 @@ export const buscarMembroPeloUser = async (idUser) => {
     }
 }
 
+export const buscarUsuarioPeloIdMembroProjeto = async (idMembroProjeto) => {
+    try {
+        const response = await api.get(`membro/buscar-usuario-github/${encodeURIComponent(idMembroProjeto)}/`)
+        return response
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar buscar os dados do usuário github do membro selecionado, contate o suporte!')
+    }
+}
+
 export const excluirMembro = async (idMembro) => {
     try {
         const resposta = await api.delete(`/membro/excluir/${encodeURIComponent(idMembro)}/`)

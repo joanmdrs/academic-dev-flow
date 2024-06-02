@@ -260,9 +260,9 @@ class ListarMembrosPorProjeto(APIView):
                 })
             
             if not membros_info:
-                return Response({'message': 'Nenhum membro encontrado.', 'results': []}, status=status.HTTP_200_OK)
+                return Response(data=[], status=status.HTTP_200_OK)
             
-            return JsonResponse(membros_info, safe=False, status=status.HTTP_200_OK)
+            return Response(data=membros_info, status=status.HTTP_200_OK)
   
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

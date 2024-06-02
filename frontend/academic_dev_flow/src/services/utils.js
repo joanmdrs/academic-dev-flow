@@ -79,7 +79,7 @@ export const handleSuccess = (response, successMessage) => {
 };
 
 export const handleInfo = (response, infoMessage) => {
-  if (response.status === 204){
+  if (response.status === 204 || response.status === 200){
     NotificationManager.info(infoMessage)
     return response;
   } else {
