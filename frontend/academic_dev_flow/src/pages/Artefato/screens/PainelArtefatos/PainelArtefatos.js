@@ -329,7 +329,6 @@ const PainelArtefatos = () => {
                     />
                 </div>
             }
-            
 
             <ModalExcluirArtefato 
                 visible={isModalExcluirVisivel}

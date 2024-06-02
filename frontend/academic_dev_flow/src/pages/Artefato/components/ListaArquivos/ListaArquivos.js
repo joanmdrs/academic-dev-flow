@@ -1,12 +1,9 @@
-import { Button, Space, Table } from "antd";
-import React, { useEffect, useState } from "react";
-import { verificarExistenciaArquivo } from "../../../../services/artefatoService";
-import { handleError } from "../../../../services/utils";
-import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
-import { IoCheckmarkCircle } from "react-icons/io5";
-import { IoCloseCircle } from "react-icons/io5";
-import { IoMdTrash } from "react-icons/io";
+import { Space, Table, Tooltip } from "antd";
+import React from "react";
+import { IoMdOpen, IoMdTrash } from "react-icons/io";
 import { FaArrowsRotate } from "react-icons/fa6";
+import { IoIosClose } from "react-icons/io";
+import { IoIosCheckmark } from "react-icons/io";
 
 const ListaArquivos = ({dadosArquivos, carregando, onDelete}) => {
 
@@ -28,9 +25,9 @@ const ListaArquivos = ({dadosArquivos, carregando, onDelete}) => {
             align: 'center',
             render: (_, record) => (
                 <Space>
-                    { record.existe ? 
-                        <span> <IoCheckmarkCircle color="green" size="15px"/></span>
-                        : <span> <IoCloseCircle color="red"  size="20px" /></span>
+                    { record.exists ? 
+                        <span> <IoIosCheckmark color="green" size="25px"/></span>
+                        : <span> <IoIosClose color="red"  size="25px" /></span>
                     }
                 </Space>
             )
@@ -40,18 +37,20 @@ const ListaArquivos = ({dadosArquivos, carregando, onDelete}) => {
             dataIndex: 'action',
             key: 'action',
             render: (_, record) => (
-                <Space> 
-                    { record.existe ? 
-                        <a onClick={() => onDelete(record)}> <IoMdTrash /> Excluir </a>
-                        : <a> <FaArrowsRotate /> Sicronizar </a>
-                    }
+                <Space size="middle">
+                    <Tooltip title="Visualizar">
+                        <a href={record.url} target="blank"> <IoMdOpen /></a>
+                    </Tooltip>
+                    <Tooltip title="Excluir">
+                        <a onClick={() => onDelete(record)}><IoMdTrash /></a>
+                    </Tooltip>
                 </Space>
             )
         }
     ]
 
     return (    
-        <Table className="style-table" loading={carregando} rowKey="sha" columns={COLUNAS_ARQUIVOS} dataSource={dadosArquivos}/>
+        <Table loading={carregando} rowKey="sha" columns={COLUNAS_ARQUIVOS} dataSource={dadosArquivos}/>
     )
 }
 

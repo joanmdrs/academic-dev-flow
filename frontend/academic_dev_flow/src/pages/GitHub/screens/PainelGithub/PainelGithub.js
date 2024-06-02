@@ -2,8 +2,6 @@ import { Tabs } from "antd";
 import React from "react";
 import GerenciarIssues from "../GerenciarIssues/GerenciarIssues";
 import GerenciarContents from "../GerenciarContents/GerenciarContents";
-import GerenciarLabels from "../GerenciarLabels/GerenciarLabels";
-import GerenciarCommits from "../GerenciarCommits/GerenciarCommits";
 import ScreenGerenciarCommits from "../GerenciarCommits";
 
 const {TabPane} = Tabs

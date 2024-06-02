@@ -15,6 +15,7 @@ import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import ModalExcluirArtefato from "../../components/ModalExcluirArtefato/ModalExcluirArtefato";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { buscarUsuarioPeloIdMembroProjeto } from "../../../../services/membroService";
+import { handleInfo } from "../../../../services/utils";
 
 const StyleSpin = {
     position: 'fixed', 
@@ -136,7 +137,7 @@ const GerenciarArtefatos = () => {
         const nomeArtefato = dados.nome
         const idProjeto = dados.id_projeto
         const response = await filtrarArtefatosPeloNomeEPeloProjeto(nomeArtefato, idProjeto)
-        if (!response.error) {
+        if (!response.error && response.data.length > 0) {
 
             const dadosModificar = await Promise.all(response.data.map(async (artefato) => {
                 const resProjeto = await buscarProjetoPeloId(artefato.projeto);
