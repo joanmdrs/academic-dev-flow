@@ -51,9 +51,11 @@ const GerenciarArtefatos = () => {
         const parametros = {
             github_token: projeto.token,
             repository: projeto.nome_repo,
+            id_projeto: projeto.id,
+            id_artefato: record.id,
             path: record.path_file
         }
-        navigate("/admin/artefatos/visualizar-artefato", {
+        navigate("/admin/artefatos/visualizar", {
             state: parametros
         });
     }
@@ -131,6 +133,15 @@ const GerenciarArtefatos = () => {
         await deleteContent(objeto)
     }
 
+    const handleAtualizarStatusArtefato = async (record, value) => {
+
+        const dados = {
+            status: value
+        }
+        await atualizarArtefato(record.id, dados)
+        handleReload()
+    }
+
     return (
         <React.Fragment>
             <Titulo 
@@ -183,7 +194,9 @@ const GerenciarArtefatos = () => {
                     <ListaArtefatos    
                         onView={handleVisualizarArtefato} 
                         onEdit={handleAtualizarArtefato} 
-                        onDelete={handlePrepararParaExcluirArtefato} />
+                        onDelete={handlePrepararParaExcluirArtefato}
+                        onUpdateStatus={handleAtualizarStatusArtefato}
+                    />
                 )}
                 
             </div>

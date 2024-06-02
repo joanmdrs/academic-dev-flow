@@ -1,8 +1,5 @@
 import React, {useEffect, useState } from "react"
 import Titulo from "../../../../components/Titulo/Titulo"
-import BotaoAdicionar from "../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar"
-import BotaoExcluir from "../../../../components/Botoes/BotaoExcluir/BotaoExcluir"
-import BotaoBuscar from "../../../../components/Botoes/BotaoBuscar/BotaoBuscar"
 import ModalDeBusca from "../../../../components/Modals/ModalDeBusca/ModalDeBusca"
 import { atualizarMembro, buscarMembroPeloNome, criarMembro, excluirMembro } from "../../../../services/membroService"
 import { useMembroContexto } from "../../context/MembroContexto"
@@ -10,7 +7,7 @@ import { buscarUsuarioPeloId } from "../../../../services/usuarioService"
 import Loading from "../../../../components/Loading/Loading"
 import FormMembro from "../../components/FormMembro/FormMembro"
 import { Button } from "antd"
-import { FaPlus, FaSearch, FaTractor, FaTrash } from "react-icons/fa"
+import { FaPlus, FaSearch, FaTrash } from "react-icons/fa"
 
 const GerenciarMembros = () => {
 

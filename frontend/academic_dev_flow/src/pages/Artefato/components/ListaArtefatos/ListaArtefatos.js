@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
-import {Table, Space} from 'antd'
+import {Table, Space, Select, Tooltip} from 'antd'
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { listarArtefatos } from "../../../../services/artefatoService";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { handleError } from "../../../../services/utils";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
-import { IoDocumentTextOutline } from "react-icons/io5";
+import { optionsStatusArtefatos } from "../../../../services/optionsStatus";
+import { IoMdCreate, IoMdOpen, IoMdTrash } from "react-icons/io";
 
-const ListaArtefatos = ({onView, onEdit, onDelete}) => {
+const ListaArtefatos = ({onView, onEdit, onDelete, onUpdateStatus}) => {
 
     const COLUNAS_TABELA_ARTEFATOS = [
         {
@@ -15,19 +16,25 @@ const ListaArtefatos = ({onView, onEdit, onDelete}) => {
             dataIndex: 'nome',
             key: 'nome',
             render: (_, record) => (
-                <a
-                    onClick={() =>  onView(record)}
+                <a 
+                    href={`https://github.com/${record.nome_repo}/tree/main/${record.path_file}`}
+                    target="blank"
                 > {record.nome} </a>
             )
         },
         {
             title: 'Status',
             dataIndex: 'status',
-            key: 'status'
-        },
-        {
-            title: 'Path',
-            dataIndex: 'path_file',
+            key: 'status',
+            render: (_, record) => (
+                <Select 
+                    style={{width: '150px'}} 
+                    placeholder="Selecione"
+                    value={record.status} 
+                    options={optionsStatusArtefatos} 
+                    onChange={(value) => onUpdateStatus(record, value)}
+                /> 
+            )
         },
         {
             title: 'Projeto',
@@ -40,8 +47,15 @@ const ListaArtefatos = ({onView, onEdit, onDelete}) => {
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    <a onClick={() => onEdit(record)}>Editar</a>
-                    <a onClick={() =>  onDelete(record)}>Excluir</a>
+                    <Tooltip title="Visualizar">
+                        <a onClick={() => onView(record)}><IoMdOpen /></a>
+                    </Tooltip>
+                    <Tooltip title="Editar">
+                        <a onClick={() => onEdit(record)}><IoMdCreate /></a>
+                    </Tooltip>
+                    <Tooltip title="Excluir">
+                        <a onClick={() => onDelete(record)}><IoMdTrash /></a>
+                    </Tooltip>
                 </Space>
             )
         }
@@ -59,12 +73,12 @@ const ListaArtefatos = ({onView, onEdit, onDelete}) => {
         fetchData()
     }, [artefatos])
 
-    function handleLimitarCaracteres(texto, limite) {
-        if (texto && texto.length >= limite) {
-            return `${texto.substring(0, limite)}...`;
-        }
-        return texto;
-    }
+    // function handleLimitarCaracteres(texto, limite) {
+    //     if (texto && texto.length >= limite) {
+    //         return `${texto.substring(0, limite)}...`;
+    //     }
+    //     return texto;
+    // }
 
     const handleListarArtefatos = async () => {
         try {
@@ -75,7 +89,8 @@ const ListaArtefatos = ({onView, onEdit, onDelete}) => {
                     const resProjeto = await buscarProjetoPeloId(artefato.projeto);
     
                     if (!resProjeto.error){
-                        artefato['nome_projeto'] = resProjeto.data.nome;
+                        artefato['nome_projeto'] = resProjeto.data.nome
+                        artefato['nome_repo'] = resProjeto.data.nome_repo
                     }
                     return artefato;
                 }));
@@ -95,7 +110,6 @@ const ListaArtefatos = ({onView, onEdit, onDelete}) => {
     return (
         <Table
             rowKey="id"
-            className="style-table"
             dataSource={artefatos}
             columns={COLUNAS_TABELA_ARTEFATOS}
         />

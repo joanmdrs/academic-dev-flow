@@ -109,9 +109,6 @@ const PainelArtefatos = () => {
             id_artefato: record.id,
             path: record.path_file
         }
-
-        console.log(parametros)
-
         if (grupo === 'Docentes') {
             navigate("/professor/artefatos/visualizar", {
                 state: parametros
