@@ -15,7 +15,6 @@ import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import ModalExcluirArtefato from "../../components/ModalExcluirArtefato/ModalExcluirArtefato";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { buscarUsuarioPeloIdMembroProjeto } from "../../../../services/membroService";
-import { handleInfo } from "../../../../services/utils";
 
 const StyleSpin = {
     position: 'fixed', 

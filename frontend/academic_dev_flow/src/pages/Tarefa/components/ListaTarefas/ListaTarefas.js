@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
-import {Table, Space} from 'antd'
+import { Table, Space, Tooltip } from 'antd';
 import { listarTarefas } from "../../../../services/tarefaService";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
 import { formatDate, handleError } from "../../../../services/utils";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 import { optionsStatusTarefas } from "../../../../services/optionsStatus";
+import { IoMdCreate, IoMdOpen, IoMdTrash } from "react-icons/io";
 
-const ListaTarefas = ({onEdit, onDelete}) => {
+const ListaTarefas = ({onView, onEdit, onDelete }) => {
 
     const COLUNAS_TABELA_TAREFAS = [
         {
@@ -15,28 +16,17 @@ const ListaTarefas = ({onEdit, onDelete}) => {
             dataIndex: 'nome',
             key: 'nome',
             render: (_, record) => (
-                <Space>
-                    <a href={record.url_issue} target="_blank"> {record.nome} </a>
-                </Space>
-            )
-        },
-        {
-            title: 'Data de Início',
-            dataIndex: 'data_inicio',
-            key: 'data_inicio',
-            render: (_, record) => (
-                <Space>
-                    <span> {formatDate(record.data_inicio)}</span>
-                </Space>
-            )
-        },
-        {
-            title: 'Data de Término (Previsão)',
-            dataIndex: 'data_termino',
-            key: 'data_termino',
-            render: (_, record) => (
-                <Space>
-                    <span> {formatDate(record.data_termino)}</span>
+                <Space style={{ display: 'block' }}>
+                    <a href={record.url_issue} target="_blank" rel="noopener noreferrer"> {record.nome} </a>
+
+                    <span style={{ color: '#585858', fontSize: '10px' }}>
+                        #{record.number_issue} 
+                        { 
+                        record.data_inicio && record.data_termino &&  (
+                            <span> {formatDate(record.data_inicio)} - {formatDate(record.data_termino)} </span>
+                        )
+                    }
+                    </span>
                 </Space>
             )
         },
@@ -50,67 +40,76 @@ const ListaTarefas = ({onEdit, onDelete}) => {
             }
         },
         {
-            title: 'Projeto', 
-            dataIndex: 'nome_projeto', 
-            key: 'nome_projeto', 
+            title: 'Projeto',
+            dataIndex: 'nome_projeto',
+            key: 'nome_projeto',
         },
         {
             title: 'Ações',
             dataIndex: 'action',
             key: 'action',
             render: (_, record) => (
-                <Space size="middle">
-                    <a onClick={() => onEdit(record)}>Editar</a>
-                    <a onClick={() =>  onDelete(record.id)}>Excluir</a>
+                <Space>
+                    <Tooltip title="Visualizar">
+                        <a><IoMdOpen /></a>
+                    </Tooltip>
+                    <Tooltip title="Editar">
+                        <a onClick={() => onEdit(record)}><IoMdCreate /></a>
+                    </Tooltip>
+                    <Tooltip title="Excluir">
+                        <a onClick={() => onDelete(record.id)}><IoMdTrash /></a>
+                    </Tooltip>
                 </Space>
             )
         }
-    ]
+    ];
 
-    const {tarefas, setTarefas} = useContextoTarefa()
+    const { tarefas, setTarefas, setTarefasSelecionadas } = useContextoTarefa();
 
     useEffect(() => {
-        const fetchData = async () => {
-            if (tarefas.length === 0){
-                await handleListarTarefas()
-            }
-        }
-
-        fetchData()
-    }, [tarefas])
+        handleListarTarefas();
+    }, [tarefas]);
 
     const handleListarTarefas = async () => {
-        try {
-            const response = await listarTarefas()
+        if (tarefas.length === 0) {
+            try {
+                const response = await listarTarefas();
 
-            if (response.data.length > 0){
-                const dados = await Promise.all(response.data.map(async (tarefa) => {
-                    const resProjeto = await buscarProjetoPeloId(tarefa.projeto)
-                    
-                    if (!resProjeto.error){
-                        tarefa['nome_projeto'] = resProjeto.data.nome;
-                    }
-                    return tarefa
-                }))
-                const resultado = await (Promise.resolve(dados))
-                setTarefas(resultado)
-            } else {
-                setTarefas([])
+                if (!response.error && response.data.length > 0) {
+                    const dados = await Promise.all(response.data.map(async (tarefa) => {
+                        const resProjeto = await buscarProjetoPeloId(tarefa.projeto);
+
+                        if (!resProjeto.error) {
+                            tarefa['nome_projeto'] = resProjeto.data.nome;
+                        }
+                        return tarefa;
+                    }));
+                    const resultado = await Promise.resolve(dados);
+                    setTarefas(resultado);
+                } else {
+                    setTarefas([]);
+                }
+            } catch (error) {
+                setTarefas([]);
+                return handleError(error, ERROR_MESSAGE_ON_SEARCHING);
             }
-        } catch (error) {
-            setTarefas([])
-            return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
         }
+    };
 
-    }
-
+    const rowSelection = {
+        onChange: (selectedRowsKeys, selectedRows) => {
+            setTarefasSelecionadas(selectedRows)
+        },
+    };
 
     return (
         <Table
+            rowKey="id"
             dataSource={tarefas}
             columns={COLUNAS_TABELA_TAREFAS}
+            rowSelection={rowSelection}
         />
-    )
-}
+    );
+};
 
-export default ListaTarefas
+export default ListaTarefas;

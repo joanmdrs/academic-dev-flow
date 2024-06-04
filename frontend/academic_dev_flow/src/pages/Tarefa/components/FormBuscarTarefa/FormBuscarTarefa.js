@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import {Form, Input, Button, Select} from 'antd'
+import { Form, Input, Button, Select } from 'antd';
 import { listarProjetos } from "../../../../services/projetoService";
 import { handleError } from "../../../../services/utils";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 
-const FormBuscarTarefa = ({onSearch}) => {
-
+const FormBuscarTarefa = ({ onSearch }) => {
     const [optionsProjetos, setOptionsProjetos] = useState([]);
     const [selectedItem, setSelectedItem] = useState(null);
 
@@ -19,7 +18,7 @@ const FormBuscarTarefa = ({onSearch}) => {
                 }));
                 setOptionsProjetos(resultados);
             } catch (error) {
-                return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+                return handleError(error, ERROR_MESSAGE_ON_SEARCHING);
             }
         };
         fetchData();
@@ -29,29 +28,31 @@ const FormBuscarTarefa = ({onSearch}) => {
         setSelectedItem(value);
     };
 
-    const filterOption = (input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
-
     const handleOnSearch = (values) => {
-        onSearch(values)
-    }
-
+        onSearch(values);
+    };
 
     return (
-        <Form layout="vertical" className="global-form" onFinish={handleOnSearch}> 
-            <Form.Item label='Nome' name='nome_tarefa'>
-                <Input name="nome_tarefa" placeholder="nome da tarefa"/>
+        <Form layout="vertical" className="global-form" onFinish={handleOnSearch}>
+            <Form.Item 
+                label='Nome' 
+                name='nome_tarefa' 
+                rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
+            >
+                <Input name="nome_tarefa" placeholder="nome da tarefa" />
             </Form.Item>
 
-            <Form.Item label='Projeto' name='id_projeto'>
+            <Form.Item 
+                label='Projeto' 
+                name='id_projeto'
+                rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
+            >
                 <Select
-                    showSearch
                     allowClear
                     placeholder="Pesquise ou selecione o projeto"
-                    optionFilterProp="children"
                     value={selectedItem}
                     onChange={handleChange}
                     options={optionsProjetos}
-                    filterOption={filterOption}
                 />
             </Form.Item>
 
@@ -61,7 +62,7 @@ const FormBuscarTarefa = ({onSearch}) => {
                 </Button>
             </Form.Item>
         </Form>
-    )
-}
+    );
+};
 
-export default FormBuscarTarefa
+export default FormBuscarTarefa;

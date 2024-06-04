@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Titulo from "../../../../components/Titulo/Titulo";
-import { FaPlus, FaSearch } from "react-icons/fa";
-import {Button, Modal} from 'antd'
+import { FaFilter, FaPlus } from "react-icons/fa";
+import {Button, Modal, Spin} from 'antd'
 import ListaTarefas from "../../components/ListaTarefas/ListaTarefas"
 import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProjeto";
 import FormBuscarTarefa from "../../components/FormBuscarTarefa/FormBuscarTarefa";
@@ -16,11 +16,25 @@ import { createIssue, updateIssue } from "../../../../services/githubIntegration
 import FormTarefa from "../../components/FormTarefa/FormTarefa";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 
+const StyleSpin = {
+    position: 'fixed', 
+    top: 0, 
+    left: 0, 
+    width: '100%', 
+    height: '100%', 
+    backgroundColor: 'rgba(255, 255, 255, 0.5)', 
+    zIndex: 9999, 
+    display: 'flex', 
+    justifyContent: 'center', 
+    alignItems: 'center'
+};
+
 const GerenciarTarefas = () => {
 
     const [isFormVisivel, setIsFormVisivel] = useState(false)
     const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false)
     const [acaoForm, setAcaoForm] = useState('criar')
+    const [isLoading, setIsLoading] = useState(false)
 
     const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
 
@@ -87,6 +101,7 @@ const GerenciarTarefas = () => {
     };
     
     const handleSalvarTarefa = async (dadosForm) => {
+        setIsLoading(true)
         dadosForm['projeto'] = dadosProjeto.id;
         const resIssue = await handleSaveIssue(dadosForm);
     
@@ -98,6 +113,7 @@ const GerenciarTarefas = () => {
         }
         
         handleReload();
+        setIsLoading(false)
     };
 
     const handleExcluirTarefa = async (id) => {
@@ -107,8 +123,10 @@ const GerenciarTarefas = () => {
             okText: 'Sim',
             cancelText: 'Não',
             onOk: async () => {
+                setIsLoading(true)
                 await excluirTarefas([id])
                 handleReload()
+                setIsLoading(false)
             }
         });
     }
@@ -122,11 +140,11 @@ const GerenciarTarefas = () => {
 
             <div className="button-menu"> 
                 <Button
-                    icon={<FaSearch />} 
+                    icon={<FaFilter />} 
                     type="primary"
                     onClick={() => setIsFormBuscarVisivel(!isFormBuscarVisivel)}
                 >
-                    Buscar
+                    Filtrar
                 </Button>
                 <Button 
                     icon={<FaPlus />} 
@@ -145,13 +163,30 @@ const GerenciarTarefas = () => {
 
             <div className="global-div"> 
                 {isFormVisivel && (
+                    <React.Fragment>
+                        {isLoading && ( 
+                            <div style={StyleSpin}>
+                                <Spin size="large" />
+                            </div>
+                        )}
+
                     <FormTarefa additionalFields={
                         <SelecionarProjeto />
                     } onSubmit={handleSalvarTarefa} onCancel={handleCancelar}  />
+
+                    </React.Fragment>
+                    
                 )}
 
                 {!isFormVisivel  && (
-                    <ListaTarefas onEdit={handleAtualizarTarefa} onDelete={handleExcluirTarefa} />
+                    <React.Fragment>
+                        {isLoading && ( 
+                            <div style={StyleSpin}>
+                                <Spin size="large" />
+                            </div>
+                        )}
+                        <ListaTarefas onEdit={handleAtualizarTarefa} onDelete={handleExcluirTarefa} />
+                    </React.Fragment>
                 )}
             </div>
         </React.Fragment>            

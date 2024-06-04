@@ -18,11 +18,15 @@ const TableTarefasSelect = ({ tasks, onView, onEdit, onDelete, onStart, onPause 
             render: (_, record) => (
                 <Space style={{ display: 'block' }}>
                     <a href={record.url_issue} target="_blank" rel="noopener noreferrer"> {record.nome} </a>
-                    {record.data_inicio && record.data_termino ? (
-                        <span style={{ color: '#585858', fontSize: '10px' }}>
-                            #{record.number_issue} {formatDate(record.data_inicio)} - {formatDate(record.data_termino)}
-                        </span>
-                    ) : null}
+
+                    <span style={{ color: '#585858', fontSize: '10px' }}>
+                        #{record.number_issue} 
+                        { 
+                        record.data_inicio && record.data_termino &&  (
+                            <span> {formatDate(record.data_inicio)} - {formatDate(record.data_termino)} </span>
+                        )
+                    }
+                    </span>
                 </Space>
             )
         },
