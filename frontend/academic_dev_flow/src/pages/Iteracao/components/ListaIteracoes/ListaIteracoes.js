@@ -1,10 +1,12 @@
-import { Space, Table } from "antd";
+import { Space, Table, Tooltip } from "antd";
 import React, { useEffect } from "react";
 import { formatDate, handleError } from "../../../../services/utils";
 import { useContextoIteracao } from "../../context/contextoIteracao";
 import { listarIteracoes } from "../../../../services/iteracaoService";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
+import { optionsStatusIteracoes } from "../../../../services/optionsStatus";
+import { IoMdCreate, IoMdTrash } from "react-icons/io";
 
 const ListaIteracoes = ({onEdit, onDelete}) => {
 
@@ -20,7 +22,11 @@ const ListaIteracoes = ({onEdit, onDelete}) => {
             key: 'data_inicio',
             render: (_, record) => (
                 <Space>
-                    <span> {formatDate(record.data_inicio)}</span>
+                    { record.data_inicio ? (
+                        <span> {formatDate(record.data_inicio)}</span>
+                    ) : (
+                        <span> - </span>
+                    )}
                 </Space>
             )
         },
@@ -30,14 +36,23 @@ const ListaIteracoes = ({onEdit, onDelete}) => {
             key: 'data_fim',
             render: (_, record) => (
                 <Space>
-                    <span> {formatDate(record.data_fim)}</span>
+                    { record.data_fim ? (
+                        <span> {formatDate(record.data_fim)}</span>
+                    ) : (
+                        <span> - </span>
+                    )}
                 </Space>
             )
         },
         {
             title: 'Status',
             dataIndex: 'status',
-            key: 'status'
+            key: 'status',
+            render: (_, record) => (
+                <span>
+                    {optionsStatusIteracoes.find(status => status.value === record.status)?.label}
+                </span>
+            )
         },
         {
             title: 'Projeto', 
@@ -50,8 +65,12 @@ const ListaIteracoes = ({onEdit, onDelete}) => {
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    <a onClick={() => onEdit(record)}>Editar</a>
-                    <a onClick={() =>  onDelete(record.id)}>Excluir</a>
+                    <Tooltip title="Editar">
+                        <a onClick={() => onEdit(record)}><IoMdCreate /></a>
+                    </Tooltip>
+                    <Tooltip title="Excluir">
+                        <a onClick={() => onDelete(record.id)}><IoMdTrash /></a>
+                    </Tooltip>
                 </Space>
             )
         }

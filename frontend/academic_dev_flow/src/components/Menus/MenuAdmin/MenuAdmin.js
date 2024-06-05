@@ -112,10 +112,10 @@ const MenuAdmin = () => {
 
                 <Menu.Item 
                     className="item-menu"
-                    key="/admin/tipos"
+                    key="/admin/categorias"
                     icon={<IoPricetagsOutline style={{ fontSize: "20px" }} />}
                 >
-                    <Link to="/admin/tipos">Tipos</Link>
+                    <Link to="/admin/categorias">Categorias</Link>
                 </Menu.Item>
 
                 <Menu.Item

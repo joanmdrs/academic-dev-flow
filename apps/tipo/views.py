@@ -6,7 +6,6 @@ from .models import Tipo
 from .serializers import TipoSerializer
 from rest_framework.permissions import IsAuthenticated
 
-
 class CadastrarTipoView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request): 
@@ -37,7 +36,7 @@ class BuscarTipoPeloNomeView(APIView):
                 print('to pegando todos')
                 
             if not tipos: 
-                return Response(data=[], status=status.HTTP_204_NO_CONTENT)
+                return Response([], status=status.HTTP_204_NO_CONTENT)
             
             serializer = TipoSerializer(tipos, many=True)
                         

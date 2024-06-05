@@ -112,7 +112,7 @@ function Routes() {
 
                 {/* Menu Item Tipos */}
 
-                <Route path="/admin/tipos" Component={PageGerenciarTipos} exact />
+                <Route path="/admin/categorias" Component={PageGerenciarTipos} exact />
 
                 {/* Menu Item Iterações */}
 
