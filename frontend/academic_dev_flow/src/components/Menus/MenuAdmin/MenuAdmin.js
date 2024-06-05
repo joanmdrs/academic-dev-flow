@@ -59,18 +59,18 @@ const MenuAdmin = () => {
                     icon={<RiFlowChart style={{ fontSize: "20px" }} />}
                     title="Fluxos"
                 >
-                    <Menu.Item key="gerenciar-fluxos">
+                    <Menu.Item key="/admin/fluxos/gerenciar">
                         <Link to="/admin/fluxos/gerenciar">Gerenciar fluxos</Link>
                     </Menu.Item>
 
-                    <Menu.Item key="etapas">
+                    <Menu.Item key="/admin/etapas">
                         <Link to="/admin/etapas">Gerenciar etapas</Link>
                     </Menu.Item>
                 </SubMenu>
 
                 <Menu.Item
                     className="item-menu"
-                    key="/admin/projetos"
+                    key="/admin/membros/gerenciar"
                     icon={<BiGroup style={{ fontSize: "20px" }} />}
                 >
                     <Link to="/admin/membros/gerenciar">Membros</Link>
@@ -82,11 +82,11 @@ const MenuAdmin = () => {
                     icon={<IoDocumentTextOutline style={{ fontSize: "20px" }} />}
                     title="Artefatos"
                 >
-                    <Menu.Item key="gerenciar-artefatos">
+                    <Menu.Item key="/admin/artefatos/gerenciar">
                         <Link to="/admin/artefatos/gerenciar">Gerenciar artefatos</Link>
                     </Menu.Item>
 
-                    <Menu.Item key="gerenciar-arquivos">
+                    <Menu.Item key="/admin/artefatos/gerenciar-arquivos">
                         <Link to="/admin/artefatos/gerenciar-arquivos">Gerenciar arquivos</Link>
                     </Menu.Item>
                 </SubMenu>
@@ -97,17 +97,17 @@ const MenuAdmin = () => {
                     icon={<MdOutlineTaskAlt style={{ fontSize: "20px" }} />}
                     title="Tarefas"
                 >
-                    <Menu.Item key="gerenciar-tarefas">
+                    <Menu.Item key="/admin/tarefas/gerenciar">
                         <Link to="/admin/tarefas/gerenciar">Gerenciar tarefas</Link>
                     </Menu.Item>
 
-                    <Menu.Item key="gerenciar-issues">
-                        <Link to="/admin/tarefas/issues">Issues</Link>
+                    <Menu.Item key="/admin/tarefas/issues">
+                        <Link to="/admin/tarefas/issues">Gerenciar issues</Link>
                     </Menu.Item>
 
-                    <Menu.Item key="gerenciar-labels">
+                    {/* <Menu.Item key="gerenciar-labels">
                         <Link to="/admin/tarefas/labels">Labels</Link>
-                    </Menu.Item>
+                    </Menu.Item> */}
                 </SubMenu>
 
                 <Menu.Item 

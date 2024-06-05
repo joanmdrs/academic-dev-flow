@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Titulo from "../../../../components/Titulo/Titulo";
-import { FaFilter, FaPlus } from "react-icons/fa";
+import { FaFilter, FaPlus, FaTrash } from "react-icons/fa";
 import {Button, Modal, Spin} from 'antd'
 import ListaTarefas from "../../components/ListaTarefas/ListaTarefas"
 import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProjeto";
@@ -15,6 +15,7 @@ import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { createIssue, updateIssue } from "../../../../services/githubIntegration/issueService";
 import FormTarefa from "../../components/FormTarefa/FormTarefa";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
+import InputsAdminTarefa from "../../components/InputsAdminTarefa/InputsAdminTarefa";
 
 const StyleSpin = {
     position: 'fixed', 
@@ -41,7 +42,9 @@ const GerenciarTarefas = () => {
     const {
         setTarefas,
         dadosTarefa, 
-        setDadosTarefa } = useContextoTarefa()
+        setDadosTarefa,
+        tarefasSelecionadas
+     } = useContextoTarefa()
 
     const handleCancelar = () => {
         setIsFormVisivel(false)
@@ -116,6 +119,22 @@ const GerenciarTarefas = () => {
         setIsLoading(false)
     };
 
+    const handleExcluirTarefas = async () => {
+        Modal.confirm({
+            title: 'Confirmar exclusão',
+            content: 'Você está seguro de que deseja excluir este(s) item(s) ?',
+            okText: 'Sim',
+            cancelText: 'Não',
+            onOk: async () => {
+                if (tarefasSelecionadas !== null) {
+                    const ids = tarefasSelecionadas.map((item) => item.id)
+                    await excluirTarefas(ids)
+                    handleReload() 
+                }
+            }
+        });
+    }
+
     const handleExcluirTarefa = async (id) => {
         Modal.confirm({
             title: 'Confirmar exclusão',
@@ -138,21 +157,36 @@ const GerenciarTarefas = () => {
                 paragrafo='Tarefas > Gerenciar tarefas'
             />
 
-            <div className="button-menu"> 
-                <Button
-                    icon={<FaFilter />} 
-                    type="primary"
-                    onClick={() => setIsFormBuscarVisivel(!isFormBuscarVisivel)}
-                >
-                    Filtrar
-                </Button>
-                <Button 
-                    icon={<FaPlus />} 
-                    type="primary" 
-                    onClick={handleAdicionarTarefa} 
-                >
-                    Criar Tarefa
-                </Button>
+            <div style={{display: 'flex', justifyContent: 'space-between', margin: '20px'}}> 
+                <div> 
+                    <Button
+                        icon={<FaFilter />} 
+                        type="primary"
+                        onClick={() => setIsFormBuscarVisivel(!isFormBuscarVisivel)}
+                    >
+                        Filtrar
+                    </Button>
+                </div>
+
+                <div style={{display: 'flex', gap: '10px'}}> 
+                    <Button 
+                        icon={<FaPlus />} 
+                        type="primary" 
+                        onClick={handleAdicionarTarefa} 
+                    >
+                        Criar Tarefa
+                    </Button>
+                    <Button 
+                        icon={<FaTrash />} 
+                        type="primary" 
+                        disabled={tarefasSelecionadas.length === 0 ? true : false}
+                        danger
+                        onClick={handleExcluirTarefas}
+                    >
+                        Excluir
+                    </Button>
+                </div>
+                
             </div>
 
             {isFormBuscarVisivel && (
@@ -162,7 +196,7 @@ const GerenciarTarefas = () => {
             )}
 
             <div className="global-div"> 
-                {isFormVisivel && (
+                {isFormVisivel && acaoForm === 'criar' && (
                     <React.Fragment>
                         {isLoading && ( 
                             <div style={StyleSpin}>
@@ -170,13 +204,36 @@ const GerenciarTarefas = () => {
                             </div>
                         )}
 
-                    <FormTarefa additionalFields={
-                        <SelecionarProjeto />
-                    } onSubmit={handleSalvarTarefa} onCancel={handleCancelar}  />
+                        <FormTarefa 
+                            additionalFields={                <SelecionarProjeto />
+                        } 
+                            onSubmit={handleSalvarTarefa} 
+                            onCancel={handleCancelar} 
+                        />
+                    </React.Fragment>
+                )}
+
+                {isFormVisivel && acaoForm === 'atualizar' && (
+                    <React.Fragment>
+                        {isLoading && ( 
+                            <div style={StyleSpin}>
+                                <Spin size="large" />
+                            </div>
+                        )}
+
+                        <FormTarefa 
+                            additionalFields={                <SelecionarProjeto />
+                        } 
+                            inputsAdmin={<InputsAdminTarefa />}
+                            onSubmit={handleSalvarTarefa} 
+                            onCancel={handleCancelar} 
+                        />
 
                     </React.Fragment>
                     
                 )}
+
+                
 
                 {!isFormVisivel  && (
                     <React.Fragment>

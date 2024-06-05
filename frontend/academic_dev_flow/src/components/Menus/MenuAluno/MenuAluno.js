@@ -5,7 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { HiOutlineHome } from "react-icons/hi2";
 import { LuLayoutGrid } from "react-icons/lu";
-import { IoDocumentOutline, IoDocumentTextOutline } from "react-icons/io5";
+import { IoDocumentTextOutline } from "react-icons/io5";
 import { VscGraph } from "react-icons/vsc";
 import { RiFlowChart } from "react-icons/ri";
 

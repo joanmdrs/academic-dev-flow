@@ -11,7 +11,7 @@ import { ERROR_MESSAGE_ON_SEARCHING } from '../../../../services/messages';
 import { useContextoGlobalProjeto } from '../../../../context/ContextoGlobalProjeto';
 import { listarTipos } from '../../../../services/tipoService';
 
-function FormTarefa({ onCancel, onSubmit, additionalFields }) {
+function FormTarefa({ onCancel, onSubmit, additionalFields, inputsAdmin }) {
     const [form] = useForm();
     const { dadosTarefa } = useContextoTarefa();
     const { dadosProjeto } = useContextoGlobalProjeto();
@@ -145,21 +145,26 @@ function FormTarefa({ onCancel, onSubmit, additionalFields }) {
                         <Input.TextArea rows={6} name='descricao' />
                     </Form.Item>
 
-                    <Form.Item
-                        label="Data de Início"
-                        name="data_inicio"
-                        rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
-                    >
-                        <Input type='date' name='data_inicio' style={{ width: 'fit-content' }} />
-                    </Form.Item>
+                    <div style={{display: 'flex', gap: '10px'}}> 
+                        <Form.Item
+                            label="Data de Início"
+                            name="data_inicio"
+                            rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
+                        >
+                            <Input type='date' name='data_inicio' style={{ width: 'fit-content' }} />
+                        </Form.Item>
 
-                    <Form.Item
-                        label="Data de Término (Previsão)"
-                        name="data_termino"
-                        rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
-                    >
-                        <Input type='date' name='data_termino' style={{ width: 'fit-content' }} />
-                    </Form.Item>
+                        <Form.Item
+                            label="Data de Término (Previsão)"
+                            name="data_termino"
+                            rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
+                        >
+                            <Input type='date' name='data_termino' style={{ width: 'fit-content' }} />
+                        </Form.Item>
+
+                    </div>
+
+                    {inputsAdmin}
                 </div>
 
                 <div style={{ flex: "1" }}>

@@ -1,5 +1,5 @@
-import { Button, Space, Table } from "antd";
-import React, { useEffect, useState } from "react";
+import { Button, Space, Spin, Table } from "antd";
+import React, { useState } from "react";
 import { IoCheckmark, IoCloseOutline } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
@@ -193,13 +193,13 @@ const GerenciarIssues = () => {
                 </div>
             </div>
 
-            {isTableVisivel &&  
+            {isTableVisivel && 
                 <Table
                     loading={ issues.length === 0 ? true : false}
                     rowKey="id"
                     dataSource={ stateIssue === 'open' ? openIssues : closedIssues}
                     columns={COLUNAS_TABELA_ISSUES}
-                />
+                /> 
             }
 
         </React.Fragment>
