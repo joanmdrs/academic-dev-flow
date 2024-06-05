@@ -227,3 +227,31 @@ class ListarIteracoesView(APIView):
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class FiltrarIteracoesPeloNomeEPeloProjeto(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        try:
+            nome = request.GET.get('nome_iteracao')
+            projeto = request.GET.get('id_projeto')
+            
+            if not nome and not projeto:
+                return Response({'error': 'Pelo menos um parâmetro é necessário'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            if nome and projeto:
+                iteracoes = Iteracao.objects.filter(nome__icontains=nome, projeto_id=projeto)
+            elif nome:
+                iteracoes = Iteracao.objects.filter(nome__icontains=nome)
+            else: 
+                iteracoes = Iteracao.objects.filter(projeto_id=projeto)
+                
+            if iteracoes.exists():
+                
+                serializer = IteracaoSerializer(iteracoes, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response(data=[], status=status.HTTP_204_NO_CONTENT)
+                
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)  

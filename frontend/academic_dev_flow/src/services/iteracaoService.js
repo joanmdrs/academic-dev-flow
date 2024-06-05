@@ -1,7 +1,7 @@
 import { NotificationManager } from "react-notifications";
 import api from "../api/api";
-import { handleError } from "./utils";
-import { ERROR_MESSAGE_ON_SEARCHING } from "./messages";
+import { handleError, handleInfo } from "./utils";
+import { ERROR_MESSAGE_ON_SEARCHING, INFO_MESSAGE_MANDATORY_PARAMETERS, INFO_MESSAGE_ON_SEARCHING } from "./messages";
 
 export const criarIteracao = async (dados) => {
     try {
@@ -70,5 +70,18 @@ export const listarIteracoes = async () => {
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
+}
+
+export const buscarIteracoesPeloNomeEPeloProjeto = async (nomeIteracao, idProjeto) => {
+    try {
+        const response = await api.get('iteracao/filtrar/nome-projeto/', {params: {nome_iteracao: nomeIteracao, id_projeto: idProjeto}})
+        if (response.status === 204) {
+            return handleInfo(response, "Não foram encontradas iterações que correspondam aos parâmetros fornecidos!")
+        }
+        return response 
+    } catch (error) {
+        return handleError(error, INFO_MESSAGE_MANDATORY_PARAMETERS)
+
     }
 }

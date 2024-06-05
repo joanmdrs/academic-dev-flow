@@ -9,6 +9,7 @@ urlpatterns = [
     path('listar/<int:id_projeto>/', ListarIteracoesPorProjetoView.as_view(), name='buscar_iteracao_por_projeto'),
     path('atualizar/<int:id>/', AtualizarIteracaoView.as_view(), name='atualizar_iteracao'),
     path('excluir/', ExcluirIteracaoView.as_view(), name='excluir_iteracao'),
-    path('listar/', ListarIteracoesView.as_view(), name="listar_iteracoes")
+    path('listar/', ListarIteracoesView.as_view(), name="listar_iteracoes"),
+    path('filtrar/nome-projeto/', FiltrarIteracoesPeloNomeEPeloProjeto.as_view(), name='filtrar_iteracoes_pelo_nome_e_pelo_projeto'),
     
 ]

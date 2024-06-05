@@ -32,12 +32,12 @@ const ListaIteracoes = ({onEdit, onDelete}) => {
         },
         {
             title: 'Data de Término (Previsão)',
-            dataIndex: 'data_fim',
-            key: 'data_fim',
+            dataIndex: 'data_termino',
+            key: 'data_termino',
             render: (_, record) => (
                 <Space>
-                    { record.data_fim ? (
-                        <span> {formatDate(record.data_fim)}</span>
+                    { record.data_termino ? (
+                        <span> {formatDate(record.data_termino)}</span>
                     ) : (
                         <span> - </span>
                     )}
