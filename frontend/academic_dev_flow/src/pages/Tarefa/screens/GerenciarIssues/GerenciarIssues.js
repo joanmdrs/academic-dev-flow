@@ -1,39 +1,36 @@
-import React, { useEffect, useState } from "react";
-import Titulo from "../../../../components/Titulo/Titulo";
-import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProjeto";
-import { FaArrowsRotate } from "react-icons/fa6";
 import { Button, Space, Table } from "antd";
+import React, { useState } from "react";
 import { IoCheckmark, IoCloseOutline } from "react-icons/io5";
-import { listIssues } from "../../../../services/githubIntegration/issueService";
-import { NotificationManager } from "react-notifications";
-import { sicronizarIssues, verificarExistenciaIssue } from "../../../../services/tarefaService";
-import { handleError } from "../../../../services/utils";
+import { FaFilter } from "react-icons/fa";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
+import { listIssues } from "../../../../services/githubIntegration/issueService";
+import { sicronizarIssues } from "../../../../services/tarefaService";
+import { handleError } from "../../../../services/utils";
+import { NotificationManager } from "react-notifications";
+import { FaArrowRotateRight, FaArrowsRotate } from "react-icons/fa6";
+import Titulo from "../../../../components/Titulo/Titulo";
+import FormFiltrarIssues from "../../components/FormFiltrarIssues/FormFiltrarIssues";
 
 const GerenciarIssues = () => {
 
     const COLUNAS_TABELA_ISSUES = [
         {
-            title: "Issue",
+            title: 'Issue', 
             dataIndex: 'title',
-            key: 'title'
-        },
-        {
-            title: "Número",
-            dataIndex: 'number',
-            key: 'number'
-        },
-        {
-            title: 'Status',
-            dataIndex: 'status',
-            key: 'status',
-            align: 'center',
+            key: 'title',
             render: (_, record) => (
-                <Space>
-                    { record.existe ? 
-                        <span> <IoCheckmark color="green" size="15px"/></span>
-                        : <span> <IoCloseOutline color="red"  size="20px" /></span>
-                    }
+                <Space style={{display: 'block'}}>
+                    <a href={record.url} target="blank"> 
+                        {record.title}
+                        <span>
+                            {
+                                record.exists ? 
+                                <IoCheckmark color="green" />
+                                : <IoCloseOutline color="red" />
+                            }
+                        </span> 
+                    </a>
+                    <span style={{fontSize: '10px'}}> #{record.number} </span>
                 </Space>
             )
         },
@@ -41,100 +38,132 @@ const GerenciarIssues = () => {
 
     const [issues, setIssues] = useState([]);
     const {dadosProjeto} = useContextoGlobalProjeto();
+    const [isFormVisivel, setIsFormVisivel] = useState(true)
+    const [isTableVisivel, setIsTableVisivel] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+    const [state, setState] = useState(null)
 
-    const handleGetIssues = async () => {
-
-        try {
-            const parametros = {
-                github_token: dadosProjeto.token,
-                repository: dadosProjeto.nome_repo
-            }
-            const response = await listIssues(parametros)
-    
-            if (!response.error && response.data){
-                const dados = await Promise.all(response.data.map(async (item) => {
-                    const resTarefa = await verificarExistenciaIssue(item.id)
-                    const existe = resTarefa.data.exists ? true : false
-                    return {...item, existe}
-                }))
-    
-                const resultado = await Promise.resolve(dados)
-                setIssues(resultado)
-            }
-            
-        } catch (error) {
-            return handleError(error, "Não foi possível carregar os dados, contate o suporte!")
-        }
+    const handleResetar = () => {
+        setIsTableVisivel(false)
+        setIssues([])
+        setIsFormVisivel(false)
     }
 
+    const handleGetIssues = async (dados) => {
+        try {
+            setIsLoading(true)
+            setIsTableVisivel(true)
+            setIssues([]);  
+            setState(dados.state)
+    
+            const parametros = {
+                github_token: dadosProjeto.token,
+                repository: dadosProjeto.nome_repo,
+                state: dados.state,
+                projeto: dadosProjeto.id
+            };
+    
+            const response = await listIssues(parametros);
+            
+            if (!response.error && response.data) {
+    
+                setIssues(response.data); 
+            }
+            setIsLoading(false)
+        } catch (error) {
+            handleError(error, "Não foi possível carregar os dados, contate o suporte!");
+        }
+    };
+    
     const handleSicronizarIssues = async () => {
-        const dados = issues.map((item) => {
-            if (!item.existe) {
-                return {
+        try {
+            const novasIssues = issues.filter(item => !item.exists && item.state === 'open');
+    
+            if (novasIssues.length > 0) {
+                const dados = novasIssues.map(item => ({
                     nome: item.title,
                     descricao: item.body,
                     id_issue: item.id,
                     number_issue: item.number,
                     url_issue: item.url,
                     projeto: dadosProjeto.id,
-                };
+                    membros: item.membros_ids,
+                    labels: item.label_ids,
+                }));
+
+               
+                await sicronizarIssues(dados);
+                await handleGetIssues({
+                    state: state
+                })
+                
+            } else {
+                NotificationManager.info('Todas as issues abertas do repositório deste projeto já estão salvas no banco de dados.');
             }
-        }).filter(Boolean);
-        
-        if (dados) {
-            await sicronizarIssues(dados);
-            await handleGetIssues()
-            
-        } else {
-            NotificationManager.info('Todos as issues do repositório deste projeto já estão salvos no bando de dados.')
+        } catch (error) {
+            return handleError(error, 'Falha ao tentar sicronizar as issues, contate o suporte!')
         }
     }
 
-
-    useEffect(() => {
-        const fetchData = async () => {
-            if (dadosProjeto) {
-                await handleGetIssues()
-            }
-        }
-
-        fetchData()
-    }, [dadosProjeto])
-
     return (
         <React.Fragment>
-            <Titulo
-                titulo='Issues'
-                paragrafo={'Issues > Gerenciar Issues'}
+
+            <Titulo 
+                titulo="Issues"
+                paragrafo="Issues > Gerenciar Issues"
             />
 
-            <div className="global-div" style={{
-                width: "50%"
-            }}> 
-                <SelecionarProjeto />
+            <div style={{display:'flex', justifyContent: 'space-between', margin: '20px'}}> 
+
+                <div style={{display: 'flex', gap: '10px'}}> 
+                    <Button 
+                        type="primary"
+                        icon={<FaFilter />}
+                        onClick={() => setIsFormVisivel(!isFormVisivel)}
+                    >
+                        Filtrar
+                    </Button>
+
+                    <Button
+                        icon={<FaArrowRotateRight />}
+                        onClick={handleResetar}
+                        danger
+                        ghost
+                    >
+                        Resetar
+                    </Button>
+                </div>
+
+                <div style={{display:'flex', gap: '10px'}}> 
+                    <Button 
+                        icon={<FaArrowsRotate />} 
+                        style={{marginBottom: '20px'}} 
+                        type="primary" ghost
+                        onClick={handleSicronizarIssues}
+                        disabled={issues.length === 0 ? true : false}
+                    > 
+                        Sicronizar 
+                    </Button>
+                </div>
             </div>
 
-            {
-                dadosProjeto !== null && issues.length > 0 ?
-                (
-                    <div className="global-div"> 
-                        <Button 
-                            icon={<FaArrowsRotate />} 
-                            style={{marginBottom: '20px'}} 
-                            type="primary" ghost
-                            onClick={handleSicronizarIssues}
-                        > 
-                            Sicronizar 
-                        </Button>
-                        <Table 
-                            rowKey="id"
-                            bordered
-                            dataSource={issues}
-                            columns={COLUNAS_TABELA_ISSUES}
-                        />
-                    </div>
-                ) : null
+            { isFormVisivel && (
+                <div className="global-div" style={{width: '50%'}}>
+                    <FormFiltrarIssues onSearch={handleGetIssues} />
+                </div>
+            )}
+
+            {isTableVisivel &&
+                <div className="global-div"> 
+                    <Table
+                        loading={isLoading}
+                        rowKey="id"
+                        dataSource={issues}
+                        columns={COLUNAS_TABELA_ISSUES}
+                    /> 
+                </div> 
             }
+
         </React.Fragment>
     )
 }

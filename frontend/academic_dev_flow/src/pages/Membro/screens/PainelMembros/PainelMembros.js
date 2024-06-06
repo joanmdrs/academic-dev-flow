@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
-import { Button, Space, Table } from "antd";
+import { Space, Table, Tooltip } from "antd";
 import { cadastrarFuncaoAtual, listarMembrosPeloIdProjeto } from "../../../../services/membroProjetoService";
 import FormFuncao from "../../components/FormFuncao/FormFuncao";
 import { useMembroContexto } from "../../context/MembroContexto";
 import { formatDate } from "../../../../services/utils";
+import { IoMdCreate, IoMdOpen } from "react-icons/io";
 
 const PainelMembros = () => {
 
@@ -30,7 +31,14 @@ const PainelMembros = () => {
             key: 'data_inicio',
             render: (_, record) => (
                 <Space>
-                    <span> {formatDate(record.data_inicio)} </span>
+                    {
+                        record.data_inicio !== null ? (
+                            <span> {formatDate(record.data_inicio)} </span>
+                        ) : (
+                            <span> - </span>
+                        )
+                    }
+                    
                 </Space>
             )
         },
@@ -40,7 +48,14 @@ const PainelMembros = () => {
             key: 'data_termino',
             render: (_, record) => (
                 <Space>
-                    <span> {formatDate(record.data_termino)} </span>
+                    {
+                        record.data_termino !== null ? (
+                            <span> {formatDate(record.data_termino)} </span>
+                        ) : (
+                            <span> - </span>
+                        )
+                    }
+                    
                 </Space>
             )
         },
@@ -48,9 +63,15 @@ const PainelMembros = () => {
             title: 'Ações',
             dataIndex: 'actions',
             key: 'actions',
+            align: 'center',
             render: (_, record) => (
                 <Space>
-                    <Button type="primary" onClick={() => handleEditarFuncao(record)} >Editar</Button>
+                    <Tooltip title="Visualizar">
+                        <a><IoMdOpen /></a>
+                    </Tooltip>
+                    <Tooltip title="Editar">
+                        <a onClick={() => handleEditarFuncao(record)}><IoMdCreate /></a>
+                    </Tooltip>
                 </Space>
             )
         }
@@ -99,12 +120,11 @@ const PainelMembros = () => {
         const dadosEnviar = {
             membro_projeto: dadosFuncao.id_membro_projeto,
             funcao_membro: dadosForm.id_funcao,
+            data_inicio: dadosForm.data_inicio,
             data_termino: dadosForm.data_termino,
             ativo: dadosForm.ativo
         }
-
-        console.log(dadosEnviar)
-
+        
         await cadastrarFuncaoAtual(dadosEnviar)
         await handleReload()
     }

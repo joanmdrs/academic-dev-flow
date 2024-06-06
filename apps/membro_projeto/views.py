@@ -6,6 +6,8 @@ from django.http import JsonResponse
 from .models import MembroProjeto, FuncaoMembroProjetoAtual, FuncaoMembroProjeto
 from .serializers import MembroProjetoSerializer, FuncaoMembroProjetoSerializer, FuncaoMembroProjetoAtualSerializer
 from apps.membro.models import Membro
+from apps.projeto.models import Projeto
+from django.db.models import Count
 from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
 from django.db.models import Count
@@ -40,6 +42,7 @@ class BuscarMembroProjetoPeloUsuarioGithubView(APIView):
 
             membro_data = {
                 'id_membro_projeto': membro_projeto.id,
+                'nome_membro_projeto': membro.nome
             }
 
             return JsonResponse(membro_data, status=200)
@@ -47,25 +50,81 @@ class BuscarMembroProjetoPeloUsuarioGithubView(APIView):
         except Membro.DoesNotExist:
             return JsonResponse({'error': 'Membro não encontrado'}, status=status.HTTP_404_NOT_FOUND)
         
+        except MembroProjeto.DoesNotExist:
+            return JsonResponse({'error': 'Membro não encontrado'}, status=status.HTTP_404_NOT_FOUND)
+        
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-                
+        
+class BuscarMembroProjetoPeloIdMembro(APIView):
+    permission_classes =[IsAuthenticated]
+    
+    def get(self, request):
+        
+        try:
+        
+            id_membro = request.GET.get('id_membro', None)
+            id_projeto = request.GET.get('id_projeto', None)
+            
+            
+            if id_membro is None or id_projeto is None:
+                return Response({'error': 'Os parâmetros referentes ao id do membro e do projeto são obrigatórios'}, status=status.HTTP_400_BAD_REQUEST)
+
+            membro_projeto = MembroProjeto.objects.get(projeto=id_projeto, membro=id_membro)
+            
+            serializer = MembroProjetoSerializer(membro_projeto, many=False)
+            
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        except MembroProjeto.DoesNotExist:
+            return JsonResponse({'error': 'Membro não encontrado'}, status=status.HTTP_404_NOT_FOUND)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 class BuscarProjetosDoMembroView(APIView):
     permission_classes = [IsAuthenticated]
+
+    def getQuantidadeMembros(self, id_projeto):
+        quantidade_membros = MembroProjeto.objects.filter(projeto__id=id_projeto).aggregate(quantidade_membros=Count('id'))
+        return quantidade_membros['quantidade_membros']
+
     def get(self, request, idUser):
-        try:   
+        try:
             membro = Membro.objects.get(usuario__id=idUser)
-            
-            objetos = MembroProjeto.objects.filter(membro=membro)
-            
-            if objetos is not None:
-                serializer = MembroProjetoSerializer(objetos, many=True)
-                return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
-        
-            return Response({'error': 'Objeto não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
-            
+            items = MembroProjeto.objects.filter(membro=membro)
+            projetos_info = []
+
+            for item in items:
+                projeto = item.projeto
+                fluxo = projeto.fluxo
+                quant_membros = self.getQuantidadeMembros(projeto.id)
+
+                projeto_info = {
+                    'id': projeto.id,
+                    'nome': projeto.nome,
+                    'status': projeto.status,
+                    'data_inicio': projeto.data_inicio,
+                    'data_fim': projeto.data_fim,
+                    'qtd_membros': quant_membros,
+                    'fluxo_id': fluxo.id,
+                    'fluxo_nome': fluxo.nome 
+                }
+
+                projetos_info.append(projeto_info)
+
+            if projetos_info:
+                return Response(projetos_info, status=status.HTTP_200_OK)
+            else:
+                return Response({"detail": "Nenhum projeto encontrado para este membro."}, status=status.HTTP_404_NOT_FOUND)
+
+        except Membro.DoesNotExist:
+            return Response({'error': 'O membro não foi encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+        except Projeto.DoesNotExist:
+            return Response({'error': 'O projeto não foi encontrado.'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         
 class BuscarMembrosPorProjetoView(APIView): 
     permission_classes = [IsAuthenticated]
@@ -201,9 +260,9 @@ class ListarMembrosPorProjeto(APIView):
                 })
             
             if not membros_info:
-                return Response({'message': 'Nenhum membro encontrado.', 'results': []}, status=status.HTTP_200_OK)
+                return Response(data=[], status=status.HTTP_200_OK)
             
-            return JsonResponse(membros_info, safe=False, status=status.HTTP_200_OK)
+            return Response(data=membros_info, status=status.HTTP_200_OK)
   
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

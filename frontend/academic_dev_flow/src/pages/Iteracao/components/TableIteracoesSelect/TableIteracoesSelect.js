@@ -1,12 +1,15 @@
 import React, { useEffect } from "react";
 import { formatDate } from "../../../../services/utils";
-import { Table } from "antd";
+import { Button, Space, Table, Tooltip } from "antd";
 import { useContextoIteracao } from "../../context/contextoIteracao";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
-import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
 import { optionsStatusIteracoes } from "../../../../services/optionsStatus";
+import { MdOpenInNew } from "react-icons/md";
+import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
+import { UserOutlined } from "@ant-design/icons";
 
-const TableIteracoesSelect = ({onEdit, onDelete}) => {
+
+const TableIteracoesSelect = ({onEdit, onView}) => {
 
     const COLUNAS_TABELA_ITERACOES = [
         {
@@ -43,30 +46,52 @@ const TableIteracoesSelect = ({onEdit, onDelete}) => {
         },
         {
             title: 'Data de término',
-            dataIndex: 'data_fim',
-            key: 'data_fim',
+            dataIndex: 'data_termino',
+            key: 'data_termino',
             render: (_, record) => (
                 <span>
-                    {formatDate(record.data_fim)}
+                    {formatDate(record.data_termino)}
                 </span>
             )
         },
         {
             title: 'Líder',
             dataIndex: 'nome_membro',
-            key: 'nome_membro'
+            key: 'nome_membro',
+            render: (_, record) => (
+                <Space> 
+                    <Tooltip title={record.nome_membro}> 
+                        <UserOutlined style={{ color: "var(--primary-color)" }} />
+                    </Tooltip>
+                </Space>
+            )
         },
         {
             title: 'Fase',
             dataIndex: 'nome_etapa',
             key: 'nome_etapa'
+        },
+        {
+            title: 'Ações',
+            dataIndex: 'actions',
+            key: 'actions', 
+            align: 'center',
+            render: (_, record) => (
+                <Tooltip title="Visualizar">
+                    <Button 
+                        style={{ border: 'none', color: 'var(--primary-color)' }}
+                        onClick={() => onView(record)} 
+                        icon={<MdOpenInNew />} 
+                    />
+                </Tooltip>
+            )
         }
     ]
 
     const {dadosProjeto} = useContextoGlobalProjeto()
 
     const {
-        iteracoes, 
+        iteracoes,
         setIteracoes,
         setIteracoesSelecionadas} = useContextoIteracao()
 
@@ -78,8 +103,14 @@ const TableIteracoesSelect = ({onEdit, onDelete}) => {
 
     const handleGetIteracoes = async () => {
         const response = await listarIteracoesPorProjeto(dadosProjeto.id)
-        const iteracoesOrdenadas = response.data.sort((a, b) => a.numero - b.numero);
-        setIteracoes(iteracoesOrdenadas)
+        console.log(response.data)
+
+        if (!response.error && response.data.length > 0){
+            const iteracoesOrdenadas = response.data.sort((a, b) => a.numero - b.numero);
+            setIteracoes(iteracoesOrdenadas)
+        } else if (!response.error && response.data.length === 0){
+            setIteracoes([])
+        }
     }
 
     useEffect(() => {

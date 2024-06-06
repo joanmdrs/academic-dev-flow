@@ -93,7 +93,15 @@
   background-color: #40a9ff; /* Change background color on hover for 3D effect */
   border-color: #40a9ff; /* Change border color on hover for 3D effect */
 }
-  
+   
+.form-login-create-account {
+  display: flex;
+  gap: 10px;
+  font-size: 12px;
+  justify-content: center;
+  align-items: center;
+}
+
 .container-presentation-image {
   position: relative;
   flex: 1;

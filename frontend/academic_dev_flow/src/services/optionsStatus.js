@@ -1,3 +1,24 @@
+export const optionsStatusProjetos = [
+    {
+        value: 'criado', 
+        label: 'Criado'
+    },
+    {
+        value: 'andamento',
+        label: 'Em andamento'
+    },
+    {
+        value: 'concluido', 
+        label: 'Concluído'
+    },
+    {
+        value: 'cancelado',
+        label: 'Cancelado'
+    },
+]
+
+
+
 export const optionsStatusTarefas = [
     {
         value: 'criada', 
@@ -9,7 +30,7 @@ export const optionsStatusTarefas = [
     },
     {
         value: 'revisao',
-        label: 'Pendente de revisão'
+        label: 'Em revisão'
 
     },
     {
@@ -19,14 +40,6 @@ export const optionsStatusTarefas = [
     {
         value: 'cancelada',
         label: 'Cancelada'
-    },
-    {
-        value: 'atrasada', 
-        label: 'Atrasada'
-    },
-    {
-        value: 'bloqueada', 
-        label: 'Bloqueada'
     }
 ]
 
@@ -60,7 +73,7 @@ export const optionsStatusArtefatos = [
     },
     {
         value: 'revisao',
-        label: 'Pendente de revisão'
+        label: 'Em revisão'
     },
     {
         value: 'aprovado',

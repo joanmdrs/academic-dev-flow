@@ -9,6 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
 
 class CadastrarFluxoEtapaView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         try:
             etapas_data = request.data.get('etapas', [])
@@ -40,6 +41,7 @@ class BuscarFluxoEtapaPeloIdFluxoView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 class AtualizarEtapaFluxoView(APIView):
+    permission_classes = [IsAuthenticated]
     def patch(self, request, id): 
         try: 
             
@@ -54,39 +56,23 @@ class AtualizarEtapaFluxoView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
     
         except Exception as e: 
-             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-            
-
-class ExcluirEtapaFluxoOneView(APIView):
-    def delete(self, request, id):
-        try:
-            fluxoEtapa = FluxoEtapa.objects.get(pk=id)
-            
-            if fluxoEtapa is not None: 
-                fluxoEtapa.delete()
-                return Response(
-                    {'detail': 'Relacionamento entre fluxo e etapa excluído com sucesso!'}, 
-                    status=status.HTTP_204_NO_CONTENT)
-            
-            else: 
-                return Response({'error': 'Objeto não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
-            
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)  
+             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)  
         
-class ExcluirEtapaFluxoManyView(APIView):
-    def delete(self, request, idFluxo):
+class ExcluirEtapaFluxoView(APIView):
+    permission_classes = [IsAuthenticated]
+    def delete(self, request):
         try:
-            ids_etapas = request.data.get('ids_etapas', [])
+            id_fluxo = request.GET.get('id_fluxo', None)
+            ids_etapas = request.GET.getlist('ids_etapas[]', [])
+                        
+            if not ids_etapas or not id_fluxo:
+                return Response({'error': 'Ausência de parâmetros'}, status=status.HTTP_400_BAD_REQUEST)
 
-            if not ids_etapas:
-                return Response({'error': 'A lista de IDs de etapas está vazia!'}, status=status.HTTP_400_BAD_REQUEST)
-
-            objetos = FluxoEtapa.objects.filter(fluxo=idFluxo, etapa__in=ids_etapas)
-
-            if objetos.exists():
-                objetos.delete()
-                return Response({'message': 'Objetos excluídos com sucesso!'}, status=status.HTTP_204_NO_CONTENT)
+            fluxo_etapas = FluxoEtapa.objects.filter(fluxo=id_fluxo, etapa__in=ids_etapas)
+            
+            if fluxo_etapas.exists():
+                fluxo_etapas.delete()
+                return Response({'message': 'O vínvulo entre as etapas e o fluxo foi excluído com sucesso!'}, status=status.HTTP_204_NO_CONTENT)
             else:
                 return Response({'error': 'Nenhum objeto encontrado para exclusão!'}, status=status.HTTP_404_NOT_FOUND)
 

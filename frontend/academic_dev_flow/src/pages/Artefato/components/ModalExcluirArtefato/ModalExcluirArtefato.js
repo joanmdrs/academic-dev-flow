@@ -2,22 +2,26 @@ import React, { useState } from "react";
 import { Modal, Input, Button } from 'antd';
 import { MdInfo } from "react-icons/md";
 
-const ModalExcluirArtefato = ({visible, onDelete, onCancel }) => {
-
+const ModalExcluirArtefato = ({ visible, onDelete, onCancel }) => {
     const [commitMessage, setCommitMessage] = useState('');
+
+    const handleCancel = () => {
+        setCommitMessage('');
+        onCancel();
+    };
 
     return (
         <Modal
             title={
-                <span style={{fontSize: '16px', fontWeight: '400', display: 'flex', justifyContent: 'baseline'}}>
-                    <MdInfo style={{ marginRight: '8px', color: '#FAAD14', width: '1.5em', height: '1.5em'}} />
+                <span style={{ fontSize: '16px', fontWeight: '400', display: 'flex', justifyContent: 'baseline' }}>
+                    <MdInfo style={{ marginRight: '8px', color: '#FAAD14', width: '1.5em', height: '1.5em' }} />
                     Confirmar exclusão
                 </span>
             }
             open={visible}
-            onCancel={() => onCancel()}
+            onCancel={handleCancel}
             footer={[
-                <Button key="cancel" onClick={() => onCancel()}>Cancelar</Button>,
+                <Button key="cancel" onClick={handleCancel}>Cancelar</Button>,
                 <Button key="submit" type="primary" onClick={() => onDelete(commitMessage)}>Excluir</Button>,
             ]}
         >

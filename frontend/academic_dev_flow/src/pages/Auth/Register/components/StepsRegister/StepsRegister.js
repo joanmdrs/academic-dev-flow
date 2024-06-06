@@ -5,18 +5,15 @@ import FormRegister from "../FormRegister/FormRegister";
 import SelecionarArea from "../SelecionarArea/SelecionarArea";
 
 const StepsRegister = () => {
-
-    const {step} = useRegisterContexto()
+    const { step } = useRegisterContexto();
 
     return (
-        <div> 
-
-            { step === "1" && <SelecionarGrupo />}
-            { step === "2" && <SelecionarArea />}
-            { step === "3" && <FormRegister />}
+        <div>
+            {step === "1" && <SelecionarGrupo key="1" />}
+            {step === "2" && <SelecionarArea key="2" />}
+            {step === "3" && <FormRegister key="3" />}
         </div>
+    );
+};
 
-    )
-}
-
-export default StepsRegister
+export default StepsRegister;

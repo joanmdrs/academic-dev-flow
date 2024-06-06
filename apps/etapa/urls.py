@@ -9,6 +9,6 @@ urlpatterns = [
     path('buscar/nome/', BuscarEtapaPeloNomeView.as_view(), name='buscar_etapa_pelo_nome'),
     path('listar/', ListarEtapasView.as_view(), name='listar_etapas'),
     path('atualizar/<int:id>/', AtualizarEtapaView.as_view(), name='atualizar_etapa'),
-    path('excluir/<int:id>/', ExcluirEtapaView.as_view(), name='excluir_etapa')
+    path('excluir/', ExcluirEtapasView.as_view(), name='excluir_etapa')
 ]
 

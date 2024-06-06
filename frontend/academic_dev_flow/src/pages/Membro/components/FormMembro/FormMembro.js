@@ -1,10 +1,8 @@
 import { Button, Form, Input, Select } from "antd"
 import InputMask from 'react-input-mask';
-
 import { useEffect, useState } from "react";
 import { useMembroContexto } from "../../context/MembroContexto";
 import Loading from "../../../../components/Loading/Loading";
-import { customizeRequiredMark } from "../../../../components/LabelMask/LabelMask";
 
 const OPTIONS_GROUP = [
     {
@@ -65,7 +63,6 @@ const FormMembro = ({onSubmit, onCancel}) => {
             form={form}
             className="global-form"
             layout="vertical"
-            requiredMark={customizeRequiredMark}
             onFinish={onSubmit}
         >
             <Form.Item>
@@ -76,7 +73,7 @@ const FormMembro = ({onSubmit, onCancel}) => {
                     style={{flex: "3"}}
                     label="Nome" 
                     name="nome"
-                    rules={[{ required: true, message: 'Por favor, insira o nome!' }]}
+                    rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
                 >
                     <Input placeholder="nome do membro"/>
                 </Form.Item>
@@ -85,7 +82,7 @@ const FormMembro = ({onSubmit, onCancel}) => {
                     style={{flex: "1"}}
                     label="Data de Nascimento" 
                     name="data_nascimento"
-                    rules={[{ required: true, message: 'Por favor, selecione sua data de nascimento!' }]}
+                    rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
                 >
                     <Input type="date"/>
                     
@@ -97,7 +94,7 @@ const FormMembro = ({onSubmit, onCancel}) => {
                     style={{flex: "1"}}
                     name="telefone"
                     label="Telefone"
-                    rules={[{ required: true, message: 'Por favor, insira seu telefone!' }]}
+                    rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
                 >
                     <InputMask mask="(99) 99999-9999" maskChar={null}>
                     {() => <Input placeholder="telefone do membro"/>}
@@ -109,7 +106,7 @@ const FormMembro = ({onSubmit, onCancel}) => {
                     name="email"
                     label="Email"
                     rules={[
-                    { required: true, message: 'Por favor, insira seu email!' },
+                    { required: true, message: 'Por favor, preencha este campo!' },
                     { type: 'email', message: 'Por favor, insira um email válido!' },
                     ]}
                 >
@@ -175,7 +172,7 @@ const FormMembro = ({onSubmit, onCancel}) => {
                 <Form.Item
                     name="usuario"
                     label="Usuário de Acesso"
-                    required
+                    rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
                 >
                     <Input name="usuario" disabled/> 
 
@@ -183,7 +180,7 @@ const FormMembro = ({onSubmit, onCancel}) => {
                 <Form.Item
                     name="senha"
                     label="Senha de Acesso"
-                    rules={[{ required: true, message: 'Por favor, cadastre uma senha para acessar a plataforma'}]}
+                    rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
                 >
                     <Input.Password name="senha" placeholder="senha de acesso"/>
                 </Form.Item>
@@ -191,7 +188,7 @@ const FormMembro = ({onSubmit, onCancel}) => {
                 <Form.Item 
                     name="grupo"
                     label="Grupo de Usuário"
-                    rules={[{ required: true, message: 'Por favor, informe o grupo de usuário!'}]}
+                    rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
                 >
                     <Select options={OPTIONS_GROUP}/>
                     
@@ -199,11 +196,11 @@ const FormMembro = ({onSubmit, onCancel}) => {
             </div>
 
             <div style={{display: 'flex', gap: "10px", marginTop: "20px"}} >
-                <Button type="primary" size="large" htmlType="submit">
+                <Button type="primary" htmlType="submit">
                     Salvar
                 </Button >
 
-                <Button type="primary" size="large" onClick={onCancel} danger >
+                <Button type="primary" onClick={onCancel} danger >
                     Cancelar
                 </Button>
             </div>

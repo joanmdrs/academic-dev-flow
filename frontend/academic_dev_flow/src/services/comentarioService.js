@@ -66,8 +66,8 @@ export const buscarComentarioArtefatoPeloId = async (id) => {
 
 export const atualizarComentarioArtefato = async (id, dados) => {
     try {
-        const response = await api.patch(`/comentario/artefato/atualizar/${encodeURIComponent(id)}`, dados)
-        return handleSuccess(response, 'Comentário excluído com sucesso!')
+        const response = await api.patch(`/comentario/artefato/atualizar/${encodeURIComponent(id)}/`, dados)
+        return handleSuccess(response, 'Comentário atualizado com sucesso!')
     } catch (error) {
         return handleError(error, 'Falha ao tentar atualizar o comentário, contate o suporte!')        
     }

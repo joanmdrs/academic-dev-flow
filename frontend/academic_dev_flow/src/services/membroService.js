@@ -1,5 +1,6 @@
 import { NotificationManager } from "react-notifications";
 import api from "../api/api";
+import { handleError, handleSuccess } from "./utils";
 
 export const criarConta = async (dados) => {
     const dadosEnviar = {
@@ -24,14 +25,16 @@ export const criarConta = async (dados) => {
             usuario_github: dados.usuario_github
         }
     }
+    
     try {
-        const resposta = await api.post('/membro/cadastrar/', dadosEnviar)
-        NotificationManager.success('Conta criada com sucesso !')
-        return resposta
+        const response = await api.post('/membro/cadastrar/', dadosEnviar)
+        return handleSuccess(response, 'Contra criada com sucesso !')
     } catch (error) {
-        console.log(error)
-        NotificationManager.error('Falha ao criar a conta, contate o suporte!')
-        return {error: "Erro durante a operação, contate o suporte!"}
+        if (error.response && error.response.status === 409){
+            return handleError(error, 'Já existe uma conta cadastrada com este endereço de e-mail!')
+        } else {
+            return handleError(error, 'Falha ao tentar criar a conta, contate o suporte!')
+        }
     }
 }
 
@@ -118,6 +121,15 @@ export const buscarMembroPeloUser = async (idUser) => {
         console.log(error)
         NotificationManager.error('Não foi possível encontrar o membro, contate o suporte!')
         return {error: 'Falha ao buscar o recurso!'}
+    }
+}
+
+export const buscarUsuarioPeloIdMembroProjeto = async (idMembroProjeto) => {
+    try {
+        const response = await api.get(`membro/buscar-usuario-github/${encodeURIComponent(idMembroProjeto)}/`)
+        return response
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar buscar os dados do usuário github do membro selecionado, contate o suporte!')
     }
 }
 

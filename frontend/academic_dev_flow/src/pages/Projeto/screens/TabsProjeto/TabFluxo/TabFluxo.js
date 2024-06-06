@@ -80,16 +80,11 @@ const TabFluxo = () => {
     }
 
     const handleBuscarFluxo = async (parametro) => {
-       try {
-        const resposta = await buscarFluxoPeloNome(parametro)
-        if(resposta.status !== 200){
-          NotificationManager.error("Ocorreu um problema ao buscar os dados, contate o suporte!")
-        } else {
-          return resposta
+        const response = await buscarFluxoPeloNome(parametro)
+        console.log(response)
+        if(!response.error){
+          return response
         }
-      } catch (error) {
-        NotificationManager.error("Ocorreu um problema ao buscar os dados, contate o suporte!")
-      } 
     }
 
     const handleSelecionarFluxo = async (record) => {

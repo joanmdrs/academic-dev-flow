@@ -5,26 +5,39 @@ import { FaPlus, FaTrash } from "react-icons/fa";
 import TableIteracoesSelect from "../../components/TableIteracoesSelect/TableIteracoesSelect";
 import FormIteracao from "../../components/FormIteracao/FormIteracao";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
-import { atualizarIteracao, criarIteracao, excluirIteracoes } from "../../../../services/iteracaoService";
-import BotaoAdicionar from "../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
-import BotaoExcluir from "../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
+import { atualizarIteracao, criarIteracao, excluirIteracoes, listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
+import Aviso from "../../../../components/Aviso/Aviso";
+import { BsQuestionCircle } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 const CronogramaIteracoes = () => {
 
     const {
         dadosIteracao,
         setDadosIteracao,
-        setIteracoes, 
         iteracoesSelecionadas, 
-        setIteracoesSelecionadas
+        setIteracoesSelecionadas,
+        setIteracoes
     } = useContextoIteracao()
 
-    const {dadosProjeto} = useContextoGlobalProjeto()
+    const {dadosProjeto, grupo} = useContextoGlobalProjeto()
 
     const [isFormSalvarVisivel, setIsFormSalvarVisivel] = useState(false)
     const [isBtnPlusDisabled, setIsBtnPlusDisabled] = useState(false)
     const isBtnTrashDisabled = iteracoesSelecionadas.length === 0
     const [acaoForm, setAcaoForm] = useState('criar')
+    const [isAvisoVisivel, setIsAvisoVisivel] = useState(false);
+
+    const navigate = useNavigate();
+
+
+    const handleDuvidaClick = () => {
+        setIsAvisoVisivel(true);
+    };
+
+    const handleAvisoClose = () => {
+        setIsAvisoVisivel(false);
+    };
 
     const handleCancelar = () => {
         setIsFormSalvarVisivel(false)
@@ -33,11 +46,12 @@ const CronogramaIteracoes = () => {
         setAcaoForm('criar')
     }
 
-    const handleReload = () => {
+    const handleReload = async () => {
+        setIsBtnPlusDisabled(false)
         setIsFormSalvarVisivel(false)
         setDadosIteracao(null)
-        setIteracoes([])
         setIteracoesSelecionadas([])
+        await handleGetIteracoes()
     }
 
     const handleAdicionarIteracao = () => {
@@ -59,16 +73,18 @@ const CronogramaIteracoes = () => {
         if (acaoForm === 'criar'){
             await criarIteracao(dadosForm)
         } else if (acaoForm === 'atualizar'){
+            console.log(dadosIteracao)
+            console.log(dadosForm)
             await atualizarIteracao(dadosIteracao.id, dadosForm)
         }
-        handleReload()
+        await handleReload()
     }
 
     const handleExcluirIteracoes = () => {
   
         Modal.confirm({
             title: 'Confirmar exclusão',
-            content: 'Tem certeza que deseja excluir a(s) iteração(ões) ?',
+            content: 'Tem certeza que deseja prosseguir com a exclusão ?',
             okText: 'Sim',
             cancelText: 'Não',
             onOk: async () => {
@@ -76,14 +92,56 @@ const CronogramaIteracoes = () => {
                     const ids = iteracoesSelecionadas.map((item) => item.id)
                     await excluirIteracoes(ids)
                 }
-                handleReload() 
+                await handleReload() 
             }
         });
     };
 
+    const handleGetIteracoes = async () => {
+        const response = await listarIteracoesPorProjeto(dadosProjeto.id)
+        console.log(response.data)
+
+        if (!response.error && response.data.length > 0){
+            const iteracoesOrdenadas = response.data.sort((a, b) => a.numero - b.numero);
+            setIteracoes(iteracoesOrdenadas)
+        } else if (!response.error && response.data.length === 0){
+            setIteracoes([])
+        }
+    }
+
+    const handleVisualizarIteracao = (record) => {
+        const parametros = {
+            id: record.id,
+            idProjeto: record.projeto
+        }
+
+        if (grupo === 'Docentes') {
+            navigate("/professor/iteracoes/visualizar", {
+                state: parametros
+            });
+        } else if (grupo === 'Discentes') {
+            navigate("/aluno/iteracoes/visualizar", {
+                state: parametros
+            });
+        } else if (grupo === 'Administradores') {
+            navigate("/admin/iteracoes/visualizar", {
+                state: parametros
+            });
+        }
+    }
+
 
     return (
         <React.Fragment>
+
+            {isAvisoVisivel && (
+                <Aviso
+                    titulo="AVISO"
+                    descricao="Nesta tela, o usuário cadastra as iterações que estão previstas para o projeto. "
+                    visible={isAvisoVisivel}
+                    onClose={handleAvisoClose}
+                />
+            )}
 
             <div style={{display: 'flex', justifyContent: 'flex-end', gap: '10px'}}> 
                 <Button 
@@ -103,6 +161,10 @@ const CronogramaIteracoes = () => {
                 >
                     Excluir
                 </Button>
+                <Button
+                    icon={<BsQuestionCircle />}
+                    onClick={handleDuvidaClick}
+                />
             </div>
             <React.Fragment>
 
@@ -112,7 +174,7 @@ const CronogramaIteracoes = () => {
                     </div> 
 
                 ) : (
-                    <TableIteracoesSelect onEdit={handleAtualizarIteracao} />
+                    <TableIteracoesSelect onEdit={handleAtualizarIteracao} onView={handleVisualizarIteracao}/>
                 )}
 
             </React.Fragment>

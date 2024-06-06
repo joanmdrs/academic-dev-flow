@@ -7,9 +7,10 @@ import ListaIteracoes from "../../components/ListaIteracoes/ListaIteracoes";
 import FormIteracao from "../../components/FormIteracao/FormIteracao";
 import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProjeto"
 import { useContextoIteracao } from "../../context/contextoIteracao";
-import { atualizarIteracao, criarIteracao, excluirIteracoes } from "../../../../services/iteracaoService";
+import { atualizarIteracao, buscarIteracoesPeloNomeEPeloProjeto, criarIteracao, excluirIteracoes } from "../../../../services/iteracaoService";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
+import FormBuscarIteracao from "../../components/FormBuscarIteracao/FormBuscarIteracao";
 
 const GerenciarIteracoes = () => {
 
@@ -36,8 +37,15 @@ const GerenciarIteracoes = () => {
     }
 
     const handleBuscarIteracao = () => {
-        setIsFormBuscarVisivel(true)
+        setIsFormBuscarVisivel(!isFormBuscarVisivel)
         setIsFormSalvarVisivel(false)
+    }
+
+    const handleFiltrarIteracoes = async (dados) => {
+        const response = await buscarIteracoesPeloNomeEPeloProjeto(dados.nome_iteracao, dados.id_projeto)
+        if (!response.error) {
+            setIteracoes(response.data)
+        }
     }
 
     const handleBuscarProjeto = async (id) => {
@@ -64,7 +72,6 @@ const GerenciarIteracoes = () => {
     const handleSalvarIteracao = async (dadosForm) => {
         dadosForm['projeto'] = dadosProjeto.id
         if (acaoForm === 'criar'){
-            console.log(dadosForm)
             await criarIteracao(dadosForm)
         } else {
             await atualizarIteracao(dadosIteracao.id, dadosForm)
@@ -113,7 +120,7 @@ const GerenciarIteracoes = () => {
 
             {isFormBuscarVisivel && (
                 <div className="global-div" style={{width: '50%'}}>   
-                    <FormGenericBusca />
+                    <FormBuscarIteracao onSearch={handleFiltrarIteracoes} />
                 </div>
             )}
 
@@ -123,7 +130,6 @@ const GerenciarIteracoes = () => {
                         additionalFields={<SelecionarProjeto />} 
                         onCancel={handleCancelar}
                         onSubmit={handleSalvarIteracao}
-                        
                     />
                 )}
 

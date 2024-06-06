@@ -2,7 +2,6 @@ import React from "react";
 import {Layout} from 'antd'
 import MyHeader from "../../../../components/Header/Header";
 import MenuAluno from "../../../../components/Menus/MenuAluno/MenuAluno";
-import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
 import { ProviderArtefato } from "../../context/ContextoArtefato";
 import MeusArtefatos from "./MeusArtefatos";
@@ -23,13 +22,10 @@ const ScreenMeusArtefatos = ({grupo}) => {
             <Layout>
                 <MyHeader/>
                 <CustomBreadcrumb routes={breadcrumbRoutes} />
-
                 <Content>
-                    <ProviderGlobalProjeto>
-                        <ProviderArtefato>
-                            <MeusArtefatos />
-                        </ProviderArtefato>
-                    </ProviderGlobalProjeto>
+                    <ProviderArtefato>
+                        <MeusArtefatos />
+                    </ProviderArtefato>
                 </Content>
             </Layout>
         </React.Fragment>   

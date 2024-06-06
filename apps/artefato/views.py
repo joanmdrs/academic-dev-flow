@@ -5,6 +5,7 @@ from rest_framework import status
 from django.http import HttpResponseNotAllowed, JsonResponse
 from .models import Artefato
 from .serializers import ArtefatoSerializer
+from apps.iteracao.models import Iteracao
 from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
 
@@ -59,7 +60,7 @@ class ListarArtefatosPorProjeto(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, id_projeto):
         try:
-            artefatos = Artefato.objects.filter(projeto_id=id_projeto)
+            artefatos = Artefato.objects.filter(projeto_id=id_projeto).order_by('id')
                 
             if artefatos.exists():
                 serializer = ArtefatoSerializer(artefatos, many=True)
@@ -93,7 +94,7 @@ class FiltrarArtefatoPeloNomeEProjeto(APIView):
                 serializer = ArtefatoSerializer(artefatos, many=True)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             
-            return Response(data=[], status=status.HTTP_204_NO_CONTENT)
+            return Response([], status=status.HTTP_204_NO_CONTENT)
         except Exception as e: 
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
@@ -146,6 +147,21 @@ class ListarArtefatosView(APIView):
         except Exception as e: 
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
+class ListarArtefatosPorIteracao(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, id_iteracao):
+        try:
+            artefatos = Artefato.objects.filter(iteracao_id=id_iteracao)
+                
+            if artefatos.exists():
+                serializer = ArtefatoSerializer(artefatos, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response(data=[], status=status.HTTP_204_NO_CONTENT)
+        
+        except Exception as e: 
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
         
 class VerificarExistenciaArtefatoView(APIView):
     permission_classes = [IsAuthenticated]
@@ -163,7 +179,7 @@ class VerificarExistenciaArtefatoView(APIView):
                 serializer = ArtefatoSerializer(artefato)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
-                return Response({'error': 'O arquivo não foi encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+                return Response([], status=status.HTTP_204_NOT_FOUND)
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -185,3 +201,34 @@ class SicronizarContentsView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
+class AtualizarIteracaoArtefatosView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def patch(self, request):
+        try:
+            ids_artefatos = request.data.get('ids_artefatos', [])
+            id_iteracao = request.data.get('id_iteracao', None)
+            
+            if not ids_artefatos:
+                return Response({'error': 'Nenhum ID de artefato fornecido'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            if id_iteracao is None:
+                return Response({'error': 'ID de iteração não fornecido'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            iteracao = Iteracao.objects.get(pk=id_iteracao)
+            artefatos = Artefato.objects.filter(pk__in=ids_artefatos)
+            
+            for artefato in artefatos:
+                artefato.iteracao = iteracao
+                artefato.save()
+            
+            return Response({'success': True}, status=status.HTTP_200_OK)
+        
+        except Iteracao.DoesNotExist:
+            return Response({'error': 'A iteração especificada não existe'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        except Artefato.DoesNotExist:
+            return Response({'error': 'Um ou mais artefatos especificadas não existem'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

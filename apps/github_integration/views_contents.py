@@ -9,7 +9,6 @@ from apps.artefato.models import Artefato
 import base64
 import json
 
-
 def create_content(request):
     try:
     

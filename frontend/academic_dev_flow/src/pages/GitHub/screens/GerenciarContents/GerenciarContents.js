@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
-import Titulo from "../../../../components/Titulo/Titulo";
-import { Button, Modal, Space, Spin, Table } from "antd";
+import React, { useState } from "react";
+import { Button, Space, Table } from "antd";
 import { FaSearch } from "react-icons/fa";
-import { FaArrowsRotate } from "react-icons/fa6";
+import { FaArrowRotateRight, FaArrowsRotate } from "react-icons/fa6";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { IoCheckmark, IoCloseOutline } from "react-icons/io5";
 import { IoDocumentOutline } from "react-icons/io5";
@@ -71,6 +70,13 @@ const GerenciarContents = () => {
         setIsTableVisivel(false)
     }
 
+    const handleResetar = () => {
+        setContents([])
+        setIsTableVisivel(false)
+        setIsFormBuscarVisivel(false)
+    }
+
+
     const handleGetContents = async (parametros) => {
         setFolder(parametros.folder)
         setIsTableVisivel(true)
@@ -128,13 +134,22 @@ const GerenciarContents = () => {
 
             <div style={{display:'flex', justifyContent: 'space-between', gap: '10px'}}> 
 
-                <div> 
+                <div style={{display: 'flex', gap: '10px'}}> 
                     <Button
                         icon={<FaSearch />} 
                         type="primary"
                         onClick={handleFiltrarContents}
                     > 
                         Filtrar 
+                    </Button>
+
+                    <Button
+                        icon={<FaArrowRotateRight />}
+                        onClick={handleResetar}
+                        danger
+                        ghost
+                    >
+                        Resetar
                     </Button>
                 </div>
 

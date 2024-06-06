@@ -91,6 +91,11 @@ const Login = () => {
                         </Form.Item>
                     </Form>
                 </div>
+
+                <div className='form-login-create-account'> 
+                    Não possui uma conta ? 
+                    <a href='/cadastre-se'> Registre-se agora </a>
+                </div>
             </div>
         </div>
 

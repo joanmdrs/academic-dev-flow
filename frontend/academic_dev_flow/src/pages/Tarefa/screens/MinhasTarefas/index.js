@@ -4,7 +4,6 @@ import MyHeader from "../../../../components/Header/Header";
 import MenuAluno from "../../../../components/Menus/MenuAluno/MenuAluno";
 import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfessor";
 import MinhasTarefas from "./MinhasTarefas";
-import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
 import { ProviderTarefa } from "../../context/ContextoTarefa";
 
@@ -14,7 +13,7 @@ const ScreenMinhasTarefas = ({grupo}) => {
 
     const breadcrumbRoutes = [
         { title: 'Home', path: `/${grupo}/home` },
-        { title: 'Tarefas', path: `/${grupo}/tarefas` },
+        { title: 'Tarefas', path: `/${grupo}/tarefas` }, 
     ];
 
     return (
@@ -26,11 +25,9 @@ const ScreenMinhasTarefas = ({grupo}) => {
                 <CustomBreadcrumb routes={breadcrumbRoutes} />
 
                 <Content>
-                    <ProviderGlobalProjeto>
-                        <ProviderTarefa>
-                            <MinhasTarefas />
-                        </ProviderTarefa>
-                    </ProviderGlobalProjeto>
+                    <ProviderTarefa>
+                        <MinhasTarefas />
+                    </ProviderTarefa>
                 </Content>
             </Layout>
         </React.Fragment>   

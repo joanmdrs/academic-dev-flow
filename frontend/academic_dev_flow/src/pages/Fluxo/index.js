@@ -1,21 +1,27 @@
 import React from "react";
 import { Layout } from 'antd';
 import MyHeader from "../../components/Header/Header";
-import { FluxoProvider } from "./context/Provider/Provider";
 import TabsFluxo from "./screens/TabsFluxo/TabsFluxo"
 import MenuAdmin from "../../components/Menus/MenuAdmin/MenuAdmin";
+import MenuAluno from "../../components/Menus/MenuAluno/MenuAluno";
+import MenuProfessor from "../../components/Menus/MenuProfessor/MenuProfessor";
+import { ProviderFluxo } from "./context/ContextoFluxo";
 
-const Fluxo = () => {
+const ScreenGerenciarFluxos = ({grupo}) => {
+
     return (
-
         <React.Fragment>
-            <MenuAdmin />
+            { grupo === 'admin' && <MenuAdmin /> }
+            { grupo === 'aluno' && <MenuAluno />}
+            { grupo === 'professor' && <MenuProfessor />}
             <Layout>
                 <MyHeader />
-                <FluxoProvider> <TabsFluxo /> </FluxoProvider>
+                <ProviderFluxo>
+                    <TabsFluxo /> 
+                </ProviderFluxo>
             </Layout>
         </React.Fragment>
     )
 }
 
-export default Fluxo
+export default ScreenGerenciarFluxos

@@ -1,92 +1,84 @@
 import React, { useState } from "react";
 import Titulo from "../../../../components/Titulo/Titulo";
-import { Button, Modal } from "antd";
-import { FaSearch } from "react-icons/fa";
+import { Button } from "antd";
 import FormListarArquivos from "../../components/FormListarArquivos/FormListarArquivos";
 import { deleteContent, listContents } from "../../../../services/githubIntegration";
 import ListaArquivos from "../../components/ListaArquivos/ListaArquivos";
 import { NotificationManager } from "react-notifications";
-import { FaArrowsRotate } from "react-icons/fa6";
 import { excluirArtefato, sicronizarContents, verificarExistenciaArquivo } from "../../../../services/artefatoService";
 import { handleError } from "../../../../services/utils";
-import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 import ModalExcluirArtefato from "../../components/ModalExcluirArtefato/ModalExcluirArtefato";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
+import { FaArrowRotateRight, FaArrowsRotate, FaFilter } from "react-icons/fa6";
 
 const GerenciarArquivosGithub = () => {
 
-    const [arquivos, setArquivos] = useState([]);
+    const [contents, setContents] = useState([]);
     const [isFormVisivel, setIsFormVisivel] = useState(true);
     const [isModalExcluirVisivel, setIsModalExcluirVisivel] = useState(false)
-    const [exibirLista, setExibirLista] = useState(false);
-    const [carregando, setCarregando] = useState(false);
-    const {dadosProjeto} = useContextoGlobalProjeto()
-    const [arquivoExcluir, setArquivoExcluir] = useState({})
+    const [isTableVisivel, setIsTableVisivel] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
+    const [arquivoExcluir, setArquivoExcluir] = useState(null)
+    const [folder, setFolder] = useState(null)
 
     const handleExibirModal = () => setIsModalExcluirVisivel(true)
     const handleFecharModal = () => setIsModalExcluirVisivel(false)
 
-    const handleListarArquivosGithub = async (parametros) => {
-        NotificationManager.info("Essa operação pode demorar alguns segundos, aguarde enquanto obtemos os dados.")
+    const handleResetar = async () => {
+        setIsTableVisivel(false)
+        setIsFormVisivel(false)
+        setContents([])
+        setIsModalExcluirVisivel(false)
+        setLoading(false)
+        setDadosProjeto(null)
+        setArquivoExcluir(null)
+    }
 
-        setCarregando(true);
-        setExibirLista(true);
-        const response = await listContents(parametros);
+    const handleGetContents = async (parametros) => {
+        setContents([])
+        setLoading(true);
+        setIsTableVisivel(true);
+        setFolder(parametros.folder)
 
-        if (!response.error) {
-            await handleVerificarExistenciaArquivoBD(response.data)
-        }
-        setCarregando(false)
+        const response = await listContents(parametros)
+
+        if (!response.error && response.data){
+            setContents(response.data)
+        } else {
+            setContents([])
+        } 
+        setLoading(false)
     };
 
-    const handleVerificarExistenciaArquivoBD = async (dadosArquivos) => {
-
+    const handleScriconizarContents = async () => {
         try {
-            const dados = await Promise.all(dadosArquivos.map(async (arquivo) => {
-                const resArtefato = await verificarExistenciaArquivo(arquivo.sha)
+            const novosContents = contents.filter(item => !item.exists);
     
-                if (!resArtefato.error) {
-                    const existe = resArtefato.data
-                    return { ...arquivo, existe }
+            if (novosContents.length > 0) {
+                const dados = novosContents.map(item => ({
+                    nome: item.name,
+                    id_file: item.sha,
+                    path_file: item.path,
+                    projeto: dadosProjeto.id
+                }))
+                await sicronizarContents(dados);
+
+                const parametros = {
+                    github_token: dadosProjeto.token,
+                    repository: dadosProjeto.nome_repo,
+                    folder: folder
                 }
-                return arquivo
-            }))
-
-            setArquivos(dados)
-
+                setContents([])
+                await handleGetContents(parametros)
+            } else {
+                NotificationManager.info('Todos os arquivos listados já estão salvos no banco de dados.');
+            }
         } catch (error) {
-            return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+            return handleError(error, "Falha ao tentar sicronizar os arquivos, contate o suporte!")
         }
     }
 
-    const handleSicronizar = async () => {
-        const arquivosSicronizar = arquivos.filter(arquivo => !arquivo.existe);
-
-        const dadosEnviar = arquivosSicronizar.map((item) => {
-            
-            return {
-                nome: item.name,
-                status: 'criado',
-                descricao: null,
-                id_file: item.sha,
-                path_file: item.path,
-                projeto: dadosProjeto.id,
-                iteracao: null
-            }
-        })
-
-        await sicronizarContents(dadosEnviar)
-    }
-
-    const handleConfirmarExclusao = (record) => {
-        Modal.confirm({
-            title: 'Confirmar exclusão',
-            content: 'Tem certeza que deseja excluir este item ? Esta ação é irreversível !',
-            okText: 'Sim',
-            cancelText: 'Não',
-            onOk: () =>  handlePrepararExcluirArquivo(record)
-        });
-    }
 
     const handlePrepararExcluirArquivo = async (record) => {
         const resArtefato = await verificarExistenciaArquivo(record.sha)
@@ -123,47 +115,57 @@ const GerenciarArquivosGithub = () => {
                 paragrafo='Arquivos > Gerenciar arquivos'
             />
 
-            <div className="button-menu">  
-                <Button 
-                    type="primary"
-                    icon={<FaSearch />}
-                    onClick={() => setIsFormVisivel(!isFormVisivel)}
-                >
-                    Filtrar
-                </Button>
+            <div style={{display:'flex', justifyContent: 'space-between', gap: '10px', margin: '20px'}}> 
+
+                <div style={{display: 'flex', gap: '10px'}}> 
+                    <Button
+                        icon={<FaFilter />} 
+                        type="primary"
+                        onClick={() => setIsFormVisivel(!isFormVisivel)}
+                       
+                    > 
+                        Filtrar 
+                    </Button>
+
+                    <Button
+                        icon={<FaArrowRotateRight />}
+                        onClick={handleResetar}
+                        danger
+                        ghost
+                    >
+                        Resetar
+                    </Button>
+                </div>
+
+                <div style={{display: 'flex', gap: '10px'}}> 
+                    <Button 
+                        icon={<FaArrowsRotate />} 
+                        type="primary"  
+                        ghost                 
+                        disabled={contents.length === 0 ? true : false}
+                        onClick={handleScriconizarContents}
+                    > 
+                        Sicronizar 
+                    </Button>
+                </div>
             </div>
 
             { isFormVisivel && (
                 <div className="global-div" style={{width: "50%"}}> 
-                    <FormListarArquivos onSearch={handleListarArquivosGithub}/>
+                    <FormListarArquivos onSearch={handleGetContents} />
                 </div>
             )}
 
-            { exibirLista &&
-                <React.Fragment>
-                    <div className="global-div" > 
-                        <div 
-                            style={{
-                                display: 'flex', 
-                                justifyContent: 'space-between', 
-                                alignItems: 'baseline',
-                            }}
-                        > 
-                            <h3> {dadosProjeto.nome} </h3>
-                            <Button onClick={handleSicronizar} type="primary" icon={<FaArrowsRotate/>}> Sicronizar </Button>
-
-                        </div>
-                    </div>
-
-                    <div className="global-div">
-                        <ListaArquivos 
-                            dadosArquivos={arquivos} 
-                            carregando={carregando} 
-                            onDelete={handleConfirmarExclusao}
-                            
-                        />
-                    </div>
-                </React.Fragment>
+            { isTableVisivel &&
+                    
+                <div className="global-div">
+                    <ListaArquivos 
+                        dadosArquivos={contents} 
+                        carregando={loading} 
+                        onDelete={handlePrepararExcluirArquivo}
+                        
+                    />
+                </div>
             } 
             <ModalExcluirArtefato 
                 visible={isModalExcluirVisivel}

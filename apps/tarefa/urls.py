@@ -21,5 +21,6 @@ urlpatterns = [
     path('labels/buscar/<int:id>/', BuscarLabelPeloIdView.as_view(), name='buscar_label_pelo_id'),
     path('labels/listar-por-projeto/<int:id_projeto>/', ListarLabelsPorProjetoView.as_view(), name='listar_labels_por_projeto'),
     path('iniciar-contagem-tempo/', IniciarContagemTempoView.as_view(), name='iniciar-contagem-tempo'),
-    path('parar-contagem-tempo/', PararContagemTempoView.as_view(), name='parar-contagem-tempo')
+    path('parar-contagem-tempo/', PararContagemTempoView.as_view(), name='parar-contagem-tempo'),
+    path('atualizar-iteracao/', AtualizarIteracaoTarefasView.as_view(), name='atualizar_iteracao')
 ]

@@ -6,14 +6,14 @@ export const useRegisterContexto = () => useContext(RegisterContexto);
 export const RegisterProvider = ({ children }) => {
 
     const [grupoUsuario, setGrupoUsuario] = useState(null)
-    const [usuarioGithub, setUsuarioGithub] = useState(null)
+    const [infoGithub, setInfoGithub] = useState(null)
     const [step, setStep] = useState('1')
 
     return (
         <RegisterContexto.Provider
             value={{
                 grupoUsuario, setGrupoUsuario,
-                usuarioGithub, setUsuarioGithub,
+                infoGithub, setInfoGithub,
                 step, setStep
             }}
         >

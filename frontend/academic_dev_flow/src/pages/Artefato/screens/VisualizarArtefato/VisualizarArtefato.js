@@ -11,17 +11,22 @@ import Loading from "../../../../components/Loading/Loading";
 import ScreenGerencirPontuacao from "../../../Pontuacao/screens/GerenciarPontuacao";
 import { buscarArtefatoPeloId } from "../../../../services/artefatoService";
 import { useContextoArtefato } from "../../context/ContextoArtefato";
+import ScreenComentariosArtefato from "../../../Comentario/screens/ComentariosArtefato";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
+import { buscarProjetoPeloId } from "../../../../services/projetoService";
 
 const { Sider, Content } = Layout;
 
 const VisualizarArtefato = () => {
+
+    const {setDadosProjeto} = useContextoGlobalProjeto()
     const {setDadosArtefato} = useContextoArtefato()
     const [conteutoArquivo, setConteudoArquivo] = useState('')
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState('document');
     const [collapsed, setCollapsed] = useState(true);
+    
     const navigate = useNavigate(); 
-
     const location = useLocation();
     const { state } = location;
 
@@ -29,8 +34,17 @@ const VisualizarArtefato = () => {
         setCollapsed(!collapsed);
     };
 
+    const handleBuscarProjeto = async () => {
+        const response = await buscarProjetoPeloId(state.id_projeto)
+
+        if (!response.error){
+            setDadosProjeto(response.data)
+        }
+    }
+
     const handleBuscarArtefato = async () => {
-        const response = await buscarArtefatoPeloId(state.id)
+
+        const response = await buscarArtefatoPeloId(state.id_artefato)
 
         if (!response.error){
             setDadosArtefato(response.data)
@@ -53,8 +67,9 @@ const VisualizarArtefato = () => {
     useEffect(() => {
         const fetchData = async () => {
             if (state) {
-                await handleGetContent()
+                await handleBuscarProjeto()
                 await handleBuscarArtefato()
+                await handleGetContent()
             }
             setLoading(false);
         };
@@ -114,7 +129,7 @@ const VisualizarArtefato = () => {
                         <ScreenGerencirPontuacao />
                     )}
                     {currentPage === 'comments' && (
-                        <div></div>
+                        <ScreenComentariosArtefato />
                     )}
                 </Content>
             </Layout>

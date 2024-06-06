@@ -26,6 +26,9 @@ class CadastrarMembroView(APIView):
             user_data = request.data.get('usuario', {}) 
             github_data = request.data.get('github', {})
             member_data = request.data.get('membro', {})
+            
+            if (Usuario.objects.filter(username=user_data['username']).exists()):
+                return Response({'error': 'O nome de usuário já está sendo utilizado!'}, status=status.HTTP_409_CONFLICT)
 
             if not user_data:
                 raise ValueError("Dados do usuário não fornecidos")
@@ -163,24 +166,25 @@ class BuscarMembroPeloUserView(APIView):
                     usuario_github = None
                     email_github = None
                     nome_github = None
+                                
+               
+                autor = {
+                    'id_membro': membro.id,
+                    'id_user': id_user,
+                    'nome': membro.nome,
+                    'data_nascimento': membro.data_nascimento,
+                    'telefone': membro.telefone,
+                    'email': membro.email,
+                    'linkedin': membro.linkedin,
+                    'lattes': membro.lattes,
+                    'grupo': membro.grupo,
+                    'nome_github': nome_github,
+                    'email_github': email_github,
+                    'usuario_github': usuario_github
+                }
                 
-                membro_projeto = MembroProjeto.objects.get(membro_id=membro.id)
-                
-                if membro_projeto: 
-                    autor = {
-                        'id_membro': membro.id,
-                        'id_user': id_user,
-                        'id_membro_projeto': membro_projeto.id,
-                        'nome': membro.nome,
-                        'nome_github': nome_github,
-                        'email_github': email_github,
-                        'usuario_github': usuario_github
-                    }
-                    
-                    return Response(autor, status=status.HTTP_200_OK)
-                
-                return Response({'error': 'Este membro não está vinculado a nenhum projeto'}, status=status.HTTP_404_NOT_FOUND)
-
+                return Response(autor, status=status.HTTP_200_OK)
+            
             return Response({'error': 'Membro não encontrado'}, status=status.HTTP_404_NOT_FOUND)
         
         except Exception as e:
@@ -195,6 +199,28 @@ class BuscarMembroPorIdView(APIView):
             serializer = MembroSerializer(membro, many=False)
             
             return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+class BuscarUsuarioPeloIdMembroProjeto(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request, id_membro_projeto):
+        try:
+            membro_projeto = MembroProjeto.objects.get(pk=id_membro_projeto)
+            membro = Membro.objects.get(pk=membro_projeto.membro_id)
+            usuario_github = UsuarioGithub.objects.get(pk=membro.github_id)
+            
+            serializer = UsuarioGithubSerializer(usuario_github)
+            
+            return Response(serializer.data, status=status.HTTP_200_OK)
+             
+        except MembroProjeto.DoesNotExist:
+            return Response({'error': 'MembroProjeto não encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+        except Membro.DoesNotExist:
+            return Response({'error': 'Membro não encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+        except UsuarioGithub.DoesNotExist:
+            return Response({'error': 'Usuário Github não encontrado.'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     

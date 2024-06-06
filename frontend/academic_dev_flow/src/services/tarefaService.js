@@ -31,6 +31,15 @@ export const criarTarefa = async (dadosForm, dadosIssue) => {
     }
 }
 
+export const buscarTarefaPeloId = async (id) => {
+    try {
+        const response = await api.get(`tarefa/buscar/${encodeURIComponent(id)}/`)
+        return response
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
+}
+
 export const listarTarefasPorProjeto = async (idProjeto) => {
     try {
         const response = await api.get(`tarefa/listar/projeto/${encodeURIComponent(idProjeto)}/`)
@@ -86,7 +95,6 @@ export const excluirTarefas = async (ids) => {
 }
 
 export const concluirTarefas = async (ids) => {
-    console.log(ids)
     try {
         const response = await api.patch('tarefa/concluir/', {ids})
         if (response.status === 200){
@@ -201,5 +209,14 @@ export const pararContagemTempo = async (parametros) => {
         return handleSuccess(response, 'Você está pausando uma tarefa !')
     } catch (error) {
         return handleError(error, 'Falha ao tentar pausar a tarefa, contate o suporte!')
+    }
+}
+
+export const vincularIteracaoAsTarefas = async (dados) => {
+    try {
+        const response = await api.patch('tarefa/atualizar-iteracao/', dados)
+        return handleSuccess(response, 'Atribuição de tarefas a iteração realizada com sucesso!')
+    } catch (error) {
+        return handleError(error, 'Falha durante a atribuição das tarefas a iteração, contate o suporte!')
     }
 }

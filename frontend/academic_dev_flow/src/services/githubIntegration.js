@@ -13,9 +13,7 @@ export const createContent = async (dados) => {
         author_name: dados.author_name,
         author_email: dados.author_email
     }
-
-    console.log(dadosEnviar)
-
+    
     try {
         const response = await api.post('github_integration/create_content/', dadosEnviar)
         return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION_THE_CONTENT)

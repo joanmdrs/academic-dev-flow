@@ -1,17 +1,18 @@
 import React, { useState } from 'react'
 import Aviso from '../../../../components/Aviso/Aviso'
 import { Button, Form, Input, Spin } from 'antd'
-import { FaPlus, FaSearch } from 'react-icons/fa'
+import { FaLink, FaPlus, FaSearch } from 'react-icons/fa'
 import { useContextoGlobalProjeto } from '../../../../context/ContextoGlobalProjeto'
 import { useContextoArtefato } from '../../context/ContextoArtefato'
 import { BsQuestionCircle } from 'react-icons/bs'
 import FormArtefato from '../../components/FormArtefato/FormArtefato'
 import { createContent, deleteContent } from '../../../../services/githubIntegration'
-import { atualizarArtefato, criarArtefato, excluirArtefato, filtrarArtefatosPeloNomeEPeloProjeto } from '../../../../services/artefatoService'
+import { atualizarArtefato, atualizarIteracaoDosArtefatos, criarArtefato, excluirArtefato, filtrarArtefatosPeloNomeEPeloProjeto } from '../../../../services/artefatoService'
 import FormFiltrarArtefatos from '../../components/FormFiltrarArtefatos/FormFiltrarArtefatos'
 import ModalExcluirArtefato from '../../components/ModalExcluirArtefato/ModalExcluirArtefato'
 import { useNavigate } from "react-router-dom";
 import TableArtefatosProjeto from '../../components/TableArtefatosProjeto/TableArtefatosProjeto'
+import ModalVincularIteracao from '../../components/ModalVincularIteracao/ModalVincularIteracao'
 
 const StyleSpin = {
     position: 'absolute', 
@@ -34,7 +35,10 @@ const PainelArtefatos = () => {
         dadosArtefato, 
         setDadosArtefato, 
         setArtefatos,
-        setArtefatosSelecionados} = useContextoArtefato()
+        artefatosSelecionados,
+        setArtefatosSelecionados,
+        handleListarArtefatos
+    } = useContextoArtefato()
 
     const [isFormSalvarVisivel, setIsFormSalvarVisivel] = useState(false)
     const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false)
@@ -44,6 +48,8 @@ const PainelArtefatos = () => {
     const [isBtnPlusDisabled, setIsBtnPlusDisabled] = useState(false)
     const [isAvisoVisivel, setIsAvisoVisivel] = useState(false)
     const [isSaving, setIsSaving] = useState(false)
+    const [isModalVincularIteracaoVisivel, setIsModalVincularIteracaoVisivel] = useState(false)
+
     const navigate = useNavigate();
 
     const handleAvisoClose = () => {
@@ -63,15 +69,18 @@ const PainelArtefatos = () => {
         setIsBtnPlusDisabled(false)
         setIsFormSalvarVisivel(false)
         setIsFormBuscarVisivel(false)
+        setIsModalVincularIteracaoVisivel(false)
         setIsSaving(false)
     }
 
-    const handleReload = () => {
+    const handleReload = async () => {
         setIsTableListVisivel(true)
         setIsFormSalvarVisivel(false)
         setIsFormBuscarVisivel(false)
+        setIsModalVincularIteracaoVisivel(false)
         setArtefatos([])
         setArtefatosSelecionados([])
+        await handleListarArtefatos(dadosProjeto.id)
     }
 
     const handleBuscarArtefato = () => {
@@ -91,13 +100,15 @@ const PainelArtefatos = () => {
 
     const handleVisualizarArtefato = async (record) => {
 
+        setDadosArtefato(record)
+
         const parametros = {
             github_token: dadosProjeto.token,
             repository: dadosProjeto.nome_repo,
-            path: record.path_file,
-            id: record.id
+            id_projeto: dadosProjeto.id,
+            id_artefato: record.id,
+            path: record.path_file
         }
-
         if (grupo === 'Docentes') {
             navigate("/professor/artefatos/visualizar", {
                 state: parametros
@@ -188,6 +199,27 @@ const PainelArtefatos = () => {
         setIsSaving(false)
     }
 
+    const handleAtualizarIteracaoDosArtefatos = async (idIteracao) => {
+        if (artefatosSelecionados !== null) {
+            const ids = artefatosSelecionados.map((item) => item.id)
+            const dados = {
+                ids_artefatos: ids,
+                id_iteracao: idIteracao
+            }
+            await atualizarIteracaoDosArtefatos(dados)
+            handleReload()
+        }
+    }
+
+    const handleAtualizarStatusArtefato = async (record, value) => {
+
+        const dados = {
+            status: value
+        }
+        await atualizarArtefato(record.id, dados)
+        handleReload()
+    }
+
     return (
         <div>
 
@@ -201,7 +233,7 @@ const PainelArtefatos = () => {
             )}
 
             <div style={{display:'flex', justifyContent:'space-between', gap: '10px', marginBottom: '40px'}}>
-                <div>
+                <div style={{display: 'flex', gap: '10px'}}>
                     <Button
                         icon={<FaSearch />}
                         type='primary'
@@ -209,6 +241,17 @@ const PainelArtefatos = () => {
                     >
                         Buscar
                     </Button>
+
+                    <Button 
+                        type="primary"
+                        icon={<FaLink />}
+                        ghost
+                        onClick={() => setIsModalVincularIteracaoVisivel(true)}
+                        disabled={artefatosSelecionados.length > 0 ? false : true}
+                    > 
+                        Vincular Iteração
+                    </Button>
+
                 </div> 
 
                 <div className='grouped-buttons'>
@@ -246,7 +289,10 @@ const PainelArtefatos = () => {
                         onSubmit={handleSalvarArtefato} 
                         onCancel={handleReload} 
                         inputCommitMessage={
-                            <Form.Item label="Mensagem de commit" name="commit_message">
+                            <Form.Item 
+                                label="Mensagem de commit" 
+                                name="commit_message" 
+                                rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}>
                                 <Input name="commit_message" placeholder="mensagem de commit"/>
                             </Form.Item>
                         } 
@@ -279,15 +325,21 @@ const PainelArtefatos = () => {
                         onView={handleVisualizarArtefato}
                         onEdit={handleAtualizarArtefato} 
                         onDelete={handleExcluirArtefato}
+                        onUpdateStatus={handleAtualizarStatusArtefato}
                     />
                 </div>
             }
-            
 
             <ModalExcluirArtefato 
                 visible={isModalExcluirVisivel}
                 onCancel={handleFecharModal}
                 onDelete={handleConfirmarExclusao}
+            />
+
+            <ModalVincularIteracao
+                visible={isModalVincularIteracaoVisivel}
+                onCancel={handleCancelar}
+                onUpdate={handleAtualizarIteracaoDosArtefatos}
             />
 
             

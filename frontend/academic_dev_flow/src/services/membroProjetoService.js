@@ -38,10 +38,6 @@ export const excluirMembroProjetoMany = async (id_projeto, lista_membros, grupo)
 export const listarMembrosPorProjeto = async (idProjeto) => {
     try {
         const response = await api.get(`membro_projeto/buscar/${encodeURIComponent(idProjeto)}/`)
-
-        if (response.status === 204) {
-            return handleInfo(response, INFO_MESSAGE_ON_SEARCHING)
-        } 
         return response
 
     } catch (error) {
@@ -74,6 +70,15 @@ export const listarMembrosPeloIdProjeto = async (idProjeto) => {
 export const buscarMembroProjetoPeloUsuarioGithub = async (parametros) => {
     try {
         const response = await api.get('membro_projeto/buscar/usuario_github/', {params: parametros})
+        return response
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
+}
+
+export const buscarMembroProjetoPeloIdMembro = async (parametros) => {
+    try {
+        const response = await api.get('membro_projeto/buscar/membro-e-projeto/', {params: parametros})
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)

@@ -2,21 +2,8 @@ import { Button, Form, Input, Select, Spin, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 import { LoadingOutlined } from '@ant-design/icons';
 import { useContextoProjeto } from "../../../context/ContextoProjeto";
+import { optionsStatusProjetos } from "../../../../../services/optionsStatus";
 
-const OPTIONS_STATUS = [
-    {
-        label: "Cancelado",
-        value: "cancelado"
-    },
-    {
-        label: "Em andamento",
-        value: "em_andamento"
-    },
-    {
-        label: "Concluído",
-        value: "concluido"
-    }
-]
 
 const customizeRequiredMark = (label, { required }) => (
     <>
@@ -34,13 +21,13 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-        try {
-            setCarregando(true);
-            handleAlterarCampos(hasProjeto)
-        } catch (error) {
-        } finally {
-            setCarregando(false);
-        }
+            try {
+                setCarregando(true);
+                handleAlterarCampos(hasProjeto)
+            } catch (error) {
+            } finally {
+                setCarregando(false);
+            }
         };
 
         fetchData();
@@ -76,28 +63,45 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
                         layout="vertical"
                         className="global-form"  
                         onFinish={onSubmit}
-                        requiredMark={customizeRequiredMark}                  
                     >
-                        <Form.Item label="Nome:" name="nome" required>
+                        <Form.Item 
+                            label="Nome:" 
+                            name="nome" 
+                            rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
+                        >
                             <Input
                                 name="nome"
                             />
                         </Form.Item>
 
                         <div style={{display: 'flex', gap: "20px"}}>
-                            <Form.Item label="Status:" name="status" style={{width: "250px"}} required>
+                            <Form.Item 
+                                label="Status:" 
+                                name="status" 
+                                style={{width: "250px"}} 
+                                rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}>
                                 <Select
                                     name="status"
                                     defaultValue="Selecione"
-                                    options={OPTIONS_STATUS}
+                                    options={optionsStatusProjetos}
                                 />
                             </Form.Item>
 
-                            <Form.Item label="Data de Início:" name="data_inicio" style={{width: "250px"}} required>
+                            <Form.Item 
+                                label="Data de Início:" 
+                                name="data_inicio" 
+                                style={{width: "250px"}}
+                                rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
+                            >
                                 <Input name="data_inicio" type="date" />
                             </Form.Item>
 
-                            <Form.Item label="Data de Término:" name="data_fim" style={{width: "250px"}} required>
+                            <Form.Item 
+                                label="Data de Término:" 
+                                name="data_fim" 
+                                style={{width: "250px"}} 
+                                rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
+                            >
                                 <Input name="data_fim" type="date" />
                             </Form.Item>
                         </div>
@@ -123,11 +127,11 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
                         </Form.Item>
 
                         <div style={{display: 'flex', gap: "10px"}} >
-                            <Button type="primary" size="large" htmlType="submit">
+                            <Button type="primary" htmlType="submit">
                                 Salvar
                             </Button >
 
-                            <Button type="primary" size="large" onClick={onCancel} danger >
+                            <Button type="primary" onClick={onCancel} danger >
                                 Cancelar
                             </Button>
                         </div>

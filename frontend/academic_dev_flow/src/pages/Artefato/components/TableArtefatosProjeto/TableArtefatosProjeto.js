@@ -1,11 +1,13 @@
-import { Space, Table, Tooltip } from "antd";
-import React, { useEffect } from "react";
+import { Select, Space, Table, Tooltip } from "antd";
+import React, { useEffect, useState } from "react";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { useContextoArtefato } from "../../context/ContextoArtefato";
-import { listarArtefatos, listarArtefatosPorProjeto } from "../../../../services/artefatoService";
 import { IoMdCreate, IoMdOpen, IoMdTrash } from "react-icons/io";
+import { optionsStatusArtefatos } from "../../../../services/optionsStatus";
+import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
+import { IoClose } from "react-icons/io5";
 
-const TableArtefatosProjeto = ({onView, onEdit, onDelete}) => {
+const TableArtefatosProjeto = ({onView, onEdit, onDelete, onUpdateStatus}) => {
 
     const COLUNAS_TABELA_ARTEFATOS = [
         {
@@ -18,6 +20,39 @@ const TableArtefatosProjeto = ({onView, onEdit, onDelete}) => {
                     target="blank"
                 > {record.nome} </a>
             )
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+            render: (_, record) => (
+                <Select 
+                    style={{width: '150px'}} 
+                    placeholder="Selecione"
+                    value={record.status} 
+                    options={optionsStatusArtefatos} 
+                    onChange={(value) => onUpdateStatus(record, value)}
+                /> 
+            )
+        },
+        {
+            title: 'Iteração',
+            dataIndex: 'iteracao',
+            key: 'iteracao',
+            align: 'center',
+            render: (_, record) => (
+                <Space>
+                    {record.iteracao ? (
+                        <span>
+                            {optionsIteracao.find(iteracao => iteracao.value === record.iteracao)?.label}
+                        </span>
+                    ) : (<Tooltip title="Nenhuma iteração vinculada">
+                            <IoClose color="red"/>
+                        </Tooltip>)
+                    }
+                </Space>
+            )
+
         },
         {
             title: 'Ações',
@@ -39,32 +74,55 @@ const TableArtefatosProjeto = ({onView, onEdit, onDelete}) => {
         }
     ]
 
-    const {dadosProjeto} = useContextoGlobalProjeto()
-    const {artefatos, setArtefatos} = useContextoArtefato()
+    const [optionsIteracao, setOptionsIteracao] = useState([])
 
-    const handleListarArtefatos = async () => {
-        const response = await listarArtefatosPorProjeto(dadosProjeto.id);
-    
-        if (!response.error) { 
-            setArtefatos(response.data)
+
+    const handleGetIteracoes = async () => {
+        const response = await listarIteracoesPorProjeto(dadosProjeto.id)
+
+        if (!response.error && response.data.length > 0){
+            const iteracoesOrdenadas = response.data.sort((a, b) => a.numero - b.numero);
+
+            const resultados = iteracoesOrdenadas.map((item) => {
+                return {
+                    value: item.id,
+                    label: item.nome
+                }
+            })
+
+            setOptionsIteracao(resultados)
         }
     }
+    
+    const {dadosProjeto} = useContextoGlobalProjeto()
+    const {artefatos, setArtefatosSelecionados, handleListarArtefatos} = useContextoArtefato()
+
 
     useEffect(() => {
         const fetchData = async () => {
             if (artefatos.length === 0){
-                await handleListarArtefatos()
+                await handleListarArtefatos(dadosProjeto.id)
+            } 
+            if (dadosProjeto !== null) {
+                await handleGetIteracoes()
             }
         }   
 
         fetchData()
-    })
+    }, [dadosProjeto])
+
+    const rowSelection = {
+        onChange: (selectedRowsKeys, selectedRows) => {
+          setArtefatosSelecionados(selectedRows)
+        },
+    };
 
     return (
         <Table 
             columns={COLUNAS_TABELA_ARTEFATOS}
             dataSource={artefatos}
             rowKey={"id"}
+            rowSelection={rowSelection}
         />
     )
 }

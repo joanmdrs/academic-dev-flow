@@ -9,6 +9,7 @@ from .serializers import EtapaSerializer
 from rest_framework.permissions import IsAuthenticated
 
 class CadastrarEtapaView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         try:
             serializer = EtapaSerializer(data=request.data)
@@ -21,6 +22,7 @@ class CadastrarEtapaView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class BuscarEtapaPeloNomeView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         try:
             parametro = request.GET.get('nome', None)
@@ -51,6 +53,7 @@ class BuscarEtapaPeloIdView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 class ListarEtapasView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         try: 
             etapas = Etapa.objects.all()
@@ -60,6 +63,7 @@ class ListarEtapasView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
 class AtualizarEtapaView(APIView): 
+    permission_classes = [IsAuthenticated]
     def patch(self, request, id):
         try: 
             print(id)
@@ -76,17 +80,23 @@ class AtualizarEtapaView(APIView):
         except Exception as e: 
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
-class ExcluirEtapaView(APIView):
-    def delete(self, request, id): 
+class ExcluirEtapasView(APIView):
+    permission_classes = [IsAuthenticated]
+    def delete(self, request): 
         try:
-            etapa = Etapa.objects.get(pk=id)
+            ids_etapas = request.GET.getlist('ids_etapas[]', [])
             
-            if etapa is not None:
-                etapa.delete()
-                return Response({'detail': 'Etapa excluída com sucesso!'}, status=status.HTTP_204_NO_CONTENT)
+            if not ids_etapas:
+                return Response({'error': 'Ausência de parâmetros'}, status=status.HTTP_400_BAD_REQUEST)
+
+            etapas = Etapa.objects.filter(id__in=ids_etapas)
             
-            else: 
-                return Response({'error': 'Objeto não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
+            if etapas.exists():
+                etapas.delete()
+                return Response({'message': 'Etapas excluídas com sucesso !'}, status=status.HTTP_204_NO_CONTENT)
+            else:
+                return Response({'error': 'Nenhum objeto encontrado para exclusão!'}, status=status.HTTP_404_NOT_FOUND)
+
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 

@@ -3,6 +3,10 @@ import "./FormDeBusca.css"
 
 const FormDeBusca = ({executeFuncao}) => {
 
+    const handleLimpar = () => {
+        document.getElementById("input-nome").value = "";
+    }
+
     return (
         <div className="global-form component-form-de-busca">
             <div className="titulo">
@@ -22,7 +26,7 @@ const FormDeBusca = ({executeFuncao}) => {
                         executeFuncao(document.getElementById("input-nome").value)}
                     }
                 > FILTRAR </button>
-                <button className="botao-limpar"> LIMPAR </button>
+                <button className="botao-limpar" onClick={() =>  handleLimpar()}> LIMPAR </button>
             </div>
         </div>
     )

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react"
-import {Table, Space} from 'antd'
+import {Table, Space, Tooltip} from 'antd'
 import { listarTipos } from "../../../../services/tipoService"
 import Loading from "../../../../components/Loading/Loading"
 import { useContextoTipo } from "../../context/ContextoTipo"
+import { IoMdCreate, IoMdTrash } from "react-icons/io"
 
 
 const ListaTipos = ({onEdit, onDelete}) => {
@@ -36,8 +37,12 @@ const ListaTipos = ({onEdit, onDelete}) => {
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    <a onClick={() => onEdit(record)}>Editar</a>
-                    <a onClick={() =>  onDelete(record.id)}>Excluir</a>
+                    <Tooltip title="Editar">
+                        <a onClick={() => onEdit(record)}><IoMdCreate /></a>
+                    </Tooltip>
+                    <Tooltip title="Excluir">
+                        <a onClick={() => onDelete(record.id)}><IoMdTrash /></a>
+                    </Tooltip>
                 </Space>
             ),
             },

@@ -8,6 +8,7 @@ from apps.membro_projeto.models import MembroProjeto
 from apps.membro.models import Membro
 from apps.fluxo.models import Fluxo
 from apps.iteracao.models import Iteracao
+from apps.tipo.models import Tipo
 from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
 from django.http import Http404
@@ -75,7 +76,7 @@ class ListarTarefasPorProjetoView(APIView):
     
     def get(self, request, id_projeto): 
         try:
-            tarefas = Tarefa.objects.filter(projeto_id=id_projeto)
+            tarefas = Tarefa.objects.filter(projeto_id=id_projeto).order_by('id')
             tarefas_info = []
 
             for tarefa in tarefas:
@@ -83,8 +84,9 @@ class ListarTarefasPorProjetoView(APIView):
                 membros_info = self.get_membros_info(tarefa)
                 membros = self.get_membros(tarefa)
                 iteracao_nome = self.get_iteracao_nome(tarefa)
-                labels_info = self.get_labels_info(tarefa)
-                labels = self.get_labels(tarefa)
+                tipo = self
+                # labels_info = self.get_labels_info(tarefa)
+                # labels = self.get_labels(tarefa)
 
                 tarefa_info = {
                     'id': tarefa.id,
@@ -93,6 +95,7 @@ class ListarTarefasPorProjetoView(APIView):
                     'data_termino': tarefa.data_termino,
                     'status': tarefa.status,
                     'descricao': tarefa.descricao,
+                    'tipo': tarefa.tipo_id,
                     'id_issue': tarefa.id_issue,
                     'number_issue': tarefa.number_issue,
                     'url_issue': tarefa.url_issue,
@@ -101,8 +104,8 @@ class ListarTarefasPorProjetoView(APIView):
                     'nome_iteracao': iteracao_nome,
                     'membros_info': membros_info,
                     'membros': membros,
-                    'labels_info': labels_info,
-                    'labels': labels,
+                    # 'labels_info': labels_info,
+                    # 'labels': labels,
                     'estado_contagem_tempo': estado_contagem,
                     'tempo_gasto': tarefa.tempo_gasto
                 }
@@ -129,26 +132,27 @@ class ListarTarefasPorProjetoView(APIView):
         membros_ids = tarefa.membros.all().values_list('id', flat=True)
         return list(membros_ids)
 
-    def get_labels_info(self, tarefa):
-        labels_info = []
-        for label in tarefa.labels.all():
-            label_info = {
-                'id': label.id,
-                'nome': label.nome,
-            }
-            labels_info.append(label_info)
-        return labels_info
+    # def get_labels_info(self, tarefa):
+    #     labels_info = []
+    #     for label in tarefa.labels.all():
+    #         label_info = {
+    #             'id': label.id,
+    #             'nome': label.nome,
+    #         }
+    #         labels_info.append(label_info)
+    #     return labels_info
 
-    def get_labels(self, tarefa):
-        labels_ids = tarefa.labels.all().values_list('id', flat=True)
-        return list(labels_ids)
+    # def get_labels(self, tarefa):
+    #     labels_ids = tarefa.labels.all().values_list('id', flat=True)
+    #     return list(labels_ids)
 
     def get_iteracao_nome(self, tarefa):
         if tarefa.iteracao_id is not None:
             iteracao = Iteracao.objects.get(id=tarefa.iteracao_id)
             return iteracao.nome
         else:
-            return "Iteração não encontrada"
+            return None
+            
 
         
 class AtualizarTarefaView(APIView):
@@ -238,7 +242,7 @@ class ListarTarefasPorIteracaoView(APIView):
         
         try:
             
-            tarefas = Tarefa.objects.filter(iteracao_id=id_iteracao)
+            tarefas = Tarefa.objects.filter(iteracao_id=id_iteracao).order_by('id')
             
             if tarefas.exists():  
                 serializer = TarefaSerializer(tarefas, many=True)
@@ -262,7 +266,7 @@ class ListarTarefasView(APIView):
                 serializer = TarefaSerializer(tarefas, many=True)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             
-            return Response(data=[], status=status.HTTP_204_NO_CONTENT)
+            return Response([], status=status.HTTP_204_NO_CONTENT)
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -327,4 +331,34 @@ class PararContagemTempoView(APIView):
         except Tarefa.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Tarefa não encontrada'})
 
+class AtualizarIteracaoTarefasView(APIView):
+    permission_classes = [IsAuthenticated]
     
+    def patch(self, request):
+        try:
+            ids_tarefas = request.data.get('ids_tarefas', [])
+            id_iteracao = request.data.get('id_iteracao', None)
+            
+            if not ids_tarefas:
+                return Response({'error': 'Nenhum ID de tarefa fornecido'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            if id_iteracao is None:
+                return Response({'error': 'ID de iteração não fornecido'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            iteracao = Iteracao.objects.get(pk=id_iteracao)
+            tarefas = Tarefa.objects.filter(pk__in=ids_tarefas)
+            
+            for tarefa in tarefas:
+                tarefa.iteracao = iteracao
+                tarefa.save()
+            
+            return Response({'success': True}, status=status.HTTP_200_OK)
+        
+        except Iteracao.DoesNotExist:
+            return Response({'error': 'A iteração especificada não existe'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        except Tarefa.DoesNotExist:
+            return Response({'error': 'Uma ou mais tarefas especificadas não existem'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

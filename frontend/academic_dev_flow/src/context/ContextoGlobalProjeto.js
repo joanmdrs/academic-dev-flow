@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { buscarMembroPeloUser } from "../services/membroService";
 import { decodeToken } from "react-jwt";
 import { handleError } from "../services/utils";
+import { buscarMembroPeloUser } from "../services/membroService";
 
 const ContextoGlobalProjeto = createContext();
 
@@ -16,13 +16,18 @@ export const ProviderGlobalProjeto = ({ children }) => {
           if (token !== null){
               try {
                   const decodedToken = await decodeToken(token);
-                  const response = await buscarMembroPeloUser(decodedToken.user_id);
 
-                  if (!response.error) {
-                    setAutor(response.data)
-                    console.log("Dados do usuário", response.data)
-                    setGrupo(decodedToken.groups[0])
+                  if (decodedToken.groups[0] !== 'Administradores'){
+                    const response = await buscarMembroPeloUser(decodedToken.user_id);
+
+                    if (!response.error) {
+                      setAutor(response.data)
+
+                    }
                   }
+
+                  setGrupo(decodedToken.groups[0])
+                 
         
                   
               } catch (error) {
@@ -32,6 +37,9 @@ export const ProviderGlobalProjeto = ({ children }) => {
           
       };
       fetchData();
+      console.log(grupo)
+      console.log(autor)
+
       
   }, [token]);
 
@@ -44,7 +52,7 @@ export const ProviderGlobalProjeto = ({ children }) => {
       value={{
         autor, setAutor,
         grupo, setGrupo, 
-        dadosProjeto, setDadosProjeto
+        dadosProjeto, setDadosProjeto,
       }}
     >
       {children}

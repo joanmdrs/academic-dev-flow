@@ -27,10 +27,14 @@ const CronogramaIteracoes = () => {
 
     const handleGetIteracoes = async () => {
         const response = await listarIteracoesPorProjeto(dadosProjeto.id)
-        const iteracoesOrdenadas = response.data.sort((a, b) => a.numero - b.numero);
-        setIteracoes(iteracoesOrdenadas)
-    }
 
+        if (!response.error && response.data.length > 0){
+            const iteracoesOrdenadas = response.data.sort((a, b) => a.numero - b.numero);
+
+            setIteracoes(iteracoesOrdenadas)
+        }
+    }
+    
     if (loading) {
         return <Loading />
     }

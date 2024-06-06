@@ -1,14 +1,13 @@
 import React, {useEffect, useState } from "react"
 import Titulo from "../../../../components/Titulo/Titulo"
-import BotaoAdicionar from "../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar"
-import BotaoExcluir from "../../../../components/Botoes/BotaoExcluir/BotaoExcluir"
-import BotaoBuscar from "../../../../components/Botoes/BotaoBuscar/BotaoBuscar"
 import ModalDeBusca from "../../../../components/Modals/ModalDeBusca/ModalDeBusca"
 import { atualizarMembro, buscarMembroPeloNome, criarMembro, excluirMembro } from "../../../../services/membroService"
 import { useMembroContexto } from "../../context/MembroContexto"
 import { buscarUsuarioPeloId } from "../../../../services/usuarioService"
 import Loading from "../../../../components/Loading/Loading"
 import FormMembro from "../../components/FormMembro/FormMembro"
+import { Button } from "antd"
+import { FaPlus, FaSearch, FaTrash } from "react-icons/fa"
 
 const GerenciarMembros = () => {
 
@@ -140,10 +139,33 @@ const GerenciarMembros = () => {
             />
 
             <div className="button-menu"> 
-                <BotaoBuscar nome="BUSCAR MEMBRO" funcao={handleAbrirModal} status={isSearchBtnEnabled}/>
+                <Button
+                    type="primary"
+                    icon={<FaSearch />}
+                    onClick={() => handleAbrirModal()}
+                    disabled={isSearchBtnEnabled}
+                >
+                    Buscar
+                </Button>
                 <div className="grouped-buttons">
-                    <BotaoAdicionar funcao={handleAdicionarMembro} status={isPlusBtnEnabled}/>
-                    <BotaoExcluir funcao={handleExcluirMembro} status={isTrashBtnEnabled}/>
+                    <Button
+                        type="primary"
+                        icon={<FaPlus />}
+                        onClick={() => handleAdicionarMembro()}
+                        disabled={isPlusBtnEnabled}
+                    >
+                        Criar Membro
+                    </Button>
+
+                    <Button
+                        type="primary"
+                        danger
+                        icon={<FaTrash />}
+                        onClick={() => handleExcluirMembro()}
+                        disabled={isTrashBtnEnabled}
+                    >
+                        Excluir
+                    </Button>
                 </div>
             </div>
 

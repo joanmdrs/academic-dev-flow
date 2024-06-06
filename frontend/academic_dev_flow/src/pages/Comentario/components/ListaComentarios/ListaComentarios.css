@@ -8,14 +8,21 @@
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    background-color: #ddd;
+    background-color: #DDF4FF;
     padding: 5px 10px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    color: #585858;
 }
 
 .info-comment {
     display: flex;
     align-items: baseline;
     gap: 5px;
+}
+
+.info-comment h4 {
+    margin: 0;
 }
 
 .autor-comment {

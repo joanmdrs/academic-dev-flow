@@ -17,7 +17,7 @@ class Iteracao(models.Model):
     descricao = models.TextField(null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='criada')
     data_inicio = models.DateField()
-    data_fim = models.DateField()
+    data_termino = models.DateField()
     
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, related_name='iteracoes', null=True, blank=True)
     lider = models.ForeignKey(MembroProjeto, on_delete=models.SET_NULL, null=True, blank=True)
