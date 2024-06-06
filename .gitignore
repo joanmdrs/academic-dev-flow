@@ -45,7 +45,6 @@ build/
 staticfiles/
 
 # Arquivos do Docker
-docker-compose.yml
 Dockerfile.local
 
 # Diretório de migrações de banco de dados (opcional, se preferir não rastreá-las)
