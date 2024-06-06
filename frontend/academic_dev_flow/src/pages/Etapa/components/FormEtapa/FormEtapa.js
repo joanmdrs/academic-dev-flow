@@ -21,7 +21,17 @@ const FormEtapa = ({onSubmit, onCancel}) => {
     }, []);
 
     return (
-        <Form layout="vertical" form={form} onFinish={onSubmit}>
+        <Form
+            layout="vertical" 
+            form={form} 
+            onFinish={onSubmit} 
+            labelCol={{
+                span: 4,
+            }}
+            wrapperCol={{
+                span: 14,
+            }}
+        >
             <Form.Item>
                 <h4> {titulo} </h4>
             </Form.Item>
@@ -29,7 +39,6 @@ const FormEtapa = ({onSubmit, onCancel}) => {
             <Form.Item 
                 label="Nome" 
                 name="nome"
-                style={{width: "50%"}}
                 rules={[{ required: true, message: 'Por favor, insira o nome da etapa!' }]}
             >
                 <Input placeholder="nome da etapa"/>
