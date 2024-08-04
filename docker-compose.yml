@@ -2,55 +2,70 @@ version: '3'
 
 services:
   postgres:
-    image: postgres:latest
+    container_name: postgres_academic_dev_flow
+    image: postgres:13
     environment:
-      POSTGRES_DB: mydb
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
     ports:
-      - "5432:5432"
+      - "5400:5432"
     networks:
-      - mynetwork
+      - dev_network
+
 
   pgadmin:
+    container_name: pgadmin_academic_dev_flow
     image: dpage/pgadmin4:latest
+    restart: always
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
       PGADMIN_LISTEN_PORT: 5050
     ports:
       - "8080:5050"
     depends_on:
       - postgres
     networks:
-      - mynetwork
-
-  backend:
-    build:
-      context: .
-      dockerfile: ./academic_dev_flow/Dockerfile
-    volumes:
-      - .:/app
-    ports:
-      - "8000:8000"
-    environment:
-      - DJANGO_SETTINGS_MODULE=academic_dev_flow.settings
-    depends_on:
-      - postgres
-    networks:
-      - mynetwork
+      - dev_network
 
   frontend:
+    container_name: client_academic_dev_flow
+    image: client_academic_dev_flow:latest
     build:
       context: ./frontend/academic_dev_flow
       dockerfile: Dockerfile
-    volumes:
-      - ./frontend/academic_dev_flow:/app
     ports:
-      - "3000:3000"
+      - "3000:80"
     networks:
-      - mynetwork
+      - dev_network
+
+  backend:
+    container_name: api_academic_dev_flow
+    image: api_academic_dev_flow:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/backend
+    env_file:
+      - .env
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+             python manage.py createsuperuser --noinput &&
+             python manage.py runserver 0.0.0.0:8000"
+    networks:
+      - dev_network
+    depends_on:
+      - postgres
 
 networks:
-  mynetwork:
-    driver: bridge
+  dev_network:
+
+volumes:
+  postgres_data:

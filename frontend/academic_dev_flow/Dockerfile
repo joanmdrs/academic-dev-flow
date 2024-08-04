@@ -1,25 +1,29 @@
-# Dockerfile para o frontend
+# Usar uma imagem base do Node.js
+FROM node:14-alpine
 
-# Use uma imagem oficial do Node.js como base
-FROM node:18-alpine
+# Definir o diretório de trabalho
+WORKDIR /frontend
 
-# Defina o diretório de trabalho dentro do container
-WORKDIR /app
-
-# Copie os arquivos de configuração do Node.js para o diretório de trabalho
+# Copiar package.json e package-lock.json
 COPY package*.json ./
 
-# Instale as dependências do Node.js
+# Instalar as dependências
 RUN npm install
 
-# Copie o restante do código do projeto para o diretório de trabalho
+# Copiar o restante do código da aplicação
 COPY . .
 
-# Construa o projeto
+# Compilar a aplicação para produção
 RUN npm run build
 
-# Exponha a porta que a aplicação React usará
-EXPOSE 3000
+# Usar uma imagem base do Nginx para servir a aplicação compilada
+FROM nginx:1.21-alpine
 
-# Comando para iniciar a aplicação React
-CMD ["npm", "start"]
+# Copiar os arquivos compilados para o diretório de servidão do Nginx
+COPY --from=0 /frontend/build /usr/share/nginx/html
+
+# Expor a porta que o Nginx vai utilizar
+EXPOSE 80
+
+# Iniciar o Nginx
+CMD ["nginx", "-g", "daemon off;"]

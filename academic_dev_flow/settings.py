@@ -1,3 +1,6 @@
+import os
+
+
 from pathlib import Path
 from rest_framework.permissions import AllowAny
 from decouple import config
@@ -108,14 +111,13 @@ WSGI_APPLICATION = 'academic_dev_flow.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mydb',
-        'USER': 'myuser',
-        'PASSWORD': 'mypassword',
-        'HOST': 'localhost',  # Pode ser o endereço do servidor PostgreSQL
-        'PORT': '',           # Deixe em branco para usar a porta padrão (5432)
+        'NAME': config('DATABASE_NAME'),
+        'USER': config('DATABASE_USER'),
+        'PASSWORD': config('DATABASE_PASSWORD'),
+        'HOST': config('DATABASE_HOST'),
+        'PORT': config('DATABASE_PORT')
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
