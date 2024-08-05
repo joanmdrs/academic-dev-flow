@@ -56,8 +56,11 @@ services:
     env_file:
       - .env
     command: >
-      sh -c "python manage.py migrate --noinput &&
-             python manage.py createsuperuser --noinput &&
+      sh -c "python manage.py migrate --noinput
+             export DJANGO_SUPERUSER_PASSWORD=admin
+             export DJANGO_SUPERUSER_USERNAME=admin
+             export DJANGO_SUPERUSER_EMAIL=labensufrn@gmail.com
+             python manage.py createsuperuser --noinput
              python manage.py runserver 0.0.0.0:8000"
     networks:
       - dev_network

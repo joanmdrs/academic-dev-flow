@@ -15,7 +15,7 @@ const ScreenGerenciarLabels = () => {
                 <MyHeader/>
                 <Content>
                     <ProviderTarefa>
-                        <GerenciarLabels />
+                        {/* <GerenciarLabels /> */}
                     </ProviderTarefa>
                 </Content>
             </Layout>

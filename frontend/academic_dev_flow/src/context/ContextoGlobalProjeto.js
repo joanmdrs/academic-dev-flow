@@ -11,6 +11,10 @@ export const ProviderGlobalProjeto = ({ children }) => {
   
   const [token] = useState(localStorage.getItem("token") || null);
 
+  const [autor, setAutor] = useState(null);
+  const [grupo, setGrupo] = useState(null);
+  const [dadosProjeto, setDadosProjeto] = useState(null);
+
   useEffect(() => {
       const fetchData = async () => {
           if (token !== null){
@@ -42,10 +46,6 @@ export const ProviderGlobalProjeto = ({ children }) => {
 
       
   }, [token]);
-
-  const [autor, setAutor] = useState(null);
-  const [grupo, setGrupo] = useState(null);
-  const [dadosProjeto, setDadosProjeto] = useState(null);
 
   return (
     <ContextoGlobalProjeto.Provider

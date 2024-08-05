@@ -79,26 +79,31 @@ const GerenciarLabels = () => {
         const [owner, repo] = dadosProjeto.nome_repo.split("/");
 
         try {
-            setIsTableVisivel(true)
+            setIsTableVisivel(true);
 
-            const response = await octokit.request('GET /repos/:owner/:repo/labels', {
+            const response = await octokit.request('GET /repos/{owner}/{repo}/labels', {
                 owner: owner,
                 repo: repo
             });
-            
-            if (response.data && response.data.length > 0) {
 
+            if (response.data && response.data.length > 0) {
                 const resultados = await Promise.all(response.data.map(async (item) => {
-                    const resLabel = await buscarLabelPeloId(item.id)                    
-                    const exists = resLabel.data.exists ? true : false
-                    return {...item, exists}
-                }))
-                setLabels(resultados)    
+                    try {
+                        const resLabel = await buscarLabelPeloId(item.id);
+                        const exists = resLabel.data.exists ? true : false;
+                        return { ...item, exists };
+                    } catch (error) {
+                        console.error('Falha ao buscar o label pelo ID:', error);
+                        return { ...item, exists: false };
+                    }
+                }));
+                setLabels(resultados);
             }
         } catch (error) {
-            return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+            handleError(error, ERROR_MESSAGE_ON_SEARCHING);
         }
-    }
+    };
+
 
     const handleSicronizarLabels = async () => {
         const dados = labels.map((item) => {
