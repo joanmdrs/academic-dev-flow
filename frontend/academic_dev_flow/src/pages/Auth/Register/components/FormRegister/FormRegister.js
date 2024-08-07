@@ -34,9 +34,9 @@ const FormRegister = () => {
         dados['data_nascimento'] = converterData(dados.data_nascimento)
 
         await criarConta(dados)
-        // setInterval(() => {
-        //     navigate("/")
-        // }, 1500);
+        setInterval(() => {
+            navigate("/")
+        }, 1500);
 
     }
 
