@@ -1,0 +1,29 @@
+{
+    // Use o IntelliSense para saber mais sobre os atributos possíveis.
+    // Focalizar para exibir as descrições dos atributos existentes.
+    // Para obter mais informações, acesse: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Depurador do Python: Django",
+            "type": "debugpy",
+            "request": "launch",
+            "args": [
+                "runserver",
+                "0.0.0.0:8005",
+            ],
+            "envFile": "${workspaceFolder}/.env",
+            "django": true,
+            "justMyCode": true,
+            "autoStartBrowser": false,
+            "program": "${workspaceFolder}/manage.py"
+        },
+        {
+            "type": "firefox",
+            "request": "launch",
+            "name": "Iniciar o Firefox em relação a localhost",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}/frontend/academic_dev_flow"
+        }
+    ]
+}
