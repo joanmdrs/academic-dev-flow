@@ -1,0 +1,31 @@
+services:
+  frontend:
+    container_name: client_academic_dev_flow
+    image: client_academic_dev_flow:latest
+    build:
+      context: ./frontend/academic_dev_flow
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+
+  backend:
+    container_name: api_academic_dev_flow
+    image: api_academic_dev_flow:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8005:8000"
+    volumes:
+      - .:/backend
+    env_file:
+      - .env
+    command: >
+      sh -c "python manage.py migrate --noinput
+             python manage.py createsuperuser --noinput
+             python manage.py runserver 0.0.0.0:8000"
+
+networks:
+  default:
+    external: true
+    name: labens-network

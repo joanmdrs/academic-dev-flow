@@ -8,3 +8,10 @@ A arquitetura do sistema é composta por uma API REST desenvolvida com Django e 
 # Criação do Banco de Dados
 
 Para 
+
+
+# Docker Deploy
+
+```console
+docker compose -f deploy.yml up --build
+```
