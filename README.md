@@ -41,6 +41,68 @@ Defina as permissions e privilégios do Usuário:
 GRANT ALL PRIVILEGES ON DATABASE scdb_dev TO sc_user;
 GRANT ALL ON SCHEMA public TO sc_user;
 ```
+# Back-end - Preparando o ambiente para execução 
+
+1. Criar o ambiente virtual com [python3-venv](https://docs.python.org/pt-br/3/library/venv.html):
+
+```console
+python -m venv venv
+```
+
+2. Ative o ambiente virtual.
+   
+Para ativar: ```source venv/bin/activate```.
+Para desativar: ```deactivate```.
+
+3. Prepare as variáveis de ambiente
+
+Copie os exemplos destes arquivos no diretório raiz do projeto:
+
+```console
+cp .env.sample .env
+cp path.env.sample path.env
+```
+
+4. Edite o arquivo `path.env` para informar as variáveis:
+```console
+export DJANGO_SETTINGS_MODULE=academic_dev_flow.settings
+export PYTHONPATH=${PYTHONPATH}:/home/<seu_diretorio>/academic_dev_flow
+```
+
+5. Após editar os valores, execute os comandos:
+```console
+source .env
+source path.env
+```
+
+## Execute o servidor do django
+
+1. Ative o ambiente virtual e instale as depedências.
+```console
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+Se houver modificações nos models (em models.py), execute a criação das migrações. Depois execute as migrações.
+```console
+python3 manage.py makemigrations app
+python3 manage.py migrate
+```
+
+>Este processo deve ser executado para cada um dos apps. 
+
+Crie um super usuário de administração do Django.
+
+```console
+python manage.py createsuperuser
+```
+
+Execute o servidor.
+```console
+python manage.py runserver
+```
+
+> Lembre-se: O SGBD deve estar em execução e configure o acesso no arquivo `.env`.
 
 # Docker Deploy
 
