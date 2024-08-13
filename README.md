@@ -7,8 +7,6 @@ A arquitetura do sistema é composta por uma API REST desenvolvida com Django e 
 
 # Criação do Banco de Dados
 
-### Criação do Banco de Dados
-
 Utilizamos o SGBD PostgreSQL para armazenar os dados. Você pode utilizar o **Docker** para executar o [PostgreSQL + pgAdmin](https://github.com/tacianosilva/bsi-tasks/tree/master/database/docker/postgres).
 
 Crie o usuário de acesso ao banco de dados:
