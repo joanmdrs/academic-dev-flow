@@ -40,6 +40,7 @@ logs/
 *.egg-info/
 dist/
 build/
+academic_dev_flow/run/
 
 # Diretório de arquivos estáticos coletados
 staticfiles/
