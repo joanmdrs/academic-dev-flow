@@ -3,7 +3,7 @@ import os
 
 from pathlib import Path
 from rest_framework.permissions import AllowAny
-from decouple import config
+from decouple import Csv, config
 from django.utils import timezone
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,7 +20,20 @@ GITHUB_TOKEN = config('GITHUB_TOKEN')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'labens.dct.ufrn.br']
+DOMAINS_WHITELIST = ALLOWED_HOSTS
+
+CSRF_COOKIE_SECURE=config('CSRF_COOKIE_SECURE', default=False, cast=bool)
+CORS_ALLOW_ALL_ORIGINS=True
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', cast=Csv())
+CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', cast=Csv())
+
+SESSION_COOKIE_AGE = 60 * 60 # 1 hora
+SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', default=False, cast=bool)
+SESSION_EXPIRE_AT_BROWSER_CLOSE = config('SESSION_EXPIRE_AT_BROWSER_CLOSE', default=True, cast=bool)
+
+SECURE_CONTENT_TYPE_NOSNIFF = config('SECURE_CONTENT_TYPE_NOSNIFF', default=True, cast=bool)
+SECURE_BROWSER_XSS_FILTER = config('SECURE_BROWSER_XSS_FILTER', default=False, cast=bool)
 
 # Application definition
 
@@ -159,7 +172,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/adflow-files/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'academic_dev_flow/run/static')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'academic_dev_flow/static')]
+
+# User_Uploaded_Files
+MEDIA_URL = '/adflow-files/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'academic_dev_flow/run/media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
