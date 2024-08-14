@@ -16,24 +16,26 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import RedirectView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('projeto/', include('apps.projeto.urls', namespace='projeto')),
-    path('fluxo/', include('apps.fluxo.urls', namespace='fluxo')),
-    path('etapa/', include('apps.etapa.urls', namespace='etapa')),
-    path('fluxo_etapa/', include('apps.fluxo_etapa.urls', namespace='fluxo_etapa')),
-    path('membro/', include('apps.membro.urls', namespace='membro')),
-    path('membro_projeto/', include('apps.membro_projeto.urls', namespace='membro_projeto')),
-    path('usuario/', include('apps.usuario.urls', namespace='usuario')),
-    path('artefato/', include('apps.artefato.urls', namespace='artefato')),
-    path('iteracao/', include('apps.iteracao.urls', namespace='iteracao')),
-    path('tarefa/', include('apps.tarefa.urls', namespace='tarefa')),
-    path('tipo/', include('apps.tipo.urls', namespace='tipo')),
-    path('comentario/', include('apps.comentario.urls', namespace='comentario')),
-    path('pontuacao/', include('apps.pontuacao.urls', namespace='pontuacao')),
-    path('auth/', include('apps.api.urls', namespace='api')),
-    path('github_integration/', include('apps.github_integration.urls', namespace='github_integration')),
+    path('academicflow-api/admin/', admin.site.urls),
+    path('academicflow-api/projeto/', include('apps.projeto.urls', namespace='projeto')),
+    path('academicflow-api/fluxo/', include('apps.fluxo.urls', namespace='fluxo')),
+    path('academicflow-api/etapa/', include('apps.etapa.urls', namespace='etapa')),
+    path('academicflow-api/fluxo_etapa/', include('apps.fluxo_etapa.urls', namespace='fluxo_etapa')),
+    path('academicflow-api/membro/', include('apps.membro.urls', namespace='membro')),
+    path('academicflow-api/membro_projeto/', include('apps.membro_projeto.urls', namespace='membro_projeto')),
+    path('academicflow-api/usuario/', include('apps.usuario.urls', namespace='usuario')),
+    path('academicflow-api/artefato/', include('apps.artefato.urls', namespace='artefato')),
+    path('academicflow-api/iteracao/', include('apps.iteracao.urls', namespace='iteracao')),
+    path('academicflow-api/tarefa/', include('apps.tarefa.urls', namespace='tarefa')),
+    path('academicflow-api/tipo/', include('apps.tipo.urls', namespace='tipo')),
+    path('academicflow-api/comentario/', include('apps.comentario.urls', namespace='comentario')),
+    path('academicflow-api/pontuacao/', include('apps.pontuacao.urls', namespace='pontuacao')),
+    path('academicflow-api/auth/', include('apps.api.urls', namespace='api')),
+    path('academicflow-api/github_integration/', include('apps.github_integration.urls', namespace='github_integration')),
+    path('academicflow-api/', RedirectView.as_view(url='/academicflow-api/admin/')),
 ]
 
 
