@@ -37,7 +37,7 @@ import ScreenGerenciarEtapas from "./pages/Etapa/screens/GerenciarEtapas";
 function Routes() {
     return (
         <Switch>
-            <Route path="/" Component={Login} />
+            <Route path="/academicflow" Component={Login} />
             <Route path="/cadastre-se" Component={Register} />
 
             {/* Admin */}
