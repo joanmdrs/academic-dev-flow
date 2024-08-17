@@ -47,7 +47,7 @@ class AtualizarEtapaFluxoView(APIView):
             
             fluxoEtapa = FluxoEtapa.objects.get(id=id) 
             
-            serializer = FluxoEtapaSerializer(fluxoEtapa, data=request.data)
+            serializer = FluxoEtapaSerializer(fluxoEtapa, data=request.data, partial=True)
             
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
