@@ -255,7 +255,7 @@ class AtualizarMembroView(APIView):
                 raise ValueError("Dados do membro não fornecidos")
             
             member_data['grupo'] = group_name
-            member_serializer = MembroSerializer(member, data=member_data)
+            member_serializer = MembroSerializer(member, data=member_data, partial=True)
 
             if not member_serializer.is_valid():
                 return Response({'error': 'Dados do membro inválidos'}, status=status.HTTP_400_BAD_REQUEST)
