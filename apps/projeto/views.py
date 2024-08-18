@@ -96,7 +96,7 @@ class AtualizarProjetoView(APIView):
     def patch(self, request, id):
         try:
             projeto = Projeto.objects.get(pk=id)
-            serializer = ProjetoSerializer(projeto, data=request.data)
+            serializer = ProjetoSerializer(projeto, data=request.data, partial=True)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
