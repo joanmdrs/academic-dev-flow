@@ -94,7 +94,7 @@ const Login = () => {
 
                 <div className='form-login-create-account'> 
                     Não possui uma conta ? 
-                    <a href='/cadastre-se'> Registre-se agora </a>
+                    <Link to="/cadastre-se"> Registre-se agora </Link>
                 </div>
             </div>
         </div>
