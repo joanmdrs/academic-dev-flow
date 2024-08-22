@@ -4,7 +4,7 @@ import { handleError, handleSuccess } from "./utils"
 
 export const vincularEtapaFluxo = async (dados) => {
     try {
-        const response = await api.post("fluxo_etapa/cadastrar/", {etapas: dados})
+        const response = await api.post("/academicflow-api/fluxo_etapa/cadastrar/", {etapas: dados})
         return handleSuccess(response, "Etapa(s) vinculada(s) ao fluxo com sucesso !")
     } catch (error) {
         return handleError(error, 'Falha ao tentar vincular a etapa ao fluxo, contate o suporte!')
@@ -13,7 +13,7 @@ export const vincularEtapaFluxo = async (dados) => {
 
 export const atualizarEtapaFluxo = async (dados, id) => {
     try {
-        const response = await api.patch(`fluxo_etapa/atualizar/${encodeURIComponent(id)}/`, dados)
+        const response = await api.patch(`/academicflow-api/fluxo_etapa/atualizar/${encodeURIComponent(id)}/`, dados)
         return response
     } catch (error) {
         return handleError(error, 'Ocorreu um problema durante a operação, contate o suporte!')
@@ -22,7 +22,7 @@ export const atualizarEtapaFluxo = async (dados, id) => {
 
 export const listarEtapasPorFluxo = async (idFluxo) => {
     try {
-        const response = await api.get(`fluxo_etapa/buscar/${encodeURIComponent(idFluxo)}/`)
+        const response = await api.get(`/academicflow-api/fluxo_etapa/buscar/${encodeURIComponent(idFluxo)}/`)
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
@@ -31,7 +31,7 @@ export const listarEtapasPorFluxo = async (idFluxo) => {
 
 export const desvincularEtapaFluxo = async (idFluxo, idsEtapas) => {
     try {
-        const response = await api.delete('fluxo_etapa/excluir/', {params: {
+        const response = await api.delete('/academicflow-api/fluxo_etapa/excluir/', {params: {
             id_fluxo: idFluxo,
             ids_etapas: idsEtapas
         }})
