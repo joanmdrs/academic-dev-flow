@@ -39,7 +39,7 @@ const AuthProvider = ({ children }) => {
 
   const loginAction = async (username, password) => {
     try {
-      const response = await api.post("auth/login/", { username, password });
+      const response = await api.post("/academicflow-api/auth/login/", { username, password });
 
       if (response.status === 200) {
         const data = await response.data;

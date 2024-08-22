@@ -27,7 +27,7 @@ export const criarConta = async (dados) => {
     }
     
     try {
-        const response = await api.post('/membro/cadastrar/', dadosEnviar)
+        const response = await api.post('/academicflow-api/membro/cadastrar/', dadosEnviar)
         return handleSuccess(response, 'Contra criada com sucesso !')
     } catch (error) {
         if (error.response && error.response.status === 409){
@@ -63,7 +63,7 @@ export const criarMembro = async (dados) => {
         }
     }
     try {
-        const resposta = await api.post('/membro/cadastrar/', dadosEnviar)
+        const resposta = await api.post('/academicflow-api/membro/cadastrar/', dadosEnviar)
         NotificationManager.success('Membro criado com sucesso !')
         return resposta
     } catch (error) {
@@ -76,7 +76,7 @@ export const criarMembro = async (dados) => {
 export const buscarMembroPeloNome = async (nomeMembro) => {
 
     try {
-        const resposta = await api.get('/membro/buscar/nome/', {params: {nome: nomeMembro}})
+        const resposta = await api.get('/academicflow-api/membro/buscar/nome/', {params: {nome: nomeMembro}})
         return resposta
     } catch (error) {
         console.log(error)
@@ -88,7 +88,7 @@ export const buscarMembroPeloNome = async (nomeMembro) => {
 export const buscarMembroPorGrupoENome = async (nomeMembro, grupoMembro) => {
 
     try {
-        const resposta = await api.get(`membro/buscar/grupo/?nome=${encodeURIComponent(nomeMembro)}&grupo=${encodeURIComponent(grupoMembro)}`)
+        const resposta = await api.get(`/academicflow-api/membro/buscar/grupo/?nome=${encodeURIComponent(nomeMembro)}&grupo=${encodeURIComponent(grupoMembro)}`)
         return resposta
     } catch (error) {
         console.log(error)
@@ -99,7 +99,7 @@ export const buscarMembroPorGrupoENome = async (nomeMembro, grupoMembro) => {
 
 export const buscarMembroPeloId = async (idMembro) => {
     try {
-        const resposta = await api.get(`membro/buscar/${encodeURIComponent(idMembro)}/`)
+        const resposta = await api.get(`/academicflow-api/membro/buscar/${encodeURIComponent(idMembro)}/`)
         return resposta
     } catch (error) {
         console.log(error)
@@ -111,7 +111,7 @@ export const buscarMembroPeloId = async (idMembro) => {
 
 export const buscarMembroPeloUser = async (idUser) => {
     try {
-        const response = await api.get(`membro/buscar/usuario/${encodeURIComponent(idUser)}/`)
+        const response = await api.get(`/academicflow-api/membro/buscar/usuario/${encodeURIComponent(idUser)}/`)
 
         if (response.status === 200){
             return response
@@ -126,7 +126,7 @@ export const buscarMembroPeloUser = async (idUser) => {
 
 export const buscarUsuarioPeloIdMembroProjeto = async (idMembroProjeto) => {
     try {
-        const response = await api.get(`membro/buscar-usuario-github/${encodeURIComponent(idMembroProjeto)}/`)
+        const response = await api.get(`/academicflow-api/membro/buscar-usuario-github/${encodeURIComponent(idMembroProjeto)}/`)
         return response
     } catch (error) {
         return handleError(error, 'Falha ao tentar buscar os dados do usuário github do membro selecionado, contate o suporte!')
@@ -135,7 +135,7 @@ export const buscarUsuarioPeloIdMembroProjeto = async (idMembroProjeto) => {
 
 export const excluirMembro = async (idMembro) => {
     try {
-        const resposta = await api.delete(`/membro/excluir/${encodeURIComponent(idMembro)}/`)
+        const resposta = await api.delete(`/academicflow-api/membro/excluir/${encodeURIComponent(idMembro)}/`)
         NotificationManager.success("Membro excluído com sucesso!")
         return resposta
     } catch (error) {
@@ -171,7 +171,7 @@ export const atualizarMembro = async (idMembro, dados) => {
     }
 
     try {
-        const resposta = await api.patch(`/membro/atualizar/${encodeURIComponent(idMembro)}/`, dadosEnviar)
+        const resposta = await api.patch(`/academicflow-api/membro/atualizar/${encodeURIComponent(idMembro)}/`, dadosEnviar)
         NotificationManager.success('Membro atualizado com sucesso!')
         return resposta
     } catch (error) {
@@ -184,7 +184,7 @@ export const atualizarMembro = async (idMembro, dados) => {
 export const buscarMembrosPorListaIds = async (listaIds) => {
 
     try {
-        const response = await api.get('/membro/listar/', {params: {ids: listaIds}});
+        const response = await api.get('/academicflow-api/membro/listar/', {params: {ids: listaIds}});
         return response;
     } catch (error) {
         console.log(error)
