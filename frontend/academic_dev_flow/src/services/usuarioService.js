@@ -6,12 +6,12 @@ export const criarUsuario = async (dados) => {
         password: dados.senha,
         grupo: dados.grupo,
     }
-    const resposta = await api.post('/usuario/cadastrar/', dadosUsuario)
+    const resposta = await api.post('/academicflow-api/usuario/cadastrar/', dadosUsuario)
     return resposta
 }
 
 export const buscarUsuarioPeloId = async (id) => {
-    const resposta = await api.get(`/usuario/buscar/${encodeURIComponent(id)}/`)
+    const resposta = await api.get(`/academicflow-api/usuario/buscar/${encodeURIComponent(id)}/`)
     return resposta
 }
 
@@ -21,6 +21,6 @@ export const atualizarUsuario = async (dados, idUsuario) => {
         password : dados.senha, // Necessário encriptar a senha
         grupo: dados.grupo,
     }
-    const resposta = await api.patch(`/usuario/atualizar/${encodeURIComponent(idUsuario)}/`, dadosUsuario)
+    const resposta = await api.patch(`/academicflow-api/usuario/atualizar/${encodeURIComponent(idUsuario)}/`, dadosUsuario)
     return resposta
 }
