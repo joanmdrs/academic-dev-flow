@@ -13,7 +13,7 @@ import {
 
 export const criarTipo = async (dados) => {
     try {
-        const response = await api.post('tipo/cadastrar/', dados);
+        const response = await api.post('/academicflow-api/tipo/cadastrar/', dados);
         return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION);
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_CREATION);
@@ -22,7 +22,7 @@ export const criarTipo = async (dados) => {
 
 export const buscarTipo = async (parametro) => {
     try {
-        const response = await api.get('tipo/buscar/nome/', {params: {nome: parametro}})
+        const response = await api.get('/academicflow-api/tipo/buscar/nome/', {params: {nome: parametro}})
         if (response.status === 204) {
             return handleInfo(response, INFO_MESSAGE_ON_SEARCHING)
         }
@@ -34,7 +34,7 @@ export const buscarTipo = async (parametro) => {
 
 export const atualizarTipo = async (idTipo, dados) => {
     try {
-        const response = await api.patch(`tipo/atualizar/${encodeURIComponent(idTipo)}/`, dados)
+        const response = await api.patch(`/academicflow-api/tipo/atualizar/${encodeURIComponent(idTipo)}/`, dados)
         return handleSuccess(response, SUCCESS_MESSAGE_ON_UPDATE)
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_UPDATE)
@@ -43,7 +43,7 @@ export const atualizarTipo = async (idTipo, dados) => {
 
 export const excluirTipo = async (idTipo) => {
     try {
-        const response = await api.delete(`tipo/excluir/${encodeURIComponent(idTipo)}/`)
+        const response = await api.delete(`/academicflow-api/tipo/excluir/${encodeURIComponent(idTipo)}/`)
         return handleSuccess(response, SUCCESS_MESSAGE_ON_DELETION)
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_DELETION)
@@ -52,7 +52,7 @@ export const excluirTipo = async (idTipo) => {
 
 export const listarTipos = async () => {
     try {
-        const response = await api.get('tipo/listar/')
+        const response = await api.get('/academicflow-api/tipo/listar/')
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
