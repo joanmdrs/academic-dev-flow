@@ -3,7 +3,7 @@ import { NotificationManager } from "react-notifications";
 
 export const registrarPontuacao = async (dados) => {
     try {
-        const response = await api.post('pontuacao/cadastrar/', dados)
+        const response = await api.post('/academicflow-api/pontuacao/cadastrar/', dados)
         if (response.status === 200){
             NotificationManager.success('Pontuação registrada com sucesso !')
             return response
@@ -17,7 +17,7 @@ export const registrarPontuacao = async (dados) => {
 
 export const buscarPontuacaoPeloId = async (id) => {
     try {
-        const response = await api.get(`pontuacao/buscar/${encodeURIComponent(id)}/`)
+        const response = await api.get(`/academicflow-api/pontuacao/buscar/${encodeURIComponent(id)}/`)
         if (response.status === 200){
             return response
         }
@@ -30,7 +30,7 @@ export const buscarPontuacaoPeloId = async (id) => {
 
 export const atualizarPontuacao = async (id, dados) => {
     try {
-        const response = await api.patch(`pontuacao/atualizar/${encodeURIComponent(id)}/`, dados)
+        const response = await api.patch(`/academicflow-api/pontuacao/atualizar/${encodeURIComponent(id)}/`, dados)
         if (response.status === 200){
             NotificationManager.success('Pontuação atualizada com sucesso!')
             return response
@@ -44,7 +44,7 @@ export const atualizarPontuacao = async (id, dados) => {
 
 export const excluirPontuacao = async (id) => {
     try {
-        const response = await api.delete(`pontuacao/excluir/${encodeURIComponent(id)}/`)
+        const response = await api.delete(`/academicflow-api/pontuacao/excluir/${encodeURIComponent(id)}/`)
         if (response.status === 204){
             NotificationManager.success("Pontuação excluída com sucesso!")
             return response
