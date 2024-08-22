@@ -14,7 +14,7 @@ export const criarArtefato = async (dados) => {
         iteracao: dados.iteracao
     }
     try {
-        const response = await api.post('/artefato/cadastrar/', dadosEnviar)
+        const response = await api.post('/academicflow-api/artefato/cadastrar/', dadosEnviar)
         return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION)
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_CREATION)
@@ -23,7 +23,7 @@ export const criarArtefato = async (dados) => {
 
 export const buscarArtefatoPeloNome =  async (parametro) => {
     try {
-        const response = await api.get('artefato/buscar/', {params: {nome: parametro}})
+        const response = await api.get('/academicflow-api/artefato/buscar/', {params: {nome: parametro}})
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
@@ -32,7 +32,7 @@ export const buscarArtefatoPeloNome =  async (parametro) => {
 
 export const buscarArtefatoPeloId = async (id) => {
     try {
-        const response = await api.get(`artefato/buscar/${encodeURIComponent(id)}/`)
+        const response = await api.get(`/academicflow-api/artefato/buscar/${encodeURIComponent(id)}/`)
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
@@ -41,7 +41,7 @@ export const buscarArtefatoPeloId = async (id) => {
 
 export const atualizarArtefato = async (id, dados) => {
     try {
-        const response = await api.patch(`/artefato/atualizar/${encodeURIComponent(id)}/`, dados)
+        const response = await api.patch(`/academicflow-api/artefato/atualizar/${encodeURIComponent(id)}/`, dados)
         return handleSuccess(response, SUCCESS_MESSAGE_ON_UPDATE)
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_UPDATE)
@@ -50,7 +50,7 @@ export const atualizarArtefato = async (id, dados) => {
 
 export const excluirArtefato = async (id) => {
     try {
-        const response = await api.delete(`/artefato/excluir/${encodeURIComponent(id)}/`)
+        const response = await api.delete(`/academicflow-api/artefato/excluir/${encodeURIComponent(id)}/`)
         return handleSuccess(response, SUCCESS_MESSAGE_ON_DELETION)
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_DELETION)
@@ -59,7 +59,7 @@ export const excluirArtefato = async (id) => {
 
 export const listarArtefatos = async () => {
     try {
-        const response = await api.get('/artefato/listar/')
+        const response = await api.get('/academicflow-api/artefato/listar/')
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
@@ -68,7 +68,7 @@ export const listarArtefatos = async () => {
 
 export const listarArtefatosPorProjeto = async (idProjeto) => {
     try {
-        const response = await api.get(`/artefato/listar/projeto/${encodeURIComponent(idProjeto)}/`)
+        const response = await api.get(`/academicflow-api/artefato/listar/projeto/${encodeURIComponent(idProjeto)}/`)
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
@@ -77,7 +77,7 @@ export const listarArtefatosPorProjeto = async (idProjeto) => {
 
 export const listarArtefatosPorIteracao = async (idIteracao) => {
     try {
-        const response = await api.get(`/artefato/listar/iteracao/${encodeURIComponent(idIteracao)}/`)
+        const response = await api.get(`/academicflow-api/artefato/listar/iteracao/${encodeURIComponent(idIteracao)}/`)
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
@@ -86,7 +86,7 @@ export const listarArtefatosPorIteracao = async (idIteracao) => {
 
 export const filtrarArtefatosPeloNomeEPeloProjeto = async (nomeArtefato, idProjeto) => {
     try {
-        const response = await api.get('artefato/filtrar/nome-projeto/', {params: {nome_artefato: nomeArtefato, id_projeto: idProjeto}})
+        const response = await api.get('/academicflow-api/artefato/filtrar/nome-projeto/', {params: {nome_artefato: nomeArtefato, id_projeto: idProjeto}})
         if (response.status === 204) {
             return handleInfo(response, INFO_MESSAGE_ON_SEARCHING)
         }
@@ -104,7 +104,7 @@ export const filtrarArtefatosPeloNomeEPeloProjeto = async (nomeArtefato, idProje
 
 export const verificarExistenciaArquivo = async (parametro) => {
     try {
-        const response = await api.get('artefato/verificar-existencia/', {params: {sha_file: parametro}})
+        const response = await api.get('/academicflow-api/artefato/verificar-existencia/', {params: {sha_file: parametro}})
         return response
         
     } catch (error) {
@@ -118,7 +118,7 @@ export const verificarExistenciaArquivo = async (parametro) => {
 
 export const sicronizarContents = async (dados) => {
     try {
-        const response = await api.post('/artefato/sicronizar-contents/', dados)
+        const response = await api.post('/academicflow-api/artefato/sicronizar-contents/', dados)
         return handleSuccess(response, SUCCESS_MESSAGE_ON_SYNC_ARTIFACTS)
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SYNC)
@@ -127,7 +127,7 @@ export const sicronizarContents = async (dados) => {
 
 export const atualizarIteracaoDosArtefatos = async (dados) => {
     try {
-        const response = await api.patch('/artefato/atualizar-iteracao/', dados)
+        const response = await api.patch('/academicflow-api/artefato/atualizar-iteracao/', dados)
         return handleSuccess(response, 'Atribuição de artefatos à iteração realizada com sucesso!')
     } catch (error) {
         return handleError(error, 'Falha durante a atribuição dos artefatos à iteração, contate o suporte!')
