@@ -4,14 +4,14 @@ import { handleError, handleInfo, handleSuccess } from "./utils"
 import { ERROR_MESSAGE_ON_CREATION, ERROR_MESSAGE_ON_SEARCHING, INFO_MESSAGE_ON_SEARCHING, SUCCESS_MESSAGE_ON_CREATION } from "./messages"
 
 export const criarMembroProjeto = async (dados) => {
-    const resposta = await api.post('membro_projeto/cadastrar/', {membros: dados})
+    const resposta = await api.post('/academicflow-api/membro_projeto/cadastrar/', {membros: dados})
     return resposta
 }
 
 export const buscarProjetosDoMembro =  async (idMembro) => {
 
     try {
-        const response = await api.get(`membro_projeto/buscar/projetos/${encodeURIComponent(idMembro)}/`)
+        const response = await api.get(`/academicflow-api/membro_projeto/buscar/projetos/${encodeURIComponent(idMembro)}/`)
         return response
     } catch (error) {
         console.log(error)
@@ -20,7 +20,7 @@ export const buscarProjetosDoMembro =  async (idMembro) => {
 }
 
 export const excluirMembroProjetoOne = async (id) => {
-    const resposta = await api.delete(`membro_projeto/excluir/one/${encodeURIComponent(id)}/`)
+    const resposta = await api.delete(`/academicflow-api/membro_projeto/excluir/one/${encodeURIComponent(id)}/`)
     return resposta
 }
 
@@ -29,7 +29,7 @@ export const excluirMembroProjetoMany = async (id_projeto, lista_membros, grupo)
     .filter(membroProjeto => membroProjeto.grupo === grupo)  
     .map(membroProjeto => membroProjeto.membro);
 
-    const resposta = await api.delete(`membro_projeto/excluir/many/${encodeURIComponent(id_projeto)}/`, {
+    const resposta = await api.delete(`/academicflow-api/membro_projeto/excluir/many/${encodeURIComponent(id_projeto)}/`, {
         data: { ids_membros: ids_membros },
     });
     return resposta
@@ -37,7 +37,7 @@ export const excluirMembroProjetoMany = async (id_projeto, lista_membros, grupo)
 
 export const listarMembrosPorProjeto = async (idProjeto) => {
     try {
-        const response = await api.get(`membro_projeto/buscar/${encodeURIComponent(idProjeto)}/`)
+        const response = await api.get(`/academicflow-api/membro_projeto/buscar/${encodeURIComponent(idProjeto)}/`)
         return response
 
     } catch (error) {
@@ -47,7 +47,7 @@ export const listarMembrosPorProjeto = async (idProjeto) => {
 
 export const buscarQuantidadeMembrosPorProjeto = async (idProjeto) => {
     try {
-        const response = await api.get(`membro_projeto/buscar/membros/quantidade/${encodeURIComponent(idProjeto)}/`)
+        const response = await api.get(`/academicflow-api/membro_projeto/buscar/membros/quantidade/${encodeURIComponent(idProjeto)}/`)
         return response
     } catch (error) {
         console.log(error)
@@ -58,7 +58,7 @@ export const buscarQuantidadeMembrosPorProjeto = async (idProjeto) => {
 export const listarMembrosPeloIdProjeto = async (idProjeto) => {
 
     try {
-        const response = await api.get(`membro_projeto/listar/projeto/${encodeURIComponent(idProjeto)}/`)
+        const response = await api.get(`/academicflow-api/membro_projeto/listar/projeto/${encodeURIComponent(idProjeto)}/`)
         return response
     } catch (error) {
         console.log(error)
@@ -69,7 +69,7 @@ export const listarMembrosPeloIdProjeto = async (idProjeto) => {
 
 export const buscarMembroProjetoPeloUsuarioGithub = async (parametros) => {
     try {
-        const response = await api.get('membro_projeto/buscar/usuario_github/', {params: parametros})
+        const response = await api.get('/academicflow-api/membro_projeto/buscar/usuario_github/', {params: parametros})
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
@@ -78,7 +78,7 @@ export const buscarMembroProjetoPeloUsuarioGithub = async (parametros) => {
 
 export const buscarMembroProjetoPeloIdMembro = async (parametros) => {
     try {
-        const response = await api.get('membro_projeto/buscar/membro-e-projeto/', {params: parametros})
+        const response = await api.get('/academicflow-api/membro_projeto/buscar/membro-e-projeto/', {params: parametros})
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
@@ -87,7 +87,7 @@ export const buscarMembroProjetoPeloIdMembro = async (parametros) => {
 
 export const cadastrarFuncoes = async (dados) => {
     try {
-        const response = await api.post('membro_projeto/funcoes/cadastrar/', {funcoes: dados})
+        const response = await api.post('/academicflow-api/membro_projeto/funcoes/cadastrar/', {funcoes: dados})
         return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION)
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_CREATION)
@@ -96,7 +96,7 @@ export const cadastrarFuncoes = async (dados) => {
 
 export const cadastrarFuncaoAtual = async (dados) => {
     try {
-        const response = await api.post('membro_projeto/funcoes/cadastrar-funcao-atual/', dados)
+        const response = await api.post('/academicflow-api/membro_projeto/funcoes/cadastrar-funcao-atual/', dados)
         return handleSuccess(response, 'Função do membro definida com sucesso!')
     } catch (error) {
         return handleError(error, 'Falha ao tentar definir a função do membro, contate o suporte!')
@@ -105,7 +105,7 @@ export const cadastrarFuncaoAtual = async (dados) => {
 
 export const listarFuncoes = async () => {
     try {
-        const response = await api.get('membro_projeto/funcoes/listar/')
+        const response = await api.get('/academicflow-api/membro_projeto/funcoes/listar/')
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
