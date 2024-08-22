@@ -11,7 +11,7 @@ import { handleError, handleSuccess } from "./utils"
 
 export const criarFluxo = async (dados) => {
     try {
-        const response = await api.post("/fluxo/cadastrar/", dados)
+        const response = await api.post("/academicflow-api/fluxo/cadastrar/", dados)
         return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION)
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_CREATION)
@@ -20,7 +20,7 @@ export const criarFluxo = async (dados) => {
 
 export const buscarFluxoPeloNome = async (parametro) => {
     try {
-        const response = await api.get(`/fluxo/buscar/?name_fluxo=${encodeURIComponent(parametro)}`)
+        const response = await api.get(`/academicflow-api/fluxo/buscar/?name_fluxo=${encodeURIComponent(parametro)}`)
         return response
     } catch (error) {
         return handleError(error, 'Falha ao tentar os fluxos, contate o suporte!')
@@ -29,7 +29,7 @@ export const buscarFluxoPeloNome = async (parametro) => {
 
 export const buscarFluxoPeloId =  async (fluxo_id) => {
     try {
-        const response = await api.get(`fluxo/buscar/${encodeURIComponent(fluxo_id)}/`) 
+        const response = await api.get(`/academicflow-api/fluxo/buscar/${encodeURIComponent(fluxo_id)}/`) 
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
@@ -38,7 +38,7 @@ export const buscarFluxoPeloId =  async (fluxo_id) => {
 
 export const atualizarFluxo = async (dadosFluxo, idFluxo) => {
     try {
-        const response = await api.patch(`fluxo/atualizar/${encodeURIComponent(idFluxo)}/`, dadosFluxo)
+        const response = await api.patch(`/academicflow-api/fluxo/atualizar/${encodeURIComponent(idFluxo)}/`, dadosFluxo)
         return handleSuccess(response, SUCCESS_MESSAGE_ON_UPDATE)
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_UPDATE)
@@ -48,7 +48,7 @@ export const atualizarFluxo = async (dadosFluxo, idFluxo) => {
 
 export const excluirFluxo = async (idFluxo) => {
     try {
-        const response = await api.delete(`fluxo/excluir/${encodeURIComponent(idFluxo)}/`)
+        const response = await api.delete(`/academicflow-api/fluxo/excluir/${encodeURIComponent(idFluxo)}/`)
         return handleSuccess(response, SUCCESS_MESSAGE_ON_DELETION)
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_DELETION)
@@ -57,7 +57,7 @@ export const excluirFluxo = async (idFluxo) => {
 
 export const listarFluxos = async () => {
     try {
-        const response = await api.get('fluxo/listar/')
+        const response = await api.get('/academicflow-api/fluxo/listar/')
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
