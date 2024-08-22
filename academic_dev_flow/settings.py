@@ -76,9 +76,10 @@ MIDDLEWARE = [
 
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000", 
-]
+# CORS_ALLOWED_ORIGINS = [
+#    "http://localhost:3000", 
+#    "http://labens.dct.ufrn.br",
+#]
 
 AUTH_USER_MODEL = 'usuario.Usuario'
 
