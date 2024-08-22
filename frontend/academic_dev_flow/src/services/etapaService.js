@@ -13,7 +13,7 @@ export const criarEtapa = async (dadosEtapa, fluxoId) => {
             status: dadosEtapa.status, 
             fluxo: fluxoId
         }
-        const response = await api.post('etapa/cadastrar/', dados);
+        const response = await api.post('/academicflow-api/etapa/cadastrar/', dados);
         return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION)
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_CREATION)
@@ -22,7 +22,7 @@ export const criarEtapa = async (dadosEtapa, fluxoId) => {
 
 export const buscarEtapaPeloNome = async (nomeEtapa) => {
     try {
-        const response = await api.get(`etapa/buscar/nome/?nome=${encodeURIComponent(nomeEtapa)}`)
+        const response = await api.get(`/academicflow-api/etapa/buscar/nome/?nome=${encodeURIComponent(nomeEtapa)}`)
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
@@ -31,7 +31,7 @@ export const buscarEtapaPeloNome = async (nomeEtapa) => {
 
 export const buscarEtapaPeloId = async (idEtapa) => {
     try {
-        const response = await api.get(`etapa/buscar/${encodeURIComponent(idEtapa)}/`)
+        const response = await api.get(`/academicflow-api/etapa/buscar/${encodeURIComponent(idEtapa)}/`)
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
@@ -40,7 +40,7 @@ export const buscarEtapaPeloId = async (idEtapa) => {
 
 export const buscarEtapasPeloIdFluxo = async (fluxoId) => {
     try {
-        const response = await api.get(`etapa/buscar/?fluxo_id=${encodeURIComponent(fluxoId)}`);
+        const response = await api.get(`/academicflow-api/etapa/buscar/?fluxo_id=${encodeURIComponent(fluxoId)}`);
         return response;
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
