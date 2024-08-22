@@ -15,7 +15,7 @@ export const createContent = async (dados) => {
     }
     
     try {
-        const response = await api.post('github_integration/create_content/', dadosEnviar)
+        const response = await api.post('/academicflow-api/github_integration/create_content/', dadosEnviar)
         return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION_THE_CONTENT)
     } catch (error) {
         if (error.response && error.response.status === 409) {
@@ -28,7 +28,7 @@ export const createContent = async (dados) => {
 
 export const getContent = async (parametros) => {
     try {
-        const response = await api.get('github_integration/get_content/', {params: {
+        const response = await api.get('/academicflow-api/github_integration/get_content/', {params: {
             github_token: parametros.github_token,
             repository: parametros.repository,
             path: parametros.path 
@@ -45,7 +45,7 @@ export const getContent = async (parametros) => {
 
 export const deleteContent = async (parametros) => {
     try {
-        const response = await api.delete('github_integration/delete_content/', {params: {
+        const response = await api.delete('/academicflow-api/github_integration/delete_content/', {params: {
             github_token: parametros.github_token,
             repository: parametros.repository,
             path: parametros.path,
@@ -65,7 +65,7 @@ export const deleteContent = async (parametros) => {
 
 export const listContents = async (parametros) => {
     try {
-        const response = await api.get('github_integration/contents/list_contents/', {params: parametros})
+        const response = await api.get('/academicflow-api/github_integration/contents/list_contents/', {params: parametros})
 
         return response
     } catch (error) {
