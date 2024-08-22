@@ -22,7 +22,7 @@ export const criarTarefa = async (dadosForm, dadosIssue) => {
     }
     
     try {
-        const response = await api.post('tarefa/cadastrar/', dadosEnviar)
+        const response = await api.post('/academicflow-api/tarefa/cadastrar/', dadosEnviar)
         return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION)
     } catch (error) {
         console.log(error)
@@ -33,7 +33,7 @@ export const criarTarefa = async (dadosForm, dadosIssue) => {
 
 export const buscarTarefaPeloId = async (id) => {
     try {
-        const response = await api.get(`tarefa/buscar/${encodeURIComponent(id)}/`)
+        const response = await api.get(`//academicflow-api/tarefa/buscar/${encodeURIComponent(id)}/`)
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
@@ -42,7 +42,7 @@ export const buscarTarefaPeloId = async (id) => {
 
 export const listarTarefasPorProjeto = async (idProjeto) => {
     try {
-        const response = await api.get(`tarefa/listar/projeto/${encodeURIComponent(idProjeto)}/`)
+        const response = await api.get(`/academicflow-api/tarefa/listar/projeto/${encodeURIComponent(idProjeto)}/`)
 
         if(response.status === 200){
             return response
@@ -56,7 +56,7 @@ export const listarTarefasPorProjeto = async (idProjeto) => {
 
 export const listarTarefasPorIteracao = async (idIteracao) => {
     try {
-        const response = await api.get(`tarefa/listar/iteracao/${encodeURIComponent(idIteracao)}/`)
+        const response = await api.get(`/academicflow-api/tarefa/listar/iteracao/${encodeURIComponent(idIteracao)}/`)
         return response
     } catch (error) {
         console.log(error)
@@ -67,7 +67,7 @@ export const listarTarefasPorIteracao = async (idIteracao) => {
 
 export const atualizarTarefa = async (id, dados) => {
     try {
-        const response = await api.patch(`tarefa/atualizar/${encodeURIComponent(id)}/`, dados)
+        const response = await api.patch(`/academicflow-api/tarefa/atualizar/${encodeURIComponent(id)}/`, dados)
         if (response.status === 200){
             NotificationManager.success('Tarefa atualizada com sucesso !')
             return response
@@ -82,7 +82,7 @@ export const atualizarTarefa = async (id, dados) => {
 
 export const excluirTarefas = async (ids) => {
     try {
-        const response = await api.delete('tarefa/excluir/',{params: {ids: ids}})
+        const response = await api.delete('/academicflow-api/tarefa/excluir/',{params: {ids: ids}})
         if (response.status === 204){
             NotificationManager.success('Tarefa(s) excluída(s) com sucesso!')
             return response
@@ -96,7 +96,7 @@ export const excluirTarefas = async (ids) => {
 
 export const concluirTarefas = async (ids) => {
     try {
-        const response = await api.patch('tarefa/concluir/', {ids})
+        const response = await api.patch('/academicflow-api/tarefa/concluir/', {ids})
         if (response.status === 200){
             NotificationManager.success('Tarefa(s) concluída(s) com sucesso!')
             return response
@@ -110,7 +110,7 @@ export const concluirTarefas = async (ids) => {
 
 export const reabrirTarefas = async (ids) => {
     try {
-        const response = await api.patch('tarefa/reabrir/', {ids})
+        const response = await api.patch('/academicflow-api/tarefa/reabrir/', {ids})
         if (response.status === 200){
             NotificationManager.success('Tarefa(s) reaberta(s) com sucesso!')
             return response
@@ -124,7 +124,7 @@ export const reabrirTarefas = async (ids) => {
 
 export const listarTarefas = async () => {
     try {
-        const response = await api.get('tarefa/listar/')
+        const response = await api.get('/academicflow-api/tarefa/listar/')
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
@@ -133,7 +133,7 @@ export const listarTarefas = async () => {
 
 export const filtrarTarefasPeloNomeEPeloProjeto = async (nomeTarefa, idProjeto) => {
     try {
-        const response = await api.get('tarefa/filtrar/nome-projeto/', {params: {nome_tarefa: nomeTarefa, id_projeto: idProjeto}})
+        const response = await api.get('/academicflow-api/tarefa/filtrar/nome-projeto/', {params: {nome_tarefa: nomeTarefa, id_projeto: idProjeto}})
         if (response.status === 204) {
             return handleInfo(response, INFO_MESSAGE_ON_SEARCHING)
         }
@@ -146,7 +146,7 @@ export const filtrarTarefasPeloNomeEPeloProjeto = async (nomeTarefa, idProjeto) 
 
 export const verificarExistenciaIssue = async (parametro) => {
     try {
-        const response = await api.get('tarefa/verificar-existencia/', {params: {id_issue: parametro}})
+        const response = await api.get('/academicflow-api/tarefa/verificar-existencia/', {params: {id_issue: parametro}})
         return response
     } catch (error) {
         if (error.response && error.response.status === 400){
@@ -159,7 +159,7 @@ export const verificarExistenciaIssue = async (parametro) => {
 
 export const criarLabels = async (dados) => {
     try {
-        const response = await api.post('tarefa/labels/cadastrar/', {labels: dados})
+        const response = await api.post('/academicflow-api/tarefa/labels/cadastrar/', {labels: dados})
         return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION_THE_LABELS)
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_CREATION_THE_LABELS)
@@ -168,7 +168,7 @@ export const criarLabels = async (dados) => {
 
 export const buscarLabelPeloId = async (id) => {
     try {
-        const response = await api.get(`tarefa/labels/buscar/${encodeURIComponent(id)}/`)
+        const response = await api.get(`/academicflow-api/tarefa/labels/buscar/${encodeURIComponent(id)}/`)
         return response
         
     } catch (error) {
@@ -178,7 +178,7 @@ export const buscarLabelPeloId = async (id) => {
 
 export const listarLabelsPorProjeto = async (id_projeto) => {
     try {
-        const response = await api.get(`tarefa/labels/listar-por-projeto/${encodeURIComponent(id_projeto)}/`)
+        const response = await api.get(`/academicflow-api/tarefa/labels/listar-por-projeto/${encodeURIComponent(id_projeto)}/`)
         return response
     } catch (error) {
         handleError(error, ERROR_MESSAGE_ON_SEARCHING)
@@ -187,7 +187,7 @@ export const listarLabelsPorProjeto = async (id_projeto) => {
 
 export const sicronizarIssues = async (dados) => {
     try {
-        const response = await api.post('/tarefa/sicronizar-issues/', dados)
+        const response = await api.post('/academicflow-api/tarefa/sicronizar-issues/', dados)
         return handleSuccess(response, SUCCESS_MESSAGE_ON_SYNC_ISSUES)
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SYNC)
@@ -196,7 +196,7 @@ export const sicronizarIssues = async (dados) => {
 
 export const iniciarContagemTempo = async (parametros) => {
     try {
-        const response = await api.post('tarefa/iniciar-contagem-tempo/', parametros)
+        const response = await api.post('/academicflow-api/tarefa/iniciar-contagem-tempo/', parametros)
         return handleSuccess(response, 'Você está iniciando uma tarefa !')
     } catch (error) {
         return handleError(error, 'Falha ao tentar iniciar a tarefa, contate o suporte!')
@@ -205,7 +205,7 @@ export const iniciarContagemTempo = async (parametros) => {
 
 export const pararContagemTempo = async (parametros) => {
     try {
-        const response = await api.post('tarefa/parar-contagem-tempo/', parametros)
+        const response = await api.post('/academicflow-api/tarefa/parar-contagem-tempo/', parametros)
         return handleSuccess(response, 'Você está pausando uma tarefa !')
     } catch (error) {
         return handleError(error, 'Falha ao tentar pausar a tarefa, contate o suporte!')
@@ -214,7 +214,7 @@ export const pararContagemTempo = async (parametros) => {
 
 export const vincularIteracaoAsTarefas = async (dados) => {
     try {
-        const response = await api.patch('tarefa/atualizar-iteracao/', dados)
+        const response = await api.patch('/academicflow-api/tarefa/atualizar-iteracao/', dados)
         return handleSuccess(response, 'Atribuição de tarefas a iteração realizada com sucesso!')
     } catch (error) {
         return handleError(error, 'Falha durante a atribuição das tarefas a iteração, contate o suporte!')
