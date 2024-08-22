@@ -3,7 +3,7 @@ import { handleError, handleSuccess } from "./utils";
 
 export const criarComentarioTarefa = async (dados) => {
     try {
-        const response = await api.post('/comentario/tarefa/cadastrar/', dados)
+        const response = await api.post('/academicflow-api/comentario/tarefa/cadastrar/', dados)
         return handleSuccess(response, 'Comentário cadastrado com sucesso!')
     } catch (error) {
         return handleError(error, 'Falha ao tentar criar o comentário, contate o suporte!')
@@ -12,7 +12,7 @@ export const criarComentarioTarefa = async (dados) => {
 
 export const buscarComentarioTarefaPeloId = async (id) => {
     try {
-        const response = await api.get(`/comentario/tarefa/buscar/${encodeURIComponent(id)}/`)
+        const response = await api.get(`/academicflow-api/comentario/tarefa/buscar/${encodeURIComponent(id)}/`)
         return response
     } catch (error) {
         return handleError(error, 'Falha ao tentar buscar os dados, contate o suporte!')
@@ -21,7 +21,7 @@ export const buscarComentarioTarefaPeloId = async (id) => {
 
 export const atualizarComentarioTarefa = async (id, dados) => {
     try {
-        const response = await api.patch(`/comentario/tarefa/atualizar/${encodeURIComponent(id)}/`, dados)
+        const response = await api.patch(`/academicflow-api/comentario/tarefa/atualizar/${encodeURIComponent(id)}/`, dados)
         return handleSuccess(response, 'Comentário atualizado com sucesso!')
     } catch (error) {
         return handleError(error, 'Falha ao tentar atualizar o comentário, contate o suporte!')        
@@ -30,7 +30,7 @@ export const atualizarComentarioTarefa = async (id, dados) => {
 
 export const excluirComentarioTarefa = async (id) => {
     try {
-        const response = await api.delete(`/comentario/tarefa/excluir/${encodeURIComponent(id)}/`)
+        const response = await api.delete(`/academicflow-api/comentario/tarefa/excluir/${encodeURIComponent(id)}/`)
         return handleSuccess(response, 'Comentário excluído com sucesso!')
     } catch (error) {
         return handleError(error, 'Falha ao tentar excluir o comentário, contate o suporte!')
@@ -39,7 +39,7 @@ export const excluirComentarioTarefa = async (id) => {
 
 export const listarComentariosPorTarefa = async (id) => {
     try {
-        const response = await api.get(`/comentario/tarefa/listar/${encodeURIComponent(id)}/`)
+        const response = await api.get(`/academicflow-api/comentario/tarefa/listar/${encodeURIComponent(id)}/`)
         return response
     } catch (error) {
         return handleError(error, 'Falha ao tentar buscar os dados, contate o suporte!')
@@ -48,7 +48,7 @@ export const listarComentariosPorTarefa = async (id) => {
 
 export const criarComentarioArtefato = async (dados) => {
     try {
-        const response = await api.post('/comentario/artefato/cadastrar/', dados)
+        const response = await api.post('/academicflow-api/comentario/artefato/cadastrar/', dados)
         return handleSuccess(response, 'Comentário cadastrado com sucesso!')
     } catch (error) {
         return handleError(error, 'Falha ao tentar criar o comentário, contate o suporte!')
@@ -57,7 +57,7 @@ export const criarComentarioArtefato = async (dados) => {
 
 export const buscarComentarioArtefatoPeloId = async (id) => {
     try {
-        const response = await api.get(`/comentario/artefato/buscar/${encodeURIComponent(id)}/`)
+        const response = await api.get(`/academicflow-api/comentario/artefato/buscar/${encodeURIComponent(id)}/`)
         return response
     } catch (error) {
         return handleError(error, 'Falha ao tentar buscar os dados, contate o suporte!')
