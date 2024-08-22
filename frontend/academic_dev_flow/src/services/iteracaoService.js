@@ -5,7 +5,7 @@ import { ERROR_MESSAGE_ON_SEARCHING, INFO_MESSAGE_MANDATORY_PARAMETERS, INFO_MES
 
 export const criarIteracao = async (dados) => {
     try {
-        const response = await api.post('iteracao/cadastrar/', dados)
+        const response = await api.post('/academicflow-api/iteracao/cadastrar/', dados)
 
         if (response.status === 200){
             NotificationManager.success('Iteração criada com sucesso !')
@@ -21,7 +21,7 @@ export const criarIteracao = async (dados) => {
 
 export const buscarIteracaoPeloId = async (idIteracao) => {
     try {
-        const response = await api.get(`iteracao/buscar/${encodeURIComponent(idIteracao)}/`)
+        const response = await api.get(`/academicflow-api/iteracao/buscar/${encodeURIComponent(idIteracao)}/`)
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
@@ -30,14 +30,14 @@ export const buscarIteracaoPeloId = async (idIteracao) => {
 
 export const listarIteracoesPorProjeto = async (idProjeto) => {
 
-    const response = await api.get(`iteracao/listar/${encodeURIComponent(idProjeto)}/`)
+    const response = await api.get(`/academicflow-api/iteracao/listar/${encodeURIComponent(idProjeto)}/`)
     return response 
 }
 
 export const atualizarIteracao = async (id, dados) => {
 
     try {
-        const response = await api.patch(`iteracao/atualizar/${encodeURIComponent(id)}/`, dados)
+        const response = await api.patch(`/academicflow-api/iteracao/atualizar/${encodeURIComponent(id)}/`, dados)
         
         if (response.status === 200){
             NotificationManager.success('Iteração atualizada com sucesso !')
@@ -52,7 +52,7 @@ export const atualizarIteracao = async (id, dados) => {
 
 export const excluirIteracoes = async (ids) => {
     try {
-        const response = await api.delete('/iteracao/excluir/',{params: {ids: ids}})
+        const response = await api.delete('/academicflow-api/iteracao/excluir/',{params: {ids: ids}})
         if (response.status === 204){
             NotificationManager.success('Iteração(oes) excluída(s) com sucesso!')
             return response
@@ -66,7 +66,7 @@ export const excluirIteracoes = async (ids) => {
 
 export const listarIteracoes = async () => {
     try {
-        const response = api.get('/iteracao/listar/')
+        const response = api.get('/academicflow-api/iteracao/listar/')
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
@@ -75,7 +75,7 @@ export const listarIteracoes = async () => {
 
 export const buscarIteracoesPeloNomeEPeloProjeto = async (nomeIteracao, idProjeto) => {
     try {
-        const response = await api.get('iteracao/filtrar/nome-projeto/', {params: {nome_iteracao: nomeIteracao, id_projeto: idProjeto}})
+        const response = await api.get('/academicflow-apiiteracao/filtrar/nome-projeto/', {params: {nome_iteracao: nomeIteracao, id_projeto: idProjeto}})
         if (response.status === 204) {
             return handleInfo(response, "Não foram encontradas iterações que correspondam aos parâmetros fornecidos!")
         }
