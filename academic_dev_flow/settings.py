@@ -124,7 +124,7 @@ WSGI_APPLICATION = 'academic_dev_flow.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mydatabase',
+        'DBNAME': 'mydatabase',
         'USER': 'myuser',
         'PASSWORD': 'mypassword',
         'HOST': 'localhost',
