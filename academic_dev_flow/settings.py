@@ -124,14 +124,14 @@ WSGI_APPLICATION = 'academic_dev_flow.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'DBNAME': 'mydatabase',
+        'NAME': 'mydatabase',
         'USER': 'myuser',
         'PASSWORD': 'mypassword',
-        'HOST': 'localhost',
-        'PORT': ''
-        
+        'HOST': 'localhost',  
+        'PORT': '',      
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
