@@ -1,6 +1,7 @@
 version: '3'
 services:
   postgres-server:
+    container_name: postgres
     image: postgres:13
     environment:
       POSTGRES_USER: myuser
@@ -10,12 +11,14 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    restart: always
     networks:
       - dev_network
 
   pgadmin:
     container_name: pgadmin
     image: dpage/pgadmin4
+    restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
@@ -31,4 +34,3 @@ volumes:
 
 networks:
   dev_network:
-    driver: bridge
