@@ -110,12 +110,11 @@
   align-items: center; 
   justify-content: center;
   overflow: hidden; 
-  margin: 10px;
-  background-color: transparent;
+  background-color: var(--primary-color);
   z-index: 2;
 }
 
-.trapezoide {
+/* .trapezoide {
   position: absolute;
   border-right:  40vw solid var(--primary-color);
   border-left: 15vw solid transparent;
@@ -126,7 +125,7 @@
   height: 0;
   z-index: 1;
   opacity: 1;
-}
+} */
 
 .container-presentation-image img {
   max-width: 80%; 

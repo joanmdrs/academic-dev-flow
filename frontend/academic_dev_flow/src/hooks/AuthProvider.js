@@ -39,7 +39,7 @@ const AuthProvider = ({ children }) => {
 
   const loginAction = async (username, password) => {
     try {
-      const response = await api.post("auth/login/", { username, password });
+      const response = await api.post("/auth/login/", { username, password });
 
       if (response.status === 200) {
         const data = await response.data;
@@ -54,7 +54,7 @@ const AuthProvider = ({ children }) => {
             NotificationManager.success("Login realizado com sucesso !");
           } catch (decodeError) {
             console.error("Erro ao decodificar o token:", decodeError);
-            logOut(); // Limpa completamente o estado em caso de erro de decodificação
+            logOut(); 
           }
         } else {
           NotificationManager.error("Token não disponível");
