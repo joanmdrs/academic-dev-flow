@@ -2,7 +2,7 @@ from django.db import models
 from apps.usuario.models import Usuario
 
 class UsuarioGithub(models.Model):
-    nome = models.CharField(max_length=200)
+    nome_github = models.CharField(max_length=200)
     email_github = models.EmailField()
     usuario_github = models.CharField(max_length=200) 
     
@@ -15,7 +15,7 @@ class Membro(models.Model):
     data_nascimento = models.DateField("Data de nascimento")
     telefone = models.CharField(max_length=20)
     email = models.EmailField(max_length=200)
-    github = models.ForeignKey(UsuarioGithub, on_delete=models.SET_NULL, null=True, blank=True)  # Corrija a referência ao modelo
+    github = models.ForeignKey(UsuarioGithub, on_delete=models.SET_NULL, null=True, blank=True)
     linkedin = models.CharField(max_length=200, null=True, blank=True)
     lattes = models.CharField(max_length=200, null=True, blank=True)
     grupo = models.CharField(max_length=100, blank=True, null=True)

@@ -8,7 +8,7 @@ class MembroAdmin(admin.ModelAdmin):
     search_fields = ('nome',)
     
 class UsuarioGithubAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nome', 'email_github', 'usuario_github')
+    list_display = ('id', 'nome_github', 'email_github', 'usuario_github')
     search_fields = ('usuario_github',)
     
 admin.site.register(Membro, MembroAdmin)

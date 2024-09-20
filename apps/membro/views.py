@@ -47,7 +47,7 @@ class CadastrarMembroView(APIView):
 
             github_created = None
         
-            if github_data['nome'] is not None:
+            if github_data['nome_github'] is not None:
                 github_serializer = UsuarioGithubSerializer(data=github_data)
                 if not github_serializer.is_valid():
                     return Response({'error': 'Dados do GitHub inválidos'}, status=status.HTTP_400_BAD_REQUEST)
