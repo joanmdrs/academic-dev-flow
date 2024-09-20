@@ -19,24 +19,32 @@ from django.contrib.auth.hashers import check_password
 
 class CadastrarMembroView(APIView):
     permission_classes = [AllowAny]
-    
+
     def post(self, request):
         try:
             group_name = request.data.get('grupo')
             user_data = request.data.get('usuario', {}) 
-            github_data = request.data.get('github', {})
+            github_data = request.data.get('github', {})  # Pega o dado de github, pode ser {}
             member_data = request.data.get('membro', {})
             
-            if (Usuario.objects.filter(username=user_data['username']).exists()):
+            print(group_name)
+            print(user_data)
+            print(github_data)
+            print(member_data)
+            
+            # Verifica se o username já existe
+            if Usuario.objects.filter(username=user_data.get('username')).exists():
                 return Response({'error': 'O nome de usuário já está sendo utilizado!'}, status=status.HTTP_409_CONFLICT)
 
             if not user_data:
                 raise ValueError("Dados do usuário não fornecidos")
 
+            # Serializa os dados do usuário
             user_serializer = UsuarioSerializer(data=user_data)
             if not user_serializer.is_valid():
                 return Response({'error': 'Dados do usuário inválidos'}, status=status.HTTP_400_BAD_REQUEST)
 
+            # Cria o usuário
             user_created = Usuario.objects.create_user(
                 username=user_serializer.validated_data['username'],
                 password=user_serializer.validated_data['password'],
@@ -46,22 +54,26 @@ class CadastrarMembroView(APIView):
             user_created.save()
 
             github_created = None
-        
-            if github_data['nome_github'] is not None:
+
+            # Processa os dados do GitHub apenas se houver dados
+            if github_data and any(github_data.values()):  # Verifica se há valores em github_data
                 github_serializer = UsuarioGithubSerializer(data=github_data)
                 if not github_serializer.is_valid():
                     return Response({'error': 'Dados do GitHub inválidos'}, status=status.HTTP_400_BAD_REQUEST)
                 github_created = github_serializer.save()
 
+            # Adiciona o usuário ao grupo, se o grupo for fornecido
             if group_name:
                 group = Group.objects.get(name=group_name)
                 user_created.groups.add(group)
 
+            # Adiciona os dados necessários ao membro
             member_data['grupo'] = group_name
             member_data['usuario'] = user_created.id
             if github_created:
                 member_data['github'] = github_created.id
 
+            # Serializa e salva o membro
             member_serializer = MembroSerializer(data=member_data)
             if not member_serializer.is_valid():
                 return Response({'error': 'Dados do membro inválidos'}, status=status.HTTP_400_BAD_REQUEST)
@@ -75,9 +87,8 @@ class CadastrarMembroView(APIView):
 
         except Exception as e:
             if user_created:
-                user_created.delete()
+                user_created.delete()  # Remove o usuário criado em caso de erro
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 
 class BuscarMembroPorGrupoView(APIView):
     permission_classes = [IsAuthenticated]

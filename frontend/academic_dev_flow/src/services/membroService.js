@@ -2,42 +2,6 @@ import { NotificationManager } from "react-notifications";
 import api from "../api/api";
 import { handleError, handleSuccess } from "./utils";
 
-export const criarConta = async (dados) => {
-    const dadosEnviar = {
-        grupo: dados.grupo,
-        
-        usuario : {
-            username: dados.usuario,
-            password: dados.senha
-        },
-        membro : {
-            nome: dados.nome,
-            data_nascimento: dados.data_nascimento,
-            telefone: dados.telefone,
-            email: dados.email,
-            linkedin: dados.linkedin,
-            lattes: dados.lattes
-        },
-
-        github: {
-            nome: dados.nome_github,
-            email_github: dados.email_github,
-            usuario_github: dados.usuario_github
-        }
-    }
-    
-    try {
-        const response = await api.post('/membro/cadastrar/', dadosEnviar)
-        return handleSuccess(response, 'Contra criada com sucesso !')
-    } catch (error) {
-        if (error.response && error.response.status === 409){
-            return handleError(error, 'Já existe uma conta cadastrada com este endereço de e-mail!')
-        } else {
-            return handleError(error, 'Falha ao tentar criar a conta, contate o suporte!')
-        }
-    }
-}
-
 export const criarMembro = async (dados) => {
 
     const dadosEnviar = {
@@ -57,19 +21,23 @@ export const criarMembro = async (dados) => {
         },
 
         github: {
-            nome: dados.nome_github,
+            nome_github: dados.nome_github,
             email_github: dados.email_github,
             usuario_github: dados.usuario_github
         }
     }
+
+    console.log(dadosEnviar)
     try {
         const resposta = await api.post('/membro/cadastrar/', dadosEnviar)
         NotificationManager.success('Membro criado com sucesso !')
         return resposta
     } catch (error) {
-        console.log(error)
-        NotificationManager.error('Falha ao criar o membro, contate o suporte!')
-        return {error: "Erro durante a operação, contate o suporte!"}
+        if (error.response && error.response.status === 409){
+            return handleError(error, 'Já existe um membro cadastrado com este endereço de e-mail!')
+        } else {
+            return handleError(error, 'Falha ao tentar criar a conta, contate o suporte!')
+        }
     }
 }
 

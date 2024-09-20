@@ -42,14 +42,14 @@ const SelecionarGrupo = () => {
                     onClick={() => handleSelecionarGrupo("Docentes")} 
                     className={`item-grupo ${itemSelecionado === "Docentes" ? "item-selecionado" : ""}`}> 
                     <img src={assetTeacher} alt="icone-professor"/>
-                    Professor 
+                    Docente 
                 </div>
                 <div 
                     id="Discentes" 
                     onClick={() => handleSelecionarGrupo("Discentes")} 
                     className={`item-grupo ${itemSelecionado === "Discentes" ? "item-selecionado" : ""}`}> 
                     <img src={assetStudent} alt="icone-estudante" />
-                    Estudante 
+                    Discente 
                 </div>
                 <div 
                     id="Colaboradores" 
