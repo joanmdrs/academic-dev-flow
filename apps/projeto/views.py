@@ -144,6 +144,6 @@ class ListarProjetosView(APIView):
                 serializer = ProjetoSerializer(projetos, many=True)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             
-            return Response(data=[], status=status.HTTP_204_CONTENT)
+            return Response(data=[], status=status.HTTP_204_NO_CONTENT)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

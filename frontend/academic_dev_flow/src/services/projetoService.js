@@ -42,7 +42,7 @@ export const listarProjetos = async () => {
     try {
         const response = await api.get('projeto/listar/')
         if (response.status === 204) {
-            return handleInfo(response, INFO_MESSAGE_ON_SEARCHING)
+            return handleInfo(response, "Não existem projetos cadastrados no banco de dados!")
         }
         return response
     } catch (error) {

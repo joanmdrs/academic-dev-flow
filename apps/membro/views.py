@@ -83,6 +83,8 @@ class CadastrarMembroView(APIView):
             return Response(member_serializer.data, status=status.HTTP_201_CREATED)
 
         except ValueError as ve:
+            if user_created:
+                user_created.delete()  # Remove o usuário criado em caso de erro
             return Response({'error': str(ve)}, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
