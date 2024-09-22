@@ -80,6 +80,45 @@ class CadastrarMembroView(APIView):
             if user_created:
                 user_created.delete()  # Remove o usuário criado em caso de erro
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class BuscarMembroPorIdView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        try:
+            id_membro = request.GET.get('id_membro', None)
+            
+            # Verifica se o ID do membro foi fornecido
+            if not id_membro:
+                return Response({'error': 'ID do membro não fornecido'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            membro = Membro.objects.get(pk=id_membro)
+            serializer = MembroSerializer(membro, many=False)
+            
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class BuscarMembrosPorNomeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            parametro = request.GET.get('nome', None)
+                        
+            if parametro is not None: 
+                membros = Membro.objects.filter(nome__icontains=parametro)
+            else:
+                membros = Membro.objects.all()
+                
+            if not membros: 
+                return Response({'message': 'Nenhum membro encontrado.', 'results': []}, status=status.HTTP_200_OK)
+            
+            serializer = MembroSerializer(membros, many=True)
+        
+            return Response({'message': 'Membros encontrados com sucesso.', 'results': serializer.data}, status=status.HTTP_200_OK)
+                
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
 class BuscarMembroPorGrupoView(APIView):
     permission_classes = [IsAuthenticated]
@@ -115,83 +154,44 @@ class BuscarMembroPorGrupoView(APIView):
         
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-class BuscarMembrosPorNomeView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        try:
-            parametro = request.GET.get('nome', None)
-                        
-            if parametro is not None: 
-                membros = Membro.objects.filter(nome__icontains=parametro)
-            else:
-                membros = Membro.objects.all()
-                
-            if not membros: 
-                return Response({'message': 'Nenhum membro encontrado.', 'results': []}, status=status.HTTP_200_OK)
-            
-            serializer = MembroSerializer(membros, many=True)
         
-            return Response({'message': 'Membros encontrados com sucesso.', 'results': serializer.data}, status=status.HTTP_200_OK)
-                
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-class BuscarMembroPeloUserView(APIView):
+class BuscarMembroPorIdUsuarioView(APIView):
     permission_classes = [IsAuthenticated]
     
-    def get(self, request, id_user):
+    def get(self, request):
         try:
-            membro = Membro.objects.get(usuario_id=id_user)
+            id_usuario = request.GET.get('id_usuario', None)
             
-            if membro: 
-                # Verifique se o membro está vinculado a um objeto UsuarioGithub
-                if membro.github:
-                    usuario_github = membro.github.usuario_github
-                    email_github = membro.github.email_github
-                    nome_github = membro.github.nome
-                else:
-                    usuario_github = None
-                    email_github = None
-                    nome_github = None
-                                
-               
-                autor = {
-                    'id_membro': membro.id,
-                    'id_user': id_user,
-                    'nome': membro.nome,
-                    'data_nascimento': membro.data_nascimento,
-                    'telefone': membro.telefone,
-                    'email': membro.email,
-                    'linkedin': membro.linkedin,
-                    'lattes': membro.lattes,
-                    'grupo': membro.grupo,
-                    'nome_github': nome_github,
-                    'email_github': email_github,
-                    'usuario_github': usuario_github
-                }
+            # Verifica se o ID do usuário foi fornecido
+            if not id_usuario:
+                return Response({'error': 'ID do usuário não fornecido'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Busca o membro pelo ID do usuário
+            membro = Membro.objects.get(usuario_id=id_usuario)
+            
+            if membro:
+                # Obtém o nome do grupo
+                group_name = membro.grupo.name if membro.grupo else None
                 
-                return Response(autor, status=status.HTTP_200_OK)
+                # Serializa o membro
+                serializer = MembroSerializer(membro)
+                
+                # Adiciona o nome do grupo à resposta
+                data = serializer.data
+                data['nome_grupo'] = group_name
+                
+                return Response(data, status=status.HTTP_200_OK)
             
+            return Response({'error': 'Membro não encontrado'}, status=status.HTTP_404_NOT_FOUND)
+        
+        except Membro.DoesNotExist:
             return Response({'error': 'Membro não encontrado'}, status=status.HTTP_404_NOT_FOUND)
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
-class BuscarMembroPorIdView(APIView):
-    permission_classes = [IsAuthenticated]
-    def get(self, request, id):
-        try:
-            membro = Membro.objects.get(pk=id)
-            serializer = MembroSerializer(membro, many=False)
-            
-            return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
-class BuscarUsuarioPeloIdMembroProjeto(APIView):
+# Avaliar se tem necessidade desta view
+class BuscarUsuarioPorIdMembroProjeto(APIView):
     permission_classes = [IsAuthenticated]
     
     def get(self, request, id_membro_projeto):
@@ -215,14 +215,21 @@ class BuscarUsuarioPeloIdMembroProjeto(APIView):
     
 class ExcluirMembroView(APIView):
     permission_classes = [IsAuthenticated]
-    def delete(self, request, id):
+    
+    def delete(self, request):
         try:
-            member = Membro.objects.get(pk=id)
-            user = Usuario.objects.get(pk=member.usuario.id)
+            id_membro = request.GET.get('id_membro', None)
             
-            if (member is not None and user is not None):
-                user.delete()
-                member.delete()
+            # Verifica se o ID do membro foi fornecido
+            if not id_membro:
+                return Response({'error': 'ID do membro não fornecido'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            obj_membro = Membro.objects.get(pk=id_membro)
+            obj_usuario = Usuario.objects.get(pk=member.usuario.id)
+            
+            if (obj_membro is not None and obj_usuario is not None):
+                obj_usuario.delete()
+                obj_membro.delete()
                 return Response({"detail": "Membro excluído com sucesso"}, status=status.HTTP_204_NO_CONTENT)
             
             else:
