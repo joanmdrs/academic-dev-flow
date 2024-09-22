@@ -1,5 +1,6 @@
 from django.db import models
 from apps.usuario.models import Usuario
+from django.contrib.auth.models import Group 
 
 class Membro(models.Model):
     nome = models.CharField(max_length=200)
@@ -8,11 +9,12 @@ class Membro(models.Model):
     email = models.EmailField(max_length=200)
     linkedin = models.CharField(max_length=200, null=True, blank=True)
     lattes = models.CharField(max_length=200, null=True, blank=True)
-    grupo = models.CharField(max_length=100, blank=True, null=True)
     nome_github = models.CharField(max_length=200, blank=True, null=True)
     email_github = models.EmailField(max_length=200, blank=True, null=True)
     usuario_github = models.CharField(max_length=200, blank=True, null=True, unique=True) 
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, null=True)
+    grupo = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True) 
+
     
     def __str__(self):
         return self.nome

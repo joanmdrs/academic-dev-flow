@@ -48,17 +48,23 @@ class CadastrarMembroView(APIView):
             user_created.save()
 
             # Adiciona o usuário ao grupo, se o grupo for fornecido
+            group = None
             if group_name:
-                group = Group.objects.get(name=group_name)
+                group = Group.objects.filter(name=group_name).first()
+                if not group:
+                    return Response({'error': 'Grupo não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
                 user_created.groups.add(group)
 
             # Adiciona os dados necessários ao membro
-            member_data['grupo'] = group_name
-            member_data['usuario'] = user_created.id
+            member_data['usuario'] = user_created.id  # Relaciona o membro com o usuário criado
+            
+            if group:
+                member_data['grupo'] = group.id  # Relaciona o membro ao grupo através do ID do grupo
 
             # Serializa e salva o membro
             member_serializer = MembroSerializer(data=member_data)
             if not member_serializer.is_valid():
+                user_created.delete()  # Remove o usuário criado em caso de erro na serialização do membro
                 return Response({'error': 'Dados do membro inválidos'}, status=status.HTTP_400_BAD_REQUEST)
 
             member_serializer.save()
@@ -74,6 +80,7 @@ class CadastrarMembroView(APIView):
             if user_created:
                 user_created.delete()  # Remove o usuário criado em caso de erro
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
 
 class BuscarMembroPorGrupoView(APIView):
     permission_classes = [IsAuthenticated]
