@@ -81,31 +81,41 @@ class CadastrarMembroView(APIView):
                 user_created.delete()  # Remove o usuário criado em caso de erro
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
-
 class BuscarMembroPorGrupoView(APIView):
     permission_classes = [IsAuthenticated]
+
     def get(self, request):
         try:
             nome = request.query_params.get('nome', None)
-            grupo = request.query_params.get('grupo', None)
+            group_member = request.query_params.get('grupo', None)  # Corrigido para usar 'grupo'
 
-            if grupo not in ['Discentes', 'Docentes']:
-                return Response({"error": "Grupo inválido"}, status=status.HTTP_400_BAD_REQUEST)
+            if not group_member:
+                return Response({'error': 'Parâmetro grupo não fornecido!'}, status=status.HTTP_400_BAD_REQUEST)
 
+            # Busca o grupo pelo nome
+            group_name = Group.objects.filter(name=group_member).first()
+            
+            if not group_name:
+                return Response({'error': 'Grupo não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
+
+            # Busca todos os membros
             membros = Membro.objects.all()
 
+            # Filtra por nome, se fornecido
             if nome:
                 membros = membros.filter(nome__icontains=nome)
 
-            if grupo:
-                membros = membros.filter(grupo=grupo)
+            # Filtra pelo grupo
+            membros = membros.filter(grupo=group_name)
 
+            # Serializa os resultados
             serializer = MembroSerializer(membros, many=True)
 
             return Response({'message': 'Membros encontrados com sucesso.', 'results': serializer.data}, status=status.HTTP_200_OK)
         
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         
 class BuscarMembrosPorNomeView(APIView):
     permission_classes = [IsAuthenticated]
