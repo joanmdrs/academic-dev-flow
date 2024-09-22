@@ -11,11 +11,14 @@ const SelecionarProjeto = () => {
         const fetchData = async () => {
             try {
                 const response = await listarProjetos();
-                const resultados = response.data.map((item) => ({
-                    value: item.id,
-                    label: item.nome
-                }));
-                setOptionsProjetos(resultados);
+
+                if (!response.error){
+                    const resultados = response.data.map((item) => ({
+                        value: item.id,
+                        label: item.nome
+                    }));
+                    setOptionsProjetos(resultados);
+                }
             } catch (error) {
                 console.error("Erro ao obter projetos:", error);
             }

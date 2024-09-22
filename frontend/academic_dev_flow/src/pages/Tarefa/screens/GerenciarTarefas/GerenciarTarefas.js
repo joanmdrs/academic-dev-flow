@@ -16,6 +16,8 @@ import { createIssue, updateIssue } from "../../../../services/githubIntegration
 import FormTarefa from "../../components/FormTarefa/FormTarefa";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import InputsAdminTarefa from "../../components/InputsAdminTarefa/InputsAdminTarefa";
+import { NotificationManager } from "react-notifications";
+import { handleError } from "../../../../services/utils";
 
 const StyleSpin = {
     position: 'fixed', 
@@ -87,36 +89,63 @@ const GerenciarTarefas = () => {
     }
 
     const handleSaveIssue = async (dadosForm) => {
+
+        if (!dadosProjeto.token || !dadosProjeto.nome_repo) {
+            NotificationManager.info('Não é possível sincronizar com o GitHub. O projeto não possui token ou repositório configurado.');
+            return { error: 'Projeto sem token ou repositório configurado' };
+        }
+
         const dadosEnviar = {
             github_token: dadosProjeto.token,
             repository: dadosProjeto.nome_repo,
             title: dadosForm.nome,
             body: dadosForm.descricao,
             labels: dadosForm.labelsNames,
-            assignees: dadosForm.assignees 
-        };
+            assignees: dadosForm.assignees
+        }; 
     
-        const response = acaoForm === 'criar' ?
-            await createIssue(dadosEnviar) :
+        // Usa a mesma função para criar ou atualizar a issue
+        const response = acaoForm === 'criar' ? 
+            await createIssue(dadosEnviar) : 
             await updateIssue(dadosTarefa.number_issue, dadosEnviar);
     
         return response;
     };
     
     const handleSalvarTarefa = async (dadosForm) => {
-        setIsLoading(true)
-        dadosForm['projeto'] = dadosProjeto.id;
-        const resIssue = await handleSaveIssue(dadosForm);
-    
-        if (acaoForm === 'criar' && !resIssue.error) {
-            const dadosIssue = resIssue.data;
-            await criarTarefa(dadosForm, dadosIssue);
-        } else if (acaoForm === 'atualizar') {
-            await atualizarTarefa(dadosTarefa.id, dadosForm);
-        }
+        setIsLoading(true);
         
-        handleReload();
-        setIsLoading(false)
+        dadosForm.projeto = dadosProjeto.id;
+        let dadosIssue = null;
+    
+        // Verifica se o usuário deseja sincronizar com o GitHub
+        if (dadosForm['sicronizar-github']) {
+            const resIssue = await handleSaveIssue(dadosForm);
+    
+            if (resIssue.error) {
+                NotificationManager.error('Erro ao criar/atualizar a issue no GitHub');
+                setIsLoading(false);
+                return;
+            }
+    
+            // Atribui os dados da issue apenas se a sincronização for bem-sucedida
+            dadosIssue = resIssue.data;
+        }
+    
+        // Decide entre criar ou atualizar a tarefa
+        try {
+            if (acaoForm === 'criar') {
+                await criarTarefa(dadosForm, dadosIssue);
+            } else {
+                await atualizarTarefa(dadosTarefa.id, dadosForm);
+            }
+    
+            handleReload();  // Recarrega os dados da página ou interface após salvar a tarefa
+        } catch (error) {
+            NotificationManager.error('Erro ao salvar a tarefa');
+        }
+    
+        setIsLoading(false);
     };
 
     const handleExcluirTarefas = async () => {
@@ -205,8 +234,7 @@ const GerenciarTarefas = () => {
                         )}
 
                         <FormTarefa 
-                            additionalFields={                <SelecionarProjeto />
-                        } 
+                            additionalFields={<SelecionarProjeto />} 
                             onSubmit={handleSalvarTarefa} 
                             onCancel={handleCancelar} 
                         />
@@ -222,8 +250,7 @@ const GerenciarTarefas = () => {
                         )}
 
                         <FormTarefa 
-                            additionalFields={                <SelecionarProjeto />
-                        } 
+                            additionalFields={<SelecionarProjeto />} 
                             inputsAdmin={<InputsAdminTarefa />}
                             onSubmit={handleSalvarTarefa} 
                             onCancel={handleCancelar} 

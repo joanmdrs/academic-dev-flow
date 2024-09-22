@@ -3,8 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import HttpResponseNotAllowed, JsonResponse
-from .models import Membro, UsuarioGithub
-from .serializers import MembroSerializer, UsuarioGithubSerializer
+from .models import Membro
+from .serializers import MembroSerializer
 from apps.membro_projeto.models import MembroProjeto
 from apps.usuario.models import Usuario
 from apps.usuario.serializers import UsuarioSerializer
@@ -24,13 +24,7 @@ class CadastrarMembroView(APIView):
         try:
             group_name = request.data.get('grupo')
             user_data = request.data.get('usuario', {}) 
-            github_data = request.data.get('github', {})  # Pega o dado de github, pode ser {}
             member_data = request.data.get('membro', {})
-            
-            print(group_name)
-            print(user_data)
-            print(github_data)
-            print(member_data)
             
             # Verifica se o username já existe
             if Usuario.objects.filter(username=user_data.get('username')).exists():
@@ -53,15 +47,6 @@ class CadastrarMembroView(APIView):
             user_created.is_superuser = False
             user_created.save()
 
-            github_created = None
-
-            # Processa os dados do GitHub apenas se houver dados
-            if github_data and any(github_data.values()):  # Verifica se há valores em github_data
-                github_serializer = UsuarioGithubSerializer(data=github_data)
-                if not github_serializer.is_valid():
-                    return Response({'error': 'Dados do GitHub inválidos'}, status=status.HTTP_400_BAD_REQUEST)
-                github_created = github_serializer.save()
-
             # Adiciona o usuário ao grupo, se o grupo for fornecido
             if group_name:
                 group = Group.objects.get(name=group_name)
@@ -70,8 +55,6 @@ class CadastrarMembroView(APIView):
             # Adiciona os dados necessários ao membro
             member_data['grupo'] = group_name
             member_data['usuario'] = user_created.id
-            if github_created:
-                member_data['github'] = github_created.id
 
             # Serializa e salva o membro
             member_serializer = MembroSerializer(data=member_data)

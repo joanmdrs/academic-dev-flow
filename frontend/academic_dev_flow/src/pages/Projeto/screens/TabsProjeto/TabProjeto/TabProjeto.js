@@ -104,7 +104,12 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
                             >
                                 <Input name="data_fim" type="date" />
                             </Form.Item>
+
                         </div>
+
+                        <Form.Item label="Descrição:" name="descricao">
+                            <Input.TextArea id="descricao" name="descricao" rows={6} />
+                        </Form.Item>
 
                         <Form.Item label="Informe (proprietário/repositório):" name="nome_repo">
                             <Input name="nome_repo"/>
@@ -120,10 +125,6 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
 
                         <Form.Item label="Token de acesso:" name="token">
                             <Input name="token" />
-                        </Form.Item>
-
-                        <Form.Item label="Descrição:" name="descricao">
-                            <Input.TextArea id="descricao" name="descricao" rows={6} />
                         </Form.Item>
 
                         <div style={{display: 'flex', gap: "10px"}} >

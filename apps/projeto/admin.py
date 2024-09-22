@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Projeto
 
 class ProjetoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nome', 'status', 'data_inicio', 'data_fim', 'exibir_nome_do_fluxo')
+    list_display = ('id', 'nome', 'status', 'data_inicio', 'data_termino', 'exibir_nome_do_fluxo')
     list_filter = ('status',)
     search_fields = ('nome',)
 

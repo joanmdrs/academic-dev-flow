@@ -1,5 +1,6 @@
 import { Button, Form, Input, Select } from 'antd';
 import { useForm } from 'antd/es/form/Form';
+import { Switch } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useContextoTarefa } from '../../context/ContextoTarefa';
 import { listarMembrosPeloIdProjeto } from '../../../../services/membroProjetoService';
@@ -39,7 +40,7 @@ function FormTarefa({ onCancel, onSubmit, additionalFields, inputsAdmin }) {
                         form.resetFields();
                         setTitulo('CADASTRAR TAREFA');
                     }
-                }
+                } 
             } catch (error) {
                 console.error("Erro ao carregar dados do formulário:", error);
             } finally {
@@ -223,6 +224,13 @@ function FormTarefa({ onCancel, onSubmit, additionalFields, inputsAdmin }) {
                     </Form.Item>
                 </div>
             </div>
+
+            <Form.Item 
+                label="Sicronizar com o GitHub ?"
+                name="sicronizar-github" 
+            >
+                <Switch name="sicronizar-github" checkedChildren="Sicronizar" unCheckedChildren="Não sicronizar" />
+            </Form.Item>
 
             <Form.Item>
                 <Button type="primary" htmlType='submit'> Salvar </Button>
