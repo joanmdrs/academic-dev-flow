@@ -5,7 +5,7 @@ app_name = 'membro'
 
 urlpatterns = [
     path('cadastrar/', CadastrarMembroView.as_view(), name='cadastrar_membro'),
-    path('buscar-por-nome', BuscarMembrosPorNomeView.as_view(), name='buscar_membro_pelo_nome'),
+    path('buscar-por-nome/', BuscarMembrosPorNomeView.as_view(), name='buscar_membro_por_nome'),
     path('buscar-por-nome-e-grupo/', BuscarMembroPorGrupoView.as_view(), name='buscar_membro_por_nome_e_grupo'),
     path('buscar/<int:id>/', BuscarMembroPorIdView.as_view(), name='buscar_membro_pelo_id'),
     path('buscar/usuario/<int:id_user>/', BuscarMembroPeloUserView.as_view(), name='buscar_membro_pelo_user'),
