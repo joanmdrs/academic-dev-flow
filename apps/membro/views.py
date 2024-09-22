@@ -241,24 +241,23 @@ class ExcluirMembroView(APIView):
 class AtualizarMembroView(APIView):
     permission_classes = [IsAuthenticated]
     
-    def patch(self, request, id):
+    def patch(self, request):
         try:
-            group_name = request.data.get('grupo', None)
-            member = Membro.objects.get(pk=id)
+            id_membro = request.GET.get('id_membro', None)
+            obj_membro = Membro.objects.get(pk=id_membro)
 
             member_data = request.data.get('membro', {})
             if not member_data:
                 raise ValueError("Dados do membro não fornecidos")
             
-            member_data['grupo'] = group_name
-            member_serializer = MembroSerializer(member, data=member_data, partial=True)
+            member_serializer = MembroSerializer(obj_membro, data=member_data, partial=True)
 
             if not member_serializer.is_valid():
                 return Response({'error': 'Dados do membro inválidos'}, status=status.HTTP_400_BAD_REQUEST)
 
             member_serializer.save()
 
-            user = Usuario.objects.get(id=member.usuario_id)
+            user = Usuario.objects.get(id=obj_membro.usuario_id)
             user_data = request.data.get('usuario', {})
             if not user_data:
                 raise ValueError("Dados do usuário não fornecidos")
@@ -277,24 +276,9 @@ class AtualizarMembroView(APIView):
                 
             user.save()
 
-            if group_name:
-                group = Group.objects.get(name=group_name)
+            if member_data['grupo']:
+                group = Group.objects.get(id=member_data['grupo'])
                 user.groups.set([group])
-
-            github_data = request.data.get('github', {})
-            if github_data:
-                member_github = member.github
-                if member_github:
-                    github_serializer = UsuarioGithubSerializer(member_github, data=github_data, partial=True)
-                else:
-                    github_serializer = UsuarioGithubSerializer(data=github_data)
-
-                if github_serializer.is_valid():
-                    github_created = github_serializer.save()
-                    member.github = github_created
-                    member.save()
-                else:
-                    return Response({'error': 'Dados do GitHub inválidos'}, status=status.HTTP_400_BAD_REQUEST)
 
             return Response(member_serializer.data, status=status.HTTP_200_OK)
 
