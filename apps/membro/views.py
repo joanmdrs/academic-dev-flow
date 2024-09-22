@@ -225,7 +225,7 @@ class ExcluirMembroView(APIView):
                 return Response({'error': 'ID do membro não fornecido'}, status=status.HTTP_400_BAD_REQUEST)
             
             obj_membro = Membro.objects.get(pk=id_membro)
-            obj_usuario = Usuario.objects.get(pk=member.usuario.id)
+            obj_usuario = Usuario.objects.get(pk=obj_membro.usuario.id)
             
             if (obj_membro is not None and obj_usuario is not None):
                 obj_usuario.delete()
