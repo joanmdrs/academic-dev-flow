@@ -3,35 +3,44 @@ import InputMask from 'react-input-mask';
 import { useEffect, useState } from "react";
 import { useMembroContexto } from "../../context/MembroContexto";
 import Loading from "../../../../components/Loading/Loading";
-
-const OPTIONS_GROUP = [
-    {
-        label: "Administradores",
-        value: "Administradores"
-    },
-    {
-        label: "Discentes",
-        value: "Discentes"
-    },
-    {
-        label: "Docentes",
-        value: "Docentes"
-    },
-    {
-        label: "Colaboradores",
-        value: "Colaboradores"
-    }
-]
+import { listarGrupos } from "../../../../services/membroService";
+import { handleError } from "../../../../services/utils";
+import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 
 const FormMembro = ({onSubmit, onCancel}) => {
 
     const {dadosMembro} = useMembroContexto()
     const [form] = Form.useForm()
     const [loading, setLoading] = useState(false)
+    const [optionsGrupos, setOptionsGrupos] = useState([])
+
+    const handleListarGrupos = async () => {
+
+        try {
+            const response = await listarGrupos()
+
+            if (!response.error){
+                const promises = await response.data.map( async (item) => {
+                    return {
+                        value: item.id,
+                        label: item.name
+                    }
+                })
+
+                const results = (await Promise.all(promises))
+                setOptionsGrupos(results)
+            }
+            
+        } catch (error) {
+            return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+        }
+
+    }
 
     useEffect(() => {
-        const fetchData = () => {
+        const fetchData = async () => {
             try {
+                await handleListarGrupos()
                 setLoading(true);
 
                 if (dadosMembro !== null){
@@ -190,7 +199,7 @@ const FormMembro = ({onSubmit, onCancel}) => {
                     label="Grupo de Usuário"
                     rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
                 >
-                    <Select options={OPTIONS_GROUP}/>
+                    <Select options={optionsGrupos}/>
                     
                 </Form.Item>
             </div>

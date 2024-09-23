@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.http import HttpResponseNotAllowed, JsonResponse
 from .models import Membro
-from .serializers import MembroSerializer
+from .serializers import MembroSerializer, GroupSerializer
 from apps.membro_projeto.models import MembroProjeto
 from apps.usuario.models import Usuario
 from apps.usuario.serializers import UsuarioSerializer
@@ -22,9 +22,9 @@ class CadastrarMembroView(APIView):
 
     def post(self, request):
         try:
-            group_name = request.data.get('grupo')
             user_data = request.data.get('usuario', {}) 
             member_data = request.data.get('membro', {})
+            print(member_data)
             
             # Verifica se o username já existe
             if Usuario.objects.filter(username=user_data.get('username')).exists():
@@ -48,9 +48,8 @@ class CadastrarMembroView(APIView):
             user_created.save()
 
             # Adiciona o usuário ao grupo, se o grupo for fornecido
-            group = None
-            if group_name:
-                group = Group.objects.filter(name=group_name).first()
+            if member_data['grupo']:
+                group = Group.objects.get(id=member_data['grupo'])
                 if not group:
                     return Response({'error': 'Grupo não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
                 user_created.groups.add(group)
@@ -58,9 +57,6 @@ class CadastrarMembroView(APIView):
             # Adiciona os dados necessários ao membro
             member_data['usuario'] = user_created.id  # Relaciona o membro com o usuário criado
             
-            if group:
-                member_data['grupo'] = group.id  # Relaciona o membro ao grupo através do ID do grupo
-
             # Serializa e salva o membro
             member_serializer = MembroSerializer(data=member_data)
             if not member_serializer.is_valid():
@@ -70,6 +66,10 @@ class CadastrarMembroView(APIView):
             member_serializer.save()
 
             return Response(member_serializer.data, status=status.HTTP_201_CREATED)
+        
+        except Group.DoesNotExist:
+            user_created.delete()  # Remove o usuário criado em caso de erro
+            return Response({'error': 'Grupo não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
 
         except ValueError as ve:
             if user_created:
@@ -316,4 +316,17 @@ class BuscarMembrosPorListaIdsView(APIView):
   
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
+
+class ListarGruposView(APIView): 
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request): 
+        try: 
+            grupos = Group.objects.all()
+
+            grupo_serializer = GroupSerializer(grupos, many=True)
+
+            return Response(grupo_serializer.data, status=status.HTTP_200_OK)
+            
+        except Exception as e: 
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

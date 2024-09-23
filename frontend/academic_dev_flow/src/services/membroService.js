@@ -1,11 +1,19 @@
 import { NotificationManager } from "react-notifications";
 import api from "../api/api";
-import { handleError, handleSuccess } from "./utils";
+import { handleError } from "./utils";
+
+export const listarGrupos = async () => {
+    try {
+        const response = await api.get('/membro/listar-grupos/')
+        return response
+    } catch (error) {
+        return handleError(error, "Falha ao listar os grupos")
+    }
+}
 
 export const criarMembro = async (dados) => {
 
     const dadosEnviar = {
-        grupo: dados.grupo,
         
         usuario : {
             username: dados.usuario,
@@ -17,13 +25,11 @@ export const criarMembro = async (dados) => {
             telefone: dados.telefone,
             email: dados.email,
             linkedin: dados.linkedin,
-            lattes: dados.lattes
-        },
-
-        github: {
+            lattes: dados.lattes,
             nome_github: dados.nome_github,
             email_github: dados.email_github,
-            usuario_github: dados.usuario_github
+            usuario_github: dados.usuario_github,
+            grupo: dados.grupo
         }
     }
 

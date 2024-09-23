@@ -12,5 +12,6 @@ urlpatterns = [
     path('buscar-por-id/', BuscarMembroPorIdView.as_view(), name='buscar_membro_por_id'),
     path('buscar-por-nome-e-grupo/', BuscarMembroPorGrupoView.as_view(), name='buscar_membro_por_nome_e_grupo'),
     path('buscar-por-id-usuario/', BuscarMembroPorIdUsuarioView.as_view(), name='buscar_membro_por_usuario'),
-    path('buscar-usuario-github/<int:id_membro_projeto>/', BuscarUsuarioPorIdMembroProjeto.as_view(), name='buscar_usuario_github_pelo_id_membro_projeto')
+    path('buscar-usuario-github/<int:id_membro_projeto>/', BuscarUsuarioPorIdMembroProjeto.as_view(), name='buscar_usuario_github_pelo_id_membro_projeto'),
+    path('listar-grupos/', ListarGruposView.as_view(), name='listar_grupos_de_usuário')
 ]
