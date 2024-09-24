@@ -6,7 +6,7 @@ import { useMembroContexto } from "../../context/MembroContexto"
 import { buscarUsuarioPeloId } from "../../../../services/usuarioService"
 import Loading from "../../../../components/Loading/Loading"
 import FormMembro from "../../components/FormMembro/FormMembro"
-import { Button } from "antd"
+import { Button, Modal } from "antd"
 import { FaPlus, FaSearch, FaTrash } from "react-icons/fa"
 
 const GerenciarMembros = () => {
@@ -127,8 +127,19 @@ const GerenciarMembros = () => {
     }
 
     const handleExcluirMembro = async () => {
-        await excluirMembro(dadosMembro.id)
-        handleCancelar()
+
+        Modal.confirm({
+            title: 'Confirmar exclusão',
+            content: 'Você está seguro de que deseja excluir este item ?',
+            okText: 'Sim',
+            cancelText: 'Não',
+            onOk:  async () => {
+                await excluirMembro(dadosMembro.id)
+                handleCancelar()
+            }
+        });
+
+        
     }
 
     return (
