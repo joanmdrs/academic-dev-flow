@@ -92,6 +92,7 @@ class BuscarMembroPorIdView(APIView):
                 return Response({'error': 'ID do membro não fornecido'}, status=status.HTTP_400_BAD_REQUEST)
             
             membro = Membro.objects.get(pk=id_membro)
+            
             serializer = MembroSerializer(membro, many=False)
             
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -126,15 +127,15 @@ class BuscarMembroPorGrupoView(APIView):
     def get(self, request):
         try:
             nome = request.query_params.get('nome', None)
-            group_member = request.query_params.get('grupo', None)  # Corrigido para usar 'grupo'
+            group_member = request.query_params.get('grupo', None)
 
             if not group_member:
                 return Response({'error': 'Parâmetro grupo não fornecido!'}, status=status.HTTP_400_BAD_REQUEST)
 
             # Busca o grupo pelo nome
-            group_name = Group.objects.filter(name=group_member).first()
-            
-            if not group_name:
+            group = Group.objects.filter(name=group_member).first()
+
+            if not group:
                 return Response({'error': 'Grupo não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
 
             # Busca todos os membros
@@ -145,11 +146,12 @@ class BuscarMembroPorGrupoView(APIView):
                 membros = membros.filter(nome__icontains=nome)
 
             # Filtra pelo grupo
-            membros = membros.filter(grupo=group_name)
+            membros = membros.filter(grupo=group)
 
             # Serializa os resultados
             serializer = MembroSerializer(membros, many=True)
 
+            # O campo nome_grupo já está no serializer, então não precisamos adicionar manualmente
             return Response({'message': 'Membros encontrados com sucesso.', 'results': serializer.data}, status=status.HTTP_200_OK)
         
         except Exception as e:
