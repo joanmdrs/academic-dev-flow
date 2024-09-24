@@ -10,7 +10,11 @@ class GroupSerializer(serializers.ModelSerializer):
         
         
 class MembroSerializer(serializers.ModelSerializer):
-    class Meta: 
+    nome_grupo = serializers.SerializerMethodField()
+
+    class Meta:
         model = Membro
-        fields = '__all__'
-        
+        fields = ['id', 'nome', 'data_nascimento', 'telefone', 'email', 'linkedin', 'lattes', 'nome_github', 'email_github', 'usuario_github', 'usuario', 'grupo', 'nome_grupo']
+
+    def get_nome_grupo(self, obj):
+        return obj.grupo.name  # Retorna o nome do grupo relacionado
