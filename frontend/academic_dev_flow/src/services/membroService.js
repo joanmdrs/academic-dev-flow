@@ -60,7 +60,7 @@ export const buscarMembroPeloNome = async (nomeMembro) => {
 export const buscarMembroPorGrupoENome = async (nomeMembro, grupoMembro) => {
 
     try {
-        const resposta = await api.get(`membro/buscar/buscar-por-nome-e-grupo/`, 
+        const resposta = await api.get(`membro/buscar-por-nome-e-grupo/`, 
             {params: {nome: nomeMembro, grupo: grupoMembro}})
         return resposta
     } catch (error) {
