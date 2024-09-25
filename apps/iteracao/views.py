@@ -10,8 +10,8 @@ from apps.projeto.models import Projeto
 from apps.fluxo_etapa.models import FluxoEtapa
 from apps.etapa.models import Etapa
 from apps.membro_projeto.models import MembroProjeto
-from apps.membro_projeto.models import FuncaoMembroProjetoAtual, FuncaoMembroProjeto
-from apps.membro_projeto.serializers import FuncaoMembroProjetoAtualSerializer
+# from apps.membro_projeto.models import FuncaoMembroProjetoAtual, FuncaoMembroProjeto
+# from apps.membro_projeto.serializers import FuncaoMembroProjetoAtualSerializer
 from apps.membro.models import Membro
 from rest_framework.permissions import IsAuthenticated
     

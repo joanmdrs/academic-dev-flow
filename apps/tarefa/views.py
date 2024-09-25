@@ -8,7 +8,7 @@ from apps.membro_projeto.models import MembroProjeto
 from apps.membro.models import Membro
 from apps.fluxo.models import Fluxo
 from apps.iteracao.models import Iteracao
-from apps.tipo.models import Tipo
+from apps.categoria.models import Categoria
 from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
 from django.http import Http404
@@ -84,7 +84,7 @@ class ListarTarefasPorProjetoView(APIView):
                 membros_info = self.get_membros_info(tarefa)
                 membros = self.get_membros(tarefa)
                 iteracao_nome = self.get_iteracao_nome(tarefa)
-                tipo = self
+                categoria = self
                 # labels_info = self.get_labels_info(tarefa)
                 # labels = self.get_labels(tarefa)
 
@@ -95,7 +95,7 @@ class ListarTarefasPorProjetoView(APIView):
                     'data_termino': tarefa.data_termino,
                     'status': tarefa.status,
                     'descricao': tarefa.descricao,
-                    'tipo': tarefa.tipo_id,
+                    'categoria': tarefa.categoria_id,
                     'id_issue': tarefa.id_issue,
                     'number_issue': tarefa.number_issue,
                     'url_issue': tarefa.url_issue,

@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class TipoConfig(AppConfig):
+class CategoriaConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.tipo'
+    name = 'apps.categoria'

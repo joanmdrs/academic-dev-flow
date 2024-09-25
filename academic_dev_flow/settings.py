@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     'apps.membro_projeto',
     'apps.iteracao',
     'apps.tarefa',
-    'apps.tipo',
+    'apps.categoria',
     'apps.comentario',
     'apps.pontuacao',
     'apps.api',

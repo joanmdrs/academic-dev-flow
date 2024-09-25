@@ -2,8 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import HttpResponseNotAllowed, JsonResponse
-from .models import Tipo
-from .serializers import TipoSerializer
+from .models import Categoria
+from .serializers import CategoriaSerializer
 from rest_framework.permissions import IsAuthenticated
 
 class CadastrarTipoView(APIView):
@@ -11,7 +11,7 @@ class CadastrarTipoView(APIView):
 
     def post(self, request): 
         try:
-            serializer = TipoSerializer(data=request.data)
+            serializer = CategoriaSerializer(data=request.data)
             
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
@@ -30,15 +30,15 @@ class BuscarTipoPeloNomeView(APIView):
             nome = request.GET.get('nome')
             
             if nome: 
-                tipos = Tipo.objects.filter(nome__icontains=nome)
+                tipos = Categoria.objects.filter(nome__icontains=nome)
                 
             else:
-                tipos = Tipo.objects.all()
+                tipos = Categoria.objects.all()
                 
             if not tipos.exists(): 
                 return Response([], status=status.HTTP_204_NO_CONTENT)
             
-            serializer = TipoSerializer(tipos, many=True)
+            serializer = CategoriaSerializer(tipos, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         except Exception as e:
@@ -49,15 +49,15 @@ class AtualizarTipoView(APIView):
     
     def patch(self, request, id):
         try:
-            tipo = Tipo.objects.get(pk=id)
-            serializer = TipoSerializer(tipo, data=request.data, partial=True)  # Alterado para permitir atualizações parciais
+            tipo = Categoria.objects.get(pk=id)
+            serializer = CategoriaSerializer(tipo, data=request.data, partial=True)  # Alterado para permitir atualizações parciais
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             
-        except Tipo.DoesNotExist:
+        except Categoria.DoesNotExist:
             return Response({'error': 'Tipo não encontrado'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -67,11 +67,11 @@ class ExcluirTipoView(APIView):
     
     def delete(self, request, id):
         try:
-            tipo = Tipo.objects.get(pk=id)
+            tipo = Categoria.objects.get(pk=id)
             tipo.delete()
             return Response({'success': 'Tipo excluído com sucesso!'}, status=status.HTTP_204_NO_CONTENT)
         
-        except Tipo.DoesNotExist:
+        except Categoria.DoesNotExist:
             return Response({'error': 'Tipo não encontrado'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -84,7 +84,7 @@ class ListarTiposViews(APIView):
             tipos = Tipo.objects.all()
             
             if tipos.exists(): 
-                serializer = TipoSerializer(tipos, many=True)
+                serializer = CategoriaSerializer(tipos, many=True)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             
             return Response([], status=status.HTTP_204_NO_CONTENT)

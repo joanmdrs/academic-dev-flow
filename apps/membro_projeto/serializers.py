@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import MembroProjeto, FuncaoMembroProjeto, FuncaoMembroProjetoAtual
+from .models import MembroProjeto, FuncaoMembroProjeto, CategoriaFuncao
 
 class MembroProjetoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,8 +11,8 @@ class FuncaoMembroProjetoSerializer(serializers.ModelSerializer):
         model = FuncaoMembroProjeto
         fields = '__all__'
         
-class FuncaoMembroProjetoAtualSerializer(serializers.ModelSerializer):
+class CategoriaFuncaoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = FuncaoMembroProjetoAtual
+        model = CategoriaFuncao
         fields = '__all__'
         

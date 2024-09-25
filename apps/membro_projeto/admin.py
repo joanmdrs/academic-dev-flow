@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import MembroProjeto, FuncaoMembroProjeto, FuncaoMembroProjetoAtual
+from .models import MembroProjeto, CategoriaFuncao, FuncaoMembroProjeto
 
 
 class MembroProjetoAdmin(admin.ModelAdmin):
@@ -15,10 +15,10 @@ class MembroProjetoAdmin(admin.ModelAdmin):
         return obj.membro.nome
     exibir_membro.short_description = 'Membro'
     
-class FuncaoMembroProjetoAmin(admin.ModelAdmin):
+class CategoriaFuncaoAdmin(admin.ModelAdmin):
     list_display = ('id', 'nome', 'descricao')
 
-class FuncaoMembroProjetoAtualAdmin(admin.ModelAdmin):
+class FuncaoMembroProjetoAdmin(admin.ModelAdmin):
     
     list_display = ('id', 'exibir_membro', 'exibir_funcao', 'data_inicio', 'data_termino')
     
@@ -27,9 +27,9 @@ class FuncaoMembroProjetoAtualAdmin(admin.ModelAdmin):
     exibir_membro.short_description = 'Membro'
     
     def exibir_funcao(self, obj):
-        return obj.funcao_membro.nome
+        return obj.categoria_funcao.nome
     exibir_funcao.short_description = 'Funcao'
 
 admin.site.register(MembroProjeto, MembroProjetoAdmin)
-admin.site.register(FuncaoMembroProjeto, FuncaoMembroProjetoAmin)
-admin.site.register(FuncaoMembroProjetoAtual, FuncaoMembroProjetoAtualAdmin)
+admin.site.register(CategoriaFuncao, CategoriaFuncaoAdmin)
+admin.site.register(FuncaoMembroProjeto, FuncaoMembroProjetoAdmin)

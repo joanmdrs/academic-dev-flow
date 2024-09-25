@@ -28,6 +28,25 @@ class CadastrarMembroProjetoView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
+class AtualizarMembroProjetoView(APIView):
+    permission_classes = [IsAuthenticated]
+    def patch(self, request, id): 
+        try: 
+            
+            id_membro_projeto = request.GET.get('id_membro_projeto', None)
+            membroProjeto = MembroProjeto.objects.get(id=id_membro_projeto) 
+            
+            serializer = MembroProjetoSerializer(membroProjeto, data=request.data)
+            
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+    
+        except Exception as e: 
+             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
 class BuscarMembroProjetoPeloUsuarioGithubView(APIView):
     permission_classes = [IsAuthenticated]
     
@@ -141,24 +160,6 @@ class BuscarMembrosPorProjetoView(APIView):
 
         except Exception as e: 
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-class AtualizarMembroProjetoView(APIView):
-    permission_classes = [IsAuthenticated]
-    def patch(self, request, id): 
-        try: 
-            
-            membroProjeto = MembroProjeto.objects.get(id=id) 
-            
-            serializer = MembroProjetoSerializer(membroProjeto, data=request.data)
-            
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
-    
-        except Exception as e: 
-             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
 
 class ExcluirMembroProjetoOneView(APIView):
