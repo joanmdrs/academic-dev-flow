@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'apps.fluxo_etapa',
     'apps.artefato',
     'apps.usuario',
+    'apps.funcao_membro',
     'apps.membro', 
     'apps.membro_projeto',
     'apps.iteracao',

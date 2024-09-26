@@ -11,12 +11,5 @@ urlpatterns = [
     path('buscar-pelo-id-membro-e-pelo-id-projeto/', BuscarMembroProjetoPeloIdMembroEPeloIdProjeto.as_view(), name='buscar_pelo_id_membro_e_id_projeto'),
     path('buscar-projetos-do-membro/', BuscarProjetosDoMembroView.as_view(), name='buscar_projetos_do_membro'),
     path('buscar-membros-por-projeto/', BuscarMembrosPorProjetoView.as_view(), name='buscar_membro_projeto_por_projeto'),
-
-    
-    # path('buscar/usuario_github/', BuscarMembroProjetoPeloUsuarioGithubView.as_view(), name='buscar_pelo_usuario_github'),
-    path('listar/projeto/<int:id_projeto>/', ListarMembrosPorProjeto.as_view(), name='listar_membros_por_projeto'),
-    # path('funcoes/cadastrar/', CadastrarFuncaoMembroView.as_view(), name='cadastrar_funcoes_membro_projeto'),
-    # path('funcoes/listar/', ListarFuncoesMembroView.as_view(), name='lista_funcoes'),
-    # path('funcoes/cadastrar-funcao-atual/', CadastrarFuncaoAtualView.as_view(), name='cadastrar_funcao_atual')
 ]
 

@@ -3,8 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import JsonResponse
-from .models import MembroProjeto, FuncaoMembroProjeto, CategoriaFuncao
-from .serializers import MembroProjetoSerializer, FuncaoMembroProjetoSerializer, CategoriaFuncaoSerializer
+from .models import MembroProjeto
+from .serializers import MembroProjetoSerializer
 from apps.membro.models import Membro
 from apps.projeto.models import Projeto
 from django.db.models import Count
