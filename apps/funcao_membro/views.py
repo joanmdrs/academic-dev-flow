@@ -58,3 +58,24 @@ class AtualizarCategoriaFuncaoMembroView(APIView):
         
         except Exception as e: 
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class BuscarCategoriaFuncaoMembroPeloNomeView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request): 
+        try:
+            nome_categoria = request.GET.get('nome_categoria', None)
+            
+            if nome_categoria: 
+                objs_categoria = CategoriaFuncaoMembro.objects.filter(nome__icontains=nome_categoria)
+            else: 
+                objs_categoria = CategoriaFuncaoMembro.objects.all()
+                
+            if not objs_categoria: 
+                return Response({'message': 'Nenhum objeto encontrado.', 'results': []}, status=status.HTTP_200_OK)
+            
+            serializer = CategoriaFuncaoMembroSerializer(objs_categoria, many=True)
+        
+            return Response({'message': 'Membros encontrados com sucesso.', 'results': serializer.data}, status=status.HTTP_200_OK)
+            
+        except Exception as e: 
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
