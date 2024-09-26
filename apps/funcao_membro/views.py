@@ -36,10 +36,10 @@ class AtualizarCategoriaFuncaoMembroView(APIView):
             id_categoria = request.GET.get('id_categoria', None)
             data_categoria = request.data.get('data_categoria', None)
             
-            if id_categoria is None: 
+            if not id_categoria: 
                 return Response({'error': 'ID da categoria não fornecido'}, status=status.HTTP_400_BAD_REQUEST)
             
-            if data_categoria is None: 
+            if not data_categoria: 
                 return Response({'error': 'Os dados atualizados da categoria não foram fornecidos'}, status=status.HTTP_400_BAD_REQUEST)
             
             obj_categoria = CategoriaFuncaoMembro.objects.get(id=id_categoria)
@@ -76,6 +76,26 @@ class BuscarCategoriaFuncaoMembroPeloNomeView(APIView):
             serializer = CategoriaFuncaoMembroSerializer(objs_categoria, many=True)
         
             return Response({'message': 'Membros encontrados com sucesso.', 'results': serializer.data}, status=status.HTTP_200_OK)
+            
+        except Exception as e: 
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class BuscarCategoriaFuncaoMembroPeloIdView(APIView): 
+    permission_classes = [IsAuthenticated]
+    def get(self, request): 
+        try: 
+            id_categoria = request.GET.get('id_categoria', None)
+            
+            if not id_categoria: 
+                return Response({'error': 'O ID da categoria não foi fornecido'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            obj_categoria = CategoriaFuncaoMembro.objects.get(id=id_categoria)
+            
+            if obj_categoria: 
+                serializer = CategoriaFuncaoMembroSerializer(obj_categoria, many=False)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+
+            return Response({'error': 'Objeto não encontrado !'}, status=status.HTTP_404_NOT_FOUND)
             
         except Exception as e: 
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
