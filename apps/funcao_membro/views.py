@@ -99,3 +99,16 @@ class BuscarCategoriaFuncaoMembroPeloIdView(APIView):
             
         except Exception as e: 
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class ListarCategoriaFuncaoMembroView(APIView): 
+    permission_classes = [IsAuthenticated] 
+    
+    def get(self, request): 
+        try: 
+            objs_categoria = CategoriaFuncaoMembro.objects.all()
+            
+            serializer = CategoriaFuncaoMembroSerializer(objs_categoria, many=True)
+            
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e: 
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
