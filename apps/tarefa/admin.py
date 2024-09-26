@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Tarefa, Label, IntervaloTempo
+from .models import Tarefa, IntervaloTempo
 
 class TarefaAdmin(admin.ModelAdmin):
     list_display = ('id', 'nome', 'data_criacao', 'concluida')
@@ -12,8 +12,8 @@ class TarefaAdmin(admin.ModelAdmin):
     #     return obj.projeto.nome
     # exibir_projeto.short_description = 'Projeto'
     
-class LabelAdmin(admin.ModelAdmin):
-    list_display = ('id', 'id_github', 'nome', 'cor')
+# class LabelAdmin(admin.ModelAdmin):
+#     list_display = ('id', 'id_github', 'nome', 'cor')
     
 class IntervaloTempoAdmin(admin.ModelAdmin):
     list_display = ('id', 'exibir_tarefa', 'exibir_membro', 'data_hora')
@@ -28,6 +28,6 @@ class IntervaloTempoAdmin(admin.ModelAdmin):
         
     
 admin.site.register(Tarefa, TarefaAdmin)
-admin.site.register(Label, LabelAdmin)
+# admin.site.register(Label, LabelAdmin)
 admin.site.register(IntervaloTempo, IntervaloTempoAdmin)
 

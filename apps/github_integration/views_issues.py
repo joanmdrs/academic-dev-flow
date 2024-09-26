@@ -6,7 +6,6 @@ from github import Github, GithubException
 from .github_auth import get_github_client
 from github import InputGitAuthor
 from apps.tarefa.models import Tarefa 
-from apps.tarefa.models import Label
 from apps.membro.models import Membro
 from apps.membro_projeto.models import MembroProjeto
 import base64
@@ -21,7 +20,6 @@ def create_issue(request):
         repository = data.get('repository')
         title = data.get('title')
         body = data.get('body', '') 
-        labels = data.get('labels', [])
         assignees = data.get('assignees', [])
         
         if not github_token or not repository or not title:
@@ -30,7 +28,7 @@ def create_issue(request):
         g = get_github_client(github_token)
         repo = g.get_repo(repository)
         
-        create_result = repo.create_issue(title=title, body=body, labels=labels, assignees=assignees)
+        create_result = repo.create_issue(title=title, body=body, assignees=assignees)
         
         response_data = {
             'success': 'Issue criada com sucesso!',
@@ -66,7 +64,6 @@ def update_issue(request, issue_number):
         repository = data.get('repository')
         title = data.get('title')
         body = data.get('body', '')
-        labels = data.get('labels', [])
         assignees = data.get('assignees', [])
         
         if not github_token or not repository or not issue_number:
@@ -82,9 +79,6 @@ def update_issue(request, issue_number):
         
         if body:
             issue.edit(body=body)
-        
-        if labels:
-            issue.edit(labels=labels)
         
         if assignees:
             issue.edit(assignees=assignees)
@@ -115,16 +109,16 @@ def filter_membro_projeto_by_assignee_and_by_projeto(assignee, projeto):
     except MembroProjeto.DoesNotExist:
         return None
 
-def get_label_ids(labels):
-    label_ids = []
-    for label_name in labels:
-        try:
-            # Verificar se o label existe no banco de dados
-            label = Label.objects.get(nome=label_name)
-            label_ids.append(label.id)
-        except Label.DoesNotExist:
-            pass
-    return label_ids
+# def get_label_ids(labels):
+#     label_ids = []
+#     for label_name in labels:
+#         try:
+#             # Verificar se o label existe no banco de dados
+#             label = Label.objects.get(nome=label_name)
+#             label_ids.append(label.id)
+#         except Label.DoesNotExist:
+#             pass
+#     return label_ids
 
 def list_issues(request):
     try:
