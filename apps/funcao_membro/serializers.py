@@ -1,13 +1,13 @@
 from rest_framework import serializers
-from .models import FuncaoMembroProjeto, CategoriaFuncao
+from .models import FuncaoMembro, CategoriaFuncaoMembro
 
-class FuncaoMembroProjetoSerializer(serializers.ModelSerializer):
+class FuncaoMembroSerializer(serializers.ModelSerializer):
     class Meta:
-        model = FuncaoMembroProjeto
+        model = FuncaoMembro
         fields = '__all__'
         
-class CategoriaFuncaoSerializer(serializers.ModelSerializer):
+class CategoriaFuncaoMembroSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CategoriaFuncao
+        model = CategoriaFuncaoMembro
         fields = '__all__'
         

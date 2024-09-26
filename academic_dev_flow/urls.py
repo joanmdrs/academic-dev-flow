@@ -26,6 +26,7 @@ urlpatterns = [
     path('academicflow-api/fluxo_etapa/', include('apps.fluxo_etapa.urls', namespace='fluxo_etapa')),
     path('academicflow-api/membro/', include('apps.membro.urls', namespace='membro')),
     path('academicflow-api/membro_projeto/', include('apps.membro_projeto.urls', namespace='membro_projeto')),
+    path('academicflow-api/funcao-membro/', include('apps.funcao_membro.urls', namespace='funcao-membro')),
     path('academicflow-api/usuario/', include('apps.usuario.urls', namespace='usuario')),
     path('academicflow-api/artefato/', include('apps.artefato.urls', namespace='artefato')),
     path('academicflow-api/iteracao/', include('apps.iteracao.urls', namespace='iteracao')),

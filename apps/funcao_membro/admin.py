@@ -1,11 +1,11 @@
 from django.contrib import admin
-from .models import CategoriaFuncao, FuncaoMembroProjeto
+from .models import CategoriaFuncaoMembro, FuncaoMembro
 
 
-class CategoriaFuncaoAdmin(admin.ModelAdmin):
+class CategoriaFuncaoMembroAdmin(admin.ModelAdmin):
     list_display = ('id', 'nome', 'descricao')
 
-class FuncaoMembroProjetoAdmin(admin.ModelAdmin):
+class FuncaoMembroAdmin(admin.ModelAdmin):
     
     list_display = ('id', 'exibir_membro', 'exibir_funcao', 'data_inicio', 'data_termino')
     
@@ -17,5 +17,5 @@ class FuncaoMembroProjetoAdmin(admin.ModelAdmin):
         return obj.categoria_funcao.nome
     exibir_funcao.short_description = 'Funcao'
     
-admin.site.register(CategoriaFuncao, CategoriaFuncaoAdmin)
-admin.site.register(FuncaoMembroProjeto, FuncaoMembroProjetoAdmin)
+admin.site.register(CategoriaFuncaoMembro, CategoriaFuncaoMembroAdmin)
+admin.site.register(FuncaoMembro, FuncaoMembroAdmin)
