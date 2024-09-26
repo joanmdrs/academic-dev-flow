@@ -18,7 +18,7 @@ class CadastrarCategoriaFuncaoMembroView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
         try:
-            categoria_funcao_membro = request.data.get('categoria_funcao_membro', None)
+            categoria_funcao_membro = request.data
             
             serializer = CategoriaFuncaoMembroSerializer(data=categoria_funcao_membro, many=True)
             if serializer.is_valid(raise_exception=True):
@@ -35,7 +35,7 @@ class AtualizarCategoriaFuncaoMembroView(APIView):
     def patch(self, request): 
         try:
             id_categoria = request.GET.get('id_categoria', None)
-            data_categoria = request.data.get('data_categoria', None)
+            data_categoria = request.data
             
             if not id_categoria: 
                 return Response({'error': 'ID da categoria não fornecido'}, status=status.HTTP_400_BAD_REQUEST)
@@ -113,37 +113,31 @@ class ListarCategoriaFuncaoMembroView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e: 
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
 class ExcluirCategoriaFuncaoMembroView(APIView):
     permission_classes = [IsAuthenticated]
 
     def delete(self, request):
         try:
-            # Obtém os IDs das categorias a serem excluídas a partir do corpo da requisição
             ids_categoria = request.data.get('ids_categoria', [])
 
-            # Valida se os IDs foram fornecidos
             if not ids_categoria:
                 return Response({'error': 'Os Ids das categorias não foram fornecidos!'}, status=status.HTTP_400_BAD_REQUEST)
 
-            # Busca os objetos CategoriaFuncaoMembro com os IDs fornecidos
             objs_categoria = CategoriaFuncaoMembro.objects.filter(id__in=ids_categoria)
 
-            # Verifica se os objetos com os IDs fornecidos existem
             if not objs_categoria.exists():
                 return Response({'error': 'Nenhum objeto encontrado com os IDs fornecidos'}, status=status.HTTP_404_NOT_FOUND)
 
-            # Tenta excluir os objetos
             objs_categoria.delete()
 
             return Response({'message': 'Objetos excluídos com sucesso'}, status=status.HTTP_204_NO_CONTENT)
 
         except ProtectedError as e:
-            # Tratamento para o caso de a categoria estar vinculada a alguma FuncaoMembro
             return Response(
                 {'error': 'Não é possível excluir uma ou mais categorias, pois elas estão associadas a uma ou mais funções de membros existentes.'},
                 status=status.HTTP_409_CONFLICT
             )
 
         except Exception as e:
-            # Tratamento genérico para outros erros
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
