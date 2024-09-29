@@ -44,7 +44,7 @@ export const buscarCategoriaFuncaoMembroPeloId = async (idCategoria) => {
 
 export const listarCategoriaFuncaoMembro = async () => {
     try {
-        const response = await api.get('funcao-membro/categoria/')
+        const response = await api.get('funcao-membro/categoria/listar/')
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)

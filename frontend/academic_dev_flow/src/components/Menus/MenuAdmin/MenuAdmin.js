@@ -68,13 +68,21 @@ const MenuAdmin = () => {
                     </Menu.Item>
                 </SubMenu>
 
-                <Menu.Item
+                <SubMenu
                     className="item-menu"
-                    key="/admin/membros/gerenciar"
+                    key="admin/membros"    
                     icon={<BiGroup style={{ fontSize: "20px" }} />}
+                    title="Membros"
                 >
-                    <Link to="/admin/membros/gerenciar">Membros</Link>
-                </Menu.Item>
+                    <Menu.Item key="/admin/membros/gerenciar">
+                        <Link to="/admin/membros/gerenciar">Gerenciar membros</Link>
+                    </Menu.Item>
+
+                    <Menu.Item key="/admin/membros/gerenciar-categorias">
+                        <Link to="/admin/membros/gerenciar-categorias">Categorias</Link>
+                    </Menu.Item>
+
+                </SubMenu>
 
                 <SubMenu
                     className='item-menu'

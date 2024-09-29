@@ -33,6 +33,7 @@ import ScreenVisualizarIteracao from "./pages/Iteracao/screens/VisualizarIteraca
 import ScreenPerfilMembro from "./pages/Membro/screens/PerfilMembro";
 import ScreenGerenciarFluxos from "./pages/Fluxo";
 import ScreenGerenciarEtapas from "./pages/Etapa/screens/GerenciarEtapas";
+import ScreenGerenciarCategoriaFuncaoMembro from "./pages/FuncaoMembro";
 
 function Routes() {
     return (
@@ -78,6 +79,12 @@ function Routes() {
                     Component={ScreenVincularMembroAoProjeto}
                     exact
                 />
+
+                <Route
+                    path="/admin/membros/gerenciar-categorias"
+                    Component={ScreenGerenciarCategoriaFuncaoMembro}
+                    exact
+                /> 
 
                 {/* Menu Item Artefatos */}
                 <Route
