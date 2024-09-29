@@ -59,7 +59,7 @@ const GerenciarCategoriaFuncaoMembro = () => {
 
     const handleBuscarCategoriaPeloNome = async () => {
         const response = await buscarCategoriaFuncaoMembroPeloNome(nomeCategoria); 
-        setItemsCategoriaFuncaoMembro(response.data);
+        setItemsCategoriaFuncaoMembro(response.data.results);
     };
 
     const handleExcluirCategoria = async (id) => {

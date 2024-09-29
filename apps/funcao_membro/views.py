@@ -20,7 +20,7 @@ class CadastrarCategoriaFuncaoMembroView(APIView):
         try:
             categoria_funcao_membro = request.data
             
-            serializer = CategoriaFuncaoMembroSerializer(data=categoria_funcao_membro, many=True)
+            serializer = CategoriaFuncaoMembroSerializer(data=categoria_funcao_membro)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
@@ -121,6 +121,7 @@ class ExcluirCategoriaFuncaoMembroView(APIView):
         try:
             ids_categoria = request.data.get('ids_categoria', [])
 
+            print(ids_categoria)
             if not ids_categoria:
                 return Response({'error': 'Os Ids das categorias não foram fornecidos!'}, status=status.HTTP_400_BAD_REQUEST)
 
