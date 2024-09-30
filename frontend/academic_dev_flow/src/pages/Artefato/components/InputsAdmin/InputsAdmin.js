@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {Form, Input, Select} from 'antd'
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
-import { listarMembrosPeloIdProjeto } from "../../../../services/membroProjetoService";
+import { buscarMembrosPorProjeto, listarMembrosPeloIdProjeto } from "../../../../services/membroProjetoService";
 import { handleInfo } from "../../../../services/utils";
 
 const InputsAdmin = () => {
@@ -10,13 +10,13 @@ const InputsAdmin = () => {
     const [optionsMembros, setOptionsMembros] = useState(null)
 
     const handleGetMembros = async () => {
-        const response = await listarMembrosPeloIdProjeto(dadosProjeto.id);
+        const response = await buscarMembrosPorProjeto(dadosProjeto.id);
 
         if (response.data && response.data.length > 0){
             const resultados = response.data.map((item) => ({
-                value: item.id_membro_projeto,
-                label: `${item.nome_membro} (${item.grupo_membro})`,
-                user: item.usuario_github,  
+                value: item.id,
+                label: `${item.nome_membro} (${item.nome_grupo})`,
+                user: item.usuario_github,  // utilizando para atribuir o usuário github
             }));
             setOptionsMembros(resultados);
         } else {

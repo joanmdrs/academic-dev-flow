@@ -79,7 +79,7 @@ const GerenciarCategoriaFuncaoMembro = () => {
         <div>
             <Titulo 
                 titulo='Categorias'
-                paragrafo='Membro > Categoria > Função'
+                paragrafo='Membro > Função > Categoria'
             />
 
             <div className="button-menu">
@@ -97,7 +97,7 @@ const GerenciarCategoriaFuncaoMembro = () => {
                     onClick={handleAdicionarCategoria}
                     disabled={isPlusBtnEnabled}
                 > 
-                    Criar Categoria 
+                    Criar Nova Categoria 
                 </Button>
             </div>
 
