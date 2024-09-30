@@ -4,11 +4,11 @@ import { Button, Modal } from "antd";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import TableIteracoesSelect from "../../components/TableIteracoesSelect/TableIteracoesSelect";
 import FormIteracao from "../../components/FormIteracao/FormIteracao";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { atualizarIteracao, criarIteracao, excluirIteracoes, listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
 import Aviso from "../../../../components/Aviso/Aviso";
 import { BsQuestionCircle } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const CronogramaIteracoes = () => {
 

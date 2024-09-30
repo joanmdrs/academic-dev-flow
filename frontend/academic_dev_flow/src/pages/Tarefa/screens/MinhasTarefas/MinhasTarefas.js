@@ -1,11 +1,11 @@
 import { Form, Result, Select, Tabs } from "antd";
 import React, { useEffect, useState } from "react";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import QuadroTarefas from "../QuadroTarefas/QuadroTarefas";
 import { buscarProjetosDoMembro } from "../../../../services/membroProjetoService";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
 import Loading from "../../../../components/Loading/Loading";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const MinhasTarefas = () => {
 

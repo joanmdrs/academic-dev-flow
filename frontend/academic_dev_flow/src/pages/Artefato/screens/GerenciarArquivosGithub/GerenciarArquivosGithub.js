@@ -8,8 +8,8 @@ import { NotificationManager } from "react-notifications";
 import { excluirArtefato, sicronizarContents, verificarExistenciaArquivo } from "../../../../services/artefatoService";
 import { handleError } from "../../../../services/utils";
 import ModalExcluirArtefato from "../../components/ModalExcluirArtefato/ModalExcluirArtefato";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { FaArrowRotateRight, FaArrowsRotate, FaFilter } from "react-icons/fa6";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const GerenciarArquivosGithub = () => {
 

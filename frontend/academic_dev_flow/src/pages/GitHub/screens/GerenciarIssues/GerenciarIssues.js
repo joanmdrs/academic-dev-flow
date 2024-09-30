@@ -2,7 +2,6 @@ import { Button, Space, Spin, Table } from "antd";
 import React, { useState } from "react";
 import { IoCheckmark, IoCloseOutline } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { listIssues } from "../../../../services/githubIntegration/issueService";
 import { sicronizarIssues } from "../../../../services/tarefaService";
 import { handleError } from "../../../../services/utils";
@@ -10,6 +9,7 @@ import { NotificationManager } from "react-notifications";
 import { FaArrowRotateRight, FaArrowsRotate } from "react-icons/fa6";
 import { BsQuestionCircle } from "react-icons/bs";
 import Aviso from "../../../../components/Aviso/Aviso";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const GerenciarIssues = () => {
 

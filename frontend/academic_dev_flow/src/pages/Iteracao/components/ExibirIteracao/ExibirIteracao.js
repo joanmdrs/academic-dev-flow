@@ -6,8 +6,8 @@ import { formatDate, handleError } from "../../../../services/utils";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 import { listarEtapasPorFluxo } from "../../../../services/fluxoEtapaService";
 import { buscarEtapaPeloId } from "../../../../services/etapaService";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { useContextoIteracao } from "../../context/contextoIteracao";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const ExibirIteracao = () => {
 

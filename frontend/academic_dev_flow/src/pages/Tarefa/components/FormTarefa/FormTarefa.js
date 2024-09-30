@@ -9,8 +9,8 @@ import Loading from '../../../../components/Loading/Loading';
 import { optionsStatusTarefas } from '../../../../services/optionsStatus';
 import { handleError } from '../../../../services/utils';
 import { ERROR_MESSAGE_ON_SEARCHING } from '../../../../services/messages';
-import { useContextoGlobalProjeto } from '../../../../context/ContextoGlobalProjeto';
 import { listarTipos } from '../../../../services/tipoService';
+import { useContextoGlobalProjeto } from '../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto';
 
 function FormTarefa({ onCancel, onSubmit, additionalFields, inputsAdmin }) {
     const [form] = useForm();

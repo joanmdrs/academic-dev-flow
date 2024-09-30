@@ -12,8 +12,8 @@ import ScreenGerencirPontuacao from "../../../Pontuacao/screens/GerenciarPontuac
 import { buscarArtefatoPeloId } from "../../../../services/artefatoService";
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import ScreenComentariosArtefato from "../../../Comentario/screens/ComentariosArtefato";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const { Sider, Content } = Layout;
 

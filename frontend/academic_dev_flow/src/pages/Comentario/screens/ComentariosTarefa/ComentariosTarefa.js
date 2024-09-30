@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import FormComentario from "../../components/FormComentario/FormComentario";
 import { atualizarComentarioTarefa, criarComentarioTarefa, excluirComentarioTarefa, listarComentariosPorTarefa } from "../../../../services/comentarioService";
 import ListaComentarios from "../../components/ListaComentarios/ListaComentarios";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { useContextoComentario } from "../../context/ContextoComentario";
 import { Modal } from "antd";
 import { useContextoTarefa } from "../../../Tarefa/context/ContextoTarefa";
 import { buscarMembroProjetoPeloIdMembroEPeloIdProjeto } from "../../../../services/membroProjetoService";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const ComentariosTarefa = () => {
 

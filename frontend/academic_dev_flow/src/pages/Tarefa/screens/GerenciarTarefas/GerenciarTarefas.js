@@ -14,10 +14,10 @@ import {
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { createIssue, updateIssue } from "../../../../services/githubIntegration/issueService";
 import FormTarefa from "../../components/FormTarefa/FormTarefa";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import InputsAdminTarefa from "../../components/InputsAdminTarefa/InputsAdminTarefa";
 import { NotificationManager } from "react-notifications";
 import { handleError } from "../../../../services/utils";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const StyleSpin = {
     position: 'fixed', 

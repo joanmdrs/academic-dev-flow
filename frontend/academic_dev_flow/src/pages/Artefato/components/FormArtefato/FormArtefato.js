@@ -3,11 +3,11 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "antd/es/form/Form";
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { optionsStatusArtefatos } from "../../../../services/optionsStatus";
 import { listarMembrosPeloIdProjeto } from "../../../../services/membroProjetoService";
 import { handleError, handleInfo } from "../../../../services/utils";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const FormArtefato = ({onSubmit, onCancel, selectProjeto, inputsAdmin, inputCommitMessage}) => {
 

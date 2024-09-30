@@ -8,7 +8,7 @@ import { optionsStatusIteracoes } from "../../../../services/optionsStatus";
 import { useContextoIteracao } from "../../context/contextoIteracao";
 import { handleError } from "../../../../services/utils";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const FormIteracao = ({onSubmit, onCancel, additionalFields}) => {
 

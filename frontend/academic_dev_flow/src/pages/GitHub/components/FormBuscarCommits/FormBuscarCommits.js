@@ -2,11 +2,11 @@ import { Form, Select, DatePicker, Button } from "antd";
 import React, { useEffect, useState } from "react";
 import { handleError } from "../../../../services/utils";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { useContextoCommits } from "../../context/ContextoCommits";
 import { filtrarCommitsPorPeriodoEUsuario } from "../../../../services/githubIntegration/commitService";
 import { NotificationManager } from "react-notifications";
 import { buscarMembrosPorProjeto } from "../../../../services/membroProjetoService";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const { RangePicker } = DatePicker;
 

@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Button, Modal } from "antd";
 import FormPontuacao from "../FormPontuacao/FormPontuacao";
 import { useContextoPontuacao } from "../../context/ContextoPontuacao";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { atualizarPontuacao, excluirPontuacao, registrarPontuacao } from "../../../../services/pontuacaoService";
 import { atualizarArtefato } from "../../../../services/artefatoService";
 import { useContextoArtefato } from "../../../Artefato/context/ContextoArtefato";
 import ExibirPontuacao from "../ExibirPontuacao/ExibirPontuacao";
 import { buscarMembroProjetoPeloIdMembro, buscarMembroProjetoPeloIdMembroEPeloIdProjeto, buscarMembroProjetoPeloUsuarioGithub } from "../../../../services/membroProjetoService";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const PainelPontuacaoProfessor = ({onReload}) => {
 

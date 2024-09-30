@@ -7,7 +7,6 @@ import { useParams } from "react-router-dom";
 import { LuCalendarClock } from "react-icons/lu";
 import { FaGithub } from "react-icons/fa6";
 import { MdOutlinePeopleAlt, MdOutlineSpaceDashboard } from "react-icons/md";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import Loading from "../../../../components/Loading/Loading";
 import ScreenCronogramaIteracoes from "../../../Iteracao/screens/CronogramaIteracoes.js";
@@ -16,6 +15,7 @@ import ScreenPainelArtefatos from "../../../Artefato/screens/PainelArtefatos/ind
 import ScreenPainelGihtub from "../../../GitHub/screens/PainelGithub/index.js";
 import ScreenPainelMembros from "../../../Membro/screens/PainelMembros/index.js";
 import ScreenDashboardProjeto from "../DashboardProjeto/index.js";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto.js";
 
 const {TabPane} = Tabs
 

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Input, Button, Select } from 'antd';
 import { MdInfo } from "react-icons/md";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const ModalVincularIteracao = ({visible, onUpdate, onCancel }) => {
 

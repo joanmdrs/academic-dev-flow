@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Button, Space, Table } from "antd";
 import { FaSearch } from "react-icons/fa";
 import { FaArrowRotateRight, FaArrowsRotate } from "react-icons/fa6";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { IoCheckmark, IoCloseOutline } from "react-icons/io5";
 import { IoDocumentOutline } from "react-icons/io5";
 import FormBuscarContents from "../../components/FormBuscarContents/FormBuscarContents";
@@ -12,6 +11,7 @@ import Aviso from "../../../../components/Aviso/Aviso";
 import { sicronizarContents } from "../../../../services/artefatoService";
 import { handleError } from "../../../../services/utils";
 import { NotificationManager } from "react-notifications";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const GerenciarContents = () => {
 

@@ -1,7 +1,6 @@
 import { Button, Modal, Spin, Tabs } from "antd";
 import React, { useEffect, useState } from "react";
 import { FaPlus, FaLink, FaTrash } from "react-icons/fa";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import FormTarefa from "../../components/FormTarefa/FormTarefa";
 import { createIssue, updateIssue } from "../../../../services/githubIntegration/issueService";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
@@ -12,6 +11,7 @@ import ModalVincularIteracao from "../../components/ModalVincularIteracao/ModalV
 import { useNavigate } from "react-router-dom";
 import { buscarMembroProjetoPeloIdMembro, buscarMembroProjetoPeloIdMembroEPeloIdProjeto } from "../../../../services/membroProjetoService";
 import TableTarefasSelect from "../../components/TableTarefasSelect/TableTarefasSelect";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const { TabPane } = Tabs;
 

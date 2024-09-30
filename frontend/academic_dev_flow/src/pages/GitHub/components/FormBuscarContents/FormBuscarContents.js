@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, Input, Button } from 'antd';
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const FormBuscarContents = ({ onSearch, onClear, inputs }) => {
     const { dadosProjeto } = useContextoGlobalProjeto();

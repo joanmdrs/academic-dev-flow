@@ -8,8 +8,8 @@ import { listarTarefasPorIteracao } from "../../../../services/tarefaService";
 import { listarArtefatosPorIteracao } from "../../../../services/artefatoService";
 import Loading from "../../../../components/Loading/Loading";
 import ExibirIteracao from "../../components/ExibirIteracao/ExibirIteracao";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 
 const {Content} = Layout

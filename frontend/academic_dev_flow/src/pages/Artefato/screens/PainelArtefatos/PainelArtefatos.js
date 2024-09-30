@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import Aviso from '../../../../components/Aviso/Aviso'
 import { Button, Form, Input, Spin } from 'antd'
 import { FaLink, FaPlus, FaSearch } from 'react-icons/fa'
-import { useContextoGlobalProjeto } from '../../../../context/ContextoGlobalProjeto'
 import { useContextoArtefato } from '../../context/ContextoArtefato'
 import { BsQuestionCircle } from 'react-icons/bs'
 import FormArtefato from '../../components/FormArtefato/FormArtefato'
@@ -13,6 +12,7 @@ import ModalExcluirArtefato from '../../components/ModalExcluirArtefato/ModalExc
 import { useNavigate } from "react-router-dom";
 import TableArtefatosProjeto from '../../components/TableArtefatosProjeto/TableArtefatosProjeto'
 import ModalVincularIteracao from '../../components/ModalVincularIteracao/ModalVincularIteracao'
+import { useContextoGlobalProjeto } from '../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto'
 
 const StyleSpin = {
     position: 'absolute', 

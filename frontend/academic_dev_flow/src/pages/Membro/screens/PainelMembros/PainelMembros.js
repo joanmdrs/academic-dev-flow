@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { Space, Table, Tooltip } from "antd";
 import { buscarMembrosPorProjeto, cadastrarFuncaoAtual } from "../../../../services/membroProjetoService";
 import FormFuncao from "../../components/FormFuncao/FormFuncao";
 import { useMembroContexto } from "../../context/MembroContexto";
 import { formatDate } from "../../../../services/utils";
 import { IoMdCreate, IoMdOpen } from "react-icons/io";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const PainelMembros = () => {
 

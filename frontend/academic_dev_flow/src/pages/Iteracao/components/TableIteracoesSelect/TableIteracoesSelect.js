@@ -2,11 +2,11 @@ import React, { useEffect } from "react";
 import { formatDate } from "../../../../services/utils";
 import { Button, Space, Table, Tooltip } from "antd";
 import { useContextoIteracao } from "../../context/contextoIteracao";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { optionsStatusIteracoes } from "../../../../services/optionsStatus";
 import { MdOpenInNew } from "react-icons/md";
 import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
 import { UserOutlined } from "@ant-design/icons";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 
 const TableIteracoesSelect = ({onEdit, onView}) => {

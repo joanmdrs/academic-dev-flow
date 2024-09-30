@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { buscarProjetoPeloId, listarProjetos } from "../../../../services/projetoService";
 import { Select } from "antd";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const SelecionarProjeto = () => {
     const [optionsProjetos, setOptionsProjetos] = useState([]);

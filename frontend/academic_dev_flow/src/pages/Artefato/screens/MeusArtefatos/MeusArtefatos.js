@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import PainelArtefatos from "../PainelArtefatos/PainelArtefatos";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { Form, Result, Select } from "antd";
 import { buscarProjetosDoMembro } from "../../../../services/membroProjetoService";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import Loading from "../../../../components/Loading/Loading";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const MeusArtefatos = () => {
 

@@ -9,8 +9,8 @@ import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProj
 import { useContextoIteracao } from "../../context/contextoIteracao";
 import { atualizarIteracao, buscarIteracoesPeloNomeEPeloProjeto, criarIteracao, excluirIteracoes } from "../../../../services/iteracaoService";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import FormBuscarIteracao from "../../components/FormBuscarIteracao/FormBuscarIteracao";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const GerenciarIteracoes = () => {
 

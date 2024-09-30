@@ -8,8 +8,8 @@ import Loading from "../../../../components/Loading/Loading";
 import { buscarTarefaPeloId } from "../../../../services/tarefaService";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import ExibirTarefa from "../../components/ExibirTarefa/ExibirTarefa";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const {Content} = Layout
 

@@ -5,9 +5,9 @@ import './Header.css';
 import MyDropdown from '../Dropdown/Dropdown';
 import { useAuth } from '../../hooks/AuthProvider';
 import { useNavigate } from 'react-router-dom';
-import { useContextoGlobalProjeto } from '../../context/ContextoGlobalProjeto';
 import { CiUser } from "react-icons/ci";
 import { CiLogout } from "react-icons/ci";
+import { useContextoGlobalProjeto } from '../../context/ContextoGlobalProjeto/ContextoGlobalProjeto';
 
 const { Header } = Layout;
 

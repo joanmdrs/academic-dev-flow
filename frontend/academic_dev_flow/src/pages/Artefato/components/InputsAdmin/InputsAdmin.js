@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {Form, Input, Select} from 'antd'
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { buscarMembrosPorProjeto, listarMembrosPeloIdProjeto } from "../../../../services/membroProjetoService";
 import { handleInfo } from "../../../../services/utils";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const InputsAdmin = () => {
 

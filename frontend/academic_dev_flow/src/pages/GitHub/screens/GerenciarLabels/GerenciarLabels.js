@@ -7,11 +7,11 @@ import { BsQuestionCircle } from "react-icons/bs";
 import { FaArrowRotateRight } from "react-icons/fa6";
 import { IoCheckmark, IoCloseOutline } from "react-icons/io5";
 import { Octokit } from "octokit";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { buscarLabelPeloId, criarLabels } from "../../../../services/tarefaService";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 import { handleError } from "../../../../services/utils";
 import { NotificationManager } from "react-notifications";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const GerenciarLabels = () => {
 

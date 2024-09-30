@@ -1,11 +1,11 @@
 import { Select, Space, Table, Tooltip } from "antd";
 import React, { useEffect, useState } from "react";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { IoMdCreate, IoMdOpen, IoMdTrash } from "react-icons/io";
 import { optionsStatusArtefatos } from "../../../../services/optionsStatus";
 import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
 import { IoClose } from "react-icons/io5";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const TableArtefatosProjeto = ({onView, onEdit, onDelete, onUpdateStatus}) => {
 

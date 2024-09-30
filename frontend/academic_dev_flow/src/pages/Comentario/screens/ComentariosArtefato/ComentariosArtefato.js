@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { useContextoComentario } from "../../context/ContextoComentario";
 import { atualizarComentarioArtefato, criarComentarioArtefato, excluirComentarioArtefato, listarComentariosPorArtefato } from "../../../../services/comentarioService";
 import { Modal } from "antd";
@@ -7,6 +6,7 @@ import ListaComentarios from "../../components/ListaComentarios/ListaComentarios
 import FormComentario from "../../components/FormComentario/FormComentario";
 import { useContextoArtefato } from "../../../Artefato/context/ContextoArtefato";
 import { buscarMembroProjetoPeloIdMembroEPeloIdProjeto } from "../../../../services/membroProjetoService";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const ComentariosArtefato = () => {
 
