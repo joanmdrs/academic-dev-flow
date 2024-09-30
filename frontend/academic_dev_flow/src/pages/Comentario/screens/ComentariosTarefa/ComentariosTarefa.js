@@ -5,8 +5,8 @@ import ListaComentarios from "../../components/ListaComentarios/ListaComentarios
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { useContextoComentario } from "../../context/ContextoComentario";
 import { Modal } from "antd";
-import { buscarMembroProjetoPeloIdMembro } from "../../../../services/membroProjetoService";
 import { useContextoTarefa } from "../../../Tarefa/context/ContextoTarefa";
+import { buscarMembroProjetoPeloIdMembroEPeloIdProjeto } from "../../../../services/membroProjetoService";
 
 const ComentariosTarefa = () => {
 
@@ -30,11 +30,7 @@ const ComentariosTarefa = () => {
 
     const handleGetMembroProjeto = async () => {
 
-        const parametros = {
-            id_membro: autor.id_membro,
-            id_projeto: dadosProjeto.id
-        }
-        const response = await buscarMembroProjetoPeloIdMembro(parametros)
+        const response = await buscarMembroProjetoPeloIdMembroEPeloIdProjeto(dadosProjeto.id, autor.id_membro)
         if (!response.error){
             setMembroProjeto(response.data)
         }
