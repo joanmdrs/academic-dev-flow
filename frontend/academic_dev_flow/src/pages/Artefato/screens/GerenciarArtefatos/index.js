@@ -4,7 +4,7 @@ import MyHeader from "../../../../components/Header/Header";
 import {Layout} from 'antd'
 import { ProviderArtefato } from "../../context/ContextoArtefato";
 import GerenciarArtefatos from "./GerenciarArtefatos";
-import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
+import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const {Content} = Layout
 

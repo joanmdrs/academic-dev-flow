@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "antd/es/form/Form";
 import { listarEtapasPorFluxo } from "../../../../services/fluxoEtapaService";
 import { buscarEtapaPeloId } from "../../../../services/etapaService";
-import { listarMembrosPeloIdProjeto } from "../../../../services/membroProjetoService";
+import { buscarMembrosPorProjeto } from "../../../../services/membroProjetoService";
 import { optionsStatusIteracoes } from "../../../../services/optionsStatus";
 import { useContextoIteracao } from "../../context/contextoIteracao";
 import { handleError } from "../../../../services/utils";
@@ -45,7 +45,7 @@ const FormIteracao = ({onSubmit, onCancel, additionalFields}) => {
     const handleGetMembros = async () => {
 
         try {
-            const response = await listarMembrosPeloIdProjeto(dadosProjeto.id)
+            const response = await buscarMembrosPorProjeto(dadosProjeto.id)
             const resultados = response.data.map((item) => {
                 return {
                     value: item.id_membro_projeto,

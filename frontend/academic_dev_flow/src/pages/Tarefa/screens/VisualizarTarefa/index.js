@@ -4,7 +4,6 @@ import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfes
 import MenuAdmin from "../../../../components/Menus/MenuAdmin/MenuAdmin";
 import { Layout } from "antd";
 import MyHeader from "../../../../components/Header/Header";
-import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { ProviderTarefa } from "../../context/ContextoTarefa";
 import VisualizarTarefa from "./VisualizarTarefa";
 

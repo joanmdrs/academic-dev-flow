@@ -10,7 +10,7 @@ import { BsQuestionCircle } from "react-icons/bs";
 import Aviso from "../../../../components/Aviso/Aviso";
 import ModalVincularIteracao from "../../components/ModalVincularIteracao/ModalVincularIteracao";
 import { useNavigate } from "react-router-dom";
-import { buscarMembroProjetoPeloIdMembro } from "../../../../services/membroProjetoService";
+import { buscarMembroProjetoPeloIdMembro, buscarMembroProjetoPeloIdMembroEPeloIdProjeto } from "../../../../services/membroProjetoService";
 import TableTarefasSelect from "../../components/TableTarefasSelect/TableTarefasSelect";
 
 const { TabPane } = Tabs;
@@ -206,12 +206,7 @@ const QuadroTarefas = () => {
     }
 
     const handleGetMembroProjeto = async () => {
-
-        const parametros = {
-            id_membro: autor.id_membro,
-            id_projeto: dadosProjeto.id
-        }
-        const response = await buscarMembroProjetoPeloIdMembro(parametros)
+        const response = await buscarMembroProjetoPeloIdMembroEPeloIdProjeto(dadosProjeto.id, autor.id_membro)
         if (!response.error){
             setMembroProjeto(response.data)
         }

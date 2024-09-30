@@ -1,12 +1,12 @@
 import { Form, Select, DatePicker, Button } from "antd";
 import React, { useEffect, useState } from "react";
-import { listarMembrosPeloIdProjeto } from "../../../../services/membroProjetoService";
 import { handleError } from "../../../../services/utils";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { useContextoCommits } from "../../context/ContextoCommits";
 import { filtrarCommitsPorPeriodoEUsuario } from "../../../../services/githubIntegration/commitService";
 import { NotificationManager } from "react-notifications";
+import { buscarMembrosPorProjeto } from "../../../../services/membroProjetoService";
 
 const { RangePicker } = DatePicker;
 
@@ -44,10 +44,10 @@ const FormBuscarCommits = () => {
 
     const handleGetMembros = async () => {
         try {
-            const response = await listarMembrosPeloIdProjeto(dadosProjeto.id);
+            const response = await buscarMembrosPorProjeto(dadosProjeto.id);
             const resultados = response.data.map((item) => ({
-                value: item.id_membro_projeto,
-                label: `${item.nome_membro} (${item.grupo_membro})`,
+                value: item.id,
+                label: `${item.nome_membro} (${item.nome_grupo})`,
                 user: item.usuario_github,
             }));
             setOptionsMembros(resultados);

@@ -5,7 +5,7 @@ import BotaoExcluir from "../../../../../components/Botoes/BotaoExcluir/BotaoExc
 import { Table } from "antd";
 import { buscarMembroPeloId, buscarMembroPorGrupoENome } from "../../../../../services/membroService";
 import { NotificationManager } from "react-notifications";
-import { criarMembroProjeto, excluirMembroProjetoMany, excluirMembroProjetoOne, listarMembrosPorProjeto } from "../../../../../services/membroProjetoService";
+import { buscarMembrosPorProjeto, criarMembroProjeto, excluirMembroProjetoMany, excluirMembroProjetoOne } from "../../../../../services/membroProjetoService";
 import { useContextoProjeto } from "../../../context/ContextoProjeto";
 import ModalSelecionarObjetos from "../../../../../components/Modals/ModalSelecionarObjetos/ModalSelecionarObjetos";
 
@@ -134,7 +134,7 @@ const TabEquipe = () => {
 
     const handleListarMembrosPorProjeto = async () => {
         try {
-            const resposta = await listarMembrosPorProjeto(hasProjeto.id);
+            const resposta = await buscarMembrosPorProjeto(hasProjeto.id);
         
             if (resposta.status === 200) {
                 const membrosVinculados = resposta.data;

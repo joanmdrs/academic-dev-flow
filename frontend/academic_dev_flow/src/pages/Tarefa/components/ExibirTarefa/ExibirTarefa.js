@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Descriptions } from 'antd';
 import { optionsStatusTarefas } from "../../../../services/optionsStatus";
-import { listarMembrosPeloIdProjeto } from "../../../../services/membroProjetoService";
+import { buscarMembrosPorProjeto } from "../../../../services/membroProjetoService";
 import { formatDate, handleError } from "../../../../services/utils";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
@@ -28,7 +28,7 @@ const ExibirTarefa = ({ dadosTarefa, dadosProjeto }) => {
 
     const handleGetMembros = async () => {
         try {
-            const response = await listarMembrosPeloIdProjeto(dadosProjeto.id);
+            const response = await buscarMembrosPorProjeto(dadosProjeto.id);
             const resultados = response.data.map((item) => {
                 return {
                     value: item.id_membro_projeto,

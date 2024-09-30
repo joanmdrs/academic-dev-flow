@@ -8,46 +8,39 @@ const ContextoGlobalUser = createContext();
 export const useContextoGlobalUser = () => useContext(ContextoGlobalUser);
 
 export const ProviderGlobalUser = ({ children }) => {
-  
+
+    const [usuario, setUsuario] = useState(null);
+    const [grupo, setGrupo] = useState(null);
+
     const [token] = useState(localStorage.getItem("token") || null);
 
     useEffect(() => {
         const fetchData = async () => {
             if (token !== null){
                 try {
-                    const decodedToken = await decodeToken(token);
-                    const response = await buscarMembroPeloUser(decodedToken.user_id);
-                    console.log(response.data)
+                    const decodedToken = await decodeToken(token)
+                    const response = await buscarMembroPeloUser(decodedToken.user_id)
 
-                    if (!response.error) {
+                    if (!response.error){
                         setUsuario(response.data)
                         setGrupo(decodedToken.groups[0])
                     }
-            
-                    
+
                 } catch (error) {
-                    return handleError(error, "Falha ao decodificar o token")
+                    return handleError(error, "Falha ao decodificar o token de autenticação, contate o suporte !")
                 }
             }
-            
-        };
-        fetchData();
-        console.log(usuario)
+        }
+    }, [token])
 
-        
-    }, [token]);
-
-  const [usuario, setUsuario] = useState(null);
-  const [grupo, setGrupo] = useState(null);
-
-  return (
-    <ContextoGlobalUser.Provider
-      value={{
-        usuario, setUsuario,
-        grupo, setGrupo, 
-      }}
-    >
-      {children}
-    </ContextoGlobalUser.Provider>
-  );
-};
+    return (
+        <ContextoGlobalUser.Provider
+            value={{
+                usuario, setUsuario,
+                grupo, setGrupo
+            }}
+        >
+            {children}
+        </ContextoGlobalUser.Provider>
+    )
+}

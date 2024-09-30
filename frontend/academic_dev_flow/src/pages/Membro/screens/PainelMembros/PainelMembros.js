@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { Space, Table, Tooltip } from "antd";
-import { cadastrarFuncaoAtual, listarMembrosPeloIdProjeto } from "../../../../services/membroProjetoService";
+import { buscarMembrosPorProjeto, cadastrarFuncaoAtual } from "../../../../services/membroProjetoService";
 import FormFuncao from "../../components/FormFuncao/FormFuncao";
 import { useMembroContexto } from "../../context/MembroContexto";
 import { formatDate } from "../../../../services/utils";
@@ -84,7 +84,7 @@ const PainelMembros = () => {
     const [isFormSalvarVisivel, setIsFormSalvarVisivel] = useState(false)
 
     const handleListarMembrosPorProjeto = async () => {
-        const response = await listarMembrosPeloIdProjeto(dadosProjeto.id);
+        const response = await buscarMembrosPorProjeto(dadosProjeto.id);
 
         if (!response.error && response.data) {
             setMembros(response.data)

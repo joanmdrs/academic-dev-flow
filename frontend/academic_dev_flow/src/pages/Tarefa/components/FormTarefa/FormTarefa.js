@@ -3,7 +3,7 @@ import { useForm } from 'antd/es/form/Form';
 import { Switch } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useContextoTarefa } from '../../context/ContextoTarefa';
-import { listarMembrosPeloIdProjeto } from '../../../../services/membroProjetoService';
+import { buscarMembrosPorProjeto, listarMembrosPeloIdProjeto } from '../../../../services/membroProjetoService';
 import { listarIteracoesPorProjeto } from '../../../../services/iteracaoService';
 import Loading from '../../../../components/Loading/Loading';
 import { optionsStatusTarefas } from '../../../../services/optionsStatus';
@@ -52,10 +52,10 @@ function FormTarefa({ onCancel, onSubmit, additionalFields, inputsAdmin }) {
 
     const handleGetMembros = async () => {
         try {
-            const response = await listarMembrosPeloIdProjeto(dadosProjeto.id);
+            const response = await buscarMembrosPorProjeto(dadosProjeto.id);
             const resultados = response.data.map((item) => ({
-                value: item.id_membro_projeto,
-                label: `${item.nome_membro} (${item.grupo_membro})`,
+                value: item.id,
+                label: `${item.nome_membro} (${item.nome_grupo})`,
                 user: item.usuario_github,
             }));
             setOptionsMembros(resultados);

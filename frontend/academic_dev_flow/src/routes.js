@@ -28,12 +28,12 @@ import ScreenComentariosArtefato from "./pages/Comentario/screens/ComentariosArt
 import ScreenComentariosTarefa from "./pages/Comentario/screens/ComentariosTarefa";
 import ScreenGerenciarRelatorios from "./pages/Relatorio/screens/GerenciarRelatorios";
 import ScreenVisualizarTarefa from "./pages/Tarefa/screens/VisualizarTarefa";
-import { ProviderGlobalProjeto } from "./context/ContextoGlobalProjeto";
 import ScreenVisualizarIteracao from "./pages/Iteracao/screens/VisualizarIteracao";
 import ScreenPerfilMembro from "./pages/Membro/screens/PerfilMembro";
 import ScreenGerenciarFluxos from "./pages/Fluxo";
 import ScreenGerenciarEtapas from "./pages/Etapa/screens/GerenciarEtapas";
 import ScreenGerenciarCategoriaFuncaoMembro from "./pages/FuncaoMembro";
+import { ProviderGlobalProjeto } from "./context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 function Routes() {
     return (

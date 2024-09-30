@@ -7,7 +7,7 @@ import { atualizarPontuacao, excluirPontuacao, registrarPontuacao } from "../../
 import { atualizarArtefato } from "../../../../services/artefatoService";
 import { useContextoArtefato } from "../../../Artefato/context/ContextoArtefato";
 import ExibirPontuacao from "../ExibirPontuacao/ExibirPontuacao";
-import { buscarMembroProjetoPeloIdMembro, buscarMembroProjetoPeloUsuarioGithub } from "../../../../services/membroProjetoService";
+import { buscarMembroProjetoPeloIdMembro, buscarMembroProjetoPeloIdMembroEPeloIdProjeto, buscarMembroProjetoPeloUsuarioGithub } from "../../../../services/membroProjetoService";
 
 const PainelPontuacaoProfessor = ({onReload}) => {
 
@@ -61,12 +61,7 @@ const PainelPontuacaoProfessor = ({onReload}) => {
     };
 
     const handleGetMembroProjeto = async () => {
-
-        const parametros = {
-            id_membro: autor.id_membro,
-            id_projeto: dadosProjeto.id
-        }
-        const response = await buscarMembroProjetoPeloIdMembro(parametros)
+        const response = await buscarMembroProjetoPeloIdMembroEPeloIdProjeto(dadosProjeto.id, autor.id_membro)
         if (!response.error){
             setMembroProjeto(response.data)
         }

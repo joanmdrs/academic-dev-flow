@@ -6,7 +6,6 @@ import { ProviderArtefato } from "../../context/ContextoArtefato";
 import VisualizarArtefato from "./VisualizarArtefato";
 import MenuAluno from "../../../../components/Menus/MenuAluno/MenuAluno";
 import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfessor";
-import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 
 const {Content} = Layout
 

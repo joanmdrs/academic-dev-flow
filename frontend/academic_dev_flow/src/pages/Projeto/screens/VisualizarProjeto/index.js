@@ -4,9 +4,9 @@ import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfes
 import MenuAdmin from "../../../../components/Menus/MenuAdmin/MenuAdmin";
 import { Layout } from "antd";
 import MyHeader from "../../../../components/Header/Header";
-import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import VisualizarProjeto from "./VisualizarProjeto";
 import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
+import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 
 const ScreenVisualizarProjeto = ({grupo}) => {

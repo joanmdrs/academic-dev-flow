@@ -5,7 +5,7 @@ import MyHeader from "../../../../components/Header/Header";
 import { Content } from "antd/es/layout/layout";
 import GerenciarIteracoes from "./GerenciarIteracoes";
 import { ProviderIteracao } from "../../context/contextoIteracao";
-import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
+import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const ScreenGerenciarIteracoes = () => {
 

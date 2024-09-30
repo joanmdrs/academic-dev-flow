@@ -4,7 +4,7 @@ import {Layout} from 'antd'
 import MyHeader from "../../../../components/Header/Header";
 import { ProviderTarefa } from "../../context/ContextoTarefa";
 import GerenciarTarefas from "./GerenciarTarefas"
-import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
+import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 const {Content} = Layout
 
 const ScreenGerenciarTarefas = () => {

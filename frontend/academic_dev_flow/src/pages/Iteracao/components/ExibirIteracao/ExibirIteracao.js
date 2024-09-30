@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Descriptions } from 'antd';
 import { optionsStatusIteracoes } from "../../../../services/optionsStatus";
-import { listarMembrosPeloIdProjeto } from "../../../../services/membroProjetoService";
+import { buscarMembrosPorProjeto } from "../../../../services/membroProjetoService";
 import { formatDate, handleError } from "../../../../services/utils";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 import { listarEtapasPorFluxo } from "../../../../services/fluxoEtapaService";
@@ -45,11 +45,11 @@ const ExibirIteracao = () => {
     const handleGetMembros = async () => {
 
         try {
-            const response = await listarMembrosPeloIdProjeto(dadosIteracao.projeto)
+            const response = await buscarMembrosPorProjeto(dadosIteracao.projeto)
             const resultados = response.data.map((item) => {
                 return {
-                    value: item.id_membro_projeto,
-                    label: `${item.nome_membro} (${item.grupo_membro})`,
+                    value: item.id,
+                    label: `${item.nome_membro} (${item.nome_grupo})`,
                 }
             })
             setOptionsMembros(resultados)
