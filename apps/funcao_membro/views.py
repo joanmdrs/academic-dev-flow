@@ -121,7 +121,6 @@ class ExcluirCategoriaFuncaoMembroView(APIView):
         try:
             ids_categoria = request.data.get('ids_categoria', [])
 
-            print(ids_categoria)
             if not ids_categoria:
                 return Response({'error': 'Os Ids das categorias não foram fornecidos!'}, status=status.HTTP_400_BAD_REQUEST)
 

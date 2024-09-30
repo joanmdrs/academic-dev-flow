@@ -8,7 +8,6 @@ class GroupSerializer(serializers.ModelSerializer):
         model = Group
         fields = ['id', 'name']  
         
-        
 class MembroSerializer(serializers.ModelSerializer):
     nome_grupo = serializers.SerializerMethodField()
 
