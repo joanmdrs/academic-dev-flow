@@ -16,13 +16,12 @@ from django.shortcuts import get_object_or_404
 
 class CadastrarTarefaView(APIView):
     permission_classes = [IsAuthenticated]
-
     def post(self, request):
         try:
-            data_categoria = request.data
-            projeto_id = data_categoria['projeto']
-            iteracao_id = data_categoria['iteracao']
-            membros_projeto = data_categoria['membros']
+            data_tarefa = request.data
+            projeto_id = data_tarefa['projeto']
+            iteracao_id = data_tarefa['iteracao']
+            membros_projeto = data_tarefa['membros']
 
             # Verifica se a iteração pertence ao projeto
             iteracao = Iteracao.objects.get(id=iteracao_id)
@@ -56,15 +55,77 @@ class CadastrarTarefaView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+class AtualizarTarefaView(APIView):
+    permission_classes = [IsAuthenticated]
+    def patch(self, request): 
+        try: 
+            id_tarefa = request.GET.get('id_tarefa', None)
+            data_tarefa = request.data
+                        
+            # Verifica se o ID da tarefa foi fornecido
+            if not id_tarefa: 
+                return Response({'error': 'O ID da tarefa não foi fornecido'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            tarefa = Tarefa.objects.get(id=id_tarefa)
+            
+            if tarefa: 
+                projeto_id = data_tarefa['projeto']
+                iteracao_id = data_tarefa['iteracao']
+                membros_projeto = data_tarefa['membros']
+
+                # Verifica se a iteração pertence ao projeto
+                iteracao = Iteracao.objects.get(id=iteracao_id)
+                if iteracao.projeto.id != projeto_id:
+                    return Response(
+                        {'error': 'A iteração não está vinculada ao projeto informado.'},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+
+                # Verifica se todos os membros estão vinculados ao projeto
+                for id_membro_projeto in membros_projeto:
+                    membro_projeto = MembroProjeto.objects.get(id=id_membro_projeto)
+                    if membro_projeto.projeto.id != projeto_id:
+                        return Response(
+                            {'error': f'O membro {membro_projeto.id} não está vinculado ao projeto informado.'},
+                            status=status.HTTP_400_BAD_REQUEST
+                        )
+                
+                serializer = TarefaSerializer(tarefa, data=request.data, partial=True)
+            
+                if serializer.is_valid(raise_exception=True):
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+            
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+            return Response({'error': 'Tarefa não encontrada'}, status=status.HTTP_404_NOT_FOUND)
+        
+        except Tarefa.DoesNotExist:
+            return Response({'error': 'Tarefa não encontrada'}, status=status.HTTP_404_NOT_FOUND)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
+        
 class BuscarTarefaPeloIdView(APIView):
     permission_classes = [IsAuthenticated]
-    
-    def get(self, request, id):
+    def get(self, request):
         try:
-            tarefa = Tarefa.objects.get(pk=id)
-            serializer = TarefaSerializer(tarefa, many=False)
-            return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+            id_tarefa = request.GET.get('id_tarefa', None)
             
+            if not id_tarefa:
+                return Response({'error': 'O ID da tarefa não foi fornecido'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            tarefa = Tarefa.objects.get(id=id_tarefa)
+            
+            if tarefa:
+                serializer = TarefaSerializer(tarefa, many=False)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response({'error': 'Tarefa não encontrada'}, status=status.HTTP_404_NOT_FOUND)
+        
+        except Tarefa.DoesNotExist:
+            return Response({'error': 'Tarefa não encontrada'}, status=status.HTTP_404_NOT_FOUND)
+                    
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
         
@@ -177,26 +238,6 @@ class ListarTarefasPorProjetoView(APIView):
             return iteracao.nome
         else:
             return None
-            
-
-        
-class AtualizarTarefaView(APIView):
-    permission_classes = [IsAuthenticated]
-    
-    def patch(self, request, id): 
-        try: 
-        
-            tarefa = Tarefa.objects.get(pk=id)
-            serializer = TarefaSerializer(tarefa, data=request.data, partial=True)
-            
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
         
 class ExcluirTarefaView(APIView):
     permission_classes = [IsAuthenticated]
