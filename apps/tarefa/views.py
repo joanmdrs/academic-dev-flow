@@ -134,18 +134,19 @@ class FiltrarTarefasPeloNomeEPeloProjeto(APIView):
     
     def get(self, request):
         try:
-            nome = request.GET.get('nome_tarefa')
-            projeto = request.GET.get('id_projeto')
+            nome_tarefa = request.GET.get('nome_tarefa')
+            id_projeto = request.GET.get('id_projeto')
             
-            if not nome and not projeto:
-                return Response({'error': 'Pelo menos um parâmetro é necessário'}, status=status.HTTP_400_BAD_REQUEST)
+            if not nome_tarefa and not id_projeto:
+                return Response(
+                    {'error': 'Os parâmetros nome da tarefa e ID do projeto não foram fornecidos, é necessário pelo menos um parâmetro'}, status=status.HTTP_400_BAD_REQUEST)
             
-            if nome and projeto:
-                tarefas = Tarefa.objects.filter(nome__icontains=nome, projeto_id=projeto)
-            elif nome:
-                tarefas = Tarefa.objects.filter(nome__icontains=nome)
+            if nome_tarefa and id_projeto:
+                tarefas = Tarefa.objects.filter(nome__icontains=nome_tarefa, projeto_id=id_projeto)
+            elif nome_tarefa:
+                tarefas = Tarefa.objects.filter(nome__icontains=nome_tarefa)
             else: 
-                tarefas = Tarefa.objects.filter(projeto_id=projeto)
+                tarefas = Tarefa.objects.filter(projeto_id=id_projeto)
                 
             if tarefas.exists():
                 
@@ -153,7 +154,7 @@ class FiltrarTarefasPeloNomeEPeloProjeto(APIView):
                 return Response(serializer.data, status=status.HTTP_200_OK)
             
             return Response(data=[], status=status.HTTP_204_NO_CONTENT)
-                
+        
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)   
             
