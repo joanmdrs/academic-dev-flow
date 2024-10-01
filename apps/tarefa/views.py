@@ -16,21 +16,46 @@ from django.shortcuts import get_object_or_404
 
 class CadastrarTarefaView(APIView):
     permission_classes = [IsAuthenticated]
-    def post(self, request): 
+
+    def post(self, request):
         try:
+            data_categoria = request.data
+            projeto_id = data_categoria['projeto']
+            iteracao_id = data_categoria['iteracao']
+            membros_projeto = data_categoria['membros']
+
+            # Verifica se a iteração pertence ao projeto
+            iteracao = Iteracao.objects.get(id=iteracao_id)
+            if iteracao.projeto.id != projeto_id:
+                return Response(
+                    {'error': 'A iteração não está vinculada ao projeto informado.'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            # Verifica se todos os membros estão vinculados ao projeto
+            for id_membro_projeto in membros_projeto:
+                membro_projeto = MembroProjeto.objects.get(id=id_membro_projeto)
+                if membro_projeto.projeto.id != projeto_id:
+                    return Response(
+                        {'error': f'O membro {membro_projeto.id} não está vinculado ao projeto informado.'},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+
+            # Serializa e valida a tarefa
             serializer = TarefaSerializer(data=request.data)
-            
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
-                
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
 
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+
+        except Iteracao.DoesNotExist:
+            return Response({'error': 'Iteração não encontrada.'}, status=status.HTTP_404_NOT_FOUND)
+        except MembroProjeto.DoesNotExist:
+            return Response({'error': 'Membro do projeto não encontrado.'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
-        
-        
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 class BuscarTarefaPeloIdView(APIView):
     permission_classes = [IsAuthenticated]
     

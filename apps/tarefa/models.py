@@ -73,7 +73,6 @@ class Tarefa(models.Model):
         elif not ultimo_intervalo or ultimo_intervalo.tipo == 'pausa':
             return False
 
-    
 class IntervaloTempo(models.Model):
     
     INTERVALO_CHOICES = [
