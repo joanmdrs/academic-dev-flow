@@ -4,14 +4,14 @@ from apps.projeto.models import Projeto
 from apps.iteracao.models import Iteracao
 from apps.categoria.models import Categoria
 
-# class Label(models.Model):
-#     id_github = models.CharField()
-#     nome = models.CharField()
-#     cor = models.CharField()
-#     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, null=True, blank=True)
+class CategoriaTarefa(models.Model): 
     
-#     def __str__(self):
-#         return self.nome
+    nome = models.CharField(max_length=40)
+    descricao = models.TextField(max_length=200, null=True, blank=True)
+    cor = models.CharField(max_length=7)
+
+    def __str__(self):
+        return self.nome
 
 class Tarefa(models.Model):
     
@@ -24,21 +24,19 @@ class Tarefa(models.Model):
     ]
     
     nome = models.CharField(max_length=255)
+    descricao = models.TextField(null=True, blank=True)
     data_criacao = models.DateTimeField(auto_now_add=True)
     data_inicio = models.DateField(null=True, blank=True)
     data_termino = models.DateField(null=True, blank=True)
     status = models.CharField(choices=STATUS_CHOICES, default='criada')
-    descricao = models.TextField(null=True, blank=True)
-    concluida = models.BooleanField(default=False)
     tempo_gasto = models.IntegerField(default=0)
     id_issue = models.BigIntegerField(null=True, blank=True)
     number_issue = models.IntegerField(null=True, blank=True)
     url_issue = models.URLField(null=True, blank=True)
-    # labels = models.ManyToManyField(Label)
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, null=True, blank=True)
     membros = models.ManyToManyField(MembroProjeto, blank=True)
     iteracao = models.ForeignKey(Iteracao, on_delete=models.CASCADE, null=True, blank=True)
-    categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True, blank=True)
+    categoria = models.ForeignKey(CategoriaTarefa, on_delete=models.SET_NULL, null=True, blank=True)
     
     def __str__(self):
         return self.nome

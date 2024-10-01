@@ -67,35 +67,40 @@ const ListaTarefas = ({onView, onEdit, onDelete }) => {
     const { tarefas, setTarefas, setTarefasSelecionadas } = useContextoTarefa();
 
     useEffect(() => {
-        handleListarTarefas();
-    }, [tarefas]);
 
-    const handleListarTarefas = async () => {
-        if (tarefas.length === 0) {
-            try {
-                const response = await listarTarefas();
-
-                if (!response.error && response.data.length > 0) {
-                    const dados = await Promise.all(response.data.map(async (tarefa) => {
-                        const resProjeto = await buscarProjetoPeloId(tarefa.projeto);
-
-                        if (!resProjeto.error) {
-                            tarefa['nome_projeto'] = resProjeto.data.nome;
-                        }
-                        return tarefa;
-                    }));
-                    const resultado = await Promise.resolve(dados);
-                    setTarefas(resultado);
-                } else {
-                    setTarefas([]);
-                }
-            } catch (error) {
-                setTarefas([]);
-                return handleError(error, ERROR_MESSAGE_ON_SEARCHING);
+        const fetchData = async () => {
+            if (tarefas.length === 0) {
+                await handleListarTarefas()
             }
         }
-    };
 
+        fetchData()
+    }, []);
+
+    const handleListarTarefas = async () => {
+        try {
+            const response = await listarTarefas();
+
+            if (!response.error && response.data.length > 0) {
+                const dados = await Promise.all(response.data.map(async (tarefa) => {
+                    const resProjeto = await buscarProjetoPeloId(tarefa.projeto);
+
+                    if (!resProjeto.error) {
+                        tarefa['nome_projeto'] = resProjeto.data.nome;
+                    }
+                    return tarefa;
+                }));
+                const resultado = await Promise.resolve(dados);
+                setTarefas(resultado);
+            } else {
+                setTarefas([]);
+            }
+        } catch (error) {
+            setTarefas([]);
+            return handleError(error, ERROR_MESSAGE_ON_SEARCHING);
+        }
+    }
+    
     const rowSelection = {
         onChange: (selectedRowsKeys, selectedRows) => {
             setTarefasSelecionadas(selectedRows)

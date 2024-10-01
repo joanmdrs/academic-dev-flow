@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import *
 from .views_labels import *
+from .views_categoria import *
 
 app_name='tarefa'
 
@@ -17,10 +18,14 @@ urlpatterns = [
     path('filtrar/nome-projeto/', FiltrarTarefasPeloNomeEPeloProjeto.as_view(), name='filtrar_tarefas_pelo_nome_e_pelo_projeto'),
     path('verificar-existencia/', VerificarIssueExisteView.as_view(), name='verificar-existencia_issue'), 
     path('sicronizar-issues/', SicronizarIssuesView.as_view(), name='sicronizar_issues'),
-    # path('labels/cadastrar/', CadastrarLabelView.as_view(), name='cadastrar_label'),
-    # path('labels/buscar/<int:id>/', BuscarLabelPeloIdView.as_view(), name='buscar_label_pelo_id'),
-    # path('labels/listar-por-projeto/<int:id_projeto>/', ListarLabelsPorProjetoView.as_view(), name='listar_labels_por_projeto'),
     path('iniciar-contagem-tempo/', IniciarContagemTempoView.as_view(), name='iniciar-contagem-tempo'),
     path('parar-contagem-tempo/', PararContagemTempoView.as_view(), name='parar-contagem-tempo'),
-    path('atualizar-iteracao/', AtualizarIteracaoTarefasView.as_view(), name='atualizar_iteracao')
+    path('atualizar-iteracao/', AtualizarIteracaoTarefasView.as_view(), name='atualizar_iteracao'),
+    path('categoria/cadastrar/', CadastrarCategoriaTarefaView.as_view(), name='cadastrar_categoria_da_tarefa'),
+    path('categoria/atualizar/', AtualizarCategoriaTarefaView.as_view(), name='atualizar_categoria_da_tarefa'),
+    path('categoria/buscar-pelo-nome/', BuscarCategoriaTarefaPeloNomeView.as_view(), name='buscar_categoria_da_tarefa_pelo_nome'),
+    path('categoria/buscar-pelo-id/', BuscarCategoriaTarefaPeloIdView.as_view(), name='buscar_categoria_da_tarefa_pelo_id'),
+    path('categoria/listar/', ListarCategoriaTarefaView.as_view(), name='listar_categoria_tarefa'),
+    path('categoria/excluir/', ExcluirCategoriaTarefaView.as_view(), name='excluir_categoria')
+    
 ]

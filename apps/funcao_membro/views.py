@@ -116,7 +116,7 @@ class ListarCategoriaFuncaoMembroView(APIView):
         
 class ExcluirCategoriaFuncaoMembroView(APIView):
     permission_classes = [IsAuthenticated]
-
+    
     def delete(self, request):
         try:
             ids_categoria = request.data.get('ids_categoria', [])
