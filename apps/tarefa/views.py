@@ -105,6 +105,42 @@ class AtualizarTarefaView(APIView):
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
+
+class AtualizarIteracaoTarefasView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def patch(self, request):
+        ids_tarefas = request.data.get('ids_tarefas', [])
+        id_iteracao = request.data.get('id_iteracao')
+        
+        if not ids_tarefas:
+            return Response({'error': 'Nenhum ID de tarefa fornecido'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if not id_iteracao:
+            return Response({'error': 'ID de iteração não fornecido'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            # Buscar iteração ou retornar 404
+            iteracao = get_object_or_404(Iteracao, id=id_iteracao)
+            
+            # Filtrar as tarefas com base nos IDs fornecidos
+            tarefas = Tarefa.objects.filter(id__in=ids_tarefas)
+            
+            if not tarefas.exists():
+                return Response({'error': 'Nenhuma tarefa encontrada com os IDs fornecidos'}, status=status.HTTP_404_NOT_FOUND)
+            
+            # Atualizar a iteração das tarefas de uma vez só
+            tarefas.update(iteracao=iteracao)
+            
+            # Serializar e retornar as tarefas atualizadas
+            serializer = TarefaSerializer(tarefas, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        except IntegrityError as e:
+            return Response({'error': 'Erro de integridade de dados'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 class BuscarTarefaPeloIdView(APIView):
     permission_classes = [IsAuthenticated]
@@ -196,6 +232,26 @@ class ListarTarefasPorProjetoView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
+class ListarTarefasPorIteracaoView(APIView): 
+    permission_classes = [IsAuthenticated] 
+    def get(self, request):
+        try:
+            id_iteracao = request.GET.get('id_iteracao', None)
+            
+            if not id_iteracao:
+                return Response({'error': 'O ID da iteração não foi fornecido'}, status=status.HTTP_400_BAD_REQUEST)
+                      
+            tarefas = Tarefa.objects.filter(iteracao_id=id_iteracao).order_by('id')
+            
+            if tarefas.exists():  
+                serializer = TarefaSerializer(tarefas, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response([], status=status.HTTP_200_OK)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
 class ExcluirTarefaView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -259,22 +315,6 @@ class ReabrirTarefasView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-class ListarTarefasPorIteracaoView(APIView): 
-    permission_classes = [IsAuthenticated] 
-    def get(self, request, id_iteracao):
-        
-        try:
-            
-            tarefas = Tarefa.objects.filter(iteracao_id=id_iteracao).order_by('id')
-            
-            if tarefas.exists():  
-                serializer = TarefaSerializer(tarefas, many=True)
-                return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False}, status=status.HTTP_200_OK)
-            
-            return JsonResponse([], safe=False, status=status.HTTP_200_OK)
-        
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 class VerificarIssueExisteView(APIView):
     permission_classes = [IsAuthenticated]
@@ -334,35 +374,3 @@ class PararContagemTempoView(APIView):
             return JsonResponse({'success': True})
         except Tarefa.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Tarefa não encontrada'})
-
-class AtualizarIteracaoTarefasView(APIView):
-    permission_classes = [IsAuthenticated]
-    
-    def patch(self, request):
-        try:
-            ids_tarefas = request.data.get('ids_tarefas', [])
-            id_iteracao = request.data.get('id_iteracao', None)
-            
-            if not ids_tarefas:
-                return Response({'error': 'Nenhum ID de tarefa fornecido'}, status=status.HTTP_400_BAD_REQUEST)
-            
-            if id_iteracao is None:
-                return Response({'error': 'ID de iteração não fornecido'}, status=status.HTTP_400_BAD_REQUEST)
-            
-            iteracao = Iteracao.objects.get(pk=id_iteracao)
-            tarefas = Tarefa.objects.filter(pk__in=ids_tarefas)
-            
-            for tarefa in tarefas:
-                tarefa.iteracao = iteracao
-                tarefa.save()
-            
-            return Response({'success': True}, status=status.HTTP_200_OK)
-        
-        except Iteracao.DoesNotExist:
-            return Response({'error': 'A iteração especificada não existe'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        except Tarefa.DoesNotExist:
-            return Response({'error': 'Uma ou mais tarefas especificadas não existem'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -2,7 +2,11 @@ from django.contrib import admin
 from .models import Tarefa, CategoriaTarefa, IntervaloTempo
 
 class TarefaAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nome', 'data_criacao', 'status')
+    list_display = ('id', 'nome', 'data_criacao', 'exibir_projeto', 'status')
+    
+    def exibir_projeto(self, obj): 
+        return obj.projeto.nome 
+    exibir_projeto.short_description = 'Projeto'
 
 class CategoriaTarefaAdmin(admin.ModelAdmin):
     list_display = ('id', 'nome', 'cor')
