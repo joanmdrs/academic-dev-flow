@@ -129,7 +129,7 @@ class BuscarTarefaPeloIdView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
         
-class FiltrarTarefasPeloNomeEPeloProjeto(APIView):
+class BuscarTarefasPeloNomeEPeloProjeto(APIView):
     permission_classes = [IsAuthenticated]
     
     def get(self, request):
@@ -157,88 +157,44 @@ class FiltrarTarefasPeloNomeEPeloProjeto(APIView):
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)   
-            
-class ListarTarefasPorProjetoView(APIView):
+        
+class ListarTarefasView(APIView):
     permission_classes = [IsAuthenticated]
     
-    def get(self, request, id_projeto): 
+    def get(self, request):
         try:
+            
+            tarefas = Tarefa.objects.all()
+            
+            if tarefas.exists():
+                serializer = TarefaSerializer(tarefas, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response([], status=status.HTTP_204_NO_CONTENT)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
+class ListarTarefasPorProjetoView(APIView):
+    permission_classes = [IsAuthenticated] 
+    def get(self, request): 
+        try:
+            id_projeto = request.GET.get('id_projeto', None)
+            
+            if not id_projeto:
+                return Response({'error': 'O ID do projeto não foi fornecido.'}, status=status.HTTP_400_BAD_REQUEST)
+            
             tarefas = Tarefa.objects.filter(projeto_id=id_projeto).order_by('id')
-            tarefas_info = []
-
-            for tarefa in tarefas:
-                estado_contagem = tarefa.estado_contagem_tempo()
-                membros_info = self.get_membros_info(tarefa)
-                membros = self.get_membros(tarefa)
-                iteracao_nome = self.get_iteracao_nome(tarefa)
-                categoria = self
-                # labels_info = self.get_labels_info(tarefa)
-                # labels = self.get_labels(tarefa)
-
-                tarefa_info = {
-                    'id': tarefa.id,
-                    'nome': tarefa.nome,
-                    'data_inicio': tarefa.data_inicio,
-                    'data_termino': tarefa.data_termino,
-                    'status': tarefa.status,
-                    'descricao': tarefa.descricao,
-                    'categoria': tarefa.categoria_id,
-                    'id_issue': tarefa.id_issue,
-                    'number_issue': tarefa.number_issue,
-                    'url_issue': tarefa.url_issue,
-                    'projeto': tarefa.projeto_id, 
-                    'iteracao': tarefa.iteracao_id,
-                    'nome_iteracao': iteracao_nome,
-                    'membros_info': membros_info,
-                    'membros': membros,
-                    # 'labels_info': labels_info,
-                    # 'labels': labels,
-                    'estado_contagem_tempo': estado_contagem,
-                    'tempo_gasto': tarefa.tempo_gasto
-                }
-                tarefas_info.append(tarefa_info)
+            
+            if tarefas.exists():
                 
-            return JsonResponse(tarefas_info, safe=False, json_dumps_params={'ensure_ascii': False})
+                serializer = TarefaSerializer(tarefas, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response({'error': 'Tarefas não encontradas'}, status=status.HTTP_404_NOT_FOUND)
                 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    def get_membros_info(self, tarefa):
-        membros_info = []
-        for membro in tarefa.membros.all():
-            membro_info = {
-                'id_membro_projeto': membro.id,
-                'id_membro': membro.membro.id,
-                'nome_membro': membro.membro.nome,
-                'grupo_membro': membro.membro.grupo
-            }
-            membros_info.append(membro_info)
-        return membros_info
-    
-    def get_membros(self, tarefa):
-        membros_ids = tarefa.membros.all().values_list('id', flat=True)
-        return list(membros_ids)
-
-    # def get_labels_info(self, tarefa):
-    #     labels_info = []
-    #     for label in tarefa.labels.all():
-    #         label_info = {
-    #             'id': label.id,
-    #             'nome': label.nome,
-    #         }
-    #         labels_info.append(label_info)
-    #     return labels_info
-
-    # def get_labels(self, tarefa):
-    #     labels_ids = tarefa.labels.all().values_list('id', flat=True)
-    #     return list(labels_ids)
-
-    def get_iteracao_nome(self, tarefa):
-        if tarefa.iteracao_id is not None:
-            iteracao = Iteracao.objects.get(id=tarefa.iteracao_id)
-            return iteracao.nome
-        else:
-            return None
         
 class ExcluirTarefaView(APIView):
     permission_classes = [IsAuthenticated]
@@ -319,25 +275,6 @@ class ListarTarefasPorIteracaoView(APIView):
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-            
-            
-class ListarTarefasView(APIView):
-    permission_classes = [IsAuthenticated]
-    
-    def get(self, request):
-        try:
-            
-            tarefas = Tarefa.objects.all()
-            
-            if tarefas.exists():
-                serializer = TarefaSerializer(tarefas, many=True)
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            
-            return Response([], status=status.HTTP_204_NO_CONTENT)
-        
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
         
 class VerificarIssueExisteView(APIView):
     permission_classes = [IsAuthenticated]
