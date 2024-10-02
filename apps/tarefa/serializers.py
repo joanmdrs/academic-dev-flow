@@ -1,7 +1,12 @@
 from rest_framework import serializers
-from .models import Tarefa, CategoriaTarefa
+from .models import Tarefa, CategoriaTarefa, IntervaloTempo
 from apps.membro_projeto.models import MembroProjeto
 from apps.membro.models import Membro
+
+class IntervaloTempoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = IntervaloTempo
+        fields = '__all__'
 
 class CategoriaTarefaSerializer(serializers.ModelSerializer):
     class Meta:
