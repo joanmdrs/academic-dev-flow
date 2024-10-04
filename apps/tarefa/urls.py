@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import *
-from .views_labels import *
+from .views_tarefa import *
 from .views_categoria import *
+from .views_intervalo_tempo import *
 
 app_name='tarefa'
 
@@ -14,22 +14,19 @@ urlpatterns = [
     path('listar/', ListarTarefasView.as_view(), name='listar_tarefas'),
     path('listar-por-projeto/', ListarTarefasPorProjetoView.as_view(), name="listar_tarefas_por_projeto"),
     path('listar-por-iteracao/', ListarTarefasPorIteracaoView.as_view(), name='listar_tarefas_por_iteracao'),
-
     path('excluir/', ExcluirTarefaView.as_view(), name="excluir_tarefa"),
-    path('concluir/', ConcluirTarefasView.as_view(), name="concluir_tarefa"),
-    path('reabrir/', ReabrirTarefasView.as_view(), name='reabrir_tarefa'),
-    path('verificar-existencia/', VerificarIssueExisteView.as_view(), name='verificar-existencia_issue'), 
-    path('sicronizar-issues/', SicronizarIssuesView.as_view(), name='sicronizar_issues'),
-    path('iniciar-contagem-tempo/', IniciarContagemTempoView.as_view(), name='iniciar-contagem-tempo'),
-    path('parar-contagem-tempo/', PararContagemTempoView.as_view(), name='parar-contagem-tempo'),
     
-    
+    path('iniciar-contagem-tempo/', IniciarContagemTempoView.as_view(), name='iniciar_contagem_tempo'),
+    path('parar-contagem-tempo/', PararContagemTempoView.as_view(), name='parar_contagem_tempo'), 
     
     path('categoria/cadastrar/', CadastrarCategoriaTarefaView.as_view(), name='cadastrar_categoria_da_tarefa'),
     path('categoria/atualizar/', AtualizarCategoriaTarefaView.as_view(), name='atualizar_categoria_da_tarefa'),
     path('categoria/buscar-pelo-nome/', BuscarCategoriaTarefaPeloNomeView.as_view(), name='buscar_categoria_da_tarefa_pelo_nome'),
     path('categoria/buscar-pelo-id/', BuscarCategoriaTarefaPeloIdView.as_view(), name='buscar_categoria_da_tarefa_pelo_id'),
     path('categoria/listar/', ListarCategoriaTarefaView.as_view(), name='listar_categoria_tarefa'),
-    path('categoria/excluir/', ExcluirCategoriaTarefaView.as_view(), name='excluir_categoria')
+    path('categoria/excluir/', ExcluirCategoriaTarefaView.as_view(), name='excluir_categoria'),
+    
+    path('verificar-existencia/', VerificarIssueExisteView.as_view(), name='verificar-existencia_issue'), 
+    path('sicronizar-issues/', SicronizarIssuesView.as_view(), name='sicronizar_issues'),
     
 ]

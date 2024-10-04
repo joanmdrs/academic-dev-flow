@@ -12,7 +12,7 @@ class CategoriaTarefaAdmin(admin.ModelAdmin):
     list_display = ('id', 'nome', 'cor')
 
 class IntervaloTempoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'exibir_tarefa', 'exibir_membro', 'data_hora')
+    list_display = ('id', 'tipo', 'exibir_tarefa', 'exibir_membro', 'data_hora')
     
     def exibir_tarefa(self, obj):
         return obj.tarefa.nome

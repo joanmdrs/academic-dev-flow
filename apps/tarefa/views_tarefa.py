@@ -1,17 +1,13 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from django.http import HttpResponseNotAllowed, JsonResponse
 from .models import Tarefa
 from .serializers import TarefaSerializer
 from apps.membro_projeto.models import MembroProjeto
-from apps.membro.models import Membro
-from apps.fluxo.models import Fluxo
 from apps.iteracao.models import Iteracao
 from apps.categoria.models import Categoria
 from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
-from django.http import Http404
 from django.shortcuts import get_object_or_404
 
 class CadastrarTarefaView(APIView):
@@ -257,64 +253,21 @@ class ExcluirTarefaView(APIView):
 
     def delete(self, request):
         try:
-            ids_tasks = request.GET.getlist('ids[]', [])
+            ids_tarefas = request.data.get('ids_tarefas', [])
 
-            if ids_tasks is not None:
-                tarefas = Tarefa.objects.filter(id__in=ids_tasks)
+            if not ids_tarefas:
+                return Response({'error': 'O IDs das tarefas não foram fornecidos'}, status=status.HTTP_400_BAD_REQUEST)
                 
-                if tarefas.exists():
-                    tarefas.delete()
-                    return Response({"detail": "Tarefas excluídas com sucesso"}, status=status.HTTP_204_NO_CONTENT)
-                
-                return Response({'error': 'Nenhuma tarefa encontrada com os IDs fornecidos'}, status=status.HTTP_404_NOT_FOUND)
-
-            return Response({'error': 'IDs das tarefas a serem excluídas não fornecidos'}, status=status.HTTP_400_BAD_REQUEST)
+            tarefas = Tarefa.objects.filter(id__in=ids_tarefas)
+            
+            if tarefas.exists():
+                tarefas.delete()
+                return Response({"detail": "Tarefas excluídas com sucesso"}, status=status.HTTP_204_NO_CONTENT)
+            
+            return Response({'error': 'Uma ou mais tarefas não foram encontradas'}, status=status.HTTP_404_NOT_FOUND)
 
         except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-class ConcluirTarefasView(APIView):
-    permission_classes = [IsAuthenticated]
-    def patch(self, request):
-        try:
-            
-            ids_tasks = request.data.get('ids', [])
-            
-            if not ids_tasks:
-                return Response({'error': 'IDs das tarefas a serem concluídas não forão fornecidos'}, status=status.HTTP_400_BAD_REQUEST)
-
-            tarefas = Tarefa.objects.filter(id__in=ids_tasks)
-            
-            for tarefa in tarefas:
-                tarefa.concluida = True  
-                tarefa.save()
-
-            return Response({'success': 'Tarefas resolvidas com sucesso'}, status=status.HTTP_200_OK)
-        
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-            
-class ReabrirTarefasView(APIView):
-    permission_classes = [IsAuthenticated]
-    def patch(self, request):
-        try:
-            
-            ids_tasks = request.data.get('ids', [])
-            
-            if not ids_tasks:
-                return Response({'error': 'IDs das tarefas a serem reabertas não forão fornecidos'}, status=status.HTTP_400_BAD_REQUEST)
-
-            tarefas = Tarefa.objects.filter(id__in=ids_tasks)
-            
-            for tarefa in tarefas:
-                tarefa.concluida = False 
-                tarefa.save()
-
-            return Response({'success': 'Tarefas reabertas com sucesso'}, status=status.HTTP_200_OK)
-        
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
         
 class VerificarIssueExisteView(APIView):
     permission_classes = [IsAuthenticated]
@@ -348,29 +301,3 @@ class SicronizarIssuesView(APIView):
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
-
-class IniciarContagemTempoView(APIView):
-    permission_classes = [IsAuthenticated]
-    def post(self, request):
-        try:
-            membro_projeto = MembroProjeto.objects.get(pk=request.data['membro_projeto_id'])
-            tarefa = Tarefa.objects.get(pk=request.data['tarefa_id'])
-            
-            tarefa.iniciar_contagem_tempo(membro_projeto=membro_projeto)
-            
-            return JsonResponse({'success': True})
-        except Tarefa.DoesNotExist:
-            return JsonResponse({'success': False, 'error': 'Tarefa não encontrada'})
-
-class PararContagemTempoView(APIView):
-    permission_classes = [IsAuthenticated]
-    def post(self, request):
-        try:
-            membro_projeto = MembroProjeto.objects.get(pk=request.data['membro_projeto_id'])
-            tarefa = Tarefa.objects.get(pk=request.data['tarefa_id'])
-            
-            tarefa.parar_contagem_tempo(membro_projeto=membro_projeto)
-            
-            return JsonResponse({'success': True})
-        except Tarefa.DoesNotExist:
-            return JsonResponse({'success': False, 'error': 'Tarefa não encontrada'})
