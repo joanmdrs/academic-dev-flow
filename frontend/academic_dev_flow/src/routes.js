@@ -10,7 +10,6 @@ import ScreenGerenciarMembros from "./pages/Membro/screens/GerenciarMembros";
 import ScreenVincularMembroAoProjeto from "./pages/Membro/screens/VincularMembroAoProjeto";
 import Login from "./pages/Auth/Login/Login";
 import Register from "./pages/Auth/Register";
-import PageGerenciarTipos from "./pages/Tipo";
 import ScreenGerenciarTarefas from "./pages/Tarefa/screens/GerenciarTarefas";
 import ScreenGerenciarArtefatos from "./pages/Artefato/screens/GerenciarArtefatos";
 import ScreenVisualizarArtefato from "./pages/Artefato/screens/VisualizarArtefato";
@@ -34,6 +33,7 @@ import ScreenGerenciarFluxos from "./pages/Fluxo";
 import ScreenGerenciarEtapas from "./pages/Etapa/screens/GerenciarEtapas";
 import ScreenGerenciarCategoriaFuncaoMembro from "./pages/FuncaoMembro";
 import { ProviderGlobalProjeto } from "./context/ContextoGlobalProjeto/ContextoGlobalProjeto";
+import ScreenGerenciarCategoriaTarefa from "./pages/CategoriaTarefa";
 
 function Routes() {
     return (
@@ -117,9 +117,9 @@ function Routes() {
                     exact
                 />
 
-                {/* Menu Item Tipos */}
+                {/* Menu Item Categorias de Tarefa */}
 
-                <Route path="/admin/categorias" Component={PageGerenciarTipos} exact />
+                <Route path="/admin/tarefas/gerenciar-categorias" Component={ScreenGerenciarCategoriaTarefa} exact />
 
                 {/* Menu Item Iterações */}
 

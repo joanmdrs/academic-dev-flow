@@ -8,9 +8,14 @@ import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 import { optionsStatusTarefas } from "../../../../services/optionsStatus";
 import { IoMdCreate, IoMdOpen, IoMdTrash } from "react-icons/io";
 
-const ListaTarefas = ({onView, onEdit, onDelete }) => {
+const TableTarefas = ({onView, onEdit, onDelete }) => {
 
     const COLUNAS_TABELA_TAREFAS = [
+        {
+            title: 'ID',
+            dataIndex: 'id',
+            key: 'id'
+        },
         {
             title: 'Nome',
             dataIndex: 'nome',
@@ -117,4 +122,4 @@ const ListaTarefas = ({onView, onEdit, onDelete }) => {
     );
 };
 
-export default ListaTarefas;
+export default TableTarefas;

@@ -2,22 +2,22 @@ import React, { useEffect, useState } from 'react'
 import {Form, Input, Button} from 'antd'
 import { FaArrowsRotate } from "react-icons/fa6";
 import { gerarCorAleatoria, lightenDarkenColor } from '../../../../services/utils';
-import { useContextoTipo } from '../../context/ContextoTipo';
+import { useContextoCategoriaTarefa } from '../../context/ContextoCategoriaTarefa';
 
-const FormTipo = ({onSubmit, onCancel}) => {
+const FormCategoriaTarefa = ({onSubmit, onCancel}) => {
 
     const [cor, setCor] = useState('');
     const [corClara, setCorClara] = useState('')
-    const {dadosTipo} = useContextoTipo()
+    const {dadosCategoria} = useContextoCategoriaTarefa()
     const [form] = Form.useForm()
     const [titulo, setTitulo] = useState("CADASTRAR CATEGORIA")
 
     useEffect(() => {
         const fetchData = async () => {
 
-            if (dadosTipo !== null) {
-                form.setFieldsValue(dadosTipo)
-                setCor(dadosTipo.cor)
+            if (dadosCategoria !== null) {
+                form.setFieldsValue(dadosCategoria)
+                setCor(dadosCategoria.cor)
                 setTitulo("ATUALIZAR CATEGORIA")
 
             } else {
@@ -28,7 +28,7 @@ const FormTipo = ({onSubmit, onCancel}) => {
         }
 
         fetchData()
-    }, [dadosTipo])
+    }, [dadosCategoria])
 
     const handleGerarCor = () => {
         const color = gerarCorAleatoria()
@@ -36,7 +36,6 @@ const FormTipo = ({onSubmit, onCancel}) => {
         setCor(color)
         setCorClara(lightColor)
     }
-
 
     const handleAlterarCor = ({target: {value}}) => {
         setCor(value)
@@ -64,7 +63,7 @@ const FormTipo = ({onSubmit, onCancel}) => {
             </Form.Item>
 
             <Form.Item label='Descrição' name='descricao'>
-                <Input type='text' name='descricão' placeholder='descrição (opcional)' />
+                <Input.TextArea type='text' name='descricão' placeholder='descrição (opcional)' rows={4} />
             </Form.Item>
 
             <div style={{display: 'flex', alignItems: 'flex-end', gap: '10px'}}> 
@@ -91,9 +90,8 @@ const FormTipo = ({onSubmit, onCancel}) => {
                 </Form.Item>
 
             </div>
-
         </Form>
     )
 }
 
-export default FormTipo
+export default FormCategoriaTarefa

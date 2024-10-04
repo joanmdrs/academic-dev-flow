@@ -11,6 +11,7 @@ export const ProviderTarefa = ({ children }) => {
     const [dadosTarefa, setDadosTarefa] = useState(null);
     const [tarefasSelecionadas, setTarefasSelecionadas] = useState([]);
     const [reload, setReload] = useState(false);
+    const [acaoForm, setAcaoForm] = useState('criar')
 
     const [tasksCriadas, setTasksCriadas] = useState([]);
     const [tasksEmAndamento, setTasksEmAndamento] = useState([]);
@@ -48,6 +49,7 @@ export const ProviderTarefa = ({ children }) => {
     return (
         <ContextoTarefa.Provider
             value={{
+                acaoForm, setAcaoForm,
                 step, setStep,
                 reload, setReload,
                 tarefas, setTarefas,

@@ -1,39 +1,93 @@
 import { NotificationManager } from "react-notifications";
 import api from "../api/api";
 import { handleError, handleInfo, handleSuccess } from "./utils";
-import { ERROR_MESSAGE_ON_CREATION_THE_LABELS, ERROR_MESSAGE_ON_SEARCHING, ERROR_MESSAGE_ON_SYNC, INFO_MESSAGE_MANDATORY_PARAMETERS, INFO_MESSAGE_ON_SEARCHING, SUCCESS_MESSAGE_ON_CREATION, SUCCESS_MESSAGE_ON_CREATION_THE_LABELS, SUCCESS_MESSAGE_ON_SYNC_ISSUES } from "./messages";
+import { 
+    ERROR_MESSAGE_ON_SEARCHING, 
+    ERROR_MESSAGE_ON_SYNC, 
+    INFO_MESSAGE_MANDATORY_PARAMETERS, 
+    INFO_MESSAGE_ON_SEARCHING, 
+    SUCCESS_MESSAGE_ON_CREATION,
+    SUCCESS_MESSAGE_ON_SYNC_ISSUES } from "./messages";
 
-export const criarTarefa = async (dadosForm, dadosIssue) => {
+export const criarTarefa = async (formData, issueData) => {
 
-    const dadosEnviar = {
-        nome: dadosForm.nome,
-        data_inicio: dadosForm.data_inicio,
-        data_termino: dadosForm.data_termino,
-        status: dadosForm.status,
-        descricao: dadosForm.descricao,
-        id_issue: dadosIssue.issue_id,
-        number_issue: dadosIssue.issue_number,
-        url_issue: dadosIssue.issue_url,
-        tipo: dadosForm.tipo,
-        labels: dadosForm.labels,
-        projeto: dadosForm.projeto,
-        membros: dadosForm.membros,
-        iteracao: dadosForm.iteracao
+    const sendData = {
+        nome: formData.nome,
+        descricao: formData.descricao,
+        data_inicio: formData.data_inicio,
+        data_termino: formData.data_termino,
+        status: formData.status,
+        id_issue: issueData ? issueData.issue_id : null,
+        number_issue: issueData ? issueData.issue_number : null,
+        url_issue: issueData ? issueData.issue_url : null,
+        projeto: formData.projeto,
+        membros: formData.membros,
+        iteracao: formData.iteracao,
+        categoria: formData.categoria
     }
     
     try {
-        const response = await api.post('tarefa/cadastrar/', dadosEnviar)
+        const response = await api.post('tarefa/cadastrar/', sendData)
         return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION)
     } catch (error) {
-        console.log(error)
-        NotificationManager.error('Falha ao cadastrar a tarefa !')
-        return {error: 'erro ao cadastrar a tarefa'}
+        return handleError(error, 'Falha ao tentar criar a tarefa !')
     }
 }
 
-export const buscarTarefaPeloId = async (id) => {
+export const atualizarTarefa = async (idTarefa, sendData) => {
     try {
-        const response = await api.get(`tarefa/buscar/${encodeURIComponent(id)}/`)
+        const response = await api.patch(`tarefa/atualizar/`,sendData, {params: {id_tarefa: idTarefa}})
+        if (response.status === 200){
+            NotificationManager.success('Tarefa atualizada com sucesso !')
+            return response
+        }
+        
+    } catch (error) {
+        console.log(error)
+        NotificationManager.error('Falha ao atualizar a tarefa, contate o suporte!')
+        return {error: 'Erro ao atualizar a tarefa!'}
+    }
+}
+
+export const vincularIteracaoAsTarefas = async (idsTarefas, idIteracao) => {
+    const sendData = {
+        ids_tarefas: idsTarefas,
+        id_iteracao: idIteracao
+    }
+    try {
+        const response = await api.patch('tarefa/atualizar-iteracao/', sendData)
+        return handleSuccess(response, 'Atribuição de tarefas a iteração realizada com sucesso!')
+    } catch (error) {
+        return handleError(error, 'Falha durante a atribuição das tarefas a iteração, contate o suporte!')
+    }
+}
+
+export const buscarTarefaPeloId = async (idTarefa) => {
+    try {
+        const response = await api.get(`tarefa/buscar-pelo-id/`, {params: {id_tarefa: idTarefa}})
+        return response
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
+}
+
+export const BuscarTarefasPeloNomeEPeloProjeto = async (nomeTarefa, idProjeto) => {
+    try {
+        const response = await api.get(
+            'tarefa/buscar-pelo-nome-e-pelo-projeto/', {params: {nome_tarefa: nomeTarefa, id_projeto: idProjeto}})
+        if (response.status === 204) {
+            return handleInfo(response, INFO_MESSAGE_ON_SEARCHING)
+        }
+        return response 
+    } catch (error) {
+        return handleError(error, INFO_MESSAGE_MANDATORY_PARAMETERS)
+
+    }
+}
+
+export const listarTarefas = async () => {
+    try {
+        const response = await api.get('tarefa/listar/')
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
@@ -42,7 +96,7 @@ export const buscarTarefaPeloId = async (id) => {
 
 export const listarTarefasPorProjeto = async (idProjeto) => {
     try {
-        const response = await api.get(`tarefa/listar/projeto/${encodeURIComponent(idProjeto)}/`)
+        const response = await api.get('tarefa/listar-por-projeto', {params: {id_projeto: idProjeto}})
 
         if(response.status === 200){
             return response
@@ -56,7 +110,7 @@ export const listarTarefasPorProjeto = async (idProjeto) => {
 
 export const listarTarefasPorIteracao = async (idIteracao) => {
     try {
-        const response = await api.get(`tarefa/listar/iteracao/${encodeURIComponent(idIteracao)}/`)
+        const response = await api.get('tarefa/listar-por-iteracao/', {params: {id_iteracao: idIteracao}})
         return response
     } catch (error) {
         console.log(error)
@@ -65,24 +119,9 @@ export const listarTarefasPorIteracao = async (idIteracao) => {
     }
 }
 
-export const atualizarTarefa = async (id, dados) => {
+export const excluirTarefas = async (idsTarefas) => {
     try {
-        const response = await api.patch(`tarefa/atualizar/${encodeURIComponent(id)}/`, dados)
-        if (response.status === 200){
-            NotificationManager.success('Tarefa atualizada com sucesso !')
-            return response
-        }
-        
-    } catch (error) {
-        console.log(error)
-        NotificationManager.error('Falha ao atualizar a tarefa, contate o suporte!')
-        return {error: 'Erro ao atualizar a tarefa!'}
-    }
-}
-
-export const excluirTarefas = async (ids) => {
-    try {
-        const response = await api.delete('tarefa/excluir/',{params: {ids: ids}})
+        const response = await api.delete('tarefa/excluir/', {data: { ids_tarefas: idsTarefas}})
         if (response.status === 204){
             NotificationManager.success('Tarefa(s) excluída(s) com sucesso!')
             return response
@@ -93,6 +132,25 @@ export const excluirTarefas = async (ids) => {
         return {error: 'Erro ao excluir a(s) tarefa(s)!'}
     }
 }
+
+export const iniciarContagemTempo = async (sendData) => {
+    try {
+        const response = await api.post('tarefa/iniciar-contagem-tempo/', sendData)
+        return handleSuccess(response, 'Você está iniciando uma tarefa !')
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar iniciar a tarefa, contate o suporte!')
+    }
+}
+
+export const pararContagemTempo = async (sendData) => {
+    try {
+        const response = await api.post('tarefa/parar-contagem-tempo/', sendData)
+        return handleSuccess(response, 'Você está pausando uma tarefa !')
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar pausar a tarefa, contate o suporte!')
+    }
+}
+
 
 export const concluirTarefas = async (ids) => {
     try {
@@ -122,28 +180,6 @@ export const reabrirTarefas = async (ids) => {
     }
 }
 
-export const listarTarefas = async () => {
-    try {
-        const response = await api.get('tarefa/listar/')
-        return response
-    } catch (error) {
-        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
-    }
-}
-
-export const filtrarTarefasPeloNomeEPeloProjeto = async (nomeTarefa, idProjeto) => {
-    try {
-        const response = await api.get('tarefa/filtrar/nome-projeto/', {params: {nome_tarefa: nomeTarefa, id_projeto: idProjeto}})
-        if (response.status === 204) {
-            return handleInfo(response, INFO_MESSAGE_ON_SEARCHING)
-        }
-        return response 
-    } catch (error) {
-        return handleError(error, INFO_MESSAGE_MANDATORY_PARAMETERS)
-
-    }
-}
-
 export const verificarExistenciaIssue = async (parametro) => {
     try {
         const response = await api.get('tarefa/verificar-existencia/', {params: {id_issue: parametro}})
@@ -157,33 +193,6 @@ export const verificarExistenciaIssue = async (parametro) => {
     }
 }
 
-export const criarLabels = async (dados) => {
-    try {
-        const response = await api.post('tarefa/labels/cadastrar/', {labels: dados})
-        return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION_THE_LABELS)
-    } catch (error) {
-        return handleError(error, ERROR_MESSAGE_ON_CREATION_THE_LABELS)
-    }
-}
-
-export const buscarLabelPeloId = async (id) => {
-    try {
-        const response = await api.get(`tarefa/labels/buscar/${encodeURIComponent(id)}/`)
-        return response
-        
-    } catch (error) {
-        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
-    }
-}
-
-export const listarLabelsPorProjeto = async (id_projeto) => {
-    try {
-        const response = await api.get(`tarefa/labels/listar-por-projeto/${encodeURIComponent(id_projeto)}/`)
-        return response
-    } catch (error) {
-        handleError(error, ERROR_MESSAGE_ON_SEARCHING)
-    }
-}
 
 export const sicronizarIssues = async (dados) => {
     try {
@@ -192,31 +201,4 @@ export const sicronizarIssues = async (dados) => {
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SYNC)
     } 
-}
-
-export const iniciarContagemTempo = async (parametros) => {
-    try {
-        const response = await api.post('tarefa/iniciar-contagem-tempo/', parametros)
-        return handleSuccess(response, 'Você está iniciando uma tarefa !')
-    } catch (error) {
-        return handleError(error, 'Falha ao tentar iniciar a tarefa, contate o suporte!')
-    }
-}
-
-export const pararContagemTempo = async (parametros) => {
-    try {
-        const response = await api.post('tarefa/parar-contagem-tempo/', parametros)
-        return handleSuccess(response, 'Você está pausando uma tarefa !')
-    } catch (error) {
-        return handleError(error, 'Falha ao tentar pausar a tarefa, contate o suporte!')
-    }
-}
-
-export const vincularIteracaoAsTarefas = async (dados) => {
-    try {
-        const response = await api.patch('tarefa/atualizar-iteracao/', dados)
-        return handleSuccess(response, 'Atribuição de tarefas a iteração realizada com sucesso!')
-    } catch (error) {
-        return handleError(error, 'Falha durante a atribuição das tarefas a iteração, contate o suporte!')
-    }
 }

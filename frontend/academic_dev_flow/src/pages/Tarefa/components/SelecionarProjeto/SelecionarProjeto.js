@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { buscarProjetoPeloId, listarProjetos } from "../../../../services/projetoService";
 import { Select } from "antd";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
+import { useContextoTarefa } from "../../context/ContextoTarefa";
 
 const SelecionarProjeto = () => {
     const [optionsProjetos, setOptionsProjetos] = useState([]);
     const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
+    const {acaoForm} = useContextoTarefa()
 
     useEffect(() => {
         const fetchData = async () => {
@@ -43,6 +45,7 @@ const SelecionarProjeto = () => {
         <div style={{display: 'flex', flexDirection: 'column', gap:'20px', flex: "1"}}>
 
             <Select
+                disabled={acaoForm === 'atualizar' ? true : false}
                 showSearch
                 allowClear
                 value={ dadosProjeto ? dadosProjeto.id : null}

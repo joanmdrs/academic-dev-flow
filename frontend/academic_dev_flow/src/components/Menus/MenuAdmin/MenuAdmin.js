@@ -105,6 +105,10 @@ const MenuAdmin = () => {
                     icon={<MdOutlineTaskAlt style={{ fontSize: "20px" }} />}
                     title="Tarefas"
                 >
+                    <Menu.Item key="/admin/tarefas/gerenciar-categorias">
+                        <Link to="/admin/tarefas/gerenciar-categorias"> Categorias </Link>
+                    </Menu.Item>
+
                     <Menu.Item key="/admin/tarefas/gerenciar">
                         <Link to="/admin/tarefas/gerenciar">Gerenciar tarefas</Link>
                     </Menu.Item>
@@ -117,14 +121,6 @@ const MenuAdmin = () => {
                         <Link to="/admin/tarefas/labels">Labels</Link>
                     </Menu.Item> */}
                 </SubMenu>
-
-                <Menu.Item 
-                    className="item-menu"
-                    key="/admin/categorias"
-                    icon={<IoPricetagsOutline style={{ fontSize: "20px" }} />}
-                >
-                    <Link to="/admin/categorias">Categorias</Link>
-                </Menu.Item>
 
                 <Menu.Item
                     className="item-menu"

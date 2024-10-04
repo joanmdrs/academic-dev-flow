@@ -3,22 +3,23 @@ import { useForm } from 'antd/es/form/Form';
 import { Switch } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useContextoTarefa } from '../../context/ContextoTarefa';
-import { buscarMembrosPorProjeto, listarMembrosPeloIdProjeto } from '../../../../services/membroProjetoService';
+import { buscarMembrosPorProjeto } from '../../../../services/membroProjetoService';
 import { listarIteracoesPorProjeto } from '../../../../services/iteracaoService';
 import Loading from '../../../../components/Loading/Loading';
 import { optionsStatusTarefas } from '../../../../services/optionsStatus';
 import { handleError } from '../../../../services/utils';
 import { ERROR_MESSAGE_ON_SEARCHING } from '../../../../services/messages';
-import { listarTipos } from '../../../../services/tipoService';
 import { useContextoGlobalProjeto } from '../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto';
+import { listarCategoriaTarefa } from '../../../../services/categoriaTarefaService';
 
-function FormTarefa({ onCancel, onSubmit, additionalFields, inputsAdmin }) {
+function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
+
     const [form] = useForm();
     const { dadosTarefa } = useContextoTarefa();
     const { dadosProjeto } = useContextoGlobalProjeto();
     const [optionsMembros, setOptionsMembros] = useState([]);
     const [optionsIteracoes, setOptionsIteracoes] = useState([]);
-    const [optionsTipos, setOptionsTipos] = useState([]);
+    const [optionsCategorias, setOptionsCategorias] = useState([]);
     const [loading, setLoading] = useState(true);
     const [titulo, setTitulo] = useState('CADASTRAR TAREFA');
 
@@ -29,8 +30,7 @@ function FormTarefa({ onCancel, onSubmit, additionalFields, inputsAdmin }) {
                     setLoading(true);
                     await handleGetMembros();
                     await handleGetIteracoes();
-                    await handleGetTipos();
-                    // await handleGetLabels();
+                    await handleGetCategorias();
                     setLoading(false);
 
                     if (dadosTarefa !== null) {
@@ -87,16 +87,16 @@ function FormTarefa({ onCancel, onSubmit, additionalFields, inputsAdmin }) {
         </div>
     );
 
-    const handleGetTipos = async () => {
+    const handleGetCategorias = async () => {
         try {
-            const response = await listarTipos();
+            const response = await listarCategoriaTarefa();
             if (!response.error && response.data) {
                 const resultados = response.data.map((item) => ({
                     value: item.id,
                     label: renderOptionWithColor(item.nome, item.cor),
                     color: item.cor,
                 }));
-                setOptionsTipos(resultados);
+                setOptionsCategorias(resultados);
             }
         } catch (error) {
             return handleError(error, ERROR_MESSAGE_ON_SEARCHING);
@@ -123,9 +123,9 @@ function FormTarefa({ onCancel, onSubmit, additionalFields, inputsAdmin }) {
                 <h4> {titulo} </h4>
             </Form.Item>
 
-            {additionalFields && (
+            {selectProject && (
                 <Form.Item>
-                    {additionalFields}
+                    {selectProject}
                 </Form.Item>
             )}
 
@@ -211,15 +211,15 @@ function FormTarefa({ onCancel, onSubmit, additionalFields, inputsAdmin }) {
 
                     <Form.Item
                         label='Categoria'
-                        name='tipo'
+                        name='categoria'
                         rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
                     >
                         <Select
                             allowClear
                             style={{ width: '100%' }}
                             placeholder="Selecione"
-                            name="tipo"
-                            options={optionsTipos}
+                            name="categoria"
+                            options={optionsCategorias}
                         />
                     </Form.Item>
                 </div>

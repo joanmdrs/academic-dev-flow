@@ -2,11 +2,11 @@ import React from "react";
 import {Layout} from 'antd'
 import MenuAdmin from "../../components/Menus/MenuAdmin/MenuAdmin";
 import MyHeader from "../../components/Header/Header";
-import GerenciarTipos from "./screens/GerenciarTipos/GerenciarTipos";
-import { ProviderTipo } from "./context/ContextoTipo";
+import { ProviderCategoriaTarefa } from "./context/ContextoCategoriaTarefa";
+import GerenciarCategoriaTarefa from "./screens/GerenciarCategoriaTarefa/GerenciarCategoriaTarefa";
 const { Content } = Layout;
 
-const PageGerenciarTipos = () => {
+const ScreenGerenciarCategoriaTarefa = () => {
 
     return (
         <React.Fragment>
@@ -14,14 +14,13 @@ const PageGerenciarTipos = () => {
             <Layout>
                 <MyHeader/>
                 <Content>
-                    <ProviderTipo>
-                        <GerenciarTipos />
-                    </ProviderTipo>
+                    <ProviderCategoriaTarefa>
+                        <GerenciarCategoriaTarefa />
+                    </ProviderCategoriaTarefa>
                 </Content>
             </Layout>
         </React.Fragment>
-        
     )
 }   
 
-export default PageGerenciarTipos
+export default ScreenGerenciarCategoriaTarefa

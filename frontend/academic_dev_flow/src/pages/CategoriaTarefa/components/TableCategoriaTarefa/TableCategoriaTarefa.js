@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react"
 import {Table, Space, Tooltip} from 'antd'
-import { listarTipos } from "../../../../services/tipoService"
 import Loading from "../../../../components/Loading/Loading"
-import { useContextoTipo } from "../../context/ContextoTipo"
+import { useContextoCategoriaTarefa } from "../../context/ContextoCategoriaTarefa"
 import { IoMdCreate, IoMdTrash } from "react-icons/io"
+import { listarCategoriaTarefa } from "../../../../services/categoriaTarefaService"
 
-
-const ListaTipos = ({onEdit, onDelete}) => {
+const TableCategoriaTarefa = ({onEdit, onDelete}) => {
 
     const COLUNAS_TABELA = [
         {
@@ -49,20 +48,20 @@ const ListaTipos = ({onEdit, onDelete}) => {
 
     ]
 
-    const {tipos, setTipos } = useContextoTipo()
+    const {categorias, setCategorias } = useContextoCategoriaTarefa()
     const [loading, setLoading] = useState(true)
 
 
-    const handleListarTipos = async () => {
-        const response = await listarTipos()
-        setTipos(response.data)
+    const handleListarCategorias = async () => {
+        const response = await listarCategoriaTarefa()
+        setCategorias(response.data)
     }
 
     useEffect(() => {
         const fetchData = async () => {
 
-            if (tipos.length === 0) {
-                await handleListarTipos()
+            if (categorias.length === 0) {
+                await handleListarCategorias()
             }
             setLoading(false)
             
@@ -70,7 +69,7 @@ const ListaTipos = ({onEdit, onDelete}) => {
 
         fetchData()
 
-    }, [tipos])
+    }, [categorias])
 
     if (loading) {
         return <Loading />
@@ -80,9 +79,9 @@ const ListaTipos = ({onEdit, onDelete}) => {
     return (
         <Table
             columns={COLUNAS_TABELA}
-            dataSource={tipos}  
+            dataSource={categorias}  
         />
     )
 }
 
-export default ListaTipos
+export default TableCategoriaTarefa

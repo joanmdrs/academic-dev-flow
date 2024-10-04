@@ -2,22 +2,21 @@ import React, { useState } from "react";
 import Titulo from "../../../../components/Titulo/Titulo";
 import { FaFilter, FaPlus, FaTrash } from "react-icons/fa";
 import {Button, Modal, Spin} from 'antd'
-import ListaTarefas from "../../components/ListaTarefas/ListaTarefas"
 import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProjeto";
 import FormBuscarTarefa from "../../components/FormBuscarTarefa/FormBuscarTarefa";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
 import { 
     atualizarTarefa, 
+    BuscarTarefasPeloNomeEPeloProjeto, 
     criarTarefa, 
-    excluirTarefas, 
-    filtrarTarefasPeloNomeEPeloProjeto } from "../../../../services/tarefaService";
+    excluirTarefas } from "../../../../services/tarefaService";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { createIssue, updateIssue } from "../../../../services/githubIntegration/issueService";
 import FormTarefa from "../../components/FormTarefa/FormTarefa";
 import InputsAdminTarefa from "../../components/InputsAdminTarefa/InputsAdminTarefa";
 import { NotificationManager } from "react-notifications";
-import { handleError } from "../../../../services/utils";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
+import TableTarefas from "../../components/TableTarefas/TableTarefas";
 
 const StyleSpin = {
     position: 'fixed', 
@@ -36,12 +35,13 @@ const GerenciarTarefas = () => {
 
     const [isFormVisivel, setIsFormVisivel] = useState(false)
     const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false)
-    const [acaoForm, setAcaoForm] = useState('criar')
     const [isLoading, setIsLoading] = useState(false)
 
     const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
 
     const {
+        acaoForm, 
+        setAcaoForm,
         setTarefas,
         dadosTarefa, 
         setDadosTarefa,
@@ -51,6 +51,7 @@ const GerenciarTarefas = () => {
     const handleCancelar = () => {
         setIsFormVisivel(false)
         setDadosTarefa(null)
+        setDadosProjeto(null)
     }
 
     const handleReload = () => {
@@ -62,7 +63,7 @@ const GerenciarTarefas = () => {
     }
 
     const handleFiltrarTarefas = async (dados) => {
-        const response = await filtrarTarefasPeloNomeEPeloProjeto(dados.nome_tarefa, dados.id_projeto)
+        const response = await BuscarTarefasPeloNomeEPeloProjeto(dados.nome_tarefa, dados.id_projeto)
         if (!response.error) {
             setTarefas(response.data)
         }
@@ -134,17 +135,19 @@ const GerenciarTarefas = () => {
     
         // Decide entre criar ou atualizar a tarefa
         try {
+            console.log(acaoForm)
             if (acaoForm === 'criar') {
                 await criarTarefa(dadosForm, dadosIssue);
             } else {
                 await atualizarTarefa(dadosTarefa.id, dadosForm);
             }
+            handleReload();
     
-            handleReload();  // Recarrega os dados da página ou interface após salvar a tarefa
         } catch (error) {
+            console.log(error)
             NotificationManager.error('Erro ao salvar a tarefa');
         }
-    
+        
         setIsLoading(false);
     };
 
@@ -234,7 +237,7 @@ const GerenciarTarefas = () => {
                         )}
 
                         <FormTarefa 
-                            additionalFields={<SelecionarProjeto />} 
+                            selectProject={<SelecionarProjeto />} 
                             onSubmit={handleSalvarTarefa} 
                             onCancel={handleCancelar} 
                         />
@@ -250,7 +253,7 @@ const GerenciarTarefas = () => {
                         )}
 
                         <FormTarefa 
-                            additionalFields={<SelecionarProjeto />} 
+                            selectProject={<SelecionarProjeto />} 
                             inputsAdmin={<InputsAdminTarefa />}
                             onSubmit={handleSalvarTarefa} 
                             onCancel={handleCancelar} 
@@ -269,7 +272,7 @@ const GerenciarTarefas = () => {
                                 <Spin size="large" />
                             </div>
                         )}
-                        <ListaTarefas onEdit={handleAtualizarTarefa} onDelete={handleExcluirTarefa} />
+                        <TableTarefas onEdit={handleAtualizarTarefa} onDelete={handleExcluirTarefa} />
                     </React.Fragment>
                 )}
             </div>

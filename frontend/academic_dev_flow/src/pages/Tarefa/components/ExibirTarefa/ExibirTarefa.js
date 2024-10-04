@@ -5,22 +5,22 @@ import { buscarMembrosPorProjeto } from "../../../../services/membroProjetoServi
 import { formatDate, handleError } from "../../../../services/utils";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
-import { listarTipos } from "../../../../services/tipoService";
 import { listarLabelsPorProjeto } from "../../../../services/tarefaService";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import OptionWithColor from "../../../../components/OptionStyle/OptionStyle";
+import { listarCategoriaTarefa } from "../../../../services/categoriaTarefaService";
 
 const ExibirTarefa = ({ dadosTarefa, dadosProjeto }) => {
     const [optionsMembros, setOptionsMembros] = useState([]);
     const [optionsIteracoes, setOptionsIteracoes] = useState([]);
-    const [optionsTipos, setOptionsTipos] = useState([]);
+    const [optionsCategorias, setOptionsCategorias] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             await handleGetIteracoes();
             await handleGetMembros();
-            await handleGetTipos();
+            await handleGetCategorias();
         };
 
         fetchData();
@@ -60,8 +60,8 @@ const ExibirTarefa = ({ dadosTarefa, dadosProjeto }) => {
     }
     
 
-    const handleGetTipos = async () => {
-        const response = await listarTipos();
+    const handleGetCategorias = async () => {
+        const response = await listarCategoriaTarefa();
         if (!response.error && response.data) {
             const resultados = response.data.map((item) => {
                 return {
@@ -70,7 +70,7 @@ const ExibirTarefa = ({ dadosTarefa, dadosProjeto }) => {
                     color: item.cor,
                 };
             });
-            setOptionsTipos(resultados);
+            setOptionsCategorias(resultados);
         }
     };
 
@@ -78,7 +78,7 @@ const ExibirTarefa = ({ dadosTarefa, dadosProjeto }) => {
         return optionsMembros.find((membro) => membro.value === membroId)?.label;
     };
 
-    const tipoTarefa = optionsTipos.find((option) => option.value === dadosTarefa.tipo);
+    const categoriaTarefa = optionsCategorias.find((option) => option.value === dadosTarefa.categoria);
 
 
 
@@ -115,9 +115,9 @@ const ExibirTarefa = ({ dadosTarefa, dadosProjeto }) => {
         },
         {
             key: "7",
-            label: "Tipo",
-            children: tipoTarefa ? (
-                <OptionWithColor label={tipoTarefa.label} color={tipoTarefa.color} />
+            label: "Categoria",
+            children: categoriaTarefa ? (
+                <OptionWithColor label={categoriaTarefa.label} color={categoriaTarefa.color} />
             ) : null,
         },
         {
