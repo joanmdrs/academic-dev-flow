@@ -3,7 +3,6 @@ import { Table, Space, Tooltip } from 'antd';
 import { listarTarefas } from "../../../../services/tarefaService";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
 import { formatDate, handleError } from "../../../../services/utils";
-import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 import { optionsStatusTarefas } from "../../../../services/optionsStatus";
 import { IoMdCreate, IoMdOpen, IoMdTrash } from "react-icons/io";
@@ -22,10 +21,9 @@ const TableTarefas = ({onView, onEdit, onDelete }) => {
             key: 'nome',
             render: (_, record) => (
                 <Space style={{ display: 'block' }}>
-                    <a href={record.url_issue} target="_blank" rel="noopener noreferrer"> {record.nome} </a>
+                    <a href="#" target="_blank" rel="noopener noreferrer"> {record.nome} </a>
 
                     <span style={{ color: '#585858', fontSize: '10px' }}>
-                        #{record.number_issue} 
                         { 
                         record.data_inicio && record.data_termino &&  (
                             <span> {formatDate(record.data_inicio)} - {formatDate(record.data_termino)} </span>
@@ -48,6 +46,11 @@ const TableTarefas = ({onView, onEdit, onDelete }) => {
             title: 'Projeto',
             dataIndex: 'nome_projeto',
             key: 'nome_projeto',
+        },
+        {
+            title: 'Categoria',
+            dataIndex: 'nome_categoria',
+            key: 'nome_categoria'
         },
         {
             title: 'Ações',
@@ -87,16 +90,7 @@ const TableTarefas = ({onView, onEdit, onDelete }) => {
             const response = await listarTarefas();
 
             if (!response.error && response.data.length > 0) {
-                const dados = await Promise.all(response.data.map(async (tarefa) => {
-                    const resProjeto = await buscarProjetoPeloId(tarefa.projeto);
-
-                    if (!resProjeto.error) {
-                        tarefa['nome_projeto'] = resProjeto.data.nome;
-                    }
-                    return tarefa;
-                }));
-                const resultado = await Promise.resolve(dados);
-                setTarefas(resultado);
+                setTarefas(response.data)
             } else {
                 setTarefas([]);
             }

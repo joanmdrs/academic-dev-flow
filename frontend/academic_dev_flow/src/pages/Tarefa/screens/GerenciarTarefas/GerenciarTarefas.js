@@ -35,6 +35,7 @@ const GerenciarTarefas = () => {
 
     const [isFormVisivel, setIsFormVisivel] = useState(false)
     const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false)
+    const [isTableVisivel, setIsTableVisivel] = useState(true)
     const [isLoading, setIsLoading] = useState(false)
 
     const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
@@ -55,6 +56,7 @@ const GerenciarTarefas = () => {
     }
 
     const handleReload = () => {
+        setIsTableVisivel(true)
         setIsFormVisivel(false)
         setIsFormBuscarVisivel(false)
         setAcaoForm('criar')
@@ -90,41 +92,48 @@ const GerenciarTarefas = () => {
     }
 
     const handleSaveIssue = async (dadosForm) => {
-
+        
         if (!dadosProjeto.token || !dadosProjeto.nome_repo) {
             NotificationManager.info('Não é possível sincronizar com o GitHub. O projeto não possui token ou repositório configurado.');
+            console.log('Retornando erro - sem token ou repositório');
             return { error: 'Projeto sem token ou repositório configurado' };
         }
-
+    
         const dadosEnviar = {
             github_token: dadosProjeto.token,
             repository: dadosProjeto.nome_repo,
             title: dadosForm.nome,
             body: dadosForm.descricao,
-            labels: dadosForm.labelsNames,
             assignees: dadosForm.assignees
-        }; 
-    
-        // Usa a mesma função para criar ou atualizar a issue
-        const response = acaoForm === 'criar' ? 
-            await createIssue(dadosEnviar) : 
-            await updateIssue(dadosTarefa.number_issue, dadosEnviar);
-    
-        return response;
+        };
+
+        if (acaoForm === 'criar') {
+            const response = await createIssue(dadosEnviar)
+            return response
+        } else if (acaoForm === 'atualizar' && !dadosTarefa.number_issue){
+            const response = await createIssue(dadosEnviar)
+            return response
+        } else if (acaoForm === 'atualizar' && dadosTarefa.number_issue){
+            const response = await updateIssue(dadosTarefa.number_issue, dadosEnviar);
+            return response
+        }
     };
+    
     
     const handleSalvarTarefa = async (dadosForm) => {
         setIsLoading(true);
+
+        console.log(dadosForm)
         
         dadosForm.projeto = dadosProjeto.id;
         let dadosIssue = null;
-    
-        // Verifica se o usuário deseja sincronizar com o GitHub
+        
+        console.log(dadosForm['sicronizar-github'])
         if (dadosForm['sicronizar-github']) {
+            console.log('estou entrando aqui')
             const resIssue = await handleSaveIssue(dadosForm);
     
             if (resIssue.error) {
-                NotificationManager.error('Erro ao criar/atualizar a issue no GitHub');
                 setIsLoading(false);
                 return;
             }
@@ -135,11 +144,10 @@ const GerenciarTarefas = () => {
     
         // Decide entre criar ou atualizar a tarefa
         try {
-            console.log(acaoForm)
             if (acaoForm === 'criar') {
                 await criarTarefa(dadosForm, dadosIssue);
             } else {
-                await atualizarTarefa(dadosTarefa.id, dadosForm);
+                await atualizarTarefa(dadosTarefa.id, dadosForm, dadosIssue);
             }
             handleReload();
     
@@ -151,36 +159,35 @@ const GerenciarTarefas = () => {
         setIsLoading(false);
     };
 
-    const handleExcluirTarefas = async () => {
+    const handleExcluirTarefa = async (ids) => {
         Modal.confirm({
             title: 'Confirmar exclusão',
-            content: 'Você está seguro de que deseja excluir este(s) item(s) ?',
+            content: 'Você está seguro de que deseja excluir este(s) item(s)?',
             okText: 'Sim',
             cancelText: 'Não',
             onOk: async () => {
-                if (tarefasSelecionadas !== null) {
-                    const ids = tarefasSelecionadas.map((item) => item.id)
-                    await excluirTarefas(ids)
-                    handleReload() 
-                }
-            }
-        });
-    }
+                setIsTableVisivel(false)
+                setIsLoading(true);
+                try {
+                    await excluirTarefas(ids);
+                    handleReload()
 
-    const handleExcluirTarefa = async (id) => {
-        Modal.confirm({
-            title: 'Confirmar exclusão',
-            content: 'Você está seguro de que deseja excluir este(s) item(s) ?',
-            okText: 'Sim',
-            cancelText: 'Não',
-            onOk: async () => {
-                setIsLoading(true)
-                await excluirTarefas([id])
-                handleReload()
-                setIsLoading(false)
+                } catch (error) {
+                    NotificationManager.error('Erro ao excluir a tarefa');
+                } 
+                setIsLoading(false);
             }
         });
-    }
+    };
+
+    const handleExcluirTarefasSelecionadas = async () => {
+        const ids = tarefasSelecionadas.map(item => item.id);
+        await handleExcluirTarefa(ids);
+    };
+    
+    const handleExcluirTarefaUnica = async (id) => {
+        await handleExcluirTarefa([id]);
+    };
 
     return (
         <React.Fragment>
@@ -213,7 +220,7 @@ const GerenciarTarefas = () => {
                         type="primary" 
                         disabled={tarefasSelecionadas.length === 0 ? true : false}
                         danger
-                        onClick={handleExcluirTarefas}
+                        onClick={handleExcluirTarefasSelecionadas}
                     >
                         Excluir
                     </Button>
@@ -272,7 +279,9 @@ const GerenciarTarefas = () => {
                                 <Spin size="large" />
                             </div>
                         )}
-                        <TableTarefas onEdit={handleAtualizarTarefa} onDelete={handleExcluirTarefa} />
+                        {isTableVisivel && (
+                            <TableTarefas onEdit={handleAtualizarTarefa} onDelete={handleExcluirTarefaUnica} />
+                        )}
                     </React.Fragment>
                 )}
             </div>

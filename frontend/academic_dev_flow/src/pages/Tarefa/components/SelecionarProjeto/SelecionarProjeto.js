@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { buscarProjetoPeloId, listarProjetos } from "../../../../services/projetoService";
-import { Select } from "antd";
+import { Form, Select } from "antd";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
 
@@ -43,18 +43,22 @@ const SelecionarProjeto = () => {
     const filterOption = (input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
     return (
         <div style={{display: 'flex', flexDirection: 'column', gap:'20px', flex: "1"}}>
-
-            <Select
-                disabled={acaoForm === 'atualizar' ? true : false}
-                showSearch
-                allowClear
-                value={ dadosProjeto ? dadosProjeto.id : null}
-                placeholder="Pesquise ou selecione o projeto"
-                optionFilterProp="children"
-                onChange={handleChange}
-                options={optionsProjetos}
-                filterOption={filterOption}
-            />
+            <Form.Item
+                rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
+            >
+                <Select
+                    disabled={acaoForm === 'atualizar' ? true : false}
+                    showSearch
+                    allowClear
+                    value={ dadosProjeto ? dadosProjeto.id : null}
+                    placeholder="Pesquise ou selecione o projeto"
+                    optionFilterProp="children"
+                    onChange={handleChange}
+                    options={optionsProjetos}
+                    filterOption={filterOption}
+                />
+            </Form.Item>
+            
        
         </div>
         

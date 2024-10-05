@@ -34,7 +34,22 @@ export const criarTarefa = async (formData, issueData) => {
     }
 }
 
-export const atualizarTarefa = async (idTarefa, sendData) => {
+export const atualizarTarefa = async (idTarefa, formData, issueData) => {
+    const sendData = {
+        nome: formData.nome,
+        descricao: formData.descricao,
+        data_inicio: formData.data_inicio,
+        data_termino: formData.data_termino,
+        status: formData.status,
+        id_issue: issueData ? issueData.issue_id : null,
+        number_issue: issueData ? issueData.issue_number : null,
+        url_issue: issueData ? issueData.issue_url : null,
+        projeto: formData.projeto,
+        membros: formData.membros,
+        iteracao: formData.iteracao,
+        categoria: formData.categoria
+    }
+    
     try {
         const response = await api.patch(`tarefa/atualizar/`,sendData, {params: {id_tarefa: idTarefa}})
         if (response.status === 200){

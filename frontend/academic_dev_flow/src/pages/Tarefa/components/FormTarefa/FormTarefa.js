@@ -11,6 +11,7 @@ import { handleError } from '../../../../services/utils';
 import { ERROR_MESSAGE_ON_SEARCHING } from '../../../../services/messages';
 import { useContextoGlobalProjeto } from '../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto';
 import { listarCategoriaTarefa } from '../../../../services/categoriaTarefaService';
+import { NotificationManager } from 'react-notifications';
 
 function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
 
@@ -53,16 +54,19 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
     const handleGetMembros = async () => {
         try {
             const response = await buscarMembrosPorProjeto(dadosProjeto.id);
-            const resultados = response.data.map((item) => ({
-                value: item.id,
-                label: `${item.nome_membro} (${item.nome_grupo})`,
-                user: item.usuario_github,
-            }));
+            const resultados = response.data
+                .filter(item => item.nome_grupo === 'Discentes' || item.nome_grupo === 'Docentes')
+                .map(item => ({
+                    value: item.id,
+                    label: `${item.nome_membro} (${item.nome_grupo})`,
+                    user: item.usuario_github,
+                }));
             setOptionsMembros(resultados);
         } catch (error) {
             return handleError(error, ERROR_MESSAGE_ON_SEARCHING);
         }
     };
+    
 
     const handleGetIteracoes = async () => {
         try {
@@ -104,6 +108,11 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
     };
 
     const handleSubmitForm = () => {
+
+        if (dadosProjeto === null){
+            NotificationManager.info("Você deve selecionar o projeto, antes de salvar a tarefa !");
+            return {'error': 'Selecione um projeto'}
+        }
         const dadosForm = form.getFieldsValue();
         const membrosSelecionados = dadosForm.membros;
         const usuariosGithub = optionsMembros
