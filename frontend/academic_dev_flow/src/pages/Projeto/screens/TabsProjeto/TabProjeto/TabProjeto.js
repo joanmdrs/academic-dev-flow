@@ -98,7 +98,7 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
 
                             <Form.Item 
                                 label="Data de Término:" 
-                                name="data_fim" 
+                                name="data_termino" 
                                 style={{width: "250px"}} 
                                 rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
                             >
