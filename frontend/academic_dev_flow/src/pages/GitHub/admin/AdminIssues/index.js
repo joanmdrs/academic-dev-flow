@@ -1,14 +1,13 @@
 import React from "react";
+import {Layout} from 'antd'
 import MenuAdmin from "../../../../components/Menus/MenuAdmin/MenuAdmin";
 import MyHeader from "../../../../components/Header/Header";
-import {Layout} from 'antd'
-import { ProviderArtefato } from "../../context/ContextoArtefato";
-import GerenciarArquivosGithub from "./GerenciarArquivosGithub";
 import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
-
+import AdminIssues from "./AdminIssues";
 const {Content} = Layout
 
-const ScreenGerenciarArquivosGithub = () => {
+const ScreenAdminIssues = () => {
+
     return (
         <React.Fragment>
             <MenuAdmin/>
@@ -16,9 +15,7 @@ const ScreenGerenciarArquivosGithub = () => {
                 <MyHeader/>
                 <Content>
                     <ProviderGlobalProjeto>
-                        <ProviderArtefato>
-                            <GerenciarArquivosGithub />
-                        </ProviderArtefato>
+                        <AdminIssues />
                     </ProviderGlobalProjeto>
                 </Content>
             </Layout>
@@ -26,4 +23,4 @@ const ScreenGerenciarArquivosGithub = () => {
     )
 }
 
-export default ScreenGerenciarArquivosGithub
+export default ScreenAdminIssues

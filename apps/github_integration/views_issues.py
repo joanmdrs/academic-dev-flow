@@ -169,13 +169,6 @@ def list_issues(request):
             tarefa_vinculada = Tarefa.objects.filter(id_issue=issue.id).exists()
             issue_data['exists'] = tarefa_vinculada
             
-            membros_ids = []
-            for assignee in issue_data['assignees']:
-                membro = filter_membro_projeto_by_assignee_and_by_projeto(assignee, projeto)
-                if membro:
-                    membros_ids.append(membro)
-            issue_data['membros_ids'] = membros_ids
-            
             issues_list.append(issue_data)
         
         return JsonResponse(issues_list, safe=False, status=status.HTTP_200_OK)

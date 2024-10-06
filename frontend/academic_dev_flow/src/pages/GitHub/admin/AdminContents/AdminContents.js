@@ -1,44 +1,44 @@
 import React, { useState } from "react";
-import Titulo from "../../../../components/Titulo/Titulo";
 import { Button } from "antd";
-import FormListarArquivos from "../../components/FormListarArquivos/FormListarArquivos";
-import { deleteContent, listContents } from "../../../../services/githubIntegration";
-import ListaArquivos from "../../components/ListaArquivos/ListaArquivos";
 import { NotificationManager } from "react-notifications";
-import { excluirArtefato, sicronizarContents, verificarExistenciaArquivo } from "../../../../services/artefatoService";
-import { handleError } from "../../../../services/utils";
-import ModalExcluirArtefato from "../../components/ModalExcluirArtefato/ModalExcluirArtefato";
 import { FaArrowRotateRight, FaArrowsRotate, FaFilter } from "react-icons/fa6";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
+import { deleteContent, listContents } from "../../../../services/githubIntegration";
+import { excluirArtefato, sicronizarContents, verificarExistenciaArquivo } from "../../../../services/artefatoService";
+import { handleError } from "../../../../services/utils";
+import Titulo from "../../../../components/Titulo/Titulo";
+import FormFilterContents from "../../components/FormFilterContents/FormFilterContents";
+import SelectProject from "../../components/SelectProject/SelectProject";
+import TableContents from "../../components/TableContents/TableContents";
 
-const GerenciarArquivosGithub = () => {
+const AdminContents = () => {
 
     const [contents, setContents] = useState([]);
-    const [isFormVisivel, setIsFormVisivel] = useState(true);
-    const [isModalExcluirVisivel, setIsModalExcluirVisivel] = useState(false)
-    const [isTableVisivel, setIsTableVisivel] = useState(false);
+    const [isFormVisible, setIsFormVisible] = useState(true);
+    const [isModalToDeleteVisible, setIsModalToDeleteVisible] = useState(false)
+    const [isTableVisible, setIsTableVisible] = useState(false);
     const [loading, setLoading] = useState(false);
     const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
-    const [arquivoExcluir, setArquivoExcluir] = useState(null)
+    const [contentToDelete, setContentToDelete] = useState(null)
     const [folder, setFolder] = useState(null)
 
-    const handleExibirModal = () => setIsModalExcluirVisivel(true)
-    const handleFecharModal = () => setIsModalExcluirVisivel(false)
+    const handleExibirModal = () => setIsModalToDeleteVisible(true)
+    const handleFecharModal = () => setIsModalToDeleteVisible(false)
 
     const handleResetar = async () => {
-        setIsTableVisivel(false)
-        setIsFormVisivel(false)
+        setIsTableVisible(false)
+        setIsFormVisible(false)
         setContents([])
-        setIsModalExcluirVisivel(false)
+        setIsModalToDeleteVisible(false)
         setLoading(false)
         setDadosProjeto(null)
-        setArquivoExcluir(null)
+        setContentToDelete(null)
     }
 
     const handleGetContents = async (parametros) => {
         setContents([])
         setLoading(true);
-        setIsTableVisivel(true);
+        setIsTableVisible(true);
         setFolder(parametros.folder)
 
         const response = await listContents(parametros)
@@ -91,14 +91,14 @@ const GerenciarArquivosGithub = () => {
                 repository: dadosProjeto.nome_repo,
                 path: record.path
             }
-            setArquivoExcluir(parametros)
+            setContentToDelete(parametros)
         } else {
             NotificationManager.error('Ocorreu um erro ao buscar os dados, contate o suporte!')
         }
     }
 
     const handleExcluirArquivo = async (parametro) => {
-        const objeto = arquivoExcluir
+        const objeto = contentToDelete
         objeto['commit_message'] = parametro
         const resArtefato = await excluirArtefato(objeto.id_artefato)
 
@@ -111,8 +111,8 @@ const GerenciarArquivosGithub = () => {
     return (
         <React.Fragment>
             <Titulo 
-                titulo='Arquivos'
-                paragrafo='Arquivos > Gerenciar arquivos'
+                titulo='Gerenciar Contents'
+                paragrafo='GitHub > Contents > Gerenciar Contents'
             />
 
             <div style={{display:'flex', justifyContent: 'space-between', gap: '10px', margin: '20px'}}> 
@@ -121,7 +121,7 @@ const GerenciarArquivosGithub = () => {
                     <Button
                         icon={<FaFilter />} 
                         type="primary"
-                        onClick={() => setIsFormVisivel(!isFormVisivel)}
+                        onClick={() => setIsFormVisible(!isFormVisible)}
                        
                     > 
                         Filtrar 
@@ -150,31 +150,26 @@ const GerenciarArquivosGithub = () => {
                 </div>
             </div>
 
-            { isFormVisivel && (
+            { isFormVisible && (
                 <div className="global-div" style={{width: "50%"}}> 
-                    <FormListarArquivos onSearch={handleGetContents} />
+                    <FormFilterContents inputSelectProject={<SelectProject />} onSearch={handleGetContents} />
                 </div>
             )}
 
-            { isTableVisivel &&
+            { isTableVisible &&
                     
                 <div className="global-div">
-                    <ListaArquivos 
-                        dadosArquivos={contents} 
-                        carregando={loading} 
+                    <TableContents 
+                        contentsData={contents} 
+                        onLoading={loading} 
                         onDelete={handlePrepararExcluirArquivo}
                         
                     />
                 </div>
-            } 
-            <ModalExcluirArtefato 
-                visible={isModalExcluirVisivel}
-                onCancel={handleFecharModal}
-                onDelete={handleExcluirArquivo}
-            />
+            }
 
         </React.Fragment> 
     )
 }
 
-export default GerenciarArquivosGithub;
+export default AdminContents;

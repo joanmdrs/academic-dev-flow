@@ -1,13 +1,12 @@
 import React from "react";
-import MenuAdmin from "../../../../components/Menus/MenuAdmin/MenuAdmin";
 import {Layout} from 'antd'
+import MenuAdmin from "../../../../components/Menus/MenuAdmin/MenuAdmin";
 import MyHeader from "../../../../components/Header/Header";
-import { ProviderTarefa } from "../../context/ContextoTarefa";
-import GerenciarIssues from "./GerenciarIssues";
 import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
+import AdminContents from "./AdminContents";
 const {Content} = Layout
 
-const ScreenGerenciarIssues = () => {
+const ScreenAdminContents = () => {
 
     return (
         <React.Fragment>
@@ -16,9 +15,7 @@ const ScreenGerenciarIssues = () => {
                 <MyHeader/>
                 <Content>
                     <ProviderGlobalProjeto>
-                        <ProviderTarefa>
-                            <GerenciarIssues />
-                        </ProviderTarefa>
+                        <AdminContents />
                     </ProviderGlobalProjeto>
                 </Content>
             </Layout>
@@ -26,4 +23,4 @@ const ScreenGerenciarIssues = () => {
     )
 }
 
-export default ScreenGerenciarIssues
+export default ScreenAdminContents

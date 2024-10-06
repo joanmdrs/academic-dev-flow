@@ -13,9 +13,6 @@ import Register from "./pages/Auth/Register";
 import ScreenGerenciarTarefas from "./pages/Tarefa/screens/GerenciarTarefas";
 import ScreenGerenciarArtefatos from "./pages/Artefato/screens/GerenciarArtefatos";
 import ScreenVisualizarArtefato from "./pages/Artefato/screens/VisualizarArtefato";
-import ScreenGerenciarArquivosGithub from "./pages/Artefato/screens/GerenciarArquivosGithub";
-import ScreenGerenciarLabels from "./pages/Tarefa/screens/GerenciarLabels";
-import ScreenGerenciarIssues from "./pages/Tarefa/screens/GerenciarIssues";
 import ScreenGerenciarIteracoes from "./pages/Iteracao/screens/GerenciarIteracoes";
 import ScreenGerenciarProjetos from "./pages/Projeto/screens/GerenciarProjetos";
 import ScreenMinhasTarefas from "./pages/Tarefa/screens/MinhasTarefas";
@@ -34,6 +31,8 @@ import ScreenGerenciarEtapas from "./pages/Etapa/screens/GerenciarEtapas";
 import ScreenGerenciarCategoriaFuncaoMembro from "./pages/FuncaoMembro";
 import { ProviderGlobalProjeto } from "./context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 import ScreenGerenciarCategoriaTarefa from "./pages/CategoriaTarefa";
+import ScreenAdminContents from "./pages/GitHub/admin/AdminContents";
+import ScreenAdminIssues from "./pages/GitHub/admin/AdminIssues";
 
 function Routes() {
     return (
@@ -92,28 +91,12 @@ function Routes() {
                     Component={ScreenGerenciarArtefatos}
                     exact
                 />
-                
-                <Route
-                    path="/admin/artefatos/gerenciar-arquivos/"
-                    Component={ScreenGerenciarArquivosGithub}
-                    exact
-                />
 
                 {/* Menu Item Tarefas */}
 
                 <Route
                     path="/admin/tarefas/gerenciar"
                     Component={ScreenGerenciarTarefas}
-                    exact
-                />
-                <Route
-                    path="/admin/tarefas/issues"
-                    Component={ScreenGerenciarIssues}
-                    exact
-                />
-                <Route
-                    path="/admin/tarefas/labels"
-                    Component={ScreenGerenciarLabels}
                     exact
                 />
 
@@ -127,6 +110,19 @@ function Routes() {
                     path="/admin/iteracoes"
                     Component={ScreenGerenciarIteracoes}
                     exact
+                />
+
+                <Route
+                    path="/admin/github-integration/issues"
+                    Component={ScreenAdminIssues}
+                    exact
+                />
+
+                <Route 
+                    path="/admin/github-integration/contents"
+                    Component={ScreenAdminContents}
+                    exact
+
                 />
 
                 <Route 

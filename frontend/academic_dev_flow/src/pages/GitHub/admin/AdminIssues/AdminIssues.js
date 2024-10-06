@@ -2,16 +2,16 @@ import { Button, Space, Table } from "antd";
 import React, { useState } from "react";
 import { IoCheckmark, IoCloseOutline } from "react-icons/io5";
 import { FaFilter } from "react-icons/fa";
-import { listIssues } from "../../../../services/githubIntegration/issueService";
 import { sicronizarIssues } from "../../../../services/tarefaService";
 import { handleError } from "../../../../services/utils";
 import { NotificationManager } from "react-notifications";
 import { FaArrowRotateRight, FaArrowsRotate } from "react-icons/fa6";
-import Titulo from "../../../../components/Titulo/Titulo";
-import FormFiltrarIssues from "../../components/FormFiltrarIssues/FormFiltrarIssues";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
+import { listIssues } from "../../../../services/githubIntegration/issueService";
+import Titulo from "../../../../components/Titulo/Titulo";
+import FormFilterIssues from "../../components/FormFilterIssues/FormFilterIssues";
 
-const GerenciarIssues = () => {
+const AdminIssues = () => {
 
     const COLUNAS_TABELA_ISSUES = [
         {
@@ -51,6 +51,12 @@ const GerenciarIssues = () => {
 
     const handleGetIssues = async (dados) => {
         try {
+
+            if (!dadosProjeto.token && !dadosProjeto.nome_repo){
+                NotificationManager.info('O projeto selecionado não possui repositório GitHub configurado !')
+                return {'error': 'O projeto selecionado não possui repositório GitHub configurado !'}
+            }
+
             setIsLoading(true)
             setIsTableVisivel(true)
             setIssues([]);  
@@ -87,8 +93,6 @@ const GerenciarIssues = () => {
                     number_issue: item.number,
                     url_issue: item.url,
                     projeto: dadosProjeto.id,
-                    membros: item.membros_ids,
-                    labels: item.label_ids,
                 }));
 
                
@@ -134,7 +138,7 @@ const GerenciarIssues = () => {
                     </Button>
                 </div>
 
-                <div style={{display:'flex', gap: '10px'}}> 
+                {/* <div style={{display:'flex', gap: '10px'}}> 
                     <Button 
                         icon={<FaArrowsRotate />} 
                         style={{marginBottom: '20px'}} 
@@ -144,12 +148,12 @@ const GerenciarIssues = () => {
                     > 
                         Sicronizar 
                     </Button>
-                </div>
+                </div> */}
             </div>
 
             { isFormVisivel && (
                 <div className="global-div" style={{width: '50%'}}>
-                    <FormFiltrarIssues onSearch={handleGetIssues} />
+                    <FormFilterIssues onSearch={handleGetIssues} />
                 </div>
             )}
 
@@ -168,4 +172,4 @@ const GerenciarIssues = () => {
     )
 }
 
-export default GerenciarIssues
+export default AdminIssues

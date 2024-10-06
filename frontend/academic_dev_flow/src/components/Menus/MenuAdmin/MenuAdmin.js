@@ -9,6 +9,7 @@ import { IoPricetagsOutline } from "react-icons/io5";
 import { MdOutlineTaskAlt } from "react-icons/md";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { BsLayers } from "react-icons/bs";
+import { FaGithub } from "react-icons/fa";
 
 const { SubMenu } = Menu;
 
@@ -78,48 +79,14 @@ const MenuAdmin = () => {
                         <Link to="/admin/membros/gerenciar">Gerenciar membros</Link>
                     </Menu.Item>
 
+                    <Menu.Item key="/admin/membros/vincular-projeto"> 
+                        <Link to="/admin/membros/vincular-projeto">Vincular Projeto</Link>
+                    </Menu.Item>
+
                     <Menu.Item key="/admin/membros/gerenciar-categorias">
                         <Link to="/admin/membros/gerenciar-categorias">Categorias</Link>
                     </Menu.Item>
 
-                </SubMenu>
-
-                <SubMenu
-                    className='item-menu'
-                    key='/admin/artefatos'
-                    icon={<IoDocumentTextOutline style={{ fontSize: "20px" }} />}
-                    title="Artefatos"
-                >
-                    <Menu.Item key="/admin/artefatos/gerenciar">
-                        <Link to="/admin/artefatos/gerenciar">Gerenciar artefatos</Link>
-                    </Menu.Item>
-
-                    <Menu.Item key="/admin/artefatos/gerenciar-arquivos">
-                        <Link to="/admin/artefatos/gerenciar-arquivos">Gerenciar arquivos</Link>
-                    </Menu.Item>
-                </SubMenu>
-
-                <SubMenu
-                    className='item-menu'
-                    key='/admin/tarefas'
-                    icon={<MdOutlineTaskAlt style={{ fontSize: "20px" }} />}
-                    title="Tarefas"
-                >
-                    <Menu.Item key="/admin/tarefas/gerenciar-categorias">
-                        <Link to="/admin/tarefas/gerenciar-categorias"> Categorias </Link>
-                    </Menu.Item>
-
-                    <Menu.Item key="/admin/tarefas/gerenciar">
-                        <Link to="/admin/tarefas/gerenciar">Gerenciar tarefas</Link>
-                    </Menu.Item>
-
-                    <Menu.Item key="/admin/tarefas/issues">
-                        <Link to="/admin/tarefas/issues">Gerenciar issues</Link>
-                    </Menu.Item>
-
-                    {/* <Menu.Item key="gerenciar-labels">
-                        <Link to="/admin/tarefas/labels">Labels</Link>
-                    </Menu.Item> */}
                 </SubMenu>
 
                 <Menu.Item
@@ -129,6 +96,52 @@ const MenuAdmin = () => {
                 >
                     <Link to="/admin/iteracoes"> Iterações </Link>
                 </Menu.Item>
+
+                <Menu.Item 
+                    className="item-menu" 
+                    icon={<IoDocumentTextOutline style={{fontSize: "20px"}} />} 
+                    key="/admin/artefatos/gerenciar"
+                    title="Artefatos"
+                >
+                    <Link to="/admin/artefatos/gerenciar">Artefatos</Link>
+                </Menu.Item>
+
+                <SubMenu
+                    className='item-menu'
+                    key='/admin/tarefas'
+                    icon={<MdOutlineTaskAlt style={{ fontSize: "20px" }} />}
+                    title="Tarefas"
+                >
+                    <Menu.Item key="/admin/tarefas/gerenciar">
+                        <Link to="/admin/tarefas/gerenciar">Gerenciar tarefas</Link>
+                    </Menu.Item>
+
+                    <Menu.Item key="/admin/tarefas/gerenciar-categorias">
+                        <Link to="/admin/tarefas/gerenciar-categorias"> Categorias </Link>
+                    </Menu.Item>
+                </SubMenu>
+
+                <SubMenu
+                    className='item-menu'
+                    key='/admin/github-integration/'
+                    icon={<FaGithub style={{ fontSize: "20px" }} />}
+                    title="GitHub"
+                >
+                    <Menu.Item
+                        className="item-menu"
+                        key="/admin/github-integration/issues"
+                    >
+                        <Link to="/admin/github-integration/issues"> Issues </Link>
+                    </Menu.Item>
+
+                    <Menu.Item
+                        className="item-menu"
+                        key="/admin/github-integration/contents"
+                    >
+                        <Link to="/admin/github-integration/contents"> Contents </Link>
+                    </Menu.Item>
+                </SubMenu>
+
             </Menu>
         </Sider>
     );
