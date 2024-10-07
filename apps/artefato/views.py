@@ -185,17 +185,14 @@ class BuscarArtefatosPeloNomeEPeloProjeto(APIView):
             nome_artefato = request.GET.get('nome_artefato')
             id_projeto = request.GET.get('id_projeto')
             
-            if not nome_artefato and not id_projeto:
-                return Response(
-                    {'error': 'Os parâmetros nome do artefato e ID do projeto não foram fornecidos!'},
-                    status=status.HTTP_400_BAD_REQUEST)
-            
             if nome_artefato and id_projeto:
                 artefatos = Artefato.objects.filter(nome__icontains=nome_artefato, projeto_id=id_projeto)
             elif nome_artefato:
                 artefatos = Artefato.objects.filter(nome__icontains=nome_artefato)
-            else: 
+            elif id_projeto: 
                 artefatos = Artefato.objects.filter(projeto_id=id_projeto)
+            else:
+                artefatos = Artefato.objects.all()
                 
             if artefatos.exists():
                 serializer = ArtefatoSerializer(artefatos, many=True)

@@ -20,6 +20,7 @@ class ArtefatoSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'nome',
+            'status',
             'descricao',
             'data_criacao',
             'url',

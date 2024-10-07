@@ -2,13 +2,12 @@ import React, { useEffect } from "react";
 import {Table, Space, Select, Tooltip} from 'antd'
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { listarArtefatos } from "../../../../services/artefatoService";
-import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { handleError } from "../../../../services/utils";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 import { optionsStatusArtefatos } from "../../../../services/optionsStatus";
 import { IoMdCreate, IoMdOpen, IoMdTrash } from "react-icons/io";
 
-const ListaArtefatos = ({onView, onEdit, onDelete, onUpdateStatus}) => {
+const TableArtefatos = ({onView, onEdit, onDelete, onUpdateStatus}) => {
 
     const COLUNAS_TABELA_ARTEFATOS = [
         {
@@ -47,21 +46,21 @@ const ListaArtefatos = ({onView, onEdit, onDelete, onUpdateStatus}) => {
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    <Tooltip title="Visualizar">
+                    {/* <Tooltip title="Visualizar">
                         <a onClick={() => onView(record)}><IoMdOpen /></a>
-                    </Tooltip>
+                    </Tooltip> */}
                     <Tooltip title="Editar">
                         <a onClick={() => onEdit(record)}><IoMdCreate /></a>
                     </Tooltip>
                     <Tooltip title="Excluir">
-                        <a onClick={() => onDelete(record)}><IoMdTrash /></a>
+                        <a onClick={() => onDelete(record.id)}><IoMdTrash /></a>
                     </Tooltip>
                 </Space>
             )
         }
     ]
 
-    const {artefatos, setArtefatos} = useContextoArtefato()
+    const {artefatos, setArtefatos, setArtefatosSelecionados} = useContextoArtefato()
 
     useEffect(() => {
         const fetchData = async () => {
@@ -84,27 +83,20 @@ const ListaArtefatos = ({onView, onEdit, onDelete, onUpdateStatus}) => {
         try {
             const response = await listarArtefatos();
     
-            if (response.data.length > 0) { 
-                const dados = await Promise.all(response.data.map(async (artefato) => {
-                    const resProjeto = await buscarProjetoPeloId(artefato.projeto);
-    
-                    if (!resProjeto.error){
-                        artefato['nome_projeto'] = resProjeto.data.nome
-                        artefato['nome_repo'] = resProjeto.data.nome_repo
-                    }
-                    return artefato;
-                }));
-                const resultado = await (Promise.resolve(dados))
-                setArtefatos(resultado)
-            } else {
-                setArtefatos([])
-            }
+            if (!response.error) { 
+                setArtefatos(response.data)
+            } 
         } catch (error) {
             setArtefatos([])
             return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
-            
         }
     }
+
+    const rowSelection = {
+        onChange: (selectedRowsKeys, selectedRows) => {
+          setArtefatosSelecionados(selectedRows)
+        },
+    };
 
 
     return (
@@ -112,8 +104,9 @@ const ListaArtefatos = ({onView, onEdit, onDelete, onUpdateStatus}) => {
             rowKey="id"
             dataSource={artefatos}
             columns={COLUNAS_TABELA_ARTEFATOS}
+            rowSelection={rowSelection}
         />
     )
 }
 
-export default ListaArtefatos
+export default TableArtefatos

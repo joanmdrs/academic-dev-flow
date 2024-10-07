@@ -3,7 +3,6 @@ import { ERROR_MESSAGE_ON_CREATION, ERROR_MESSAGE_ON_DELETION, ERROR_MESSAGE_ON_
 import { handleError, handleInfo, handleSuccess } from "./utils"
 
 export const criarArtefato = async (formData) => {
-
     try {
         const response = await api.post('/artefato/cadastrar/', formData)
         return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION)
@@ -100,8 +99,9 @@ export const buscarArtefatosPeloNomeEPeloProjeto = async (nomeArtefato, idProjet
 }
 
 export const excluirArtefato = async (idsArtefatos) => {
+    console.log(idsArtefatos)
     try {
-        const response = await api.delete('/artefato/excluir/', {data: {ids_artefatos: idsArtefatos}})
+        const response = await api.delete('/artefato/excluir/', {data: { ids_artefatos: idsArtefatos}})
         return handleSuccess(response, SUCCESS_MESSAGE_ON_DELETION)
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_DELETION)

@@ -1,22 +1,19 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {Button, Spin} from 'antd'
+import {Button, Modal, Spin} from 'antd'
 import Titulo from "../../../../components/Titulo/Titulo";
-import { FaPlus, FaSearch } from "react-icons/fa";
-import FormGenericBusca from "../../../../components/Forms/FormGenericBusca/FormGenericBusca";
+import { FaFilter, FaPlus, FaTrash } from "react-icons/fa";
 import FormArtefato from "../../components/FormArtefato/FormArtefato";
-import ListaArtefatos from "../../components/ListaArtefatos/ListaArtefatos";
 import SelectProjeto from "../../components/SelectProjeto/SelectProjeto"
-import InputsAdmin from "../../components/InputsAdmin/InputsAdmin"
 import { useContextoArtefato } from "../../context/ContextoArtefato";
-import { createContent, deleteContent } from "../../../../services/githubIntegration";
-import { atualizarArtefato, criarArtefato, excluirArtefato, filtrarArtefatosPeloNomeEPeloProjeto } from "../../../../services/artefatoService";
+import { createContent } from "../../../../services/githubIntegration";
+import { atualizarArtefato, buscarArtefatosPeloNomeEPeloProjeto, criarArtefato, excluirArtefato } from "../../../../services/artefatoService";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
-import ModalExcluirArtefato from "../../components/ModalExcluirArtefato/ModalExcluirArtefato";
-import { buscarUsuarioPeloIdMembroProjeto } from "../../../../services/membroService";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 import { NotificationManager } from "react-notifications";
 import { updateIssue } from "../../../../services/githubIntegration/issueService";
+import TableArtefatos from "../../components/TableArtefatos/TableArtefatos";
+import FormFiltrarArtefatos from "../../components/FormFiltrarArtefatos/FormFiltrarArtefatos";
 
 const StyleSpin = {
     position: 'fixed', 
@@ -35,18 +32,18 @@ const AdminArtefatos = () => {
 
     const [isFormVisible, setIsFormVisible] = useState(false)
     const [isFormFilterArtefatoVisible, setIsFormFilterArtefatoVisible] = useState(false)
-    const [isModalToDeleteVisible, setIsModalToDeleteVisible] = useState(false)
     const [actionForm, setActionForm] = useState('create')
-    const [artefatoToDelete, setArtefatoToDelete] = useState(null)
-    const {dadosArtefato, setDadosArtefato, setArtefatos} = useContextoArtefato()
+    const [isTableVisible, setIsTableVisible] = useState(true)
+    const {
+        dadosArtefato, 
+        setDadosArtefato, 
+        setArtefatos, 
+        artefatosSelecionados, 
+        setArtefatosSelecionados} = useContextoArtefato()
     const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
     const [isLoading, setIsLoading] = useState(false)
 
     const navigate = useNavigate()
-
-    const handleExibirModal = () => setIsModalToDeleteVisible(true)
-    
-    const handleFecharModal = () => setIsModalToDeleteVisible(false)
 
 
     const handleCancelar = () => {  
@@ -59,8 +56,10 @@ const AdminArtefatos = () => {
     const handleReload = () => {
         setIsFormVisible(false)
         setIsFormFilterArtefatoVisible(false)
+        setIsTableVisible(true)
         setDadosProjeto(null)
         setArtefatos([])
+        setArtefatosSelecionados([])
     }
 
     const handleVisualizarArtefato = async (record) => {
@@ -86,6 +85,7 @@ const AdminArtefatos = () => {
     }
 
     const handleCriarArtefato = () => {
+        setIsFormFilterArtefatoVisible(false)
         setIsFormVisible(true)
         setDadosProjeto(null)
         setActionForm('create')
@@ -97,12 +97,6 @@ const AdminArtefatos = () => {
         setIsFormFilterArtefatoVisible(false)
         setActionForm('update')
         setDadosArtefato(record)
-    }
-
-    const handleBuscarAutor = async (idMembroProjeto) => {
-
-        const response = await buscarUsuarioPeloIdMembroProjeto(idMembroProjeto)
-        return response
     }
 
     const handleSaveContent = async (dadosForm) => {
@@ -133,8 +127,6 @@ const AdminArtefatos = () => {
 
     const handleSalvarArtefato = async (dadosForm) => {
         setIsLoading(true);
-
-        console.log(dadosForm)
         
         dadosForm.projeto = dadosProjeto.id;
         
@@ -158,67 +150,57 @@ const AdminArtefatos = () => {
             handleReload();
     
         } catch (error) {
-            console.log(error)
             NotificationManager.error('Erro ao salvar a tarefa');
         }
         
         setIsLoading(false);
     };
 
-    const handleBuscarArtefato = async (dados) => {
-        const nomeArtefato = dados.nome
-        const idProjeto = dados.id_projeto
-        const response = await filtrarArtefatosPeloNomeEPeloProjeto(nomeArtefato, idProjeto)
-        if (!response.error && response.data.length > 0) {
-
-            const dadosModificar = await Promise.all(response.data.map(async (artefato) => {
-                const resProjeto = await buscarProjetoPeloId(artefato.projeto);
-
-                if (!resProjeto.error){
-                    artefato['nome_projeto'] = resProjeto.data.nome;
-                }
-                return artefato;
-            }));
-            const resultado = await (Promise.resolve(dadosModificar))
-            setArtefatos(resultado)
-        }
-    }
-
-    const handlePrepararParaExcluirArtefato = async (record) => {
-        handleExibirModal()
-        const resProjeto = await buscarProjetoPeloId(record.projeto)
-        const projeto = resProjeto.data
-        const parametros = {
-            id_artefato: record.id,
-            github_token: projeto.token,
-            repository: projeto.nome_repo,
-            path: record.path_file
-        }
-        setArtefatoToDelete(parametros)
-    }
-
-    const handleExcluirArtefato = async (parametro) => {
-        handleFecharModal()
-        setIsLoading(true)
-        const objeto = artefatoToDelete
-        objeto['commit_message'] = parametro
-
-        const response = await deleteContent(objeto)
-        if(!response.error){
-            await excluirArtefato(objeto.id_artefato)
-        }
-        handleReload()
-        setIsLoading(false)
-    }
-
     const handleAtualizarStatusArtefato = async (record, value) => {
-
+        setIsTableVisible(false)
         const dados = {
             status: value
         }
         await atualizarArtefato(record.id, dados)
         handleReload()
     }
+
+    const handleFiltrarArtefatos = async (dados) => {
+        const nomeArtefato = dados.nome_artefato
+        const idProjeto = dados.id_projeto
+        const response = await buscarArtefatosPeloNomeEPeloProjeto(nomeArtefato, idProjeto)
+        if (!response.error) {
+            setArtefatos(response.data)
+        }
+    }
+
+    const handleExcluirArtefato = async (ids) => {
+        Modal.confirm({
+            title: 'Confirmar exclusão',
+            content: 'Você está seguro de que deseja excluir este(s) item(s)?',
+            okText: 'Sim',
+            cancelText: 'Não',
+            onOk: async () => {
+                setIsTableVisible(false)
+                try {
+                    await excluirArtefato(ids)
+                    handleReload()
+
+                } catch (error) {
+                    NotificationManager.error('Erro ao excluir o artefato');
+                } 
+            }
+        });
+    };
+
+    const handleExcluirArtefatosSelecionados = async () => {
+        const ids = artefatosSelecionados.map(item => item.id);
+        await handleExcluirArtefato(ids);
+    };
+    
+    const handleExcluirArtefatoUnico = async (id) => {
+        await handleExcluirArtefato([id]);
+    };
 
     return (
         <React.Fragment>
@@ -227,28 +209,40 @@ const AdminArtefatos = () => {
                 paragrafo='Artefatos > Gerenciar artefatos'
             />
 
-            <div className="button-menu"> 
-                <Button
-                    icon={<FaSearch />} 
-                    type="primary"
-                    onClick={() => setIsFormFilterArtefatoVisible(!isFormFilterArtefatoVisible)}
-                >
-                    Buscar
-                </Button>
+            <div style={{display: 'flex', justifyContent: 'space-between', margin: '20px'}}> 
+                <div>
+                    <Button
+                        icon={<FaFilter />} 
+                        type="primary"
+                        onClick={() => setIsFormFilterArtefatoVisible(!isFormFilterArtefatoVisible)}
+                    >
+                        Filtrar
+                    </Button>
+                </div>
 
-                <Button 
-                    icon={<FaPlus />} 
-                    type="primary" 
-                    onClick={handleCriarArtefato}
-                >
-                    Criar Artefato
-                </Button>
-                
+                <div style={{display: 'flex', gap: '10px'}}> 
+                    <Button 
+                        icon={<FaPlus />} 
+                        type="primary" 
+                        onClick={handleCriarArtefato}
+                    >
+                        Criar Artefato
+                    </Button>
+                    <Button 
+                        icon={<FaTrash />} 
+                        type="primary" 
+                        disabled={artefatosSelecionados.length === 0 ? true : false}
+                        danger
+                        onClick={handleExcluirArtefatosSelecionados}
+                    >
+                        Excluir
+                    </Button>
+                </div>
             </div>
 
             {isFormFilterArtefatoVisible && (
                 <div className="global-div" style={{width: '50%'}}>   
-                    <FormGenericBusca onSearch={handleBuscarArtefato} />
+                    <FormFiltrarArtefatos onSearch={handleFiltrarArtefatos} />
                 </div>
             )}
 
@@ -265,7 +259,6 @@ const AdminArtefatos = () => {
                             onSubmit={handleSalvarArtefato} 
                             onCancel={handleCancelar}
                             selectProjeto={<SelectProjeto />} 
-                            inputsAdmin={<InputsAdmin/>} 
                         /> 
                     </React.Fragment>
                 )}
@@ -292,22 +285,18 @@ const AdminArtefatos = () => {
                                 <Spin size="large" />
                             </div>
                         )}
-                        <ListaArtefatos    
+
+                        {isTableVisible && <TableArtefatos    
                             onView={handleVisualizarArtefato} 
                             onEdit={handleAtualizarArtefato} 
-                            onDelete={handlePrepararParaExcluirArtefato}
+                            onDelete={handleExcluirArtefatoUnico}
                             onUpdateStatus={handleAtualizarStatusArtefato}
-                        />
+                        />}
                     </React.Fragment>
                 )}
                 
             </div>
 
-            <ModalExcluirArtefato 
-                visible={isModalToDeleteVisible}
-                onCancel={handleFecharModal}
-                onDelete={handleExcluirArtefato}
-            />
         </React.Fragment>    
     )
 }

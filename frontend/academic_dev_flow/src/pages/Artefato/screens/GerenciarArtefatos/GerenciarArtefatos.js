@@ -5,12 +5,11 @@ import Titulo from "../../../../components/Titulo/Titulo";
 import { FaPlus, FaSearch } from "react-icons/fa";
 import FormGenericBusca from "../../../../components/Forms/FormGenericBusca/FormGenericBusca";
 import FormArtefato from "../../components/FormArtefato/FormArtefato";
-import ListaArtefatos from "../../components/ListaArtefatos/ListaArtefatos";
+import ListaArtefatos from "../../components/TableArtefatos/TableArtefatos";
 import SelectProjeto from "../../components/SelectProjeto/SelectProjeto"
-import InputsAdmin from "../../components/InputsAdmin/InputsAdmin"
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { createContent, deleteContent } from "../../../../services/githubIntegration";
-import { atualizarArtefato, criarArtefato, excluirArtefato, filtrarArtefatosPeloNomeEPeloProjeto } from "../../../../services/artefatoService";
+import { atualizarArtefato, buscarArtefatosPeloNomeEPeloProjeto, criarArtefato, excluirArtefato } from "../../../../services/artefatoService";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import ModalExcluirArtefato from "../../components/ModalExcluirArtefato/ModalExcluirArtefato";
 import { buscarUsuarioPeloIdMembroProjeto } from "../../../../services/membroService";
@@ -135,7 +134,7 @@ const GerenciarArtefatos = () => {
     const handleBuscarArtefato = async (dados) => {
         const nomeArtefato = dados.nome
         const idProjeto = dados.id_projeto
-        const response = await filtrarArtefatosPeloNomeEPeloProjeto(nomeArtefato, idProjeto)
+        const response = await buscarArtefatosPeloNomeEPeloProjeto(nomeArtefato, idProjeto)
         if (!response.error && response.data.length > 0) {
 
             const dadosModificar = await Promise.all(response.data.map(async (artefato) => {
@@ -232,8 +231,7 @@ const GerenciarArtefatos = () => {
                             onSubmit={handleSalvarArtefato} 
                             onCancel={handleCancelar}
                             selectProjeto={<SelectProjeto />} 
-                            inputsAdmin={<InputsAdmin/>} 
-                        /> 
+                            /> 
                     </React.Fragment>
                 )}
 

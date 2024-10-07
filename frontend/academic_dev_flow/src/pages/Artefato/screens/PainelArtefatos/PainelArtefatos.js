@@ -6,7 +6,7 @@ import { useContextoArtefato } from '../../context/ContextoArtefato'
 import { BsQuestionCircle } from 'react-icons/bs'
 import FormArtefato from '../../components/FormArtefato/FormArtefato'
 import { createContent, deleteContent } from '../../../../services/githubIntegration'
-import { atualizarArtefato, atualizarIteracaoDosArtefatos, criarArtefato, excluirArtefato, filtrarArtefatosPeloNomeEPeloProjeto } from '../../../../services/artefatoService'
+import { atualizarArtefato, atualizarIteracaoDosArtefatos, buscarArtefatosPeloNomeEPeloProjeto, criarArtefato, excluirArtefato } from '../../../../services/artefatoService'
 import FormFiltrarArtefatos from '../../components/FormFiltrarArtefatos/FormFiltrarArtefatos'
 import ModalExcluirArtefato from '../../components/ModalExcluirArtefato/ModalExcluirArtefato'
 import { useNavigate } from "react-router-dom";
@@ -92,7 +92,7 @@ const PainelArtefatos = () => {
     const handleFiltrarArtefatos = async (dados) => {
         const nomeArtefato = dados.nome
         const idProjeto = dadosProjeto.id
-        const response = await filtrarArtefatosPeloNomeEPeloProjeto(nomeArtefato, idProjeto)
+        const response = await buscarArtefatosPeloNomeEPeloProjeto(nomeArtefato, idProjeto)
         if (!response.error) {
             setArtefatos(response.data)
         }
