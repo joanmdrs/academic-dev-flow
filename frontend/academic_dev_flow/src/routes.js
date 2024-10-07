@@ -33,6 +33,7 @@ import { ProviderGlobalProjeto } from "./context/ContextoGlobalProjeto/ContextoG
 import ScreenGerenciarCategoriaTarefa from "./pages/CategoriaTarefa";
 import ScreenAdminContents from "./pages/GitHub/admin/AdminContents";
 import ScreenAdminIssues from "./pages/GitHub/admin/AdminIssues";
+import ScreenAdminArtefatos from "./pages/Artefato/admin/AdminArtefatos";
 
 function Routes() {
     return (
@@ -88,7 +89,7 @@ function Routes() {
                 {/* Menu Item Artefatos */}
                 <Route
                     path="/admin/artefatos/gerenciar"
-                    Component={ScreenGerenciarArtefatos}
+                    Component={ScreenAdminArtefatos}
                     exact
                 />
 

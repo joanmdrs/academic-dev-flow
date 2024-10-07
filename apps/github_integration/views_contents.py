@@ -19,24 +19,21 @@ def create_content(request):
         content = data.get('content')
         commit_message = data.get('commit_message')
         path = data.get('path', "test.txt")
-        author_name = data.get('author_name')
-        author_email = data.get('author_email')
                  
-        if not github_token or not repository or not content or not commit_message or not path or not author_name or not author_email:
+        if not github_token or not repository or not content or not commit_message or not path:
             return JsonResponse({
                 'error': 'Ausência de parâmetros'}, 
                 status=status.HTTP_400_BAD_REQUEST)
         
         g = get_github_client(github_token)
         repo = g.get_repo(repository)
-        author = InputGitAuthor(author_name, author_email)
         
         try:
             existing_file = repo.get_contents(path)
             return JsonResponse({'error': 'Um arquivo com o mesmo caminho já existe. Informe outro caminho.'}, status=status.HTTP_409_CONFLICT)
 
         except Exception as e:
-            create_result = repo.create_file(path, commit_message, content, branch="main", committer=author)
+            create_result = repo.create_file(path, commit_message, content, branch="main")
             sha = create_result['commit'].sha
         
         return JsonResponse({'success': 'Arquivo criado com sucesso!', 'sha': sha}, status=status.HTTP_201_CREATED)
@@ -95,7 +92,7 @@ def update_content(request):
         
         repo.update_file(contents.path, content, commit_message, contents.sha, branch="main")
         
-        return JsonResponse({'success': 'Arquivo atualizado com sucesso'}, status=status.HTTP_200_OK)
+        return JsonResponse({'success': 'Arquivo atualizado com sucesso!', 'sha': sha}, status=status.HTTP_200_OK)
     
     except GithubException as e:
         return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

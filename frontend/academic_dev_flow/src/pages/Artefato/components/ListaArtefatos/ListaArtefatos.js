@@ -71,7 +71,7 @@ const ListaArtefatos = ({onView, onEdit, onDelete, onUpdateStatus}) => {
         }
 
         fetchData()
-    }, [artefatos])
+    }, [])
 
     // function handleLimitarCaracteres(texto, limite) {
     //     if (texto && texto.length >= limite) {

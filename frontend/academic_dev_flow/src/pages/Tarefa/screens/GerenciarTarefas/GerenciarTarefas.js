@@ -95,7 +95,6 @@ const GerenciarTarefas = () => {
         
         if (!dadosProjeto.token || !dadosProjeto.nome_repo) {
             NotificationManager.info('Não é possível sincronizar com o GitHub. O projeto não possui token ou repositório configurado.');
-            console.log('Retornando erro - sem token ou repositório');
             return { error: 'Projeto sem token ou repositório configurado' };
         }
     

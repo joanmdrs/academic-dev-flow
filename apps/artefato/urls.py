@@ -5,15 +5,16 @@ app_name = 'artefato'
 
 urlpatterns = [
     path('cadastrar/', CadastrarArtefatoView.as_view(), name='cadastrar_artefato'),
-    path('buscar/', BuscarArtefatoPorNomeView.as_view(), name='buscar_artefato_pelo_nome'),
-    path('buscar/<int:id>/', BuscarArtefatoPeloIdView.as_view(), name='buscar_artefato_pelo_id'),
-    path('atualizar/<int:id>/', AtualizarArtefatoView.as_view(), name='atualizar_artefato'),
-    path('excluir/<int:id>/', ExcluirArtefatoView.as_view(), name='excluir_artefato'),
+    path('atualizar/', AtualizarArtefatoView.as_view(), name='atualizar_artefato'),
+    path('atualizar-iteracao/', AtualizarIteracaoArtefatosView.as_view(), name='atualizar_iteracao'),
+    path('buscar-por-nome/', BuscarArtefatoPorNomeView.as_view(), name='buscar_artefato_pelo_nome'),
+    path('buscar-por-id/', BuscarArtefatoPeloIdView.as_view(), name='buscar_artefato_pelo_id'),
+    path('buscar-por-nome-e-por-projeto/', BuscarArtefatosPeloNomeEPeloProjeto.as_view(), name='buscar_artefato_por_nome_e_por_projeto'),
     path('listar/', ListarArtefatosView.as_view(), name="listar_artefatos"),
-    path('listar/projeto/<int:id_projeto>/', ListarArtefatosPorProjeto.as_view(), name='listar_artefatos_por_projeto'),
-    path('listar/iteracao/<int:id_iteracao>/', ListarArtefatosPorIteracao.as_view(), name='listar_artefatos_por_iteracao'),
-    path('filtrar/nome-projeto/', FiltrarArtefatoPeloNomeEProjeto.as_view(), name='filtrar_artefato_pelo_nome_e_pelo_projeto'),
+    path('listar-por-projeto/', ListarArtefatosPorProjeto.as_view(), name='listar_artefatos_por_projeto'),
+    path('listar-por-iteracao/', ListarArtefatosPorIteracao.as_view(), name='listar_artefatos_por_iteracao'),
+    path('excluir/', ExcluirArtefatoView.as_view(), name='excluir_artefato'),
+    
     path('verificar-existencia/', VerificarExistenciaArtefatoView.as_view(), name='verificar-se-artefato-já-existe'),
     path('sicronizar-contents/', SicronizarContentsView.as_view(), name="sicronizar-contents"),
-    path('atualizar-iteracao/', AtualizarIteracaoArtefatosView.as_view(), name='atualizar_iteracao')
 ]

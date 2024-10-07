@@ -34,7 +34,6 @@ const InputsAdmin = () => {
         fetchData()
     }, [dadosProjeto])
 
-
     return (
         <>
             <Form.Item
