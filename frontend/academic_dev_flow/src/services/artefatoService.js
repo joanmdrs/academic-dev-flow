@@ -2,58 +2,53 @@ import api from "../api/api"
 import { ERROR_MESSAGE_ON_CREATION, ERROR_MESSAGE_ON_DELETION, ERROR_MESSAGE_ON_SEARCHING, ERROR_MESSAGE_ON_SYNC, ERROR_MESSAGE_ON_UPDATE, INFO_MESSAGE_MANDATORY_PARAMETERS, INFO_MESSAGE_ON_SEARCHING, SUCCESS_MESSAGE_ON_CREATION, SUCCESS_MESSAGE_ON_DELETION, SUCCESS_MESSAGE_ON_SYNC_ARTIFACTS, SUCCESS_MESSAGE_ON_UPDATE } from "./messages"
 import { handleError, handleInfo, handleSuccess } from "./utils"
 
-export const criarArtefato = async (dados) => {
+export const criarArtefato = async (formData) => {
 
-    const dadosEnviar = {
-        nome: dados.nome,
-        status: dados.status,
-        descricao: dados.descricao,
-        id_file: dados.id_file,
-        path_file: dados.path_file,
-        projeto: dados.projeto,
-        iteracao: dados.iteracao
-    }
     try {
-        const response = await api.post('/artefato/cadastrar/', dadosEnviar)
+        const response = await api.post('/artefato/cadastrar/', formData)
         return handleSuccess(response, SUCCESS_MESSAGE_ON_CREATION)
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_CREATION)
     }   
 }
 
-export const buscarArtefatoPeloNome =  async (parametro) => {
+export const atualizarArtefato = async (idArtefato, formData) => {
     try {
-        const response = await api.get('artefato/buscar/', {params: {nome: parametro}})
-        return response
-    } catch (error) {
-        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
-    }
-}
-
-export const buscarArtefatoPeloId = async (id) => {
-    try {
-        const response = await api.get(`artefato/buscar/${encodeURIComponent(id)}/`)
-        return response
-    } catch (error) {
-        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
-    }
-}
-
-export const atualizarArtefato = async (id, dados) => {
-    try {
-        const response = await api.patch(`/artefato/atualizar/${encodeURIComponent(id)}/`, dados)
+        const response = await api.patch('artefato/atualizar/', formData, {params: {id_artefato: idArtefato}})
         return handleSuccess(response, SUCCESS_MESSAGE_ON_UPDATE)
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_UPDATE)
     }
 }
 
-export const excluirArtefato = async (id) => {
+export const atualizarIteracaoDosArtefatos = async (idsArtefatos, idIteracao) => {
+    const sendData = {
+        ids_artefatos: idsArtefatos,
+        id_iteracao: idIteracao
+    }
     try {
-        const response = await api.delete(`/artefato/excluir/${encodeURIComponent(id)}/`)
-        return handleSuccess(response, SUCCESS_MESSAGE_ON_DELETION)
+        const response = await api.patch('/artefato/atualizar-iteracao/', sendData)
+        return handleSuccess(response, 'Atribuição de artefatos à iteração realizada com sucesso!')
     } catch (error) {
-        return handleError(error, ERROR_MESSAGE_ON_DELETION)
+        return handleError(error, 'Falha durante a atribuição dos artefatos à iteração, contate o suporte!')
+    }
+}
+
+export const buscarArtefatoPeloNome =  async (nomeArtefato) => {
+    try {
+        const response = await api.get('artefato/buscar-por-nome/', {params: {nome_artefato: nomeArtefato}})
+        return response
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
+}
+
+export const buscarArtefatoPeloId = async (idArtefato) => {
+    try {
+        const response = await api.get('artefato/buscar-por-id/', {params: {id_artefato: idArtefato}})
+        return response
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
     }
 }
 
@@ -68,7 +63,7 @@ export const listarArtefatos = async () => {
 
 export const listarArtefatosPorProjeto = async (idProjeto) => {
     try {
-        const response = await api.get(`/artefato/listar/projeto/${encodeURIComponent(idProjeto)}/`)
+        const response = await api.get('/artefato/listar-por-projeto', {params: {id_projeto: idProjeto}})
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
@@ -77,16 +72,18 @@ export const listarArtefatosPorProjeto = async (idProjeto) => {
 
 export const listarArtefatosPorIteracao = async (idIteracao) => {
     try {
-        const response = await api.get(`/artefato/listar/iteracao/${encodeURIComponent(idIteracao)}/`)
+        const response = await api.get('/artefato/listar-por-iteracao/', {params: {id_iteracao: idIteracao}})
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
     }
 } 
 
-export const filtrarArtefatosPeloNomeEPeloProjeto = async (nomeArtefato, idProjeto) => {
+export const buscarArtefatosPeloNomeEPeloProjeto = async (nomeArtefato, idProjeto) => {
     try {
-        const response = await api.get('artefato/filtrar/nome-projeto/', {params: {nome_artefato: nomeArtefato, id_projeto: idProjeto}})
+        const response = await api.get(
+            'artefato/buscar-por-nome-e-por-projeto/',
+            {params: {nome_artefato: nomeArtefato, id_projeto: idProjeto}})
         if (response.status === 204) {
             return handleInfo(response, INFO_MESSAGE_ON_SEARCHING)
         }
@@ -99,6 +96,15 @@ export const filtrarArtefatosPeloNomeEPeloProjeto = async (nomeArtefato, idProje
             return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
         }
 
+    }
+}
+
+export const excluirArtefato = async (idsArtefatos) => {
+    try {
+        const response = await api.delete('/artefato/excluir/', {data: {ids_artefatos: idsArtefatos}})
+        return handleSuccess(response, SUCCESS_MESSAGE_ON_DELETION)
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_DELETION)
     }
 }
 
@@ -123,13 +129,4 @@ export const sicronizarContents = async (dados) => {
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SYNC)
     }   
-}
-
-export const atualizarIteracaoDosArtefatos = async (dados) => {
-    try {
-        const response = await api.patch('/artefato/atualizar-iteracao/', dados)
-        return handleSuccess(response, 'Atribuição de artefatos à iteração realizada com sucesso!')
-    } catch (error) {
-        return handleError(error, 'Falha durante a atribuição dos artefatos à iteração, contate o suporte!')
-    }
 }
