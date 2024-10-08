@@ -11,5 +11,6 @@ urlpatterns = [
     path('buscar-pelo-id-membro-e-pelo-id-projeto/', BuscarMembroProjetoPeloIdMembroEPeloIdProjeto.as_view(), name='buscar_pelo_id_membro_e_id_projeto'),
     path('buscar-projetos-do-membro/', BuscarProjetosDoMembroView.as_view(), name='buscar_projetos_do_membro'),
     path('buscar-membros-por-projeto/', BuscarMembrosPorProjetoView.as_view(), name='buscar_membro_projeto_por_projeto'),
+    path('listar/', ListarMembroProjetoView.as_view(), name='listar_membro_projeto')
 ]
 

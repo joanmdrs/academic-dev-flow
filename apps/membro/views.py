@@ -296,8 +296,11 @@ class ListarMembrosView(APIView):
         try: 
             membros = Membro.objects.all()
             
-            serializer = MembroSerializer(membros, many=True)
-            return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})   
+            if membros.exists():        
+                serializer = MembroSerializer(membros, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response({'error': 'Membro não encontrados!'}, status=status.HTTP_200_OK)
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

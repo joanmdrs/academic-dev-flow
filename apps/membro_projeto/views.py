@@ -12,6 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
 from django.db.models import Count
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
 
 class CadastrarMembroProjetoView(APIView):
     permission_classes = [IsAuthenticated]
@@ -25,6 +26,8 @@ class CadastrarMembroProjetoView(APIView):
             
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)        
 
+        except IntegrityError as e:
+            return Response({'error': 'Já existe um vínculo para este membro e projeto.'},status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
@@ -182,6 +185,21 @@ class BuscarMembrosPorProjetoView(APIView):
             return Response(data=[], status=status.HTTP_204_NO_CONTENT)
 
         except Exception as e: 
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class ListarMembroProjetoView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        try:
+            objs_membros_projetos = MembroProjeto.objects.all()
+            
+            if objs_membros_projetos:
+                serializer = MembroProjetoSerializer(objs_membros_projetos, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+                
+            return Response({'error': 'Objetos MembroProjeto não encontrados!'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # class BuscarMembroProjetoPeloUsuarioGithubView(APIView):

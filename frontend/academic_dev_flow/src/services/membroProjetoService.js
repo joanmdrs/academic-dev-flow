@@ -10,9 +10,18 @@ import {
     SUCCESS_MESSAGE_ON_UPDATE } from "./messages"
 
 // Esta função faz uma requisição para uma view do django que realiza o cadastro de um MembroProjeto.
-export const criarMembroProjeto = async (dados) => {
-    const resposta = await api.post('membro-projeto/cadastrar/', {membros: dados})
-    return resposta
+export const criarMembroProjeto = async (formData) => {
+    try {
+        const response = await api.post('membro-projeto/cadastrar/', {membros: formData})
+        return handleSuccess(response, 'Membro vinculado ao projeto com sucesso !')
+    } catch (error) {
+        console.log("erro: ", error.response.data.error)
+        if (error.response.status === 400 && error.response.data.error === 'Já existe um vínculo para este membro e projeto.') {
+            return handleError(error, 'Este membro já está vinculado a este projeto. Tente outro membro ou projeto.')
+        } else {
+            return handleError(error, 'Falha ao tentar vincular o membro ao projeto!')
+        }
+    }
 }
 
 // Esta função faz uma requisição para uma view do django que realiza a atualização de um MembroProjeto.
@@ -76,6 +85,15 @@ export const buscarProjetosDoMembro = async (idUsuario) => {
 export const buscarMembrosPorProjeto = async (idProjeto) => {
     try {
         const response = await api.get('membro-projeto/buscar-membros-por-projeto/', {params: {id_projeto: idProjeto}})
+        return response
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
+}
+
+export const listarMembroProjeto = async () => {
+    try {
+        const response = await api.get('membro-projeto/listar/')
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)

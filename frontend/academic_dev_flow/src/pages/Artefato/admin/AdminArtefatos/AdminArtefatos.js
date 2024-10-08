@@ -45,7 +45,6 @@ const AdminArtefatos = () => {
 
     const navigate = useNavigate()
 
-
     const handleCancelar = () => {  
         setIsFormVisible(false)
         setIsLoading(false)
@@ -60,23 +59,6 @@ const AdminArtefatos = () => {
         setDadosProjeto(null)
         setArtefatos([])
         setArtefatosSelecionados([])
-    }
-
-    const handleVisualizarArtefato = async (record) => {
-
-        const response = await buscarProjetoPeloId(record.projeto)
-        const projeto = response.data
-
-        const parametros = {
-            github_token: projeto.token,
-            repository: projeto.nome_repo,
-            id_projeto: projeto.id,
-            id_artefato: record.id,
-            path: record.path_file
-        }
-        navigate("/admin/artefatos/visualizar", {
-            state: parametros
-        });
     }
 
     const handleBuscarProjeto = async (id) => {
@@ -201,6 +183,23 @@ const AdminArtefatos = () => {
     const handleExcluirArtefatoUnico = async (id) => {
         await handleExcluirArtefato([id]);
     };
+
+    const handleVisualizarArtefato = async (record) => {
+
+        const response = await buscarProjetoPeloId(record.projeto)
+        const projeto = response.data
+
+        const parametros = {
+            github_token: projeto.token,
+            repository: projeto.nome_repo,
+            id_projeto: projeto.id,
+            id_artefato: record.id,
+            path: record.path_file
+        }
+        navigate("/admin/artefatos/visualizar", {
+            state: parametros
+        });
+    }
 
     return (
         <React.Fragment>

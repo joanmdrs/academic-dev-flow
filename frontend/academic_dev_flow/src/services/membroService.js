@@ -1,6 +1,7 @@
 import { NotificationManager } from "react-notifications";
 import api from "../api/api";
 import { handleError } from "./utils";
+import { ERROR_MESSAGE_ON_DELETION, ERROR_MESSAGE_ON_SEARCHING } from "./messages";
 
 export const listarGrupos = async () => {
     try {
@@ -148,6 +149,15 @@ export const atualizarMembro = async (idMembro, dados) => {
         console.log(error)
         NotificationManager.error('Falha ao atualizar o membro, contate o suporte!')
         return {error: "Erro durante a operação, contate o suporte!"}
+    }
+}
+
+export const listarMembros = async () => {
+    try {
+        const response = await api.get('membro/listar/')
+        return response
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
     }
 }
 

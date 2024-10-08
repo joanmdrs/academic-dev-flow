@@ -22,6 +22,27 @@ export const formatDate = (dateString) => {
   return formattedDate;
 };
 
+export const formatDateTime = (dateString) => {
+  const months = [
+    'jan', 'fev', 'mar', 'abr', 'mai', 'jun',
+    'jul', 'ago', 'set', 'out', 'nov', 'dez'
+  ];
+
+  const date = new Date(dateString);
+  const day = date.getDate();
+  const monthIndex = date.getMonth();
+  const year = date.getFullYear();
+
+  // Extraindo horas e minutos
+  const hours = date.getHours().toString().padStart(2, '0'); // Adiciona o zero à esquerda, se necessário
+  const minutes = date.getMinutes().toString().padStart(2, '0'); // Adiciona o zero à esquerda, se necessário
+
+  const formattedDate = `${day} ${months[monthIndex]}. ${year} às ${hours}:${minutes}`;
+
+  return formattedDate;
+};
+
+
 export const converterData = (dataString) => {
   const partes = dataString.split('/');
   
