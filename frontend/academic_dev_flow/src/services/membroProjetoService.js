@@ -1,5 +1,5 @@
 import api from "../api/api"
-import { handleError, handleSuccess } from "./utils"
+import { handleError, handleInfo, handleSuccess } from "./utils"
 import { 
     ERROR_MESSAGE_ON_CREATION, 
     ERROR_MESSAGE_ON_DELETION, 
@@ -12,15 +12,17 @@ import {
 // Esta função faz uma requisição para uma view do django que realiza o cadastro de um MembroProjeto.
 export const criarMembroProjeto = async (formData) => {
     try {
-        const response = await api.post('membro-projeto/cadastrar/', {membros: formData})
-        return handleSuccess(response, 'Membro vinculado ao projeto com sucesso !')
-    } catch (error) {
-        console.log("erro: ", error.response.data.error)
-        if (error.response.status === 400 && error.response.data.error === 'Já existe um vínculo para este membro e projeto.') {
-            return handleError(error, 'Este membro já está vinculado a este projeto. Tente outro membro ou projeto.')
+        const response = await api.post('membro-projeto/cadastrar/', formData)
+
+        if (response.status === 204){   
+            return handleInfo(response, 'O(s) membro(s) selecionado(s) já está(ão) vinculado(s) ao projeto!')
         } else {
-            return handleError(error, 'Falha ao tentar vincular o membro ao projeto!')
+            return handleSuccess(response, 'Membro(s) vinculados ao projeto com sucesso!')
         }
+        
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar vincular o(s) membro(s) ao projeto!')
+
     }
 }
 
@@ -32,6 +34,18 @@ export const atualizarMembroProjeto = async (requestData, idMembroProjeto) => {
         return handleSuccess(response, SUCCESS_MESSAGE_ON_UPDATE)
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_UPDATE)
+    }
+}
+
+export const excluirMembroProjeto = async (idsMembroProjeto) => {
+
+    console.log(idsMembroProjeto)
+    try {
+        const response = await api.delete(
+            'membro-projeto/excluir/', {data: {ids_membro_projeto: idsMembroProjeto }})
+        return handleSuccess(response, SUCCESS_MESSAGE_ON_DELETION)
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_DELETION)
     }
 }
 
@@ -71,9 +85,9 @@ export const buscarMembroProjetoPeloIdMembroEPeloIdProjeto = async (idProjeto, i
 
 // Esta função faz uma requisição para uma view do django que realiza a busca pelos projetos que estão conectados ao membro, 
 // e esta função é feita utilizando o ID do usuário. 
-export const buscarProjetosDoMembro = async (idUsuario) => {
+export const buscarProjetosDoMembro = async (idMembro) => {
     try {
-        const response = await api.get('membro-projeto/buscar-projetos-do-membro/', {params: {id_usuario: idUsuario}})
+        const response = await api.get('membro-projeto/buscar-projetos-do-membro/', {params: {id_membro: idMembro}})
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)

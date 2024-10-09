@@ -16,20 +16,35 @@ from django.db import IntegrityError
 
 class CadastrarMembroProjetoView(APIView):
     permission_classes = [IsAuthenticated]
+
     def post(self, request):
         try:
-            membros_data = request.data.get('membros', [])
-            serializer = MembroProjetoSerializer(data=membros_data, many=True)
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
+            ids_membros = request.data.get('membros', [])
+            id_projeto = request.data.get('projeto', None)
             
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)        
+            if not id_projeto or not ids_membros:
+                return Response({'error': 'O ID do projeto e os IDs dos membros são necessários.'}, status=status.HTTP_400_BAD_REQUEST)
+
+            novos_membros = []
+
+            # Verifica se o membro já está vinculado e cria novos membros
+            for id_membro in ids_membros:
+                if not MembroProjeto.objects.filter(projeto_id=id_projeto, membro_id=id_membro).exists():
+                    novos_membros.append(MembroProjeto(projeto_id=id_projeto, membro_id=id_membro))
+
+            if novos_membros:
+                membros_criados = MembroProjeto.objects.bulk_create(novos_membros)
+                serializer = MembroProjetoSerializer(membros_criados, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+
+            return Response(
+                {'message': 'Os membros selecionados já estão vinculados ao projeto.'}, status=status.HTTP_204_NO_CONTENT)
 
         except IntegrityError as e:
-            return Response({'error': 'Já existe um vínculo para este membro e projeto.'},status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Erro de integridade: ' + str(e)}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         
 class AtualizarMembroProjetoView(APIView):
     permission_classes = [IsAuthenticated]
@@ -50,46 +65,26 @@ class AtualizarMembroProjetoView(APIView):
         except Exception as e: 
              return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
          
-class ExcluirMembroProjetoOneView(APIView):
+class ExcluirMembroProjetoView(APIView):
     permission_classes = [IsAuthenticated]
     def delete(self, request):
         try:
-            id_membro_projeto = request.GET.get('id_membro_projeto', None)
-            membro_projeto = MembroProjeto.objects.get(pk=id_membro_projeto)
+            ids_membro_projeto = request.data.get('ids_membro_projeto', None)
             
-            if membro_projeto is not None: 
-                membro_projeto.delete()
+            if not ids_membro_projeto: 
                 return Response(
-                    {'detail': 'Relacionamento entre membro e projeto excluído com sucesso!'}, 
-                    status=status.HTTP_204_NO_CONTENT)
+                    {'error': 'Os IDs dos membros_projeto não foram fornecidos!'}, status=status.HTTP_400_BAD_REQUEST)
+                
+            objs_membro_projeto = MembroProjeto.objects.filter(id__in=ids_membro_projeto)
             
-            else: 
-                return Response({'error': 'Objeto não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
+            if objs_membro_projeto.exists():
+                objs_membro_projeto.delete()
+                return Response({"detail": "Objetos Membro Projeto excluídos com sucesso"}, status=status.HTTP_204_NO_CONTENT)
+            
+            return Response({'error': 'Um ou mais objetos não foram encontrados'}, status=status.HTTP_404_NOT_FOUND)
             
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)  
-        
-class ExcluirMembroProjetoManyView(APIView):
-    permission_classes = [IsAuthenticated]
-    def delete(self, request):
-        try:
-            
-            id_projeto = request.data.get('id_projeto', None)
-            ids_membros = request.data.get('ids_membros', [])
-
-            if not ids_membros:
-                return Response({'error': 'A lista de IDs de membros está vazia!'}, status=status.HTTP_400_BAD_REQUEST)
-
-            objetos = MembroProjeto.objects.filter(projeto=id_projeto, membro__in=ids_membros)
-
-            if objetos.exists():
-                objetos.delete()
-                return Response({'message': 'Objetos excluídos com sucesso!'}, status=status.HTTP_204_NO_CONTENT)
-            else:
-                return Response({'error': 'Nenhum objeto encontrado para exclusão!'}, status=status.HTTP_404_NOT_FOUND)
-
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 class BuscarMembroProjetoPeloIdMembroEPeloIdProjeto(APIView):
     permission_classes =[IsAuthenticated]
@@ -117,52 +112,21 @@ class BuscarMembroProjetoPeloIdMembroEPeloIdProjeto(APIView):
 class BuscarProjetosDoMembroView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def getQuantidadeMembros(self, id_projeto):
-        quantidade_membros = MembroProjeto.objects.filter(projeto__id=id_projeto).aggregate(quantidade_membros=Count('id'))
-        return quantidade_membros['quantidade_membros']
-
     def get(self, request):
         try:
-            id_usuario = request.GET.get('id_usuario', None)
+            id_membro = request.GET.get('id_membro', None)
 
-            if id_usuario is None: 
-                return Response({'error': 'Parâmetro id_usuario não fornecido!'}, status=status.HTTP_400_BAD_REQUEST)
+            if id_membro is None: 
+                return Response({'error': 'Parâmetro id_membro não fornecido!'}, status=status.HTTP_400_BAD_REQUEST)
             
-            membro = Membro.objects.get(usuario__id=id_usuario)
-            membro_projeto_items = MembroProjeto.objects.filter(membro=membro)
-            projetos_info = []
-
-            for item in membro_projeto_items:
-                projeto = item.projeto
-                fluxo = projeto.fluxo
-                quant_membros = self.getQuantidadeMembros(projeto.id)
-
-                # Verificando se o fluxo é None
-                fluxo_id = fluxo.id if fluxo is not None else None
-                fluxo_nome = fluxo.nome if fluxo is not None else None
-
-                projeto_info = {
-                    'id': projeto.id,
-                    'nome': projeto.nome,
-                    'status': projeto.status,
-                    'data_inicio': projeto.data_inicio,
-                    'data_termino': projeto.data_termino,
-                    'qtd_membros': quant_membros,
-                    'fluxo_id': fluxo_id,
-                    'fluxo_nome': fluxo_nome
-                }
-
-                projetos_info.append(projeto_info)
-
-            if projetos_info:
-                return Response(projetos_info, status=status.HTTP_200_OK)
-            else:
-                return Response({"detail": "Nenhum projeto encontrado para este membro."}, status=status.HTTP_404_NOT_FOUND)
-
-        except Membro.DoesNotExist:
-            return Response({'error': 'O membro não foi encontrado.'}, status=status.HTTP_404_NOT_FOUND)
-        except Projeto.DoesNotExist:
-            return Response({'error': 'O projeto não foi encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+            objs_membro_projeto = MembroProjeto.objects.filter(membro=id_membro)
+            
+            if objs_membro_projeto.exists():
+                serializer = MembroProjetoSerializer(objs_membro_projeto, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+                
+            return Response([], status=status.HTTP_200_OK)
+        
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
@@ -194,11 +158,11 @@ class ListarMembroProjetoView(APIView):
         try:
             objs_membros_projetos = MembroProjeto.objects.all()
             
-            if objs_membros_projetos:
+            if objs_membros_projetos.exists():
                 serializer = MembroProjetoSerializer(objs_membros_projetos, many=True)
                 return Response(serializer.data, status=status.HTTP_200_OK)
                 
-            return Response({'error': 'Objetos MembroProjeto não encontrados!'}, status=status.HTTP_404_NOT_FOUND)
+            return Response([], status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

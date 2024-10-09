@@ -97,17 +97,17 @@ const FormMembroProjeto = ({titleForm, onSubmit, onCancel}) => {
                         option?.label.toLowerCase().includes(input.toLowerCase())
                     }
                 />
-
             </Form.Item>
 
             <Form.Item
-                name="membro"
-                rules={[{required: true, message: 'Por favor, selecione uma opção!'}]}
+                name="membros"
+                rules={[{required: true, message: 'Por favor, selecione pelo menos um membro!'}]}
             >
                 <Select 
+                    mode="multiple"
                     showSearch
                     allowClear
-                    placeholder="Pesquise ou selecione o membro"
+                    placeholder="Pesquise ou selecione os membros"
                     options={optionsMembros}
                     filterOption={(input, option) =>
                         option?.label.toLowerCase().includes(input.toLowerCase())
@@ -129,4 +129,4 @@ const FormMembroProjeto = ({titleForm, onSubmit, onCancel}) => {
     )
 }
 
-export default FormMembroProjeto
+export default FormMembroProjeto;

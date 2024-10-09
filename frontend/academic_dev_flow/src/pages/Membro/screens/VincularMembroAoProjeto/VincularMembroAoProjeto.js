@@ -1,51 +1,165 @@
-import { Button } from "antd";
-import React, { useState } from "react";
+import { Button, Modal, Select } from "antd";
+import React, { useEffect, useState } from "react";
 import Titulo from "../../../../components/Titulo/Titulo";
 import { FaFilter, FaPlus, FaTrash } from "react-icons/fa";
 import TableMembroProjeto from "../../components/TableMembroProjeto/TableMembroProjeto";
 import { useMembroContexto } from "../../context/MembroContexto";
 import FormMembroProjeto from "../../components/FormMembroProjeto/FormMembroProjeto";
 import { handleError } from "../../../../services/utils";
-import { criarMembroProjeto } from "../../../../services/membroProjetoService";
+import { buscarMembrosPorProjeto, buscarProjetosDoMembro, criarMembroProjeto, excluirMembroProjeto, listarMembroProjeto } from "../../../../services/membroProjetoService";
+import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
+import { listarProjetos } from "../../../../services/projetoService";
+import { listarMembros } from "../../../../services/membroService";
 
 const VincularMembroAoProjeto = () => {
-    const [titleForm, setTitleForm] = useState('VINCULAR PROJETO AO MEMBRO')
-    const [isFormVisible, setIsFormVisible] = useState(false)
-    const [isFormFilterVisible, setIsFormFilterVisible] = useState(false)
-    const [isTableVisible, setIsTableVisible] = useState(true)
-    const {setDadosMembroProjeto, objsMembroProjetoSelecionados} = useMembroContexto()
-    const [isSearchBtnEnabled, setIsSearchBtnEnabled] = useState(true)
+
+    const [titleForm, setTitleForm] = useState('VINCULAR MEMBRO(S) AO PROJETO');
+    const [isFormVisible, setIsFormVisible] = useState(false);
+    const [isFormFilterVisible, setIsFormFilterVisible] = useState(false);
+    const [isTableVisible, setIsTableVisible] = useState(true);
+    const {setDadosMembroProjeto, objsMembroProjetoSelecionados, setObjsMembroProjeto} = useMembroContexto();
+    const [isSearchBtnEnabled, setIsSearchBtnEnabled] = useState(true);
+    const [optionsMembros, setOptionsMembros] = useState([]);
+    const [optionsProjetos, setOptionsProjetos] = useState([]);
+
+    const resetTableData = async () => {
+        try {
+            const response = await listarMembroProjeto();
+    
+            if (!response.error) { 
+                setObjsMembroProjeto(response.data)
+            } 
+        } catch (error) {
+            setObjsMembroProjeto([])
+            return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+        }
+    };
 
     const handleCancelar = () => {
-        setIsFormVisible(false)
-        setIsTableVisible(true)
-    }
+        setIsFormVisible(false);
+        setIsTableVisible(true);
+    };
 
     const handleReload = () => {
-        setIsFormVisible(false)
-        setIsFormFilterVisible(false)
-        setIsTableVisible(true)
-        setDadosMembroProjeto(null)
-    }
+        setIsFormVisible(false);
+        setIsFormFilterVisible(false);
+        setIsTableVisible(true);
+        setDadosMembroProjeto(null);
+        setObjsMembroProjeto([]);
+    };
 
     const handleAdicionarMembroProjeto = () => {
-        setIsFormVisible(true)
-        setIsTableVisible(false)
-        setIsFormFilterVisible(false)
-        setDadosMembroProjeto(null)
-    }
+        setIsFormVisible(true);
+        setIsTableVisible(false);
+        setIsFormFilterVisible(false);
+        setDadosMembroProjeto(null);
+    };
 
     const handleVincularMembroAoProjeto = async (formData) => {
         try {
-            const response = await criarMembroProjeto([formData])
+            const response = await criarMembroProjeto(formData);
 
             if (!response.error){
-                handleReload()
+                handleReload();
             }
         } catch (error) {
-            return handleError(error, 'Falha ao tentar vincular o membro ao projeto!')
+            return handleError(error, 'Falha ao tentar vincular o membro ao projeto!');
         }
-    }
+    };
+
+    const handleDesvincularMembroProjeto = async () => {
+        Modal.confirm({
+            title: 'Confirmar exclusão',
+            content: 'Tem certeza de que deseja excluir este(s) item(s)? Ao prosseguir, o vínculo entre este(s) membro(s) e o(s) projeto(s) será desfeito',
+            okText: 'Sim',
+            cancelText: 'Não',
+            onOk:  async () => {
+                try {
+                    setIsTableVisible(false);
+                    const ids = objsMembroProjetoSelecionados.map(item => item.id);
+                    const response = await excluirMembroProjeto(ids);
+                    if (!response.error){
+                        handleReload();
+                    }
+                } catch (error) {
+                    return handleError(error, 'Falha ao tentar desvincular os membros do projeto!');
+                }
+            }
+        });
+    };
+
+    const handleBuscarProjetosDoMembro = async (idMembro) => {
+        if (!idMembro) {
+            resetTableData(); // Resetar a tabela quando a seleção é limpa
+            return;
+        }
+        try {
+            const response = await buscarProjetosDoMembro(idMembro);
+
+            if(!response.error){
+                setObjsMembroProjeto(response.data);
+            }
+        } catch (error) {
+            return handleError(error, 'Falha ao tentar buscar os projetos do membro selecionado!');
+        }
+    };
+
+    const handleBuscarMembrosDoProjeto = async (idProjeto) => {
+        if (!idProjeto) {
+            resetTableData(); // Resetar a tabela quando a seleção é limpa
+            return;
+        }
+        try {
+            const response = await buscarMembrosPorProjeto(idProjeto);
+
+            if(!response.error){
+                setObjsMembroProjeto(response.data);
+            }
+        } catch (error) {
+            return handleError(error, 'Falha ao tentar buscar os membros do projeto!');
+        }
+    };
+
+    const handleGetProjetos = async () => {
+        try {
+            const response = await listarProjetos();
+
+            if(!response.error){
+                const resultados = response.data.map((item) => ({
+                    value: item.id,
+                    label: item.nome
+                }));
+                setOptionsProjetos(resultados);
+            }
+        } catch (error) {
+            return handleError(error, ERROR_MESSAGE_ON_SEARCHING);
+        }
+    };
+
+    const handleGetMembros = async () => {
+        try {
+            const response = await listarMembros();
+            const resultados = response.data.map((item) => {
+                return {
+                    value: item.id,
+                    label: `${item.nome} (${item.nome_grupo})`,
+                };
+            });
+            setOptionsMembros(resultados);
+        
+        } catch (error) {   
+            return handleError(error, ERROR_MESSAGE_ON_SEARCHING);
+        }
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            await handleGetMembros();
+            await handleGetProjetos();
+        };
+
+        fetchData();
+    }, []);
 
     return (
         <div>
@@ -56,15 +170,29 @@ const VincularMembroAoProjeto = () => {
             />
 
             <div style={{display: 'flex', justifyContent: 'space-between', margin: '20px'}}> 
-                <div>
-                    <Button
-                        icon={<FaFilter />} 
-                        type="primary"
-                        disabled={isSearchBtnEnabled}
-                        onClick={() => setIsFormFilterVisible(!isFormFilterVisible)}
-                    >
-                        Filtrar
-                    </Button>
+                <div style={{display: 'flex', gap: '20px'}}>
+
+                    <Select
+                        showSearch
+                        allowClear
+                        placeholder="Pesquise ou selecione o membro"
+                        options={optionsMembros}
+                        onChange={(value) => handleBuscarProjetosDoMembro(value)} 
+                        filterOption={(input, option) =>
+                            option?.label.toLowerCase().includes(input.toLowerCase())
+                        }
+                    />
+                    <Select
+                        showSearch
+                        allowClear
+                        placeholder="Pesquise ou selecione o projeto"
+                        options={optionsProjetos}
+                        onChange={(value) => handleBuscarMembrosDoProjeto(value)}
+                        filterOption={(input, option) =>
+                            option?.label.toLowerCase().includes(input.toLowerCase())
+                        }
+                    />
+
                 </div>
 
                 <div style={{display: 'flex', gap: '10px'}}> 
@@ -79,7 +207,8 @@ const VincularMembroAoProjeto = () => {
                         icon={<FaTrash />} 
                         type="primary" 
                         danger
-                        disabled={objsMembroProjetoSelecionados.length === 0 ? true : false}
+                        disabled={objsMembroProjetoSelecionados.length === 0}
+                        onClick={handleDesvincularMembroProjeto}
                     >
                         Excluir
                     </Button>
@@ -100,6 +229,6 @@ const VincularMembroAoProjeto = () => {
             
         </div>
     );
-}
+};
 
-export default VincularMembroAoProjeto
+export default VincularMembroAoProjeto;
