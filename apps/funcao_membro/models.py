@@ -13,9 +13,12 @@ class CategoriaFuncaoMembro(models.Model):
 class FuncaoMembro(models.Model):
     membro_projeto = models.ForeignKey(MembroProjeto, on_delete=models.CASCADE)
     categoria_funcao = models.ForeignKey(CategoriaFuncaoMembro, on_delete=models.PROTECT, default=1, null=True, blank=True)
-    data_inicio = models.DateField(null=True, blank=True)
-    data_termino = models.DateField(null=True, blank=True)
     status = models.BooleanField(default=True)
     
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['membro_projeto', 'categoria_funcao'], name='unique_funcao_membro')
+        ]
+        
     def __str__(self):
         return f"{self.membro_projeto.membro.nome} - {self.categoria_funcao.nome}"

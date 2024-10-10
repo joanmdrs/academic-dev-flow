@@ -27,7 +27,6 @@ class CadastrarMembroProjetoView(APIView):
 
             novos_membros = []
 
-            # Verifica se o membro já está vinculado e cria novos membros
             for id_membro in ids_membros:
                 if not MembroProjeto.objects.filter(projeto_id=id_projeto, membro_id=id_membro).exists():
                     novos_membros.append(MembroProjeto(projeto_id=id_projeto, membro_id=id_membro))
@@ -108,7 +107,6 @@ class BuscarMembroProjetoPeloIdMembroEPeloIdProjeto(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-# A view abaixo realiza a busca dos projetos que o membro está vinculado. Para fazer essa busca, a view utiliza como informação, o id do usuário, o qual está vinculado ao model de membro. 
 class BuscarProjetosDoMembroView(APIView):
     permission_classes = [IsAuthenticated]
 

@@ -4,6 +4,11 @@ from .views import *
 app_name = 'funcao-membro'
 
 urlpatterns = [
+    
+    path('cadastrar/', CadastrarFuncaoMembroProjetoView.as_view(), name='cadastrar_funcao_membro'),
+    path('listar-funcoes-do-membro/', ListarFuncaoMembroProjetoView.as_view(), name='listar_funcoes_do_membro'),
+    path('excluir/', ExcluirFuncaoMembroProjetoView.as_view(), name='excluir_funcao_membro'),
+        
     path('categoria/cadastrar/', CadastrarCategoriaFuncaoMembroView.as_view(), name='cadastrar_categoria_funcao_membro'),
     path('categoria/atualizar/', AtualizarCategoriaFuncaoMembroView.as_view(), name='atualizar_categoria_funcao_membro'),
     path('categoria/buscar-pelo-nome/', BuscarCategoriaFuncaoMembroPeloNomeView.as_view(), name='buscar_categoria_pelo_nome'),

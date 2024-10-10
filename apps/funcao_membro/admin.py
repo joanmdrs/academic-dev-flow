@@ -7,7 +7,7 @@ class CategoriaFuncaoMembroAdmin(admin.ModelAdmin):
 
 class FuncaoMembroAdmin(admin.ModelAdmin):
     
-    list_display = ('id', 'exibir_membro', 'exibir_funcao', 'data_inicio', 'data_termino')
+    list_display = ('id', 'exibir_membro', 'exibir_funcao', 'status')
     
     def exibir_membro(self, obj):
         return obj.membro_projeto.membro.nome

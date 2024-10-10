@@ -8,8 +8,8 @@ from apps.membro_projeto.models import MembroProjeto
 from apps.membro_projeto.serializers import MembroProjetoSerializer
 from apps.membro.models import Membro
 from apps.projeto.models import Projeto
-from .models import CategoriaFuncaoMembro
-from .serializers import CategoriaFuncaoMembroSerializer
+from .models import CategoriaFuncaoMembro, FuncaoMembro
+from .serializers import CategoriaFuncaoMembroSerializer, FuncaoMembroSerializer
 from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
 from django.core.exceptions import ObjectDoesNotExist
@@ -139,5 +139,71 @@ class ExcluirCategoriaFuncaoMembroView(APIView):
                 status=status.HTTP_409_CONFLICT
             )
 
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class CadastrarFuncaoMembroProjetoView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        try:
+            serializer = FuncaoMembroSerializer(data=request.data)
+            
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        except IntegrityError as e:
+            if 'unique_funcao_membro' in str(e):
+                return Response({'error': 'Este membro já possui essa função atribuída.'}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({'error': 'Erro de integridade no banco de dados.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class ListarFuncaoMembroProjetoView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        try:
+            id_membro_projeto = request.GET.get('id_membro_projeto', None)
+            
+            if not id_membro_projeto:
+                return Response({'error': 'O ID do MembroProjeto não foi fornecido!'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            objs_funcao_membro = FuncaoMembro.objects.filter(membro_projeto=id_membro_projeto)
+            
+            if objs_funcao_membro.exists():
+                serializer = FuncaoMembroSerializer(objs_funcao_membro, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response(
+                {'error': 'Não existem funções vinculadas ao ID do MembroProjeto fornecido !'}, 
+                status=status.HTTP_404_NOT_FOUND)
+            
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class ExcluirFuncaoMembroProjetoView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def delete(self, request):
+        try:
+            id_funcao_membro_projeto = request.GET.get('id_funcao_membro_projeto', None)
+            
+            if not id_funcao_membro_projeto:
+                return Response({'error': 'O ID da FuncaoMembro não foi fornecido'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            funcao_membro_projeto = FuncaoMembro.objects.get(id=id_funcao_membro_projeto)
+            
+            if funcao_membro_projeto:
+                funcao_membro_projeto.delete()
+                return Response({"detail": "Objeto FuncaoMembro excluído com sucesso"}, status=status.HTTP_204_NO_CONTENT)
+                
+            return Response({'error': 'O objeto FuncaoMembro não foi encontrado!'}, status=status.HTTP_404_NOT_FOUND)
+                    
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
