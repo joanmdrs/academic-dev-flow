@@ -7,16 +7,20 @@ import { buscarMembrosPorProjeto } from "../../../../services/membroProjetoServi
 import { listarCategoriaFuncaoMembro } from "../../../../services/funcaoMembroProjetoService";
 import { useFuncaoMembroContexto } from "../../context/FuncaoMembroContexto";
 import { useForm } from "antd/es/form/Form";
+import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
 
 const FormFuncaoMembro = ({ onCancel, onSubmit }) => {
     const [optionsProjetos, setOptionsProjetos] = useState([]);
     const [optionsMembroProjeto, setOptionsMembroProjeto] = useState([]);
+    const [optionsIteracao, setOptionsIteracao] = useState([])
     const [optionsCategorias, setOptionsCategoria] = useState([]);
     const [enableOptionMembroProjeto, setEnableOptionMembroProjeto] = useState(true);
+    const [enableOptionIteracao, setEnableOptionIteracao] = useState(true)
     const { dadosFuncaoMembro, setDadosFuncaoMembro } = useFuncaoMembroContexto();
     const [form] = useForm();
     const [titulo, setTitulo] = useState("ATRIBUIR FUNÇÃO AO MEMBRO");
     const [membroProjetoSelecionado, setMembroProjetoSelecionado] = useState(null);
+    const [iteracaoSelecionada, setIteracaoSelecionada] = useState(null)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -78,13 +82,32 @@ const FormFuncaoMembro = ({ onCancel, onSubmit }) => {
                     label: `${item.nome_membro} - ${item.nome_grupo}`,
                 }));
                 setOptionsMembroProjeto(resultados);
-                setEnableOptionMembroProjeto(false); // Reativa o campo após carregar
+                setEnableOptionMembroProjeto(false);
             }
         } catch (error) {
             return handleError(error, ERROR_MESSAGE_ON_SEARCHING);
         }
     };
 
+    const handleGetIteracoes = async (id) => {
+        try {
+            form.setFieldsValue({iteracao: undefined})
+            setIteracaoSelecionada(null)
+            setEnableOptionIteracao(true)
+            const response = await listarIteracoesPorProjeto(id)
+            if (!response.error){
+                const resultados = response.data.map((item) => ({
+                    value: item.id,
+                    label: item.nome
+                }))
+                setOptionsIteracao(resultados)
+                setEnableOptionIteracao(false)
+            }
+
+        } catch (error) {
+            return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+        }
+    }
     const handleSubmitForm = (values) => {
         const { membro_projeto, categoria_funcao } = values;
         
@@ -117,7 +140,10 @@ const FormFuncaoMembro = ({ onCancel, onSubmit }) => {
                         allowClear
                         placeholder="Pesquise ou selecione o projeto"
                         options={optionsProjetos}
-                        onChange={(value) => handleGetMembrosProjeto(value)}
+                        onChange={(value) => {
+                            handleGetMembrosProjeto(value)
+                            handleGetIteracoes(value)
+                        }}
                         filterOption={(input, option) => option?.label.toLowerCase().includes(input.toLowerCase())}
                     />
                 </Form.Item>
@@ -136,6 +162,23 @@ const FormFuncaoMembro = ({ onCancel, onSubmit }) => {
                         showSearch
                         value={membroProjetoSelecionado}
                         onChange={(value) => setMembroProjetoSelecionado(value)}
+                        filterOption={(input, option) => option?.label.toLowerCase().includes(input.toLowerCase())}
+                    />
+                </Form.Item>
+
+                <Form.Item
+                    label="Iteracao"
+                    name="iteracao"
+                >
+                    <Select
+                        name="iteracao"
+                        disabled={enableOptionIteracao}
+                        allowClear
+                        placeholder="Selecione a iteração"
+                        options={optionsIteracao}
+                        showSearch
+                        value={iteracaoSelecionada}
+                        onChange={(value) => setIteracaoSelecionada(value)}
                         filterOption={(input, option) => option?.label.toLowerCase().includes(input.toLowerCase())}
                     />
                 </Form.Item>
