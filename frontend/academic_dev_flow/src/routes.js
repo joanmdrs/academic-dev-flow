@@ -28,12 +28,13 @@ import ScreenVisualizarIteracao from "./pages/Iteracao/screens/VisualizarIteraca
 import ScreenPerfilMembro from "./pages/Membro/screens/PerfilMembro";
 import ScreenGerenciarFluxos from "./pages/Fluxo";
 import ScreenGerenciarEtapas from "./pages/Etapa/screens/GerenciarEtapas";
-import ScreenGerenciarCategoriaFuncaoMembro from "./pages/FuncaoMembro";
+import ScreenGerenciarCategoriaFuncaoMembro from "./pages/FuncaoMembro/screens/GerenciarCategoriaFuncaoMembro";
 import { ProviderGlobalProjeto } from "./context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 import ScreenGerenciarCategoriaTarefa from "./pages/CategoriaTarefa";
 import ScreenAdminContents from "./pages/GitHub/admin/AdminContents";
 import ScreenAdminIssues from "./pages/GitHub/admin/AdminIssues";
 import ScreenAdminArtefatos from "./pages/Artefato/admin/AdminArtefatos";
+import ScreenGerenciarFuncaoMembro from "./pages/FuncaoMembro/screens/GerenciarFuncaoMembro";
 
 function Routes() {
     return (
@@ -81,9 +82,15 @@ function Routes() {
                 />
 
                 <Route
-                    path="/admin/membros/gerenciar-categorias"
+                    path="/admin/membros/funcoes/gerenciar-categorias"
                     Component={ScreenGerenciarCategoriaFuncaoMembro}
                     exact
+                /> 
+
+                <Route 
+                    path="/admin/membros/funcoes/gerenciar-funcoes"
+                    Component={ScreenGerenciarFuncaoMembro}
+                    exact    
                 /> 
 
                 {/* Menu Item Artefatos */}

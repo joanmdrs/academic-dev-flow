@@ -147,7 +147,7 @@ class CadastrarFuncaoMembroProjetoView(APIView):
     
     def post(self, request):
         try:
-            serializer = FuncaoMembroSerializer(data=request.data)
+            serializer = FuncaoMembroSerializer(data=request.data, many=True)
             
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
@@ -164,7 +164,45 @@ class CadastrarFuncaoMembroProjetoView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-class ListarFuncaoMembroProjetoView(APIView):
+class AtualizarFuncaoMembroProjetoView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def patch(self, request):
+        try:
+            id_funcao_membro = request.GET.get("id_funcao_membro", None)
+            
+            if not id_funcao_membro:
+                return Response({'error': 'O ID da FuncaoMembro não foi fornecido!'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            # Recupera a função membro com base no ID
+            funcao_membro = FuncaoMembro.objects.get(id=id_funcao_membro)
+            
+            if funcao_membro:
+                # Verifica se o status foi fornecido no corpo da requisição
+                status_atualizado = request.data.get('status', None)
+                
+                # Se o status for fornecido e for False, chama a função de desativar
+                if status_atualizado is not None and not status_atualizado:
+                    funcao_membro.desativar_funcao()
+                
+                # Serializa e atualiza os dados da função
+                serializer = FuncaoMembroSerializer(funcao_membro, data=request.data, partial=True)
+                
+                if serializer.is_valid(raise_exception=True):
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+            
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+            return Response({'error': 'O objeto FuncaoMembro não foi localizado!'}, status=status.HTTP_404_NOT_FOUND)
+                    
+        except FuncaoMembro.DoesNotExist:
+            return Response({'error': 'O objeto FuncaoMembro não foi encontrado!'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        
+class ListarFuncaoMembroProjetoPeloIDView(APIView):
     permission_classes = [IsAuthenticated]
     
     def get(self, request):
@@ -186,6 +224,67 @@ class ListarFuncaoMembroProjetoView(APIView):
             
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class ListarFuncaoMembroView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        try:
+            objs_funcao_membro = FuncaoMembro.objects.all().order_by('id')
+            
+            if objs_funcao_membro.exists():
+                serializer = FuncaoMembroSerializer(objs_funcao_membro, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response([], status=status.HTTP_200_OK)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class FiltrarFuncaoMembroProjetoView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        try:
+            id_projeto = request.GET.get('projeto', None)
+            id_membro_projeto = request.GET.get('membro_projeto', None)
+            id_categoria = request.GET.get('categoria_funcao', None)
+            
+            if not id_projeto and id_categoria:
+                # Caso: Filter por categoria de função
+                objs_funcao_membro = FuncaoMembro.objects.filter(categoria_funcao=id_categoria)
+                
+            elif id_membro_projeto and not id_categoria:
+                # Caso: Filtrar por membro do projeto
+                objs_funcao_membro = FuncaoMembro.objects.filter(membro_projeto=id_membro_projeto)
+                
+            elif id_membro_projeto and id_categoria:
+                # Caso: Filtrar por membro do projeto e categoria de função
+                objs_funcao_membro = FuncaoMembro.objects.filter(membro_projeto=id_membro_projeto, categoria_funcao=id_categoria)
+                
+            elif id_projeto and not id_membro_projeto and not id_categoria:
+                # Caso: Filtrar por projeto (obter todas as funções dos membros do projeto)
+                membros_projeto = MembroProjeto.objects.filter(projeto=id_projeto).values_list('id', flat=True)
+                objs_funcao_membro = FuncaoMembro.objects.filter(membro_projeto__in=membros_projeto)
+                
+            elif id_projeto and id_categoria:
+                # Caso: Filtrar por projeto e categoria de função
+                membros_projeto = MembroProjeto.objects.filter(projeto=id_projeto).values_list('id', flat=True)
+                objs_funcao_membro = FuncaoMembro.objects.filter(membro_projeto__in=membros_projeto, categoria_funcao=id_categoria)
+
+            else:
+                # Caso: Nenhum filtro fornecido, retorna todos os objetos FuncaoMembro
+                objs_funcao_membro = FuncaoMembro.objects.all()
+
+            serializer = FuncaoMembroSerializer(objs_funcao_membro, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        except FuncaoMembro.DoesNotExist:
+            return Response([], status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            
 
 class ExcluirFuncaoMembroProjetoView(APIView):
     permission_classes = [IsAuthenticated]

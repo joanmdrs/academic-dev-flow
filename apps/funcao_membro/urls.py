@@ -6,7 +6,10 @@ app_name = 'funcao-membro'
 urlpatterns = [
     
     path('cadastrar/', CadastrarFuncaoMembroProjetoView.as_view(), name='cadastrar_funcao_membro'),
-    path('listar-funcoes-do-membro/', ListarFuncaoMembroProjetoView.as_view(), name='listar_funcoes_do_membro'),
+    path('atualizar/', AtualizarFuncaoMembroProjetoView.as_view(), name='atualizar_funcao_membro'),
+    path('listar/', ListarFuncaoMembroView.as_view(), name='listar_funcao_membro'),
+    path('listar-funcoes-do-membro/', ListarFuncaoMembroProjetoPeloIDView.as_view(), name='listar_funcoes_do_membro'),
+    path('filtrar/', FiltrarFuncaoMembroProjetoView.as_view(), name='filtrar_funcoes_membro'),
     path('excluir/', ExcluirFuncaoMembroProjetoView.as_view(), name='excluir_funcao_membro'),
         
     path('categoria/cadastrar/', CadastrarCategoriaFuncaoMembroView.as_view(), name='cadastrar_categoria_funcao_membro'),

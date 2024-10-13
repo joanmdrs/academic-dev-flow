@@ -5,7 +5,6 @@ import { HiOutlineClipboardList } from "react-icons/hi";
 import { BiGroup } from "react-icons/bi";
 import Sider from "antd/es/layout/Sider";
 import { RiFlowChart } from "react-icons/ri";
-import { IoPricetagsOutline } from "react-icons/io5";
 import { MdOutlineTaskAlt } from "react-icons/md";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { BsLayers } from "react-icons/bs";
@@ -83,9 +82,19 @@ const MenuAdmin = () => {
                         <Link to="/admin/membros/vincular-projeto">Vincular Projeto</Link>
                     </Menu.Item>
 
-                    <Menu.Item key="/admin/membros/gerenciar-categorias">
-                        <Link to="/admin/membros/gerenciar-categorias">Categorias</Link>
-                    </Menu.Item>
+                    <SubMenu
+                        className="item-menu"
+                        key="admin/membros/funcoes"
+                        title="Funções"
+                    >
+                        <Menu.Item key="/admin/membros/funcoes/gerenciar-categorias">
+                            <Link to="/admin/membros/funcoes/gerenciar-categorias">Categorias</Link>
+                        </Menu.Item>
+
+                        <Menu.Item key="/admin/membros/funcoes/gerenciar-funcoes">
+                            <Link to="/admin/membros/funcoes/gerenciar-funcoes">Gerenciar Funções</Link>
+                        </Menu.Item>
+                    </SubMenu>
 
                 </SubMenu>
 

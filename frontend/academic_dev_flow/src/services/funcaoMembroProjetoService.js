@@ -63,3 +63,58 @@ export const excluirCategoriaFuncaoMembro = async (idsCategoria) => {
         return handleError(error, ERROR_MESSAGE_ON_DELETION)
     }
 }
+
+export const cadastrarFuncaoMembroProjeto = async (formData) => {
+    try {
+        const response = await api.post('funcao-membro/cadastrar/', formData)
+        return handleSuccess(response, 'Função(es) atribuída(s) ao membro com sucesso !')
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar atribuir a função do membro !')   
+    }
+}
+
+export const atualizarFuncaoMembroProjeto = async (idFuncaoMembro, formData) => {
+    try {
+        const response = await api.patch('funcao-membro/atualizar/', formData, {params: {id_funcao_membro: idFuncaoMembro}})
+        return response
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar atualizar a função do membro !')
+    }
+}
+
+export const filtrarFuncaoMembroProjeto = async (params) => {
+    try {
+        const response = await api.get('funcao-membro/filtrar/', {params: params})
+        return response
+    } catch (error) {   
+        return handleError(error, 'Falha durante a filtragem !')
+    }
+}
+
+export const listarFuncaoMembro = async () => {
+    try {
+        const response = await api.get('funcao-membro/listar/')
+        return response
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
+}
+
+export const listarFuncaoMembroProjetoDoMembro = async (idMembroProjeto) => {
+    try {
+        const response = await api.get(
+            'funcao-membro/listar-funcoes-do-membro/', {params: {id_membro_projeto: idMembroProjeto}})
+        return response
+    } catch (error) {
+        return handleError('Falha ao tentar listar as funções do membro selecionado !')
+    }
+}
+
+export const excluirFuncaoMembroProjeto = async (idMembroProjeto) => {
+    try {
+        const response = await api.delete('funcao-membro/excluir/',  {params: {id_membro_projeto: idMembroProjeto}})
+        return handleSuccess(response, 'Função desvinculada do membro selecionado com sucesso !')
+    } catch (error) {
+        return handleError('Falha ao tentar excluir a função do membro selecionado !')
+    }
+}
