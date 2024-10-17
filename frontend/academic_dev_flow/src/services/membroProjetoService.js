@@ -15,13 +15,13 @@ export const criarMembroProjeto = async (formData) => {
         const response = await api.post('membro-projeto/cadastrar/', formData)
 
         if (response.status === 204){   
-            return handleInfo(response, 'O(s) membro(s) selecionado(s) já está(ão) vinculado(s) ao projeto!')
+            return handleInfo(response, 'Os membros selecionados já estão vinculados ao projeto!')
         } else {
-            return handleSuccess(response, 'Membro(s) vinculados ao projeto com sucesso!')
+            return handleSuccess(response, 'Membros vinculados ao projeto com sucesso!')
         }
         
     } catch (error) {
-        return handleError(error, 'Falha ao tentar vincular o(s) membro(s) ao projeto!')
+        return handleError(error, 'Falha ao tentar vincular os membros ao projeto!')
 
     }
 }
@@ -43,7 +43,7 @@ export const excluirMembroProjeto = async (idsMembroProjeto) => {
     try {
         const response = await api.delete(
             'membro-projeto/excluir/', {data: {ids_membro_projeto: idsMembroProjeto }})
-        return handleSuccess(response, SUCCESS_MESSAGE_ON_DELETION)
+        return handleSuccess(response, 'Os membros selecionados foram removidos com sucesso !')
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_DELETION)
     }

@@ -9,8 +9,12 @@ export const criarProjeto = (dados) => {
 }
 
 export const buscarProjetoPeloNome = async (parametro) => {
-    const resposta = await api.get(`/projeto/buscar/?name=${encodeURIComponent(parametro)}`);
-    return resposta;
+    try {
+        const response = await api.get('/projeto/buscar-por-nome/', {params: {nome_projeto: parametro}});
+        return response
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar buscar os dados de projeto !')
+    }
 };
 
 export const buscarProjetoPeloId = async (idProjeto) => {
@@ -32,6 +36,7 @@ export const atualizarProjeto = (dados, id) => {
     const resposta = api.patch(`/projeto/atualizar/${encodeURIComponent(id)}/`, dados);
     return resposta
 }
+
 
 export const atualizarFluxoProjeto = (idFluxo, idProjeto ) => {
     const resposta = api.patch(`/projeto/atualizar/fluxo/${encodeURIComponent(idProjeto)}/`, { fluxo_id: idFluxo})

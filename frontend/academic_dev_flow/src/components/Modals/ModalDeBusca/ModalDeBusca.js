@@ -1,49 +1,67 @@
 import React, { useState } from "react";
-import "./ModalDeBusca.css"
-import { Modal, Form, Input, Divider, Table } from 'antd';
+import "./ModalDeBusca.css";
+import { Modal, Form, Input, Table } from 'antd';
 
 const { Item } = Form;
 
-const ModalDeBusca = ({status, titulo, name, onCancel, onOk, colunas}) => {
-
+const ModalDeBusca = ({ status, titulo, name, onCancel, onOk, colunas }) => {
 
     const [form] = Form.useForm();
     const [parametro, setParametro] = useState('');
-    const [dados, setDados] = useState([])
-    const [hasResposta, setHasResposta] = useState(false)
+    const [dados, setDados] = useState([]);
+    const [hasResposta, setHasResposta] = useState(false);
 
     const handleAlterarParametro = (event) => {
         setParametro(event.target.value);
     };
 
+    const handleKeyDown = async (event) => {
+        if (event.key === 'Enter') {
+            // Previne o comportamento padrão de envio de formulário ao pressionar "Enter"
+            event.preventDefault();
+            
+            const response = await onOk(parametro);
+            setHasResposta(true);
+            if (!response.error) {
+                setDados(response.data.results);
+            } else {
+                setDados([]);
+            }
+        }
+    };
+
     return (
         <Modal
+            width={1000}
             title={titulo}
             open={status}
             cancelText="Cancelar"
             okText="Buscar"
             onCancel={() => {
-                onCancel()
-                setHasResposta(false)
-                setDados([])
-
+                onCancel();
+                setHasResposta(false);
+                setDados([]);
             }}
             onOk={async () => {
-                const response = await onOk(parametro)
-                setHasResposta(true)
-                if(!response.error) {
-                    setDados(response.data.results)
+                const response = await onOk(parametro);
+                setHasResposta(true);
+                if (!response.error) {
+                    setDados(response.data.results);
                 } else {
-                    setDados([])
+                    setDados([]);
                 }
             }}
         >
             <Form form={form} layout="vertical">
-                <Item name={name} >
+                <Item>
                     <Input
-                        name={name}
+                        
+                        style={{border: 'none', borderBottom: '1px solid var(--primary-color)', borderRadius: '0'}}
+                        placeholder='Digite aqui'
+                        
                         value={parametro}
                         onChange={handleAlterarParametro}
+                        onKeyDown={handleKeyDown}
                     />
                 </Item>
             </Form>
@@ -52,21 +70,15 @@ const ModalDeBusca = ({status, titulo, name, onCancel, onOk, colunas}) => {
                 <>
                     {hasResposta && dados.length > 0 ? (
                         <>
-                            <Divider orientation="left">Resultados</Divider>
-                            <Table className="component-tabela-modal" dataSource={dados} columns={colunas} rowKey="id" />
+                            <Table dataSource={dados} columns={colunas} rowKey="id" />
                         </>
-                    ) : 
-                        <div> Nenhum resultado encontrado </div>
-                    }
-                    
+                    ) : (
+                        <div>Nenhum resultado encontrado</div>
+                    )}
                 </>
-            ) : null
-            }
-
-            
-
+            ) : null}
         </Modal>
-    )
-}
+    );
+};
 
 export default ModalDeBusca;

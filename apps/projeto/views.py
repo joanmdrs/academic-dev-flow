@@ -25,24 +25,26 @@ class CadastrarProjetoView(APIView):
 
 class BuscarProjetosPorNomeView(APIView):
     permission_classes = [IsAuthenticated]
+    
     def get(self, request):
         try:
-            parametro = request.GET.get('name', None)
-            print(parametro)
+            nome_projeto = request.GET.get('nome_projeto', None)
 
-            if parametro is not None:
-                projetos = Projeto.objects.filter(nome__icontains=parametro)
-
-            else:
+            # Certifique-se de que a variável 'projetos' seja sempre definida
+            if not nome_projeto:
                 projetos = Projeto.objects.all()
+            else:
+                projetos = Projeto.objects.filter(nome__icontains=nome_projeto)
 
-            if not projetos: 
-                return Response({'message': 'Nenhum projeto encontrado.', 'results': []}, status=status.HTTP_200_OK)
+            if projetos.exists(): 
+                serializer = ProjetoSerializer(projetos, many=True)
+                return Response({'message': 'Projetos encontrados com sucesso.', 'results': serializer.data}, status=status.HTTP_200_OK)
 
-            serializer = ProjetoSerializer(projetos, many=True)
-            return Response({'message': 'Projetos encontrados com sucesso.', 'results': serializer.data}, status=status.HTTP_200_OK)
+            return Response({'message': 'Nenhum projeto encontrado.', 'results': []}, status=status.HTTP_200_OK)
+
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
     
 class ListarProjetoPorIdView(APIView):
     permission_classes = [IsAuthenticated]

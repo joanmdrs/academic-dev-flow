@@ -1,200 +1,200 @@
 import React, { useEffect, useState } from "react";
-import BotaoAdicionar from "../../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
-import BotaoExcluir from "../../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
-import ListaDados from "../../../../../components/Listas/ListaDados/ListaDados";
-import ModalDeBusca from "../../../../../components/Modals/ModalDeBusca/ModalDeBusca";
-import { buscarFluxoPeloId, buscarFluxoPeloNome } from "../../../../../services/fluxoService";
-import { NotificationManager } from "react-notifications";
-import { atualizarFluxoProjeto, buscarProjetoPeloId } from "../../../../../services/projetoService";
 import { useContextoProjeto } from "../../../context/ContextoProjeto";
+import { Button, Empty, Form, List, Modal, Select, Typography } from "antd";
+import { FaLink, FaTrash } from "react-icons/fa";
+import { listarFluxos } from "../../../../../services/fluxoService";
+import { handleError } from "../../../../../services/utils";
+import { atualizarFluxoProjeto, buscarProjetoPeloId } from "../../../../../services/projetoService";
+import { NotificationManager } from "react-notifications";
+const { Text } = Typography;
 
 const TabFluxo = () => {
 
-
-    const COLUNAS_LISTA = [
-      {
-        title: "ID",
-        key: "id",
-        dataIndex: "id",
-      },
-      {
-        title: "Nome",
-        dataIndex: "nome",
-        key: "nome",
-        render:(text) => (
-          <span 
-            style={{color: 'blue', cursor: 'pointer'}}
-            onClick={() => setIsBotaoExcluirVisivel(true)}
-          >
-            {text}
-          </span>
-        )
-      }
-    ]
-
-    const COLUNAS_MODAL = [
-        {
-          title: "ID",
-          key: "id",
-          dataIndex: "id",
-        },
-        {
-          title: "Nome",
-          dataIndex: "nome",
-          key: "nome",
-          render:(text, record) => (
-            <span 
-              style={{color: 'blue', cursor: 'pointer'}}
-              onClick={async () => await handleSelecionarFluxo(record)}
-            >
-              {text}
-            </span>
-          )
-        },
-        
-    ];
-    
     const {hasProjeto, setHasProjeto} = useContextoProjeto()
-    const [isBotaoAdicionarVisivel, setIsBotaoAdicionarVisivel] = useState(true)
-    const [isBotaoExcluirVisivel, setIsBotaoExcluirVisivel] = useState(true)
-    const [isModalVisivel, setIsModalVisivel] = useState(false)
-    const [hasFluxo, setHasFluxo] = useState([])
-    const [isVisivel, setIsVisivel] = useState(false)
+    const [isFormVisible, setIsFormVisible] = useState(false)
+    const [isFluxoVisible, setIsFluxoVisible] = useState(true)
+    const [optionsFluxo, setOptionsFluxo] = useState([])
+    const [dataFluxo, setDataFluxo] = useState([{id: null, nome: null}])
 
-    useEffect(() => {
-      const fetchData = async () => {
-        if (hasProjeto !== null) {
-          setIsBotaoAdicionarVisivel(false)
-          await handleBuscarFluxoProjeto();
-        }
-      };
-  
-      fetchData();
-    }, [hasProjeto]);
-
-    const handleExibirModal = () => setIsModalVisivel(true)
-    const handleFecharModal = () => setIsModalVisivel(false)
-
-    const handleCliqueLinha = () => {
-      setIsBotaoExcluirVisivel(false)
+    const handleCancelar = () => {
+        setIsFormVisible(false)
+        setIsFluxoVisible(true)
     }
 
-    const handleBuscarFluxo = async (parametro) => {
-        const response = await buscarFluxoPeloNome(parametro)
-        console.log(response)
-        if(!response.error){
-          return response
+    const handleReload = async () => {
+        setIsFluxoVisible(true)
+        setIsFormVisible(false)
+        await handleUpdateProjeto()
+    }
+
+    const handleUpdateProjeto = async () => {
+        try {
+            const response = await buscarProjetoPeloId(hasProjeto.id)
+
+            if (!response.error){
+                setHasProjeto(response.data)
+            }
+        } catch (error) {
+            return handleError(error, 'Falha ao tentar atualizar as informações do projeto')
         }
     }
 
-    const handleSelecionarFluxo = async (record) => {
-      try {
-        const idFluxo = record.id
-        const idProjeto = hasProjeto.id
-        const resposta = await atualizarFluxoProjeto(idFluxo, idProjeto)
-
-        if (resposta.status === 200){
-          const responseFilterProject = await buscarProjetoPeloId(idProjeto)
-          
-          if (responseFilterProject.status === 200){
-            setHasProjeto(responseFilterProject.data)
-            await handleBuscarFluxoProjeto()
-            handleFecharModal()
-          } else {
-            NotificationManager.error("Falha ao buscar as informações do projeto, contate o suporte!")
-          } 
-        } else {
-          NotificationManager.error("Falha ao vincular o fluxo ao projeto, contate o suporte!")
+    const handleGetFluxos = async () => {
+        try {
+            const response = await listarFluxos()
+            if (!response.error){
+                const resultados = response.data.map((item) => {
+                    return {
+                        value: item.id,
+                        label: item.nome
+                    }
+                })
+                setOptionsFluxo(resultados)
+            }
+        } catch (error) {
+            return handleError('Falha ao tentar listar os fluxos')
         }
-      } catch (error) {
-        NotificationManager.error("Ocorreu um problema durante a operação, contate o suporte!")
-      }
     }
 
-    const handleBuscarFluxoProjeto = async () => {
-      try {
-        if (hasProjeto.fluxo !== null) {
-          const resposta = await buscarFluxoPeloId(hasProjeto.fluxo)
-          if (resposta.status === 200){
-            setHasFluxo([resposta.data])
-          } else {
-            NotificationManager.error('Falha ao buscar os dados do fluxo')
-          }
-        } else {
-          return
+    const handleAdicionarFluxo = async () => {
+        await handleGetFluxos()
+        setIsFormVisible(true)
+        setIsFluxoVisible(false)
+    }
+
+    const handleVincularFluxo = async (formData) => {
+        try {
+            console.log(formData)
+            const response = await atualizarFluxoProjeto(formData.fluxo, hasProjeto.id)
+            if (!response.error){
+                NotificationManager.success('Fluxo vinculado ao projeto com sucesso! ')
+                handleReload()
+            }
+        } catch (error) {
+            return handleError(error, 'Falha ao tentar vincular o fluxo ao projeto')
         }
-  
-      } catch (error) {
-        NotificationManager.error("Ocorreu um problema durante a operação, contate o suporte!")
-      }
+    }
+
+    const handleRemoverFluxo = async () => {
+
+        Modal.confirm({
+            title: 'Confirmar remoção',
+            content: 'Você está seguro de que deseja desvincular o fluxo do projeto ?',
+            okText: 'Sim',
+            cancelText: 'Não',
+            onOk: async () => {
+                await handleDesvincularFluxo()
+            }
+        });
     }
 
     const handleDesvincularFluxo = async () => {
-      try {
-        const resposta = await atualizarFluxoProjeto(0, hasProjeto.id)
-
-        if (resposta.status === 200){
-          NotificationManager.success("Fluxo desvinculado do projeto com sucesso!")
-          setHasFluxo([])
-          setIsBotaoExcluirVisivel(false)
-        } else {
-          NotificationManager.error('Falha ao desvincular o fluxo do projeto, contate o suporte!')
+        try {
+            const response = await atualizarFluxoProjeto(0, hasProjeto.id)
+    
+            if (!response.error){
+                NotificationManager.success('Fluxo desvinculado do projeto com sucesso !')
+                await handleReload()
+            }
+        } catch (error) {
+            return handleError(error, 'Falha ao tentar desvincular o fluxo do projeto !')
         }
-      } catch (error) {
-        NotificationManager.error("Ocorreu um problema durante a operação, contate o suporte!")
-      }
     }
-  
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                if (hasProjeto !== null && hasProjeto.nome_fluxo !== null){
+                    setDataFluxo([{
+                        id: hasProjeto.fluxo,
+                        nome: hasProjeto.nome_fluxo
+                    }])
+                }
+            } catch (error) {
+                return handleError(error, 'Falha ao tentar renderizar os dados do fluxo')
+            }
+        }
+        fetchData()
+    }, [hasProjeto])
+
     return (
-        <div> 
-          <div 
-            style={{
-              cursor: "pointer",
-              padding: "20px",
-              border: "1px solid #d9d9d9",
-            }}
-            onClick={() => setIsVisivel(!isVisivel)}
-          >
-            <h4> VINCULAR FLUXO</h4>
-          </div>
+        <React.Fragment>
+            {hasProjeto && (
+                <React.Fragment>
+                    <div style={{display: 'flex', justifyContent: 'space-between', margin: '20px'}}> 
+                        <div style={{display: 'flex', gap: '20px'}}>
+                        </div>
 
-          { isVisivel && 
-            <React.Fragment>
-                <div
-                    className="grouped-buttons"
-                    style={{ 
-                      width: "100%", 
-                      display: "flex", 
-                      justifyContent: "flex-end", 
-                      padding:'20px'
-                    }}
-                >
-                    <BotaoAdicionar funcao={handleExibirModal} status={isBotaoAdicionarVisivel}/>
-                    <BotaoExcluir funcao={handleDesvincularFluxo} status={isBotaoExcluirVisivel}/>
-                </div>
-              <div>
+                        <div style={{display: 'flex', gap: '10px'}}> 
+                            {hasProjeto.nome_fluxo !== null ? (
+                                <Button 
+                                    icon={<FaTrash />} 
+                                    danger
+                                    onClick={handleRemoverFluxo}
+                                >
+                                    Remover
+                                </Button>
+                            ) : (
+                                <Button 
+                                    icon={<FaLink />} 
+                                    type="primary" 
+                                    onClick={handleAdicionarFluxo}
+                                >
+                                    Vincular Fluxo
+                                </Button>
+                            )}
+                        </div>
+                    </div>
 
-              {hasFluxo && hasFluxo.length > 0 ? (
-                <ListaDados colunas={COLUNAS_LISTA} dados={hasFluxo} onClickRow={handleCliqueLinha} />
-              ) : null}
+                    <div>
+                        {isFormVisible && (
+                            <Form onFinish={handleVincularFluxo}>
+                                <Form.Item label="Selecione o fluxo" name="fluxo">
+                                    <Select
+                                        options={optionsFluxo}
+                                        showSearch
+                                        allowClear
+                                        placeholder="Pesquise ou selecione o membro"
+                                        filterOption={
+                                            (input, option) => option?.label.toLowerCase().includes(input.toLowerCase())
+                                        }
+                                    />
+                                </Form.Item>
 
-                  
+                                <Form.Item>
+                                <Button type="primary" htmlType="submit">
+                                    Salvar
+                                </Button>
+                                <Button type="primary" style={{ marginLeft: "10px" }} danger onClick={handleCancelar}>
+                                    Cancelar
+                                </Button>
+                                </Form.Item>
+                            </Form>
+                        )}
 
-                  <ModalDeBusca 
-                    titulo="BUSCAR FLUXO"
-                    colunas={COLUNAS_MODAL}
-                    status={isModalVisivel}
-                    label="Buscar fluxo"
-                    name="nomeFluxo"
-                    onOk={handleBuscarFluxo}
-                    onCancel={handleFecharModal}
-                  />
-              </div>
-            </React.Fragment>
-          }          
-        </div>
+                        {dataFluxo[0].nome !== null && isFluxoVisible ? (
+
+                            <List
+                                header={<div>Fluxo</div>}
+                                bordered
+                                dataSource={dataFluxo}
+                                renderItem={(item) => (
+                                    <List.Item>
+                                       <Text style={{color: "var(--primary-color)"}}>{item.nome} </Text>
+                                    </List.Item>
+                                )}
+                            />
+
+                        ) : (
+                            <Empty description="Nenhum fluxo vinculado ao projeto" image={Empty.PRESENTED_IMAGE_SIMPLE}/>
+                        )}
+
+                    </div>
+
+                </React.Fragment>
+            )}
+        </React.Fragment>
     )
+}   
 
-}
-
-export default TabFluxo;
+export default TabFluxo
