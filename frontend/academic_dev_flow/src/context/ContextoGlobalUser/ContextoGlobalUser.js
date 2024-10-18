@@ -31,6 +31,7 @@ export const ProviderGlobalUser = ({ children }) => {
                 }
             }
         }
+        fetchData()
     }, [token])
 
     return (

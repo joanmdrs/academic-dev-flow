@@ -208,7 +208,6 @@ export const verificarExistenciaIssue = async (parametro) => {
     }
 }
 
-
 export const sicronizarIssues = async (dados) => {
     try {
         const response = await api.post('/tarefa/sicronizar-issues/', dados)
@@ -216,4 +215,25 @@ export const sicronizarIssues = async (dados) => {
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SYNC)
     } 
+}
+
+export const listarTarefasDoMembro = async (idMembro) => {
+    try {
+        const response = await api.get('/tarefa/listar-por-membro/', { params: { id_membro: idMembro } })
+
+        // Verifica se a resposta contém o código "MEMBRO_SEM_PROJETO"
+        if (response.data?.code === 'MEMBRO_SEM_PROJETO') {
+            // Trate o caso específico onde o membro não está vinculado a nenhum projeto
+            return {
+                message: 'O membro não está vinculado a nenhum projeto',
+                empty: true, // Define um indicador customizado para que o frontend saiba que não há projetos
+            };
+        }
+
+        // Retorna os dados normais se não for o caso acima
+        return response;
+        
+    } catch (error) {
+        return handleError(error, 'Falha ao listar as suas tarefas !');
+    }
 }

@@ -137,3 +137,21 @@ export const lightenDarkenColor = (col, amt) => {
   else if (g < 0) g = 0;
   return (usePound ? '#' : '') + (g | (b << 8) | (r << 16)).toString(16);
 }
+
+export const getDataHoraNow = () => {
+    const meses = [
+        "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    ];
+
+    const agora = new Date();
+    const mes = meses[agora.getMonth()];
+    const dia = String(agora.getDate()).padStart(2, '0');
+    const ano = agora.getFullYear();
+    
+    const horas = String(agora.getHours()).padStart(2, '0');
+    const minutos = String(agora.getMinutes()).padStart(2, '0');
+
+    return `${mes}, ${dia}, ${ano} | ${horas}:${minutos}`;
+
+}

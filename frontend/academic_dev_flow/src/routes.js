@@ -35,6 +35,7 @@ import ScreenAdminContents from "./pages/GitHub/admin/AdminContents";
 import ScreenAdminIssues from "./pages/GitHub/admin/AdminIssues";
 import ScreenAdminArtefatos from "./pages/Artefato/admin/AdminArtefatos";
 import ScreenGerenciarFuncaoMembro from "./pages/FuncaoMembro/screens/GerenciarFuncaoMembro";
+import { ProviderGlobalUser } from "./context/ContextoGlobalUser/ContextoGlobalUser";
 
 function Routes() {
     return (
@@ -161,7 +162,9 @@ function Routes() {
 
             <Route element={
                 <ProviderGlobalProjeto>
-                    <StudentRoutes />
+                    <ProviderGlobalUser>
+                        <StudentRoutes />
+                    </ProviderGlobalUser>
                 </ProviderGlobalProjeto>
             }>
                 <Route path="/aluno/home" Component={HomeAluno} exact />

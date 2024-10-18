@@ -2,6 +2,7 @@ import React from "react";
 import { Layout } from "antd";
 import MenuAluno from "../../../../components/Menus/MenuAluno/MenuAluno";
 import MyHeader from "../../../../components/Header/Header";
+import DashboardDiscente from "../../../Dashboard/Discente/DashboardDiscente";
 
 const baseStyle = {
     display: "flex",
@@ -19,9 +20,7 @@ const HomeAluno = () => {
             <MenuAluno />
             <Layout>
                 <MyHeader />
-                <div style={{...baseStyle}}>
-                    Página Inicial do Aluno
-                </div>
+                <DashboardDiscente />
             </Layout>
         </React.Fragment>
     )

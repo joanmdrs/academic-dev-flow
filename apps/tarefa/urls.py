@@ -14,6 +14,7 @@ urlpatterns = [
     path('listar/', ListarTarefasView.as_view(), name='listar_tarefas'),
     path('listar-por-projeto/', ListarTarefasPorProjetoView.as_view(), name="listar_tarefas_por_projeto"),
     path('listar-por-iteracao/', ListarTarefasPorIteracaoView.as_view(), name='listar_tarefas_por_iteracao'),
+    path('listar-por-membro/', ListarTarefasDoMembroView.as_view(), name='listar_tarefas_por_usuario'),
     path('excluir/', ExcluirTarefaView.as_view(), name="excluir_tarefa"),
     
     path('iniciar-contagem-tempo/', IniciarContagemTempoView.as_view(), name='iniciar_contagem_tempo'),
