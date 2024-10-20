@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Titulo from "../../../../components/Titulo/Titulo";
 import { Button, Modal, Spin, Tabs } from "antd";
-import Item from "antd/es/list/Item";
 import { useContextoProjeto } from "../../context/ContextoProjeto";
 import { atualizarProjeto, buscarProjetoPeloNome, criarProjeto, excluirProjeto } from "../../../../services/projetoService";
 import { NotificationManager } from "react-notifications";
 import ModalDeBusca from "../../../../components/Modals/ModalDeBusca/ModalDeBusca";
 import { LoadingOutlined } from "@ant-design/icons";
-import TabProjeto from "../TabsProjeto/TabProjeto/TabProjeto";
-import TabEquipe from "../TabsProjeto/TabEquipe/TabEquipe";
-import TabFluxo from "../TabsProjeto/TabFluxo/TabFluxo";
 import { FaPlus, FaSearch, FaTrash } from "react-icons/fa";
+import TabsProjeto from "../TabsProjeto";
 
 const GerenciarProjetos = () => {
   
@@ -40,7 +37,6 @@ const GerenciarProjetos = () => {
         },
     ];
 
-    const [current, setCurrent] = useState("1");
     const [acaoForm, setAcaoForm] = useState("criar")
     const {hasProjeto, setHasProjeto} = useContextoProjeto()
     const [isModalVisivel, setIsModalVisivel] = useState(false)
@@ -221,28 +217,7 @@ const GerenciarProjetos = () => {
                         )
 
                         : (
-                            <div className="global-div">
-                                <Tabs
-                                    size="large"
-                                    indicator={{
-                                    align: "center"
-                                    }}
-                                    style={{padding: "20px"}}
-                                    activeKey={current} 
-                                    onChange={setCurrent} 
-                                    className="tabs-projeto"
-                                > 
-                                    <Item tab="Projeto" key="1">
-                                        <TabProjeto onSubmit={handleSalvarProjeto} onCancel={handleCancelar} />
-                                    </Item>
-                                    <Item tab="Equipe" key="2" className="tab-item">
-                                        <TabEquipe />
-                                    </Item>
-                                    <Item tab="Fluxo" key="3" className="tab-item">
-                                        <TabFluxo />
-                                    </Item>
-                                </Tabs>
-                            </div>
+                            <TabsProjeto onSaveProject={handleSalvarProjeto} onCancel={handleCancelar} />
                         )
                         
                     }

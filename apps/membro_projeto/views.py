@@ -114,7 +114,7 @@ class BuscarProjetosDoMembroView(APIView):
         try:
             id_membro = request.GET.get('id_membro', None)
 
-            if id_membro is None: 
+            if not id_membro: 
                 return Response({'error': 'Parâmetro id_membro não fornecido!'}, status=status.HTTP_400_BAD_REQUEST)
             
             objs_membro_projeto = MembroProjeto.objects.filter(membro=id_membro)

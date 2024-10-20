@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.http import HttpResponseNotAllowed, JsonResponse
 from .models import Artefato
+from apps.membro_projeto.models import MembroProjeto
+from apps.membro.models import Membro
 from .serializers import ArtefatoSerializer
 from apps.iteracao.models import Iteracao
 from rest_framework.permissions import IsAuthenticated
@@ -258,5 +260,45 @@ class SicronizarContentsView(APIView):
             
             return Response(serializer.data, status=status.HTTP_201_CREATED)
                  
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class ListarArtefatosDoMembroView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        try:
+            
+            id_membro = request.GET.get('id_membro', None)
+            
+            if not id_membro:
+                return Response({'error': 'O ID do membro não foi fornecido!'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Busca os projetos associados ao membro
+            membros_projeto = MembroProjeto.objects.filter(membro=id_membro)
+            
+            if not membros_projeto.exists():
+                # Retorna uma resposta específica indicando que o membro não foi vinculado a nenhum projeto
+                return Response(
+                    {
+                        'message': 'O membro não está vinculado a nenhum projeto',
+                        'code': 'MEMBRO_SEM_PROJETO'
+                    }, 
+                    status=status.HTTP_200_OK
+                )
+
+            # Busca todas os artefatos vinculados a esses projetos
+            artefatos = Artefato.objects.filter(membros__in=membros_projeto).distinct().order_by('id')
+            
+            if not artefatos.exists():
+                return Response([], status=status.HTTP_200_OK)
+            
+            # Serializa os artefatos
+            serializer = ArtefatoSerializer(artefatos, many=True)
+            
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        except MembroProjeto.DoesNotExist:
+            return Response({'error': 'Objeto(s) MembroProjeto não localizado(s)'}, status=status.HTTP_404_NOT_FOUND)
+
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

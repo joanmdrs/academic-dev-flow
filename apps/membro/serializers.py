@@ -10,10 +10,18 @@ class GroupSerializer(serializers.ModelSerializer):
         
 class MembroSerializer(serializers.ModelSerializer):
     nome_grupo = serializers.SerializerMethodField()
+    username = serializers.SerializerMethodField()
+    password = serializers.SerializerMethodField()
 
     class Meta:
         model = Membro
-        fields = ['id', 'nome', 'data_nascimento', 'telefone', 'email', 'linkedin', 'lattes', 'nome_github', 'email_github', 'usuario_github', 'usuario', 'grupo', 'nome_grupo']
+        fields = ['id', 'nome', 'data_nascimento', 'telefone', 'email', 'linkedin', 'lattes', 'nome_github', 'email_github', 'usuario_github', 'usuario', 'username', 'password', 'grupo', 'nome_grupo']
 
     def get_nome_grupo(self, obj):
-        return obj.grupo.name  # Retorna o nome do grupo relacionado
+        return obj.grupo.name 
+    
+    def get_username(self, obj):
+        return obj.usuario.username
+    
+    def get_password(self, obj):
+        return obj.usuario.password

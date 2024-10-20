@@ -8,13 +8,14 @@ app_name='tarefa'
 urlpatterns = [
     path('cadastrar/', CadastrarTarefaView.as_view(), name="cadastrar_tarefa"),
     path('atualizar/', AtualizarTarefaView.as_view(), name="atualizar_tarefa"),
-    path('atualizar-iteracao/', AtualizarIteracaoTarefasView.as_view(), name='atualizar_iteracao'),
+    path('atualizar-status/', AtualizarStatusTarefaView.as_view(), name='atualizar_status_tarefa'),
+    path('atualizar-iteracao/', AtualizarIteracaoTarefasView.as_view(), name='atualizar_iteracao_tarefa'),
     path('buscar-pelo-id/', BuscarTarefaPeloIdView.as_view(), name="buscar_tarefa_pelo_id"),
-    path('buscar-pelo-nome-e-pelo-projeto/', BuscarTarefasPeloNomeEPeloProjeto.as_view(), name='buscar_tarefas_pelo_nome_e_pelo_projeto'),
+    path('buscar-pelo-nome-e-pelo-projeto/', BuscarTarefasPeloNomeEPeloProjeto.as_view(), name='buscar_tarefas_pelo_nome_e_pelo_projeto'), 
     path('listar/', ListarTarefasView.as_view(), name='listar_tarefas'),
     path('listar-por-projeto/', ListarTarefasPorProjetoView.as_view(), name="listar_tarefas_por_projeto"),
     path('listar-por-iteracao/', ListarTarefasPorIteracaoView.as_view(), name='listar_tarefas_por_iteracao'),
-    path('listar-por-membro/', ListarTarefasDoMembroView.as_view(), name='listar_tarefas_por_usuario'),
+    path('listar-por-membro/', ListarTarefasDoMembroView.as_view(), name='listar_tarefas_por_membro'),
     path('excluir/', ExcluirTarefaView.as_view(), name="excluir_tarefa"),
     
     path('iniciar-contagem-tempo/', IniciarContagemTempoView.as_view(), name='iniciar_contagem_tempo'),

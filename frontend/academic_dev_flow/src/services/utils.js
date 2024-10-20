@@ -55,6 +55,11 @@ export const converterData = (dataString) => {
   
 }
 
+export const getRandomColor = () => {
+  const colors = ['#f56a00', '#7265e6', '#ffbf00', '#00a2ae'];
+  return colors[Math.floor(Math.random() * colors.length)];
+};
+
 export const limitarCaracteres = (texto, limite) => {
 
   if (texto === null) {

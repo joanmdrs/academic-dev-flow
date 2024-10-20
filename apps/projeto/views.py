@@ -9,6 +9,7 @@ from apps.fluxo.models import Fluxo
 from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
 from apps.membro_projeto.models import MembroProjeto
+from apps.membro_projeto.serializers import MembroProjetoSerializer
 
     
 class CadastrarProjetoView(APIView):
@@ -78,32 +79,49 @@ class BuscarProjetosPorListaDeIdsView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    
-    
+  
 class ExcluirProjetoView(APIView):
     permission_classes = [IsAuthenticated]
-    def delete(self, request, id):
+    def delete(self, request):
         try:
-            projeto = get_object_or_404(Projeto, id=id)
-            if projeto is not None:
+            id_projeto = request.GET.get('id_projeto', None)
+            
+            if not id_projeto:
+                return Response({'error': 'O ID do projeto não foi fornecido !'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            projeto = Projeto.objects.get(id=id_projeto)
+            
+            if projeto:
                 projeto.delete()
-                return Response(status=status.HTTP_204_NO_CONTENT)
-            else:
-                return JsonResponse({'error': 'Recurso não encontrado'}, status=404)
+                return Response({'message': 'Projeto excluído com sucesso!'}, status=status.HTTP_204_NO_CONTENT)
+            
+            return Response({'error': 'Projeto não localizado !'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class AtualizarProjetoView(APIView):
     permission_classes = [IsAuthenticated]
-    def patch(self, request, id):
+    def patch(self, request):
         try:
-            projeto = Projeto.objects.get(pk=id)
-            serializer = ProjetoSerializer(projeto, data=request.data, partial=True)
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            else:
-                return JsonResponse({'error': 'Dados inválidos'}, status=400)
+            
+            id_projeto = request.GET.get('id_projeto', None)
+            
+            if not id_projeto:
+                return Response({'error': 'O ID do projeto não foi fornecido!'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            
+            projeto = Projeto.objects.get(id=id_projeto)
+            
+            if projeto:
+                serializer = ProjetoSerializer(projeto, data=request.data, partial=True)
+                if serializer.is_valid(raise_exception=True):
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+                
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+            return Response({'error': 'Projeto não localizado !'}, status=status.HTTP_404_NOT_FOUND)
+        
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         

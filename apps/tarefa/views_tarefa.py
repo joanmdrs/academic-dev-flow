@@ -103,6 +103,31 @@ class AtualizarTarefaView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
 
+class AtualizarStatusTarefaView(APIView):
+    permission_classes = [IsAuthenticated]
+    def patch(self, request):
+        try:
+            id_tarefa = request.GET.get('id_tarefa', None)
+            status_tarefa = request.data.get('status', None)
+
+            if not id_tarefa and not status_tarefa:
+                return Response({'error': 'O ID da tarefa e o status não foram fornecidos !'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            tarefa = Tarefa.objects.get(id=id_tarefa)
+            
+            if tarefa:
+                serializer = TarefaSerializer(tarefa, data={'status': status_tarefa}, partial=True)
+                if serializer.is_valid(raise_exception=True):
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            return Response({'error': 'Tarefa não localizada!'}, status=status.HTTP_404_NOT_FOUND)
+                
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
 class AtualizarIteracaoTarefasView(APIView):
     permission_classes = [IsAuthenticated]
     
@@ -307,7 +332,6 @@ class ListarTarefasDoMembroView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, *args, **kwargs):
         try:
-
             
             id_membro = request.GET.get('id_membro', None)
             

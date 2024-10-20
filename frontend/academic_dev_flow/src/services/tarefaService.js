@@ -64,6 +64,15 @@ export const atualizarTarefa = async (idTarefa, formData, issueData) => {
     }
 }
 
+export const atualizarStatusTarefa = async (idTarefa, data) => {
+    try {
+        const response = await api.patch('/tarefa/atualizar-status/', data, {params: {id_tarefa: idTarefa}})
+        return response
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar atualizar o status da tarefa')
+    }
+}
+
 export const vincularIteracaoAsTarefas = async (idsTarefas, idIteracao) => {
     const sendData = {
         ids_tarefas: idsTarefas,

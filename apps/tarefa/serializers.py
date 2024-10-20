@@ -25,6 +25,7 @@ class MembroSerializer(serializers.ModelSerializer):
 class TarefaSerializer(serializers.ModelSerializer):
     nome_iteracao = serializers.SerializerMethodField()
     nome_categoria = serializers.SerializerMethodField()
+    cor_categoria = serializers.SerializerMethodField()
     nome_projeto = serializers.SerializerMethodField()
     estado_contagem_tempo = serializers.SerializerMethodField()
     membros_info = serializers.SerializerMethodField()
@@ -50,6 +51,7 @@ class TarefaSerializer(serializers.ModelSerializer):
             'nome_iteracao',
             'categoria',
             'nome_categoria',
+            'cor_categoria',
             'estado_contagem_tempo',
             'membros_info',  # Campo adicionado para informações dos membros
         ]
@@ -62,6 +64,9 @@ class TarefaSerializer(serializers.ModelSerializer):
 
     def get_nome_categoria(self, obj):
         return obj.categoria.nome if obj.categoria else None
+    
+    def get_cor_categoria(self, obj):
+        return obj.categoria.cor if obj.categoria else None
 
     def get_estado_contagem_tempo(self, obj):
         return obj.estado_contagem_tempo()
@@ -69,3 +74,4 @@ class TarefaSerializer(serializers.ModelSerializer):
     def get_membros_info(self, obj):
         membros = obj.membros.all()
         return MembroSerializer(membros, many=True).data
+

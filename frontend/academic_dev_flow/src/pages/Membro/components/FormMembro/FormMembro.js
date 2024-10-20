@@ -179,19 +179,19 @@ const FormMembro = ({onSubmit, onCancel}) => {
                 </Form.Item>
 
                 <Form.Item
-                    name="usuario"
+                    name="username"
                     label="Usuário de Acesso"
                     rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
                 >
-                    <Input name="usuario" disabled/> 
+                    <Input name="username" disabled/> 
 
                 </Form.Item>
                 <Form.Item
-                    name="senha"
+                    name="password"
                     label="Senha de Acesso"
                     rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
                 >
-                    <Input.Password name="senha" placeholder="senha de acesso"/>
+                    <Input.Password name="password" placeholder="senha de acesso"/>
                 </Form.Item>
 
                 <Form.Item 

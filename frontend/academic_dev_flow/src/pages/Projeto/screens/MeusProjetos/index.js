@@ -6,6 +6,7 @@ import MyHeader from "../../../../components/Header/Header";
 import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
 import { Content } from "antd/es/layout/layout";
 import MeusProjetos from "./MeusProjetos";
+import { ProviderProjeto } from "../../context/ContextoProjeto";
 
 const ScreenMeusProjetos = ({grupo}) => {
 
@@ -23,7 +24,9 @@ const ScreenMeusProjetos = ({grupo}) => {
                 <CustomBreadcrumb routes={breadcrumbRoutes} />
 
                 <Content>
-                    <MeusProjetos grupo={grupo} />
+                    <ProviderProjeto>
+                        <MeusProjetos />
+                    </ProviderProjeto>
                 </Content>
             </Layout>
         </React.Fragment>   

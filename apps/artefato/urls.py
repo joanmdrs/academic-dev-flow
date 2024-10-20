@@ -13,6 +13,7 @@ urlpatterns = [
     path('listar/', ListarArtefatosView.as_view(), name="listar_artefatos"),
     path('listar-por-projeto/', ListarArtefatosPorProjeto.as_view(), name='listar_artefatos_por_projeto'),
     path('listar-por-iteracao/', ListarArtefatosPorIteracao.as_view(), name='listar_artefatos_por_iteracao'),
+    path('listar-por-membro/', ListarArtefatosDoMembroView.as_view(), name='listar_artefatos_por_membro'),
     path('excluir/', ExcluirArtefatoView.as_view(), name='excluir_artefato'),
     
     path('verificar-existencia/', VerificarExistenciaArtefatoView.as_view(), name='verificar-se-artefato-já-existe'),
