@@ -8,6 +8,7 @@ import { LuLayoutGrid } from "react-icons/lu";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { VscGraph } from "react-icons/vsc";
 import { RiFlowChart } from "react-icons/ri";
+import { MdOutlineFolderOpen } from "react-icons/md";
 
 const { SubMenu } = Menu
 
@@ -45,21 +46,17 @@ const MenuAluno = () => {
                 >
                     <Link to="/aluno/home">Dashboard</Link>
                 </Menu.Item>
-
-                <SubMenu
-                    className='item-menu'
-                    key='/aluno/projetos'
-                    icon={<MdOutlineSpaceDashboard style={{ fontSize: "20px" }} />}
-                    title="Projetos"
+               
+                <Menu.Item
+                    className="item-menu"
+                    key="/aluno/meus-projetos"
+                    icon={<MdOutlineFolderOpen size="20px"/>}
                 >
-                    <Menu.Item key="/aluno/projetos/gerenciar">
-                        <Link to="/aluno/projetos/gerenciar">Gerenciar</Link>
-                    </Menu.Item>
+                    <Link to="/aluno/meus-projetos">Projetos</Link>
+                </Menu.Item>
                     
-                    <Menu.Item key="/aluno/projetos/meus-projetos">
-                        <Link to="/aluno/projetos/meus-projetos">Meus Projetos</Link>
-                    </Menu.Item>
-                </SubMenu>
+                    
+        
 
                 <SubMenu
                     className="item-menu"

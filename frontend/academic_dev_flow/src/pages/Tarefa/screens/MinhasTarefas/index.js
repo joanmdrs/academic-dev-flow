@@ -6,6 +6,7 @@ import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfes
 import MinhasTarefas from "./MinhasTarefas";
 import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
 import { ProviderTarefa } from "../../context/ContextoTarefa";
+import MyTasks from "./MyTasks";
 
 const {Content} = Layout
 
@@ -22,11 +23,12 @@ const ScreenMinhasTarefas = ({grupo}) => {
             { grupo === 'professor' && <MenuProfessor />}
             <Layout>
                 <MyHeader/>
-                <CustomBreadcrumb routes={breadcrumbRoutes} />
+                {/* <CustomBreadcrumb routes={breadcrumbRoutes} /> */}
 
                 <Content>
                     <ProviderTarefa>
-                        <MinhasTarefas />
+                        {/* <MinhasTarefas /> */}
+                        <MyTasks />
                     </ProviderTarefa>
                 </Content>
             </Layout>

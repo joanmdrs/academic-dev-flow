@@ -32,7 +32,6 @@ const MinhasTarefas = () => {
             }))
             setOptionsProjetos(dados)
         }
-    
     }
 
     const handleSelectProjeto = async (value) => {

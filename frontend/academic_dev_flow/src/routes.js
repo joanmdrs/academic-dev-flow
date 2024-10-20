@@ -172,13 +172,7 @@ function Routes() {
                 <Route path="/aluno/perfil" element={<ScreenPerfilMembro grupo="aluno" />} exact/>
 
                 <Route
-                    path="/aluno/projetos/gerenciar"
-                    element={<ScreenGerenciarProjetos grupo="aluno" />}
-                    exact
-                />
-
-                <Route
-                    path="/aluno/projetos/meus-projetos"
+                    path="/aluno/meus-projetos"
                     element={<ScreenMeusProjetos grupo="aluno" />}
                     exact
                 />
