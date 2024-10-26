@@ -13,13 +13,7 @@ const TableArtefatos = ({onView, onEdit, onDelete, onUpdateStatus}) => {
         {
             title: 'Nome',
             dataIndex: 'nome',
-            key: 'nome',
-            render: (_, record) => (
-                <a 
-                    href={`https://github.com/${record.nome_repo}/tree/main/${record.path_file}`}
-                    target="blank"
-                > {record.nome} </a>
-            )
+            key: 'nome'
         },
         {
             title: 'Status',

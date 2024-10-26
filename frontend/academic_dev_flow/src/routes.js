@@ -11,7 +11,6 @@ import ScreenVincularMembroAoProjeto from "./pages/Membro/screens/VincularMembro
 import Login from "./pages/Auth/Login/Login";
 import Register from "./pages/Auth/Register";
 import ScreenGerenciarTarefas from "./pages/Tarefa/screens/GerenciarTarefas";
-import ScreenGerenciarArtefatos from "./pages/Artefato/screens/GerenciarArtefatos";
 import ScreenVisualizarArtefato from "./pages/Artefato/screens/VisualizarArtefato";
 import ScreenGerenciarIteracoes from "./pages/Iteracao/screens/GerenciarIteracoes";
 import ScreenGerenciarProjetos from "./pages/Projeto/screens/GerenciarProjetos";

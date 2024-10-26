@@ -131,9 +131,9 @@ export const sicronizarContents = async (dados) => {
     }   
 }
 
-export const listarArtefatosPorMembro = async (idMembro) => {
+export const listarArtefatosDosProjetosDoMembro = async (idMembro) => {
     try {
-        const response = await api.get('/artefato/listar-por-membro/', { params: { id_membro: idMembro } })
+        const response = await api.get('/artefato/listar-artefatos-dos-projetos-do-membro/', { params: { id_membro: idMembro } })
 
         // Verifica se a resposta contém o código "MEMBRO_SEM_PROJETO"
         if (response.data?.code === 'MEMBRO_SEM_PROJETO') {
@@ -147,6 +147,17 @@ export const listarArtefatosPorMembro = async (idMembro) => {
         // Retorna os dados normais se não for o caso acima
         return response;
     } catch (error) {
-        return handleError(error, 'Falha ao listar os seus artefatos')
+        return handleError(error, 'Falha ao listar os artefatos dos seus projetos')
+    }
+}
+
+export const filtrarArtefatosPorProjetoEPorMembro = async (formData) => {
+    try {
+        const response = await api.get(
+            'artefato/filtrar-por-projeto-e-por-membro/', 
+            {params: {id_membro: formData.membroSelect, id_projeto: formData.projetoSelect}})
+        return response
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar filtrar os artefatos !')
     }
 }

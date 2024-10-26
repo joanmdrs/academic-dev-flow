@@ -1,9 +1,9 @@
 import { getDataHoraNow, handleError } from "../../../services/utils";
 import "./DashboardDiscente.css"
 import React, { useEffect, useState } from "react";
-import { atualizarStatusTarefa, listarTarefasDoMembro } from "../../../services/tarefaService";
+import { atualizarStatusTarefa, listarTarefasDosProjetosDoMembro } from "../../../services/tarefaService";
 import { useContextoGlobalUser } from "../../../context/ContextoGlobalUser/ContextoGlobalUser";
-import { listarArtefatosPorMembro } from "../../../services/artefatoService";
+import { listarArtefatosDosProjetosDoMembro } from "../../../services/artefatoService";
 import { buscarProjetosDoMembro } from "../../../services/membroProjetoService";
 import { Splitter } from 'antd';
 import MinhasTarefas from "../components/MinhasTarefas/MinhasTarefas";
@@ -18,7 +18,7 @@ const DashboardDiscente = () => {
     const [projetos, setProjetos] = useState([])
 
     const handleGetTarefasDoMembro = async () => {
-        const response = await listarTarefasDoMembro(usuario.id)
+        const response = await listarTarefasDosProjetosDoMembro(usuario.id)
 
         if (!response.error){
             setTarefas(response.data)
@@ -26,7 +26,7 @@ const DashboardDiscente = () => {
     }
 
     const handleGetArtefatosDoMembro = async () => {
-        const response = await listarArtefatosPorMembro(usuario.id)
+        const response = await listarArtefatosDosProjetosDoMembro(usuario.id)
 
         if (!response.error){
             setArtefatos(response.data)

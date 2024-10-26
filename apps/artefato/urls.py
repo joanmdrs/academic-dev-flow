@@ -13,7 +13,8 @@ urlpatterns = [
     path('listar/', ListarArtefatosView.as_view(), name="listar_artefatos"),
     path('listar-por-projeto/', ListarArtefatosPorProjeto.as_view(), name='listar_artefatos_por_projeto'),
     path('listar-por-iteracao/', ListarArtefatosPorIteracao.as_view(), name='listar_artefatos_por_iteracao'),
-    path('listar-por-membro/', ListarArtefatosDoMembroView.as_view(), name='listar_artefatos_por_membro'),
+    path('listar-artefatos-dos-projetos-do-membro/', ListarArtefatosDosProjetosDoMembroView.as_view(), name='listar_artefatos_dos_projetos_do_membro'),
+    path('filtrar-por-projeto-e-por-membro/', FiltrarArtefatosPorMembroEPorProjetoView.as_view(), name='filtrar_artefatos_por_projeto_e_por_membro'),
     path('excluir/', ExcluirArtefatoView.as_view(), name='excluir_artefato'),
     
     path('verificar-existencia/', VerificarExistenciaArtefatoView.as_view(), name='verificar-se-artefato-já-existe'),

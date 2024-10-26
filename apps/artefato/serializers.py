@@ -14,6 +14,8 @@ class ArtefatoSerializer(serializers.ModelSerializer):
     nome_iteracao = serializers.SerializerMethodField()
     nome_projeto = serializers.SerializerMethodField()
     membros_info = serializers.SerializerMethodField()
+    nomes_membros = serializers.SerializerMethodField()
+    ids_membros = serializers.SerializerMethodField()
     
     class Meta:
         model = Artefato
@@ -23,16 +25,19 @@ class ArtefatoSerializer(serializers.ModelSerializer):
             'status',
             'descricao',
             'data_criacao',
-            'url',
-            'id_content',
-            'path_content',
-            'membros',
+            'data_termino',
             'projeto',
             'nome_projeto',
             'iteracao',
             'nome_iteracao',
+            'url',
+            'id_content',
+            'path_content',
+            'pontuacao',
+            'membros',
             'membros_info',
-            'pontuacao'
+            'ids_membros',
+            'nomes_membros',
         ]
         
     def get_nome_projeto(self, obj):
@@ -44,4 +49,14 @@ class ArtefatoSerializer(serializers.ModelSerializer):
     def get_membros_info(self, obj):
         membros = obj.membros.all()
         return MembroSerializer(membros, many=True).data
+    
+    def get_ids_membros(self, obj):
+        membros = obj.membros.all()
+        ids_membros = [membro.membro.id for membro in membros]
+        return ids_membros
+    
+    def get_nomes_membros(self, obj):
+        membros = obj.membros.all()
+        nomes_membros = [membro.membro.nome for membro in membros]
+        return nomes_membros
         

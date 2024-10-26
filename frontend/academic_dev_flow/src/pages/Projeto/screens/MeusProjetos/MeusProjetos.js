@@ -89,12 +89,13 @@ const MeusProjetos = () => {
     }
 
     const handleSalvarProjeto = async (formData) => {
- 
+        
+        console.log(hasProjeto)
         try {
 
-            if (actionForm === 'create' && hasProjeto !== null){
+            if (actionForm === 'create' && hasProjeto == null){
                 const response = await criarProjeto(formData)
-    
+                
                 if (!response.error){
                     await criarMembroProjeto({
                         membros: [usuario.id],

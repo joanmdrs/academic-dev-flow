@@ -164,6 +164,57 @@ class ListarMembroProjetoView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+# Esta view tem como objetivo listar os membros dos membros que um membro específico faz parte 
+class ListarEquipesDoMembroView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        try:
+            id_membro = request.GET.get('id_membro', None)
+            
+            if not id_membro:
+                return Response({'error': 'O ID do membro não foi fornecido!'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            # Busca os projetos nos quais o membro está relacionado
+            membros_projeto = MembroProjeto.objects.filter(membro=id_membro)
+            
+            if not membros_projeto.exists():
+                return Response(
+                    {
+                        'message': 'O membro não está vinculado a nenhum projeto',
+                        'code': 'MEMBRO_SEM_PROJETO'
+                    }, 
+                    status=status.HTTP_200_OK
+                )
+            
+            # Lista para armazenar os IDs únicos dos membros
+            membros_ids = set()
+            equipe = []
+
+            # Para cada relação membro-projeto, buscar os membros do projeto
+            for membro_projeto in membros_projeto:
+                projeto_id = membro_projeto.projeto.id
+                
+                # Buscar todos os membros vinculados ao mesmo projeto
+                membros_do_projeto = MembroProjeto.objects.filter(projeto=projeto_id).select_related('membro')
+                
+                for relacao in membros_do_projeto:
+                    membro_id = relacao.membro.id
+                    
+                    # Evitar duplicatas
+                    if membro_id not in membros_ids:
+                        membros_ids.add(membro_id)
+                        equipe.append({
+                            'id': membro_id,
+                            'nome': relacao.membro.nome,  # Assumindo que o modelo Membro tem um campo 'nome'
+                        })
+            
+            # Retornar a lista de membros da equipe sem duplicatas
+            return Response(equipe, status=status.HTTP_200_OK)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 # class BuscarMembroProjetoPeloUsuarioGithubView(APIView):
 #     permission_classes = [IsAuthenticated]
     

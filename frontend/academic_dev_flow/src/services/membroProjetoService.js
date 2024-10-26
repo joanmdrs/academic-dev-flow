@@ -150,3 +150,12 @@ export const listarFuncoes = async () => {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
     }
 }
+
+export const listarEquipesDoMembro = async (idMembro) => {
+    try {
+        const response = await api.get('membro-projeto/listar-equipes/', {params: {id_membro: idMembro}})
+        return response
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
+}

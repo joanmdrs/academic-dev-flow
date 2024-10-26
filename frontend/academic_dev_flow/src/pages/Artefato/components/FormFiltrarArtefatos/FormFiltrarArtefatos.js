@@ -6,6 +6,7 @@ import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 
 const FormFiltrarArtefatos = ({ onSearch }) => {
     const [optionsProjetos, setOptionsProjetos] = useState([]);
+
     const [selectedItem, setSelectedItem] = useState(null);
 
     useEffect(() => {

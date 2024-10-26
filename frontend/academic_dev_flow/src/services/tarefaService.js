@@ -143,6 +143,38 @@ export const listarTarefasPorIteracao = async (idIteracao) => {
     }
 }
 
+export const listarTarefasDosProjetosDoMembro = async (idMembro) => {
+    try {
+        const response = await api.get('/tarefa/listar-tarefas-dos-projetos-do-membro/', { params: { id_membro: idMembro } })
+
+        // Verifica se a resposta contém o código "MEMBRO_SEM_PROJETO"
+        if (response.data?.code === 'MEMBRO_SEM_PROJETO') {
+            // Trate o caso específico onde o membro não está vinculado a nenhum projeto
+            return {
+                message: 'O membro não está vinculado a nenhum projeto',
+                empty: true, // Define um indicador customizado para que o frontend saiba que não há projetos
+            };
+        }
+
+        // Retorna os dados normais se não for o caso acima
+        return response;
+        
+    } catch (error) {
+        return handleError(error, 'Falha ao listar as suas tarefas !');
+    }
+}
+
+export const filtrarTarefasPorProjetoEPorMembro = async (formData) => {
+    try {
+        const response = await api.get(
+            'tarefa/filtrar-por-projeto-e-por-membro/', 
+            {params: {id_membro: formData.membroSelect, id_projeto: formData.projetoSelect}})
+        return response
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar filtrar as tarefas !')
+    }
+}
+
 export const excluirTarefas = async (idsTarefas) => {
     try {
         const response = await api.delete('tarefa/excluir/', {data: { ids_tarefas: idsTarefas}})
@@ -160,7 +192,7 @@ export const excluirTarefas = async (idsTarefas) => {
 export const iniciarContagemTempo = async (sendData) => {
     try {
         const response = await api.post('tarefa/iniciar-contagem-tempo/', sendData)
-        return handleSuccess(response, 'Você está iniciando uma tarefa !')
+        return response
     } catch (error) {
         return handleError(error, 'Falha ao tentar iniciar a tarefa, contate o suporte!')
     }
@@ -169,12 +201,11 @@ export const iniciarContagemTempo = async (sendData) => {
 export const pararContagemTempo = async (sendData) => {
     try {
         const response = await api.post('tarefa/parar-contagem-tempo/', sendData)
-        return handleSuccess(response, 'Você está pausando uma tarefa !')
+        return response
     } catch (error) {
         return handleError(error, 'Falha ao tentar pausar a tarefa, contate o suporte!')
     }
 }
-
 
 export const concluirTarefas = async (ids) => {
     try {
@@ -226,23 +257,23 @@ export const sicronizarIssues = async (dados) => {
     } 
 }
 
-export const listarTarefasDoMembro = async (idMembro) => {
-    try {
-        const response = await api.get('/tarefa/listar-por-membro/', { params: { id_membro: idMembro } })
+// export const listarTarefasDoMembro = async (idMembro) => {
+//     try {
+//         const response = await api.get('/tarefa/listar-por-membro/', { params: { id_membro: idMembro } })
 
-        // Verifica se a resposta contém o código "MEMBRO_SEM_PROJETO"
-        if (response.data?.code === 'MEMBRO_SEM_PROJETO') {
-            // Trate o caso específico onde o membro não está vinculado a nenhum projeto
-            return {
-                message: 'O membro não está vinculado a nenhum projeto',
-                empty: true, // Define um indicador customizado para que o frontend saiba que não há projetos
-            };
-        }
+//         // Verifica se a resposta contém o código "MEMBRO_SEM_PROJETO"
+//         if (response.data?.code === 'MEMBRO_SEM_PROJETO') {
+//             // Trate o caso específico onde o membro não está vinculado a nenhum projeto
+//             return {
+//                 message: 'O membro não está vinculado a nenhum projeto',
+//                 empty: true, // Define um indicador customizado para que o frontend saiba que não há projetos
+//             };
+//         }
 
-        // Retorna os dados normais se não for o caso acima
-        return response;
+//         // Retorna os dados normais se não for o caso acima
+//         return response;
         
-    } catch (error) {
-        return handleError(error, 'Falha ao listar as suas tarefas !');
-    }
-}
+//     } catch (error) {
+//         return handleError(error, 'Falha ao listar as suas tarefas !');
+//     }
+// }

@@ -1,7 +1,7 @@
 .task-container {
     width: 100%;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    border-radius: 20px;
+    border-radius: 10px;
     padding: 30px;
     display: flex;
     justify-content: center;
@@ -13,6 +13,7 @@
     display: flex;
     justify-content: space-between;
     align-items: baseline;
+    text-transform: uppercase;
 }
 
 .task-title {
@@ -34,7 +35,8 @@
 }
 
 .task-start-date,
-.task-end-date {
+.task-end-date,
+.task-atrasada {
     padding: 7px;
     border-radius: 5px;
     font-size: 10px;
@@ -42,13 +44,18 @@
 }
 
 .task-start-date {
-    background-color: #CEF6CE;
-    color: #0B610B;
+    background-color: #CEE3F6;
+    color: #0B4C5F;
 }
 
 .task-end-date {
-    background-color: #F6CECE;
-    color: #B40404;
+    background-color: #F6E3CE;
+    color: #FF8000;
+}
+
+.task-atrasada {
+    background-color: #E3CEF6;
+    color: #5F04B4;
 }
 
 .task-footer {

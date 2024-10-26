@@ -21,18 +21,15 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
     const [optionsMembros, setOptionsMembros] = useState([]);
     const [optionsIteracoes, setOptionsIteracoes] = useState([]);
     const [optionsCategorias, setOptionsCategorias] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [titulo, setTitulo] = useState('CADASTRAR TAREFA');
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 if (dadosProjeto !== null) {
-                    setLoading(true);
                     await handleGetMembros();
                     await handleGetIteracoes();
                     await handleGetCategorias();
-                    setLoading(false);
 
                     if (dadosTarefa !== null) {
                         form.setFieldsValue(dadosTarefa);
@@ -45,7 +42,6 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
             } catch (error) {
                 console.error("Erro ao carregar dados do formulário:", error);
             } finally {
-                setLoading(false);
             }
         };
         fetchData();
@@ -54,9 +50,9 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
     const handleGetMembros = async () => {
         try {
             const response = await buscarMembrosPorProjeto(dadosProjeto.id);
-            const resultados = response.data
-                .filter(item => item.nome_grupo === 'Discentes' || item.nome_grupo === 'Docentes')
-                .map(item => ({
+
+            console.log(response.data)
+            const resultados = response.data.map(item => ({
                     value: item.id,
                     label: `${item.nome_membro} (${item.nome_grupo})`,
                     user: item.usuario_github,
@@ -122,9 +118,9 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
         onSubmit(dadosForm);
     };
 
-    if (loading) {
-        return <Loading />;
-    }
+    // if (loading) {
+    //     return <Loading />;
+    // }
 
     return (
         <Form form={form} layout='vertical' className='global-form' onFinish={handleSubmitForm}>
@@ -159,7 +155,18 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
                         <Form.Item
                             label="Data de Início"
                             name="data_inicio"
-                            rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
+                            rules={[
+                                { required: true, message: 'Por favor, preencha este campo!' },
+                                ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        const dataTermino = getFieldValue('data_termino');
+                                        if (!value || !dataTermino || value <= dataTermino) {
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject(new Error('A data de início não pode ser maior que a data de término!'));
+                                    },
+                                }),
+                            ]}
                         >
                             <Input type='date' name='data_inicio' style={{ width: 'fit-content' }} />
                         </Form.Item>
@@ -167,7 +174,18 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
                         <Form.Item
                             label="Data de Término (Previsão)"
                             name="data_termino"
-                            rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
+                            rules={[
+                                { required: true, message: 'Por favor, preencha este campo!' },
+                                ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        const dataInicio = getFieldValue('data_inicio');
+                                        if (!value || !dataInicio || value >= dataInicio) {
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject(new Error('A data de término não pode ser menor que a data de início!'));
+                                    },
+                                }),
+                            ]}
                         >
                             <Input type='date' name='data_termino' style={{ width: 'fit-content' }} />
                         </Form.Item>

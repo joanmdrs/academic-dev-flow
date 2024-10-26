@@ -4,6 +4,7 @@ from .views import *
 app_name = 'iteracao'
 
 urlpatterns = [
+    
     path('cadastrar/', CadastrarIteracaoView.as_view(), name='cadastrar_iteracao' ),
     path('buscar/<int:id>/', BuscarIteracaoPeloId.as_view(), name='buscar_iteracao_pelo_id'),
     path('listar/<int:id_projeto>/', ListarIteracoesPorProjetoView.as_view(), name='buscar_iteracao_por_projeto'),

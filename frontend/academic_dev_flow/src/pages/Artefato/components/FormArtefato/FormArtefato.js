@@ -119,6 +119,16 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto}) => {
                     <Form.Item label="Url do artefato" name="url">
                         <Input name="url" placeholder="url do artefato"/>
                     </Form.Item>
+
+                    <Form.Item
+                        label="Data de Término (Previsão)"
+                        name="data_termino"
+                        rules={[
+                            { required: true, message: 'Por favor, preencha este campo!' }
+                        ]}
+                    >
+                        <Input type='date' name='data_termino' style={{ width: 'fit-content' }} />
+                    </Form.Item>
                 </div>
 
                 <div style={{flex: '1'}}>
@@ -150,6 +160,7 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto}) => {
                     >
                         <Select options={optionsStatusArtefatos} name="status" defaultValue="selecione" />
                     </Form.Item>
+
                 </div>
             </div>
          

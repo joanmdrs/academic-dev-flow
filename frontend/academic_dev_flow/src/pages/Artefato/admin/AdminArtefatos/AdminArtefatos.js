@@ -4,7 +4,6 @@ import {Button, Modal, Spin} from 'antd'
 import Titulo from "../../../../components/Titulo/Titulo";
 import { FaFilter, FaPlus, FaTrash } from "react-icons/fa";
 import FormArtefato from "../../components/FormArtefato/FormArtefato";
-import SelectProjeto from "../../components/SelectProjeto/SelectProjeto"
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { createContent } from "../../../../services/githubIntegration";
 import { atualizarArtefato, buscarArtefatosPeloNomeEPeloProjeto, criarArtefato, excluirArtefato } from "../../../../services/artefatoService";
@@ -14,6 +13,7 @@ import { NotificationManager } from "react-notifications";
 import { updateIssue } from "../../../../services/githubIntegration/issueService";
 import TableArtefatos from "../../components/TableArtefatos/TableArtefatos";
 import FormFiltrarArtefatos from "../../components/FormFiltrarArtefatos/FormFiltrarArtefatos";
+import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProjeto";
 
 const StyleSpin = {
     position: 'fixed', 
@@ -257,7 +257,7 @@ const AdminArtefatos = () => {
                         <FormArtefato 
                             onSubmit={handleSalvarArtefato} 
                             onCancel={handleCancelar}
-                            selectProjeto={<SelectProjeto />} 
+                            selectProjeto={<SelecionarProjeto />} 
                         /> 
                     </React.Fragment>
                 )}

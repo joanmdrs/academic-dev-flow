@@ -26,6 +26,22 @@ export const createContent = async (dados) => {
     }
 }
 
+export const updateContent = async (data) => {
+    const sendData = {
+        github_token: data.github_token,
+        repository: data.repository,
+        content: data.content,
+        commit_message: data.commit_message,
+        path: data.path_file,
+    }
+    try {
+        const response = await api.patch('github_integration/update_content', sendData)
+        return handleSuccess(response, 'Informações do content atualizadas com sucesso !')
+    } catch (error) {
+        
+    }
+}
+
 export const getContent = async (parametros) => {
     try {
         const response = await api.get('github_integration/get_content/', {params: {

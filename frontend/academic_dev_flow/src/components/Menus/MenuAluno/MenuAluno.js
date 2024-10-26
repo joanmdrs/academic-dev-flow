@@ -9,6 +9,8 @@ import { IoDocumentTextOutline } from "react-icons/io5";
 import { VscGraph } from "react-icons/vsc";
 import { RiFlowChart } from "react-icons/ri";
 import { MdOutlineFolderOpen } from "react-icons/md";
+import { IoCalendarOutline } from "react-icons/io5";
+import { HiOutlineUsers } from "react-icons/hi2";
 
 const { SubMenu } = Menu
 
@@ -54,10 +56,7 @@ const MenuAluno = () => {
                 >
                     <Link to="/aluno/meus-projetos">Projetos</Link>
                 </Menu.Item>
-                    
-                    
         
-
                 <SubMenu
                     className="item-menu"
                     key="/aluno/fluxos"
@@ -74,6 +73,14 @@ const MenuAluno = () => {
                 </SubMenu>
 
                 <Menu.Item
+                    className="item-menu"
+                    key="/aluno/cronograma"
+                    icon={<IoCalendarOutline  size="20px" />}
+                >
+                    <Link to="/aluno/cronograma"> Cronograma </Link>
+                </Menu.Item>
+
+                <Menu.Item
                     className='item-menu'
                     key='/aluno/tarefas'
                     icon={<LuLayoutGrid size="20px"/>}
@@ -87,6 +94,11 @@ const MenuAluno = () => {
                     icon={<IoDocumentTextOutline size="20px" />}
                 >
                     <Link to="/aluno/artefatos"> Artefatos </Link>
+                </Menu.Item>
+
+                <Menu.Item className="item-menu" key="/aluno/equipes" icon={<HiOutlineUsers size="20px" />
+}>
+                    <Link to="/aluno/equipes/"> Equipes </Link>
                 </Menu.Item>
 
                 <Menu.Item

@@ -3,8 +3,9 @@ import { buscarProjetoPeloId, listarProjetos } from "../../../../services/projet
 import { Form, Select } from "antd";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
+import { buscarProjetosDoMembro } from "../../../../services/membroProjetoService";
 
-const SelecionarProjeto = () => {
+const SelecionarProjeto = ({idMembro}) => {
     const [optionsProjetos, setOptionsProjetos] = useState([]);
     const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
     const {acaoForm} = useContextoTarefa()
@@ -12,15 +13,29 @@ const SelecionarProjeto = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await listarProjetos();
 
-                if (!response.error){
-                    const resultados = response.data.map((item) => ({
-                        value: item.id,
-                        label: item.nome
-                    }));
-                    setOptionsProjetos(resultados);
+                if (idMembro) {
+                    const response = await buscarProjetosDoMembro(idMembro)
+
+                    if (!response.error){
+                        const resultados = response.data.map((item) => ({
+                            value: item.projeto,
+                            label: item.nome_projeto
+                        }))
+                        setOptionsProjetos(resultados);
+                    }
+                } else {
+                    const response = await listarProjetos();
+
+                    if (!response.error){
+                        const resultados = response.data.map((item) => ({
+                            value: item.id,
+                            label: item.nome
+                        }));
+                        setOptionsProjetos(resultados);
+                    }
                 }
+                
             } catch (error) {
                 console.error("Erro ao obter projetos:", error);
             }
@@ -51,7 +66,7 @@ const SelecionarProjeto = () => {
                     showSearch
                     allowClear
                     value={ dadosProjeto ? dadosProjeto.id : null}
-                    placeholder="Pesquise ou selecione o projeto"
+                    placeholder="Projeto"
                     optionFilterProp="children"
                     onChange={handleChange}
                     options={optionsProjetos}

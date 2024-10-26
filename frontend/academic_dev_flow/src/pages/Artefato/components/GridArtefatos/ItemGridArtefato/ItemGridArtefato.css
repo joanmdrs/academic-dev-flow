@@ -1,0 +1,74 @@
+.artefato-container {
+    width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border-radius: 10px;
+    padding: 30px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.artefato-header {
+
+}
+
+.artefato-title {
+    margin: 0;
+}
+
+.artefato-projeto-nome {
+    margin: 0;
+    color: #585858;
+}
+
+.artefato-descricao {
+    font-size: 12px;
+}
+
+.artefatos-datas {
+    display: flex;
+    gap: 10px;
+}
+
+.artefato-data-criacao,
+.artefato-data-termino, 
+.artefato-atrasado {
+    padding: 7px;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.artefato-data-criacao {
+    background-color: #CEE3F6;
+    color: #0B4C5F;
+}
+
+.artefato-data-termino {
+    background-color: #F6E3CE;
+    color: #FF8000;
+}
+
+.artefato-atrasado {
+    background-color: #E3CEF6;
+    color: #5F04B4;
+}
+
+.artefato-footer {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    gap: 20px;
+}
+
+.artefato-avatars {
+    display: flex;
+    position: relative;
+    margin-left: -8px;
+}
+
+.artefato-actions {
+    display: flex;
+    justify-content: space-between;
+}
