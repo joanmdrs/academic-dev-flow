@@ -30,6 +30,7 @@ urlpatterns = [
     path('academicflow-api/usuario/', include('apps.usuario.urls', namespace='usuario')),
     path('academicflow-api/artefato/', include('apps.artefato.urls', namespace='artefato')),
     path('academicflow-api/iteracao/', include('apps.iteracao.urls', namespace='iteracao')),
+    path('academicflow-api/release/', include('apps.release.urls', namespace='release')),
     path('academicflow-api/tarefa/', include('apps.tarefa.urls', namespace='tarefa')),
     path('academicflow-api/categoria/', include('apps.categoria.urls', namespace='categoria')),
     path('academicflow-api/comentario/', include('apps.comentario.urls', namespace='comentario')),

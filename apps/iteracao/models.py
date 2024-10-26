@@ -1,22 +1,8 @@
 from django.db import models
 from apps.projeto.models import Projeto
+from apps.release.models import Release
 from apps.membro_projeto.models import MembroProjeto
 from apps.fluxo_etapa.models import FluxoEtapa
-
-class Release(models.Model):
-    STATUS_CHOICES = [
-        ('criada', 'Criada'),
-        ('planejamento', 'Em planejamento'),
-        ('andamento', 'Em Andamento'),
-        ('concluida', 'Concluída'),
-        ('cancelada', 'Cancelada')
-    ]
-    
-    nome = models.CharField(max_length=200)
-    descricao = models.TextField()
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='criada')
-    data_lancamento = models.DateField()
-    projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, null=True, blank=True)
 
 class Iteracao(models.Model):
     STATUS_CHOICES = [
@@ -33,8 +19,8 @@ class Iteracao(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='criada')
     data_inicio = models.DateField()
     data_termino = models.DateField()
-    relase = models.ForeignKey(Release, on_delete=models.CASCADE, null=True, blank=True)
-    
+    release = models.ForeignKey(Release, on_delete=models.CASCADE, null=True, blank=True)
+    etapa = models.ForeignKey(FluxoEtapa, on_delete=models.SET_NULL, null=True, blank=True)
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, related_name='iteracoes', null=True, blank=True)
     responsavel = models.ForeignKey(MembroProjeto, on_delete=models.SET_NULL, null=True, blank=True)
 
