@@ -35,6 +35,8 @@ import ScreenAdminIssues from "./pages/GitHub/admin/AdminIssues";
 import ScreenAdminArtefatos from "./pages/Artefato/admin/AdminArtefatos";
 import ScreenGerenciarFuncaoMembro from "./pages/FuncaoMembro/screens/GerenciarFuncaoMembro";
 import { ProviderGlobalUser } from "./context/ContextoGlobalUser/ContextoGlobalUser";
+import ScreenRelease from "./pages/Release/screens/Release";
+import ScreenIteracoes from "./pages/Iteracao/screens/Iteracoes";
 
 function Routes() {
     return (
@@ -182,6 +184,20 @@ function Routes() {
                         <ScreenVisualizarProjeto grupo="aluno"/>
                     }
                     exact
+                />
+
+                <Route 
+                    path="/aluno/cronograma/releases"
+                    element={
+                        <ScreenRelease grupo="aluno"/>
+                    }
+                />
+
+                <Route 
+                    path="/aluno/cronograma/iterations"
+                    element={
+                        <ScreenIteracoes grupo="aluno"/>
+                    }
                 />
 
                 <Route path="/aluno/fluxos/gerenciar" element={<ScreenGerenciarFluxos grupo="aluno" />} exact />

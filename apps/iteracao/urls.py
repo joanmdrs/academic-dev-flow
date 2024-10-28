@@ -12,5 +12,7 @@ urlpatterns = [
     path('excluir/', ExcluirIteracoesView.as_view(), name='excluir_iteracao'),
     path('listar/', ListarIteracoesView.as_view(), name="listar_iteracoes"),
     path('filtrar-por-nome-e-por-projeto/', FiltrarIteracoesPeloNomeEPeloProjeto.as_view(), name='filtrar_iteracoes_pelo_nome_e_pelo_projeto'),
+    path('buscar-iteracoes-dos-projetos-do-membro/', BuscarIteracoesDosProjetosDoMembroView.as_view(), 
+        name='buscar_iteracoes_dos_projetos_do_membro'),
     
 ]

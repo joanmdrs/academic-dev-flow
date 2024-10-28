@@ -19,7 +19,7 @@ class ReleaseAdmin(admin.ModelAdmin):
     
     def exibir_etapa(self, obj):
         if obj.etapa:
-            return obj.etapa.etapa.nome7
+            return obj.etapa.etapa.nome
         return None
     exibir_etapa.short_description = 'Etapa'
 

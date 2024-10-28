@@ -6,7 +6,6 @@ from apps.membro_projeto.models import MembroProjeto
 class Release(models.Model):
     STATUS_CHOICES = [
         ('criada', 'Criada'),
-        ('planejamento', 'Em planejamento'),
         ('andamento', 'Em Andamento'),
         ('concluida', 'Concluída'),
         ('cancelada', 'Cancelada')

@@ -256,7 +256,7 @@ const MyArtifacts = () => {
                 {
                     isGridVisible && (
                         <React.Fragment>
-                            <div style={{
+                           <div style={{
                                 display: 'flex',
                                 justifyContent: 'space-between',
                                 alignItems: 'baseline',

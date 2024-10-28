@@ -31,7 +31,7 @@ export const buscarReleasePeloId = async (idRelease) => {
 export const filtrarReleasesPeloNomeEPeloProjeto = async (nomeRelease, idProjeto) => {
     try {
         const response = await api.get(
-            '/release/filtrar-por-nome-e-por-projeto/', 
+            '/release/filtrar-pelo-nome-e-pelo-projeto/', 
             {params: {nome_release: nomeRelease, id_projeto: idProjeto}}
         )
         return response
@@ -58,9 +58,19 @@ export const listarReleasesPorProjeto = async (idProjeto) => {
     }
 }
 
+export const buscarReleasesDosProjetosDoMembro = async (idMembro) => {
+    try {
+        const response = await api.get('/release/buscar-releases-dos-projetos-do-membro/', {params: {id_membro: idMembro}})
+        return response
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar buscar as releases !')
+    }
+}
+
 export const excluirReleases = async (idsReleases) => {
     try {
         const response = await api.delete('/release/excluir/', {data: {ids_releases: idsReleases}})
+        return handleSuccess(response, 'Release excluída com sucesso !')
     } catch (error) {
         return handleError(error, 'Falha ao tentar excluir as releases !')
     }

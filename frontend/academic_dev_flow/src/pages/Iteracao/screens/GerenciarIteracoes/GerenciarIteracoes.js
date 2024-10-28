@@ -7,7 +7,7 @@ import ListaIteracoes from "../../components/ListaIteracoes/ListaIteracoes";
 import FormIteracao from "../../components/FormIteracao/FormIteracao";
 import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProjeto"
 import { useContextoIteracao } from "../../context/contextoIteracao";
-import { atualizarIteracao, buscarIteracoesPeloNomeEPeloProjeto, criarIteracao, excluirIteracoes } from "../../../../services/iteracaoService";
+import { atualizarIteracao, criarIteracao, excluirIteracoes, filtrarIteracoesPeloNomeEPeloProjeto } from "../../../../services/iteracaoService";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import FormBuscarIteracao from "../../components/FormBuscarIteracao/FormBuscarIteracao";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
@@ -42,7 +42,7 @@ const GerenciarIteracoes = () => {
     }
 
     const handleFiltrarIteracoes = async (dados) => {
-        const response = await buscarIteracoesPeloNomeEPeloProjeto(dados.nome_iteracao, dados.id_projeto)
+        const response = await filtrarIteracoesPeloNomeEPeloProjeto(dados.nome_iteracao, dados.id_projeto)
         if (!response.error) {
             setIteracoes(response.data)
         }

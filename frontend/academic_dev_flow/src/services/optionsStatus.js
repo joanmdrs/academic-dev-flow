@@ -51,13 +51,37 @@ export const optionsStatusTarefas = [
 
 export const optionsStatusIteracoes = [
     {
-        value: 'planejamento',
-        label: 'Em Planejamento',
-        color: '#6c757d' // Cinza
+        value: 'criada', 
+        label: 'Criada',
+        color: '#007bff' // Azul
     },
     {
         value: 'andamento',
-        label: 'Em andamento',
+        label: 'Andamento',
+        color: '#ffc107' // Amarelo
+    },
+    {
+        value: 'concluida',
+        label: 'Concluída',
+        color: '#28a745' // Verde
+    },
+    {
+        value: 'cancelada',
+        label: 'Cancelada',
+        color: '#dc3545' // Vermelho
+    }
+]
+
+export const optionsStatusReleases = [
+
+    {
+        value: 'criada', 
+        label: 'Criada',
+        color: '#007bff' // Azul
+    },
+    {
+        value: 'andamento',
+        label: 'Andamento',
         color: '#ffc107' // Amarelo
     },
     {

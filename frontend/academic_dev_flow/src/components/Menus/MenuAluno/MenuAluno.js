@@ -72,13 +72,21 @@ const MenuAluno = () => {
                     </Menu.Item>
                 </SubMenu>
 
-                <Menu.Item
+                <SubMenu
                     className="item-menu"
-                    key="/aluno/cronograma"
-                    icon={<IoCalendarOutline  size="20px" />}
+                    key="/aluno/cronograma/"
+                    icon={<IoCalendarOutline size="20px" />}
+                    title="Cronograma"
                 >
-                    <Link to="/aluno/cronograma"> Cronograma </Link>
-                </Menu.Item>
+                     <Menu.Item key="gerenciar-releases">
+                        <Link to="/aluno/cronograma/releases">Releases</Link>
+                    </Menu.Item>
+
+                    <Menu.Item key="etapas">
+                        <Link to="/aluno/cronograma/iterations">Iterações </Link>
+                    </Menu.Item>
+
+                </SubMenu>
 
                 <Menu.Item
                     className='item-menu'

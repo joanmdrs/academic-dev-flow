@@ -167,3 +167,45 @@ class FiltrarIteracoesPeloNomeEPeloProjeto(APIView):
                 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)  
+        
+class BuscarIteracoesDosProjetosDoMembroView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        try:
+            id_membro = request.GET.get('id_membro', None)
+            
+            if not id_membro:
+                return Response({'error': 'O ID do membro não foi fornecido !'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            membros_projeto = MembroProjeto.objects.filter(membro=id_membro)
+            
+            if not membros_projeto.exists():
+                # Retorna uma resposta específica indicando que o membro não está vinculado a nenhum projeto
+                return Response(
+                    {
+                        'message': 'O membro não está vinculado a nenhum projeto',
+                        'code': 'MEMBRO_SEM_PROJETO'
+                    }, 
+                    status=status.HTTP_200_OK
+                )
+
+            # Extrai os projetos do queryset MembroProjeto
+            projetos_ids = membros_projeto.values_list('projeto', flat=True)
+            
+            # Busca todas as iterações vinculadas a esses projetos
+            iteracoes = Iteracao.objects.filter(projeto__in=projetos_ids).distinct().order_by('projeto')
+            
+            if not iteracoes.exists():
+                return Response([], status=status.HTTP_200_OK)
+
+            # Serializa as iterações
+            serializer = IteracaoSerializer(iteracoes, many=True)
+            
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        except MembroProjeto.DoesNotExist:
+            return Response({'error': 'Objeto(s) MembroProjeto não localizado(s)'}, status=status.HTTP_404_NOT_FOUND)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

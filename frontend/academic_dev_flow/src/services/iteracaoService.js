@@ -58,7 +58,7 @@ export const listarIteracoes = async () => {
     }
 }
 
-export const buscarIteracoesPeloNomeEPeloProjeto = async (nomeIteracao, idProjeto) => {
+export const filtrarIteracoesPeloNomeEPeloProjeto = async (nomeIteracao, idProjeto) => {
     try {
         const response = await api.get(
             'iteracao/filtrar-por-nome-e-por-projeto/', 
@@ -68,5 +68,21 @@ export const buscarIteracoesPeloNomeEPeloProjeto = async (nomeIteracao, idProjet
     } catch (error) {
         return handleError(error, 'Falha ao tentar buscas as informações !')
 
+    }
+}
+
+export const buscarIteracoesDosProjetosDoMembro = async (idMembro) => {
+    try {
+        const response = await api.get('iteracao/buscar-iteracoes-dos-projetos-do-membro/', {params: {id_membro: idMembro}})
+        if (response.data?.code === 'MEMBRO_SEM_PROJETO') {
+            // Trate o caso específico onde o membro não está vinculado a nenhum projeto
+            return {
+                message: 'O membro não está vinculado a nenhum projeto',
+                empty: true, // Define um indicador customizado para que o frontend saiba que não há projetos
+            };
+        }
+        return response
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar buscar as informações das iterações !')
     }
 }

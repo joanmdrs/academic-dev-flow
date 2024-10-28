@@ -7,7 +7,6 @@ from apps.fluxo_etapa.models import FluxoEtapa
 class Iteracao(models.Model):
     STATUS_CHOICES = [
         ('criada', 'Criada'),
-        ('planejamento', 'Em planejamento'),
         ('andamento', 'Em Andamento'),
         ('concluida', 'Concluída'),
         ('cancelada', 'Cancelada')
