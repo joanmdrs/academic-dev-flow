@@ -1,4 +1,4 @@
-import { Menu } from "antd";
+import { Menu, Space } from "antd";
 import Sider from "antd/es/layout/Sider";
 import React, { useState } from "react";
 import { Link, useLocation } from 'react-router-dom';
@@ -6,13 +6,14 @@ import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { HiOutlineHome } from "react-icons/hi2";
 import { LuLayoutGrid } from "react-icons/lu";
 import { IoDocumentTextOutline } from "react-icons/io5";
-import { VscGraph } from "react-icons/vsc";
 import { RiFlowChart } from "react-icons/ri";
 import { MdOutlineFolderOpen } from "react-icons/md";
 import { IoCalendarOutline } from "react-icons/io5";
 import { HiOutlineUsers } from "react-icons/hi2";
+import { FaGithub } from "react-icons/fa";
+import { FaCoffee } from "react-icons/fa";
 
-const { SubMenu } = Menu
+const { SubMenu } = Menu;
 
 const MenuAluno = () => {
     const [collapsed, setCollapsed] = useState(false);
@@ -20,18 +21,22 @@ const MenuAluno = () => {
 
     return (
         <Sider width={250} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-            <div 
+            <Space 
                 style={{
                     display: "flex", 
                     flex: '1',
                     justifyContent: "center",
                     alignItems: "center",
+                    gap: '10px',
                     padding: "10px",
                     color: "#FFFFFF",
                     height: '64px',
-                }} className="demo-logo-vertical">
-                Academic Dev Flow
-            </div>
+                }} 
+                className="demo-logo-vertical"
+            >
+                <FaCoffee size="25px" />
+                {!collapsed && <span>Academic Dev Flow</span>}
+            </Space>
             <Menu
                 theme="dark"
                 mode="inline"
@@ -40,7 +45,6 @@ const MenuAluno = () => {
                 }}
                 selectedKeys={[location.pathname]}
             >
-
                 <Menu.Item
                     className='item-menu'
                     key='/aluno/home'
@@ -82,8 +86,8 @@ const MenuAluno = () => {
                         <Link to="/aluno/cronograma/releases">Releases</Link>
                     </Menu.Item>
 
-                    <Menu.Item key="gerenciar-releases">
-                        <Link to="/aluno/cronograma/iterations">Iterações </Link>
+                    <Menu.Item key="gerenciar-iterations">
+                        <Link to="/aluno/cronograma/iterations">Iterações</Link>
                     </Menu.Item>
 
                 </SubMenu>
@@ -104,18 +108,34 @@ const MenuAluno = () => {
                     <Link to="/aluno/artefatos"> Artefatos </Link>
                 </Menu.Item>
 
-                <Menu.Item className="item-menu" key="/aluno/membros" icon={<HiOutlineUsers size="20px" />
-}>
+                <Menu.Item 
+                    className="item-menu" 
+                    key="/aluno/membros" 
+                    icon={<HiOutlineUsers size="20px" />}
+                >
                     <Link to="/aluno/membros"> Membros </Link>
                 </Menu.Item>
 
-                <Menu.Item
+                <SubMenu
                     className='item-menu'
-                    key='/aluno/relatorios' 
-                    icon={<VscGraph size="20px"/>}
+                    key='/aluno/github-integration/'
+                    icon={<FaGithub style={{ fontSize: "20px" }} />}
+                    title="GitHub"
                 >
-                    <Link to="/aluno/relatorios">Relatórios</Link>
-                </Menu.Item>
+                    <Menu.Item
+                        className="item-menu"
+                        key="/aluno/github-integration/issues"
+                    >
+                        <Link to="/aluno/github-integration/issues"> Issues </Link>
+                    </Menu.Item>
+
+                    <Menu.Item
+                        className="item-menu"
+                        key="/aluno/github-integration/contents"
+                    >
+                        <Link to="/aluno/github-integration/contents"> Contents </Link>
+                    </Menu.Item>
+                </SubMenu>
 
             </Menu>
         </Sider>

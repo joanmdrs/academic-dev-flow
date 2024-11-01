@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { CiUser } from "react-icons/ci";
 import { CiLogout } from "react-icons/ci";
 import { useContextoGlobalProjeto } from '../../context/ContextoGlobalProjeto/ContextoGlobalProjeto';
+import { useContextoGlobalUser } from '../../context/ContextoGlobalUser/ContextoGlobalUser';
 
 const { Header } = Layout;
 
@@ -17,6 +18,7 @@ const MyHeader = () => {
     const {logOut} = useAuth();
     const navigate = useNavigate()
     const {grupo} = useContextoGlobalProjeto()
+    const {usuario} = useContextoGlobalUser()
 
 
     const handleAcessarPerfil = async () => {
@@ -56,13 +58,13 @@ const MyHeader = () => {
 
     return (
         <Header className="header">
-        <div className='logo-ufrn'>
-            <img src={logo_ufrn} alt="Logo da UFRN" className='logo-image' />
-        </div>
+            <div className='logo-ufrn'>
+                <img src={logo_ufrn} alt="Logo da UFRN" className='logo-image' />
+            </div>
 
-        <div className='icone-perfil'>
-            <MyDropdown items={items} />
-        </div>
+            <div className='icone-perfil'>
+                <MyDropdown items={items} />
+            </div>
         </Header>
     );
 };

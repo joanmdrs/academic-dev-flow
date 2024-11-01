@@ -95,6 +95,7 @@ const TableProjetos = ({projetos, onUpdate, onDelete}) => {
             projetos.length !== 0 ? (
                 
                 <Table
+                    style={{boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px', padding: '20px'}}
                     dataSource={projetos}
                     columns={columns}
                     rowKey="id"

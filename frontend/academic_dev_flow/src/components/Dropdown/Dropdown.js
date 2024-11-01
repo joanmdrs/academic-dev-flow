@@ -1,12 +1,20 @@
-import { Dropdown } from "antd";
+import { Avatar, Dropdown, Space } from "antd";
 import React from "react";
-import { CgProfile } from "react-icons/cg";
+import { DownOutlined } from '@ant-design/icons';
+import { useContextoGlobalUser } from "../../context/ContextoGlobalUser/ContextoGlobalUser";
+import { FaCaretDown } from "react-icons/fa";
 
 const MyDropdown = ({ items }) => {
+  const {usuario} = useContextoGlobalUser()
   
   return (
     <Dropdown trigger={['click']} menu={{items}}>
-      <CgProfile size="30px" color='#ffffff' cursor="pointer" />
+      <Space style={{color: '#FFFFFF', display: 'flex', gap: '10px'}}>
+        <Avatar src={`https://avatar.iran.liara.run/public/${usuario?.avatar}`} />
+        <span> {usuario?.nome} </span>   
+        <span style={{cursor: 'pointer'}}> <FaCaretDown/> </span>
+      </Space>
+       
     </Dropdown>
   );
 };

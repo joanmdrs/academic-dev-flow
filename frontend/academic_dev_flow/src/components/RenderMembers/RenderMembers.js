@@ -5,7 +5,7 @@ import { getRandomColor } from "../../services/utils";
 const RenderMembers = ({membros, quantMembros, maxAvatars}) => {
     
     return (
-        <div style={{ display: 'flex'}}>
+        <div style={{ display: 'flex', marginLeft: '8px'}}>
             <div style={{ display: 'flex', position: 'relative', marginLeft: -8 }}>
                 {
                     membros.map((item, index) => (
