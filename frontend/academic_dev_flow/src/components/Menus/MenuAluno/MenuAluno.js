@@ -82,7 +82,7 @@ const MenuAluno = () => {
                         <Link to="/aluno/cronograma/releases">Releases</Link>
                     </Menu.Item>
 
-                    <Menu.Item key="etapas">
+                    <Menu.Item key="gerenciar-releases">
                         <Link to="/aluno/cronograma/iterations">Iterações </Link>
                     </Menu.Item>
 
@@ -104,9 +104,9 @@ const MenuAluno = () => {
                     <Link to="/aluno/artefatos"> Artefatos </Link>
                 </Menu.Item>
 
-                <Menu.Item className="item-menu" key="/aluno/equipes" icon={<HiOutlineUsers size="20px" />
+                <Menu.Item className="item-menu" key="/aluno/membros" icon={<HiOutlineUsers size="20px" />
 }>
-                    <Link to="/aluno/equipes/"> Equipes </Link>
+                    <Link to="/aluno/membros"> Membros </Link>
                 </Menu.Item>
 
                 <Menu.Item

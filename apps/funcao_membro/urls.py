@@ -9,6 +9,7 @@ urlpatterns = [
     path('atualizar/', AtualizarFuncaoMembroProjetoView.as_view(), name='atualizar_funcao_membro'),
     path('listar/', ListarFuncaoMembroView.as_view(), name='listar_funcao_membro'),
     path('listar-funcoes-do-membro/', ListarFuncaoMembroProjetoPeloIDView.as_view(), name='listar_funcoes_do_membro'),
+    path('listar-funcoes-dos-membros-do-projeto/', ListarFuncaoMembroProjetoPorProjetoView.as_view(), name='listar_funcoes_dos_membros_do_projeto'),
     path('filtrar/', FiltrarFuncaoMembroProjetoView.as_view(), name='filtrar_funcoes_membro'),
     path('excluir/', ExcluirFuncaoMembroProjetoView.as_view(), name='excluir_funcao_membro'),
         

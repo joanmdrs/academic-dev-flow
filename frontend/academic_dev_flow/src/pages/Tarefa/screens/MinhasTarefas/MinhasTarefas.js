@@ -286,7 +286,7 @@ const MinhasTarefas = () => {
                         size="middle"
                         indicator={{align: "center"}}
                     > 
-                        <Item tab={<span><GoColumns /> Quadro</span>} key="1"  >
+                        <Item tab={<span><GoColumns /> Quadro</span>} key="1" >
                             <TaskBoard 
                                 tarefas={tarefas} 
                                 onCreate={handleAdicionarTarefa}

@@ -3,11 +3,16 @@ from django.db.models import Count
 from .models import MembroProjeto
 from apps.tarefa.models import Tarefa
 from apps.artefato.models import Artefato
+from apps.funcao_membro.models import FuncaoMembro
+from apps.funcao_membro.serializers import FuncaoMembroSerializer
+from apps.membro.models import Membro
+from apps.membro.serializers import MembroSerializer
 
 class MembroProjetoSerializer(serializers.ModelSerializer):
     nome_grupo = serializers.SerializerMethodField()
     nome_membro = serializers.SerializerMethodField()
     nome_projeto = serializers.SerializerMethodField()
+    descricao_projeto = serializers.SerializerMethodField()
     status_projeto = serializers.SerializerMethodField()
     data_inicio_projeto = serializers.SerializerMethodField()
     data_termino_projeto = serializers.SerializerMethodField()
@@ -17,7 +22,9 @@ class MembroProjetoSerializer(serializers.ModelSerializer):
     nome_fluxo = serializers.SerializerMethodField()
     quantidade_tarefas = serializers.SerializerMethodField()
     quantidade_artefatos = serializers.SerializerMethodField()
-    nomes_membros = serializers.SerializerMethodField()
+    avatar = serializers.SerializerMethodField()
+    funcoes_membro = serializers.SerializerMethodField()
+    equipe = serializers.SerializerMethodField()
     
     class Meta:
         model = MembroProjeto
@@ -26,6 +33,7 @@ class MembroProjetoSerializer(serializers.ModelSerializer):
                   'membro', 
                   'nome_membro', 
                   'nome_projeto', 
+                  'descricao_projeto',
                   'nome_grupo', 
                   'usuario_github', 
                   'status_projeto',
@@ -34,9 +42,11 @@ class MembroProjetoSerializer(serializers.ModelSerializer):
                   'quantidade_membros',
                   'quantidade_artefatos',
                   'quantidade_tarefas',
-                  'nomes_membros',
                   'id_fluxo',
                   'nome_fluxo',
+                  'avatar',
+                  'funcoes_membro',
+                  'equipe'
                 ] 
         
     def get_nome_grupo(self, obj):
@@ -48,6 +58,9 @@ class MembroProjetoSerializer(serializers.ModelSerializer):
     def get_nome_projeto(self, obj): 
         return obj.projeto.nome
 
+    def get_descricao_projeto(self, obj):
+        return obj.projeto.descricao
+    
     def get_status_projeto(self, obj):
         return obj.projeto.status
 
@@ -79,8 +92,20 @@ class MembroProjetoSerializer(serializers.ModelSerializer):
     def get_quantidade_artefatos(self, obj):
         quantidade_artefatos = Artefato.objects.filter(projeto=obj.projeto).count()
         return quantidade_artefatos
-
-    def get_nomes_membros(self, obj):
-        membros_projeto = MembroProjeto.objects.filter(projeto=obj.projeto)
-        nomes_membros = [membro.membro.nome for membro in membros_projeto]
-        return nomes_membros
+    
+    def get_avatar(self, obj): 
+        return obj.membro.avatar
+    
+    def get_funcoes_membro(self, obj):
+        funcoes_membro = FuncaoMembro.objects.filter(membro_projeto=obj.id)
+        serializer = FuncaoMembroSerializer(funcoes_membro, many=True)
+        return serializer.data
+    
+    def get_equipe(self, obj):
+        membros_projeto_ids = MembroProjeto.objects.filter(projeto=obj.projeto).values_list('membro', flat=True)
+        
+        membros = Membro.objects.filter(id__in=membros_projeto_ids)
+        
+        serializer = MembroSerializer(membros, many=True)
+        return serializer.data
+    

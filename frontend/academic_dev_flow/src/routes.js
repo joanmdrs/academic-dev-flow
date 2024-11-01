@@ -17,7 +17,6 @@ import ScreenGerenciarProjetos from "./pages/Projeto/screens/GerenciarProjetos";
 import ScreenMinhasTarefas from "./pages/Tarefa/screens/MinhasTarefas";
 import ScreenMeusArtefatos from "./pages/Artefato/screens/MeusArtefatos";
 import ScreenVisualizarProjeto from "./pages/Projeto/screens/VisualizarProjeto";
-import ScreenMeusProjetos from "./pages/Projeto/screens/MeusProjetos";
 import ScreenGerenciarComentariosTarefa from "./pages/Comentario/screens/ComentariosTarefa";
 import ScreenComentariosArtefato from "./pages/Comentario/screens/ComentariosArtefato";
 import ScreenComentariosTarefa from "./pages/Comentario/screens/ComentariosTarefa";
@@ -37,6 +36,9 @@ import ScreenGerenciarFuncaoMembro from "./pages/FuncaoMembro/screens/GerenciarF
 import { ProviderGlobalUser } from "./context/ContextoGlobalUser/ContextoGlobalUser";
 import ScreenRelease from "./pages/Release/screens/Release";
 import ScreenIteracoes from "./pages/Iteracao/screens/Iteracoes";
+import ScreenQuadroMembros from "./pages/Membro/screens/QuadroMembros";
+import ScreenEquipe from "./pages/Membro/screens/Equipe";
+import ScreenProjetos from "./pages/Projeto/screens/Projetos";
 
 function Routes() {
     return (
@@ -174,7 +176,7 @@ function Routes() {
 
                 <Route
                     path="/aluno/meus-projetos"
-                    element={<ScreenMeusProjetos grupo="aluno" />}
+                    element={<ScreenProjetos grupo="aluno" />}
                     exact
                 />
 
@@ -239,6 +241,18 @@ function Routes() {
                     exact
                 />
 
+                <Route 
+                    path="/aluno/membros"
+                    element={<ScreenQuadroMembros grupo="aluno" />}
+                    exact
+                />
+
+                <Route
+                    path="/aluno/membros/equipe"
+                    element={<ScreenEquipe grupo="aluno" />}
+                    exact
+                />
+
                 <Route
                     path="/aluno/relatorios"
                     element={<ScreenGerenciarRelatorios  grupo="aluno" />}
@@ -271,7 +285,7 @@ function Routes() {
 
                 <Route
                     path="/professor/projetos/meus-projetos"
-                    element={<ScreenMeusProjetos grupo="professor" />}
+                    element={<ScreenProjetos grupo="professor" />}
                     exact
                 />
 

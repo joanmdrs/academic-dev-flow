@@ -6,7 +6,7 @@ export const optionsStatusProjetos = [
     },
     {
         value: 'andamento',
-        label: 'Em andamento',
+        label: 'Andamento',
         color: '#ffc107' // Amarelo
     },
     {

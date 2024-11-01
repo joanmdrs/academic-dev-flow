@@ -106,15 +106,28 @@ export const listarFuncaoMembroProjetoDoMembro = async (idMembroProjeto) => {
             'funcao-membro/listar-funcoes-do-membro/', {params: {id_membro_projeto: idMembroProjeto}})
         return response
     } catch (error) {
-        return handleError('Falha ao tentar listar as funções do membro selecionado !')
+        return handleError(error, 'Falha ao tentar listar as funções do membro selecionado !')
     }
 }
 
-export const excluirFuncaoMembroProjeto = async (idMembroProjeto) => {
+export const listarFuncaoMembroProjetoPorProjeto = async (idProjeto) => {
     try {
-        const response = await api.delete('funcao-membro/excluir/',  {params: {id_membro_projeto: idMembroProjeto}})
+        const response = await api.get(
+            'funcao-membro/listar-funcoes-dos-membros-do-projeto/', {params: {id_projeto: idProjeto}}
+        )
+        return response
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar listar as informações !')
+    }
+}
+
+export const excluirFuncaoMembroProjeto = async (idFuncaoMembroProjeto) => {
+    try {
+        const response = await api.delete(
+            'funcao-membro/excluir/',  
+            {params: {id_funcao_membro_projeto: idFuncaoMembroProjeto}})
         return handleSuccess(response, 'Função desvinculada do membro selecionado com sucesso !')
     } catch (error) {
-        return handleError('Falha ao tentar excluir a função do membro selecionado !')
+        return handleError(error, 'Falha ao tentar excluir a função do membro selecionado !')
     }
 }

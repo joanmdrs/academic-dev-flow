@@ -5,7 +5,6 @@ const RenderStatus = ({optionsStatus, propStatus}) => {
      
     const statusOption = optionsStatus.find(option => option.value === propStatus);
 
-    console.log(statusOption)
     return (
         <Space style={{
             display: 'flex',

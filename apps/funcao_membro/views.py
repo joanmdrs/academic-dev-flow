@@ -225,6 +225,32 @@ class ListarFuncaoMembroProjetoPeloIDView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
+class ListarFuncaoMembroProjetoPorProjetoView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        try:
+            id_projeto = request.GET.get('id_projeto', None)
+            
+            if not id_projeto:
+                return Response({'error': 'O ID do projeto não foi fornecido !'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            membros_projeto = MembroProjeto.objects.filter(projeto=id_projeto)
+            
+            ids_membros = membros_projeto.values_list('id', flat=True)
+            
+            objs_funcao_membro = FuncaoMembro.objects.filter(membro_projeto__in=ids_membros).order_by('membro_projeto')
+            
+            if objs_funcao_membro.exists():
+                serializer = FuncaoMembroSerializer(objs_funcao_membro, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response(
+                {'error': 'Nenhum dado foi encontrado !'}, 
+                status=status.HTTP_404_NOT_FOUND)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
 class ListarFuncaoMembroView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):

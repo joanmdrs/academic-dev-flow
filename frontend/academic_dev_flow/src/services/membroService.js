@@ -22,6 +22,7 @@ export const criarMembro = async (dados) => {
         membro : {
             nome: dados.nome,
             data_nascimento: dados.data_nascimento,
+            sexo: dados.sexo,
             telefone: dados.telefone,
             email: dados.email,
             linkedin: dados.linkedin,
@@ -29,7 +30,8 @@ export const criarMembro = async (dados) => {
             nome_github: dados.nome_github,
             email_github: dados.email_github,
             usuario_github: dados.usuario_github,
-            grupo: dados.grupo
+            grupo: dados.grupo,
+            avatar: dados.avatar
         }
     }
 
@@ -130,6 +132,7 @@ export const atualizarMembro = async (idMembro, dados) => {
         membro : {
             nome: dados.nome,
             data_nascimento: dados.data_nascimento,
+            sexo: dados.sexo, 
             telefone: dados.telefone,
             email: dados.email,
             linkedin: dados.linkedin,
@@ -137,7 +140,8 @@ export const atualizarMembro = async (idMembro, dados) => {
             nome_github: dados.nome_github,
             email_github: dados.email_github,
             usuario_github: dados.usuario_github,
-            grupo: dados.grupo
+            grupo: dados.grupo,
+            avatar: dados.avatar
         }
     }
 

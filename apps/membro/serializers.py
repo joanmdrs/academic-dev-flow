@@ -15,7 +15,7 @@ class MembroSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Membro
-        fields = ['id', 'nome', 'data_nascimento', 'telefone', 'email', 'linkedin', 'lattes', 'nome_github', 'email_github', 'usuario_github', 'usuario', 'username', 'password', 'grupo', 'nome_grupo']
+        fields = ['id', 'nome', 'data_nascimento', 'telefone', 'email', 'linkedin', 'lattes', 'nome_github', 'email_github', 'usuario_github', 'usuario', 'username', 'password', 'grupo', 'nome_grupo', 'avatar']
 
     def get_nome_grupo(self, obj):
         return obj.grupo.name 

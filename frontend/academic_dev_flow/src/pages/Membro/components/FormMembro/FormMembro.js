@@ -7,12 +7,28 @@ import { listarGrupos } from "../../../../services/membroService";
 import { handleError } from "../../../../services/utils";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 
+const optionsSexo = [
+    {
+        value: 'M',
+        label: 'Masculino'
+    }, 
+    {
+        value: 'F',
+        label: 'Feminino'
+    }, 
+    {
+        value: 'O',
+        label: 'Outro'
+    }
+]
+
 const FormMembro = ({onSubmit, onCancel}) => {
 
     const {dadosMembro} = useMembroContexto()
     const [form] = Form.useForm()
     const [loading, setLoading] = useState(false)
     const [optionsGrupos, setOptionsGrupos] = useState([])
+    const [gender, setGender] = useState(null)
 
     const handleListarGrupos = async () => {
 
@@ -64,7 +80,22 @@ const FormMembro = ({onSubmit, onCancel}) => {
 
     const handleEmailChange = (e) => {
         const { value } = e.target;
-        form.setFieldsValue({ usuario: value }); // Atualiza o valor do campo de usuário com o valor do campo de email
+        form.setFieldsValue({ username: value });
+    };
+
+    const handleSubmitForm = () => {
+        let avatarNumber;
+        if (gender === 'M') {
+            avatarNumber = Math.floor(Math.random() * 50) + 1;
+        } else if (gender === 'F') {
+            avatarNumber = Math.floor(Math.random() * 50) + 51;
+        } else if (gender === 'O') {
+            avatarNumber = Math.floor(Math.random() * 100) + 1;
+        }
+        const dadosForm = form.getFieldsValue();
+        dadosForm['avatar'] = avatarNumber;
+        //onSubmit(dadosForm);
+        console.log(dadosForm)
     };
 
     return (
@@ -72,11 +103,12 @@ const FormMembro = ({onSubmit, onCancel}) => {
             form={form}
             className="global-form"
             layout="vertical"
-            onFinish={onSubmit}
+            onFinish={handleSubmitForm}
         >
             <Form.Item>
                 <h3> Dados do Membro </h3>
             </Form.Item>
+
             <div style={{display: "flex", gap: "20px"}}> 
                 <Form.Item 
                     style={{flex: "3"}}
@@ -95,6 +127,20 @@ const FormMembro = ({onSubmit, onCancel}) => {
                 >
                     <Input type="date"/>
                     
+                </Form.Item>
+
+                <Form.Item 
+                    style={{flex: "1"}}
+                    label="Sexo"
+                    name="sexo"
+                    rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
+                >
+                    <Select 
+                        onChange={(value) => setGender(value)} 
+                        options={optionsSexo} 
+                        allowClear 
+                        placeholder="Sexo do membro" 
+                    />
                 </Form.Item>
             </div>
 

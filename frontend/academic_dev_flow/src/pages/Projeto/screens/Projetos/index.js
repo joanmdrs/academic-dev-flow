@@ -3,17 +3,11 @@ import MenuAluno from "../../../../components/Menus/MenuAluno/MenuAluno";
 import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfessor";
 import { Layout } from "antd";
 import MyHeader from "../../../../components/Header/Header";
-import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
 import { Content } from "antd/es/layout/layout";
-import MeusProjetos from "./MeusProjetos";
 import { ProviderProjeto } from "../../context/ContextoProjeto";
+import Projetos from "./Projetos";
 
-const ScreenMeusProjetos = ({grupo}) => {
-
-    const breadcrumbRoutes = [
-        { title: 'Home', path: `/${grupo}/home` },
-        { title: 'Projetos', path: `/${grupo}/projetos/meus-projetos` },
-      ];
+const ScreenProjetos = ({grupo}) => {
 
     return (
         <React.Fragment>
@@ -21,11 +15,9 @@ const ScreenMeusProjetos = ({grupo}) => {
             { grupo === 'professor' && <MenuProfessor />}
             <Layout>
                 <MyHeader/>
-                <CustomBreadcrumb routes={breadcrumbRoutes} />
-
                 <Content>
                     <ProviderProjeto>
-                        <MeusProjetos />
+                        <Projetos />
                     </ProviderProjeto>
                 </Content>
             </Layout>
@@ -33,4 +25,4 @@ const ScreenMeusProjetos = ({grupo}) => {
     )
 }
 
-export default ScreenMeusProjetos
+export default ScreenProjetos

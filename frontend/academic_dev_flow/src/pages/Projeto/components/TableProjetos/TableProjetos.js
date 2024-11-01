@@ -1,12 +1,12 @@
-import { Avatar, Empty, Space, Table, Tooltip } from "antd";
-import React, { useState } from "react";
-import { formatDate, getRandomColor } from "../../../../services/utils";
+import { Empty, Space, Table, Tooltip } from "antd";
+import React from "react";
 import { optionsStatusProjetos } from "../../../../services/optionsStatus";
 import { IoMdCreate, IoMdTrash } from "react-icons/io";
+import RenderDate from "../../../../components/RenderDate/RenderDate";
+import RenderStatus from "../../../../components/RenderStatus/RenderStatus";
+import RenderMembers from "../../../../components/RenderMembers/RenderMembers";
 
 const TableProjetos = ({projetos, onUpdate, onDelete}) => {
-
-    const maxAvatars = 3
 
     const columns = [
         {
@@ -15,7 +15,7 @@ const TableProjetos = ({projetos, onUpdate, onDelete}) => {
             key: 'nome_projeto',
             render: (_, record) => (
                 <Space>
-                    <a > {record.nome_projeto} </a>
+                    <a> {record.nome_projeto} </a>
                 </Space>
             )
         },
@@ -24,80 +24,46 @@ const TableProjetos = ({projetos, onUpdate, onDelete}) => {
             dataIndex: 'nomes_membros',
             key: 'nomes_membros',
             render: (_, record) => (
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <div style={{ display: 'flex', position: 'relative', marginLeft: -8 }}>
-                        {
-                            record.nomes_membros.slice(0, maxAvatars).map((membro, index) => (
-                                <Tooltip title={`${membro}`}>
-                                    <Avatar
-                                        key={index}
-                                        style={{
-                                            backgroundColor: getRandomColor(),
-                                            zIndex: record.quantidade_membros - index,
-                                            marginLeft: index > 0 ? -10 : 0, // Sobreposição
-                                        }}
-                                    >
-                                        {membro[0].toUpperCase()} {/* Mostra a primeira letra do nome */}
-                                    </Avatar>
-                                </Tooltip>
-                                
-                            ))
-                        }
-                        {
-                           ( record.quantidade_membros - maxAvatars ) > 0 && 
-                                <Avatar
-                                    key={record.quantidade_membros - maxAvatars}
-                                    style={{
-                                        backgroundColor: getRandomColor(),
-                                        zIndex: (record.quantidade_membros - maxAvatars),
-                                        marginLeft: (record.quantidade_membros - maxAvatars) > 0 ? -10 : 0, // Sobreposição
-                                    }}
-                                >
-                                    { `+${(record.quantidade_membros - maxAvatars)}`}
-                                </Avatar>
-                        }
-                    </div>
-                </div>
+                <RenderMembers membros={record.equipe} maxAvatars={3} quantMembros={record.quantidade_membros} />
             )
         },
         {
             title: 'Tarefas',
             dataIndex: 'quantidade_tarefas',
-            key: 'quantidade_tarefas'
+            key: 'quantidade_tarefas',
+            align: 'center',
         },
         {
             title: 'Artefatos',
             dataIndex: 'quantidade_artefatos',
-            key: 'quantidade_artefatos'
+            key: 'quantidade_artefatos',
+            align: 'center'
         },
         {
             title: 'Início',
             dataIndex: 'data_inicio_projeto',
             key: 'data_inicio_projeto',
+            align: 'center',
             render: (_, record) => (
-                <Space>
-                    {formatDate(record.data_inicio_projeto)}
-                </Space>
+                <RenderDate dateType="inicio" dateValue={record.data_inicio_projeto} />
             )
         },
         {
             title: 'Fim',
             dataIndex: 'data_termino_projeto',
             key: 'data_termino_projeto',
+            align: 'center',
             render: (_, record) => (
-                <Space>
-                    {formatDate(record.data_termino_projeto)}
-                </Space>
+                <RenderDate dateType="fim" dateValue={record.data_termino_projeto} />
             )
         },
         {
             title: 'Status',
             dataIndex: 'status_projeto',
             key: 'status_projeto',
+            align: 'center',
             render: (_, record) => (
-                <span>
-                    {optionsStatusProjetos.find(status => status.value === record.status_projeto)?.label}
-                </span>
+                <RenderStatus optionsStatus={optionsStatusProjetos} propStatus={record.status_projeto} />
             )
         },
         {
@@ -122,37 +88,28 @@ const TableProjetos = ({projetos, onUpdate, onDelete}) => {
         }
     ];
 
-    const [projetosSelecionados, setProjetosSelecionados] = useState([])
-
-    const rowSelection = {
-        onChange: (selectedRowsKeys, selectedRows) => {
-            setProjetosSelecionados(selectedRows)
-        },
-    };
-
 
     return (
         <React.Fragment>
             {
             projetos.length !== 0 ? (
-                <div className="global-div">
-                    <Table
-                        dataSource={projetos}
-                        columns={columns}
-                        rowKey="id"
-                        rowSelection={rowSelection}
-                    />
-                </div>
+                
+                <Table
+                    dataSource={projetos}
+                    columns={columns}
+                    rowKey="id"
+                />
 
                 
             ) : (
-                <Empty 
+                <Empty
                     description="Nenhum projeto para exibir"
-                    image={Empty.PRESENTED_IMAGE_SIMPLE}
+                    image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
                     style={{
                         display: 'flex',
                         width: "100%",
                         height: "100%",
+                        padding: '40px',
                         flexDirection: 'column',
                         alignItems: 'center',
                         justifyContent: 'center',

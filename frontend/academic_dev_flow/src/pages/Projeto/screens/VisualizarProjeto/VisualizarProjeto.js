@@ -13,7 +13,6 @@ import ScreenCronogramaIteracoes from "../../../Iteracao/screens/CronogramaItera
 import ScreenQuadroTarefas from "../../../Tarefa/screens/QuadroTarefas/index.js";
 import ScreenPainelArtefatos from "../../../Artefato/screens/PainelArtefatos/index.js";
 import ScreenPainelGihtub from "../../../GitHub/screens/PainelGithub/index.js";
-import ScreenPainelMembros from "../../../Membro/screens/PainelMembros/index.js";
 import ScreenDashboardProjeto from "../DashboardProjeto/index.js";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto.js";
 
@@ -127,7 +126,6 @@ const VisualizarProjeto = () => {
                             icon={<MdOutlinePeopleAlt />} 
                             style={{backgroundColor: '#F0F2F5',padding: '3%'}}
                         >
-                            <ScreenPainelMembros />
                         </TabPane>
                     </Tabs>
                 </div>

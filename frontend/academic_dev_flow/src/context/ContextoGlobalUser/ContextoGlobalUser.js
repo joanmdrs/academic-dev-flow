@@ -34,6 +34,8 @@ export const ProviderGlobalUser = ({ children }) => {
         fetchData()
     }, [token])
 
+    console.log()
+
     return (
         <ContextoGlobalUser.Provider
             value={{
