@@ -140,7 +140,6 @@ def list_issues(request):
         github_token = request.GET.get('github_token')
         repository = request.GET.get('repository')
         state = request.GET.get('state')
-        projeto = request.GET.get('projeto')
         
         if not github_token or not repository:
             return JsonResponse({'error': 'Ausência de parâmetros'}, status=status.HTTP_400_BAD_REQUEST)

@@ -3,6 +3,8 @@ from django.db.models import Count
 from .models import MembroProjeto
 from apps.tarefa.models import Tarefa
 from apps.artefato.models import Artefato
+from apps.projeto.models import Projeto
+from apps.projeto.serializers import ProjetoSerializer
 from apps.funcao_membro.models import FuncaoMembro
 from apps.funcao_membro.serializers import FuncaoMembroSerializer
 from apps.membro.models import Membro
@@ -25,6 +27,7 @@ class MembroProjetoSerializer(serializers.ModelSerializer):
     avatar = serializers.SerializerMethodField()
     funcoes_membro = serializers.SerializerMethodField()
     equipe = serializers.SerializerMethodField()
+    dados_projeto = serializers.SerializerMethodField()
     
     class Meta:
         model = MembroProjeto
@@ -46,7 +49,8 @@ class MembroProjetoSerializer(serializers.ModelSerializer):
                   'nome_fluxo',
                   'avatar',
                   'funcoes_membro',
-                  'equipe'
+                  'equipe',
+                  'dados_projeto'
                 ] 
         
     def get_nome_grupo(self, obj):
@@ -107,5 +111,10 @@ class MembroProjetoSerializer(serializers.ModelSerializer):
         membros = Membro.objects.filter(id__in=membros_projeto_ids)
         
         serializer = MembroSerializer(membros, many=True)
+        return serializer.data
+    
+    def get_dados_projeto(self, obj):
+        projeto = Projeto.objects.get(id=obj.projeto_id)
+        serializer = ProjetoSerializer(projeto, many=False)
         return serializer.data
     

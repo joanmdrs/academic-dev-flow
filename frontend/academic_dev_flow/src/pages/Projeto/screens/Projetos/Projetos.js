@@ -152,7 +152,7 @@ const Projetos = () => {
     }
 
     return (
-        <div style={{backgroundColor: '#FFFFFF', height: '100%'}}>
+        <div className='global-div' style={{backgroundColor: '#FFFFFF', height: '100%'}}>
 
             <div style={{
                 borderBottom: '1px solid #ddd',

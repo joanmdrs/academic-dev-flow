@@ -123,6 +123,10 @@ def delete_content(request):
     except GithubException as e:
         return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+from django.http import JsonResponse
+from rest_framework import status
+from github import GithubException
+
 def list_contents(request):
     try:
         github_token = request.GET.get('github_token')
@@ -130,19 +134,26 @@ def list_contents(request):
         folder = request.GET.get('folder')
         
         if not repository or not github_token or not folder:
-            return JsonResponse({'error': 'Os parâmetros repository, github_token e folder são obrigatórios'}, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(
+                {'error': 'Os parâmetros repository, github_token e folder são obrigatórios', 'status': status.HTTP_400_BAD_REQUEST}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
         
         g = get_github_client(github_token)
-        
         repo = g.get_repo(repository)
         
+        try:
+            contents = repo.get_contents(folder)
+        except GithubException as e:
+            if e.status == 404:
+                return JsonResponse(
+                    {'error': 'Conteúdo não encontrado no repositório ou no caminho especificado.', 'status': status.HTTP_404_NOT_FOUND}, 
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            else:
+                return JsonResponse({'error': str(e), 'status': status.HTTP_500_INTERNAL_SERVER_ERROR}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
         documentos = []
-
-        contents = repo.get_contents(folder)
-        
-        if not contents:
-            return JsonResponse({'message': 'Não foi localizado nenhum arquivo'}, status=status.HTTP_404_NOT_FOUND)
-        
         while contents:
             file_content = contents.pop(0)
             if file_content.type == "dir":
@@ -157,14 +168,14 @@ def list_contents(request):
                     'download_url': file_content.download_url,
                     'type': file_content.type
                 })
+        
         documentos_list = []   
         for documento in documentos:
-            
-            artefato = Artefato.objects.filter(id_file=documento['sha']).exists()
+            artefato = Artefato.objects.filter(id_content=documento['sha']).exists()
             documento['exists'] = artefato
             documentos_list.append(documento)
                
         return JsonResponse(documentos_list, safe=False, status=status.HTTP_200_OK)
                 
     except GithubException as e:
-        return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return JsonResponse({'error': str(e), 'status': status.HTTP_500_INTERNAL_SERVER_ERROR}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

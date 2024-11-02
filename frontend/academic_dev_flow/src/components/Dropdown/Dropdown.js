@@ -9,7 +9,7 @@ const MyDropdown = ({ items }) => {
   
   return (
     <Dropdown trigger={['click']} menu={{items}}>
-      <Space style={{color: '#FFFFFF', display: 'flex', gap: '10px'}}>
+      <Space style={{display: 'flex', gap: '10px'}}>
         <Avatar src={`https://avatar.iran.liara.run/public/${usuario?.avatar}`} />
         <span> {usuario?.nome} </span>   
         <span style={{cursor: 'pointer'}}> <FaCaretDown/> </span>

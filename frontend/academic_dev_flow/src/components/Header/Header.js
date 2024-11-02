@@ -5,40 +5,39 @@ import './Header.css';
 import MyDropdown from '../Dropdown/Dropdown';
 import { useAuth } from '../../hooks/AuthProvider';
 import { useNavigate } from 'react-router-dom';
-import { CiUser } from "react-icons/ci";
-import { CiLogout } from "react-icons/ci";
+import { CiUser, CiLogout} from "react-icons/ci";
 import { useContextoGlobalProjeto } from '../../context/ContextoGlobalProjeto/ContextoGlobalProjeto';
 import { useContextoGlobalUser } from '../../context/ContextoGlobalUser/ContextoGlobalUser';
+import { useContextoGlobalTheme } from '../../context/ContextoTheme/ContextoTheme';
+import { FaBrush } from "react-icons/fa6";
 
 const { Header } = Layout;
 
-
 const MyHeader = () => {
-
-    const {logOut} = useAuth();
-    const navigate = useNavigate()
-    const {grupo} = useContextoGlobalProjeto()
-    const {usuario} = useContextoGlobalUser()
-
+    const { logOut } = useAuth();
+    const navigate = useNavigate();
+    const { grupo } = useContextoGlobalProjeto();
+    const { usuario } = useContextoGlobalUser();
+    const { theme, setTheme } = useContextoGlobalTheme();
 
     const handleAcessarPerfil = async () => {
-
-        console.log(grupo)
-
         if (grupo === 'Docentes') {
-            navigate("/professor/perfil")
+            navigate("/professor/perfil");
         } else if (grupo === 'Discentes') {
-            navigate("/aluno/perfil")
+            navigate("/aluno/perfil");
         } else if (grupo === 'Administradores') {
-            navigate("/admin/perfil")
+            navigate("/admin/perfil");
         }
-    }
+    };
 
-    
+    const toggleTheme = () => {
+        setTheme(theme === 'light' ? 'dark' : 'light');
+    };
+
     const items = [
         {
             label: (
-                <Button style={{border: "none"}} onClick={() => handleAcessarPerfil()}> 
+                <Button style={{ border: "none" }} onClick={handleAcessarPerfil}> 
                     Perfil
                 </Button>
             ),
@@ -47,8 +46,8 @@ const MyHeader = () => {
         },
         {
             label: (
-                <Button style={{border: "none"}} onClick={() => logOut()}> 
-                Logout
+                <Button style={{ border: "none" }} onClick={logOut}> 
+                    Logout
                 </Button>
             ),
             key: '2',
@@ -57,13 +56,31 @@ const MyHeader = () => {
     ];
 
     return (
-        <Header className="header">
+        <Header 
+            className="header" 
+            style={{
+                backgroundColor: theme === 'light' ? '#FFFFFF' : '#001529',
+                color: theme === 'light' ? '#000000' : '#FFFFFF',
+                borderBottom: '1px solid #ddd'
+            }}> 
             <div className='logo-ufrn'>
                 <img src={logo_ufrn} alt="Logo da UFRN" className='logo-image' />
             </div>
 
-            <div className='icone-perfil'>
-                <MyDropdown items={items} />
+            <div style={{display:'flex', gap: '20px'}}>
+                <Button 
+                    onClick={toggleTheme} 
+                    icon={<FaBrush color={`${theme === 'light' ? "#000000" : '#FFFFFF'}`}/>}
+                    style={{
+                        borderRadius: '50%', 
+                        background: 'none', 
+                        border: `1px solid ${theme === 'light' ? "#000000" : '#FFFFFF'}`, 
+                        cursor: 'pointer' 
+                    }}
+                />
+                <div className='icone-perfil'>
+                    <MyDropdown items={items} />
+                </div>
             </div>
         </Header>
     );

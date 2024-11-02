@@ -39,6 +39,10 @@ import ScreenIteracoes from "./pages/Iteracao/screens/Iteracoes";
 import ScreenQuadroMembros from "./pages/Membro/screens/QuadroMembros";
 import ScreenEquipe from "./pages/Membro/screens/Equipe";
 import ScreenProjetos from "./pages/Projeto/screens/Projetos";
+import ScreenIssues from "./pages/GitHub/screens/Issues";
+import ScreenGithubProjetos from "./pages/GitHub/screens/GithubProjetos";
+import ScreenContents from "./pages/GitHub/screens/Contents";
+import ScreenCommits from "./pages/GitHub/screens/Commits";
 
 function Routes() {
     return (
@@ -164,6 +168,7 @@ function Routes() {
             {/* Rotas do aluno */}
 
             <Route element={
+                
                 <ProviderGlobalProjeto>
                     <ProviderGlobalUser>
                         <StudentRoutes />
@@ -264,6 +269,31 @@ function Routes() {
                     element={<ScreenVisualizarIteracao grupo="aluno" /> }
                     exact
                 />
+
+                <Route 
+                    path="/aluno/github-integration"
+                    element={<ScreenGithubProjetos grupo={"aluno"} />}
+                    exact
+                />
+
+                <Route 
+                    path="/aluno/github-integration/issues"
+                    element={<ScreenIssues grupo={"aluno"} />}
+                    exact
+                />
+
+                <Route 
+                    path="/aluno/github-integration/contents"
+                    element={<ScreenContents grupo={"aluno"} />}
+                    exact
+                />
+
+                <Route 
+                    path="/aluno/github-integration/commits"
+                    element={<ScreenCommits grupo={"aluno"} />}
+                    exact
+                /> 
+                
             </Route>
 
             {/* Rotas do professor */}

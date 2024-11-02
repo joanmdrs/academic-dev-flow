@@ -1,16 +1,20 @@
-import { Space, Table, Tooltip } from "antd";
+import { Empty, Space, Table, Tooltip } from "antd";
 import React from "react";
-import { IoMdOpen, IoMdTrash } from "react-icons/io";
 import { IoIosClose } from "react-icons/io";
 import { IoIosCheckmark } from "react-icons/io";
 
-const TableContents = ({contentsData, onLoading, onDelete}) => {
+const TableContents = ({data}) => {
 
-    const COLUNAS_ARQUIVOS = [
+    const columnsTable = [
         {
             title: "Content",
             dataIndex: 'name',
-            key: 'name'
+            key: 'name',
+            render: (_, record) => (
+                <span>
+                    <a href={record.url} target="_blank" rel="noreferrer"> {record.name} </a>
+                </span>
+            )
         },
         {
             title: "Path content",
@@ -24,29 +28,49 @@ const TableContents = ({contentsData, onLoading, onDelete}) => {
             align: 'center',
             render: (_, record) => (
                 <Space>
-                    { record.exists ? 
-                        <span> <IoIosCheckmark color="green" size="25px"/></span>
-                        : <span> <IoIosClose color="red"  size="25px" /></span>
+                    { record.exists ?
+                        (<Tooltip title="Sicronizado">[
+                            <span> <IoIosCheckmark color="green" size="25px"/></span>
+                        </Tooltip>)
+                        
+                        : (<Tooltip title="Não sicronizado">
+                            <span> <IoIosClose color="red"  size="25px" /></span>
+                        </Tooltip>)
                     }
-                </Space>
-            )
-        },
-        {
-            title: 'Ações',
-            dataIndex: 'action',
-            key: 'action',
-            render: (_, record) => (
-                <Space size="middle">
-                    <Tooltip title="Visualizar">
-                        <a href={record.url} target="blank"> <IoMdOpen /></a>
-                    </Tooltip>
                 </Space>
             )
         }
     ]
 
     return (    
-        <Table loading={onLoading} rowKey="sha" columns={COLUNAS_ARQUIVOS} dataSource={contentsData}/>
+        <React.Fragment>
+            {
+            data.length !== 0 ? (
+                <Table
+                    dataSource={data}
+                    columns={columnsTable}
+                    rowKey="id"
+                    style={{boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px', padding: '20px'}}
+                />
+                
+            ) : (
+                <Empty
+                    description="Nenhum content para exibir"
+                    image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+                    style={{
+                        display: 'flex',
+                        width: "100%",
+                        height: "100%",
+                        padding: '40px',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                >
+                </Empty>
+            )
+        }
+        </React.Fragment>
     )
 }
 

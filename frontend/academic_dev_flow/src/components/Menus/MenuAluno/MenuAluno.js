@@ -2,43 +2,52 @@ import { Menu, Space } from "antd";
 import Sider from "antd/es/layout/Sider";
 import React, { useState } from "react";
 import { Link, useLocation } from 'react-router-dom';
-import { MdOutlineSpaceDashboard } from "react-icons/md";
-import { HiOutlineHome } from "react-icons/hi2";
-import { LuLayoutGrid } from "react-icons/lu";
-import { IoDocumentTextOutline } from "react-icons/io5";
-import { RiFlowChart } from "react-icons/ri";
-import { MdOutlineFolderOpen } from "react-icons/md";
-import { IoCalendarOutline } from "react-icons/io5";
-import { HiOutlineUsers } from "react-icons/hi2";
-import { FaGithub } from "react-icons/fa";
+
 import { FaCoffee } from "react-icons/fa";
+import { LuClipboardList } from "react-icons/lu";
+import { LuFileCode2 } from "react-icons/lu";
+import { LuFolder } from "react-icons/lu";
+import { LuLayoutDashboard } from "react-icons/lu";
+import { LuWorkflow } from "react-icons/lu";
+import { LuCalendarDays } from "react-icons/lu";
+import { LuGithub } from "react-icons/lu";
+import { LuUsers } from "react-icons/lu";
+import { useContextoGlobalTheme } from "../../../context/ContextoTheme/ContextoTheme";
 
 const { SubMenu } = Menu;
 
 const MenuAluno = () => {
     const [collapsed, setCollapsed] = useState(false);
     const location = useLocation();
+    const {theme} = useContextoGlobalTheme()
 
     return (
-        <Sider width={250} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-            <Space 
+        <Sider 
+            style={{borderRight: '1px solid #ddd'}}
+            theme={theme}
+            width={250} 
+            collapsible 
+            collapsed={collapsed} 
+            onCollapse={(value) => setCollapsed(value)}
+        >
+            <div 
                 style={{
                     display: "flex", 
-                    flex: '1',
                     justifyContent: "center",
                     alignItems: "center",
                     gap: '10px',
                     padding: "10px",
-                    color: "#FFFFFF",
-                    height: '64px',
+                    color: `${ theme === 'light' ? 'var(--primary-color)' : '#FFFFFF'}`,
+                    height: '64px'
                 }} 
-                className="demo-logo-vertical"
             >
-                <FaCoffee size="25px" />
+                <span> <FaCoffee size="25px" /> </span>
+            
                 {!collapsed && <span>Academic Dev Flow</span>}
-            </Space>
+            </div>
             <Menu
-                theme="dark"
+
+                theme={theme}
                 mode="inline"
                 style={{
                     marginTop: "20px"
@@ -48,7 +57,7 @@ const MenuAluno = () => {
                 <Menu.Item
                     className='item-menu'
                     key='/aluno/home'
-                    icon={<HiOutlineHome size="20px"/>}
+                    icon={<LuLayoutDashboard size="20px"/>}
                 >
                     <Link to="/aluno/home">Dashboard</Link>
                 </Menu.Item>
@@ -56,7 +65,7 @@ const MenuAluno = () => {
                 <Menu.Item
                     className="item-menu"
                     key="/aluno/meus-projetos"
-                    icon={<MdOutlineFolderOpen size="20px"/>}
+                    icon={<LuFolder size="20px"/>}
                 >
                     <Link to="/aluno/meus-projetos">Projetos</Link>
                 </Menu.Item>
@@ -64,7 +73,7 @@ const MenuAluno = () => {
                 <SubMenu
                     className="item-menu"
                     key="/aluno/fluxos"
-                    icon={<RiFlowChart style={{ fontSize: "20px" }} />}
+                    icon={<LuWorkflow style={{ fontSize: "20px" }} />}
                     title="Fluxos"
                 >
                     <Menu.Item key="gerenciar-fluxos">
@@ -79,7 +88,7 @@ const MenuAluno = () => {
                 <SubMenu
                     className="item-menu"
                     key="/aluno/cronograma/"
-                    icon={<IoCalendarOutline size="20px" />}
+                    icon={<LuCalendarDays size="20px" />}
                     title="Cronograma"
                 >
                      <Menu.Item key="gerenciar-releases">
@@ -95,7 +104,7 @@ const MenuAluno = () => {
                 <Menu.Item
                     className='item-menu'
                     key='/aluno/tarefas'
-                    icon={<LuLayoutGrid size="20px"/>}
+                    icon={<LuClipboardList size="20px"/>}
                 >
                     <Link to="/aluno/tarefas">Tarefas</Link>
                 </Menu.Item>
@@ -103,7 +112,7 @@ const MenuAluno = () => {
                 <Menu.Item
                     className="item-menu"
                     key='/aluno/artefatos'
-                    icon={<IoDocumentTextOutline size="20px" />}
+                    icon={<LuFileCode2 size="20px" />}
                 >
                     <Link to="/aluno/artefatos"> Artefatos </Link>
                 </Menu.Item>
@@ -111,31 +120,18 @@ const MenuAluno = () => {
                 <Menu.Item 
                     className="item-menu" 
                     key="/aluno/membros" 
-                    icon={<HiOutlineUsers size="20px" />}
+                    icon={<LuUsers size="20px" />}
                 >
                     <Link to="/aluno/membros"> Membros </Link>
                 </Menu.Item>
-
-                <SubMenu
-                    className='item-menu'
-                    key='/aluno/github-integration/'
-                    icon={<FaGithub style={{ fontSize: "20px" }} />}
-                    title="GitHub"
+                
+                <Menu.Item 
+                    className="item-menu" 
+                    key="/aluno/github-integration" 
+                    icon={<LuGithub size="20px" />}
                 >
-                    <Menu.Item
-                        className="item-menu"
-                        key="/aluno/github-integration/issues"
-                    >
-                        <Link to="/aluno/github-integration/issues"> Issues </Link>
-                    </Menu.Item>
-
-                    <Menu.Item
-                        className="item-menu"
-                        key="/aluno/github-integration/contents"
-                    >
-                        <Link to="/aluno/github-integration/contents"> Contents </Link>
-                    </Menu.Item>
-                </SubMenu>
+                    <Link to="/aluno/github-integration"> GitHub </Link>
+                </Menu.Item>
 
             </Menu>
         </Sider>
