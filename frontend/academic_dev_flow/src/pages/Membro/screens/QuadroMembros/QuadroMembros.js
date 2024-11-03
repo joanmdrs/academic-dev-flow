@@ -54,7 +54,7 @@ const QuadroMembros = () => {
     }, [usuario])
 
     return (
-        <div style={{backgroundColor: "#FFFFFF", height: '100vh'}}> 
+        <div className="global-div" style={{height: '100%'}}> 
             <div style={{
                 borderBottom: '1px solid #ddd',
                 display: 'flex',
@@ -63,9 +63,13 @@ const QuadroMembros = () => {
                 padding: '20px',
                 backgroundColor: '#FFFFFF'
             }}> 
-                <Space>
-                    <h3> Área de Membros </h3>
-                </Space>
+               <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
+                    <h2 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '600'}}> Membros </h2>
+                    <h4 
+                        style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '400'}}> 
+                        Encontre suas equipes 
+                    </h4>
+                </div>
 
             </div>
 

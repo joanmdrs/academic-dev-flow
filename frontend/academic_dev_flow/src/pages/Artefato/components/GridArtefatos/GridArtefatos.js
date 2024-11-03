@@ -2,21 +2,20 @@ import React from "react";
 import { Row, Col, Empty } from "antd";
 import ItemGridArtefato from "./ItemGridArtefato/ItemGridArtefato";
 
-const GridArtefatos = ({artefatos, onUpdate, onDelete}) => {
+const GridArtefatos = ({data, onUpdate, onDelete}) => {
 
     return (
-        <div style={{ padding: "20px" }}>
+        <div>
 
             {
-                artefatos.length !== 0 ? (
-                    <Row gutter={[16, 16]}>
-                        {artefatos.map((artefato, index) => (
-                        <Col key={index} xs={24} sm={12} md={8} lg={6}>
-                            <ItemGridArtefato artefato={artefato} onUpdate={onUpdate} onDelete={onDelete} />
-                        </Col>
-                        ))}
-                    </Row>
-                    
+                data.length !== 0 ? (
+                    <div style={{display: 'flex', gap: '20px', padding: '20px'}}> 
+                        {data.map((item, index) => (
+                            <ItemGridArtefato item={item} onUpdate={onUpdate} onDelete={onDelete} />
+                        ))} 
+                    </div>
+                   
+                                           
                 ) : (
                     <Empty
                         description="Nenhum artefato para exibir"

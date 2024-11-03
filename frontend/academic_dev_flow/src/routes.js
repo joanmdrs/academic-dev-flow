@@ -14,8 +14,6 @@ import ScreenGerenciarTarefas from "./pages/Tarefa/screens/GerenciarTarefas";
 import ScreenVisualizarArtefato from "./pages/Artefato/screens/VisualizarArtefato";
 import ScreenGerenciarIteracoes from "./pages/Iteracao/screens/GerenciarIteracoes";
 import ScreenGerenciarProjetos from "./pages/Projeto/screens/GerenciarProjetos";
-import ScreenMinhasTarefas from "./pages/Tarefa/screens/MinhasTarefas";
-import ScreenMeusArtefatos from "./pages/Artefato/screens/MeusArtefatos";
 import ScreenVisualizarProjeto from "./pages/Projeto/screens/VisualizarProjeto";
 import ScreenGerenciarComentariosTarefa from "./pages/Comentario/screens/ComentariosTarefa";
 import ScreenComentariosArtefato from "./pages/Comentario/screens/ComentariosArtefato";
@@ -43,6 +41,8 @@ import ScreenIssues from "./pages/GitHub/screens/Issues";
 import ScreenGithubProjetos from "./pages/GitHub/screens/GithubProjetos";
 import ScreenContents from "./pages/GitHub/screens/Contents";
 import ScreenCommits from "./pages/GitHub/screens/Commits";
+import ScreenTarefas from "./pages/Tarefa/screens/Tarefas";
+import ScreenArtefatos from "./pages/Artefato/screens/Artefatos";
 
 function Routes() {
     return (
@@ -212,7 +212,7 @@ function Routes() {
 
                 <Route
                     path="/aluno/tarefas"
-                    element={<ScreenMinhasTarefas grupo="aluno" />}
+                    element={<ScreenTarefas grupo="aluno" />}
                     exact
                 />
 
@@ -224,7 +224,7 @@ function Routes() {
 
                 <Route
                     path="/aluno/artefatos"
-                    element={<ScreenMeusArtefatos grupo="aluno" />}
+                    element={<ScreenArtefatos grupo="aluno" />}
                     exact
                 />
 
@@ -332,7 +332,7 @@ function Routes() {
             
                 <Route
                     path="/professor/tarefas"
-                    element={<ScreenMinhasTarefas grupo="professor" />}
+                    element={<ScreenTarefas grupo="professor" />}
                     exact
                 />
 
@@ -344,7 +344,7 @@ function Routes() {
 
                 <Route
                     path="/professor/artefatos"
-                    element={<ScreenMeusArtefatos grupo="professor" />}
+                    element={<ScreenArtefatos grupo="professor" />}
                     exact
                 />
 

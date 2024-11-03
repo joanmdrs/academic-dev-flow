@@ -1,12 +1,10 @@
 import { Form, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import { buscarProjetosDoMembro, listarEquipesDoMembro } from "../../../../services/membroProjetoService";
-import { useContextoTarefa } from "../../context/ContextoTarefa";
 
 const FormFiltrarTarefas = ({idMembro, onChange}) => {
     const [optionsMembros, setOptionsMembros] = useState([]);
     const [optionsProjetos, setOptionsProjetos] = useState([]);
-    const {tarefas, setTarefas} = useContextoTarefa();
 
     const handleGetProjetos = async () => {
         const response = await buscarProjetosDoMembro(idMembro);
@@ -60,6 +58,7 @@ const FormFiltrarTarefas = ({idMembro, onChange}) => {
                     optionFilterProp="children"
                     options={optionsMembros}
                     filterOption={filterOption}
+                    popupMatchSelectWidth={false}
                 />
             </Form.Item>
 
@@ -73,6 +72,7 @@ const FormFiltrarTarefas = ({idMembro, onChange}) => {
                     optionFilterProp="children"
                     options={optionsProjetos}
                     filterOption={filterOption}
+                    popupMatchSelectWidth={false}
                 />
             </Form.Item>
         </Form>

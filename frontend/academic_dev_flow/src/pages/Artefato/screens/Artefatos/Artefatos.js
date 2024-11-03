@@ -18,7 +18,6 @@ import { NotificationManager } from "react-notifications";
 import { createContent, updateContent } from "../../../../services/githubIntegration";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProjeto";
-import { GoTable } from "react-icons/go";
 const {TabPane} = Tabs
 
 const StyleSpin = {
@@ -36,8 +35,7 @@ const StyleSpin = {
 
 const { Search } = Input;
 
-const MyArtifacts = () => {
-    const [layout, setLayout] = useState('grid');
+const Artefatos = () => {
     const {usuario} = useContextoGlobalUser()
     const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
     const {artefatos, setArtefatos, dadosArtefato, setDadosArtefato} = useContextoArtefato()
@@ -206,30 +204,42 @@ const MyArtifacts = () => {
         });
     };
 
-    const handleBuscarPeloNome = async (value) => {
-        const response = await buscarArtefatoPeloNome(value)
-
-        if (!response.error){
-            setArtefatos(response.data)
+    const handleBuscarArtefatosPeloNome = async (value) => {
+        if (value){
+            const response = await listarArtefatosDosProjetosDoMembro(usuario.id);
+            const artefatosFiltrados = response.data.filter(artefato =>
+                artefato.nome.toLowerCase().includes(value.toLowerCase())
+            );
+            setArtefatos(artefatosFiltrados)
+        } else {
+            await handleBuscarArtefatosDosProjetosDoMembro()
         }
     }
     
     
     return (
-        <div className="bloco-principal"> 
+        <div className="global-div" style={{height: '100%'}}> 
             <div style={{
                 borderBottom: '1px solid #ddd',
                 padding: '20px',
                 display: 'flex',
                 justifyContent: 'space-between'
             }}> 
-                <Space>
-                    <h3> ARTEFATOS </h3>
-                </Space>
+               <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
+                    <h2 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '600'}}> Artefatos </h2>
+                    <h4 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '400'}}> </h4>
+                </div>
 
-                <Space>
-                    <Button onClick={handleAdicionarArtefato} type="primary" ghost icon={<FaPlus />}> Criar Artefato </Button>
-                </Space>
+                <div>
+                    <Button
+                        size="large" 
+                        onClick={() => handleAdicionarArtefato()} 
+                        type="primary" 
+                        ghost 
+                        icon={<FaPlus />}> 
+                        Criar Artefato 
+                    </Button>
+                </div>
             </div>
 
             <div style={{backgroundColor: "#FFFFFF", height: '100vh'}}>
@@ -261,16 +271,17 @@ const MyArtifacts = () => {
                                 justifyContent: 'space-between',
                                 alignItems: 'baseline',
                                 padding: '20px',
-                                border: '1px solid #DDD'
+                                borderBottom: '1px solid #DDD'
                             }}>
                                 <Flex horizontal gap="middle">
                                     <Space>
-                                        <span style={{color: '#BDBDBD'}}>  <FaFilter/> Filtros </span>
-                                    </Space>
-                                    <Space>
-                                        <Search 
-                                            onSearch={(value) => handleBuscarPeloNome(value)} 
-                                            placeholder="pesquise aqui" style={{width: 400}}
+                                        <Search
+                                            style={{width: '500px'}}
+                                            placeholder="pesquise pelo nome"
+                                            allowClear
+                                            enterButton="Pesquisar"
+                                            size="middle"
+                                            onSearch={handleBuscarArtefatosPeloNome}
                                         />
                                     </Space>
 
@@ -295,33 +306,31 @@ const MyArtifacts = () => {
                                     </Tooltip>
                                 </Flex>
                             </div>
-
-                           
-                            <Tabs
-                                style={{paddingTop: '10px'}}
-                                size="middle"
-                                tabPosition="left"
-                                indicator={{align: "center"}}
-                                defaultActiveKey="2"
-                            > 
-                                <TabPane style={{padding: '20px'}} tab={ <BsGrid3X3GapFill /> } key="1"  >
-                                    <GridArtefatos 
-                                        artefatos={artefatos}
-                                        onUpdate={handleAtualizarArtefato}
-                                        onDelete={handleExcluirArtefato}
-                                    />
-                                </TabPane>
-                                <TabPane style={{padding: '20px'}} tab={<FaListUl />} key="2" >
-                                    <TableArtifacts 
-                                        artefatos={artefatos}
-                                        onUpdate={handleAtualizarArtefato}
-                                        onDelete={handleExcluirArtefato}
-                                    />
-                                </TabPane>
-                                
-                            </Tabs>
-
-
+                            <div style={{padding: '20px'}}> 
+                                <Tabs
+                                    style={{paddingTop: '10px'}}
+                                    size="middle"
+                                    tabPosition="left"
+                                    indicator={{align: "center"}}
+                                    defaultActiveKey="2"
+                                > 
+                                    <TabPane style={{padding: '20px'}} tab={ <BsGrid3X3GapFill /> } key="1"  >
+                                        <GridArtefatos 
+                                            data={artefatos}
+                                            onUpdate={handleAtualizarArtefato}
+                                            onDelete={handleExcluirArtefato}
+                                        />
+                                    </TabPane>
+                                    <TabPane style={{padding: '20px'}} tab={<FaListUl />} key="2" >
+                                        <TableArtifacts 
+                                            data={artefatos}
+                                            onUpdate={handleAtualizarArtefato}
+                                            onDelete={handleExcluirArtefato}
+                                        />
+                                    </TabPane>
+                                    
+                                </Tabs>
+                            </div>                        
                         </React.Fragment>        
                     )
                 }    
@@ -330,4 +339,4 @@ const MyArtifacts = () => {
     );
 }
 
-export default MyArtifacts;
+export default Artefatos;

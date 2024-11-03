@@ -29,13 +29,8 @@ export const optionsStatusTarefas = [
     },
     {
         value: 'andamento',
-        label: 'Em andamento',
+        label: 'Andamento',
         color: '#ffc107' // Amarelo
-    },
-    {
-        value: 'revisao',
-        label: 'Em revisão',
-        color: '#17a2b8' // Ciano
     },
     {
         value: 'concluida', 

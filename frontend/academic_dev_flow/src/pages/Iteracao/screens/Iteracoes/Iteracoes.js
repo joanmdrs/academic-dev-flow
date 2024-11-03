@@ -1,7 +1,6 @@
 import { Button, Flex, Modal, Space } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { FaFilter, FaPlus } from 'react-icons/fa'
-import { handleError } from '../../../../services/utils'
+import { FaPlus } from 'react-icons/fa'
 import { useContextoGlobalUser } from '../../../../context/ContextoGlobalUser/ContextoGlobalUser'
 import SelectProject from '../../components/SelectProject/SelectProject'
 import { useContextoGlobalProjeto } from '../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto'
@@ -125,7 +124,7 @@ const Iteracoes = () => {
 
 
     return (
-        <div style={{height: '100vh', backgroundColor: "#FFFFFF"}} className="bloco-principal"> 
+        <div style={{height: '100%',}} className="global-div"> 
             <div style={{
                 borderBottom: '1px solid #ddd',
                 display: 'flex',
@@ -135,7 +134,7 @@ const Iteracoes = () => {
                 backgroundColor: '#FFFFFF'
             }}> 
                 <Space>
-                    <h3> ITERAÇÕES </h3>
+                    <h2 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '600'}}> Iterações </h2>
                 </Space>
 
                 <Space>
@@ -143,6 +142,7 @@ const Iteracoes = () => {
                         onClick={handleAdicionarIteracao} 
                         type="primary" 
                         ghost 
+                        size="large"
                         icon={<FaPlus />}
                     > Criar Iteração 
                     </Button>
@@ -156,13 +156,10 @@ const Iteracoes = () => {
                     justifyContent: 'space-between',
                     alignItems: 'baseline',
                     padding: '20px',
-                    border: '1px solid #DDD',
+                    borderBottom: '1px solid #DDD',
                     backgroundColor: '#FFFFFF'
                 }}>
                     <Flex horizontal gap="middle">
-                        <Space>
-                            <span style={{color: '#BDBDBD'}}>  <FaFilter/> Filtros </span>
-                        </Space>
                         <Space>
                             <FormFilterIteracoes onChange={handleFiltrarIteracoes} idMembro={usuario.id}/>
                         </Space>

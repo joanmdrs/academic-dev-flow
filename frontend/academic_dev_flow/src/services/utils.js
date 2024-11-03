@@ -56,7 +56,8 @@ export const converterData = (dataString) => {
 }
 
 export const getRandomColor = () => {
-  const colors = ['#f56a00', '#7265e6', '#ffbf00', '#00a2ae'];
+  const colors = ['#f56a00', '#7265e6', '#ffbf00', '#00a2ae', '#00429d', '#b80000'];
+
   return colors[Math.floor(Math.random() * colors.length)];
 };
 

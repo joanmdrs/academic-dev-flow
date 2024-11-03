@@ -5,10 +5,35 @@ import './ColumnTaskBoard.css';
 import ItemTaskBoard from '../ItemTaskBoard/ItemTaskBoard';
 import { getRandomColor } from '../../../../../services/utils';
 
-const ColumnTaskBoard = ({ title, tarefas, onCreate, onUpdate, onDelete, onStartTarefa, onPauseTarefa }) => {
+const getColorByStatus = (title) => {
+    switch (title) {
+        case 'To Do':
+            return '#4788FF'; 
+        case 'In Progress':
+            return '#f56a00'; 
+        case 'Done':
+            return '#00a2ae';
+        default:
+            return getRandomColor(); 
+    }
+};
+
+const ColumnTaskBoard = ({ 
+    title, 
+    tarefas, 
+    onCreate, 
+    onUpdate, 
+    onDelete, 
+    onStartTarefa, 
+    onPauseTarefa, 
+}) => {
+
     return (
         <div className="column-task-board">
-            <div className="column-task-board-header" style={{backgroundColor: `${getRandomColor()}`}}>
+            <div 
+                className="column-task-board-header" 
+                style={{ backgroundColor: getColorByStatus(title) }}
+            >
                 <h4 className="column-task-board-title">{title}</h4>
                 <span onClick={onCreate} className="column-task-board-add-task-button">
                     <Tooltip title="Adicionar Tarefa">

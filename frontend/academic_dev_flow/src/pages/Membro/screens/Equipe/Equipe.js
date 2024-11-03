@@ -130,7 +130,7 @@ const Equipe = () => {
     }
 
     return (
-        <div style={{backgroundColor: "#FFFFFF", height: '100vh'}}>
+        <div className="global-div" style={{backgroundColor: "#FFFFFF", height: '100%'}}>
             <div style={{
                 borderBottom: '1px solid #ddd',
                 display: 'flex',

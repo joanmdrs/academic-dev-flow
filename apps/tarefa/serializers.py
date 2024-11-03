@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Tarefa, CategoriaTarefa, IntervaloTempo
 from apps.membro_projeto.models import MembroProjeto
 from apps.membro.models import Membro
+from apps.membro.serializers import MembroSerializer
 
 class IntervaloTempoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -12,14 +13,6 @@ class CategoriaTarefaSerializer(serializers.ModelSerializer):
     class Meta:
         model = CategoriaTarefa
         fields = '__all__'  
-
-class MembroSerializer(serializers.ModelSerializer):
-    nome_membro = serializers.CharField(source='membro.nome')  # Acessa o nome do Membro
-    grupo_membro = serializers.CharField(source='membro.grupo.name')  # Acessa o grupo do Membro (se existir)
-
-    class Meta:
-        model = MembroProjeto
-        fields = ['id', 'nome_membro', 'grupo_membro'] 
         
 
 class TarefaSerializer(serializers.ModelSerializer):
@@ -76,8 +69,11 @@ class TarefaSerializer(serializers.ModelSerializer):
         return obj.estado_contagem_tempo()
 
     def get_membros_info(self, obj):
-        membros = obj.membros.all()
-        return MembroSerializer(membros, many=True).data
+        membros_projeto = obj.membros.all()
+        ids_membros = [membro.membro.id for membro in membros_projeto]
+        membros = Membro.objects.filter(id__in=ids_membros)
+        serializer = MembroSerializer(membros, many=True)
+        return serializer.data
     
     def get_ids_membros(self, obj):
         membros = obj.membros.all()

@@ -3,9 +3,11 @@ import './ItemTaskBoard.css'
 import { IoMdCreate, IoMdTrash } from 'react-icons/io';
 import { FaRegClock, FaPlay, FaPause } from 'react-icons/fa';
 import { GoCommentDiscussion } from 'react-icons/go';
-import { formatDate, getRandomColor, limitarCaracteres } from '../../../../../services/utils';
-import { Avatar, Tooltip } from 'antd';
+import { formatDate, limitarCaracteres } from '../../../../../services/utils';
+import { Tooltip } from 'antd';
 import { FaCircleInfo } from 'react-icons/fa6';
+import RenderMembers from '../../../../../components/RenderMembers/RenderMembers';
+import RenderDate from '../../../../../components/RenderDate/RenderDate';
 
 function verificarAtraso(task) {
     const dataAtual = new Date().toISOString().split('T')[0]; // Data atual no formato YYYY-MM-DD
@@ -51,8 +53,8 @@ const ItemTaskBoard = ({ task, maxAvatars = 3, onUpdate, onDelete, onStartTarefa
             </div>
 
             <div className="task-dates">
-                <span className="task-start-date"><FaRegClock /> {formatDate(task.data_inicio)}</span>
-                <span className="task-end-date"><FaRegClock /> {formatDate(task.data_termino)}</span>
+                <RenderDate dateType="inicio" dateValue={task.data_inicio} />
+                <RenderDate dateType="termino" dateValue={task.data_termino} />
                 
                 { verificarAtraso(task) && (
                     <span className="task-atrasada"><FaCircleInfo /> Em atraso </span>
@@ -62,35 +64,7 @@ const ItemTaskBoard = ({ task, maxAvatars = 3, onUpdate, onDelete, onStartTarefa
 
             <div className="task-footer">
                 <div className="task-avatars">
-                    {
-                        task.nomes_membros.slice(0, maxAvatars).map((membro, index) => (
-                            <Tooltip title={`${membro}`} key={index}>
-                                <Avatar
-                                    src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`}
-                                    style={{
-                                        backgroundColor: getRandomColor(),
-                                        zIndex: task.nomes_membros.length + index,
-                                        marginLeft: index > 0 ? -10 : 0
-                                    }}
-                                >
-                                    {membro[0].toUpperCase()}
-                                </Avatar>
-                            </Tooltip>
-                        ))
-                    }
-                    {
-                        (task.nomes_membros.length - maxAvatars) > 0 && 
-                            <Avatar
-                                
-                                style={{
-                                    backgroundColor: getRandomColor(),
-                                    zIndex: task.nomes_membros.length * 2,
-                                    marginLeft: -10,
-                                }}
-                            >
-                                {`+${(task.nomes_membros.length - maxAvatars)}`}
-                            </Avatar>
-                    }
+                    <RenderMembers maxAvatars={3} membros={task.membros_info} quantMembros={(task.membros_info).length} />
                 </div>
 
                 <div className="task-actions">

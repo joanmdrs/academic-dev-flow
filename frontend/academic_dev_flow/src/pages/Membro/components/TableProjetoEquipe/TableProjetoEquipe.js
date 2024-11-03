@@ -1,6 +1,8 @@
-import { Button, Empty, Space, Table } from "antd";
+import { Avatar, Empty, Space, Table } from "antd";
 import React from "react";
 import RenderMembers from "../../../../components/RenderMembers/RenderMembers";
+import { getRandomColor } from "../../../../services/utils";
+import { FaUsers } from "react-icons/fa";
 
 const TableProjetoEquipe = ({data, onOpen}) => {
 
@@ -11,7 +13,16 @@ const TableProjetoEquipe = ({data, onOpen}) => {
             key: 'nome_projeto',
             render: (_, record) => (
                 <Space>
-                    {record.nome_projeto}
+                    <Avatar style={{backgroundColor: `${getRandomColor()}`}} icon={<FaUsers />} />
+                    <h4 
+                        onClick={() => onOpen(record)}
+                        style={{
+                            fontFamily: 'Poppins, sans-serif', 
+                            color: 'var(--primary-color)', 
+                            fontWeight: '400', 
+                            cursor: 'pointer'
+                        }}> 
+                        {record.dados_projeto.nome }</h4>
                 </Space>
             )
         }, 
@@ -27,16 +38,6 @@ const TableProjetoEquipe = ({data, onOpen}) => {
                 />
             )
         },
-        {
-            title: '',
-            dataIndex: 'action',
-            key: 'action',
-            render: (_, record) => (
-                <Space> 
-                    <Button onClick={() => onOpen(record)} type="primary"> Abrir </Button>
-                </Space>
-            )
-        }
     ]
 
     return (
@@ -47,6 +48,7 @@ const TableProjetoEquipe = ({data, onOpen}) => {
                     dataSource={data}
                     columns={columnsTable}
                     rowKey="id"
+                    style={{boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px', padding: '20px'}}
                 />
                 
             ) : (

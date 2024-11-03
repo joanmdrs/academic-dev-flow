@@ -1,7 +1,7 @@
-import { Button, Modal, Space, Spin, Tabs } from "antd";
+import { Button, Input, Modal, Space, Spin, Tabs } from "antd";
 import Item from "antd/es/list/Item";
 import React, { useEffect, useState } from "react";
-import { FaPlus, FaTasks } from "react-icons/fa";
+import { FaCalendar, FaListUl, FaPlus, FaTasks } from "react-icons/fa";
 import TableTask from "../../components/TableTask/TableTask";
 import TaskBoard from "../../components/TaskBoard/TaskBoard";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
@@ -16,9 +16,10 @@ import { createIssue, updateIssue } from "../../../../services/githubIntegration
 import FormFiltrarTarefas from "../../components/FormFiltrarTarefas/FormFiltrarTarefas";
 import { buscarMembroProjetoPeloIdMembroEPeloIdProjeto } from "../../../../services/membroProjetoService";
 import { handleError } from "../../../../services/utils";
-import { GoColumns } from "react-icons/go";
-import { GoTable } from "react-icons/go";
-import { GoCalendar } from "react-icons/go";
+import { TbLayoutCardsFilled } from "react-icons/tb";
+import { LuCalendarDays } from "react-icons/lu";
+
+const {Search} = Input 
 
 const StyleSpin = {
     position: 'fixed', 
@@ -33,7 +34,7 @@ const StyleSpin = {
     alignItems: 'center'
 };
 
-const MinhasTarefas = () => {
+const Tarefas = () => {
 
     const [isFormVisible, setIsFormVisible] = useState(false)   
     const [isTabsVisible, setIsTabsVisible] = useState(true)
@@ -62,6 +63,18 @@ const MinhasTarefas = () => {
         setDadosTarefa(null)
         await handleBuscarTarefasDosProjetosDoMembro()
 
+    }
+
+    const handleFiltrarTarefaPeloNome = async (value) => {
+        if (value){
+            const response = await listarTarefasDosProjetosDoMembro(usuario.id);
+            const tarefasFiltradas = response.data.filter(tarefa =>
+                tarefa.nome.toLowerCase().includes(value.toLowerCase())
+            );
+            setTarefas(tarefasFiltradas)
+        } else {
+            await handleBuscarTarefasDosProjetosDoMembro()
+        }
     }
 
     const handleBuscarProjeto = async (id) => {
@@ -233,7 +246,7 @@ const MinhasTarefas = () => {
     }, [usuario])
 
     return (
-        <div className="bloco-principal"> 
+        <div className="global-div" style={{height: '100%'}}> 
             <div style={{
                 borderBottom: '1px solid #ddd',
                 display: 'flex',
@@ -241,13 +254,21 @@ const MinhasTarefas = () => {
                 alignItems: 'baseline',
                 padding: '20px'
             }}> 
-                <Space>
-                    <h3> TAREFAS </h3>
-                </Space>
+                <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
+                    <h2 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '600'}}> Tarefas </h2>
+                    <h4 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '400'}}> </h4>
+                </div>
 
-                <Space>
-                    <Button onClick={() => handleAdicionarTarefa()} type="primary" ghost icon={<FaPlus />}> Criar Tarefa </Button>
-                </Space>
+                <div>
+                    <Button
+                        size="large" 
+                        onClick={() => handleAdicionarTarefa()} 
+                        type="primary" 
+                        ghost 
+                        icon={<FaPlus />}> 
+                        Criar Tarefa 
+                    </Button>
+                </div>
 
             </div>
 
@@ -274,19 +295,27 @@ const MinhasTarefas = () => {
 
                     </React.Fragment>
                 )}
-
-            
-
             
                 { isTabsVisible && (
                     <Tabs
                         tabBarExtraContent={
-                            <FormFiltrarTarefas idMembro={usuario.id} onChange={handleFiltrarTarefas}/>
+                            <div style={{display: 'flex', gap: '20px'}}> 
+                                <Search
+                                    style={{width: '500px'}}
+                                    placeholder="pesquise pelo nome"
+                                    allowClear
+                                    enterButton="Pesquisar"
+                                    size="middle"
+                                    onSearch={handleFiltrarTarefaPeloNome}
+                                />
+                                <FormFiltrarTarefas idMembro={usuario.id} onChange={handleFiltrarTarefas}/>
+                            </div>
+                            
                         }
                         size="middle"
                         indicator={{align: "center"}}
                     > 
-                        <Item tab={<span><GoColumns /> Quadro</span>} key="1" >
+                        <Item tab={<span><TbLayoutCardsFilled /> Quadro</span>} key="1" >
                             <TaskBoard 
                                 tarefas={tarefas} 
                                 onCreate={handleAdicionarTarefa}
@@ -296,7 +325,7 @@ const MinhasTarefas = () => {
                                 onStartTarefa={handleIniciarContagemTempoTarefa}
                             />
                         </Item>
-                        <Item tab={<span> <GoTable /> Tabela </span>} key="2" >
+                        <Item tab={<span> <FaListUl /> Tabela </span>} key="2" >
                             <TableTask 
                                 tarefas={tarefas} 
                                 onUpdate={handleAtualizarTarefa} 
@@ -305,7 +334,7 @@ const MinhasTarefas = () => {
                                 onStartTarefa={handleIniciarContagemTempoTarefa}
                             />
                         </Item>
-                        <Item tab={<span> <GoCalendar /> Calendário </span>} key="3" >
+                        <Item tab={<span> <LuCalendarDays /> Calendário </span>} key="3" >
                            {/* <CalendarTask tarefas={tarefas} /> */}
                         </Item>
                     </Tabs>
@@ -318,4 +347,4 @@ const MinhasTarefas = () => {
     )
 }
 
-export default MinhasTarefas
+export default Tarefas

@@ -188,7 +188,7 @@ const Projetos = () => {
                 <div>
                     <Search
                         style={{width: '500px'}}
-                        placeholder="pesquise pelo projeto"
+                        placeholder="pesquise pelo nome"
                         allowClear
                         enterButton="Pesquisar"
                         size="middle"
@@ -198,10 +198,10 @@ const Projetos = () => {
 
                 <div> 
                     <Select 
-                        style={{width: '180px'}}
                         options={optionsStatus}
                         allowClear
-                        placeholder="Selecione o status"
+                        placeholder="Status"
+                        popupMatchSelectWidth={false}
                         onChange={(value) => handleFiltrarProjetoPorStatus(value)}
                 
                     /> 

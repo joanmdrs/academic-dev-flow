@@ -9,7 +9,6 @@ import { FaGithub } from "react-icons/fa6";
 import { MdOutlinePeopleAlt, MdOutlineSpaceDashboard } from "react-icons/md";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import Loading from "../../../../components/Loading/Loading";
-import ScreenCronogramaIteracoes from "../../../Iteracao/screens/CronogramaIteracoes.js";
 import ScreenQuadroTarefas from "../../../Tarefa/screens/QuadroTarefas/index.js";
 import ScreenPainelArtefatos from "../../../Artefato/screens/PainelArtefatos/index.js";
 import ScreenPainelGihtub from "../../../GitHub/screens/PainelGithub/index.js";
@@ -90,7 +89,7 @@ const VisualizarProjeto = () => {
                             icon={<LuCalendarClock />} 
                             style={{backgroundColor: '#F0F2F5', padding: '3%'}}
                         >
-                            <ScreenCronogramaIteracoes />
+                            
                         </TabPane>
 
                         <TabPane 

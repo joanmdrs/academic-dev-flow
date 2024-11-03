@@ -15,6 +15,7 @@ const ScreenCommits = ({grupo}) => {
         { title: 'Commits', path: ``}
     ];
 
+    
     return (
         <React.Fragment>
             { grupo === 'aluno' && <MenuAluno />}

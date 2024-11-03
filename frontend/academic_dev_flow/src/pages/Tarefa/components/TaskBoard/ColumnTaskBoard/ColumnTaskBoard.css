@@ -3,6 +3,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 100%;
 }
 
 .column-task-board-header {
@@ -30,6 +31,7 @@
     height: 40px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     cursor: pointer;
+
 }
 
 .column-task-board-task-list {
@@ -39,4 +41,5 @@
     flex-direction: column;
     align-items: center;
     gap: 10px; /* Espaçamento entre os itens */
+
 }

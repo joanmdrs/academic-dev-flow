@@ -1,15 +1,15 @@
-import { Avatar, Empty, Space, Table, Tooltip } from "antd";
+import { Empty, Space, Table, Tooltip } from "antd";
 import React from "react";
-import { FaRegClock } from "react-icons/fa";
 import { GoCommentDiscussion } from "react-icons/go";
-import { formatDate, getRandomColor } from "../../../../services/utils";
 import { IoMdCreate, IoMdTrash } from "react-icons/io";
 import { IoDocumentText } from "react-icons/io5";
 import { optionsStatusArtefatos } from "../../../../services/optionsStatus";
+import RenderMembers from "../../../../components/RenderMembers/RenderMembers";
+import RenderDate from "../../../../components/RenderDate/RenderDate";
+import RenderStatus from "../../../../components/RenderStatus/RenderStatus";
 
-const TableArtifacts = ({artefatos, onUpdate, onDelete}) => {
+const TableArtifacts = ({data, onUpdate, onDelete}) => {
     
-    const maxAvatars = 3
     const columns = [
         {
             title: 'Nome',
@@ -24,44 +24,11 @@ const TableArtifacts = ({artefatos, onUpdate, onDelete}) => {
         }, 
         {
             title: 'Membros',
-            dataIndex: 'nomes_membros',
-            key: 'nomes_membros',
+            dataIndex: 'membros',
+            key: 'membros',
             align: 'center',
             render: (_, record) => (
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                    <div style={{ display: 'flex', position: 'relative', marginLeft: -8 }}>
-                        {
-                            record.nomes_membros.slice(0, maxAvatars).map((membro, index) => (
-                                <Tooltip title={`${membro}`}>
-                                    <Avatar
-                                        key={index}
-                                        style={{
-                                            backgroundColor: getRandomColor(),
-                                            zIndex: record.quantidade_membros - index,
-                                            marginLeft: index > 0 ? -10 : 0, // Sobreposição
-                                        }}
-                                    >
-                                        {membro[0].toUpperCase()} {/* Mostra a primeira letra do nome */}
-                                    </Avatar>
-                                </Tooltip>
-                                
-                            ))
-                        }
-                        {
-                           ( record.quantidade_membros - maxAvatars ) > 0 && 
-                                <Avatar
-                                    key={record.quantidade_membros - maxAvatars}
-                                    style={{
-                                        backgroundColor: getRandomColor(),
-                                        zIndex: (record.quantidade_membros - maxAvatars),
-                                        marginLeft: (record.quantidade_membros - maxAvatars) > 0 ? -10 : 0, // Sobreposição
-                                    }}
-                                >
-                                    { `+${(record.quantidade_membros - maxAvatars)}`}
-                                </Avatar>
-                        }
-                    </div>
-                </div>
+                <RenderMembers membros={record.membros_info} maxAvatars={3} quantMembros={(record.membros_info).length} />
             )
         },
         {
@@ -70,7 +37,7 @@ const TableArtifacts = ({artefatos, onUpdate, onDelete}) => {
             key: 'data_criacao',
             align: 'center',
             render: (_, record) => (
-                    <span className="task-start-date"><FaRegClock /> {formatDate(record.data_criacao)}</span>
+                <RenderDate dateType="inicio" dateValue={record.data_criacao} />
                     
             )
         },
@@ -80,32 +47,17 @@ const TableArtifacts = ({artefatos, onUpdate, onDelete}) => {
             key: 'data_termino',
             align: 'center',
             render: (_, record) => (
-                <span className="task-end-date"><FaRegClock /> {formatDate(record.data_termino)}</span>
+                <RenderDate dateType="termino" dateValue={record.data_termino} />
             )
         },
         {
             title: 'Status', 
             dataIndex: 'status', 
             key: 'status',
-            render: (_, record) => {
-                const statusOption = optionsStatusArtefatos.find(option => option.value === record.status);
-                return (
-                    <Space style={{
-                        width: '100px',         
-                        height: '30px',  
-                        fontSize: '10px',
-                        fontWeight: 'bold',
-                        color: '#FFFFFF', 
-                        backgroundColor: `${statusOption.color}`,
-                        padding: '10px',       
-                        borderRadius: '5px',
-                        textTransform: 'uppercase',
-                        textAlign: 'center',    
-                    }}> 
-                        {statusOption.label} 
-                    </Space>
-                )
-            }
+            align: 'center',
+            render: (_, record) => (
+                <RenderStatus optionsStatus={optionsStatusArtefatos} propStatus={record.status} />
+            )
         },
         {
             title: 'Comentários',
@@ -139,11 +91,12 @@ const TableArtifacts = ({artefatos, onUpdate, onDelete}) => {
     return (
         <React.Fragment>
             {
-            artefatos.length !== 0 ? (
+            data.length !== 0 ? (
                     <Table
-                        dataSource={artefatos}
+                        dataSource={data}
                         columns={columns}
                         rowKey="id"
+                        style={{boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px', padding: '20px'}}
                     />
 
                 

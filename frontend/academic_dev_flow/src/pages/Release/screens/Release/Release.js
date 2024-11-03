@@ -127,7 +127,7 @@ const Release = () => {
 
 
     return (
-        <div style={{height: '100vh', backgroundColor: "#FFFFFF"}} className="bloco-principal"> 
+        <div style={{height: '100%'}} className="global-div"> 
             <div style={{
                 borderBottom: '1px solid #ddd',
                 display: 'flex',
@@ -137,11 +137,16 @@ const Release = () => {
                 backgroundColor: '#FFFFFF'
             }}> 
                 <Space>
-                    <h3> RELEASES </h3>
+                    <h2 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '600'}}> Releases </h2>
                 </Space>
 
                 <Space>
-                    <Button onClick={handleAdicionarRelease} type="primary" ghost icon={<FaPlus />}> Criar Release </Button>
+                    <Button 
+                        size="large"
+                        onClick={handleAdicionarRelease} 
+                        type="primary" 
+                        ghost 
+                        icon={<FaPlus />}> Criar Release </Button>
                 </Space>
 
             </div>
@@ -152,13 +157,10 @@ const Release = () => {
                     justifyContent: 'space-between',
                     alignItems: 'baseline',
                     padding: '20px',
-                    border: '1px solid #DDD',
+                    borderBottom: '1px solid #DDD',
                     backgroundColor: '#FFFFFF'
                 }}>
                     <Flex horizontal gap="middle">
-                        <Space>
-                            <span style={{color: '#BDBDBD'}}>  <FaFilter/> Filtros </span>
-                        </Space>
                         <Space>
                             <FormFilterReleases onChange={handleFiltrarReleases} idMembro={usuario.id}/>
                         </Space>

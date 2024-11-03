@@ -2,17 +2,17 @@ import React from "react";
 import {Layout} from 'antd'
 import MyHeader from "../../../../components/Header/Header";
 import MenuAluno from "../../../../components/Menus/MenuAluno/MenuAluno";
+import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
+import { ProviderArtefato } from "../../context/ContextoArtefato";
 import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfessor";
-import MinhasTarefas from "./MinhasTarefas";
-import { ProviderTarefa } from "../../context/ContextoTarefa";
-
+import Artefatos from "./Artefatos";
 const {Content} = Layout
 
-const ScreenMinhasTarefas = ({grupo}) => {
+const ScreenArtefatos = ({grupo}) => {
 
     const breadcrumbRoutes = [
         { title: 'Home', path: `/${grupo}/home` },
-        { title: 'Tarefas', path: `/${grupo}/tarefas` }, 
+        { title: 'Artefatos', path: `/${grupo}/artefatos` },
     ];
 
     return (
@@ -21,17 +21,16 @@ const ScreenMinhasTarefas = ({grupo}) => {
             { grupo === 'professor' && <MenuProfessor />}
             <Layout>
                 <MyHeader/>
-                
                 {/* <CustomBreadcrumb routes={breadcrumbRoutes} /> */}
-
                 <Content>
-                    <ProviderTarefa>
-                        <MinhasTarefas />
-                    </ProviderTarefa>
+                    <ProviderArtefato>
+                        {/* <MeusArtefatos /> */}
+                        <Artefatos />
+                    </ProviderArtefato>
                 </Content>
             </Layout>
         </React.Fragment>   
     )
 }
 
-export default ScreenMinhasTarefas
+export default ScreenArtefatos

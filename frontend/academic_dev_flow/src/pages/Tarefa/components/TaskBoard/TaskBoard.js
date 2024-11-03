@@ -16,7 +16,7 @@ const TaskBoard = ({ tarefas, onCreate, onUpdate, onDelete, onStartTarefa, onPau
                         {/* Coluna de To-Do */}
                         <ColumnTaskBoard 
                             tarefas={tarefasToDo} 
-                            title={'To-Do'} 
+                            title={'To Do'} 
                             onCreate={onCreate}
                             onUpdate={onUpdate} 
                             onDelete={onDelete} 
@@ -28,7 +28,7 @@ const TaskBoard = ({ tarefas, onCreate, onUpdate, onDelete, onStartTarefa, onPau
                         {/* Coluna de Doing */}
                         <ColumnTaskBoard 
                             tarefas={tarefasDoing} 
-                            title={'Doing'} 
+                            title={'In Progress'} 
                             onCreate={onCreate} 
                             onUpdate={onUpdate} 
                             onDelete={onDelete} 

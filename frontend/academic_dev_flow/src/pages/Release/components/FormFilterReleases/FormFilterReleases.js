@@ -52,6 +52,7 @@ const FormFilterReleases = ({idMembro, onChange}) => {
                         optionFilterProp="children"
                         options={optionsProjetos}
                         filterOption={filterOption}
+                        popupMatchSelectWidth={false}
                     />
                 </Form.Item>
         </Form>

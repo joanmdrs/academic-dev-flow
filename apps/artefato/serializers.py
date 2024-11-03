@@ -1,20 +1,13 @@
 from rest_framework import serializers
 from .models import Artefato
+from apps.membro.models import Membro
+from apps.membro.serializers import MembroSerializer
 from apps.membro_projeto.models import MembroProjeto
-
-class MembroSerializer(serializers.ModelSerializer):
-    nome_membro = serializers.CharField(source='membro.nome')  # Acessa o nome do Membro
-    grupo_membro = serializers.CharField(source='membro.grupo.name')  # Acessa o grupo do Membro (se existir)
-
-    class Meta:
-        model = MembroProjeto
-        fields = ['id', 'nome_membro', 'grupo_membro'] 
 
 class ArtefatoSerializer(serializers.ModelSerializer):
     nome_iteracao = serializers.SerializerMethodField()
     nome_projeto = serializers.SerializerMethodField()
     membros_info = serializers.SerializerMethodField()
-    nomes_membros = serializers.SerializerMethodField()
     ids_membros = serializers.SerializerMethodField()
     
     class Meta:
@@ -37,7 +30,6 @@ class ArtefatoSerializer(serializers.ModelSerializer):
             'membros',
             'membros_info',
             'ids_membros',
-            'nomes_membros',
         ]
         
     def get_nome_projeto(self, obj):
@@ -47,16 +39,14 @@ class ArtefatoSerializer(serializers.ModelSerializer):
         return obj.iteracao.nome if obj.iteracao else None
 
     def get_membros_info(self, obj):
-        membros = obj.membros.all()
-        return MembroSerializer(membros, many=True).data
+        membros_projeto = obj.membros.all()
+        ids_membros = [membro.membro.id for membro in membros_projeto]
+        membros = Membro.objects.filter(id__in=ids_membros)
+        serializer = MembroSerializer(membros, many=True)
+        return serializer.data
     
     def get_ids_membros(self, obj):
         membros = obj.membros.all()
         ids_membros = [membro.membro.id for membro in membros]
         return ids_membros
-    
-    def get_nomes_membros(self, obj):
-        membros = obj.membros.all()
-        nomes_membros = [membro.membro.nome for membro in membros]
-        return nomes_membros
         

@@ -1,24 +1,36 @@
-import { Avatar, Button, Empty, Space, Table, Tooltip } from "antd";
-import React from "react";
+import { Button, Empty, Space, Table, Tooltip } from "antd";
+import React, { useEffect, useState } from "react";
 import { IoMdCreate, IoMdTrash } from "react-icons/io";
-import { formatarTempo, formatDate, getRandomColor } from "../../../../services/utils";
-import { FaPause, FaPlay, FaRegClock } from "react-icons/fa";
+import { formatarTempo, handleError } from "../../../../services/utils";
+import { FaPause, FaPlay } from "react-icons/fa";
 import { GoCommentDiscussion } from "react-icons/go";
+import RenderMembers from "../../../../components/RenderMembers/RenderMembers";
+import RenderDate from "../../../../components/RenderDate/RenderDate";
+import RenderStatus from "../../../../components/RenderStatus/RenderStatus";
+import { optionsStatusTarefas } from "../../../../services/optionsStatus";
+import { listarCategoriaTarefa } from "../../../../services/categoriaTarefaService";
+import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
+import OptionWithColor from "../../../../components/OptionStyle/OptionStyle";
 
 const TableTask = ({tarefas, onUpdate, onDelete, onStartTarefa, onPauseTarefa}) => {
+    
+    const [optionsCategorias, setOptionsCategorias] = useState([]);
 
-    const maxAvatars = 3
 
     const columnsTable = [
         {
             title: 'Tarefa',
             dataIndex: 'nome',
-            key: 'nome',
+            key: 'nome'
         },
         {
             title: 'Categoria',
             dataIndex: 'categoria_tarefa',
             key: 'categoria_tarefa',
+            filters: optionsCategorias.map(option => ({
+                text: option.label,
+                value: option.value
+            })),
             render: (_, record) => (
                 <span style={{
                     fontSize: '10px',
@@ -38,40 +50,25 @@ const TableTask = ({tarefas, onUpdate, onDelete, onStartTarefa, onPauseTarefa}) 
             key: 'nomes_membros',
             align: 'center',
             render: (_, record) => (
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                    <div style={{ display: 'flex', position: 'relative', marginLeft: -8 }}>
-                        {
-                            record.nomes_membros.slice(0, maxAvatars).map((membro, index) => (
-                                <Tooltip title={`${membro}`}>
-                                    <Avatar
-                                        key={index}
-                                        style={{
-                                            backgroundColor: getRandomColor(),
-                                            zIndex: record.quantidade_membros - index,
-                                            marginLeft: index > 0 ? -10 : 0, // Sobreposição
-                                        }}
-                                    >
-                                        {membro[0].toUpperCase()} {/* Mostra a primeira letra do nome */}
-                                    </Avatar>
-                                </Tooltip>
-                                
-                            ))
-                        }
-                        {
-                           ( record.quantidade_membros - maxAvatars ) > 0 && 
-                                <Avatar
-                                    key={record.quantidade_membros - maxAvatars}
-                                    style={{
-                                        backgroundColor: getRandomColor(),
-                                        zIndex: (record.quantidade_membros - maxAvatars),
-                                        marginLeft: (record.quantidade_membros - maxAvatars) > 0 ? -10 : 0, // Sobreposição
-                                    }}
-                                >
-                                    { `+${(record.quantidade_membros - maxAvatars)}`}
-                                </Avatar>
-                        }
-                    </div>
-                </div>
+                <RenderMembers 
+                    maxAvatars={3} 
+                    membros={record.membros_info} 
+                    quantMembros={(record.membros_info).length} 
+                />
+            )
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+            align: 'center',
+            filters: optionsStatusTarefas.map(option => ({
+                text: option.label,
+                value: option.value
+            })),
+            onFilter: (value, record) => record.status === value,
+            render: (_, record) => (
+                <RenderStatus optionsStatus={optionsStatusTarefas} propStatus={record.status} />
             )
         },
         {
@@ -80,8 +77,7 @@ const TableTask = ({tarefas, onUpdate, onDelete, onStartTarefa, onPauseTarefa}) 
             key: 'data_inicio',
             align: 'center',
             render: (_, record) => (
-                    <span className="task-start-date"><FaRegClock /> {formatDate(record.data_inicio)}</span>
-                    
+                <RenderDate dateType="inicio" dateValue={record.data_inicio} />
             )
         },
         {
@@ -90,18 +86,7 @@ const TableTask = ({tarefas, onUpdate, onDelete, onStartTarefa, onPauseTarefa}) 
             key: 'data_termino',
             align: 'center',
             render: (_, record) => (
-                <span className="task-end-date"><FaRegClock /> {formatDate(record.data_termino)}</span>
-            )
-        },
-        {
-            title: 'Comentários',
-            dataIndex: 'comentarios_tarefa',
-            key: 'comentarios_tarefa',
-            align: 'center',
-            render: (_, record) => (
-                <Space>
-                     <a><GoCommentDiscussion size="20px" /></a>
-                </Space>
+                <RenderDate dateType="termino" dateValue={record.data_termino} />
             )
         },
         {
@@ -165,6 +150,10 @@ const TableTask = ({tarefas, onUpdate, onDelete, onStartTarefa, onPauseTarefa}) 
             key: 'actions',
             render: (_, record) => (
                 <Space>
+                    <Tooltip title="Comentários">
+                        <a><GoCommentDiscussion size="20px" /></a>
+                    </Tooltip>
+                    
                     <Tooltip title="Editar">
                         <a onClick={() => onUpdate(record)}><IoMdCreate /></a>
                     </Tooltip>
@@ -175,6 +164,25 @@ const TableTask = ({tarefas, onUpdate, onDelete, onStartTarefa, onPauseTarefa}) 
             )
         }
     ]
+
+    useEffect(() => {
+        const handleGetCategorias = async () => {
+            try {
+                const response = await listarCategoriaTarefa();
+                if (!response.error && response.data) {
+                    const resultados = response.data.map((item) => ({
+                        value: item.id,
+                        label: item.nome
+                    }));
+                    setOptionsCategorias(resultados);
+                }
+            } catch (error) {
+                return handleError(error, ERROR_MESSAGE_ON_SEARCHING);
+            }
+        };
+
+        handleGetCategorias()
+    }, [])
 
     return (
         <React.Fragment>
