@@ -2,7 +2,7 @@ import React from "react";
 import { Row, Col, Empty } from "antd";
 import ItemGridArtefato from "./ItemGridArtefato/ItemGridArtefato";
 
-const GridArtefatos = ({data, onUpdate, onDelete}) => {
+const GridArtefatos = ({data, onUpdate, onDelete, onShowComments}) => {
 
     return (
         <div>
@@ -11,7 +11,12 @@ const GridArtefatos = ({data, onUpdate, onDelete}) => {
                 data.length !== 0 ? (
                     <div style={{display: 'flex', gap: '20px', padding: '20px'}}> 
                         {data.map((item, index) => (
-                            <ItemGridArtefato item={item} onUpdate={onUpdate} onDelete={onDelete} />
+                            <ItemGridArtefato 
+                                item={item} 
+                                onUpdate={onUpdate} 
+                                onDelete={onDelete} 
+                                onShowComments={onShowComments} 
+                            />
                         ))} 
                     </div>
                    

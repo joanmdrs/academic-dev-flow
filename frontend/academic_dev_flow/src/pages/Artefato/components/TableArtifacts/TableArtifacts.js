@@ -8,7 +8,7 @@ import RenderMembers from "../../../../components/RenderMembers/RenderMembers";
 import RenderDate from "../../../../components/RenderDate/RenderDate";
 import RenderStatus from "../../../../components/RenderStatus/RenderStatus";
 
-const TableArtifacts = ({data, onUpdate, onDelete}) => {
+const TableArtifacts = ({data, onUpdate, onDelete, onShowComments}) => {
     
     const columns = [
         {
@@ -66,7 +66,7 @@ const TableArtifacts = ({data, onUpdate, onDelete}) => {
             align: 'center',
             render: (_, record) => (
                 <Space>
-                     <a><GoCommentDiscussion size="20px" /></a>
+                     <a onClick={() => onShowComments(record)}><GoCommentDiscussion size="20px" /></a>
                 </Space>
             )
         },

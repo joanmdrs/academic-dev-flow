@@ -18,6 +18,9 @@ import { buscarMembroProjetoPeloIdMembroEPeloIdProjeto } from "../../../../servi
 import { handleError } from "../../../../services/utils";
 import { TbLayoutCardsFilled } from "react-icons/tb";
 import { LuCalendarDays } from "react-icons/lu";
+import FormComentario from "../../../Comentario/components/FormComentario/FormComentario";
+import DrawerComments from "../DrawerComments/DrawerComments";
+import ScreenDrawerComments from "../DrawerComments";
 
 const {Search} = Input 
 
@@ -42,6 +45,20 @@ const Tarefas = () => {
     const {dadosTarefa, setDadosTarefa, tarefas, setTarefas, acaoForm, setAcaoForm} = useContextoTarefa()
     const {usuario} = useContextoGlobalUser()
     const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
+    const [isDrawerCommentsVisible, setIsDrawerCommentsVisible] = useState(false)
+
+    const handleShowDrawerComments = () => {
+        setIsDrawerCommentsVisible(true)
+    }
+
+    const handleCloseDrawerComments = () => {
+        setIsDrawerCommentsVisible(false)
+    }
+
+    const handleExibirComentarios = (record) => {
+        handleShowDrawerComments()
+        setDadosTarefa(record)
+    }
 
     const handleBuscarTarefasDosProjetosDoMembro = async () => {
         const response = await listarTarefasDosProjetosDoMembro(usuario.id)
@@ -247,6 +264,12 @@ const Tarefas = () => {
 
     return (
         <div className="global-div" style={{height: '100%'}}> 
+
+            {isDrawerCommentsVisible && <ScreenDrawerComments 
+                isDrawerVisible={isDrawerCommentsVisible} 
+                closeDrawer={handleCloseDrawerComments} 
+            />}
+            
             <div style={{
                 borderBottom: '1px solid #ddd',
                 display: 'flex',
@@ -323,6 +346,7 @@ const Tarefas = () => {
                                 onDelete={handleExcluirTarefa}
                                 onPauseTarefa={handlePararContagemTempoTarefa}
                                 onStartTarefa={handleIniciarContagemTempoTarefa}
+                                onShowComments={handleExibirComentarios}
                             />
                         </Item>
                         <Item tab={<span> <FaListUl /> Tabela </span>} key="2" >
@@ -332,6 +356,7 @@ const Tarefas = () => {
                                 onDelete={handleExcluirTarefa}
                                 onPauseTarefa={handlePararContagemTempoTarefa}
                                 onStartTarefa={handleIniciarContagemTempoTarefa}
+                                onShowComments={handleExibirComentarios}
                             />
                         </Item>
                         <Item tab={<span> <LuCalendarDays /> Calendário </span>} key="3" >

@@ -10,36 +10,36 @@ export const criarComentarioTarefa = async (dados) => {
     }
 }
 
-export const buscarComentarioTarefaPeloId = async (id) => {
+export const buscarComentarioTarefaPeloId = async (idComentario) => {
     try {
-        const response = await api.get(`/comentario/tarefa/buscar/${encodeURIComponent(id)}/`)
+        const response = await api.get(`/comentario/tarefa/buscar/`, {params: {id_comentario: idComentario}})
         return response
     } catch (error) {
         return handleError(error, 'Falha ao tentar buscar os dados, contate o suporte!')
     }
 }
 
-export const atualizarComentarioTarefa = async (id, dados) => {
+export const atualizarComentarioTarefa = async (idComentario, dados) => {
     try {
-        const response = await api.patch(`/comentario/tarefa/atualizar/${encodeURIComponent(id)}/`, dados)
+        const response = await api.patch(`/comentario/tarefa/atualizar/`, dados, {params: {id_comentario: idComentario}})
         return handleSuccess(response, 'Comentário atualizado com sucesso!')
     } catch (error) {
         return handleError(error, 'Falha ao tentar atualizar o comentário, contate o suporte!')        
     }
 }
 
-export const excluirComentarioTarefa = async (id) => {
+export const excluirComentarioTarefa = async (idComentario) => {
     try {
-        const response = await api.delete(`/comentario/tarefa/excluir/${encodeURIComponent(id)}/`)
+        const response = await api.delete(`/comentario/tarefa/excluir/`, {params: {id_comentario: idComentario}})
         return handleSuccess(response, 'Comentário excluído com sucesso!')
     } catch (error) {
         return handleError(error, 'Falha ao tentar excluir o comentário, contate o suporte!')
     }
 }
 
-export const listarComentariosPorTarefa = async (id) => {
+export const listarComentariosPorTarefa = async (idTarefa) => {
     try {
-        const response = await api.get(`/comentario/tarefa/listar/${encodeURIComponent(id)}/`)
+        const response = await api.get(`/comentario/tarefa/listar/`, {params: {id_tarefa: idTarefa}})
         return response
     } catch (error) {
         return handleError(error, 'Falha ao tentar buscar os dados, contate o suporte!')
@@ -55,36 +55,36 @@ export const criarComentarioArtefato = async (dados) => {
     }
 }
 
-export const buscarComentarioArtefatoPeloId = async (id) => {
+export const buscarComentarioArtefatoPeloId = async (idComentario) => {
     try {
-        const response = await api.get(`/comentario/artefato/buscar/${encodeURIComponent(id)}/`)
+        const response = await api.get(`/comentario/artefato/buscar/`, {params: {id_comentario: idComentario}})
         return response
     } catch (error) {
         return handleError(error, 'Falha ao tentar buscar os dados, contate o suporte!')
     }
 }
 
-export const atualizarComentarioArtefato = async (id, dados) => {
+export const atualizarComentarioArtefato = async (idComentario, dados) => {
     try {
-        const response = await api.patch(`/comentario/artefato/atualizar/${encodeURIComponent(id)}/`, dados)
+        const response = await api.patch(`/comentario/artefato/atualizar/`, dados, {params: {id_comentario: idComentario}})
         return handleSuccess(response, 'Comentário atualizado com sucesso!')
     } catch (error) {
         return handleError(error, 'Falha ao tentar atualizar o comentário, contate o suporte!')        
     }
 }
 
-export const excluirComentarioArtefato = async (id) => {
+export const excluirComentarioArtefato = async (idComentario) => {
     try {
-        const response = await api.delete(`/comentario/artefato/excluir/${encodeURIComponent(id)}/`)
+        const response = await api.delete(`/comentario/artefato/excluir/`, {params: {id_comentario: idComentario}})
         return handleSuccess(response, 'Comentário excluído com sucesso!')
     } catch (error) {
         return handleError(error, 'Falha ao tentar excluir o comentário, contate o suporte!')
     }
 }
 
-export const listarComentariosPorArtefato = async (id) => {
+export const listarComentariosPorArtefato = async (idArtefato) => {
     try {
-        const response = await api.get(`/comentario/artefato/listar/${encodeURIComponent(id)}/`)
+        const response = await api.get(`/comentario/artefato/listar/`, {params: {id_artefato: idArtefato}})
         return response
     } catch (error) {
         return handleError(error, 'Falha ao tentar buscar os dados, contate o suporte!')

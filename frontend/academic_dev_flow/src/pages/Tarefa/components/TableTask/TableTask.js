@@ -12,7 +12,7 @@ import { listarCategoriaTarefa } from "../../../../services/categoriaTarefaServi
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 import OptionWithColor from "../../../../components/OptionStyle/OptionStyle";
 
-const TableTask = ({tarefas, onUpdate, onDelete, onStartTarefa, onPauseTarefa}) => {
+const TableTask = ({tarefas, onUpdate, onDelete, onStartTarefa, onPauseTarefa, onShowComments}) => {
     
     const [optionsCategorias, setOptionsCategorias] = useState([]);
 
@@ -151,7 +151,7 @@ const TableTask = ({tarefas, onUpdate, onDelete, onStartTarefa, onPauseTarefa}) 
             render: (_, record) => (
                 <Space>
                     <Tooltip title="Comentários">
-                        <a><GoCommentDiscussion size="20px" /></a>
+                        <a onClick={() => onShowComments()}><GoCommentDiscussion size="20px" /></a>
                     </Tooltip>
                     
                     <Tooltip title="Editar">

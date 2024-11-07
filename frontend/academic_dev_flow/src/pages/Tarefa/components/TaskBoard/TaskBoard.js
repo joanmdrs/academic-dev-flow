@@ -2,7 +2,15 @@ import { Empty, Flex } from "antd";
 import React from "react";
 import ColumnTaskBoard from "./ColumnTaskBoard/ColumnTaskBoard";
 
-const TaskBoard = ({ tarefas, onCreate, onUpdate, onDelete, onStartTarefa, onPauseTarefa }) => {
+const TaskBoard = ({ 
+        tarefas, 
+        onCreate, 
+        onUpdate, 
+        onDelete, 
+        onStartTarefa, 
+        onPauseTarefa,
+        onShowComments
+}) => {
     // Filtra as tarefas com base no status
     const tarefasToDo = tarefas.filter(tarefa => tarefa.status === 'criada');
     const tarefasDoing = tarefas.filter(tarefa => tarefa.status === 'andamento');
@@ -22,6 +30,7 @@ const TaskBoard = ({ tarefas, onCreate, onUpdate, onDelete, onStartTarefa, onPau
                             onDelete={onDelete} 
                             onPauseTarefa={onPauseTarefa}
                             onStartTarefa={onStartTarefa}
+                            onShowComments={onShowComments}
                             
                         />
 
@@ -34,6 +43,7 @@ const TaskBoard = ({ tarefas, onCreate, onUpdate, onDelete, onStartTarefa, onPau
                             onDelete={onDelete} 
                             onPauseTarefa={onPauseTarefa}
                             onStartTarefa={onStartTarefa}
+                            onShowComments={onShowComments}
                         />
 
                         {/* Coluna de Done */}
@@ -45,6 +55,7 @@ const TaskBoard = ({ tarefas, onCreate, onUpdate, onDelete, onStartTarefa, onPau
                             onDelete={onDelete} 
                             onPauseTarefa={onPauseTarefa}
                             onStartTarefa={onStartTarefa}
+                            onShowComments={onShowComments}
                         />
                     </Flex>
                 ) : (

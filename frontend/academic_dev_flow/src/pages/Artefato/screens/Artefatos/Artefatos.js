@@ -18,6 +18,7 @@ import { NotificationManager } from "react-notifications";
 import { createContent, updateContent } from "../../../../services/githubIntegration";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProjeto";
+import DrawerComments from "../DrawerComments/DrawerComments";
 const {TabPane} = Tabs
 
 const StyleSpin = {
@@ -43,6 +44,20 @@ const Artefatos = () => {
     const [isGridVisible, setIsGridVisible] = useState(true)
     const [actionForm, setActionForm] = useState('create')
     const [isLoading, setIsLoading] = useState(false)
+    const [isDrawerCommentsVisible, setIsDrawerCommentsVisible] = useState(false)
+
+    const handleShowDrawerComments = () => {
+        setIsDrawerCommentsVisible(true)
+    }
+
+    const handleCloseDrawerComments = () => {
+        setIsDrawerCommentsVisible(false)
+    }
+
+    const handleExibirComentarios = (record) => {
+        handleShowDrawerComments()
+        setDadosArtefato(record)
+    }
 
     const handleBuscarArtefatosDosProjetosDoMembro = async () => {
         const response = await listarArtefatosDosProjetosDoMembro(usuario.id)
@@ -219,6 +234,12 @@ const Artefatos = () => {
     
     return (
         <div className="global-div" style={{height: '100%'}}> 
+
+            {isDrawerCommentsVisible && < DrawerComments
+                isDrawerVisible={isDrawerCommentsVisible} 
+                closeDrawer={handleCloseDrawerComments} 
+            />}
+
             <div style={{
                 borderBottom: '1px solid #ddd',
                 padding: '20px',
@@ -319,6 +340,7 @@ const Artefatos = () => {
                                             data={artefatos}
                                             onUpdate={handleAtualizarArtefato}
                                             onDelete={handleExcluirArtefato}
+                                            onShowComments={handleExibirComentarios}
                                         />
                                     </TabPane>
                                     <TabPane style={{padding: '20px'}} tab={<FaListUl />} key="2" >
@@ -326,6 +348,7 @@ const Artefatos = () => {
                                             data={artefatos}
                                             onUpdate={handleAtualizarArtefato}
                                             onDelete={handleExcluirArtefato}
+                                            onShowComments={handleExibirComentarios}
                                         />
                                     </TabPane>
                                     

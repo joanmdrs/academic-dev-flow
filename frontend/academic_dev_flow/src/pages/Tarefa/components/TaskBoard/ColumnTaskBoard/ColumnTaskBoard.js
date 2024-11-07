@@ -26,6 +26,7 @@ const ColumnTaskBoard = ({
     onDelete, 
     onStartTarefa, 
     onPauseTarefa, 
+    onShowComments
 }) => {
 
     return (
@@ -51,6 +52,7 @@ const ColumnTaskBoard = ({
                         onDelete={onDelete}
                         onStartTarefa={onStartTarefa}
                         onPauseTarefa={onPauseTarefa}
+                        onShowComments={onShowComments}
                     />
                 ))}
             </div>

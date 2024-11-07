@@ -1,7 +1,6 @@
 import { Button, Layout, Result } from "antd";
 import React, { useEffect, useState } from "react";
 import BotaoVoltar from "../../../../components/Botoes/BotaoVoltar/BotaoVoltar";
-import ScreenComentariosTarefa from "../../../Comentario/screens/ComentariosTarefa";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Collapse } from 'antd';
 import Loading from "../../../../components/Loading/Loading";
@@ -74,12 +73,7 @@ const VisualizarTarefa = () => {
             key: '1',
             label: 'Tarefa',
             children: <ExibirTarefa dadosProjeto={dadosProjeto} dadosTarefa={dadosTarefa} />
-        },
-        {
-            key: '2',
-            label: 'Comentários',
-            children: <ScreenComentariosTarefa />
-        },
+        }
     ];
 
     return (

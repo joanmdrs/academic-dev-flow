@@ -11,7 +11,6 @@ import Loading from "../../../../components/Loading/Loading";
 import ScreenGerencirPontuacao from "../../../Pontuacao/screens/GerenciarPontuacao";
 import { buscarArtefatoPeloId } from "../../../../services/artefatoService";
 import { useContextoArtefato } from "../../context/ContextoArtefato";
-import ScreenComentariosArtefato from "../../../Comentario/screens/ComentariosArtefato";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
@@ -128,9 +127,7 @@ const VisualizarArtefato = () => {
                     {currentPage === 'score' && (
                         <ScreenGerencirPontuacao />
                     )}
-                    {currentPage === 'comments' && (
-                        <ScreenComentariosArtefato />
-                    )}
+                   
                 </Content>
             </Layout>
         </Layout>

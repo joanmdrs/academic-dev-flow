@@ -4,7 +4,7 @@ from apps.tarefa.models import Tarefa
 from apps.artefato.models import Artefato
 
 class ComentarioBase(models.Model):
-    texto = models.TextField()
+    mensagem = models.TextField()
     data_hora = models.DateTimeField(auto_now_add=True)
     autor = models.ForeignKey(MembroProjeto, on_delete=models.CASCADE)
     comentario_pai = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='respostas')
@@ -20,7 +20,7 @@ class ComentarioBase(models.Model):
                 subarvore = cls.construir_arvore(comentarios, comentario)
                 arvore.append({
                     'id': comentario.id,
-                    'texto': comentario.texto,
+                    'mensagem': comentario.mensagem,
                     'data_hora': comentario.data_hora,
                     'autor': comentario.autor,
                     'respostas': subarvore

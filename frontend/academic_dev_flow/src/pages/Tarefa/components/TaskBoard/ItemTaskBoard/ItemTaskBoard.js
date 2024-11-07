@@ -15,7 +15,7 @@ function verificarAtraso(task) {
     return tarefaAtrasada ? true : false;
 }
 
-const ItemTaskBoard = ({ task, maxAvatars = 3, onUpdate, onDelete, onStartTarefa, onPauseTarefa}) => {
+const ItemTaskBoard = ({ task, onUpdate, onDelete, onStartTarefa, onPauseTarefa, onShowComments}) => {
 
     return (
         <div className="task-container">
@@ -78,7 +78,7 @@ const ItemTaskBoard = ({ task, maxAvatars = 3, onUpdate, onDelete, onStartTarefa
                             <a onClick={() => onPauseTarefa(task)}><FaPause size="20px" /></a>
                         </Tooltip>
                     )}
-                    <a><GoCommentDiscussion size="20px" /></a>
+                    <a onClick={() => onShowComments(task)}><GoCommentDiscussion size="20px" /></a>
                 </div>
             </div>
         </div>

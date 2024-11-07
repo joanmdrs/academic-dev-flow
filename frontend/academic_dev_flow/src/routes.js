@@ -15,9 +15,6 @@ import ScreenVisualizarArtefato from "./pages/Artefato/screens/VisualizarArtefat
 import ScreenGerenciarIteracoes from "./pages/Iteracao/screens/GerenciarIteracoes";
 import ScreenGerenciarProjetos from "./pages/Projeto/screens/GerenciarProjetos";
 import ScreenVisualizarProjeto from "./pages/Projeto/screens/VisualizarProjeto";
-import ScreenGerenciarComentariosTarefa from "./pages/Comentario/screens/ComentariosTarefa";
-import ScreenComentariosArtefato from "./pages/Comentario/screens/ComentariosArtefato";
-import ScreenComentariosTarefa from "./pages/Comentario/screens/ComentariosTarefa";
 import ScreenGerenciarRelatorios from "./pages/Relatorio/screens/GerenciarRelatorios";
 import ScreenVisualizarTarefa from "./pages/Tarefa/screens/VisualizarTarefa";
 import ScreenVisualizarIteracao from "./pages/Iteracao/screens/VisualizarIteracao";
@@ -146,18 +143,6 @@ function Routes() {
                     element={<ScreenVisualizarArtefato grupo="admin" /> }
                 />
 
-                <Route 
-                    path="/admin/tarefas/:idTarefa/comentarios"
-                    element={<ScreenComentariosTarefa grupo="admin" />}
-                    exact
-                />
-
-                <Route 
-                    path="/admin/artefatos/:idArtefato/comentarios"
-                    element={<ScreenComentariosArtefato grupo="admin" />}
-                    exact
-                />
-
                 <Route
                     path="/admin/relatorios"
                     element={<ScreenGerenciarRelatorios  grupo="admin" />}
@@ -231,18 +216,6 @@ function Routes() {
                 <Route 
                     path="/aluno/artefatos/visualizar"
                     element={<ScreenVisualizarArtefato grupo="aluno" /> }
-                    exact
-                />
-
-                <Route 
-                    path="/aluno/tarefas/:idTarefa/comentarios"
-                    element={<ScreenComentariosTarefa grupo="aluno" />}
-                    exact
-                />
-
-                <Route 
-                    path="/aluno/artefatos/:idArtefato/comentarios"
-                    element={<ScreenComentariosArtefato grupo="aluno" />}
                     exact
                 />
 
@@ -336,12 +309,6 @@ function Routes() {
                     exact
                 />
 
-                <Route 
-                    path="/professor/tarefas/:idTarefa/comentarios"
-                    element={<ScreenGerenciarComentariosTarefa grupo="professor" />}
-                    exact
-                />
-
                 <Route
                     path="/professor/artefatos"
                     element={<ScreenArtefatos grupo="professor" />}
@@ -351,12 +318,6 @@ function Routes() {
                 <Route 
                     path="/professor/artefatos/visualizar"
                     element={<ScreenVisualizarArtefato grupo="professor" /> }
-                />
-
-                <Route 
-                    path="/professor/artefatos/:idArtefato/comentarios"
-                    element={<ScreenComentariosArtefato grupo="professor"/>}
-                    exact
                 />
 
                 <Route 

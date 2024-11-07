@@ -15,7 +15,7 @@ function verificarAtraso(task) {
     return tarefaAtrasada ? true : false;
 }
 
-const ItemGridArtefato = ({item, onUpdate, onDelete}) => {
+const ItemGridArtefato = ({item, onUpdate, onDelete, onShowComments}) => {
 
     return (
         <div className="artefato-container">
@@ -52,7 +52,7 @@ const ItemGridArtefato = ({item, onUpdate, onDelete}) => {
                 </div>
 
                 <div className="artefato-actions">
-                    <a><GoCommentDiscussion size="20px" /></a>
+                    <a onClick={() => onShowComments(item)}><GoCommentDiscussion size="20px" /></a>
                     <span style={{display: 'flex', gap: '10px'}}>
                         <a onClick={() => onUpdate(item)}>
                             <Tooltip title="Editar">
