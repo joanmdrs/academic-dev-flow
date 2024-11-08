@@ -10,6 +10,9 @@ const RenderDate = ({dateType, dateValue}) => {
             borderRadius: '5px',
             fontSize: '10px',
             fontWeight: 'bold',
+            display: 'flex',
+            alignItems: 'baseline',
+            gap: '5px',
             backgroundColor: `${dateType === 'inicio' ? "#CEE3F6" : "#F6E3CE"}`,
             color: `${dateType === 'inicio' ? "#0B4C5F" : "#FF8000"}`
         }}> 

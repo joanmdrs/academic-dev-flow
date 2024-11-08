@@ -1,7 +1,7 @@
 import React from "react";
 import { Layout } from "antd";
-import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfessor";
-import MyHeader from "../../../../components/Header/Header";
+import MenuProfessor from "../../../components/Menus/MenuProfessor/MenuProfessor";
+import MyHeader from "../../../components/Header/Header";
 
 const baseStyle = {
     display: "flex",
@@ -11,7 +11,7 @@ const baseStyle = {
     alignItems: "center"
 }
 
-const HomeProfessor = () => {
+const ScreenHomeDocente = () => {
 
     return (
 
@@ -27,4 +27,4 @@ const HomeProfessor = () => {
     )
 }
 
-export default HomeProfessor
+export default ScreenHomeDocente

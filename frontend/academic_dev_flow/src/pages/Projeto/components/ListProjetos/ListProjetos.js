@@ -22,7 +22,8 @@ const ListProjetos = ({ data, onUpdate, onDelete }) => {
                             style={{
                                 padding: '20px',
                                 marginBottom: '20px',
-                                borderLeft: `4px solid ${getRandomColor()}`,
+                                borderLeft: `
+                                    4px solid ${(optionsStatusProjetos.find(option => option.value === item.status_projeto)).color}`,
                                 boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px'
                             }}
                             extra={
@@ -60,8 +61,8 @@ const ListProjetos = ({ data, onUpdate, onDelete }) => {
                                         key={item.nome_projeto}
                                     >
                                         <div style={{display: 'flex', flexDirection: 'column', gap: '15px'}}>
-                                            <div>{`Fluxo: ${item.nome_fluxo}`}</div>
-                                            <div>{`Descrição: ${item.descricao_projeto}`}</div>
+                                            <div>{`Fluxo: ${item.nome_fluxo ? item.nome_fluxo : 'Não informado'}`}</div>
+                                            <div>{`Descrição: ${item.descricao_projeto ? item.descricao_projeto : ''}`}</div>
                                             <div style={{display: 'flex', gap: '10px'}}> 
                                                 <RenderDate dateType="inicio" dateValue={item.data_inicio_projeto} />
                                                 <RenderDate dateType="fim" dateValue={item.data_termino_projeto} />

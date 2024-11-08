@@ -1,7 +1,7 @@
 import React from "react";
 import { Layout } from 'antd';
-import MenuAdmin from "../../../../components/Menus/MenuAdmin/MenuAdmin";
-import MyHeader from "../../../../components/Header/Header";
+import MenuAdmin from "../../../components/Menus/MenuAdmin/MenuAdmin";
+import MyHeader from "../../../components/Header/Header";
 
 const baseStyle = {
     display: "flex",
@@ -12,7 +12,7 @@ const baseStyle = {
 }
 
 
-const HomeAdministrador = () => {
+const ScreenHomeAdmin = () => {
     return (
         <React.Fragment>
             <MenuAdmin />
@@ -26,4 +26,4 @@ const HomeAdministrador = () => {
     )
 }
 
-export default HomeAdministrador;
+export default ScreenHomeAdmin;

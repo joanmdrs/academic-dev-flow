@@ -59,7 +59,7 @@ const MenuAluno = () => {
                     key='/aluno/home'
                     icon={<LuLayoutDashboard size="20px"/>}
                 >
-                    <Link to="/aluno/home">Dashboard</Link>
+                    <Link to="/aluno/home">Home</Link>
                 </Menu.Item>
                
                 <Menu.Item
@@ -67,7 +67,7 @@ const MenuAluno = () => {
                     key="/aluno/meus-projetos"
                     icon={<LuFolder size="20px"/>}
                 >
-                    <Link to="/aluno/meus-projetos">Projetos</Link>
+                    <Link to="/aluno/projetos">Projetos</Link>
                 </Menu.Item>
         
                 <SubMenu

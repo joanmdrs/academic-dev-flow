@@ -3,9 +3,6 @@ import { Routes as Switch, Route } from "react-router-dom";
 import AdminRoutes from "./router/AdminRoutes/AdminRoutes";
 import StudentRoutes from "./router/StudentRoutes/StudentRoutes";
 import TeacherRoutes from "./router/TeacherRoutes/TeacherRoutes";
-import HomeProfessor from "./pages/Perfis/Professor/Home";
-import HomeAdministrador from "./pages/Perfis/Administrador/Home";
-import HomeAluno from "./pages/Perfis/Aluno/Home";
 import ScreenGerenciarMembros from "./pages/Membro/screens/GerenciarMembros";
 import ScreenVincularMembroAoProjeto from "./pages/Membro/screens/VincularMembroAoProjeto";
 import Login from "./pages/Auth/Login/Login";
@@ -14,7 +11,6 @@ import ScreenGerenciarTarefas from "./pages/Tarefa/screens/GerenciarTarefas";
 import ScreenVisualizarArtefato from "./pages/Artefato/screens/VisualizarArtefato";
 import ScreenGerenciarIteracoes from "./pages/Iteracao/screens/GerenciarIteracoes";
 import ScreenGerenciarProjetos from "./pages/Projeto/screens/GerenciarProjetos";
-import ScreenVisualizarProjeto from "./pages/Projeto/screens/VisualizarProjeto";
 import ScreenGerenciarRelatorios from "./pages/Relatorio/screens/GerenciarRelatorios";
 import ScreenVisualizarTarefa from "./pages/Tarefa/screens/VisualizarTarefa";
 import ScreenVisualizarIteracao from "./pages/Iteracao/screens/VisualizarIteracao";
@@ -40,6 +36,9 @@ import ScreenContents from "./pages/GitHub/screens/Contents";
 import ScreenCommits from "./pages/GitHub/screens/Commits";
 import ScreenTarefas from "./pages/Tarefa/screens/Tarefas";
 import ScreenArtefatos from "./pages/Artefato/screens/Artefatos";
+import ScreenHomeAdmin from "./pages/Home/Admin";
+import ScreenHomeDiscente from "./pages/Home/Discente";
+import ScreenHomeDocente from "./pages/Home/Docente";
 
 function Routes() {
     return (
@@ -58,7 +57,7 @@ function Routes() {
             
             }>
                 {/* Página de Home */}
-                <Route path="/admin/home" Component={HomeAdministrador} exact />
+                <Route path="/admin/home" Component={ScreenHomeAdmin} exact />
 
                 <Route path="/admin/perfil" element={<ScreenPerfilMembro grupo="admin" />} exact/>
 
@@ -160,21 +159,13 @@ function Routes() {
                     </ProviderGlobalUser>
                 </ProviderGlobalProjeto>
             }>
-                <Route path="/aluno/home" Component={HomeAluno} exact />
+                <Route path="/aluno/home" Component={ScreenHomeDiscente} exact />
 
                 <Route path="/aluno/perfil" element={<ScreenPerfilMembro grupo="aluno" />} exact/>
 
                 <Route
-                    path="/aluno/meus-projetos"
+                    path="/aluno/projetos"
                     element={<ScreenProjetos grupo="aluno" />}
-                    exact
-                />
-
-                <Route
-                    path="/aluno/projetos/visualizar/:idProjeto"
-                    element={
-                        <ScreenVisualizarProjeto grupo="aluno"/>
-                    }
                     exact
                 />
 
@@ -276,7 +267,7 @@ function Routes() {
                 <TeacherRoutes />
                 </ProviderGlobalProjeto>}
             >
-                <Route path="/professor/home" Component={HomeProfessor} exact />
+                <Route path="/professor/home" Component={ScreenHomeDocente} exact />
 
                 <Route path="/professor/perfil" element={<ScreenPerfilMembro grupo="professor" />} exact/>
 
@@ -287,16 +278,8 @@ function Routes() {
                 />
 
                 <Route
-                    path="/professor/projetos/meus-projetos"
+                    path="/professor/projetos/projetos"
                     element={<ScreenProjetos grupo="professor" />}
-                    exact
-                />
-
-                <Route
-                    path="/professor/projetos/visualizar/:idProjeto"
-                    element={
-                        <ScreenVisualizarProjeto grupo="professor"/>
-                    }
                     exact
                 />
 

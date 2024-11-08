@@ -1,45 +1,50 @@
-import { List, Tooltip } from "antd";
+import { List, Progress, Tooltip } from "antd";
 import React from "react";
 import { MdOpenInNew } from "react-icons/md";
+import ChartStatusProjeto from "../ChartStatusProjeto/ChartStatusProjeto";
+import { CiFolderOn } from "react-icons/ci";
+import { IoIosArrowForward } from "react-icons/io";
 
 const MeusProjetos = ({projetos}) => {
 
     return (
         <div className="meus-projetos box-model">
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'baseline'}}> 
-                <h4>Meus projetos</h4>
-                <h5>Visualize todos</h5>
+                <h3 className="ff-pop">Meus Projetos</h3>
+                <a style={{fontSize: '12px', fontWeight: 'bold'}} href="/academic-dev-flow/aluno/projetos">Visualize todos</a>
             </div>
 
             <div> 
                 <List
                     className="demo-loadmore-list"
                     itemLayout="horizontal"
-                    dataSource={projetos}
-                    pagination={{
-                        pageSize: 4,
-                    }}
+                    dataSource={projetos.slice(0, 4)}
+                    pagination={false}
                     renderItem={(item, index) => (
                         <List.Item
                             className="item-model"
                             actions={[
-                                <a>
+                                <a style={{color: '#000000'}}>
                                     <Tooltip title="Visualizar">
-                                        <MdOpenInNew />
+                                        <IoIosArrowForward size="15px" />
                                     </Tooltip>
-                                </a>,
+                                </a>
                             ]}
                         >
                                 <List.Item.Meta
-                                    avatar={
-                                        <div style={{ fontSize: '15px', fontWeight: 'bold', color: "var(--primary-color)" }}>{String(index + 1).padStart(2, '0')}</div>
-                                    }
-                                    title={item.nome_projeto}
+                                    avatar={<CiFolderOn />}
+                                    title={<span className="ff-pop fw-500"> {item.nome_projeto} </span>}
                                 />
                         </List.Item>
                     )}
                 />
             </div>
+
+            <div className="df "> 
+                <ChartStatusProjeto projetos={projetos} width={400} heigth={400} />
+            </div>
+
+
         </div>
     )
 }

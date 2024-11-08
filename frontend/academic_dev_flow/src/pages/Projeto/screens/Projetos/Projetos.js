@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Input, Modal, Select, Tabs, Tooltip } from 'antd';
+import { Button, Drawer, Input, Modal, Select, Tabs, Tooltip } from 'antd';
 import { buscarProjetosDoMembro, criarMembroProjeto } from "../../../../services/membroProjetoService";
 import { useContextoGlobalUser } from "../../../../context/ContextoGlobalUser/ContextoGlobalUser";
 import TableProjetos from "../../components/TableProjetos/TableProjetos";
@@ -10,30 +10,13 @@ import { handleError } from '../../../../services/utils';
 import { useContextoProjeto } from '../../context/ContextoProjeto';
 import { TbLayoutListFilled } from "react-icons/tb";
 import ListProjetos from '../../components/ListProjetos/ListProjetos';
+import { optionsStatusProjetos } from '../../../../services/optionsStatus';
+import { listarFluxos } from '../../../../services/fluxoService';
 
 const { Search } = Input;
 const {TabPane} = Tabs 
 
 const Projetos = () => {
-
-    const optionsStatus = [
-        {
-            value: 'criado',
-            label: 'Criado'
-        }, 
-        {
-            value: 'andamento',
-            label: 'Em andamento'
-        }, 
-        {
-            value: 'concluido',
-            label: 'Concluído'
-        }, 
-        {
-            value: 'cancelado',
-            label: 'Cancelado'
-        }
-    ]
 
     const { hasProjeto, setHasProjeto } = useContextoProjeto();
     const { usuario } = useContextoGlobalUser();
@@ -41,6 +24,37 @@ const Projetos = () => {
     const [isTabsVisible, setIsTabsVisible] = useState(false);
     const [isTableVisible, setIsTableVisible] = useState(true);
     const [actionForm, setActionForm] = useState('create');
+    const [optionsFluxo, setOptionsFluxo] = useState([])
+    const [isDrawerVisible, setIsDrawerVisible] = useState(false)
+
+    const handleOpenDrawer = () => {
+        setIsDrawerVisible(true)
+    }
+
+    const handleCloseDrawer = () => {
+        setIsDrawerVisible(false)
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (usuario && usuario.id) {
+                const response = await buscarProjetosDoMembro(usuario.id);
+                if (!response.error) {
+                    setProjetos(response.data)
+                }
+            }
+
+            const response = await listarFluxos()
+            if (!response.error){
+                const resultados = response.data.map(item => ({
+                    value: item.id,
+                    label: item.nome
+                }))
+                setOptionsFluxo(resultados)
+            }
+        };
+        fetchData();
+    }, [usuario]);
 
     const handleBuscarProjetosDoMembro = async () => {
         const response = await buscarProjetosDoMembro(usuario.id);
@@ -49,14 +63,16 @@ const Projetos = () => {
         }
     };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            if (usuario && usuario.id) {
-                await handleBuscarProjetosDoMembro();
+    const handleFiltrarProjetoPorFluxo = async (fluxo) => {
+        if (fluxo) {
+            const response = await buscarProjetosDoMembro(usuario.id)
+            if (!response.error){
+                setProjetos(response.data.filter(projeto => projeto.id_fluxo === fluxo))
             }
-        };
-        fetchData();
-    }, [usuario]);
+        } else {
+            await handleBuscarProjetosDoMembro()
+        }
+    }
 
     const handleFiltrarProjetoPorStatus = async (status) => {
         if (status) {
@@ -152,71 +168,101 @@ const Projetos = () => {
     }
 
     return (
-        <div className='global-div' style={{backgroundColor: '#FFFFFF', height: '100%'}}>
+        <div className='content'>
 
-            <div style={{
-                borderBottom: '1px solid #ddd',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'baseline',
-                padding: '20px'
-            }}> 
-                <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
-                    <h2 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '600'}}> Projetos </h2>
-                    <h4 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '400'}}> Seja bem-vindo {usuario?.nome} </h4>
-                </div>
-
-                <div>
-                    <Button 
-                        type="primary" 
-                        ghost
-                        size='large'
-                        icon={<FaPlus />} 
-                        onClick={handleAdicionarProjeto} 
-                    > Criar Projeto </Button>
-                </div>
-            </div>
-
-            <div style={{
-                    borderBottom: '1px solid #ddd',
-                    padding: '20px',
-                    display: 'flex',
-                    justifyContent: 'space-between'
-
-                }}> 
-
-                <div>
-                    <Search
-                        style={{width: '500px'}}
-                        placeholder="pesquise pelo nome"
-                        allowClear
-                        enterButton="Pesquisar"
-                        size="middle"
-                        onSearch={handleFiltrarProjetosPeloNome}
+            {/* {isDrawerVisible && (
+                <Drawer
+                    width="80%"
+                    onClose={handleCloseDrawer}
+                    open={isDrawerVisible}
+                    placement="right"
+                    maskClosable={false}
+                >
+                    <TabsProjeto
+                        onSaveProject={handleSalvarProjeto}
+                        onCancel={handleCancelar}
                     />
-                </div>
 
-                <div> 
-                    <Select 
-                        options={optionsStatus}
-                        allowClear
-                        placeholder="Status"
-                        popupMatchSelectWidth={false}
-                        onChange={(value) => handleFiltrarProjetoPorStatus(value)}
+                </Drawer>
+            )} */}
+
+            {!isTabsVisible ? (
+                <React.Fragment>
+                    <div style={{
+                        borderBottom: '1px solid #ddd',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'baseline',
+                        padding: '20px'
+                    }}> 
+                        <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
+                            <h2 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '600'}}> Projetos </h2>
+                        </div>
+        
+                        <div>
+                            <Button 
+                                type="primary" 
+                                ghost
+                                size='large'
+                                icon={<FaPlus />} 
+                                onClick={handleAdicionarProjeto} 
+                            > Criar Projeto </Button>
+                        </div>
+                    </div>
+        
+                    <div style={{
+                            borderBottom: '1px solid #ddd',
+                            padding: '20px',
+                            display: 'flex',
+                            justifyContent: 'space-between'
+        
+                        }}> 
+        
+                        <div>
+                            <Search
+                                style={{width: '500px'}}
+                                placeholder="pesquise pelo nome"
+                                allowClear
+                                enterButton="Pesquisar"
+                                size="middle"
+                                onSearch={handleFiltrarProjetosPeloNome}
+                            />
+                        </div>
+        
+                        <div className='df g-10'> 
+                            <Select 
+                                options={optionsFluxo}
+                                allowClear
+                                placeholder="Fluxo"
+                                popupMatchSelectWidth={false}
+                                onChange={(value) => handleFiltrarProjetoPorFluxo(value)}
+                        
+                            /> 
+                            <Select 
+                                options={optionsStatusProjetos}
+                                allowClear
+                                placeholder="Status"
+                                popupMatchSelectWidth={false}
+                                onChange={(value) => handleFiltrarProjetoPorStatus(value)}
+                        
+                            /> 
+                        </div>
+                    </div>
+                </React.Fragment>
                 
-                    /> 
-                </div>
-            </div>
+            ) : (
+                <TabsProjeto
+                    onSaveProject={handleSalvarProjeto}
+                    onCancel={handleCancelar}
+                />
+            ) }
+
+            
             
 
             <div style={{
                 padding: '20px'
             }}>
-                {isTabsVisible &&
-                    <TabsProjeto
-                        onSaveProject={handleSalvarProjeto}
-                        onCancel={handleCancelar}
-                    />}
 
                 {isTableVisible && (
                     <React.Fragment>

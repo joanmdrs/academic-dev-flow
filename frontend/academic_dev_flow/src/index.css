@@ -1,6 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
 :root {
   --primary-color: #1677FF;
   --second-color: #001529;
@@ -9,7 +12,7 @@
 }
 
 * {
-  font-family: "Poppins", sans-serif;
+  font-family: "Nunito", sans-serif;
 }
 
 body {
@@ -18,29 +21,57 @@ body {
 }
 
 
-/* .ant-layout {
-  background-color: #FFFFFF;
+.ant-layout {
+  background-color: #F2F2F2;
 }
-
+/* 
 .ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector {
   border: 1px solid var(--border-color);
+  color: var(--border-color) !important;
 
 }
 .ant-input-outlined {
   border: 1px solid var(--border-color);
-}
+  color: var(--border-color) !important;
+} */
 
-.ant-btn-default {
+/* .ant-btn-default {
   border-color: var(--border-color);
 } */
 
-.font-Poppins {
+.ff-pop {
   font-family: 'Poppins', sans-serif;
 }
 
-.font-Montserrat {
-  font-family: 'Montserrat', sans-serif;
+.fw-400 {
+  font-weight: 400;
 }
+
+.fw-500 {
+  font-weight: 500;
+}
+
+.df {
+  display: flex;
+}
+
+.g-10 {
+  gap: 10px;
+}
+
+
+.content {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  padding: 20px;
+  margin-top: 15px;
+  margin-left: 15px;
+  background-color: #FFFFFF;
+  border-top-left-radius: 5px;
+  height: auto;
+}
+
+
+
 
 .global-div {
   margin: 20px;

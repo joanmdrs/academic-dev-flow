@@ -95,7 +95,18 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
                                         label="Data de Início:" 
                                         name="data_inicio" 
                                         style={{width: "250px"}}
-                                        rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
+                                        rules={[
+                                            { required: true, message: 'Por favor, preencha este campo!' },
+                                            ({ getFieldValue }) => ({
+                                                validator(_, value) {
+                                                    const dataTermino = getFieldValue('data_termino');
+                                                    if (!value || !dataTermino || value <= dataTermino) {
+                                                        return Promise.resolve();
+                                                    }
+                                                    return Promise.reject(new Error('A data de início não pode ser maior que a data de término!'));
+                                                },
+                                            }),
+                                        ]}
                                     >
                                         <Input name="data_inicio" type="date" />
                                     </Form.Item>
@@ -104,7 +115,18 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
                                         label="Data de Término:" 
                                         name="data_termino" 
                                         style={{width: "250px"}} 
-                                        rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
+                                        rules={[
+                                            { required: true, message: 'Por favor, preencha este campo!' },
+                                            ({ getFieldValue }) => ({
+                                                validator(_, value) {
+                                                    const dataInicio = getFieldValue('data_inicio');
+                                                    if (!value || !dataInicio || value >= dataInicio) {
+                                                        return Promise.resolve();
+                                                    }
+                                                    return Promise.reject(new Error('A data de término não pode ser menor que a data de início!'));
+                                                },
+                                            }),
+                                        ]}
                                     >
                                         <Input name="data_fim" type="date" />
                                     </Form.Item>

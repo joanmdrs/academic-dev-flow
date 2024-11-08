@@ -11,28 +11,26 @@ const TabsProjeto = ({onSaveProject, onCancel}) => {
 
 
     return (
-        <div className="global-div">
-            <Tabs
-                size="large"
-                indicator={{
-                align: "center"
-                }}
-                style={{padding: "20px"}}
-                activeKey={current} 
-                onChange={setCurrent} 
-                className="tabs-projeto"
-            > 
-                <Item tab="Projeto" key="1">
-                    <TabProjeto onSubmit={onSaveProject} onCancel={onCancel} />
-                </Item>
-                <Item tab="Equipe" key="2" className="tab-item">
-                    <TabEquipe />
-                </Item>
-                <Item tab="Fluxo" key="3" className="tab-item">
-                    <TabFluxo />
-                </Item>
-            </Tabs> 
-        </div>
+        <Tabs
+            size="large"
+            indicator={{
+            align: "center"
+            }}
+            style={{padding: "20px"}}
+            activeKey={current} 
+            onChange={setCurrent} 
+            className="tabs-projeto"
+        > 
+            <Item tab="Projeto" key="1">
+                <TabProjeto onSubmit={onSaveProject} onCancel={onCancel} />
+            </Item>
+            <Item tab="Equipe" key="2" className="tab-item">
+                <TabEquipe />
+            </Item>
+            <Item tab="Fluxo" key="3" className="tab-item">
+                <TabFluxo />
+            </Item>
+        </Tabs> 
     )
 }
 

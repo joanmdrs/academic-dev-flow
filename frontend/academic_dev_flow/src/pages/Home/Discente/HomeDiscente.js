@@ -1,5 +1,5 @@
 import { getDataHoraNow, handleError } from "../../../services/utils";
-import "./DashboardDiscente.css"
+import "./HomeDiscente.css"
 import React, { useEffect, useState } from "react";
 import { atualizarStatusTarefa, listarTarefasDosProjetosDoMembro } from "../../../services/tarefaService";
 import { useContextoGlobalUser } from "../../../context/ContextoGlobalUser/ContextoGlobalUser";
@@ -9,8 +9,10 @@ import { Splitter } from 'antd';
 import MinhasTarefas from "../components/MinhasTarefas/MinhasTarefas";
 import MeusArtefatos from "../components/MeusArtefatos/MeusArtefatos";
 import MeusProjetos from "../components/Meus Projetos/MeusProjetos";
+import ChartStatusTarefa from "../components/ChartStatusTarefa/ChartStatusTarefa";
+import MinhasEquipes from "../components/MinhasEquipes/MinhasEquipes";
 
-const DashboardDiscente = () => {
+const HomeDiscente = () => {
 
     const {usuario} = useContextoGlobalUser()
     const [tarefas, setTarefas] = useState([])
@@ -68,7 +70,7 @@ const DashboardDiscente = () => {
     }
 
     return (
-        <div className="bloco-principal">
+        <div className="bloco-principal" style={{height: '100%', backgroundColor: '#FFFFFF'}}>
             <Splitter            >
                 <Splitter.Panel defaultSize="55%" min="20%" max="70%">
                     
@@ -78,7 +80,8 @@ const DashboardDiscente = () => {
                                 <span> {getDataHoraNow()} </span>
                             </div>
 
-                            <MinhasTarefas tarefas={tarefas} atualizarStatus={handleAlterarSituacaoTarefa} /> 
+                            <MinhasTarefas tarefas={tarefas} atualizarStatus={handleAlterarSituacaoTarefa} />
+
                             <MeusArtefatos artefatos={artefatos} />
                             
                         </div>
@@ -87,6 +90,7 @@ const DashboardDiscente = () => {
                 <Splitter.Panel>
                     <div className="caixa-esquerda"> 
                         <MeusProjetos projetos={projetos} />
+                        {/* <MinhasEquipes  equipes={projetos}/> */}
                     </div>
                 </Splitter.Panel>
             </Splitter>
@@ -96,4 +100,4 @@ const DashboardDiscente = () => {
     )
 }
 
-export default DashboardDiscente
+export default HomeDiscente
