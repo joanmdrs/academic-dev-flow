@@ -75,3 +75,24 @@ export const excluirReleases = async (idsReleases) => {
         return handleError(error, 'Falha ao tentar excluir as releases !')
     }
 }
+
+
+export const buscarUltimaReleaseDoProjeto = async (idProjeto) => {
+    try {
+        const response = await api.get('release/buscar-ultima-release/', {params: {id_projeto: idProjeto}})
+        return response
+    } catch (error) {
+        return handleError(error, 'Falha ao buscar os dados da última release cadastrada para este projeto!')
+    }
+}
+
+export const buscarReleasesAdjacentes = async (idProjeto, idRelease) => {
+    try {
+        const response = await api.get(
+            'release/buscar-releases-adjacentes/', 
+            {params: {id_projeto: idProjeto, id_release: idRelease}})
+        return response
+    } catch (error) {
+        return handleError(error, 'Falha ao buscar os dados das releases adjacentes !')
+    }
+}

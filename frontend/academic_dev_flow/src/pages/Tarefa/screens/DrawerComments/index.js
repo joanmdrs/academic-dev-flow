@@ -3,13 +3,12 @@ import { ProviderComentario } from "../../../Comentario/context/ContextoComentar
 import DrawerComments from "./DrawerComments";
 
 
-const ScreenDrawerComments = ({idTarefa, idProjeto, isDrawerVisible, closeDrawer }) => {
+const ScreenDrawerComments = ({isDrawerVisible, closeDrawer }) => {
     return (
         <React.Fragment>
             <ProviderComentario >
-                <DrawerComments idTarefa={idTarefa} idProjeto={idProjeto} isDrawerVisible={isDrawerVisible} closeDrawer={closeDrawer}/> 
+                <DrawerComments isDrawerVisible={isDrawerVisible} closeDrawer={closeDrawer}/> 
             </ProviderComentario>
-            
         </React.Fragment>   
     )
 }

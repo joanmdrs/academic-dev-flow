@@ -120,7 +120,7 @@ export const listarTarefas = async () => {
 
 export const listarTarefasPorProjeto = async (idProjeto) => {
     try {
-        const response = await api.get('tarefa/listar-por-projeto', {params: {id_projeto: idProjeto}})
+        const response = await api.get('tarefa/listar-por-projeto/', {params: {id_projeto: idProjeto}})
 
         if(response.status === 200){
             return response

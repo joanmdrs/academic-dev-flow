@@ -30,15 +30,14 @@ import ScreenIteracoes from "./pages/Iteracao/screens/Iteracoes";
 import ScreenQuadroMembros from "./pages/Membro/screens/QuadroMembros";
 import ScreenEquipe from "./pages/Membro/screens/Equipe";
 import ScreenProjetos from "./pages/Projeto/screens/Projetos";
-import ScreenIssues from "./pages/GitHub/screens/Issues";
-import ScreenGithubProjetos from "./pages/GitHub/screens/GithubProjetos";
-import ScreenContents from "./pages/GitHub/screens/Contents";
-import ScreenCommits from "./pages/GitHub/screens/Commits";
 import ScreenTarefas from "./pages/Tarefa/screens/Tarefas";
 import ScreenArtefatos from "./pages/Artefato/screens/Artefatos";
 import ScreenHomeAdmin from "./pages/Home/Admin";
 import ScreenHomeDiscente from "./pages/Home/Discente";
 import ScreenHomeDocente from "./pages/Home/Docente";
+import ScreenVisualizarProjeto from "./pages/Projeto/screens/VisualizarProjeto";
+import ScreenRepositories from "./pages/GitHub/screens/Repositories";
+import ScreenPainelGitHub from "./pages/GitHub/screens/PainelGitHub";
 
 function Routes() {
     return (
@@ -50,9 +49,9 @@ function Routes() {
 
             <Route element={
                 <ProviderGlobalProjeto>
-
-                    <AdminRoutes />
-
+                    <ProviderGlobalUser>
+                        <AdminRoutes />
+                    </ProviderGlobalUser>
                 </ProviderGlobalProjeto>
             
             }>
@@ -169,6 +168,12 @@ function Routes() {
                     exact
                 />
 
+                <Route
+                    path="/aluno/projetos/visualizar"
+                    element={<ScreenVisualizarProjeto grupo="aluno" />}
+                    exact
+                />
+
                 <Route 
                     path="/aluno/cronograma/releases"
                     element={
@@ -236,27 +241,15 @@ function Routes() {
 
                 <Route 
                     path="/aluno/github-integration"
-                    element={<ScreenGithubProjetos grupo={"aluno"} />}
+                    element={<ScreenRepositories grupo={"aluno"} />}
                     exact
                 />
 
                 <Route 
-                    path="/aluno/github-integration/issues"
-                    element={<ScreenIssues grupo={"aluno"} />}
+                    path="/aluno/github-integration/painel"
+                    element={<ScreenPainelGitHub grupo={'aluno'} />}
                     exact
                 />
-
-                <Route 
-                    path="/aluno/github-integration/contents"
-                    element={<ScreenContents grupo={"aluno"} />}
-                    exact
-                />
-
-                <Route 
-                    path="/aluno/github-integration/commits"
-                    element={<ScreenCommits grupo={"aluno"} />}
-                    exact
-                /> 
                 
             </Route>
 

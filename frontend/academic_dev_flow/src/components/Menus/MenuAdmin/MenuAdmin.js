@@ -8,37 +8,44 @@ import { RiFlowChart } from "react-icons/ri";
 import { MdOutlineTaskAlt } from "react-icons/md";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { BsLayers } from "react-icons/bs";
-import { FaGithub } from "react-icons/fa";
+import { FaCoffee, FaGithub } from "react-icons/fa";
+import { useContextoGlobalTheme } from "../../../context/ContextoTheme/ContextoTheme";
+import { LuCalendarDays, LuClipboardList, LuFileCode2, LuFolder, LuGithub, LuLayoutDashboard, LuUsers, LuWorkflow } from "react-icons/lu";
 
 const { SubMenu } = Menu;
 
 const MenuAdmin = () => {
     const [collapsed, setCollapsed] = useState(false);
     const location = useLocation();
+    const {theme} = useContextoGlobalTheme()
+
 
     return (
         <Sider
-            width={250}
-            collapsible
-            collapsed={collapsed}
+            style={{borderRight: '1px solid #ddd'}}
+            theme={theme}
+            width={250} 
+            collapsible 
+            collapsed={collapsed} 
             onCollapse={(value) => setCollapsed(value)}
         >
             <div 
                 style={{
-                display: "flex", 
-                justifyContent: "center",
-                alignItems: "center",
-                padding: "10px",
-                color: "#FFFFFF",
-                height: '64px',
+                    display: "flex", 
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: '10px',
+                    padding: "10px",
+                    color: `${ theme === 'light' ? 'var(--primary-color)' : '#FFFFFF'}`,
+                    height: '64px'
                 }} 
-                
-                className="demo-logo-vertical"
             >
-                Academic Dev Flow
+                <span> <FaCoffee size="25px" /> </span>
+            
+                {!collapsed && <span>Academic Dev Flow</span>}
             </div>
             <Menu
-                theme="dark"
+                theme={theme}
                 mode="inline"
                 style={{
                     marginTop: "20px",
@@ -46,32 +53,41 @@ const MenuAdmin = () => {
                 selectedKeys={[location.pathname]}
             >
                 <Menu.Item
+                    className='item-menu'
+                    key='/aluno/home'
+                    icon={<LuLayoutDashboard size="20px"/>}
+                >
+                    <Link to="/admin/home">Home</Link>
+                </Menu.Item>
+
+                <Menu.Item
                     className="item-menu"
                     key="/admin/projetos"
-                    icon={<HiOutlineClipboardList style={{ fontSize: "20px" }} />}
+                    icon={<LuFolder size="20px"/>}
                 >
                     <Link to="/admin/projetos">Projetos</Link>
                 </Menu.Item>
 
                 <SubMenu
                     className="item-menu"
-                    key="/admin/fluxos"
-                    icon={<RiFlowChart style={{ fontSize: "20px" }} />}
-                    title="Fluxos"
+                    key="/admin/cronograma/"
+                    icon={<LuCalendarDays size="20px" />}
+                    title="Cronograma"
                 >
-                    <Menu.Item key="/admin/fluxos/gerenciar">
-                        <Link to="/admin/fluxos/gerenciar">Gerenciar fluxos</Link>
+                     <Menu.Item key="gerenciar-releases">
+                        <Link to="/admin/cronograma/releases">Releases</Link>
                     </Menu.Item>
 
-                    <Menu.Item key="/admin/etapas">
-                        <Link to="/admin/etapas">Gerenciar etapas</Link>
+                    <Menu.Item key="gerenciar-iterations">
+                        <Link to="/admin/cronograma/iterations">Iterações</Link>
                     </Menu.Item>
+
                 </SubMenu>
 
                 <SubMenu
                     className="item-menu"
                     key="admin/membros"    
-                    icon={<BiGroup style={{ fontSize: "20px" }} />}
+                    icon={<LuUsers size="20px" />}
                     title="Membros"
                 >
                     <Menu.Item key="/admin/membros/gerenciar">
@@ -98,17 +114,9 @@ const MenuAdmin = () => {
 
                 </SubMenu>
 
-                <Menu.Item
-                    className="item-menu"
-                    key="/admin/iteracoes"
-                    icon={<BsLayers style={{fontSize: '20px'}} />}
-                >
-                    <Link to="/admin/iteracoes"> Iterações </Link>
-                </Menu.Item>
-
                 <Menu.Item 
                     className="item-menu" 
-                    icon={<IoDocumentTextOutline style={{fontSize: "20px"}} />} 
+                    icon={<LuFileCode2 size="20px" />} 
                     key="/admin/artefatos/gerenciar"
                     title="Artefatos"
                 >
@@ -118,7 +126,7 @@ const MenuAdmin = () => {
                 <SubMenu
                     className='item-menu'
                     key='/admin/tarefas'
-                    icon={<MdOutlineTaskAlt style={{ fontSize: "20px" }} />}
+                    icon={<LuClipboardList size="20px"/>}
                     title="Tarefas"
                 >
                     <Menu.Item key="/admin/tarefas/gerenciar">
@@ -133,7 +141,7 @@ const MenuAdmin = () => {
                 <SubMenu
                     className='item-menu'
                     key='/admin/github-integration/'
-                    icon={<FaGithub style={{ fontSize: "20px" }} />}
+                    icon={<LuGithub size="20px" />}
                     title="GitHub"
                 >
                     <Menu.Item

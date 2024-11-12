@@ -3,21 +3,35 @@ import { Form, Modal, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import { listarMembros } from "../../../../services/membroService";
 import { useForm } from "antd/es/form/Form";
+import { buscarMembrosPorProjeto } from "../../../../services/membroProjetoService";
 
-const ModalSelectMembros = ({isModalVisible, onSubmit, onCancel}) => {
+const ModalSelectMembros = ({idProjeto, isModalVisible, onSubmit, onCancel}) => {
 
     const [optionsMembros, setOptionsMembros] = useState([])
     const [form] = useForm()
     useEffect(() => {
         const fetchData = async () => {
-            const response = await listarMembros();
-            if (!response.error){
-                const resultados = response.data.map((item) => ({
-                    value: item.id,
-                    label: `${item.nome} - ${item.nome_grupo} `,
-                }));
-                setOptionsMembros(resultados);
+
+            if (idProjeto){
+                const response = await buscarMembrosPorProjeto(idProjeto)
+                if (!response.error){
+                    const resultados = response.data.map((item) => ({
+                        value: item.id,
+                        label: `${item.nome_membro} - ${item.nome_grupo} `,
+                    }));
+                    setOptionsMembros(resultados);
+                }
+            } else {
+                const response = await listarMembros();
+                if (!response.error){
+                    const resultados = response.data.map((item) => ({
+                        value: item.id,
+                        label: `${item.nome} - ${item.nome_grupo} `,
+                    }));
+                    setOptionsMembros(resultados);
+                }
             }
+            
         }
         fetchData()
     }, [])

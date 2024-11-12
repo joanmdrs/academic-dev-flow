@@ -6,7 +6,7 @@ import RenderDate from "../../../../components/RenderDate/RenderDate";
 import RenderStatus from "../../../../components/RenderStatus/RenderStatus";
 import RenderMembers from "../../../../components/RenderMembers/RenderMembers";
 
-const TableProjetos = ({projetos, onUpdate, onDelete}) => {
+const TableProjetos = ({projetos, onUpdate, onDelete, onView}) => {
 
     const columns = [
         {
@@ -15,7 +15,7 @@ const TableProjetos = ({projetos, onUpdate, onDelete}) => {
             key: 'nome_projeto',
             render: (_, record) => (
                 <Space>
-                    <a> {record.nome_projeto} </a>
+                    <a onClick={() => onView(record)}> {record.nome_projeto} </a>
                 </Space>
             )
         },
@@ -100,8 +100,6 @@ const TableProjetos = ({projetos, onUpdate, onDelete}) => {
                     columns={columns}
                     rowKey="id"
                 />
-
-                
             ) : (
                 <Empty
                     description="Nenhum projeto para exibir"

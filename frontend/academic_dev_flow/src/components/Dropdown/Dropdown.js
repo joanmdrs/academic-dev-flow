@@ -1,21 +1,24 @@
-import { Avatar, Dropdown, Space } from "antd";
+import { Avatar, Space } from "antd";
 import React from "react";
-import { DownOutlined } from '@ant-design/icons';
-import { useContextoGlobalUser } from "../../context/ContextoGlobalUser/ContextoGlobalUser";
 import { FaCaretDown } from "react-icons/fa";
+import { useContextoGlobalUser } from "../../context/ContextoGlobalUser/ContextoGlobalUser";
+import { Dropdown } from "antd";
 
 const MyDropdown = ({ items }) => {
-  const {usuario} = useContextoGlobalUser()
-  
+  const { usuario } = useContextoGlobalUser();
+
   return (
-    <Dropdown trigger={['click']} menu={{items}}>
-      <Space style={{display: 'flex', gap: '10px'}}>
-        <Avatar src={`https://avatar.iran.liara.run/public/${usuario?.avatar}`} />
-        <span> {usuario?.nome} </span>   
-        <span style={{cursor: 'pointer'}}> <FaCaretDown/> </span>
-      </Space>
-       
-    </Dropdown>
+    <Space style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+      <Avatar src={`https://avatar.iran.liara.run/public/${usuario?.avatar}`} />
+      <span> {usuario?.nome} </span>
+      
+      {/* Dropdown surrounding only the icon */}
+      <Dropdown trigger={['click']} menu={{ items }}>
+        <span style={{ cursor: 'pointer' }}>
+          <FaCaretDown />
+        </span>
+      </Dropdown>
+    </Space>
   );
 };
 

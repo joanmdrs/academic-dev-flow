@@ -94,8 +94,7 @@ const FormMembro = ({onSubmit, onCancel}) => {
         }
         const dadosForm = form.getFieldsValue();
         dadosForm['avatar'] = avatarNumber;
-        //onSubmit(dadosForm);
-        console.log(dadosForm)
+        onSubmit(dadosForm);
     };
 
     return (

@@ -91,7 +91,7 @@ def filter_commits_by_period_and_assignee(request):
                             'message': commit.commit.message,
                             'assignee': commit.author.login,
                             'author': commit.commit.author.name,
-                            'date': commit_date.isoformat()
+                            'date': commit.commit.author.date
                         })
                 else:
                     if start_date <= commit_date <= end_date:
@@ -100,7 +100,7 @@ def filter_commits_by_period_and_assignee(request):
                             'message': commit.commit.message,
                             'assignee': commit.author.login,
                             'author': commit.commit.author.name,
-                            'date': commit_date.isoformat()
+                            'date': commit.commit.author.date
                         })
         else:
             for commit in repo.get_commits():
@@ -113,7 +113,7 @@ def filter_commits_by_period_and_assignee(request):
                             'message': commit.commit.message,
                             'assignee': commit.author.login,
                             'author': commit.commit.author.name,
-                            'date': commit_date.isoformat()
+                            'date': commit.commit.author.date
                         })
                 else:
                     if start_date <= commit_date <= end_date:
@@ -122,7 +122,7 @@ def filter_commits_by_period_and_assignee(request):
                             'message': commit.commit.message,
                             'assignee': commit.author.login,
                             'author': commit.commit.author.name,
-                            'date': commit_date.isoformat()
+                            'date': commit.commit.author.date
                         })
 
         return JsonResponse(user_commits, safe=False)

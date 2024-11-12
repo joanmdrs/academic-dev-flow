@@ -1,10 +1,10 @@
-import { Button, Flex, Modal, Space } from 'antd'
+import { Button, Flex, Modal, Space, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { FaFilter, FaPlus } from 'react-icons/fa'
+import { FaPlus } from 'react-icons/fa'
 import FormRelease from '../../components/FormRelease/FormRelease'
 import { useContextoRelease } from '../../context/ContextoRelease'
 import TableRelease from '../../components/TableRelease/TableRelease'
-import { handleError } from '../../../../services/utils'
+import { formatDate } from '../../../../services/utils'
 import { atualizarRelease, buscarReleasesDosProjetosDoMembro, criarRelease, excluirReleases, filtrarReleasesPeloNomeEPeloProjeto } from '../../../../services/releaseService'
 import { useContextoGlobalUser } from '../../../../context/ContextoGlobalUser/ContextoGlobalUser'
 import FormFilterReleases from '../../components/FormFilterReleases/FormFilterReleases'
@@ -12,6 +12,10 @@ import SelectProject from '../../components/SelectProject/SelectProject'
 import { useContextoGlobalProjeto } from '../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto'
 import { buscarProjetoPeloId } from '../../../../services/projetoService'
 import { NotificationManager } from 'react-notifications'
+import RenderStatus from '../../../../components/RenderStatus/RenderStatus'
+import { optionsStatusReleases } from '../../../../services/optionsStatus'
+import { IoMdCreate, IoMdTrash } from 'react-icons/io'
+
 
 const Release = () => {
 
@@ -125,9 +129,79 @@ const Release = () => {
         });
     };
 
+    const columnsTable = [
+        {
+            title: 'Nome',
+            dataIndex: 'nome',
+            key: 'nome'
+        },
+        {
+            title: 'Projeto',
+            dataIndex: 'projeto',
+            key: 'projeto',
+            render: (_, record) => (
+                <Space> {record.nome_projeto} </Space>
+            ),
+        },
+        {
+            title: 'Lançamento',
+            dataIndex: 'data_lancamento',
+            key: 'data_lancamento',
+            render: (_, record) => (
+                <Space>
+                    {formatDate(record.data_lancamento)}
+                </Space>
+            )
+        },
+        {
+            title: 'Responsável',
+            dataIndex: 'responsavel',
+            key: 'responsavel',
+            render: (_, record) => (
+                <Space>
+                    {record.nome_responsavel}
+                </Space>
+            )
+        },
+        {
+            title: 'Etapa',
+            dataIndex: 'etapa',
+            key: 'etapa',
+            render: (_, record) => (
+                <Space>
+                    {record.nome_etapa}
+                </Space>
+            )
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+            align: 'center',
+            render: (_, record) => (
+                <RenderStatus optionsStatus={optionsStatusReleases} propStatus={record.status} /> 
+            )
+        },
+        {
+            title: 'Ações',
+            dataIndex: 'actions',
+            key: 'actions',
+            render: (_, record) => (
+                <Space>
+                    <Tooltip title="Editar">
+                        <a onClick={() => handleAtualizarRelease(record)}><IoMdCreate /></a>
+                    </Tooltip>
+                    <Tooltip title="Excluir">
+                        <a onClick={() => handleExcluirRelease(record.id)}><IoMdTrash /></a>
+                    </Tooltip>
+                </Space>
+            )
+        }
+    ]
+
 
     return (
-        <div style={{height: '100%'}} className="global-div"> 
+        <div className='content'> 
             <div style={{
                 borderBottom: '1px solid #ddd',
                 display: 'flex',
@@ -180,7 +254,7 @@ const Release = () => {
 
                 { isTableVisible && (
                     <div>
-                        <TableRelease data={releases} onUpdate={handleAtualizarRelease} onDelete={handleExcluirRelease}/>
+                        <TableRelease data={releases} columns={columnsTable}/>
                     </div>
         
 

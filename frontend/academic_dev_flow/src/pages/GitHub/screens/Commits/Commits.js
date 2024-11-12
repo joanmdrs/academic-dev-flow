@@ -1,66 +1,22 @@
-import React, { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import React from "react";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
-import { buscarProjetoPeloId } from "../../../../services/projetoService";
-import { handleError } from "../../../../services/utils";
-import { Button, Result } from "antd";
+import { Empty, Result, Tabs } from "antd";
 import SpinLoading from "../../../../components/SpinLoading/SpinLoading";
 import FormBuscarCommits from "../../components/FormBuscarCommits/FormBuscarCommits";
-import GraficoBarrasCommits from "../../../Graficos/GraficoBarrasCommits/GraficoBarrasCommits";
 import { useContextoCommits } from "../../context/ContextoCommits";
-import { FaArrowRotateRight } from "react-icons/fa6";
+import GraphBarCommits from "../../components/GraphBarCommits/GraphBarCommits";
+import { VscGraph } from "react-icons/vsc";
+
+const {TabPane} = Tabs
 
 const Commits = () => {
-    const { dadosProjeto, setDadosProjeto } = useContextoGlobalProjeto();
-    const location = useLocation();
-    const { state } = location;
-    const { commits, setCommits, loading} = useContextoCommits()
-
-    const handleBuscarProjeto = async () => {
-        const response = await buscarProjetoPeloId(state.idProjeto);
-        if (!response.error) {
-            setDadosProjeto(response.data);
-        }
-    };
-
-    
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                if (state.idProjeto) {
-                    await handleBuscarProjeto();
-                }
-            } catch (error) {
-                handleError(error, "Falha ao tentar buscar os dados!");
-            }
-        };
-        fetchData();
-    }, [state]);
+    const { dadosProjeto} = useContextoGlobalProjeto();
+    const { commits, loading} = useContextoCommits()
 
     return (
-        <div className="global-div" style={{ backgroundColor: "#FFFFFF", height: "100%" }}>
-            <div
-                style={{
-                    borderBottom: "1px solid #ddd",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "baseline",
-                    padding: "20px",
-                    backgroundColor: "#FFFFFF",
-                }}
-            >
-                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                    <h2 style={{ margin: 0, fontFamily: "Poppins, sans-serif", fontWeight: "600" }}>
-                        Integração com o GitHub
-                    </h2>
-                    <h4 style={{ margin: 0, fontFamily: "Poppins, sans-serif", fontWeight: "400" }}>
-                        {dadosProjeto?.nome} | Commits
-                    </h4>
-                </div>
-            </div>
+        <div>
 
-            { (!state?.repoGithub || !state?.tokenGithub) && (
+            { (!dadosProjeto?.nome_repo || !dadosProjeto?.token) && (
                 <div style={{padding: '20px'}}>
                     <Result
                         status="info"
@@ -70,18 +26,14 @@ const Commits = () => {
                 </div>
             )}
 
-            { state?.repoGithub && state?.tokenGithub && (
+            { dadosProjeto?.nome_repo && dadosProjeto?.token && (
                 <React.Fragment>
                     <div style={{
                         borderBottom: '1px solid #ddd',
-                        padding: '20px',
-                        display: 'flex',
-                        justifyContent: 'space-between'
-
+                        paddingBottom: '10px',
+                        paddingTop: '10px'
                     }}> 
                         <FormBuscarCommits />
-
-                        <Button type="primary" ghost icon={<FaArrowRotateRight />} onClick={() => setCommits([])}> Resetar </Button>
                     </div>
 
                     <div style={{marginTop: '40px'}}>
@@ -89,9 +41,35 @@ const Commits = () => {
                         { loading ? (
                             <SpinLoading />
                         ) : (
-                            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}> 
-                                <GraficoBarrasCommits data={commits} />
-                            </div>
+                            <React.Fragment>
+                                { commits.length > 0 ? (
+
+                                    <Tabs tabPosition="right">
+                                        <TabPane tab={<VscGraph size="20px"/>} key="1">
+                                            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}> 
+                                                <GraphBarCommits data={commits} />
+                                            </div>
+                                        </TabPane>
+                                    </Tabs>
+                                    
+                                ) : (
+                                    <Empty
+                                        description="Não há dados para exibir"
+                                        image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+                                        style={{
+                                            display: 'flex',
+                                            width: "100%",
+                                            height: "100%",
+                                            flexDirection: 'column',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            padding: '20px'
+                                        }}
+                                    >
+                                    </Empty>
+                                )}
+                            </React.Fragment>
+                            
                         )}
                     </div>
                 </React.Fragment>

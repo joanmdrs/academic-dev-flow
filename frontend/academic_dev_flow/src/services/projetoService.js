@@ -14,7 +14,7 @@ export const criarProjeto = async (data) => {
 export const atualizarProjeto = async (data, idProjeto) => {
     try {
         const response = await api.patch(`/projeto/atualizar/`, data, {params: {id_projeto: idProjeto}})
-        return handleSuccess(response, 'Informações atualzadas com sucesso !')
+        return handleSuccess(response, 'Informações atualizadas com sucesso !')
     } catch (error) {
         return handleError(error, 'Falha ao tentar atualizar os dados do projeto!')
     }

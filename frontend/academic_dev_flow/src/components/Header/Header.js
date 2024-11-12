@@ -17,7 +17,6 @@ const MyHeader = () => {
     const { logOut } = useAuth();
     const navigate = useNavigate();
     const { grupo } = useContextoGlobalProjeto();
-    const { usuario } = useContextoGlobalUser();
     const { theme, setTheme } = useContextoGlobalTheme();
 
     const handleAcessarPerfil = async () => {
@@ -30,9 +29,9 @@ const MyHeader = () => {
         }
     };
 
-    const toggleTheme = () => {
-        setTheme(theme === 'light' ? 'dark' : 'light');
-    };
+    // const toggleTheme = () => {
+    //     setTheme(theme === 'light' ? 'dark' : 'light');
+    // };
 
     const items = [
         {
@@ -68,7 +67,7 @@ const MyHeader = () => {
             </div>
 
             <div style={{display:'flex', gap: '20px'}}>
-                <Button 
+                {/* <Button 
                     onClick={toggleTheme} 
                     icon={<FaBrush color={`${theme === 'light' ? "#000000" : '#FFFFFF'}`}/>}
                     style={{
@@ -77,7 +76,7 @@ const MyHeader = () => {
                         border: `1px solid ${theme === 'light' ? "#000000" : '#FFFFFF'}`, 
                         cursor: 'pointer' 
                     }}
-                />
+                /> */}
                 <div className='icone-perfil'>
                     <MyDropdown items={items} />
                 </div>

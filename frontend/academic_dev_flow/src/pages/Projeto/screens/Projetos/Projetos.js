@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Drawer, Input, Modal, Select, Tabs, Tooltip } from 'antd';
+import { Button, Input, Modal, Select, Tabs, Tooltip } from 'antd';
 import { buscarProjetosDoMembro, criarMembroProjeto } from "../../../../services/membroProjetoService";
 import { useContextoGlobalUser } from "../../../../context/ContextoGlobalUser/ContextoGlobalUser";
 import TableProjetos from "../../components/TableProjetos/TableProjetos";
@@ -12,28 +12,22 @@ import { TbLayoutListFilled } from "react-icons/tb";
 import ListProjetos from '../../components/ListProjetos/ListProjetos';
 import { optionsStatusProjetos } from '../../../../services/optionsStatus';
 import { listarFluxos } from '../../../../services/fluxoService';
+import { useNavigate } from 'react-router-dom';
 
 const { Search } = Input;
 const {TabPane} = Tabs 
 
 const Projetos = () => {
-
+    
+    const navigate = useNavigate();
     const { hasProjeto, setHasProjeto } = useContextoProjeto();
-    const { usuario } = useContextoGlobalUser();
+    const { usuario, grupo } = useContextoGlobalUser();
     const [projetos, setProjetos] = useState([]);
     const [isTabsVisible, setIsTabsVisible] = useState(false);
     const [isTableVisible, setIsTableVisible] = useState(true);
     const [actionForm, setActionForm] = useState('create');
     const [optionsFluxo, setOptionsFluxo] = useState([])
-    const [isDrawerVisible, setIsDrawerVisible] = useState(false)
 
-    const handleOpenDrawer = () => {
-        setIsDrawerVisible(true)
-    }
-
-    const handleCloseDrawer = () => {
-        setIsDrawerVisible(false)
-    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -55,6 +49,25 @@ const Projetos = () => {
         };
         fetchData();
     }, [usuario]);
+
+    const handleVisualizarProjeto = async (record) => {
+        const parametros = {
+            idProjeto: record.projeto
+        }
+        if (grupo === 'Docentes') {
+            navigate("/professor/projetos/visualizar", {
+                state: parametros
+            });
+        } else if (grupo === 'Discentes') {
+            navigate("/aluno/projetos/visualizar", {
+                state: parametros
+            });
+        } else if (grupo === 'Administradores') {
+            navigate("/admin/projetos/visualizar", {
+                state: parametros
+            });
+        }
+    }
 
     const handleBuscarProjetosDoMembro = async () => {
         const response = await buscarProjetosDoMembro(usuario.id);
@@ -302,6 +315,7 @@ const Projetos = () => {
                                     projetos={projetos} 
                                     onUpdate={handleAtualizarProjeto}
                                     onDelete={handleExcluirProjeto}
+                                    onView={handleVisualizarProjeto}
                                 />
                             </TabPane>
                             

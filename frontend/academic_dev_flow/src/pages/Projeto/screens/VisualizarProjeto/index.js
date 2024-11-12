@@ -1,12 +1,12 @@
 import React from "react";
-import {Layout} from 'antd'
-import MyHeader from "../../../../components/Header/Header";
 import MenuAluno from "../../../../components/Menus/MenuAluno/MenuAluno";
 import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfessor";
-import GithubProjetos from "./GithubProjetos";
-const {Content} = Layout
+import { Layout } from "antd";
+import MyHeader from "../../../../components/Header/Header";
+import { Content } from "antd/es/layout/layout";
+import VisualizarProjeto from "./VisualizarProjeto";
 
-const ScreenGithubProjetos = ({grupo}) => {
+const ScreenVisualizarProjeto = ({grupo}) => {
 
     return (
         <React.Fragment>
@@ -15,11 +15,11 @@ const ScreenGithubProjetos = ({grupo}) => {
             <Layout>
                 <MyHeader/>
                 <Content>
-                    <GithubProjetos />
+                    <VisualizarProjeto />
                 </Content>
             </Layout>
         </React.Fragment>   
     )
 }
 
-export default ScreenGithubProjetos
+export default ScreenVisualizarProjeto

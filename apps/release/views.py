@@ -200,3 +200,67 @@ class ExcluirReleasesView(APIView):
             
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class BuscarUltimaReleaseDoProjetoView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        try:
+            id_projeto = request.GET.get('id_projeto', None)
+            
+            if not id_projeto:
+                return Response(
+                    {'error': 'O ID do projeto não foi fornecido!'}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            # Obter a última release do projeto
+            ultima_release = Release.objects.filter(projeto=id_projeto).order_by('-data_lancamento').first()
+            
+            if ultima_release:
+                serializer = ReleaseSerializer(ultima_release)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            # Resposta quando não há releases no projeto
+            return Response(
+                {
+                    'message': 'Este projeto ainda não possui releases.',
+                    'code': 'PROJETO_SEM_RELEASES'
+                }, 
+                status=status.HTTP_200_OK
+            )
+        
+        except Exception as e:
+            return Response({'error': str(e), 'code': 'ERRO_INTERNO'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+
+class BuscarReleasesAdjacentesView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        try:
+            id_projeto = request.GET.get('id_projeto')
+            release_atual_id = request.GET.get('id_release')
+            
+            if not id_projeto or not release_atual_id:
+                return Response(
+                    {'error': 'ID do projeto e da release atual são necessários!'}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            # Release anterior
+            release_anterior = Release.objects.filter(
+                projeto_id=id_projeto, id__lt=release_atual_id
+            ).order_by('-data_lancamento').first()
+            
+            # Release posterior
+            release_posterior = Release.objects.filter(
+                projeto_id=id_projeto, id__gt=release_atual_id
+            ).order_by('data_lancamento').first()
+
+            data = {
+                'release_anterior': ReleaseSerializer(release_anterior).data if release_anterior else None,
+                'release_posterior': ReleaseSerializer(release_posterior).data if release_posterior else None
+            }
+            return Response(data, status=status.HTTP_200_OK)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

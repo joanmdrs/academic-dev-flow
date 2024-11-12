@@ -12,15 +12,13 @@ export const formatDate = (dateString) => {
     'jul', 'ago', 'set', 'out', 'nov', 'dez'
   ];
 
-  const date = new Date(dateString);
-  const day = date.getDate();
-  const monthIndex = date.getMonth();
-  const year = date.getFullYear();
+  const [year, month, day] = dateString.split('-'); // Supondo formato 'YYYY-MM-DD'
+  const date = new Date(year, month - 1, day);
 
-  const formattedDate = `${day} ${months[monthIndex]}. ${year}`;
-
+  const formattedDate = `${day} ${months[date.getMonth()]}. ${year}`;
   return formattedDate;
 };
+
 
 export const formatDateTime = (dateString) => {
   const months = [
@@ -40,6 +38,11 @@ export const formatDateTime = (dateString) => {
   const formattedDate = `${day} ${months[monthIndex]}. ${year} às ${hours}:${minutes}`;
 
   return formattedDate;
+};
+
+export const formatDateIso = (dateString) => {
+  const [year, month, day] = dateString.split('-'); // Divide a data no formato 'YYYY-MM-DD'
+  return `${day}/${month}/${year}`; // Retorna no formato 'DD/MM/AAAA'
 };
 
 

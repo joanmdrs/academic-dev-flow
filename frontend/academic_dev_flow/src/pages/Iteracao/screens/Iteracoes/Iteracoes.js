@@ -1,4 +1,4 @@
-import { Button, Flex, Modal, Space } from 'antd'
+import { Button, Flex, Modal, Space, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
 import { useContextoGlobalUser } from '../../../../context/ContextoGlobalUser/ContextoGlobalUser'
@@ -11,6 +11,10 @@ import { atualizarIteracao, buscarIteracoesDosProjetosDoMembro, criarIteracao, e
 import FormFilterIteracoes from '../../components/FormFilterIteracoes/FormFilterIteracoes'
 import FormIteracao from '../../components/FormIteracao/FormIteracao'
 import TableIteracoes from '../../components/TableIteracoes/TableIteracoes'
+import RenderStatus from '../../../../components/RenderStatus/RenderStatus'
+import { optionsStatusIteracoes } from '../../../../services/optionsStatus'
+import { IoMdCreate, IoMdTrash } from 'react-icons/io'
+import { formatDate } from '../../../../services/utils'
 
 const Iteracoes = () => {
 
@@ -122,9 +126,90 @@ const Iteracoes = () => {
         });
     };
 
+    const columnsTable = [
+        {
+            title: 'Nome',
+            dataIndex: 'nome',
+            key: 'nome'
+        },
+        {
+            title: 'Projeto',
+            dataIndex: 'projeto',
+            key: 'projeto',
+            render: (_, record) => (
+                <Space> {record.nome_projeto} </Space>
+            ),
+        },
+        
+        {
+            title: 'Início',
+            dataIndex: 'data_inicio',
+            key: 'data_inicio',
+            render: (_, record) => (
+                <Space>
+                    {formatDate(record.data_inicio)}
+                </Space>
+            )
+        },
+        {
+            title: 'Término',
+            dataIndex: 'data_termino',
+            key: 'data_termino',
+            render: (_, record) => (
+                <Space>
+                    {formatDate(record.data_termino)}
+                </Space>
+            )
+        },
+        {
+            title: 'Responsável',
+            dataIndex: 'responsavel',
+            key: 'responsavel',
+            render: (_, record) => (
+                <Space>
+                    {record.nome_responsavel}
+                </Space>
+            )
+        },
+        {
+            title: 'Etapa',
+            dataIndex: 'etapa',
+            key: 'etapa',
+            render: (_, record) => (
+                <Space>
+                    {record.nome_etapa}
+                </Space>
+            )
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+            align: 'center',
+            render: (_, record) => (
+                <RenderStatus optionsStatus={optionsStatusIteracoes} propStatus={record.status} /> 
+            )
+        },
+        {
+            title: 'Ações',
+            dataIndex: 'actions',
+            key: 'actions',
+            render: (_, record) => (
+                <Space>
+                    <Tooltip title="Editar">
+                        <a onClick={() => handleAtualizarIteracao(record)}><IoMdCreate /></a>
+                    </Tooltip>
+                    <Tooltip title="Excluir">
+                        <a onClick={() => handleExcluirIteracao(record.id)}><IoMdTrash /></a>
+                    </Tooltip>
+                </Space>
+            )
+        }
+    ]
+
 
     return (
-        <div style={{height: '100%',}} className="global-div"> 
+        <div className='content'> 
             <div style={{
                 borderBottom: '1px solid #ddd',
                 display: 'flex',
@@ -180,9 +265,8 @@ const Iteracoes = () => {
                 { isTableVisible && (
                     <div>
                         <TableIteracoes 
-                            data={iteracoes} 
-                            onUpdate={handleAtualizarIteracao} 
-                            onDelete={handleExcluirIteracao}
+                            columns={columnsTable}
+                            data={iteracoes}   
                         />
                     </div>
         

@@ -27,7 +27,7 @@ const ListEquipe = ({data, onAddFunction, onDeleteFunction, onAdd, onDelete}) =>
                             style={{
                                 padding: '20px', 
                                 marginBottom: '10px',
-                                borderLeft: `4px solid ${getRandomColor()}`,
+                                borderLeft: `4px solid ${() => getRandomColor()}`,
                                 boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px'
                             }}
                             >
@@ -37,16 +37,20 @@ const ListEquipe = ({data, onAddFunction, onDeleteFunction, onAdd, onDelete}) =>
                                     title={
                                         <div style={{display: 'flex', width: '100%', justifyContent: 'space-between'}}>
                                             <div>{item.nome_membro}</div>
-                                            <span style={{
-                                                backgroundColor: 'rgba(0,0,0,0.1)', 
-                                                borderRadius: '50%',
-                                                padding: '10px',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                width: '40px',
-                                                height: '40px',
-                                            }}> 
+                                            <span 
+                                                onClick={() => onDelete(item.id)}
+                                                style={{
+                                                    backgroundColor: 'rgba(0,0,0,0.1)', 
+                                                    borderRadius: '50%',
+                                                    padding: '10px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    width: '40px',
+                                                    height: '40px',
+                                                    cursor: 'pointer'
+                                                }}
+                                            > 
                                                 <Tooltip title="Remover membro">
                                                     <IoMdClose size="20px" />
                                                 </Tooltip>

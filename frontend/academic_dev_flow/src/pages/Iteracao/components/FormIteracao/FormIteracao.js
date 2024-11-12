@@ -6,110 +6,153 @@ import { buscarEtapaPeloId } from "../../../../services/etapaService";
 import { buscarMembrosPorProjeto } from "../../../../services/membroProjetoService";
 import { optionsStatusIteracoes } from "../../../../services/optionsStatus";
 import { useContextoIteracao } from "../../context/contextoIteracao";
-import { handleError } from "../../../../services/utils";
+import { formatDateIso, handleError } from "../../../../services/utils";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 import { NotificationManager } from "react-notifications";
-import { listarReleasesPorProjeto } from "../../../../services/releaseService";
+import { buscarReleasePeloId, listarReleasesPorProjeto } from "../../../../services/releaseService";
 
-const FormIteracao = ({onSubmit, onCancel, selectProject}) => {
+const FormIteracao = ({ onSubmit, onCancel, selectProject }) => {
 
     const { dadosIteracao } = useContextoIteracao();
     const { dadosProjeto } = useContextoGlobalProjeto();
-    const [optionsReleases, setOptionsReleases] = useState([])
+    const [dadosRelease, setDadosRelease] = useState(null);
+    const [optionsReleases, setOptionsReleases] = useState([]);
     const [optionsEtapas, setOptionsEtapas] = useState([]);
     const [optionsMembros, setOptionsMembros] = useState([]);
-    const [titulo, setTitulo] = useState('CADASTRAR ITERAÇÃO')
+    const [titulo, setTitulo] = useState('CADASTRAR ITERAÇÃO');
     const [form] = useForm();
 
     const handleGetReleases = async () => {
         try {
             const response = await listarReleasesPorProjeto(dadosProjeto.id);
-
-            if (!response.error && response.data.length > 0){
-
+            if (!response.error && response.data.length > 0) {
                 const resultados = response.data.map(item => ({
                     value: item.id,
-                    label: item.nome,
+                    label: `${item.nome} - ${formatDateIso(item.data_lancamento)}`
                 }));
-
                 setOptionsReleases(resultados);
             } else {
                 NotificationManager.info(
                     'O projeto selecionado não possui releases criadas. Crie as releases antes de criar as iterações !'
-                )
+                );
             }
         } catch (error) {
             return handleError(error, 'Falha ao tentar buscar as releases do projeto !');
         }
-    }
-    
+    };
+
     const handleGetEtapas = async () => {
         try {
             if (dadosProjeto.fluxo) {
-                const response = await listarEtapasPorFluxo(dadosProjeto.fluxo)
-
-                if (!response.error){
-                    const promises = await response.data.map( async (item) => {
-                        const response2 = await buscarEtapaPeloId(item.etapa)
-
+                const response = await listarEtapasPorFluxo(dadosProjeto.fluxo);
+                if (!response.error) {
+                    const promises = await response.data.map(async (item) => {
+                        const response2 = await buscarEtapaPeloId(item.etapa);
                         return {
                             value: item.id,
-                            label: response2.data.nome
-                        }
-                    })
+                            label: response2.data.nome,
+                        };
+                    });
 
-                    const results = (await Promise.all(promises))
-                    setOptionsEtapas(results)
+                    const results = (await Promise.all(promises));
+                    setOptionsEtapas(results);
                 }
             } else {
-                NotificationManager.info('O projeto selecionado não possui um fluxo associado. Vincule o fluxo ao projeto !')
-
+                NotificationManager.info('O projeto selecionado não possui um fluxo associado. Vincule o fluxo ao projeto !');
             }
-            
-            
         } catch (error) {
-            return handleError(error, 'Falha ao tentar buscar as etapas do fluxo do projeto !')
+            return handleError(error, 'Falha ao tentar buscar as etapas do fluxo do projeto !');
         }
-    }
+    };
 
     const handleGetMembros = async () => {
         try {
             const response = await buscarMembrosPorProjeto(dadosProjeto.id);
-
             const resultados = response.data.map(item => ({
-                    value: item.id,
-                    label: `${item.nome_membro} (${item.nome_grupo})`,
-                }));
+                value: item.id,
+                label: `${item.nome_membro} (${item.nome_grupo})`,
+            }));
             setOptionsMembros(resultados);
         } catch (error) {
             return handleError(error, 'Falha ao tentar buscar os membros do projeto !');
         }
     };
 
+    const handleBuscarRelease = async (idRelease) => {
+
+        if (idRelease){
+            const response = await buscarReleasePeloId(idRelease);
+            if (!response.error) {
+                setDadosRelease(response.data);
+            }
+        } else {
+            setDadosRelease(null)
+        }
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             if (dadosProjeto !== null) {
-                await handleGetReleases()
+                await handleGetReleases();
                 await handleGetEtapas();
                 await handleGetMembros();
-
                 if (dadosIteracao !== null) {
-                    form.setFieldsValue(dadosIteracao)
-                    setTitulo("ATUALIZAR ITERAÇÃO")
+                    form.setFieldsValue(dadosIteracao);
+                    setTitulo("ATUALIZAR ITERAÇÃO");
                 } else {
-                    form.resetFields()
-                    setTitulo('CADASTRAR ITERAÇÃO')
+                    form.resetFields();
+                    setTitulo('CADASTRAR ITERAÇÃO');
                 }
-
             } else {
-                setOptionsEtapas([])
-                setOptionsMembros([])
+                setOptionsEtapas([]);
+                setOptionsMembros([]);
             }
         };
-
         fetchData();
     }, [dadosProjeto, dadosIteracao]);
+
+    const validateDateWithinProjectRange = ({ getFieldValue }) => ({
+        validator(_, value) {
+            const dataInicio = getFieldValue('data_inicio');
+            const dataTermino = getFieldValue('data_termino');
+            
+            if (dadosProjeto && dataInicio && dataTermino) {
+                const projetoInicio = new Date(dadosProjeto.data_inicio);
+                const projetoTermino = new Date(dadosProjeto.data_termino);
+                const inicio = new Date(dataInicio);
+                const termino = new Date(dataTermino);
     
+                if (inicio < projetoInicio || inicio > projetoTermino) {
+                    return Promise.reject(new Error(`A data de início deve estar entre ${formatDateIso(dadosProjeto.data_inicio)} e ${formatDateIso(dadosProjeto.data_termino)}`));
+                }
+                if (termino < projetoInicio || termino > projetoTermino) {
+                    return Promise.reject(new Error(`A data de término deve estar entre ${formatDateIso(dadosProjeto.data_inicio)} e ${formatDateIso(dadosProjeto.data_termino)}`));
+                }
+            }
+            return Promise.resolve();
+        }
+    });
+    
+    const validateDateBeforeRelease = ({ getFieldValue }) => ({
+        validator(_, value) {
+            const releaseData = dadosRelease ? dadosRelease.data_lancamento : null;
+            const dataInicio = getFieldValue('data_inicio');
+            const dataTermino = getFieldValue('data_termino');
+    
+            if (releaseData) {
+                const releaseDate = new Date(releaseData);
+                const inicio = new Date(dataInicio);
+                const termino = new Date(dataTermino);
+    
+                if (inicio > releaseDate || termino > releaseDate) {
+                    return Promise.reject(new Error('As datas precisam ser antes da data de lançamento da release.'));
+                }
+            }
+            return Promise.resolve();
+        }
+    });
+    
+
     return (
         <Form layout="vertical" className="global-form" form={form} onFinish={onSubmit}>
             <Form.Item>
@@ -118,12 +161,12 @@ const FormIteracao = ({onSubmit, onCancel, selectProject}) => {
 
             {selectProject}
 
-            <div style={{display: 'flex', gap: '20px'}}> 
-                <div style={{flex: '2'}}> 
-                    <Form.Item 
-                        label="Nome" 
-                        name="nome" 
-                        style={{ flex: "1"}} 
+            <div style={{ display: 'flex', gap: '20px' }}>
+                <div style={{ flex: '2' }}>
+                    <Form.Item
+                        label="Nome"
+                        name="nome"
+                        style={{ flex: "1" }}
                         rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
                     >
                         <Input type='text' name="nome" placeholder="nome" />
@@ -133,18 +176,18 @@ const FormIteracao = ({onSubmit, onCancel, selectProject}) => {
                         <Input.TextArea rows={5} name="descricao" placeholder="descrição ..." />
                     </Form.Item>
 
-                    <div style={{display: 'flex', gap: '10px'}}> 
-                        <Form.Item 
-                            label="Ordem" 
-                            name="ordem" 
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                        <Form.Item
+                            label="Ordem"
+                            name="ordem"
                             rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
                         >
                             <Input type="number" name="ordem" placeholder="número" />
-                        </Form.Item> 
+                        </Form.Item>
 
-                        <Form.Item 
-                            label="Data de Início" 
-                            name="data_inicio" 
+                        <Form.Item
+                            label="Data de Início"
+                            name="data_inicio"
                             rules={[
                                 { required: true, message: 'Por favor, preencha este campo!' },
                                 ({ getFieldValue }) => ({
@@ -156,14 +199,21 @@ const FormIteracao = ({onSubmit, onCancel, selectProject}) => {
                                         return Promise.reject(new Error('A data de início não pode ser maior que a data de término!'));
                                     },
                                 }),
+                                validateDateWithinProjectRange,
+                                validateDateBeforeRelease
                             ]}
                         >
-                            <Input type="date" name="data_inicio" style={{width: 'fit-content'}}/>
+                            <Input 
+                                type="date" 
+                                name="data_inicio" 
+                                style={{ width: 'fit-content' }}
+                                disabled={dadosRelease ? false : true}  
+                            />
                         </Form.Item>
 
-                        <Form.Item 
-                            label="Data de Término" 
-                            name="data_termino" 
+                        <Form.Item
+                            label="Data de Término"
+                            name="data_termino"
                             rules={[
                                 { required: true, message: 'Por favor, preencha este campo!' },
                                 ({ getFieldValue }) => ({
@@ -175,59 +225,73 @@ const FormIteracao = ({onSubmit, onCancel, selectProject}) => {
                                         return Promise.reject(new Error('A data de término não pode ser menor que a data de início!'));
                                     },
                                 }),
+                                validateDateWithinProjectRange,
+                                validateDateBeforeRelease
                             ]}
                         >
-                            <Input type="date" name="data_termino" style={{width: 'fit-content'}}/>
+                            <Input 
+                                type="date" 
+                                name="data_termino" 
+                                style={{ width: 'fit-content' }} 
+                                disabled={dadosRelease ? false : true} 
+                            />
                         </Form.Item>
                     </div>
                 </div>
-            
-                <div style={{flex: '1'}}> 
+
+                <div style={{ flex: '1' }}>
                     <Form.Item
                         label="Release"
                         name="release"
-                        style={{ flex: "1"}} 
-                        rules={[{ required: true, message: 'Por favor, preencha este campo !'}]}
+                        style={{ flex: "1" }}
+                        rules={[{ required: true, message: 'Por favor, preencha este campo !' }]}
                     >
-                        <Select options={optionsReleases} defaultValue="Selecione"/>
-
+                        <Select
+                            allowClear
+                            onChange={(value) => handleBuscarRelease(value)}
+                            options={optionsReleases}
+                            defaultValue="Selecione"
+                        />
                     </Form.Item>
 
-                    <Form.Item 
-                        label="Status" 
-                        name="status" 
-                        style={{ flex: "1"}} 
+                    <Form.Item
+                        label="Status"
+                        name="status"
+                        style={{ flex: "1" }}
                         rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
                     >
-                        <Select options={optionsStatusIteracoes} defaultValue="Selecione"/>
-                    </Form.Item>
-            
-                    <Form.Item 
-                        label="Etapa" 
-                        name="etapa" 
-                        style={{ flex: "1"}} 
-                        rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
-                    >
-                        <Select options={optionsEtapas} defaultValue="Selecione" />
+                        <Select options={optionsStatusIteracoes} />
                     </Form.Item>
 
-                    <Form.Item 
-                        label="Responsável" 
-                        name="responsavel" 
-                        style={{ flex: "1"}} 
-                        rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
+                    <Form.Item
+                        label="Etapas"
+                        name="etapa"
+                        style={{ flex: "1" }}
+                        rules={[{ required: true, message: 'Por favor, selecione a etapa!' }]}
                     >
-                        <Select options={optionsMembros} defaultValue="Selecione" />
+                        <Select options={optionsEtapas} />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Membros"
+                        name="membros"
+                    >
+                        <Select
+                            mode="multiple"
+                            style={{ width: '100%' }}
+                            placeholder="Selecione os membros"
+                            options={optionsMembros}
+                        />
                     </Form.Item>
                 </div>
             </div>
-                  
-            <Space style={{display: 'flex', gap: '10px'}}>
-                <Button type="primary" htmlType="submit"> Salvar </Button>
-                <Button onClick={onCancel} type="primary" danger> Cancelar </Button>
+
+            <Space>
+                <Button type="primary" htmlType="submit">Salvar</Button>
+                <Button type="primary" danger onClick={onCancel}>Cancelar</Button>
             </Space>
         </Form>
-    )
-}
+    );
+};
 
-export default FormIteracao
+export default FormIteracao;

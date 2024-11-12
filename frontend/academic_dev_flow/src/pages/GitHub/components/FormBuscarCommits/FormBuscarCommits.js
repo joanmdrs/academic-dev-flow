@@ -7,7 +7,7 @@ import { filtrarCommitsPorPeriodoEUsuario } from "../../../../services/githubInt
 import { NotificationManager } from "react-notifications";
 import { buscarMembrosPorProjeto } from "../../../../services/membroProjetoService";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
-import { FaFilter } from "react-icons/fa6";
+import { FaArrowRotateRight, FaFilter } from "react-icons/fa6";
 
 const { RangePicker } = DatePicker;
 
@@ -63,6 +63,8 @@ const FormBuscarCommits = () => {
                 end_date: endDate,
             };
 
+            console.log(parametros)
+
             const response = await filtrarCommitsPorPeriodoEUsuario(parametros);
 
             if (!response.error && response.data.length > 0) {
@@ -75,6 +77,13 @@ const FormBuscarCommits = () => {
         }
     };
 
+    const handleResetar = () => {
+        form.resetFields()
+        setCommits([])
+        setAssignee(null)
+
+    }
+
     useEffect(() => {
         if (dadosProjeto) handleGetMembros();
     }, [dadosProjeto]);
@@ -83,12 +92,13 @@ const FormBuscarCommits = () => {
         <Form
             form={form}
             onFinish={handleGetCommits}
+            style={{display: 'flex', justifyContent: 'space-between'}}
         >
             <div style={{display: 'flex', gap: '10px'}}>
                 <Form.Item name="assignee">
                     <Select
+                        popupMatchSelectWidth={false}
                         allowClear
-                        style={{ width: '150px' }}
                         placeholder="Membro"
                         options={optionsMembros}
                         onChange={(value) => {
@@ -110,68 +120,74 @@ const FormBuscarCommits = () => {
 
                 <Form.Item name="periodo" rules={[{ required: true, message: "Selecione um período" }]}>
                     <Select
+                        popupMatchSelectWidth={false}
                         allowClear
-                        style={{ width: '150px' }}
                         onChange={(value) => setPeriodo(value)}
                         options={optionsFiltro}
-                        placeholder="Selecione"
+                        placeholder="Período"
                     />
                 </Form.Item>
 
-                <Form.Item
-                    name="data"
-                    rules={[
-                        { required: true, message: "Selecione uma data" },
-                        ({ getFieldValue }) => ({
-                            validator(_, value) {
-                                if (!periodo || value) return Promise.resolve();
-                                return Promise.reject(new Error("Selecione uma data válida para o período escolhido"));
-                            },
-                        }),
-                    ]}
-                >
-                    {periodo === 'day' && (
-                        <DatePicker
-                            picker="date"
-                            onChange={(date) => {
-                                const formattedDate = date?.format("YYYY-MM-DD");
-                                setDay(formattedDate);
-                            }}
-                        />
-                    )}
-                    {periodo === 'month' && (
-                        <DatePicker
-                            picker="month"
-                            onChange={(date) => {
-                                setMonth(date?.month() + 1);
-                                setYear(date?.year());
-                            }}
-                        />
-                    )}
-                    {periodo === 'year' && (
-                        <DatePicker
-                            picker="year"
-                            onChange={(date) => setYear(date?.year())}
-                        />
-                    )}
-                    {periodo === 'interval' && (
-                        <RangePicker
-                            onChange={(dates) => {
-                                setStartDate(dates?.[0]?.format("YYYY-MM-DD"));
-                                setEndDate(dates?.[1]?.format("YYYY-MM-DD"));
-                            }}
-                        />
-                    )}
-                </Form.Item>
+                { form.getFieldValue('periodo') && (
+                    <Form.Item
+                        name="data"
+                        rules={[
+                            { required: true, message: "Selecione uma data" },
+                            ({ getFieldValue }) => ({
+                                validator(_, value) {
+                                    if (!periodo || value) return Promise.resolve();
+                                    return Promise.reject(new Error("Selecione uma data válida para o período escolhido"));
+                                },
+                            }),
+                        ]}
+                    >
+                        {periodo === 'day' && (
+                            <DatePicker
+                                picker="date"
+                                onChange={(date) => {
+                                    const formattedDate = date?.format("YYYY-MM-DD");
+                                    setDay(formattedDate);
+                                }}
+                            />
+                        )}
+                        {periodo === 'month' && (
+                            <DatePicker
+                                picker="month"
+                                onChange={(date) => {
+                                    setMonth(date?.month() + 1);
+                                    setYear(date?.year());
+                                }}
+                            />
+                        )}
+                        {periodo === 'year' && (
+                            <DatePicker
+                                picker="year"
+                                onChange={(date) => setYear(date?.year())}
+                            />
+                        )}
+                        {periodo === 'interval' && (
+                            <RangePicker
+                                onChange={(dates) => {
+                                    setStartDate(dates?.[0]?.format("YYYY-MM-DD"));
+                                    setEndDate(dates?.[1]?.format("YYYY-MM-DD"));
+                                }}
+                            />
+                        )}
+                    </Form.Item>
 
-            </div>
-            
+                )}
 
-            <Form.Item>
+                
                 <Button icon={<FaFilter />} type="primary" htmlType="submit">
                     Filtrar
                 </Button>
-            </Form.Item>
+
+            </div>
+
+            <Button type="primary" ghost icon={<FaArrowRotateRight />} onClick={() => handleResetar()}> Resetar </Button>
+            
+
+           
         </Form>
     );
 };

@@ -1,52 +1,40 @@
-import { Button, Input, Modal, Space, Spin, Tabs } from "antd";
-import Item from "antd/es/list/Item";
 import React, { useEffect, useState } from "react";
+import ScreenDrawerComments from "../../../../../Tarefa/screens/DrawerComments";
+import { Button, Input, Modal, Select, Tabs } from "antd";
 import { FaCalendar, FaListUl, FaPlus, FaTasks } from "react-icons/fa";
-import TableTask from "../../components/TableTask/TableTask";
-import TaskBoard from "../../components/TaskBoard/TaskBoard";
-import { useContextoTarefa } from "../../context/ContextoTarefa";
-import FormTarefa from "../../components/FormTarefa/FormTarefa";
-import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProjeto";
-import { useContextoGlobalUser } from "../../../../context/ContextoGlobalUser/ContextoGlobalUser";
-import { atualizarTarefa, criarTarefa, excluirTarefas, filtrarTarefasPorProjetoEPorMembro, iniciarContagemTempo, listarTarefasDosProjetosDoMembro, pararContagemTempo } from "../../../../services/tarefaService";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
-import { buscarProjetoPeloId } from "../../../../services/projetoService";
-import { NotificationManager } from "react-notifications";
-import { createIssue, updateIssue } from "../../../../services/githubIntegration/issueService";
-import FormFiltrarTarefas from "../../components/FormFiltrarTarefas/FormFiltrarTarefas";
-import { buscarMembroProjetoPeloIdMembroEPeloIdProjeto } from "../../../../services/membroProjetoService";
-import { handleError } from "../../../../services/utils";
+import SpinLoading from "../../../../../../components/SpinLoading/SpinLoading";
+import FormTarefa from "../../../../../Tarefa/components/FormTarefa/FormTarefa";
+import TaskBoard from "../../../../../Tarefa/components/TaskBoard/TaskBoard";
 import { TbLayoutCardsFilled } from "react-icons/tb";
+import TableTask from "../../../../../Tarefa/components/TableTask/TableTask";
 import { LuCalendarDays } from "react-icons/lu";
-import FormComentario from "../../../Comentario/components/FormComentario/FormComentario";
-import DrawerComments from "../DrawerComments/DrawerComments";
-import ScreenDrawerComments from "../DrawerComments";
-
-const {Search} = Input 
-
-const StyleSpin = {
-    position: 'fixed', 
-    top: 0, 
-    left: 0, 
-    width: '100%', 
-    height: '100%', 
-    backgroundColor: 'rgba(255, 255, 255, 0.5)', 
-    zIndex: 9999, 
-    display: 'flex', 
-    justifyContent: 'center', 
-    alignItems: 'center'
-};
+import FormFiltrarTarefas from "../../../../../Tarefa/components/FormFiltrarTarefas/FormFiltrarTarefas";
+import { useContextoGlobalUser } from "../../../../../../context/ContextoGlobalUser/ContextoGlobalUser";
+import { useContextoTarefa } from "../../../../../Tarefa/context/ContextoTarefa";
+import { atualizarTarefa, criarTarefa, excluirTarefas, iniciarContagemTempo, listarTarefasPorProjeto, pararContagemTempo } from "../../../../../../services/tarefaService";
+import { useContextoGlobalProjeto } from "../../../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
+import { buscarMembroProjetoPeloIdMembroEPeloIdProjeto, buscarMembrosPorProjeto } from "../../../../../../services/membroProjetoService";
+import { listarCategoriaTarefa } from "../../../../../../services/categoriaTarefaService";
+import { handleError } from "../../../../../../services/utils";
+import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../../../services/messages";
+import { NotificationManager } from "react-notifications";
+import { createIssue, updateIssue } from "../../../../../../services/githubIntegration/issueService";
+const {TabPane} = Tabs
+const {Search} = Input
 
 const Tarefas = () => {
 
-    const [isFormVisible, setIsFormVisible] = useState(false)   
-    const [isTabsVisible, setIsTabsVisible] = useState(true)
-    const [isLoading, setIsLoading] = useState(false)
-    const {dadosTarefa, setDadosTarefa, tarefas, setTarefas, acaoForm, setAcaoForm} = useContextoTarefa()
     const {usuario} = useContextoGlobalUser()
-    const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
-    const [isDrawerCommentsVisible, setIsDrawerCommentsVisible] = useState(false)
-
+    const {dadosProjeto} = useContextoGlobalProjeto()
+    const [isFormVisible, setIsFormVisible] = useState(false)
+    const [isDrawerCommentsVisible, setIsDrawerCommentsVisible] = useState()
+    const [isLoading, setIsLoading] = useState(false)
+    const [isTabsVisible, setIsTabsVisible] = useState(true)
+    const {dadosTarefa, setDadosTarefa, tarefas, setTarefas} = useContextoTarefa()
+    const [optionsMembros, setOptionsMembros] = useState([])
+    const [optionsCategorias, setOptionsCategorias] = useState([])
+    const [actionForm, setActionForm] = useState('create')
+    
     const handleShowDrawerComments = () => {
         setIsDrawerCommentsVisible(true)
     }
@@ -55,63 +43,88 @@ const Tarefas = () => {
         setIsDrawerCommentsVisible(false)
     }
 
-    const handleExibirComentarios = (record) => {
-        setDadosTarefa(record)
-        handleShowDrawerComments()
-        
-    }
-
-    const handleBuscarTarefasDosProjetosDoMembro = async () => {
-        const response = await listarTarefasDosProjetosDoMembro(usuario.id)
+    const handleListarTarefasPorProjeto = async () => {
+        const response = await listarTarefasPorProjeto(dadosProjeto.id)
         if(!response.error){
             setTarefas(response.data)
         }
     }
 
+    const handleBuscarMembrosPorProjeto = async () => {
+        const response = await buscarMembrosPorProjeto(dadosProjeto.id)
+        if(!response.error){
+            const resultados = response.data.map(item => ({
+                value: item.id,
+                label: `${item.nome_membro} (${item.nome_grupo})`,
+                user: item.usuario_github,
+            }));
+            setOptionsMembros(resultados);
+        }
+    }
+    
+    const handleBuscarCategorias = async () => {
+        try {
+            const response = await listarCategoriaTarefa();
+            if (!response.error && response.data) {
+                const resultados = response.data.map((item) => ({
+                    value: item.id,
+                    label: item.nome
+                }));
+                setOptionsCategorias(resultados);
+            }
+        } catch (error) {
+            return handleError(error, ERROR_MESSAGE_ON_SEARCHING);
+        }
+    };
+    useEffect(() => {
+        const fetchData = async () => {
+            if (dadosProjeto){
+                await handleListarTarefasPorProjeto()
+                await handleBuscarMembrosPorProjeto()
+                await handleBuscarCategorias()
+            }
+        }
+
+        fetchData()
+    }, [dadosProjeto])
+
     const handleCancelar = () => {
         setIsFormVisible(false)
         setIsTabsVisible(true)
-        setDadosProjeto(null)
     }
 
+
     const handleReload = async () => {
-        setDadosProjeto(null)
         setIsFormVisible(false)
         setIsTabsVisible(true)
         setDadosTarefa(null)
-        await handleBuscarTarefasDosProjetosDoMembro()
+        await handleListarTarefasPorProjeto()
 
     }
 
     const handleFiltrarTarefaPeloNome = async (value) => {
         if (value){
-            const response = await listarTarefasDosProjetosDoMembro(usuario.id);
+            const response = await listarTarefasPorProjeto(dadosProjeto.id);
             const tarefasFiltradas = response.data.filter(tarefa =>
                 tarefa.nome.toLowerCase().includes(value.toLowerCase())
             );
             setTarefas(tarefasFiltradas)
         } else {
-            await handleBuscarTarefasDosProjetosDoMembro()
+            await listarTarefasPorProjeto()
         }
-    }
-
-    const handleBuscarProjeto = async (id) => {
-        const response = await buscarProjetoPeloId(id)
-        setDadosProjeto(response.data)
     }
 
     const handleAdicionarTarefa = () => {
         setIsFormVisible(true)
         setIsTabsVisible(false)
-        setAcaoForm('criar')
+        setActionForm('create')
         setDadosTarefa(null)
     }
 
     const handleAtualizarTarefa = async (record) => {
-        await handleBuscarProjeto(record.projeto)
         setIsFormVisible(true)
         setIsTabsVisible(false)
-        setAcaoForm('atualizar')
+        setActionForm('update')
         setDadosTarefa(record)
     }
 
@@ -130,13 +143,13 @@ const Tarefas = () => {
             assignees: dadosForm.assignees
         };
 
-        if (acaoForm === 'criar') {
+        if (actionForm === 'create') {
             const response = await createIssue(dadosEnviar)
             return response
-        } else if (acaoForm === 'atualizar' && !dadosTarefa.number_issue){
+        } else if (actionForm === 'update' && !dadosTarefa.number_issue){
             const response = await createIssue(dadosEnviar)
             return response
-        } else if (acaoForm === 'atualizar' && dadosTarefa.number_issue){
+        } else if (actionForm === 'update' && dadosTarefa.number_issue){
             const response = await updateIssue(dadosTarefa.number_issue, dadosEnviar);
             return response
         }
@@ -163,7 +176,7 @@ const Tarefas = () => {
         }
     
         try {
-            if (acaoForm === 'criar') {
+            if (actionForm === 'criar') {
                 await criarTarefa(dadosForm, dadosIssue);
             } else {
                 await atualizarTarefa(dadosTarefa.id, dadosForm, dadosIssue);
@@ -188,7 +201,7 @@ const Tarefas = () => {
                 setIsLoading(true);
                 try {
                     await excluirTarefas([id]);
-                    await handleReload()
+                    handleReload()
 
                 } catch (error) {
                     NotificationManager.error('Falha ao tentar excluir a tarefa');
@@ -198,35 +211,23 @@ const Tarefas = () => {
         });
     };
 
-    const handleFiltrarTarefas = async (formData) => {
-        const { membroSelect, projetoSelect } = formData;
-
-        if (!membroSelect && !projetoSelect){
-            await handleBuscarTarefasDosProjetosDoMembro()
-        } else {
-            const response = await filtrarTarefasPorProjetoEPorMembro(formData)
-            if (!response.error){
-                setTarefas(response.data)
-            }
-        }
-
-    };
-    
-
     const handleIniciarContagemTempoTarefa = async (tarefa) => {
         try {
             const sendData = {
                 idMembro: usuario.id,
-                idProjeto: tarefa.projeto
+                idProjeto: dadosProjeto.id
             }
+
+            console.log(sendData)
             const response = await buscarMembroProjetoPeloIdMembroEPeloIdProjeto(sendData.idProjeto, sendData.idMembro)
 
             if (!response.error){
+                console.log(response.data)
                 await iniciarContagemTempo({
                     id_membro_projeto: response.data.id,
                     id_tarefa: tarefa.id
                 })
-                await handleBuscarTarefasDosProjetosDoMembro()
+                await handleListarTarefasPorProjeto()
             }
         } catch (error) {
             return handleError(error, 'Falha ao tentar iniciar a contagem de tempo da tarefa !')
@@ -237,109 +238,99 @@ const Tarefas = () => {
         try {
             const sendData = {
                 idMembro: usuario.id,
-                idProjeto: tarefa.projeto
+                idProjeto: dadosProjeto.id
             }
+            console.log(sendData)
             const response = await buscarMembroProjetoPeloIdMembroEPeloIdProjeto(sendData.idProjeto, sendData.idMembro)
 
             if (!response.error){
+                console.log(response.data)
                 await pararContagemTempo({
                     id_membro_projeto: response.data.id,
                     id_tarefa: tarefa.id
                 })
-                await handleBuscarTarefasDosProjetosDoMembro()
+                await handleListarTarefasPorProjeto()
             }
         } catch (error) {
             return handleError(error, 'Falha ao tentar iniciar a contagem de tempo da tarefa !')
         }
     }
 
-    useEffect(() => {
-        const fetchData = async () => {
-            if (usuario && usuario.id){
-                await handleBuscarTarefasDosProjetosDoMembro()
-            }
-        }
+    const handleExibirComentarios = (record) => {
+        handleShowDrawerComments()
+        console.log(record)
+        setDadosTarefa(record)
+    }
 
-        fetchData()
-    }, [usuario])
 
     return (
-        <div className="global-div" style={{height: '100%'}}> 
+        <div> 
 
             {isDrawerCommentsVisible && <ScreenDrawerComments 
                 isDrawerVisible={isDrawerCommentsVisible} 
                 closeDrawer={handleCloseDrawerComments} 
             />}
-            
-            <div style={{
-                borderBottom: '1px solid #ddd',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'baseline',
-                padding: '20px'
-            }}> 
-                <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
-                    <h2 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '600'}}> Tarefas </h2>
-                    <h4 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '400'}}> </h4>
-                </div>
 
-                <div>
+            { !isFormVisible && (
+                <div className="df jc-between pa-t-20 pa-b-20" style={{borderBottom: '1px solid #ddd'}}>  
+                    <div className="df g-20"> 
+                        <Search
+                            style={{width: '500px'}}
+                            placeholder="pesquise pelo nome"
+                            allowClear
+                            enterButton="Pesquisar"
+                            onSearch={handleFiltrarTarefaPeloNome}
+                        />
+
+                        <Select
+                            showSearch
+                            allowClear
+                            placeholder="Membro"
+                            optionFilterProp="children"
+                            options={optionsMembros}
+                            popupMatchSelectWidth={false}
+                        />
+
+                        <Select
+                            showSearch
+                            allowClear
+                            placeholder="Categoria"
+                            optionFilterProp="children"
+                            options={optionsCategorias}
+                            popupMatchSelectWidth={false}
+                        />
+                    </div>
                     <Button
-                        size="large" 
                         onClick={() => handleAdicionarTarefa()} 
                         type="primary" 
-                        ghost 
                         icon={<FaPlus />}> 
                         Criar Tarefa 
                     </Button>
-                </div>
 
-            </div>
-
-            <div style={{
-                backgroundColor: '#FFFFFF',
-                padding: '20px',
-                minHeight: '100vh'
-            }}>
+                </div>  
+            )}
+        
+            <div className="pa-10">
                  {isFormVisible  && (
                     <React.Fragment>
                         {isLoading && ( 
-                            <div style={StyleSpin}>
-                                <Spin size="large" />
-                            </div>
+                            <SpinLoading />
                         )}
 
-                        <div className="global-div">
-                            <FormTarefa 
-                                selectProject={<SelecionarProjeto />} 
-                                onSubmit={handleSalvarTarefa} 
-                                onCancel={handleCancelar} 
-                            />
-                        </div>
+                        <FormTarefa 
+                            onSubmit={handleSalvarTarefa} 
+                            onCancel={handleCancelar} 
+                        />
 
                     </React.Fragment>
                 )}
             
                 { isTabsVisible && (
                     <Tabs
-                        tabBarExtraContent={
-                            <div style={{display: 'flex', gap: '20px'}}> 
-                                <Search
-                                    style={{width: '500px'}}
-                                    placeholder="pesquise pelo nome"
-                                    allowClear
-                                    enterButton="Pesquisar"
-                                    size="middle"
-                                    onSearch={handleFiltrarTarefaPeloNome}
-                                />
-                                <FormFiltrarTarefas idMembro={usuario.id} onChange={handleFiltrarTarefas}/>
-                            </div>
-                            
-                        }
                         size="middle"
                         indicator={{align: "center"}}
                     > 
-                        <Item tab={<span><TbLayoutCardsFilled /> Quadro</span>} key="1" >
+                        <TabPane tab={<span><TbLayoutCardsFilled /> Quadro</span>} key="1" >
                             <TaskBoard 
                                 tarefas={tarefas} 
                                 onCreate={handleAdicionarTarefa}
@@ -349,8 +340,8 @@ const Tarefas = () => {
                                 onStartTarefa={handleIniciarContagemTempoTarefa}
                                 onShowComments={handleExibirComentarios}
                             />
-                        </Item>
-                        <Item tab={<span> <FaListUl /> Tabela </span>} key="2" >
+                        </TabPane>
+                        <TabPane tab={<span> <FaListUl /> Tabela </span>} key="2" >
                             <TableTask 
                                 tarefas={tarefas} 
                                 onUpdate={handleAtualizarTarefa} 
@@ -359,10 +350,10 @@ const Tarefas = () => {
                                 onStartTarefa={handleIniciarContagemTempoTarefa}
                                 onShowComments={handleExibirComentarios}
                             />
-                        </Item>
-                        <Item tab={<span> <LuCalendarDays /> Calendário </span>} key="3" >
+                        </TabPane>
+                        <TabPane tab={<span> <LuCalendarDays /> Calendário </span>} key="3" >
                            {/* <CalendarTask tarefas={tarefas} /> */}
-                        </Item>
+                        </TabPane>
                     </Tabs>
                 )}
 

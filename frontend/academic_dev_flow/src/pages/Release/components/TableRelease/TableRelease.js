@@ -5,78 +5,7 @@ import { formatDate } from "../../../../services/utils";
 import RenderStatus from "../../../../components/RenderStatus/RenderStatus";
 import { optionsStatusReleases } from "../../../../services/optionsStatus";
 
-const TableRelease = ({data, onUpdate, onDelete}) => {
-
-    const columnsTable = [
-        {
-            title: 'Nome',
-            dataIndex: 'nome',
-            key: 'nome'
-        },
-        {
-            title: 'Projeto',
-            dataIndex: 'projeto',
-            key: 'projeto',
-            render: (_, record) => (
-                <Space> {record.nome_projeto} </Space>
-            ),
-        },
-        
-        {
-            title: 'Lançamento',
-            dataIndex: 'data_lancamento',
-            key: 'data_lancamento',
-            render: (_, record) => (
-                <Space>
-                    {formatDate(record.data_lancamento)}
-                </Space>
-            )
-        },
-        {
-            title: 'Responsável',
-            dataIndex: 'responsavel',
-            key: 'responsavel',
-            render: (_, record) => (
-                <Space>
-                    {record.nome_responsavel}
-                </Space>
-            )
-        },
-        {
-            title: 'Etapa',
-            dataIndex: 'etapa',
-            key: 'etapa',
-            render: (_, record) => (
-                <Space>
-                    {record.nome_etapa}
-                </Space>
-            )
-        },
-        {
-            title: 'Status',
-            dataIndex: 'status',
-            key: 'status',
-            align: 'center',
-            render: (_, record) => (
-                <RenderStatus optionsStatus={optionsStatusReleases} propStatus={record.status} /> 
-            )
-        },
-        {
-            title: 'Ações',
-            dataIndex: 'actions',
-            key: 'actions',
-            render: (_, record) => (
-                <Space>
-                    <Tooltip title="Editar">
-                        <a onClick={() => onUpdate(record)}><IoMdCreate /></a>
-                    </Tooltip>
-                    <Tooltip title="Excluir">
-                        <a onClick={() => onDelete(record.id)}><IoMdTrash /></a>
-                    </Tooltip>
-                </Space>
-            )
-        }
-    ]
+const TableRelease = ({columns, data}) => {
 
     const rowSelection = {
         onChange: (selectedRowsKeys, selectedRows) => {
@@ -89,7 +18,8 @@ const TableRelease = ({data, onUpdate, onDelete}) => {
             {
             data.length !== 0 ? (
                 <Table
-                    columns={columnsTable}
+                    className="bs-1 pd-20"
+                    columns={columns}
                     dataSource={data}
                     rowKey="id"
                     rowSelection={rowSelection}

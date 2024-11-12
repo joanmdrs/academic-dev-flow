@@ -1,16 +1,20 @@
-import { Empty, Table } from "antd";
+import { Avatar, Empty, Table, Tooltip } from "antd";
 import React, { useEffect, useState } from "react";
 import { handleError } from "../../../../services/utils";
 import { useContextoProjeto } from "../../context/ContextoProjeto";
 import { buscarMembrosPorProjeto } from "../../../../services/membroProjetoService";
+import { IoMdTrash } from "react-icons/io";
 
-const TableEquipe = () => {
+const TableEquipe = ({onDelete}) => {
 
     const COLLUMS_TABLE_EQUIPE = [
         {
-            title: "ID",
-            key: "id",
-            dataIndex: "id",
+            title: "Membro",
+            key: "membro",
+            dataIndex: "membro",
+            render: (_, record) => (
+                <Avatar src={`https://avatar.iran.liara.run/public/${record.avatar}`} /> 
+            )
         },
         {
             title: "Nome",
@@ -21,6 +25,16 @@ const TableEquipe = () => {
             title: 'Grupo',
             key: 'nome_grupo',
             dataIndex: 'nome_grupo'
+        }, 
+        {
+            title: 'Ações', 
+            key: 'actions',
+            dataIndex: 'actions',
+            render: (_, record) => (
+                <Tooltip title="Excluir">
+                    <a onClick={() => onDelete(record.id)}> <IoMdTrash/> </a>
+                </Tooltip>
+            )
         }
     ]
 
@@ -65,7 +79,6 @@ const TableEquipe = () => {
                             rowSelection={rowSelection}
                         />
                     </div>
-                    
             }
         </React.Fragment>
     )

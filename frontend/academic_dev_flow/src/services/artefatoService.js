@@ -62,7 +62,7 @@ export const listarArtefatos = async () => {
 
 export const listarArtefatosPorProjeto = async (idProjeto) => {
     try {
-        const response = await api.get('/artefato/listar-por-projeto', {params: {id_projeto: idProjeto}})
+        const response = await api.get('/artefato/listar-por-projeto/', {params: {id_projeto: idProjeto}})
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
