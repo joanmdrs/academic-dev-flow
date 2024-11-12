@@ -1,7 +1,7 @@
 import { Empty, List, Skeleton, Space, Tooltip, Collapse } from "antd";
 import React from "react";
 import { IoMdCreate, IoMdTrash } from "react-icons/io";
-import { getRandomColor, limitarCaracteres } from "../../../../services/utils";
+import { limitarCaracteres } from "../../../../services/utils";
 import RenderStatus from "../../../../components/RenderStatus/RenderStatus";
 import { optionsStatusProjetos } from "../../../../services/optionsStatus";
 import RenderMembers from "../../../../components/RenderMembers/RenderMembers";

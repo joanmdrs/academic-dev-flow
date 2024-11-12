@@ -1,116 +1,66 @@
-import { Button, Space, Table } from "antd";
+import { Button, Tabs } from "antd";
 import React, { useState } from "react";
-import { IoCheckmark, IoCloseOutline } from "react-icons/io5";
 import { FaFilter } from "react-icons/fa";
-import { sicronizarIssues } from "../../../../services/tarefaService";
-import { handleError } from "../../../../services/utils";
-import { NotificationManager } from "react-notifications";
-import { FaArrowRotateRight, FaArrowsRotate } from "react-icons/fa6";
+import { FaArrowRotateRight } from "react-icons/fa6";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 import { listIssues } from "../../../../services/githubIntegration/issueService";
 import Titulo from "../../../../components/Titulo/Titulo";
 import FormFilterIssues from "../../components/FormFilterIssues/FormFilterIssues";
+import TableIssues from "../../components/TableIssues/TableIssues";
+import SpinLoading from "../../../../components/SpinLoading/SpinLoading";
+
+const {TabPane} = Tabs
 
 const AdminIssues = () => {
 
-    const COLUNAS_TABELA_ISSUES = [
-        {
-            title: 'Issue', 
-            dataIndex: 'title',
-            key: 'title',
-            render: (_, record) => (
-                <Space style={{display: 'block'}}>
-                    <a href={record.url} target="blank"> 
-                        {record.title}
-                        <span>
-                            {
-                                record.exists ? 
-                                <IoCheckmark color="green" />
-                                : <IoCloseOutline color="red" />
-                            }
-                        </span> 
-                    </a>
-                    <span style={{fontSize: '10px'}}> #{record.number} </span>
-                </Space>
-            )
-        },
-    ]
-
-    const [issues, setIssues] = useState([]);
     const {dadosProjeto} = useContextoGlobalProjeto();
     const [isFormVisivel, setIsFormVisivel] = useState(true)
-    const [isTableVisivel, setIsTableVisivel] = useState(false)
+    const [isTabsVisible, setIsTabsVisible] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
-    const [state, setState] = useState(null)
+    const [openIssues, setOpenIssues] = useState([]);
+    const [closedIssues, setClosedIssues] = useState([]);
 
     const handleResetar = () => {
-        setIsTableVisivel(false)
-        setIssues([])
+        setClosedIssues([])
+        setOpenIssues([])
+        setIsTabsVisible(false)
         setIsFormVisivel(false)
     }
 
-    const handleGetIssues = async (dados) => {
-        try {
+    const handleBuscarIssues = async () => {
 
-            if (!dadosProjeto.token && !dadosProjeto.nome_repo){
-                NotificationManager.info('O projeto selecionado não possui repositório GitHub configurado !')
-                return {'error': 'O projeto selecionado não possui repositório GitHub configurado !'}
-            }
+        if(dadosProjeto.nome_repo && dadosProjeto.token) {
+            setIsLoading(true);
 
-            setIsLoading(true)
-            setIsTableVisivel(true)
-            setIssues([]);  
-            setState(dados.state)
-    
             const parametros = {
                 github_token: dadosProjeto.token,
                 repository: dadosProjeto.nome_repo,
-                state: dados.state,
-                projeto: dadosProjeto.id
             };
-    
-            const response = await listIssues(parametros);
-            
-            if (!response.error && response.data) {
-    
-                setIssues(response.data); 
-            }
-            setIsLoading(false)
-        } catch (error) {
-            handleError(error, "Não foi possível carregar os dados, contate o suporte!");
-        }
-    };
-    
-    const handleSicronizarIssues = async () => {
-        try {
-            const novasIssues = issues.filter(item => !item.exists && item.state === 'open');
-    
-            if (novasIssues.length > 0) {
-                const dados = novasIssues.map(item => ({
-                    nome: item.title,
-                    descricao: item.body,
-                    id_issue: item.id,
-                    number_issue: item.number,
-                    url_issue: item.url,
-                    projeto: dadosProjeto.id,
-                }));
 
-               
-                await sicronizarIssues(dados);
-                await handleGetIssues({
-                    state: state
-                })
-                
-            } else {
-                NotificationManager.info('Todas as issues abertas do repositório deste projeto já estão salvas no banco de dados.');
+            const response = await listIssues(parametros);
+
+            if (!response.error && response.data) {
+                const openIssuesList = [];
+                const closedIssuesList = [];
+                response.data.forEach(issue => {
+
+                    if (issue.state === "open") {
+                        openIssuesList.push(issue);
+                    } else if (issue.state === "closed") {
+                        closedIssuesList.push(issue);
+                    }
+                });
+
+                setOpenIssues(openIssuesList);
+                setClosedIssues(closedIssuesList);
             }
-        } catch (error) {
-            return handleError(error, 'Falha ao tentar sicronizar as issues, contate o suporte!')
+            setIsLoading(false);
         }
-    }
+        
+    };
 
     return (
-        <React.Fragment>
+        <div className="content">
 
             <Titulo 
                 titulo="Issues"
@@ -129,46 +79,41 @@ const AdminIssues = () => {
                     </Button>
 
                     <Button
+                        type="primary"
                         icon={<FaArrowRotateRight />}
                         onClick={handleResetar}
-                        danger
                         ghost
                     >
                         Resetar
                     </Button>
                 </div>
 
-                {/* <div style={{display:'flex', gap: '10px'}}> 
-                    <Button 
-                        icon={<FaArrowsRotate />} 
-                        style={{marginBottom: '20px'}} 
-                        type="primary" ghost
-                        onClick={handleSicronizarIssues}
-                        disabled={issues.length === 0 ? true : false}
-                    > 
-                        Sicronizar 
-                    </Button>
-                </div> */}
             </div>
 
             { isFormVisivel && (
-                <div className="global-div" style={{width: '50%'}}>
-                    <FormFilterIssues onSearch={handleGetIssues} />
+                <div style={{width: '50%'}}>
+                    <FormFilterIssues onSearch={handleBuscarIssues} />
                 </div>
             )}
 
-            {isTableVisivel &&
-                <div className="global-div"> 
-                    <Table
-                        loading={isLoading}
-                        rowKey="id"
-                        dataSource={issues}
-                        columns={COLUNAS_TABELA_ISSUES}
-                    /> 
-                </div> 
+            {isTabsVisible &&
+                <div> 
+                    <Tabs
+                        style={{ paddingTop: "10px" }}
+                        size="middle"
+                        tabPosition="left"
+                    >
+                        <TabPane style={{ padding: "20px" }} tab="Open" key="1">
+                            {!isLoading ? <TableIssues data={openIssues} /> : <SpinLoading />}
+                        </TabPane>
+                        <TabPane style={{ padding: "20px" }} tab="Closed" key="2">
+                            {!isLoading ? <TableIssues data={closedIssues} /> : <SpinLoading />}
+                        </TabPane>
+                    </Tabs>
+                </div>
             }
 
-        </React.Fragment>
+        </div>
     )
 }
 

@@ -1,13 +1,13 @@
 import React from "react";
+import {Layout} from 'antd'
 import MenuAdmin from "../../../../components/Menus/MenuAdmin/MenuAdmin";
-import { Layout } from "antd";
 import MyHeader from "../../../../components/Header/Header";
-import { Content } from "antd/es/layout/layout";
-import GerenciarIteracoes from "./GerenciarIteracoes";
-import { ProviderIteracao } from "../../context/contextoIteracao";
 import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
+import AdminCommits from "./AdminCommits";
+import { ProviderCommits } from "../../context/ContextoCommits";
+const {Content} = Layout
 
-const ScreenGerenciarIteracoes = () => {
+const ScreenAdminCommits = () => {
 
     return (
         <React.Fragment>
@@ -15,13 +15,15 @@ const ScreenGerenciarIteracoes = () => {
             <Layout>
                 <MyHeader/>
                 <Content>
-                    <ProviderIteracao>
-                        <GerenciarIteracoes />
-                    </ProviderIteracao>
+                    <ProviderGlobalProjeto>
+                        <ProviderCommits>
+                            <AdminCommits />
+                        </ProviderCommits>
+                    </ProviderGlobalProjeto>
                 </Content>
             </Layout>
         </React.Fragment>   
     )
 }
 
-export default ScreenGerenciarIteracoes
+export default ScreenAdminCommits

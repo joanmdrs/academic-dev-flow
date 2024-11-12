@@ -143,42 +143,44 @@ const GerenciarMembros = () => {
     }
 
     return (
-        <div> 
+        <div className="content"> 
             <Titulo 
                 titulo='Membros'
                 paragrafo='Membros > Gerenciar membros'
             />
 
-            <div className="button-menu"> 
-                <Button
-                    type="primary"
-                    icon={<FaSearch />}
-                    onClick={() => handleAbrirModal()}
-                    disabled={isSearchBtnEnabled}
-                >
-                    Buscar
-                </Button>
-                <div className="grouped-buttons">
+            { !isFormVisivel && (
+                <div className="button-menu"> 
                     <Button
                         type="primary"
-                        icon={<FaPlus />}
-                        onClick={() => handleAdicionarMembro()}
-                        disabled={isPlusBtnEnabled}
+                        icon={<FaSearch />}
+                        onClick={() => handleAbrirModal()}
+                        disabled={isSearchBtnEnabled}
                     >
-                        Criar Membro
+                        Buscar
                     </Button>
+                    <div className="grouped-buttons">
+                        <Button
+                            type="primary"
+                            icon={<FaPlus />}
+                            onClick={() => handleAdicionarMembro()}
+                            disabled={isPlusBtnEnabled}
+                        >
+                            Criar Membro
+                        </Button>
 
-                    <Button
-                        type="primary"
-                        danger
-                        icon={<FaTrash />}
-                        onClick={() => handleExcluirMembro()}
-                        disabled={isTrashBtnEnabled}
-                    >
-                        Excluir
-                    </Button>
+                        <Button
+                            type="primary"
+                            danger
+                            icon={<FaTrash />}
+                            onClick={() => handleExcluirMembro()}
+                            disabled={isTrashBtnEnabled}
+                        >
+                            Excluir
+                        </Button>
+                    </div>
                 </div>
-            </div>
+            )}
 
             <ModalDeBusca  
                 titulo="Buscar membro" 
@@ -192,7 +194,7 @@ const GerenciarMembros = () => {
                         
             {isFormVisivel &&  (
 
-                <div className="global-div"> 
+                <div> 
                     <FormMembro onSubmit={handleSalvarMembro} onCancel={handleCancelar}/>
                 </div>
             )}

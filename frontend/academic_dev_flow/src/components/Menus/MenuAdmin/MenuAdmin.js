@@ -70,6 +70,21 @@ const MenuAdmin = () => {
 
                 <SubMenu
                     className="item-menu"
+                    key="/admin/fluxos"
+                    icon={<LuWorkflow style={{ fontSize: "20px" }} />}
+                    title="Fluxos"
+                >
+                    <Menu.Item key="gerenciar-fluxos">
+                        <Link to="/admin/fluxos/gerenciar">Gerenciar fluxos</Link>
+                    </Menu.Item>
+
+                    <Menu.Item key="etapas">
+                        <Link to="/admin/fluxos/etapas">Gerenciar etapas</Link>
+                    </Menu.Item>
+                </SubMenu>
+
+                <SubMenu
+                    className="item-menu"
                     key="/admin/cronograma/"
                     icon={<LuCalendarDays size="20px" />}
                     title="Cronograma"
@@ -156,6 +171,13 @@ const MenuAdmin = () => {
                         key="/admin/github-integration/contents"
                     >
                         <Link to="/admin/github-integration/contents"> Contents </Link>
+                    </Menu.Item>
+
+                    <Menu.Item
+                        className="item-menu"
+                        key="/admin/github-integration/commits"
+                    >
+                        <Link to="/admin/github-integration/commits"> Commits </Link>
                     </Menu.Item>
                 </SubMenu>
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Titulo from "../../../../components/Titulo/Titulo";
-import { Button, Form, Input } from "antd";
+import { Button } from "antd";
 import { FaFilter, FaPlus } from "react-icons/fa";
 import { useFuncaoMembroContexto } from "../../context/FuncaoMembroContexto";
 import FormFuncaoMembro from "../../components/FormFuncaoMembro/FormFuncaoMembro";
@@ -15,12 +15,12 @@ const GerenciarFuncaoMembro = () => {
     const [isFormVisible, setIsFormVisible] = useState(false);
     const [isTableVisible, setIsTableVisible] = useState(true)
     const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false);
-    const [acaoForm, setAcaoForm] = useState('criar');
     const [isPlusBtnEnabled, setIsPlusBtnEnabled] = useState(false);
     const {setDadosFuncaoMembro, setItemsFuncaoMembro} = useFuncaoMembroContexto()
 
     const handleCancelar = () => {
         setIsFormVisible(false)
+        setIsTableVisible(true)
     }
 
     const handleReload = async () => {
@@ -80,43 +80,45 @@ const GerenciarFuncaoMembro = () => {
     }
 
     return (
-        <React.Fragment>
+        <div className="content">
             <Titulo 
                 titulo='Gerenciar funções'
                 paragrafo='Membro > Função > Gerenciar funções'
             />
 
-            <div className="button-menu">
-                <Button 
-                    icon={<FaFilter />}
-                    type="primary"
-                    onClick={() => setIsFormBuscarVisivel(!isFormBuscarVisivel)}
-                >
-                    Filtrar
-                </Button>
+            { !isFormVisible && (
+                <div className="button-menu">
+                    <Button 
+                        icon={<FaFilter />}
+                        type="primary"
+                        onClick={() => setIsFormBuscarVisivel(!isFormBuscarVisivel)}
+                    >
+                        Filtrar
+                    </Button>
 
-                <Button 
-                    icon={<FaPlus />} 
-                    type="primary" 
-                    disabled={isPlusBtnEnabled}
-                    onClick={handleAdicionarFuncaoMembro}
-                > 
-                    Atribuir Função
-                </Button>
-            </div>
+                    <Button 
+                        icon={<FaPlus />} 
+                        type="primary" 
+                        disabled={isPlusBtnEnabled}
+                        onClick={handleAdicionarFuncaoMembro}
+                    > 
+                        Atribuir Função
+                    </Button>
+                </div>
+            )}
 
             { isFormBuscarVisivel && (
-                <div className="global-div" style={{width: '50%'}}>
+                <div style={{width: '50%'}}>
                     <FormFilterFuncaoMembro onSubmit={handleFiltrarFuncaoMembro} />
                 </div>
             )}
 
-            <React.Fragment>
+            <div>
                 { isFormVisible && <FormFuncaoMembro onSubmit={handleAtribuirFuncaoMembro} onCancel={handleCancelar} /> }
                 { isTableVisible && <TableFuncaoMembro onDisable={handleAtualizarStatusFuncaoMembro} /> }
-            </React.Fragment>
+           </div>
 
-        </React.Fragment>
+        </div>
     );
 }
 

@@ -16,20 +16,8 @@ import FormTarefa from "../../components/FormTarefa/FormTarefa";
 import InputsAdminTarefa from "../../components/InputsAdminTarefa/InputsAdminTarefa";
 import { NotificationManager } from "react-notifications";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
-import TableTarefas from "../../components/TableTarefas/TableTarefas";
-
-const StyleSpin = {
-    position: 'fixed', 
-    top: 0, 
-    left: 0, 
-    width: '100%', 
-    height: '100%', 
-    backgroundColor: 'rgba(255, 255, 255, 0.5)', 
-    zIndex: 9999, 
-    display: 'flex', 
-    justifyContent: 'center', 
-    alignItems: 'center'
-};
+import TableAdminTarefas from "../../components/TableAdminTarefas/TableAdminTarefas";
+import SpinLoading from "../../../../components/SpinLoading/SpinLoading";
 
 const GerenciarTarefas = () => {
 
@@ -189,7 +177,7 @@ const GerenciarTarefas = () => {
     };
 
     return (
-        <React.Fragment>
+        <div className="content">
             <Titulo 
                 titulo='Tarefas'
                 paragrafo='Tarefas > Gerenciar tarefas'
@@ -228,18 +216,16 @@ const GerenciarTarefas = () => {
             </div>
 
             {isFormBuscarVisivel && (
-                <div className="global-div" style={{width: '50%'}}>   
+                <div style={{width: '50%'}}>   
                     <FormBuscarTarefa onSearch={handleFiltrarTarefas}  />
                 </div>
             )}
 
-            <div className="global-div"> 
+            <div> 
                 {isFormVisivel && acaoForm === 'criar' && (
                     <React.Fragment>
                         {isLoading && ( 
-                            <div style={StyleSpin}>
-                                <Spin size="large" />
-                            </div>
+                            <SpinLoading />
                         )}
 
                         <FormTarefa 
@@ -253,9 +239,7 @@ const GerenciarTarefas = () => {
                 {isFormVisivel && acaoForm === 'atualizar' && (
                     <React.Fragment>
                         {isLoading && ( 
-                            <div style={StyleSpin}>
-                                <Spin size="large" />
-                            </div>
+                            <SpinLoading />
                         )}
 
                         <FormTarefa 
@@ -269,22 +253,18 @@ const GerenciarTarefas = () => {
                     
                 )}
 
-                
-
                 {!isFormVisivel  && (
                     <React.Fragment>
                         {isLoading && ( 
-                            <div style={StyleSpin}>
-                                <Spin size="large" />
-                            </div>
+                            <SpinLoading />
                         )}
                         {isTableVisivel && (
-                            <TableTarefas onEdit={handleAtualizarTarefa} onDelete={handleExcluirTarefaUnica} />
+                            <TableAdminTarefas onEdit={handleAtualizarTarefa} onDelete={handleExcluirTarefaUnica} />
                         )}
                     </React.Fragment>
                 )}
             </div>
-        </React.Fragment>            
+        </div>            
     )
 }
 

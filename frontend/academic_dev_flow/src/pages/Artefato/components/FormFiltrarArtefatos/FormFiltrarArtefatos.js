@@ -16,6 +16,7 @@ const FormFiltrarArtefatos = ({ onSearch }) => {
                 const resultados = response.data.map((item) => ({
                     value: item.id,
                     label: item.nome
+                    
                 }));
                 setOptionsProjetos(resultados);
             } catch (error) {

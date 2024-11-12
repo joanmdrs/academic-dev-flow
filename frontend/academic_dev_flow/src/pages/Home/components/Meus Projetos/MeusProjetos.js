@@ -1,17 +1,23 @@
-import { List, Progress, Tooltip } from "antd";
-import React from "react";
-import { MdOpenInNew } from "react-icons/md";
+import { List, Tooltip } from "antd";
+import React, { useEffect, useState } from "react";
 import ChartStatusProjeto from "../ChartStatusProjeto/ChartStatusProjeto";
 import { CiFolderOn } from "react-icons/ci";
 import { IoIosArrowForward } from "react-icons/io";
+import { useContextoGlobalUser } from "../../../../context/ContextoGlobalUser/ContextoGlobalUser";
+import { Link } from "react-router-dom";
 
 const MeusProjetos = ({projetos}) => {
+
+    const {grupo} = useContextoGlobalUser()
 
     return (
         <div className="meus-projetos box-model">
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'baseline'}}> 
-                <h3 className="ff-pop">Meus Projetos</h3>
-                <a style={{fontSize: '12px', fontWeight: 'bold'}} href="/academic-dev-flow/aluno/projetos">Visualize todos</a>
+                <h3 className="ff-pop">Projetos</h3>
+                { grupo === 'Administradores' && <Link to={`/admin/projetos`}> Visualize todos </Link> }
+                { grupo === 'Discentes' && <Link to={`/aluno/projetos`}> Visualize todos </Link> }
+                { grupo === 'Docentes' && <Link to={`/professor/projetos`}> Visualize todos </Link> }
+
             </div>
 
             <div> 
@@ -22,6 +28,7 @@ const MeusProjetos = ({projetos}) => {
                     pagination={false}
                     renderItem={(item, index) => (
                         <List.Item
+                            key={index}
                             className="item-model"
                             actions={[
                                 <a style={{color: '#000000'}}>
@@ -33,7 +40,7 @@ const MeusProjetos = ({projetos}) => {
                         >
                                 <List.Item.Meta
                                     avatar={<CiFolderOn />}
-                                    title={<span className="ff-pop fw-500"> {item.nome_projeto} </span>}
+                                    title={<span className="ff-pop fw-500"> {item.nome_projeto ? item.nome_projeto : item.nome} </span>}
                                 />
                         </List.Item>
                     )}

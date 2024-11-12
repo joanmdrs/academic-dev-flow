@@ -2,6 +2,7 @@ import { Empty, Space, Table, Tooltip } from "antd";
 import React from "react";
 import { IoIosClose } from "react-icons/io";
 import { IoIosCheckmark } from "react-icons/io";
+import RenderEmpty from "../../../../components/Empty/Empty";
 
 const TableContents = ({data}) => {
 
@@ -50,24 +51,11 @@ const TableContents = ({data}) => {
                     dataSource={data}
                     columns={columnsTable}
                     rowKey="id"
-                    style={{boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px', padding: '20px'}}
+                    className="pa-20 bs-1"
                 />
                 
             ) : (
-                <Empty
-                    description="Nenhum content para exibir"
-                    image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-                    style={{
-                        display: 'flex',
-                        width: "100%",
-                        height: "100%",
-                        padding: '40px',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                >
-                </Empty>
+                <RenderEmpty title="Nenhum content para exibir" />
             )
         }
         </React.Fragment>

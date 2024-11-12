@@ -3,7 +3,7 @@ import "./TabGerenciarFluxos.css"
 import FormDeBusca from "../../../../../components/Forms/FormDeBusca/FormDeBusca";
 import { atualizarFluxo, buscarFluxoPeloNome, criarFluxo, excluirFluxo, listarFluxos } from "../../../../../services/fluxoService";
 import FormFluxo from "../../../components/FormFluxo/FormFluxo";
-import { Button, Modal, Table } from "antd";
+import { Button, Empty, Modal, Table } from "antd";
 import { FaFilter, FaPlus, FaTrash } from "react-icons/fa";
 import { useContextoFluxo } from "../../../context/ContextoFluxo";
 
@@ -122,13 +122,12 @@ const TabGerenciarFluxos = () => {
     return (
         <div>
             { isFormVisivel ? 
-                (<div className="global-div">
+                (
                     <FormFluxo 
                         onSubmit={handleSalvarFluxo}
                         onCancel={handleCancelar}
                         onBack={handleCancelar} 
                     /> 
-                </div>
             
                 )
 
@@ -170,13 +169,30 @@ const TabGerenciarFluxos = () => {
                         </div>
                     ) }
                 
-                    <div className="global-div">
-                        <Table 
-                            dataSource={fluxos} 
-                            columns={COLUNAS_FLUXOS} 
-                            rowKey="id"
-                            rowSelection={rowSelection}
-                        />
+                    <div>
+                        { fluxos.length !== 0 ? (
+                            <Table 
+                                className="bs-1"
+                                dataSource={fluxos} 
+                                columns={COLUNAS_FLUXOS} 
+                                rowKey="id"
+                                rowSelection={rowSelection}
+                            />
+                        ) : (
+                            <Empty
+                                description="Nenhum fluxo para exibir"
+                                image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+                                style={{
+                                    display: 'flex',
+                                    width: "100%",
+                                    height: "100%",
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}
+                            />
+                        )}
+                        
                     </div>
                 </React.Fragment>
                 

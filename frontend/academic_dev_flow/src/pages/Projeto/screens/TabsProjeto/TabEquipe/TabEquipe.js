@@ -12,8 +12,8 @@ const TabEquipe = () => {
     const [isFormVisible, setIsFormVisible] = useState(false)
     const [isTableVisible, setIsTableVisible] = useState(true)
     const {
-        hasProjeto, 
-        setHasMembros, 
+        dadosProjeto, 
+        setMembros, 
         membrosSelecionados, 
         setMembrosSelecionados} = useContextoProjeto()
 
@@ -40,9 +40,9 @@ const TabEquipe = () => {
     }
 
     const handleListarMembros = async () => {
-        const response = await buscarMembrosPorProjeto(hasProjeto.id)
+        const response = await buscarMembrosPorProjeto(dadosProjeto.id)
         if (!response.error){
-            setHasMembros(response.data)
+            setMembros(response.data)
         }
     }
 
@@ -68,7 +68,7 @@ const TabEquipe = () => {
 
     return (    
         <React.Fragment>
-            {hasProjeto && (
+            {dadosProjeto && (
                 <React.Fragment>
                     <div style={{display: 'flex', justifyContent: 'space-between', margin: '20px'}}> 
                         <div style={{display: 'flex', gap: '20px'}}>

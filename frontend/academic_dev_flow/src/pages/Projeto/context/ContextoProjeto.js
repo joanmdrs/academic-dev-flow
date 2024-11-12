@@ -6,18 +6,17 @@ export const useContextoProjeto = () => useContext(ContextoProjeto);
 
 export const ProviderProjeto = ({ children }) => {
 
-    const [hasProjeto, setHasProjeto] = useState(null);
-    const [hasMembros, setHasMembros] = useState([]);
+    const [dadosProjeto, setDadosProjeto] = useState(null);
+    const [membros, setMembros] = useState([]);
     const [membrosSelecionados, setMembrosSelecionados] = useState([]);
 
-    console.log('Membros selecionados', membrosSelecionados)
     return (
         <ContextoProjeto.Provider 
             value={{ 
-                hasProjeto,
-                setHasProjeto,
-                hasMembros,
-                setHasMembros,
+                dadosProjeto, 
+                setDadosProjeto,
+                membros,
+                setMembros,
                 membrosSelecionados, 
                 setMembrosSelecionados
             }}

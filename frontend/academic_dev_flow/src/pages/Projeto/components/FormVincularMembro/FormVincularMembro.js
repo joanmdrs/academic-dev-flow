@@ -7,7 +7,7 @@ import { useForm } from "antd/es/form/Form";
 const FormVincularMembro = ({onSubmit, onCancel}) => {
 
     const [optionsMembros, setOptionsMembros] = useState([]);
-    const {hasProjeto} = useContextoProjeto();
+    const {dadosProjeto} = useContextoProjeto();
     const [form] = useForm();
 
     const handleGetMembros = async () => {
@@ -27,7 +27,7 @@ const FormVincularMembro = ({onSubmit, onCancel}) => {
 
     const handleSubmitForm = () => {         
         const formData = {             
-            "projeto": hasProjeto.id,             
+            "projeto": dadosProjeto.id,             
             "membros": form.getFieldValue('membros') || []
         };         
         onSubmit(formData);

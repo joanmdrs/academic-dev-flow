@@ -15,14 +15,14 @@ import { createContent, updateContent } from "../../../../../../services/githubI
 import DrawerComments from "../../../../../Artefato/screens/DrawerComments/DrawerComments";
 import FormArtefato from "../../../../../Artefato/components/FormArtefato/FormArtefato";
 import GridArtefatos from "../../../../../Artefato/components/GridArtefatos/GridArtefatos";
-import TableArtifacts from "../../../../../Artefato/components/TableArtifacts/TableArtifacts";
+import TableArtefatos from "../../../../../Artefato/components/TableArtefatos/TableArtefatos";
 
 const {TabPane} = Tabs
 const { Search } = Input
 
 const Artefatos = () => {
 
-    const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
+    const {dadosProjeto} = useContextoGlobalProjeto()
     const {artefatos, setArtefatos, dadosArtefato, setDadosArtefato} = useContextoArtefato()
     const [isFormVisible, setIsFormVisible] = useState(false)
     const [isGridVisible, setIsGridVisible] = useState(true)
@@ -272,7 +272,7 @@ const Artefatos = () => {
                                     />
                                 </TabPane>
                                 <TabPane style={{padding: '20px'}} tab={<FaListUl />} key="2" >
-                                    <TableArtifacts 
+                                    <TableArtefatos 
                                         data={artefatos}
                                         onUpdate={handleAtualizarArtefato}
                                         onDelete={handleExcluirArtefato}

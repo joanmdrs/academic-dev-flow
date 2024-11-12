@@ -6,6 +6,7 @@ import FormEtapa from "../../components/FormEtapa/FormEtapa";
 import { useContextoEtapa } from "../../context/ContextoEtapa";
 import { Button, Modal, Table } from "antd";
 import { FaFilter, FaPlus, FaTrash } from "react-icons/fa";
+import RenderEmpty from "../../../../components/Empty/Empty";
 
 const GerenciarEtapas = () => {
 
@@ -126,7 +127,7 @@ const GerenciarEtapas = () => {
     };
 
     return (
-        <React.Fragment>
+        <div className="content">
 
             <Titulo
                 titulo='Etapas'
@@ -134,12 +135,11 @@ const GerenciarEtapas = () => {
             />
 
             {isFormVisivel ? (
-                <div className="global-div">
-                    <FormEtapa 
-                        onSubmit={handleSalvarEtapa} 
-                        onCancel={handleCancelar}
-                    />
-                </div>
+            
+                <FormEtapa 
+                    onSubmit={handleSalvarEtapa} 
+                    onCancel={handleCancelar}
+                />
 
             ) : (
 
@@ -182,18 +182,23 @@ const GerenciarEtapas = () => {
                         </div>
                     )}
 
-                    <div className="global-div"> 
-                        <Table 
-                            columns={COLUNAS_TABELA_ETAPAS}
-                            dataSource={etapas}
-                            rowKey="id"
-                            rowSelection={rowSelection}
-                        />
+                    <div> 
+                        { etapas.length !== 0 ? (
+                            <Table 
+                                columns={COLUNAS_TABELA_ETAPAS}
+                                dataSource={etapas}
+                                rowKey="id"
+                                rowSelection={rowSelection}
+                            />
+                        ) : (
+                            <RenderEmpty title="Nenhuma etapa para exibir " /> 
+                        )}
+                        
                     </div>
                 </div> 
             )}
             
-        </React.Fragment>
+        </div>
 
     )
 }

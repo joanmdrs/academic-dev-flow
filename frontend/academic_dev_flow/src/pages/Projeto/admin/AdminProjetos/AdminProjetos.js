@@ -1,22 +1,17 @@
 import React, { useEffect, useState } from "react";
 import Titulo from "../../../../components/Titulo/Titulo";
-import { Button, Modal, Spin, Tabs } from "antd";
+import { Button, Modal } from "antd";
 import { useContextoProjeto } from "../../context/ContextoProjeto";
 import { atualizarProjeto, buscarProjetoPeloNome, criarProjeto, excluirProjeto } from "../../../../services/projetoService";
 import { NotificationManager } from "react-notifications";
 import ModalDeBusca from "../../../../components/Modals/ModalDeBusca/ModalDeBusca";
-import { LoadingOutlined } from "@ant-design/icons";
 import { FaPlus, FaSearch, FaTrash } from "react-icons/fa";
-import TabsProjeto from "../TabsProjeto";
+import TabsProjeto from "../../screens/TabsProjeto";
+import SpinLoading from "../../../../components/SpinLoading/SpinLoading";
 
-const GerenciarProjetos = () => {
+const AdminProjetos = () => {
   
     const COLUNAS_MODAL = [
-        {
-            title: "Código",
-            key: "codigo",
-            dataIndex: "id",
-        },
         {
             title: "Nome",
             dataIndex: "nome",
@@ -38,9 +33,9 @@ const GerenciarProjetos = () => {
     ];
 
     const [acaoForm, setAcaoForm] = useState("criar")
-    const {hasProjeto, setHasProjeto} = useContextoProjeto()
+    const {dadosProjeto, setDadosProjeto} = useContextoProjeto()
     const [isModalVisivel, setIsModalVisivel] = useState(false)
-    const [isTabsAtivo, setIsTabsAtivo] = useState(false)
+    const [isTabsVisible, setIsTabsVisible] = useState(false)
     const [isBotaoAdicionarVisivel, setIsBotaoAdicionarVisivel] = useState(false)
     const [isBotaoExcluirVisivel, setIsBotaoExcluirVisivel] = useState(true)
     const [isBotaoBuscarVisivel, setIsBotaoBuscarVisivel] = useState(false)
@@ -58,24 +53,24 @@ const GerenciarProjetos = () => {
         };
 
       fetchData();
-  }, [hasProjeto]);
+  }, [dadosProjeto]);
 
     const handleExibirModal = () => setIsModalVisivel(true)
     const handleFecharModal = () => setIsModalVisivel(false)
     
     const handleBotaoAdicionar = () => {
-        setIsTabsAtivo(true)
+        setIsTabsVisible(true)
         setIsBotaoAdicionarVisivel(true)
         setIsBotaoExcluirVisivel(true)
         setIsBotaoBuscarVisivel(true)
         setAcaoForm('criar')
-        setHasProjeto(null)
+        setDadosProjeto(null)
     }
 
     const handleCliqueLinha = (record) => {
         setAcaoForm("atualizar")
-        setHasProjeto(record)
-        setIsTabsAtivo(true)
+        setDadosProjeto(record)
+        setIsTabsVisible(true)
         setIsModalVisivel(false)
         setIsBotaoExcluirVisivel(false)
     }
@@ -99,7 +94,7 @@ const GerenciarProjetos = () => {
             
             if(resposta.status === 200){
                 NotificationManager.success('Projeto criado com sucesso!');
-                setHasProjeto(resposta.data)          
+                setDadosProjeto(resposta.data)          
             } else {
                 NotificationManager.error("Ocorreu um problema, contate o suporte!");
             }
@@ -114,7 +109,7 @@ const GerenciarProjetos = () => {
             
             if(resposta.status === 200){
                 NotificationManager.success('Projeto atualizado com sucesso!');
-                setHasProjeto(resposta.data)
+                setDadosProjeto(resposta.data)
             } else {
                 NotificationManager.error("Ocorreu um problema, contate o suporte!");
             }
@@ -127,12 +122,12 @@ const GerenciarProjetos = () => {
         if (acaoForm === 'criar'){
             await handleCriarProjeto(dados)
         }else if(acaoForm === 'atualizar'){
-            await handleAtualizarProjeto(dados, hasProjeto.id)
+            await handleAtualizarProjeto(dados, dadosProjeto.id)
         }
     };
 
     const handleCancelar = () => {
-        setIsTabsAtivo(false)
+        setIsTabsVisible(false)
         setIsBotaoAdicionarVisivel(false)
         setIsBotaoBuscarVisivel(false)
         setIsBotaoExcluirVisivel(true)
@@ -144,47 +139,12 @@ const GerenciarProjetos = () => {
             content: 'Tem certeza que deseja excluir o projeto ? Esta ação é irreversível !',
             okText: 'Sim',
             cancelText: 'Não',
-            onOk: async () =>  await excluirProjeto(hasProjeto.id)
+            onOk: async () =>  await excluirProjeto(dadosProjeto.id)
         });
     }
 
     return ( 
-        <div className="component-tabs-projeto">
-            <Titulo 
-                titulo="Projetos"
-                paragrafo="Administração > Gerenciar projetos"
-            />
-
-            <div className="button-menu"> 
-                <Button 
-                    type="primary"
-                    onClick={() => handleExibirModal()} 
-                    disabled={isBotaoBuscarVisivel}
-                    icon={<FaSearch />}
-                >
-                    Buscar Projeto
-                </Button>
-                <div className="grouped-buttons">
-                    <Button 
-                        type="primary" 
-                        icon={<FaPlus />} 
-                        onClick={() => handleBotaoAdicionar()}  
-                        disabled={isBotaoAdicionarVisivel}
-                    >
-                        Criar Projeto
-                    </Button> 
-                    <Button 
-                        type="primary"
-                        danger
-                        icon={<FaTrash />}
-                        onClick={handleExcluirProjeto} 
-                        disabled={isBotaoExcluirVisivel}
-                    >
-                        Excluir
-                    </Button>
-                </div>
-            </div>
-
+        <div className="content" >
             <ModalDeBusca 
                 colunas={COLUNAS_MODAL}
                 titulo="Buscar projeto" 
@@ -195,29 +155,53 @@ const GerenciarProjetos = () => {
                 name="name-projeto"
             />
 
-            {isTabsAtivo && 
+
+            <Titulo 
+                titulo="Projetos"
+                paragrafo="Administração > Gerenciar projetos"
+            />
+
+            { ! isTabsVisible && (
+                <div className="button-menu"> 
+                    <Button 
+                        type="primary"
+                        onClick={() => handleExibirModal()} 
+                        disabled={isBotaoBuscarVisivel}
+                        icon={<FaSearch />}
+                    >
+                        Buscar Projeto
+                    </Button>
+                    <div className="grouped-buttons">
+                        <Button 
+                            type="primary" 
+                            icon={<FaPlus />} 
+                            onClick={() => handleBotaoAdicionar()}  
+                            disabled={isBotaoAdicionarVisivel}
+                        >
+                            Criar Projeto
+                        </Button> 
+                        <Button 
+                            type="primary"
+                            danger
+                            icon={<FaTrash />}
+                            onClick={handleExcluirProjeto} 
+                            disabled={isBotaoExcluirVisivel}
+                        >
+                            Excluir
+                        </Button>
+                    </div>
+                </div>
+            ) }
+
+            {isTabsVisible && 
                 <React.Fragment>
                     { carregando ? 
-
-                        (<div style={{ textAlign: "center", padding: "20px" }}>
-                            <Spin
-                                indicator={
-                                <LoadingOutlined
-                                    style={{
-                                    fontSize: 48,
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    }}
-                                    spin
-                                />
-                                }
-                            />
-                            </div>
-                        )
+                        <SpinLoading />
 
                         : (
-                            <TabsProjeto onSaveProject={handleSalvarProjeto} onCancel={handleCancelar} />
+                            <div> 
+                                <TabsProjeto onSubmit={handleSalvarProjeto} onCancel={handleCancelar} />
+                            </div>
                         )
                         
                     }
@@ -228,4 +212,4 @@ const GerenciarProjetos = () => {
     );
   }
   
-  export default GerenciarProjetos;
+  export default AdminProjetos;

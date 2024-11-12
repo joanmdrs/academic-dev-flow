@@ -10,7 +10,7 @@ const { Text } = Typography;
 
 const TabFluxo = () => {
 
-    const {hasProjeto, setHasProjeto} = useContextoProjeto()
+    const {dadosProjeto, setDadosProjeto} = useContextoProjeto()
     const [isFormVisible, setIsFormVisible] = useState(false)
     const [isFluxoVisible, setIsFluxoVisible] = useState(true)
     const [optionsFluxo, setOptionsFluxo] = useState([])
@@ -29,10 +29,10 @@ const TabFluxo = () => {
 
     const handleUpdateProjeto = async () => {
         try {
-            const response = await buscarProjetoPeloId(hasProjeto.id)
+            const response = await buscarProjetoPeloId(dadosProjeto.id)
 
             if (!response.error){
-                setHasProjeto(response.data)
+                setDadosProjeto(response.data)
             }
         } catch (error) {
             return handleError(error, 'Falha ao tentar atualizar as informações do projeto')
@@ -65,7 +65,7 @@ const TabFluxo = () => {
     const handleVincularFluxo = async (formData) => {
         try {
             console.log(formData)
-            const response = await atualizarFluxoProjeto(formData.fluxo, hasProjeto.id)
+            const response = await atualizarFluxoProjeto(formData.fluxo, dadosProjeto.id)
             if (!response.error){
                 NotificationManager.success('Fluxo vinculado ao projeto com sucesso! ')
                 handleReload()
@@ -90,7 +90,7 @@ const TabFluxo = () => {
 
     const handleDesvincularFluxo = async () => {
         try {
-            const response = await atualizarFluxoProjeto(0, hasProjeto.id)
+            const response = await atualizarFluxoProjeto(0, dadosProjeto.id)
     
             if (!response.error){
                 NotificationManager.success('Fluxo desvinculado do projeto com sucesso !')
@@ -104,10 +104,10 @@ const TabFluxo = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                if (hasProjeto !== null && hasProjeto.nome_fluxo !== null){
+                if (dadosProjeto !== null && dadosProjeto.nome_fluxo !== null){
                     setDataFluxo([{
-                        id: hasProjeto.fluxo,
-                        nome: hasProjeto.nome_fluxo
+                        id: dadosProjeto.fluxo,
+                        nome: dadosProjeto.nome_fluxo
                     }])
                 }
             } catch (error) {
@@ -115,18 +115,18 @@ const TabFluxo = () => {
             }
         }
         fetchData()
-    }, [hasProjeto])
+    }, [dadosProjeto])
 
     return (
         <React.Fragment>
-            {hasProjeto && (
+            {dadosProjeto && (
                 <React.Fragment>
                     <div style={{display: 'flex', justifyContent: 'space-between', margin: '20px'}}> 
                         <div style={{display: 'flex', gap: '20px'}}>
                         </div>
 
                         <div style={{display: 'flex', gap: '10px'}}> 
-                            {hasProjeto.nome_fluxo !== null ? (
+                            {dadosProjeto.nome_fluxo !== null ? (
                                 <Button 
                                     icon={<FaTrash />} 
                                     danger

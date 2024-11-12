@@ -34,8 +34,8 @@ const ChartStatusProjeto = ({projetos, width, height}) => {
         }
 
         projetos.forEach(projeto => {
-            if(statusCount[projeto.status_projeto] !== undefined){
-                statusCount[projeto.status_projeto] += 1
+            if(statusCount[projeto.status_projeto ? projeto.status_projeto : projeto.status] !== undefined){
+                statusCount[projeto.status_projeto ? projeto.status_projeto : projeto.status] += 1
             }
         });
 

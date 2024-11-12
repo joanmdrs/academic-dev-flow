@@ -1,6 +1,7 @@
 import { Empty, Space, Table } from "antd";
 import React from "react";
 import { IoCheckmark, IoCloseOutline } from "react-icons/io5";
+import RenderEmpty from "../../../../components/Empty/Empty";
 
 const TableIssues = ({data}) => {
     const columnsTable = [
@@ -56,20 +57,7 @@ const TableIssues = ({data}) => {
                 />
                 
             ) : (
-                <Empty
-                    description="Nenhuma Issue para exibir"
-                    image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-                    style={{
-                        display: 'flex',
-                        width: "100%",
-                        height: "100%",
-                        padding: '40px',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                >
-                </Empty>
+                <RenderEmpty title="Nenhuma issue para exibir" />
             )
         }
         </React.Fragment>

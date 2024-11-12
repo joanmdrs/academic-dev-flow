@@ -1,4 +1,4 @@
-import { Button, Collapse, Form, Input, Select, Spin } from "antd";
+import { Button, Collapse, Form, Input, Select, Space, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import { CaretRightOutlined, LoadingOutlined } from '@ant-design/icons';
 import { useContextoProjeto } from "../../../context/ContextoProjeto";
@@ -7,31 +7,24 @@ const {Panel} = Collapse
 
 const TabProjeto = ({ onSubmit, onCancel }) => {
 
-    const {hasProjeto} = useContextoProjeto()
+    const {dadosProjeto} = useContextoProjeto()
     const [carregando, setCarregando] = useState(false);
-    const [activeKey, setActiveKey] = useState(['1']);
     const [form] = Form.useForm();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setCarregando(true);
-                handleAlterarCampos(hasProjeto)
+                form.setFieldsValue(dadosProjeto)
             } catch (error) {
             } finally {
                 setCarregando(false);
             }
         };
         fetchData();
-    }, [hasProjeto]);
+    }, [dadosProjeto, form]);
 
-    const handleAlterarCampos = (dados) => {
-        form.setFieldsValue(dados)
-    }
 
-    const handleCollapseChange = (key) => {
-        setActiveKey(key); 
-    };
 
     return (
 
@@ -61,13 +54,18 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
                     >
                         <Collapse
                             collapsible=""
-                            bordered={true}
-                            style={{padding: '30px', borderRadius: '0', backgroundColor: "#FFFFFF"}} 
+                            bordered={false}
                             expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
-                            activeKey={activeKey}
-                            onChange={handleCollapseChange}
                         >
-                            <Panel header="DADOS DO PROJETO" key="1">
+                            <Panel 
+                                style={{
+                                    padding: '30px', 
+                                    boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
+                                    border: 'none', 
+                                    marginBottom: '20px'
+                                }} 
+                                header="DADOS DO PROJETO" key="1"
+                            >
                                 <Form.Item 
                                     label="Nome:" 
                                     name="nome" 
@@ -137,16 +135,16 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
                                     <Input.TextArea id="descricao" name="descricao" rows={6} />
                                 </Form.Item>
                             </Panel>
-                        </Collapse>
 
-                        <Collapse
-                            bordered={true}
-                            style={{marginBottom: '20px', padding: '30px', borderRadius: '0', backgroundColor: '#FFFFFF'}} 
-                            expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
-                            activeKey={activeKey}
-                            onChange={handleCollapseChange}
-                        >
-                            <Panel header="VINCULAR AO GITHUB" key="2">
+                            <Panel style={{
+                                    padding: '30px', 
+                                    boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
+                                    border: 'none', 
+                                    marginBottom: '20px'
+                                }} 
+                                header="VINCULAR AO GITHUB" 
+                                key="2"
+                            >
                                 <Form.Item label="Informe (proprietário/repositório):" name="nome_repo">
                                     <Input name="nome_repo"/>
                                 </Form.Item>
@@ -164,16 +162,13 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
                                 </Form.Item>
                             </Panel>
                         </Collapse>
-                                                
-                        <Form.Item>
-                            <Button type="primary" htmlType="submit">
-                                Salvar
-                            </Button>
 
-                            <Button style={{ marginLeft: "10px" }} type="primary" onClick={onCancel} danger >
-                                Cancelar
-                            </Button>
-                        </Form.Item> 
+        
+
+                        <Space>
+                            <Button type="primary" htmlType="submit"> Salvar </Button>
+                            <Button type="primary" danger onClick={() => onCancel()}> Cancelar </Button>
+                        </Space>           
 
                     </Form>
                 </React.Fragment>

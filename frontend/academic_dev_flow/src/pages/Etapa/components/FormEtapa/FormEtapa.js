@@ -22,6 +22,7 @@ const FormEtapa = ({onSubmit, onCancel}) => {
 
     return (
         <Form
+            className="global-form"
             layout="vertical" 
             form={form} 
             onFinish={onSubmit} 

@@ -1,4 +1,4 @@
-import { Form, Select, DatePicker, Button } from "antd";
+import { Form, Select, DatePicker, Button, notification } from "antd";
 import React, { useEffect, useState } from "react";
 import { handleError } from "../../../../services/utils";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
@@ -11,7 +11,7 @@ import { FaArrowRotateRight, FaFilter } from "react-icons/fa6";
 
 const { RangePicker } = DatePicker;
 
-const FormBuscarCommits = () => {
+const FormBuscarCommits = ({selectProjeto}) => {
     const { dadosProjeto } = useContextoGlobalProjeto();
     const { setCommits, setLoading } = useContextoCommits();
     const [optionsMembros, setOptionsMembros] = useState([]);
@@ -23,6 +23,16 @@ const FormBuscarCommits = () => {
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const [form] = Form.useForm();
+    const [api, contextHolder] = notification.useNotification();
+
+    const openNotificationWithIcon = (type) => {
+        api[type]({
+            message: 'Atenção',
+            description:
+                'O projeto selecionado não possui credenciais de acesso a um repositório do GitHub. Para realizar a conexão com o GitHub, adicione as informações de acesso ao repositório no menu de Projetos.',
+            duration: 3
+        });
+    };
 
     const optionsFiltro = [
         { value: 'day', label: 'Dia' },
@@ -48,9 +58,7 @@ const FormBuscarCommits = () => {
     const handleGetCommits = async () => {
         setLoading(true);
 
-        NotificationManager.info('Esta ação pode demorar um pouco, dependendo do volume de dados. Aguarde!');
-
-        try {
+        if (dadosProjeto.token && dadosProjeto.nome_repo){
             const parametros = {
                 github_token: dadosProjeto.token,
                 repository: dadosProjeto.nome_repo,
@@ -63,18 +71,17 @@ const FormBuscarCommits = () => {
                 end_date: endDate,
             };
 
-            console.log(parametros)
-
             const response = await filtrarCommitsPorPeriodoEUsuario(parametros);
 
             if (!response.error && response.data.length > 0) {
                 setCommits(response.data);
+        
             }
-        } catch (error) {
-            handleError(error, ERROR_MESSAGE_ON_SEARCHING);
-        } finally {
-            setLoading(false);
+        } else {
+            openNotificationWithIcon('warning')
         }
+
+        setLoading(false)       
     };
 
     const handleResetar = () => {
@@ -89,106 +96,107 @@ const FormBuscarCommits = () => {
     }, [dadosProjeto]);
 
     return (
-        <Form
-            form={form}
-            onFinish={handleGetCommits}
-            style={{display: 'flex', justifyContent: 'space-between'}}
-        >
-            <div style={{display: 'flex', gap: '10px'}}>
-                <Form.Item name="assignee">
-                    <Select
-                        popupMatchSelectWidth={false}
-                        allowClear
-                        placeholder="Membro"
-                        options={optionsMembros}
-                        onChange={(value) => {
-                            if (value){
-                                const selectedOption = optionsMembros.find((option) => option.value === value);
-                                if (selectedOption && selectedOption.user) {
-                                    setAssignee(selectedOption.user);
+        <>
+            {contextHolder}
+            <Form
+                form={form}
+                onFinish={handleGetCommits}
+                style={{display: 'flex', justifyContent: 'space-between'}}
+            >
+                <div style={{display: 'flex', gap: '10px'}}>
+                    {selectProjeto}
+                    <Form.Item name="assignee">
+                        <Select
+                            popupMatchSelectWidth={false}
+                            allowClear
+                            placeholder="Membro"
+                            options={optionsMembros}
+                            onChange={(value) => {
+                                if (value){
+                                    const selectedOption = optionsMembros.find((option) => option.value === value);
+                                    if (selectedOption && selectedOption.user) {
+                                        setAssignee(selectedOption.user);
+                                    } else {
+                                        NotificationManager.warning("O membro selecionado não possui um usuário GitHub associado.");
+                                        setAssignee(null);
+                                    }
                                 } else {
-                                    NotificationManager.warning("O membro selecionado não possui um usuário GitHub associado.");
-                                    setAssignee(null);
+                                    setAssignee(null)
                                 }
-                            } else {
-                                setAssignee(null)
-                            }
-                            
-                        }}
-                    />
-                </Form.Item>
-
-                <Form.Item name="periodo" rules={[{ required: true, message: "Selecione um período" }]}>
-                    <Select
-                        popupMatchSelectWidth={false}
-                        allowClear
-                        onChange={(value) => setPeriodo(value)}
-                        options={optionsFiltro}
-                        placeholder="Período"
-                    />
-                </Form.Item>
-
-                { form.getFieldValue('periodo') && (
-                    <Form.Item
-                        name="data"
-                        rules={[
-                            { required: true, message: "Selecione uma data" },
-                            ({ getFieldValue }) => ({
-                                validator(_, value) {
-                                    if (!periodo || value) return Promise.resolve();
-                                    return Promise.reject(new Error("Selecione uma data válida para o período escolhido"));
-                                },
-                            }),
-                        ]}
-                    >
-                        {periodo === 'day' && (
-                            <DatePicker
-                                picker="date"
-                                onChange={(date) => {
-                                    const formattedDate = date?.format("YYYY-MM-DD");
-                                    setDay(formattedDate);
-                                }}
-                            />
-                        )}
-                        {periodo === 'month' && (
-                            <DatePicker
-                                picker="month"
-                                onChange={(date) => {
-                                    setMonth(date?.month() + 1);
-                                    setYear(date?.year());
-                                }}
-                            />
-                        )}
-                        {periodo === 'year' && (
-                            <DatePicker
-                                picker="year"
-                                onChange={(date) => setYear(date?.year())}
-                            />
-                        )}
-                        {periodo === 'interval' && (
-                            <RangePicker
-                                onChange={(dates) => {
-                                    setStartDate(dates?.[0]?.format("YYYY-MM-DD"));
-                                    setEndDate(dates?.[1]?.format("YYYY-MM-DD"));
-                                }}
-                            />
-                        )}
+                                
+                            }}
+                        />
                     </Form.Item>
 
-                )}
+                    <Form.Item name="periodo" rules={[{ required: true, message: "Selecione um período" }]}>
+                        <Select
+                            popupMatchSelectWidth={false}
+                            allowClear
+                            onChange={(value) => setPeriodo(value)}
+                            options={optionsFiltro}
+                            placeholder="Período"
+                        />
+                    </Form.Item>
 
-                
-                <Button icon={<FaFilter />} type="primary" htmlType="submit">
-                    Filtrar
-                </Button>
+                    { form.getFieldValue('periodo') && (
+                        <Form.Item
+                            name="data"
+                            rules={[
+                                { required: true, message: "Selecione uma data" },
+                                ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        if (!periodo || value) return Promise.resolve();
+                                        return Promise.reject(new Error("Selecione uma data válida para o período escolhido"));
+                                    },
+                                }),
+                            ]}
+                        >
+                            {periodo === 'day' && (
+                                <DatePicker
+                                    picker="date"
+                                    onChange={(date) => {
+                                        const formattedDate = date?.format("YYYY-MM-DD");
+                                        setDay(formattedDate);
+                                    }}
+                                />
+                            )}
+                            {periodo === 'month' && (
+                                <DatePicker
+                                    picker="month"
+                                    onChange={(date) => {
+                                        setMonth(date?.month() + 1);
+                                        setYear(date?.year());
+                                    }}
+                                />
+                            )}
+                            {periodo === 'year' && (
+                                <DatePicker
+                                    picker="year"
+                                    onChange={(date) => setYear(date?.year())}
+                                />
+                            )}
+                            {periodo === 'interval' && (
+                                <RangePicker
+                                    onChange={(dates) => {
+                                        setStartDate(dates?.[0]?.format("YYYY-MM-DD"));
+                                        setEndDate(dates?.[1]?.format("YYYY-MM-DD"));
+                                    }}
+                                />
+                            )}
+                        </Form.Item>
 
-            </div>
+                    )}
 
-            <Button type="primary" ghost icon={<FaArrowRotateRight />} onClick={() => handleResetar()}> Resetar </Button>
-            
+                    
+                    <Button icon={<FaFilter />} type="primary" htmlType="submit">
+                        Filtrar
+                    </Button>
 
-           
-        </Form>
+                </div>
+
+                <Button type="primary" ghost icon={<FaArrowRotateRight />} onClick={() => handleResetar()}> Resetar </Button>
+            </Form>
+        </>
     );
 };
 

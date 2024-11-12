@@ -76,30 +76,33 @@ const GerenciarCategoriaFuncaoMembro = () => {
     };
 
     return (
-        <div>
+        <div className="content">
             <Titulo 
                 titulo='Categorias'
                 paragrafo='Membro > Função > Categoria'
             />
 
-            <div className="button-menu">
-                <Button 
-                    icon={<FaFilter />}
-                    type="primary"
-                    onClick={() => setIsFormBuscarVisivel(!isFormBuscarVisivel)}
-                >
-                    Filtrar
-                </Button>
+            { !isFormVisivel && (
+                <div className="button-menu">
+                    <Button 
+                        icon={<FaFilter />}
+                        type="primary"
+                        onClick={() => setIsFormBuscarVisivel(!isFormBuscarVisivel)}
+                    >
+                        Filtrar
+                    </Button>
 
-                <Button 
-                    icon={<FaPlus />} 
-                    type="primary" 
-                    onClick={handleAdicionarCategoria}
-                    disabled={isPlusBtnEnabled}
-                > 
-                    Criar Nova Categoria 
-                </Button>
-            </div>
+                    <Button 
+                        icon={<FaPlus />} 
+                        type="primary" 
+                        onClick={handleAdicionarCategoria}
+                        disabled={isPlusBtnEnabled}
+                    > 
+                        Criar Nova Categoria 
+                    </Button>
+                </div>
+
+            )}
 
             { isFormBuscarVisivel && (
                 <div className="global-div" style={{width: '50%'}}>
@@ -127,7 +130,7 @@ const GerenciarCategoriaFuncaoMembro = () => {
                 </div>
             )}
 
-            <div className="global-div">
+            <div>
                 { isFormVisivel ? (
                         <FormCategoriaFuncaoMembro onSubmit={handleSalvarCategoria} onCancel={handleCancelar}/>
                 ) : (

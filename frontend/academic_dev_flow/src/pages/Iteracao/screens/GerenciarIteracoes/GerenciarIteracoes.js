@@ -94,7 +94,7 @@ const GerenciarIteracoes = () => {
 
     return (
 
-        <React.Fragment>
+        <div className="content">
             <Titulo
                 titulo="Iterações"
                 paragrafo="Iterações > Gerenciar iterações"
@@ -136,7 +136,7 @@ const GerenciarIteracoes = () => {
                     <ListaIteracoes onEdit={handleAtualizarIteracao} onDelete={handleExcluirIteracao} />
                 )}
             </div>
-        </React.Fragment>
+        </div>
     )
 }
 

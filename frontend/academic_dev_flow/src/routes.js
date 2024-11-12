@@ -10,9 +10,7 @@ import Register from "./pages/Auth/Register";
 import ScreenGerenciarTarefas from "./pages/Tarefa/screens/GerenciarTarefas";
 import ScreenVisualizarArtefato from "./pages/Artefato/screens/VisualizarArtefato";
 import ScreenGerenciarIteracoes from "./pages/Iteracao/screens/GerenciarIteracoes";
-import ScreenGerenciarProjetos from "./pages/Projeto/screens/GerenciarProjetos";
 import ScreenGerenciarRelatorios from "./pages/Relatorio/screens/GerenciarRelatorios";
-import ScreenVisualizarTarefa from "./pages/Tarefa/screens/VisualizarTarefa";
 import ScreenVisualizarIteracao from "./pages/Iteracao/screens/VisualizarIteracao";
 import ScreenPerfilMembro from "./pages/Membro/screens/PerfilMembro";
 import ScreenGerenciarFluxos from "./pages/Fluxo";
@@ -38,6 +36,9 @@ import ScreenHomeDocente from "./pages/Home/Docente";
 import ScreenVisualizarProjeto from "./pages/Projeto/screens/VisualizarProjeto";
 import ScreenRepositories from "./pages/GitHub/screens/Repositories";
 import ScreenPainelGitHub from "./pages/GitHub/screens/PainelGitHub";
+import ScreenAdminProjetos from "./pages/Projeto/admin/AdminProjetos";
+import ScreenAdminReleases from "./pages/Release/admin/AdminReleases";
+import ScreenAdminCommits from "./pages/GitHub/admin/AdminCommits";
 
 function Routes() {
     return (
@@ -64,13 +65,13 @@ function Routes() {
                 {/* Menu Item Projetos */}
                 <Route
                     path="/admin/projetos"
-                    element={<ScreenGerenciarProjetos grupo="admin" />}
+                    element={<ScreenAdminProjetos />}
                     exact
                 />
 
                 {/* Menu Item Fluxos */}
                 <Route path="/admin/fluxos/gerenciar" element={<ScreenGerenciarFluxos grupo="admin" />} exact />
-                <Route path="/admin/etapas" element={<ScreenGerenciarEtapas  grupo="admin" />} exact />
+                <Route path="/admin/fluxos/etapas" element={<ScreenGerenciarEtapas  grupo="admin" />} exact />
 
                 {/* Menu Item Membros */}
                 <Route
@@ -117,11 +118,9 @@ function Routes() {
 
                 {/* Menu Item Iterações */}
 
-                <Route
-                    path="/admin/iteracoes"
-                    Component={ScreenGerenciarIteracoes}
-                    exact
-                />
+                <Route path="/admin/cronograma/releases" Component={ScreenAdminReleases} exact />
+
+                <Route path="/admin/cronograma/iterations" Component={ScreenGerenciarIteracoes} exact />
 
                 <Route
                     path="/admin/github-integration/issues"
@@ -133,7 +132,12 @@ function Routes() {
                     path="/admin/github-integration/contents"
                     Component={ScreenAdminContents}
                     exact
+                />
 
+                <Route 
+                    path="/admin/github-integration/commits"
+                    Component={ScreenAdminCommits}
+                    exact
                 />
 
                 <Route 
@@ -197,11 +201,7 @@ function Routes() {
                     exact
                 />
 
-                <Route
-                    path="/aluno/tarefas/visualizar"
-                    element = {<ScreenVisualizarTarefa  grupo='aluno' />}
-                    exact
-                />
+
 
                 <Route
                     path="/aluno/artefatos"
@@ -264,11 +264,7 @@ function Routes() {
 
                 <Route path="/professor/perfil" element={<ScreenPerfilMembro grupo="professor" />} exact/>
 
-                <Route
-                    path="/professor/projetos/gerenciar"
-                    element={<ScreenGerenciarProjetos grupo="professor" />}
-                    exact
-                />
+        
 
                 <Route
                     path="/professor/projetos/projetos"

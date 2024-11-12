@@ -1,4 +1,4 @@
-import { Button, Form, Input, Select } from "antd"
+import { Button, Collapse, Form, Input, Select, Space } from "antd"
 import InputMask from 'react-input-mask';
 import { useEffect, useState } from "react";
 import { useMembroContexto } from "../../context/MembroContexto";
@@ -6,6 +6,9 @@ import Loading from "../../../../components/Loading/Loading";
 import { listarGrupos } from "../../../../services/membroService";
 import { handleError } from "../../../../services/utils";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
+import { CaretRightOutlined } from "@ant-design/icons";
+
+const {Panel} = Collapse
 
 const optionsSexo = [
     {
@@ -29,6 +32,7 @@ const FormMembro = ({onSubmit, onCancel}) => {
     const [loading, setLoading] = useState(false)
     const [optionsGrupos, setOptionsGrupos] = useState([])
     const [gender, setGender] = useState(null)
+    const [titulo, setTitulo] = useState('CADASTRAR MEMBRO')
 
     const handleListarGrupos = async () => {
 
@@ -61,8 +65,10 @@ const FormMembro = ({onSubmit, onCancel}) => {
 
                 if (dadosMembro !== null){
                     form.setFieldsValue(dadosMembro)
+                    setTitulo('ATUALIZAR DADOS DO MEMBRO')
                 } else {
                     form.resetFields()
+                    setTitulo('CADASTRAR MEMBRO')
                 }
                 
             } catch (error) {
@@ -105,151 +111,181 @@ const FormMembro = ({onSubmit, onCancel}) => {
             onFinish={handleSubmitForm}
         >
             <Form.Item>
-                <h3> Dados do Membro </h3>
+                <h4>{titulo}</h4>
             </Form.Item>
 
-            <div style={{display: "flex", gap: "20px"}}> 
-                <Form.Item 
-                    style={{flex: "3"}}
-                    label="Nome" 
-                    name="nome"
-                    rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
-                >
-                    <Input placeholder="nome do membro"/>
-                </Form.Item>
-
-                <Form.Item 
-                    style={{flex: "1"}}
-                    label="Data de Nascimento" 
-                    name="data_nascimento"
-                    rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
-                >
-                    <Input type="date"/>
-                    
-                </Form.Item>
-
-                <Form.Item 
-                    style={{flex: "1"}}
-                    label="Sexo"
-                    name="sexo"
-                    rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
-                >
-                    <Select 
-                        onChange={(value) => setGender(value)} 
-                        options={optionsSexo} 
-                        allowClear 
-                        placeholder="Sexo do membro" 
-                    />
-                </Form.Item>
-            </div>
-
-            <div style={{display: "flex", gap: "20px"}}>
-                <Form.Item
-                    style={{flex: "1"}}
-                    name="telefone"
-                    label="Telefone"
-                    rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
-                >
-                    <InputMask mask="(99) 99999-9999" maskChar={null}>
-                    {() => <Input placeholder="telefone do membro"/>}
-                    </InputMask>
-                </Form.Item>
-
-                <Form.Item
-                    style={{flex: "2"}}
-                    name="email"
-                    label="Email"
-                    rules={[
-                    { required: true, message: 'Por favor, preencha este campo!' },
-                    { type: 'email', message: 'Por favor, insira um email válido!' },
-                    ]}
-                >
-                    <Input placeholder="email do membro" onChange={handleEmailChange}/>
-                </Form.Item>
-            </div>
-            
-            <Form.Item>
-                <h3> Dados do Usuário GitHub </h3>
-            </Form.Item>
-
-            <div style={{display: "flex", gap: "20px"}}>
-                <Form.Item 
-                    style={{flex: "1"}}
-                    name="nome_github"
-                    label="Nome do Usuário"
-                >
-                    <Input name="nome_github" placeholder="nome do usuário do GitHub" />
-                </Form.Item>
-
-                <Form.Item 
-                    style={{flex: "1"}}
-                    name="email_github"
-                    label="Email do GitHub"
-                >
-                    <Input name="email_github" placeholder="email do usuario do GitHub"/>
-                </Form.Item>
-
-                <Form.Item 
-                    style={{flex: "1"}}
-                    name="usuario_github"
-                    label="Username do GitHub"
-                >
-                    <Input name="usuario_github" placeholder="username do GitHub" />
-                </Form.Item>
-            </div>
-
-            <Form.Item>
-                <h3> LinkedIn/Currículo </h3>
-            </Form.Item>
-
-            <Form.Item 
-                style={{width: "70%"}}
-                name="linkedin"
-                label="Perfil do Linkedin"
+            <Collapse
+                collapsible=""
+                bordered={false}
+                expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
             >
-                <Input name="linkedin" placeholder="perfil do LinkedIn" />
-            </Form.Item>
-
-            <Form.Item 
-                style={{width: "70%"}}
-                name="lattes"
-                label="Currículo Lattes"
-            >
-                <Input name="lattes" placeholder="link do currículo Lattes" />
-            </Form.Item>
-
-            <div style={{width: '50%'}}>
-                <Form.Item>
-                    <h3> Dados do Usuário </h3>
-                </Form.Item>
-
-                <Form.Item
-                    name="username"
-                    label="Usuário de Acesso"
-                    rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
+                <Panel 
+                    style={{
+                        padding: '30px', 
+                        boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
+                        border: 'none', 
+                        marginBottom: '20px'
+                    }} 
+                    header="DADOS DO MEMBRO" key="1"
                 >
-                    <Input name="username" disabled/> 
+                    <div style={{display: "flex", gap: "20px"}}> 
+                        <Form.Item 
+                            style={{flex: "3"}}
+                            label="Nome" 
+                            name="nome"
+                            rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
+                        >
+                            <Input placeholder="nome do membro"/>
+                        </Form.Item>
 
-                </Form.Item>
-                <Form.Item
-                    name="password"
-                    label="Senha de Acesso"
-                    rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
+                        <Form.Item 
+                            style={{flex: "1"}}
+                            label="Data de Nascimento" 
+                            name="data_nascimento"
+                            rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
+                        >
+                            <Input type="date"/>
+                            
+                        </Form.Item>
+
+                        <Form.Item 
+                            style={{flex: "1"}}
+                            label="Sexo"
+                            name="sexo"
+                            rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
+                        >
+                            <Select 
+                                onChange={(value) => setGender(value)} 
+                                options={optionsSexo} 
+                                allowClear 
+                                placeholder="Sexo do membro" 
+                            />
+                        </Form.Item>
+                    </div>
+
+                    <div style={{display: "flex", gap: "20px"}}>
+                        <Form.Item
+                            style={{flex: "1"}}
+                            name="telefone"
+                            label="Telefone"
+                            rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
+                        >
+                            <InputMask mask="(99) 99999-9999" maskChar={null}>
+                            {() => <Input placeholder="telefone do membro"/>}
+                            </InputMask>
+                        </Form.Item>
+
+                        <Form.Item
+                            style={{flex: "2"}}
+                            name="email"
+                            label="Email"
+                            rules={[
+                            { required: true, message: 'Por favor, preencha este campo!' },
+                            { type: 'email', message: 'Por favor, insira um email válido!' },
+                            ]}
+                        >
+                            <Input placeholder="email do membro" onChange={handleEmailChange}/>
+                        </Form.Item>
+                    </div>
+                </Panel>
+
+                <Panel style={{
+                        padding: '30px', 
+                        boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
+                        border: 'none', 
+                        marginBottom: '20px'
+                    }} 
+                    header="USUÁRIO GITHUB" key="2"
+                >   
+                    <div style={{display: "flex", gap: "20px"}}>
+                        <Form.Item 
+                            style={{flex: "1"}}
+                            name="nome_github"
+                            label="Nome do Usuário"
+                        >
+                            <Input name="nome_github" placeholder="nome do usuário do GitHub" />
+                        </Form.Item>
+
+                        <Form.Item 
+                            style={{flex: "1"}}
+                            name="email_github"
+                            label="Email do GitHub"
+                        >
+                            <Input name="email_github" placeholder="email do usuario do GitHub"/>
+                        </Form.Item>
+
+                        <Form.Item 
+                            style={{flex: "1"}}
+                            name="usuario_github"
+                            label="Username do GitHub"
+                        >
+                            <Input name="usuario_github" placeholder="username do GitHub" />
+                        </Form.Item>
+                    </div>
+
+                </Panel>
+
+                <Panel style={{
+                        padding: '30px', 
+                        boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
+                        border: 'none', 
+                        marginBottom: '20px'
+                    }} 
+                    header="LINKEDIN/CURRICULO" key="3"
                 >
-                    <Input.Password name="password" placeholder="senha de acesso"/>
-                </Form.Item>
+                     <Form.Item 
+                        style={{width: "70%"}}
+                        name="linkedin"
+                        label="Perfil do Linkedin"
+                    >
+                        <Input name="linkedin" placeholder="perfil do LinkedIn" />
+                    </Form.Item>
 
-                <Form.Item 
-                    name="grupo"
-                    label="Grupo de Usuário"
-                    rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
+                    <Form.Item 
+                        style={{width: "70%"}}
+                        name="lattes"
+                        label="Currículo Lattes"
+                    >
+                        <Input name="lattes" placeholder="link do currículo Lattes" />
+                    </Form.Item>
+                </Panel>
+
+                <Panel style={{
+                        padding: '30px', 
+                        boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
+                        border: 'none', 
+                        marginBottom: '20px'
+                    }} 
+                    header="ACESSO" key="4"
                 >
-                    <Select options={optionsGrupos}/>
-                    
-                </Form.Item>
-            </div>
+                    <Form.Item
+                        name="username"
+                        label="Usuário de Acesso"
+                        rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
+                    >
+                        <Input name="username" disabled/> 
 
-            <div style={{display: 'flex', gap: "10px", marginTop: "20px"}} >
+                    </Form.Item>
+                    <Form.Item
+                        name="password"
+                        label="Senha de Acesso"
+                        rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
+                    >
+                        <Input.Password name="password" placeholder="senha de acesso"/>
+                    </Form.Item>
+
+                    <Form.Item 
+                        name="grupo"
+                        label="Grupo de Usuário"
+                        rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
+                    >
+                        <Select options={optionsGrupos}/>
+                        
+                    </Form.Item>
+                </Panel>
+            </Collapse>
+
+            <Space>
                 <Button type="primary" htmlType="submit">
                     Salvar
                 </Button >
@@ -257,7 +293,7 @@ const FormMembro = ({onSubmit, onCancel}) => {
                 <Button type="primary" onClick={onCancel} danger >
                     Cancelar
                 </Button>
-            </div>
+            </Space>
 
             
         </Form>

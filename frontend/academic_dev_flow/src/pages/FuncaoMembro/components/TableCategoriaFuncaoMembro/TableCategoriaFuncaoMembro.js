@@ -4,6 +4,7 @@ import Loading from "../../../../components/Loading/Loading"
 import { IoMdCreate, IoMdTrash } from "react-icons/io"
 import { useFuncaoMembroContexto } from "../../context/FuncaoMembroContexto"
 import { listarCategoriaFuncaoMembro } from "../../../../services/funcaoMembroProjetoService"
+import RenderEmpty from "../../../../components/Empty/Empty"
 
 
 const TableCategoriaFuncaoMembro = ({onEdit, onDelete}) => {
@@ -67,10 +68,17 @@ const TableCategoriaFuncaoMembro = ({onEdit, onDelete}) => {
 
 
     return (
-        <Table
-            columns={COLUNAS_TABELA}
-            dataSource={itemsCategoriaFuncaoMembro}  
-        />
+        <React.Fragment>
+            { itemsCategoriaFuncaoMembro.length !== 0 ? (
+                <Table
+                    columns={COLUNAS_TABELA}
+                    dataSource={itemsCategoriaFuncaoMembro}
+                    rowKey="id"  
+                />
+            ) : (
+                <RenderEmpty title="Nenhum dado para exibir" />
+            )}
+        </React.Fragment>
     )
 }
 

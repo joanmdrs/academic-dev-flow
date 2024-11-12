@@ -1,50 +1,83 @@
-import React, { useEffect } from "react";
-import {Table, Space, Select, Tooltip} from 'antd'
-import { useContextoArtefato } from "../../context/ContextoArtefato";
-import { listarArtefatos } from "../../../../services/artefatoService";
-import { handleError } from "../../../../services/utils";
-import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
+import { Empty, Space, Table, Tooltip } from "antd";
+import React from "react";
+import { GoCommentDiscussion } from "react-icons/go";
+import { IoMdCreate, IoMdTrash } from "react-icons/io";
+import { IoDocumentText } from "react-icons/io5";
 import { optionsStatusArtefatos } from "../../../../services/optionsStatus";
-import { IoMdCreate, IoMdOpen, IoMdTrash } from "react-icons/io";
+import RenderMembers from "../../../../components/RenderMembers/RenderMembers";
+import RenderDate from "../../../../components/RenderDate/RenderDate";
+import RenderStatus from "../../../../components/RenderStatus/RenderStatus";
 
-const TableArtefatos = ({onView, onEdit, onDelete, onUpdateStatus}) => {
-
-    const COLUNAS_TABELA_ARTEFATOS = [
+const TableArtefatos = ({data, onUpdate, onDelete, onShowComments}) => {
+    
+    const columns = [
         {
             title: 'Nome',
             dataIndex: 'nome',
-            key: 'nome'
-        },
-        {
-            title: 'Status',
-            dataIndex: 'status',
-            key: 'status',
+            key: 'nome',
             render: (_, record) => (
-                <Select 
-                    style={{width: '150px'}} 
-                    placeholder="Selecione"
-                    value={record.status} 
-                    options={optionsStatusArtefatos} 
-                    onChange={(value) => onUpdateStatus(record, value)}
-                /> 
+                <Space>
+                    <span style={{color: 'var(--primary-color'}}> <IoDocumentText /> </span>
+                    <span style={{color: 'var(--primary-color'}}> {record.nome }</span>
+                </Space>
+            )
+        }, 
+        {
+            title: 'Membros',
+            dataIndex: 'membros',
+            key: 'membros',
+            align: 'center',
+            render: (_, record) => (
+                <RenderMembers membros={record.membros_info} maxAvatars={3} quantMembros={(record.membros_info).length} />
             )
         },
         {
-            title: 'Projeto',
-            dataIndex: 'nome_projeto',
-            key: 'nome_projeto'
+            title: 'Criação',
+            dataIndex: 'data_criacao',
+            key: 'data_criacao',
+            align: 'center',
+            render: (_, record) => (
+                <RenderDate dateType="inicio" dateValue={record.data_criacao} />
+                    
+            )
+        },
+        {
+            title: 'Fim',
+            dataIndex: 'data_termino',
+            key: 'data_termino',
+            align: 'center',
+            render: (_, record) => (
+                <RenderDate dateType="termino" dateValue={record.data_termino} />
+            )
+        },
+        {
+            title: 'Status', 
+            dataIndex: 'status', 
+            key: 'status',
+            align: 'center',
+            render: (_, record) => (
+                <RenderStatus optionsStatus={optionsStatusArtefatos} propStatus={record.status} />
+            )
+        },
+        {
+            title: 'Comentários',
+            dataIndex: 'comentarios_artefato',
+            key: 'comentarios_artefato',
+            align: 'center',
+            render: (_, record) => (
+                <Space>
+                     <a onClick={() => onShowComments(record)}><GoCommentDiscussion size="20px" /></a>
+                </Space>
+            )
         },
         {
             title: 'Ações',
-            dataIndex: 'action',
-            key: 'action',
+            dataIndex: 'actions',
+            key: 'actions',
             render: (_, record) => (
-                <Space size="middle">
-                    {/* <Tooltip title="Visualizar">
-                        <a onClick={() => onView(record)}><IoMdOpen /></a>
-                    </Tooltip> */}
+                <Space>
                     <Tooltip title="Editar">
-                        <a onClick={() => onEdit(record)}><IoMdCreate /></a>
+                        <a onClick={() => onUpdate(record)}><IoMdCreate /></a>
                     </Tooltip>
                     <Tooltip title="Excluir">
                         <a onClick={() => onDelete(record.id)}><IoMdTrash /></a>
@@ -54,53 +87,36 @@ const TableArtefatos = ({onView, onEdit, onDelete, onUpdateStatus}) => {
         }
     ]
 
-    const {artefatos, setArtefatos, setArtefatosSelecionados} = useContextoArtefato()
-
-    useEffect(() => {
-        const fetchData = async () => {
-            if (artefatos.length === 0){
-                await handleListarArtefatos()
-            }
-        }
-
-        fetchData()
-    }, [])
-
-    // function handleLimitarCaracteres(texto, limite) {
-    //     if (texto && texto.length >= limite) {
-    //         return `${texto.substring(0, limite)}...`;
-    //     }
-    //     return texto;
-    // }
-
-    const handleListarArtefatos = async () => {
-        try {
-            const response = await listarArtefatos();
-    
-            if (!response.error) { 
-                setArtefatos(response.data)
-            } 
-        } catch (error) {
-            setArtefatos([])
-            return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
-        }
-    }
-
-    const rowSelection = {
-        onChange: (selectedRowsKeys, selectedRows) => {
-          setArtefatosSelecionados(selectedRows)
-        },
-    };
-
 
     return (
-        <Table
-            rowKey="id"
-            dataSource={artefatos}
-            columns={COLUNAS_TABELA_ARTEFATOS}
-            rowSelection={rowSelection}
-        />
+        <React.Fragment>
+            {
+            data.length !== 0 ? (
+                    <Table
+                        dataSource={data}
+                        columns={columns}
+                        rowKey="id"
+                        style={{boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px', padding: '20px'}}
+                    />                
+            ) : (
+                <Empty
+                    description="Nenhum artefato para exibir"
+                    image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+                    style={{
+                        display: 'flex',
+                        width: "100%",
+                        height: "100%",
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: '20px'
+                    }}
+                >
+                </Empty>
+            )
+        }
+        </React.Fragment>
     )
-}
+}   
 
 export default TableArtefatos

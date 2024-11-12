@@ -1,14 +1,13 @@
-import { Button, Space, Input, Spin, Tooltip, Modal, Flex, Tabs } from "antd";
+import { Button, Space, Input, Tooltip, Modal, Flex, Tabs } from "antd";
 import React, { useEffect, useState } from "react";
-import { FaFilter, FaPlus } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import { TbCalendarUp } from "react-icons/tb";
 import FormFilterArtefatos from "../../components/FormFilterArtefatos/FormFilterArtefatos";
 import { BsGrid3X3GapFill } from "react-icons/bs";
 import { FaListUl } from "react-icons/fa6";
 import { MdSortByAlpha } from "react-icons/md";
-import TableArtifacts from "../../components/TableArtifacts/TableArtifacts";
 import GridArtefatos from "../../components/GridArtefatos/GridArtefatos";
-import { atualizarArtefato, buscarArtefatoPeloNome, criarArtefato, excluirArtefato, filtrarArtefatosPorProjetoEPorMembro, listarArtefatosDosProjetosDoMembro } from "../../../../services/artefatoService";
+import { atualizarArtefato, criarArtefato, excluirArtefato, filtrarArtefatosPorProjetoEPorMembro, listarArtefatosDosProjetosDoMembro } from "../../../../services/artefatoService";
 import { useContextoGlobalUser } from "../../../../context/ContextoGlobalUser/ContextoGlobalUser";
 import { handleError } from "../../../../services/utils";
 import { useContextoArtefato } from "../../context/ContextoArtefato";
@@ -19,21 +18,10 @@ import { createContent, updateContent } from "../../../../services/githubIntegra
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProjeto";
 import DrawerComments from "../DrawerComments/DrawerComments";
+import TableArtefatos from "../../components/TableArtefatos/TableArtefatos";
+import SpinLoading from "../../../../components/SpinLoading/SpinLoading";
+
 const {TabPane} = Tabs
-
-const StyleSpin = {
-    position: 'fixed', 
-    top: 0, 
-    left: 0, 
-    width: '100%', 
-    height: '100%', 
-    backgroundColor: 'rgba(255, 255, 255, 0.5)', 
-    zIndex: 9999, 
-    display: 'flex', 
-    justifyContent: 'center', 
-    alignItems: 'center'
-};
-
 const { Search } = Input;
 
 const Artefatos = () => {
@@ -268,9 +256,7 @@ const Artefatos = () => {
                 { isFormVisible && 
                     <React.Fragment>
                          {isLoading && ( 
-                            <div style={StyleSpin}>
-                                <Spin size="large" />
-                            </div>
+                            <SpinLoading />
                         )}
                         <div className="global-div"> 
                             <FormArtefato 
@@ -344,7 +330,7 @@ const Artefatos = () => {
                                         />
                                     </TabPane>
                                     <TabPane style={{padding: '20px'}} tab={<FaListUl />} key="2" >
-                                        <TableArtifacts 
+                                        <TableArtefatos 
                                             data={artefatos}
                                             onUpdate={handleAtualizarArtefato}
                                             onDelete={handleExcluirArtefato}

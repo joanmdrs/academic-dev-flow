@@ -5,6 +5,7 @@ import { listarFuncaoMembro } from "../../../../services/funcaoMembroProjetoServ
 import { useFuncaoMembroContexto } from "../../context/FuncaoMembroContexto"
 import { handleError } from "../../../../services/utils"
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages"
+import RenderEmpty from "../../../../components/Empty/Empty"
 
 
 const TableFuncaoMembro = ({onDisable, onDelete}) => {
@@ -87,13 +88,18 @@ const TableFuncaoMembro = ({onDisable, onDelete}) => {
 
 
     return (
-        <div className="global-div">
-            <Table
-                columns={COLUNAS_TABELA}
-                dataSource={itemsFuncaoMembro}  
-                rowKey="id"
-            />
-        </div>
+        <React.Fragment>
+            { itemsFuncaoMembro.length !== 0 ? (
+                <Table
+                    columns={COLUNAS_TABELA}
+                    dataSource={itemsFuncaoMembro}  
+                    rowKey="id"
+                />
+            ) : (
+                <RenderEmpty title="Nenhum dado para exibir" />
+            )}
+        </React.Fragment>
+
     )
 }
 

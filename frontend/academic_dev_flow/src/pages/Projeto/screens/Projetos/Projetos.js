@@ -20,7 +20,7 @@ const {TabPane} = Tabs
 const Projetos = () => {
     
     const navigate = useNavigate();
-    const { hasProjeto, setHasProjeto } = useContextoProjeto();
+    const { dadosProjeto, setDadosProjeto } = useContextoProjeto();
     const { usuario, grupo } = useContextoGlobalUser();
     const [projetos, setProjetos] = useState([]);
     const [isTabsVisible, setIsTabsVisible] = useState(false);
@@ -114,13 +114,13 @@ const Projetos = () => {
     const handleBuscarProjeto = async (id) => {
         const response = await buscarProjetoPeloId(id)
         if (!response.error){
-            setHasProjeto(response.data)
+            setDadosProjeto(response.data)
         }
     }
 
     const handleAdicionarProjeto = () => {
         setActionForm('create')
-        setHasProjeto(null)
+        setDadosProjeto(null)
         setIsTableVisible(false)
         setIsTabsVisible(true)
     }
@@ -139,7 +139,7 @@ const Projetos = () => {
     }
 
     const handleReload = async () => {
-        setHasProjeto(null)
+        setDadosProjeto(null)
         setIsTableVisible(true)
         setIsTabsVisible(false)
         await handleBuscarProjetosDoMembro()
@@ -148,7 +148,7 @@ const Projetos = () => {
     const handleSalvarProjeto = async (formData) => {        
         try {
 
-            if (actionForm === 'create' && hasProjeto == null){
+            if (actionForm === 'create' && dadosProjeto == null){
                 const response = await criarProjeto(formData)
                 
                 if (!response.error){
@@ -156,11 +156,11 @@ const Projetos = () => {
                         membros: [usuario.id],
                         projeto: response.data.id
                     })
-                    setHasProjeto(response.data)
+                    setDadosProjeto(response.data)
     
                 }
             }else if(actionForm === 'update'){
-                await atualizarProjeto(formData, hasProjeto.id)
+                await atualizarProjeto(formData, dadosProjeto.id)
             }
         } catch (error) {
             return handleError(error, 'Falha ao tentar salvar os dados do projeto !')

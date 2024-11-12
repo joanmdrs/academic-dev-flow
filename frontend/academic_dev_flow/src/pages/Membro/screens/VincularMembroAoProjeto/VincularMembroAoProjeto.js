@@ -1,7 +1,7 @@
 import { Button, Modal, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import Titulo from "../../../../components/Titulo/Titulo";
-import { FaFilter, FaPlus, FaTrash } from "react-icons/fa";
+import { FaPlus, FaTrash } from "react-icons/fa";
 import TableMembroProjeto from "../../components/TableMembroProjeto/TableMembroProjeto";
 import { useMembroContexto } from "../../context/MembroContexto";
 import FormMembroProjeto from "../../components/FormMembroProjeto/FormMembroProjeto";
@@ -13,12 +13,9 @@ import { listarMembros } from "../../../../services/membroService";
 
 const VincularMembroAoProjeto = () => {
 
-    const [titleForm, setTitleForm] = useState('VINCULAR MEMBRO(S) AO PROJETO');
     const [isFormVisible, setIsFormVisible] = useState(false);
-    const [isFormFilterVisible, setIsFormFilterVisible] = useState(false);
     const [isTableVisible, setIsTableVisible] = useState(true);
     const {setDadosMembroProjeto, objsMembroProjetoSelecionados, setObjsMembroProjeto} = useMembroContexto();
-    const [isSearchBtnEnabled, setIsSearchBtnEnabled] = useState(true);
     const [optionsMembros, setOptionsMembros] = useState([]);
     const [optionsProjetos, setOptionsProjetos] = useState([]);
 
@@ -42,7 +39,6 @@ const VincularMembroAoProjeto = () => {
 
     const handleReload = () => {
         setIsFormVisible(false);
-        setIsFormFilterVisible(false);
         setIsTableVisible(true);
         setDadosMembroProjeto(null);
         setObjsMembroProjeto([]);
@@ -51,7 +47,6 @@ const VincularMembroAoProjeto = () => {
     const handleAdicionarMembroProjeto = () => {
         setIsFormVisible(true);
         setIsTableVisible(false);
-        setIsFormFilterVisible(false);
         setDadosMembroProjeto(null);
     };
 
@@ -162,63 +157,67 @@ const VincularMembroAoProjeto = () => {
     }, []);
 
     return (
-        <div>
+        <div className="content">
             
             <Titulo 
                 titulo='Vincular Projeto'
                 paragrafo='Membros > Vincular Projeto'
             />
 
-            <div style={{display: 'flex', justifyContent: 'space-between', margin: '20px'}}> 
-                <div style={{display: 'flex', gap: '20px'}}>
+            { !isFormVisible && (
+                <div style={{display: 'flex', justifyContent: 'space-between', margin: '20px'}}> 
+                    <div style={{display: 'flex', gap: '20px'}}>
 
-                    <Select
-                        showSearch
-                        allowClear
-                        placeholder="Pesquise ou selecione o membro"
-                        options={optionsMembros}
-                        onChange={(value) => handleBuscarProjetosDoMembro(value)} 
-                        filterOption={(input, option) =>
-                            option?.label.toLowerCase().includes(input.toLowerCase())
-                        }
-                    />
-                    <Select
-                        showSearch
-                        allowClear
-                        placeholder="Pesquise ou selecione o projeto"
-                        options={optionsProjetos}
-                        onChange={(value) => handleBuscarMembrosDoProjeto(value)}
-                        filterOption={(input, option) =>
-                            option?.label.toLowerCase().includes(input.toLowerCase())
-                        }
-                    />
+                        <Select
+                            showSearch
+                            allowClear
+                            placeholder="Pesquise ou selecione o membro"
+                            options={optionsMembros}
+                            onChange={(value) => handleBuscarProjetosDoMembro(value)} 
+                            filterOption={(input, option) =>
+                                option?.label.toLowerCase().includes(input.toLowerCase())
+                            }
+                        />
+                        <Select
+                            showSearch
+                            allowClear
+                            placeholder="Pesquise ou selecione o projeto"
+                            options={optionsProjetos}
+                            onChange={(value) => handleBuscarMembrosDoProjeto(value)}
+                            filterOption={(input, option) =>
+                                option?.label.toLowerCase().includes(input.toLowerCase())
+                            }
+                        />
 
+                    </div>
+
+                    <div style={{display: 'flex', gap: '10px'}}> 
+                        <Button 
+                            icon={<FaPlus />} 
+                            type="primary" 
+                            onClick={handleAdicionarMembroProjeto}
+                        >
+                            Vincular Projeto
+                        </Button>
+                        <Button 
+                            icon={<FaTrash />} 
+                            type="primary" 
+                            danger
+                            disabled={objsMembroProjetoSelecionados.length === 0}
+                            onClick={handleDesvincularMembroProjeto}
+                        >
+                            Excluir
+                        </Button>
+                    </div>
                 </div>
 
-                <div style={{display: 'flex', gap: '10px'}}> 
-                    <Button 
-                        icon={<FaPlus />} 
-                        type="primary" 
-                        onClick={handleAdicionarMembroProjeto}
-                    >
-                        Vincular Projeto
-                    </Button>
-                    <Button 
-                        icon={<FaTrash />} 
-                        type="primary" 
-                        danger
-                        disabled={objsMembroProjetoSelecionados.length === 0}
-                        onClick={handleDesvincularMembroProjeto}
-                    >
-                        Excluir
-                    </Button>
-                </div>
-            </div>
+            )}
 
-            <div className="global-div"> 
+            
+            <div> 
                 {isFormVisible && 
                     <FormMembroProjeto 
-                        titleForm={titleForm}
+                        titleForm="VINCULAR MEMBRO(S) AO PROJETO"
                         onSubmit={handleVincularMembroAoProjeto} 
                         onCancel={handleCancelar} 
                     />

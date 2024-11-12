@@ -34,7 +34,7 @@ export const ProviderGlobalUser = ({ children }) => {
         fetchData()
     }, [token])
 
-    console.log()
+    console.log(grupo)
 
     return (
         <ContextoGlobalUser.Provider

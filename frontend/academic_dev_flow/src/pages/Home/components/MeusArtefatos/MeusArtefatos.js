@@ -1,16 +1,19 @@
 import { List, Tooltip } from "antd";
 import React from "react";
 import { MdOpenInNew } from "react-icons/md";
+import { useContextoGlobalUser } from "../../../../context/ContextoGlobalUser/ContextoGlobalUser";
+import { Link } from "react-router-dom";
 
 const MeusArtefatos = ({artefatos}) => {
+    const {grupo} = useContextoGlobalUser()
+
     return (
         <div className="meus-artefatos box-model"> 
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'baseline'}}> 
                 <h3 className="ff-pop">Meus artefatos</h3>
-                <a 
-                    style={{fontSize: '12px', fontWeight: 'bold'}} 
-                    href="/academic-dev-flow/aluno/artefatos"
-                > Visualize todos </a>
+                { grupo === 'Administradores' && <Link to={`/admin/artefatos`}> Visualize todos </Link> }
+                { grupo === 'Discentes' && <Link to={`/aluno/artefatos`}> Visualize todos </Link> }
+                { grupo === 'Docentes' && <Link to={`/professor/artefatos`}> Visualize todos </Link> }
             </div>
 
             <div> 

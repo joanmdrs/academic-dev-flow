@@ -72,34 +72,36 @@ const GerenciarCategoriaTarefa = () => {
     };
 
     return (
-        <div>
+        <div className="content">
             <Titulo 
                 titulo='Gerenciar Categorias'
                 paragrafo='Tarefas > Categorias > Gerenciar categorias'
             />
 
-            <div className="button-menu">
-                <Button 
-                    icon={<FaFilter />}
-                    type="primary"
-                    onClick={() => setIsFormBuscarVisivel(!isFormBuscarVisivel)}
-                >
-                    Filtrar
-                </Button>
+            { !isFormVisivel && (
+                <div className="button-menu">
+                    <Button 
+                        icon={<FaFilter />}
+                        type="primary"
+                        onClick={() => setIsFormBuscarVisivel(!isFormBuscarVisivel)}
+                    >
+                        Filtrar
+                    </Button>
 
-                <Button 
-                    icon={<FaPlus />} 
-                    type="primary" 
-                    onClick={handleAdicionarCategoria}
-                    disabled={isPlusBtnEnabled}
-                > 
-                    Criar Nova Categoria 
-                </Button>
-            </div>
+                    <Button 
+                        icon={<FaPlus />} 
+                        type="primary" 
+                        onClick={handleAdicionarCategoria}
+                        disabled={isPlusBtnEnabled}
+                    > 
+                        Criar Nova Categoria 
+                    </Button>
+                </div>
+            )}
 
             { isFormBuscarVisivel && (
-                <div className="global-div" style={{width: '50%'}}>
-                    <Form layout="vertical">
+                <div style={{width: '50%'}}>
+                    <Form className="global-form" layout="vertical">
                         <Form.Item 
                             name="nome_categoria"
                             label="Nome" 
@@ -123,7 +125,7 @@ const GerenciarCategoriaTarefa = () => {
                 </div>
             )}
 
-            <div className="global-div">
+            <div>
                 { isFormVisivel ? (
                         <FormCategoriaTarefa onSubmit={handleSalvarCategoria} onCancel={handleCancelar}/>
                 ) : (

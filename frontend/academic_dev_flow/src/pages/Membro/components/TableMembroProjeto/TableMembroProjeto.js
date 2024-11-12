@@ -5,6 +5,7 @@ import { listarMembroProjeto } from "../../../../services/membroProjetoService";
 import { useMembroContexto } from "../../context/MembroContexto";
 import { handleError } from "../../../../services/utils";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
+import RenderEmpty from "../../../../components/Empty/Empty";
 
 const TableMembroProjeto = ({onEdit, onDelete}) => {
 
@@ -73,12 +74,18 @@ const TableMembroProjeto = ({onEdit, onDelete}) => {
     };
 
     return (
-        <Table
-            rowKey="id"
-            dataSource={objsMembroProjeto}
-            columns={COLUNAS_TABELA_MEMBRO_PROJETO}
-            rowSelection={rowSelection}
-        />
+        <React.Fragment>
+            { objsMembroProjeto.length !== 0 ? (
+                <Table
+                    rowKey="id"
+                    dataSource={objsMembroProjeto}
+                    columns={COLUNAS_TABELA_MEMBRO_PROJETO}
+                    rowSelection={rowSelection}
+                />
+            ) : (
+                <RenderEmpty title="Nenhum dado para exibir " />
+            )}
+        </React.Fragment>
     )
 }
 

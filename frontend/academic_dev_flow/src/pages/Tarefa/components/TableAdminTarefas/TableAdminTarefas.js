@@ -6,8 +6,9 @@ import { formatDate, handleError } from "../../../../services/utils";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 import { optionsStatusTarefas } from "../../../../services/optionsStatus";
 import { IoMdCreate, IoMdOpen, IoMdTrash } from "react-icons/io";
+import RenderEmpty from "../../../../components/Empty/Empty";
 
-const TableTarefas = ({onView, onEdit, onDelete }) => {
+const TableAdminTarefas = ({onView, onEdit, onDelete }) => {
 
     const COLUNAS_TABELA_TAREFAS = [
         {
@@ -107,13 +108,19 @@ const TableTarefas = ({onView, onEdit, onDelete }) => {
     };
 
     return (
-        <Table
-            rowKey="id"
-            dataSource={tarefas}
-            columns={COLUNAS_TABELA_TAREFAS}
-            rowSelection={rowSelection}
-        />
+        <React.Fragment>
+            { tarefas.length !== 0 ? (
+                <Table
+                    rowKey="id"
+                    dataSource={tarefas}
+                    columns={COLUNAS_TABELA_TAREFAS}
+                    rowSelection={rowSelection}
+                />
+            ) : (
+                <RenderEmpty title="Nenhuma tarefa para exibir" />
+            )}
+        </React.Fragment>
     );
 };
 
-export default TableTarefas;
+export default TableAdminTarefas;

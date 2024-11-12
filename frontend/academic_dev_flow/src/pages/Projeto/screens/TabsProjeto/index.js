@@ -1,11 +1,11 @@
-import { Tabs } from "antd";
+import { Button, Space, Tabs } from "antd";
 import Item from "antd/es/list/Item";
 import React, { useState } from "react";
 import TabProjeto from "./TabProjeto/TabProjeto";
 import TabEquipe from "./TabEquipe/TabEquipe";
 import TabFluxo from "./TabFluxo/TabFluxo";
 
-const TabsProjeto = ({onSaveProject, onCancel}) => {
+const TabsProjeto = ({onSubmit, onCancel}) => {
 
     const [current, setCurrent] = useState("1");
 
@@ -22,7 +22,7 @@ const TabsProjeto = ({onSaveProject, onCancel}) => {
             className="tabs-projeto"
         > 
             <Item tab="Projeto" key="1">
-                <TabProjeto onSubmit={onSaveProject} onCancel={onCancel} />
+                <TabProjeto onCancel={onCancel} onSubmit={onSubmit} />
             </Item>
             <Item tab="Equipe" key="2" className="tab-item">
                 <TabEquipe />

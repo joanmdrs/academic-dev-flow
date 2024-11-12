@@ -13,26 +13,28 @@ const TabsFluxo = () => {
     const [current, setCurrent] = useState("1")
 
     return (    
-        <React.Fragment>
+        <div className="content">
             <Titulo 
                 titulo="Fluxos de desenvolvimento"
                 paragrafo="Fluxos > Gerenciar fluxos"
             />
-            <Tabs
-                style={{marginTop: "30px"}} 
-                activeKey={current} 
-                onChange={setCurrent} 
-                className="global-div tabs-fluxo"
-            >
-                <TabPane tab="GERENCIAR FLUXOS" key="1">
-                    <TabGerenciarFluxos />
-                </TabPane>
-                <TabPane tab="ETAPAS DO FLUXO" key="2">
-                    <TabVincularEtapas />
-                </TabPane>
-            </Tabs>
-
-        </React.Fragment>
+            <div className="pa-10"> 
+                <Tabs
+                    size="large"
+                    indicator={{align: 'center'}}
+                    activeKey={current} 
+                    onChange={setCurrent} 
+                    className="tabs-fluxo"
+                >
+                    <TabPane tab="Fluxos" key="1">
+                        <TabGerenciarFluxos />
+                    </TabPane>
+                    <TabPane tab="Etapas" key="2">
+                        <TabVincularEtapas />
+                    </TabPane>
+                </Tabs>
+            </div>  
+        </div>
         
     );
 }

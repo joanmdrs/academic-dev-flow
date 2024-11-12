@@ -57,9 +57,6 @@ export const atualizarFluxoProjeto = (idFluxo, idProjeto ) => {
 export const listarProjetos = async () => {
     try {
         const response = await api.get('projeto/listar/')
-        if (response.status === 204) {
-            return handleInfo(response, "Não existem projetos cadastrados no banco de dados!")
-        }
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)

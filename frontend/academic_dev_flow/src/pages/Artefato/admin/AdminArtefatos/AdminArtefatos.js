@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {Button, Modal, Spin} from 'antd'
+import {Button, Modal} from 'antd'
 import Titulo from "../../../../components/Titulo/Titulo";
 import { FaFilter, FaPlus, FaTrash } from "react-icons/fa";
 import FormArtefato from "../../components/FormArtefato/FormArtefato";
@@ -11,22 +11,10 @@ import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 import { NotificationManager } from "react-notifications";
 import { updateIssue } from "../../../../services/githubIntegration/issueService";
-import TableArtefatos from "../../components/TableArtefatos/TableArtefatos";
 import FormFiltrarArtefatos from "../../components/FormFiltrarArtefatos/FormFiltrarArtefatos";
 import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProjeto";
-
-const StyleSpin = {
-    position: 'fixed', 
-    top: 0, 
-    left: 0, 
-    width: '100%', 
-    height: '100%', 
-    backgroundColor: 'rgba(255, 255, 255, 0.5)', 
-    zIndex: 9999, 
-    display: 'flex', 
-    justifyContent: 'center', 
-    alignItems: 'center'
-};
+import SpinLoading from "../../../../components/SpinLoading/SpinLoading";
+import TableAdminArtefatos from "../../components/TableAdminArtefatos/TableAdminArtefatos";
 
 const AdminArtefatos = () => {
 
@@ -202,101 +190,97 @@ const AdminArtefatos = () => {
     }
 
     return (
-        <React.Fragment>
+        <div className="content">
             <Titulo 
                 titulo='Artefatos'
                 paragrafo='Artefatos > Gerenciar artefatos'
             />
 
-            <div style={{display: 'flex', justifyContent: 'space-between', margin: '20px'}}> 
-                <div>
-                    <Button
-                        icon={<FaFilter />} 
-                        type="primary"
-                        onClick={() => setIsFormFilterArtefatoVisible(!isFormFilterArtefatoVisible)}
-                    >
-                        Filtrar
-                    </Button>
-                </div>
+            { !isFormVisible && (
+                <div style={{display: 'flex', justifyContent: 'space-between', marginTop: '20px'}}> 
+                    <div>
+                        <Button
+                            icon={<FaFilter />} 
+                            type="primary"
+                            onClick={() => setIsFormFilterArtefatoVisible(!isFormFilterArtefatoVisible)}
+                        >
+                            Filtrar
+                        </Button>
+                    </div>
 
-                <div style={{display: 'flex', gap: '10px'}}> 
-                    <Button 
-                        icon={<FaPlus />} 
-                        type="primary" 
-                        onClick={handleCriarArtefato}
-                    >
-                        Criar Artefato
-                    </Button>
-                    <Button 
-                        icon={<FaTrash />} 
-                        type="primary" 
-                        disabled={artefatosSelecionados.length === 0 ? true : false}
-                        danger
-                        onClick={handleExcluirArtefatosSelecionados}
-                    >
-                        Excluir
-                    </Button>
+                    <div style={{display: 'flex', gap: '10px'}}> 
+                        <Button 
+                            icon={<FaPlus />} 
+                            type="primary" 
+                            onClick={handleCriarArtefato}
+                        >
+                            Criar Artefato
+                        </Button>
+                        <Button 
+                            icon={<FaTrash />} 
+                            type="primary" 
+                            disabled={artefatosSelecionados.length === 0 ? true : false}
+                            danger
+                            onClick={handleExcluirArtefatosSelecionados}
+                        >
+                            Excluir
+                        </Button>
+                    </div>
                 </div>
-            </div>
+            )}
 
             {isFormFilterArtefatoVisible && (
-                <div className="global-div" style={{width: '50%'}}>   
+                <div style={{width: '50%'}}>   
                     <FormFiltrarArtefatos onSearch={handleFiltrarArtefatos} />
                 </div>
             )}
 
-            <div className="global-div"> 
+            <div> 
 
                 {isFormVisible && actionForm === 'create' && (
-                    <React.Fragment> 
+                    <div> 
                         {isLoading && ( 
-                            <div style={StyleSpin}>
-                                <Spin size="large" />
-                            </div>
+                            <SpinLoading />
                         )}
                         <FormArtefato 
                             onSubmit={handleSalvarArtefato} 
                             onCancel={handleCancelar}
                             selectProjeto={<SelecionarProjeto />} 
                         /> 
-                    </React.Fragment>
+                    </div>
                 )}
 
                 {isFormVisible && actionForm === 'update' && (
-                    <React.Fragment> 
+                    <div> 
                         {isLoading && ( 
-                            <div style={StyleSpin}>
-                                <Spin size="large" />
-                            </div>
+                            <SpinLoading />
                         )}
                         <FormArtefato 
                             onSubmit={handleSalvarArtefato} 
                             onCancel={handleCancelar} 
                         />
-                    </React.Fragment>
+                    </div>
                 )}
                 
 
                 {!isFormVisible && (
-                    <React.Fragment>
+                    <div>
                         {isLoading && ( 
-                            <div style={StyleSpin}>
-                                <Spin size="large" />
-                            </div>
+                            <SpinLoading />
                         )}
 
-                        {isTableVisible && <TableArtefatos    
+                        {isTableVisible && <TableAdminArtefatos    
                             onView={handleVisualizarArtefato} 
                             onEdit={handleAtualizarArtefato} 
                             onDelete={handleExcluirArtefatoUnico}
                             onUpdateStatus={handleAtualizarStatusArtefato}
                         />}
-                    </React.Fragment>
+                    </div>
                 )}
                 
             </div>
 
-        </React.Fragment>    
+        </div>    
     )
 }
 

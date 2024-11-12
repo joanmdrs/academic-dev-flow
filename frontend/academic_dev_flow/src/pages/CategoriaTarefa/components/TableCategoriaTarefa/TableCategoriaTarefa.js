@@ -4,6 +4,7 @@ import Loading from "../../../../components/Loading/Loading"
 import { useContextoCategoriaTarefa } from "../../context/ContextoCategoriaTarefa"
 import { IoMdCreate, IoMdTrash } from "react-icons/io"
 import { listarCategoriaTarefa } from "../../../../services/categoriaTarefaService"
+import RenderEmpty from "../../../../components/Empty/Empty"
 
 const TableCategoriaTarefa = ({onEdit, onDelete}) => {
 
@@ -77,10 +78,17 @@ const TableCategoriaTarefa = ({onEdit, onDelete}) => {
 
 
     return (
-        <Table
-            columns={COLUNAS_TABELA}
-            dataSource={categorias}  
-        />
+        <React.Fragment>
+            { categorias.length !== 0 ? (
+                <Table
+                    rowKey="id"
+                    columns={COLUNAS_TABELA}
+                    dataSource={categorias}  
+                />
+            ) : (
+                <RenderEmpty title="Nenhuma categoria para exibir" />
+            )}
+        </React.Fragment>
     )
 }
 

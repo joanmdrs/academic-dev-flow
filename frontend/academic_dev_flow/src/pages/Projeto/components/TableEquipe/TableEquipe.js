@@ -1,5 +1,5 @@
 import { Avatar, Empty, Table, Tooltip } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { handleError } from "../../../../services/utils";
 import { useContextoProjeto } from "../../context/ContextoProjeto";
 import { buscarMembrosPorProjeto } from "../../../../services/membroProjetoService";
@@ -38,23 +38,23 @@ const TableEquipe = ({onDelete}) => {
         }
     ]
 
-    const {hasProjeto, hasMembros, setHasMembros, setMembrosSelecionados} = useContextoProjeto()
+    const {dadosProjeto, membros, setMembros, setMembrosSelecionados} = useContextoProjeto()
 
     useEffect(() => {
         const fetchData = async () => {
-            if (hasProjeto !== null){
+            if (dadosProjeto !== null){
                 await handleGetMembros()
             }
         }
 
         fetchData()
-    }, [hasProjeto])
+    }, [dadosProjeto])
 
     const handleGetMembros = async () => {
         try {
-            const response = await buscarMembrosPorProjeto(hasProjeto.id)
+            const response = await buscarMembrosPorProjeto(dadosProjeto.id)
             if (!response.error){
-                setHasMembros(response.data)
+                setMembros(response.data)
             }
         } catch (error) {
             return handleError(error, 'Falha ao buscar os membros do projeto')
@@ -69,12 +69,12 @@ const TableEquipe = ({onDelete}) => {
 
     return (
         <React.Fragment>
-            {hasMembros.length === 0 ? 
+            {membros.length === 0 ? 
                     <Empty description="Nenhum membro vinculado ao projeto" image={Empty.PRESENTED_IMAGE_SIMPLE}/> :
                     <div style={{border: '1px solid #ddd', padding: '10px', borderRadius: '10px'}}>
                         <Table 
                             columns={COLLUMS_TABLE_EQUIPE}
-                            dataSource={hasMembros}
+                            dataSource={membros}
                             rowKey="id"
                             rowSelection={rowSelection}
                         />
