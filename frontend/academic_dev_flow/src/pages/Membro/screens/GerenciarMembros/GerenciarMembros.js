@@ -111,12 +111,21 @@ const GerenciarMembros = () => {
         setIsSearchBtnEnabled(true)
     }
 
-    const handleSalvarMembro = async (dados) => {
+    const handleSalvarMembro = async (dadosForm) => {
         if (acaoForm === 'criar'){
-            const response = await criarMembro(dados)
+            let avatarNumber;
+            if (dadosForm.sexo === 'M') {
+                avatarNumber = Math.floor(Math.random() * 50) + 1;
+            } else if (dadosForm.sexo === 'F') {
+                avatarNumber = Math.floor(Math.random() * 50) + 51;
+            } else if (dadosForm.sexo === 'O') {
+                avatarNumber = Math.floor(Math.random() * 100) + 1;
+            }
+            dadosForm['avatar'] = avatarNumber;
+            const response = await criarMembro(dadosForm)
             handleReload('atualizar', response.data)
         } else if (acaoForm === 'atualizar') {
-            const response = await atualizarMembro(dadosMembro.id, dados)
+            const response = await atualizarMembro(dadosMembro.id, dadosForm)
             handleReload('atualizar', response.data )
         }
     }

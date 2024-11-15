@@ -31,7 +31,6 @@ const FormMembro = ({onSubmit, onCancel}) => {
     const [form] = Form.useForm()
     const [loading, setLoading] = useState(false)
     const [optionsGrupos, setOptionsGrupos] = useState([])
-    const [gender, setGender] = useState(null)
     const [titulo, setTitulo] = useState('CADASTRAR MEMBRO')
 
     const handleListarGrupos = async () => {
@@ -89,26 +88,12 @@ const FormMembro = ({onSubmit, onCancel}) => {
         form.setFieldsValue({ username: value });
     };
 
-    const handleSubmitForm = () => {
-        let avatarNumber;
-        if (gender === 'M') {
-            avatarNumber = Math.floor(Math.random() * 50) + 1;
-        } else if (gender === 'F') {
-            avatarNumber = Math.floor(Math.random() * 50) + 51;
-        } else if (gender === 'O') {
-            avatarNumber = Math.floor(Math.random() * 100) + 1;
-        }
-        const dadosForm = form.getFieldsValue();
-        dadosForm['avatar'] = avatarNumber;
-        onSubmit(dadosForm);
-    };
-
     return (
         <Form 
             form={form}
             className="global-form"
             layout="vertical"
-            onFinish={handleSubmitForm}
+            onFinish={onSubmit}
         >
             <Form.Item>
                 <h4>{titulo}</h4>
@@ -121,6 +106,7 @@ const FormMembro = ({onSubmit, onCancel}) => {
                 expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
             >
                 <Panel 
+                    forceRender
                     style={{
                         padding: '30px', 
                         boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
@@ -130,6 +116,11 @@ const FormMembro = ({onSubmit, onCancel}) => {
                     header="DADOS DO MEMBRO" key="1"
                 >
                     <div style={{display: "flex", gap: "20px"}}> 
+
+                        <Form.Item name="avatar" hidden>
+                            <Input />
+                        </Form.Item>
+
                         <Form.Item 
                             style={{flex: "3"}}
                             label="Nome" 
@@ -156,7 +147,6 @@ const FormMembro = ({onSubmit, onCancel}) => {
                             rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
                         >
                             <Select 
-                                onChange={(value) => setGender(value)} 
                                 options={optionsSexo} 
                                 allowClear 
                                 placeholder="Sexo do membro" 
@@ -190,7 +180,9 @@ const FormMembro = ({onSubmit, onCancel}) => {
                     </div>
                 </Panel>
 
-                <Panel style={{
+                <Panel 
+                    forceRender
+                    style={{
                         padding: '30px', 
                         boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
                         border: 'none', 
@@ -226,7 +218,9 @@ const FormMembro = ({onSubmit, onCancel}) => {
 
                 </Panel>
 
-                <Panel style={{
+                <Panel 
+                    forceRender
+                    style={{
                         padding: '30px', 
                         boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
                         border: 'none', 
@@ -251,7 +245,9 @@ const FormMembro = ({onSubmit, onCancel}) => {
                     </Form.Item>
                 </Panel>
 
-                <Panel style={{
+                <Panel 
+                    forceRender
+                    style={{
                         padding: '30px', 
                         boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
                         border: 'none', 

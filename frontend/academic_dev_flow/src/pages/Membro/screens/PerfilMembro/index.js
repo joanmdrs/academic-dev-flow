@@ -24,7 +24,6 @@ const ScreenPerfilMembro = ({grupo}) => {
             { grupo === 'professor' && <MenuProfessor />}
             <Layout>
                 <MyHeader/>
-                <CustomBreadcrumb routes={breadcrumbRoutes} />
                 <ProviderGlobalUser>
                     <MembroProvider>
                         <PerfilMembro/>
