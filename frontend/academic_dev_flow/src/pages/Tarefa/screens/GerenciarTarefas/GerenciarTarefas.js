@@ -39,6 +39,7 @@ const GerenciarTarefas = () => {
 
     const handleCancelar = () => {
         setIsFormVisivel(false)
+        setIsFormBuscarVisivel(false)
         setDadosTarefa(null)
         setDadosProjeto(null)
     }
@@ -183,7 +184,7 @@ const GerenciarTarefas = () => {
                 paragrafo='Tarefas > Gerenciar tarefas'
             />
 
-            <div style={{display: 'flex', justifyContent: 'space-between', margin: '20px'}}> 
+            <div className="button-menu"> 
                 <div> 
                     <Button
                         icon={<FaFilter />} 
@@ -194,7 +195,7 @@ const GerenciarTarefas = () => {
                     </Button>
                 </div>
 
-                <div style={{display: 'flex', gap: '10px'}}> 
+                <div className="grouped-buttons"> 
                     <Button 
                         icon={<FaPlus />} 
                         type="primary" 
@@ -217,7 +218,7 @@ const GerenciarTarefas = () => {
 
             {isFormBuscarVisivel && (
                 <div style={{width: '50%'}}>   
-                    <FormBuscarTarefa onSearch={handleFiltrarTarefas}  />
+                    <FormBuscarTarefa onSearch={handleFiltrarTarefas} onCancel={handleCancelar} />
                 </div>
             )}
 

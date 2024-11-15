@@ -2,12 +2,12 @@ import React from "react";
 import MenuAdmin from "../../../../components/Menus/MenuAdmin/MenuAdmin";
 import { Layout } from "antd";
 import MyHeader from "../../../../components/Header/Header";
-import { Content } from "antd/es/layout/layout";
-import GerenciarIteracoes from "./GerenciarIteracoes";
 import { ProviderIteracao } from "../../context/contextoIteracao";
-import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
+import AdminIteracoes from "./AdminIteracoes";
 
-const ScreenGerenciarIteracoes = () => {
+const {Content} = Layout
+
+const ScreenAdminIteracoes = () => {
 
     return (
         <React.Fragment>
@@ -16,7 +16,7 @@ const ScreenGerenciarIteracoes = () => {
                 <MyHeader/>
                 <Content>
                     <ProviderIteracao>
-                        <GerenciarIteracoes />
+                        <AdminIteracoes />
                     </ProviderIteracao>
                 </Content>
             </Layout>
@@ -24,4 +24,4 @@ const ScreenGerenciarIteracoes = () => {
     )
 }
 
-export default ScreenGerenciarIteracoes
+export default ScreenAdminIteracoes

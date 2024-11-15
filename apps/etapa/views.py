@@ -12,7 +12,7 @@ class CadastrarEtapaView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
         try:
-            serializer = EtapaSerializer(data=request.data)
+            serializer = EtapaSerializer(data=request.data, context={'request': request})
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
@@ -57,8 +57,12 @@ class ListarEtapasView(APIView):
     def get(self, request):
         try: 
             etapas = Etapa.objects.all()
-            serializer = EtapaSerializer(etapas, many=True) 
-            return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})  
+            
+            if etapas: 
+                serializer = EtapaSerializer(etapas, many=True) 
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response([], status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             

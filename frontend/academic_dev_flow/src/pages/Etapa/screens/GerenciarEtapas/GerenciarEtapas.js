@@ -7,6 +7,7 @@ import { useContextoEtapa } from "../../context/ContextoEtapa";
 import { Button, Modal, Table } from "antd";
 import { FaFilter, FaPlus, FaTrash } from "react-icons/fa";
 import RenderEmpty from "../../../../components/Empty/Empty";
+import FormFiltrarEtapas from "../../components/FormFiltrarEtapas/FormFiltrarEtapas";
 
 const GerenciarEtapas = () => {
 
@@ -177,8 +178,8 @@ const GerenciarEtapas = () => {
                     </div>
 
                     {isFormFiltrarVisivel && (
-                        <div className="global-div" style={{width: '50%'}}>
-                            <FormDeBusca executeFuncao={handleFiltrarEtapas}/>
+                        <div style={{width: '50%'}}>
+                            <FormFiltrarEtapas onCancel={handleCancelar} onFilter={handleFiltrarEtapas} />
                         </div>
                     )}
 

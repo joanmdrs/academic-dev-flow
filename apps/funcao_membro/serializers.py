@@ -23,7 +23,9 @@ class FuncaoMembroSerializer(serializers.ModelSerializer):
             'nome_iteracao',
             'data_atribuicao',
             'data_desativacao',
-            'status']
+            'status',
+        ]
+        
         
     def get_nome_categoria_funcao(self, obj):
         return obj.categoria_funcao.nome

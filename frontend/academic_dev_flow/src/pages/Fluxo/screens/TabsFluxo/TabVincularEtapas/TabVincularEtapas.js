@@ -1,197 +1,227 @@
 import React, { useEffect, useState } from "react";
-import { Table, Form, Select, Modal, Button } from "antd";
-import { buscarFluxoPeloId, listarFluxos } from "../../../../../services/fluxoService"; 
-import { buscarEtapaPeloId, buscarEtapaPeloNome } from "../../../../../services/etapaService";
-import BotaoAdicionar from "../../../../../components/Botoes/BotaoAdicionar/BotaoAdicionar";
-import BotaoExcluir from "../../../../../components/Botoes/BotaoExcluir/BotaoExcluir";
-import {  desvincularEtapaFluxo, listarEtapasPorFluxo, vincularEtapaFluxo } from "../../../../../services/fluxoEtapaService";
-import ModalSelecionarObjetos from "../../../../../components/Modals/ModalSelecionarObjetos/ModalSelecionarObjetos";
+import { Button, Form, Modal, Select, Space, Tooltip } from "antd";
+import { listarFluxos } from "../../../../../services/fluxoService"; 
+
 import { useContextoFluxo } from "../../../context/ContextoFluxo";
-import { handleError, handleInfo } from "../../../../../services/utils";
-import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../../services/messages";
-import { FaLink, FaTrash } from "react-icons/fa";
+import { FaFilter, FaPlus } from "react-icons/fa6";
+import FormVincularEtapas from "../../../components/FormVincularEtapas/FormVincularEtapas";
+import { atualizarFluxoEtapa, desvincularEtapaFluxo, listarEtapasPorFluxo, listarFluxoEtapas, vincularEtapaFluxo } from "../../../../../services/fluxoEtapaService";
+import TableFluxoEtapas from "../../../components/TableFluxoEtapas/TableFluxoEtapas";
+import { IoMdCreate, IoMdTrash } from "react-icons/io";
+import { NotificationManager } from "react-notifications";
 
 const TabVincularEtapas = () => {
 
-    const [etapasVinculadas, setEtapasVinculadas] = useState([])
-    const [optionsFluxos, setOptionsFluxos] = useState([]);
-    const {dadosFluxo, setDadosFluxo} = useContextoFluxo()
-    const [isModalVisivel, setIsModalVisivel] = useState(false)
-    const [etapasExcluir, setEtapasExcluir] = useState([])
-    
-    const COLUNAS_TABELA = [
-        { title: "Código", dataIndex: "id", key: "id" },
-        { title: "Nome", dataIndex: "nome", key: "nome" },
-        { title: "Descrição", dataIndex: "descricao", key: "descricao"}
-    ];
+    const [isFormVisible, setIsFormVisible] = useState(false)
+    const [isFormFiltrarVisible, setIsFormFiltrarVisible] = useState(false)
+    const [isTableVisible, setIsTableVisible] = useState(true)
+    const [optionsFluxos, setOptionsFluxos] = useState([])
+    const {fluxoEtapas, setFluxoEtapas, dadosFluxoEtapa, setDadosFluxoEtapa} = useContextoFluxo()
+    const [actionForm, setActionForm] = useState('create')
 
-    const handleExibirModal = () => setIsModalVisivel(true)
-    const handleFecharModal = () =>  setIsModalVisivel(false)
-
-    const handleListarFluxos = async () => {
-        try {
-            const response = await listarFluxos();
-            const resultados = response.data.map((item) => ({
-                value: item.id,
-                label: item.nome,
-            }));
-            setOptionsFluxos(resultados);
-        } catch (error) {
-            return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
-        }
-    };
-
-    const handleListarEtapasPorFluxo = async (idFluxo) => {
-        const response = await listarEtapasPorFluxo(idFluxo);
-
-        if (!response.error) {
-            const etapasVinculadas = response.data 
-
-            if (etapasVinculadas.length === 0) {
-                setEtapasVinculadas([])
-
-            } else {
-                const promisesEtapas = await Promise.all(etapasVinculadas.map(async (fluxoEtapa) => {
-                    const resEtapa = await buscarEtapaPeloId(fluxoEtapa.etapa);
-                    return {
-                        id: fluxoEtapa.id,
-                        fluxo: fluxoEtapa.fluxo,
-                        etapa: fluxoEtapa.etapa,
-                        nome: resEtapa.data.nome,
-                        descricao: resEtapa.data.descricao,
-                    };
-                }));
-        
-                setEtapasVinculadas(promisesEtapas);
-            }
-        }
-    };
-  
-    const handleSelecionarFluxo = async (value) => {
-
-        if (value !== undefined) {
-            const response = await buscarFluxoPeloId(value)
-            if(!response.error){
-                setDadosFluxo(response.data);
-                await handleListarEtapasPorFluxo(value);
-            }
-        } else {
-            setDadosFluxo(null)
-        }    
-    };
-
-    const handleBuscarEtapas = async (parametro) => {
-        const response = await buscarEtapaPeloNome(parametro)
-        return response
+    const handleCancelar = async () => {
+        await handleReload()
     }
 
-    const handleSelecionarEtapas = async (dados) => {
-        const dadosEnviar = dados.map((item) => {
-            return {
-                fluxo: dadosFluxo.id,
-                etapa: item.id,
-            };
-        });
+    const handleReload = async () => {
+        await handleListarFluxoEtapas()
+        setIsFormVisible(false)
+        setIsFormFiltrarVisible(false)
+        setIsTableVisible(true)
+    }
 
-        const response = await vincularEtapaFluxo(dadosEnviar);
-
-        if (!response.error) {
-            await handleListarEtapasPorFluxo(dadosFluxo.id);
+    const handleListarFluxoEtapas = async () => {
+        const response = await listarFluxoEtapas()
+        if (!response.error){
+            setFluxoEtapas(response.data)
         }
-    };
+    }
 
-    const handleExcluirEtapas = async () => {
+    const handleListarEtapasPorFluxo = async (idFluxo) => {
+
+        if (idFluxo) {
+            const response = await listarEtapasPorFluxo(idFluxo)
+            if (!response.error && response.data.length !== 0){
+                setFluxoEtapas(response.data)
+                setIsTableVisible(true)
+            } else {
+                setIsTableVisible(false)
+                NotificationManager.info('O fluxo selecionado não possui nenhuma etapa vinculada !')
+            }
+        } else {
+            await handleReload()
+        }
+        
+    }
+
+    const handleVincularEtapaAoFluxo = async () => {
+        setIsFormFiltrarVisible(false)
+        setIsFormVisible(true)
+        setIsTableVisible(false)
+        setDadosFluxoEtapa(null)
+        setActionForm('create')
+    }
+
+    const handleAtualizarFluxoEtapa = async (record) => {
+        setDadosFluxoEtapa(record)
+        setIsFormFiltrarVisible(false)
+        setIsFormVisible(true)
+        setIsTableVisible(false)
+        setActionForm('update')
+    }
+
+    const handleSalvarFluxoEtapa = async (dataForm) => {
+
+        if (actionForm === 'create'){
+            const response = await vincularEtapaFluxo(dataForm)
+
+            if (!response.error){
+                await handleReload()
+            }
+        } else if (actionForm === 'update') {
+            const response = await atualizarFluxoEtapa(dadosFluxoEtapa.id, dataForm)
+            if (!response.error){
+                await handleReload()
+            }
+        }
+    }
+
+    const handleExcluirFluxoEtapa = async (ids) => {
         Modal.confirm({
             title: 'Confirmar exclusão',
-            content: 'Você está seguro de que deseja excluir este(s) item(s) ?',
+            content: 'Você está seguro de que deseja desvincular esta etapa do fluxo  ?',
             okText: 'Sim',
             cancelText: 'Não',
             onOk: async () => {
-
-                if (etapasExcluir.length > 0){
-                    const ids = etapasExcluir.map((item) => item.etapa)
-                    await desvincularEtapaFluxo(dadosFluxo.id, ids)
-                    await handleListarEtapasPorFluxo(dadosFluxo.id)
-                } else {
-                    return handleInfo(null, "Não há etapas para excluir !")
-                }
+                await desvincularEtapaFluxo([ids]);
+                await handleReload()
             }
         });
-    };
+    }
+    
 
     useEffect(() => {
-        handleListarFluxos();
-    }, []);
+        const fetchData = async () => {
 
+            await handleListarFluxoEtapas()
 
-    const rowSelection = {
-        onChange: (selectedRowsKeys, selectedRows) => {
-        setEtapasExcluir(selectedRows)
+            const response = await listarFluxos()
+            if (!response.error){
+                const resultados = response.data.map((item) => ({
+                    value: item.id,
+                    label: item.nome
+                }))
+                setOptionsFluxos(resultados)
+            }
+        }
+
+        fetchData()
+    }, [])
+
+    const columnsTable = [
+        {
+            title: 'Fluxo',
+            dataIndex: 'nome_fluxo',
+            key: 'nome_fluxo'
         },
-    };
+        {
+            title: 'Etapa',
+            dataIndex: 'nome_etapa',
+            key: 'nome_etapa'
+        }, 
+        {
+            title: 'Descrição',
+            dataIndex: 'descricao_etapa',
+            key: 'descricao_etapa'
+        }, 
+        {
+            title: "Ações",
+            dataIndex: 'actions',
+            key: 'actions',
+            render: (_, record) => (
+                <Space>
+                    <Tooltip title="Editar">
+                        <span 
+                            style={{color: 'var(--primary-color)', cursor: 'pointer'}}  
+                            onClick={() => handleAtualizarFluxoEtapa(record)}
+                        ><IoMdCreate /></span>
+                    </Tooltip>
+                    <Tooltip title="Excluir">
+                        <span 
+                            style={{color: 'var(--primary-color)', cursor: 'pointer'}} 
+                            onClick={() => handleExcluirFluxoEtapa(record.id)}
+                        ><IoMdTrash /></span>
+                    </Tooltip>
+                </Space>
+            )
+        }
+    ]
 
     return (
-        <div className="global-form">
-            <Form layout="vertical">
-                <Form.Item>
-                    <Select
-                        style={{width: "50%"}}
-                        onChange={handleSelecionarFluxo}
-                        allowClear
-                        defaultValue="Selecione o fluxo"
-                        options={optionsFluxos}
-                    />
-                </Form.Item>
-            </Form>
+        <div>
+            { !isFormVisible && (
+                <div 
+                    style={{
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: 'space-between',
+                        alignItems: 'baseline',
+                        padding: '20px 10px'
+                    }}>
 
-            <div>
-                { dadosFluxo !== null ? 
-                    (
-                        <React.Fragment>
-                            <div style={{
-                                display: "flex",
-                                justifyContent: "flex-end",
-                                gap: "10px",
-                                margin: "20px"
-                            }}> 
-                                <Button 
-                                    type="primary" 
-                                    icon={<FaLink />} 
-                                    onClick={() => handleExibirModal()}> 
-                                    Vincular etapas 
-                                </Button>
+                    <Button 
+                        icon={<FaFilter />} 
+                        type="primary" 
+                        onClick={() => setIsFormFiltrarVisible(!isFormFiltrarVisible)}
+                    > 
+                        Filtrar
+                    </Button>
+                
+                    <Button 
+                        icon={<FaPlus />} 
+                        type="primary" 
+                        onClick={handleVincularEtapaAoFluxo}
+                    > 
+                        Vincular etapas
+                    </Button>
+                </div>
+            )}
 
-                                <Button 
-                                    type="primary"
-                                    danger
-                                    icon={<FaTrash />}
-                                    onClick={() => handleExcluirEtapas()}
-                                    disabled={etapasExcluir.length === 0 ? true : false}
-                                >
-                                    Excluir
-                                </Button>
-                            </div>
+            { isFormFiltrarVisible && (
+                <Form 
+                    className="global-form" 
+                    style={{width: '50%'}} 
+                    onFinish={(values) => handleListarEtapasPorFluxo(values.fluxo)}
+                > 
+                    <Form.Item name="fluxo">
+                        <Select 
+                            options={optionsFluxos} 
+                            allowClear
+                            placeholder="Selecione o fluxo"
+                            popupMatchSelectWidth={false}
+                        />
+                    </Form.Item>
 
-                            <ModalSelecionarObjetos
-                                title="Buscar etapas" 
-                                onOk={handleBuscarEtapas}
-                                onCancel={handleFecharModal}
-                                onSelect={handleSelecionarEtapas}
-                                colunas={COLUNAS_TABELA}
-                                status={isModalVisivel}
-                            />
+                    <Space>
+                        <Button onClick={() => handleCancelar()}> Cancelar </Button>
+                        <Button type="primary" htmlType="submit"> Filtrar </Button>
+                    </Space>
+                </Form>
+            )}
 
-                            <Table
-                                columns={COLUNAS_TABELA}
-                                dataSource={etapasVinculadas}
-                                rowSelection={rowSelection}
-                                rowKey="id"
-                            />
-                        </React.Fragment>
-                    )
+            { isFormVisible && (
+                <div> 
+                    <FormVincularEtapas onCancel={handleCancelar} onSubmit={handleSalvarFluxoEtapa} />
+                </div>
+            )}
 
-                : null }  
-            </div>
+            { isTableVisible && (
+                <div style={{marginTop: '20px'}}>
+                    <TableFluxoEtapas data={fluxoEtapas} columns={columnsTable} />
+                </div>
+            )
+                
+            }
         </div>
     );
 };

@@ -242,7 +242,7 @@ const Release = () => {
                 </div>
             )}
 
-            <div style={{margin: '20px'}}>
+            <div>
 
                 { isFormVisible && 
                     <FormRelease 

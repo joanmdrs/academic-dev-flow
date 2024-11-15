@@ -149,7 +149,7 @@ class FiltrarIteracoesPeloNomeEPeloProjeto(APIView):
             projeto = request.GET.get('id_projeto')
             
             if not nome and not projeto:
-                return Response({'error': 'Pelo menos um parâmetro é necessário'}, status=status.HTTP_400_BAD_REQUEST)
+                iteracoes = Iteracao.objects.all()
             
             if nome and projeto:
                 iteracoes = Iteracao.objects.filter(nome__icontains=nome, projeto_id=projeto)

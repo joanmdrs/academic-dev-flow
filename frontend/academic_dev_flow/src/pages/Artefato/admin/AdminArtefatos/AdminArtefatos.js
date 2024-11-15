@@ -15,6 +15,7 @@ import FormFiltrarArtefatos from "../../components/FormFiltrarArtefatos/FormFilt
 import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProjeto";
 import SpinLoading from "../../../../components/SpinLoading/SpinLoading";
 import TableAdminArtefatos from "../../components/TableAdminArtefatos/TableAdminArtefatos";
+import FormAdminFiltrarArtefatos from "../../components/FormAdminFiltrarArtefatos/FormAdminFiltrarArtefatos";
 
 const AdminArtefatos = () => {
 
@@ -35,6 +36,7 @@ const AdminArtefatos = () => {
 
     const handleCancelar = () => {  
         setIsFormVisible(false)
+        setIsFormFilterArtefatoVisible(false)
         setIsLoading(false)
         setDadosArtefato(null)
         setDadosProjeto(null)
@@ -197,7 +199,7 @@ const AdminArtefatos = () => {
             />
 
             { !isFormVisible && (
-                <div style={{display: 'flex', justifyContent: 'space-between', marginTop: '20px'}}> 
+                <div className="button-menu"> 
                     <div>
                         <Button
                             icon={<FaFilter />} 
@@ -208,7 +210,7 @@ const AdminArtefatos = () => {
                         </Button>
                     </div>
 
-                    <div style={{display: 'flex', gap: '10px'}}> 
+                    <div className="grouped-buttons"> 
                         <Button 
                             icon={<FaPlus />} 
                             type="primary" 
@@ -231,7 +233,7 @@ const AdminArtefatos = () => {
 
             {isFormFilterArtefatoVisible && (
                 <div style={{width: '50%'}}>   
-                    <FormFiltrarArtefatos onSearch={handleFiltrarArtefatos} />
+                    <FormAdminFiltrarArtefatos onFilter={handleFiltrarArtefatos} onCancel={handleCancelar} />
                 </div>
             )}
 

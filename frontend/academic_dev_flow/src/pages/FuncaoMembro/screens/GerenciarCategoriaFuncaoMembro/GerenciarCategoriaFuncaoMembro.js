@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useFuncaoMembroContexto } from "../../context/FuncaoMembroContexto";
 import { atualizarCategoriaFuncaoMembro, buscarCategoriaFuncaoMembroPeloNome, cadastrarCategoriaFuncaoMembro, excluirCategoriaFuncaoMembro } from "../../../../services/funcaoMembroProjetoService";
-import { Button, Input, Modal, Form } from "antd";
+import { Button, Input, Modal, Form, Space } from "antd";
 import Titulo from "../../../../components/Titulo/Titulo";
 import { FaFilter } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
@@ -25,6 +25,7 @@ const GerenciarCategoriaFuncaoMembro = () => {
         setDadosCategoriaFuncaoMembro(null);
         setItemsCategoriaFuncaoMembro([])
         setIsFormVisivel(false);
+        setIsFormBuscarVisivel(false)
         setIsPlusBtnEnabled(false);
     };
 
@@ -105,12 +106,11 @@ const GerenciarCategoriaFuncaoMembro = () => {
             )}
 
             { isFormBuscarVisivel && (
-                <div className="global-div" style={{width: '50%'}}>
-                    <Form layout="vertical">
+                <div style={{width: '50%'}}>
+                    <Form layout="vertical" className="global-form">
                         <Form.Item 
                             name="nome"
                             label="Nome" 
-                            rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
                         >
                             <Input 
                                 type="text" 
@@ -121,11 +121,12 @@ const GerenciarCategoriaFuncaoMembro = () => {
                             />
                         </Form.Item>
 
-                        <Form.Item>
+                        <Space>
+                            <Button onClick={() => handleCancelar()}> Cancelar </Button>
                             <Button type="primary" htmlType="submit" onClick={handleBuscarCategoriaPeloNome}>
-                                Buscar
+                                Filtrar
                             </Button>
-                        </Form.Item>
+                        </Space>
                     </Form>
                 </div>
             )}

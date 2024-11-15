@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button, Select } from 'antd';
+import { Form, Input, Button, Select, Space } from 'antd';
 import { listarProjetos } from "../../../../services/projetoService";
 import { handleError } from "../../../../services/utils";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 
-const FormBuscarTarefa = ({ onSearch }) => {
+const FormBuscarTarefa = ({ onSearch, onCancel }) => {
     const [optionsProjetos, setOptionsProjetos] = useState([]);
     const [selectedItem, setSelectedItem] = useState(null);
 
@@ -37,7 +37,6 @@ const FormBuscarTarefa = ({ onSearch }) => {
             <Form.Item 
                 label='Nome' 
                 name='nome_tarefa' 
-                rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
             >
                 <Input name="nome_tarefa" placeholder="nome da tarefa" />
             </Form.Item>
@@ -45,7 +44,6 @@ const FormBuscarTarefa = ({ onSearch }) => {
             <Form.Item 
                 label='Projeto' 
                 name='id_projeto'
-                rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
             >
                 <Select
                     allowClear
@@ -56,11 +54,11 @@ const FormBuscarTarefa = ({ onSearch }) => {
                 />
             </Form.Item>
 
-            <Form.Item>
-                <Button type="primary" htmlType="submit">
-                    Filtrar
-                </Button>
-            </Form.Item>
+            <Space>
+                <Button onClick={() => onCancel()}> Cancelar </Button>
+                <Button type="primary" htmlType="submit"> Filtrar </Button>
+            </Space>
+                
         </Form>
     );
 };

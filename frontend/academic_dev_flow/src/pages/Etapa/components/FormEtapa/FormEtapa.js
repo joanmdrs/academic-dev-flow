@@ -47,7 +47,6 @@ const FormEtapa = ({onSubmit, onCancel}) => {
             <Form.Item 
                 label="Descrição" 
                 name="descricao" 
-                rules={[{required: true, message: 'Por favor, insira a descrição da etapa!'}]}
             >
                 <Input.TextArea
                     rows={8}

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button, Select } from 'antd';
+import { Form, Input, Button, Select, Space } from 'antd';
 import { listarProjetos } from "../../../../services/projetoService";
 import { handleError } from "../../../../services/utils";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 
-const FormBuscarIteracao = ({ onSearch }) => {
+const FormAdminFiltrarIteracoes = ({ onFilter, onCancel }) => {
+
     const [optionsProjetos, setOptionsProjetos] = useState([]);
-    const [selectedItem, setSelectedItem] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -24,20 +24,13 @@ const FormBuscarIteracao = ({ onSearch }) => {
         fetchData();
     }, []);
 
-    const handleChange = (value) => {
-        setSelectedItem(value);
-    };
-
-    const handleOnSearch = (values) => {
-        onSearch(values);
-    };
+    const filterOption = (input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
     return (
-        <Form layout="vertical" className="global-form" onFinish={handleOnSearch}>
+        <Form layout="vertical" className="global-form" onFinish={onFilter}>
             <Form.Item 
                 label='Nome' 
                 name='nome_iteracao' 
-                rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
             >
                 <Input name="nome_iteracao" placeholder="nome da iteração" />
             </Form.Item>
@@ -45,24 +38,25 @@ const FormBuscarIteracao = ({ onSearch }) => {
             <Form.Item 
                 label='Projeto' 
                 name='id_projeto'
-                rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
             >
                 <Select
+                    showSearch
                     allowClear
-                    placeholder="Pesquise ou selecione o projeto"
-                    value={selectedItem}
-                    onChange={handleChange}
+                    placeholder="Projeto"
+                    optionFilterProp="children"
                     options={optionsProjetos}
+                    filterOption={filterOption}
+                    popupMatchSelectWidth={false}
                 />
             </Form.Item>
 
-            <Form.Item>
-                <Button type="primary" htmlType="submit">
-                    Filtrar
-                </Button>
-            </Form.Item>
+            <Space>
+                <Button onClick={() => onCancel()}> Cancelar </Button>
+                <Button type="primary" htmlType="submit"> Filtrar </Button>
+
+            </Space>
         </Form>
     );
 };
 
-export default FormBuscarIteracao;
+export default FormAdminFiltrarIteracoes

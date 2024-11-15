@@ -155,7 +155,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-start !important;
-  border-radius: 10px;
+  border-radius: 5px;
   padding: 30px;
   margin: 20px 10px;
   background-color: #FFFFFF;

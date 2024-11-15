@@ -196,8 +196,7 @@ class BuscarTarefasPeloNomeEPeloProjeto(APIView):
             id_projeto = request.GET.get('id_projeto')
             
             if not nome_tarefa and not id_projeto:
-                return Response(
-                    {'error': 'Os parâmetros nome da tarefa e ID do projeto não foram fornecidos, é necessário pelo menos um parâmetro'}, status=status.HTTP_400_BAD_REQUEST)
+                tarefas = Tarefa.objects.all()
             
             if nome_tarefa and id_projeto:
                 tarefas = Tarefa.objects.filter(nome__icontains=nome_tarefa, projeto_id=id_projeto)

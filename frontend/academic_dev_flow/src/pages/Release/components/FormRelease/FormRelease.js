@@ -53,11 +53,17 @@ const FormRelease = ({ onSubmit, onCancel, selectProject }) => {
     try {
       const response = await buscarMembrosPorProjeto(dadosProjeto.id);
 
-      const resultados = response.data.map((item) => ({
-        value: item.id,
-        label: `${item.nome_membro} (${item.nome_grupo})`,
-      }));
-      setOptionsMembros(resultados);
+      if (!response.error && response.data.length !== 0){
+        const resultados = response.data.map((item) => ({
+          value: item.id,
+          label: `${item.nome_membro} (${item.nome_grupo})`,
+        }));
+        setOptionsMembros(resultados);
+      } else {
+        NotificationManager.info("O projeto selecionado não possui membros vinculados !")
+      }
+
+     
     } catch (error) {
       return handleError(error, "Falha ao tentar buscar os membros do projeto !");
     }

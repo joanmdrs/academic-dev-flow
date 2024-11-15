@@ -9,7 +9,6 @@ import Login from "./pages/Auth/Login/Login";
 import Register from "./pages/Auth/Register";
 import ScreenGerenciarTarefas from "./pages/Tarefa/screens/GerenciarTarefas";
 import ScreenVisualizarArtefato from "./pages/Artefato/screens/VisualizarArtefato";
-import ScreenGerenciarIteracoes from "./pages/Iteracao/screens/GerenciarIteracoes";
 import ScreenGerenciarRelatorios from "./pages/Relatorio/screens/GerenciarRelatorios";
 import ScreenVisualizarIteracao from "./pages/Iteracao/screens/VisualizarIteracao";
 import ScreenPerfilMembro from "./pages/Membro/screens/PerfilMembro";
@@ -39,6 +38,7 @@ import ScreenPainelGitHub from "./pages/GitHub/screens/PainelGitHub";
 import ScreenAdminProjetos from "./pages/Projeto/admin/AdminProjetos";
 import ScreenAdminReleases from "./pages/Release/admin/AdminReleases";
 import ScreenAdminCommits from "./pages/GitHub/admin/AdminCommits";
+import ScreenAdminIteracoes from "./pages/Iteracao/admin/AdminIteracoes";
 
 function Routes() {
     return (
@@ -120,7 +120,7 @@ function Routes() {
 
                 <Route path="/admin/cronograma/releases" Component={ScreenAdminReleases} exact />
 
-                <Route path="/admin/cronograma/iterations" Component={ScreenGerenciarIteracoes} exact />
+                <Route path="/admin/cronograma/iterations" Component={ScreenAdminIteracoes} exact />
 
                 <Route
                     path="/admin/github-integration/issues"

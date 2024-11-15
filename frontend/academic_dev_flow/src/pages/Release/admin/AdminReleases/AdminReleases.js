@@ -1,11 +1,16 @@
 import { Button, Modal, Space, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { FaFilter, FaPlus, FaTrash } from 'react-icons/fa'
+import { FaFilter, FaPlus } from 'react-icons/fa'
 import FormRelease from '../../components/FormRelease/FormRelease'
 import { useContextoRelease } from '../../context/ContextoRelease'
 import TableRelease from '../../components/TableRelease/TableRelease'
 import { formatDate } from '../../../../services/utils'
-import { atualizarRelease, criarRelease, excluirReleases, filtrarReleasesPeloNomeEPeloProjeto, listarReleases } from '../../../../services/releaseService'
+import { 
+    atualizarRelease, 
+    criarRelease, 
+    excluirReleases, 
+    filtrarReleasesPeloNomeEPeloProjeto, 
+    listarReleases } from '../../../../services/releaseService'
 import SelectProject from '../../components/SelectProject/SelectProject'
 import { useContextoGlobalProjeto } from '../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto'
 import { buscarProjetoPeloId } from '../../../../services/projetoService'
@@ -14,7 +19,7 @@ import RenderStatus from '../../../../components/RenderStatus/RenderStatus'
 import { optionsStatusReleases } from '../../../../services/optionsStatus'
 import { IoMdCreate, IoMdTrash } from 'react-icons/io'
 import Titulo from '../../../../components/Titulo/Titulo'
-import FormFilterReleases from '../../components/FormFilterReleases/FormFilterReleases'
+import FormAdminFiltrarReleases from '../../components/FormAdminFiltrarReleases/FormAdminFiltrarReleases'
 
 
 const AdminReleases = () => {
@@ -129,7 +134,7 @@ const AdminReleases = () => {
         });
     };
 
-    const columnsTable = [
+    const columnsTableIteracoes = [
         {
             title: 'Nome',
             dataIndex: 'nome',
@@ -189,10 +194,17 @@ const AdminReleases = () => {
             render: (_, record) => (
                 <Space>
                     <Tooltip title="Editar">
-                        <a onClick={() => handleAtualizarRelease(record)}><IoMdCreate /></a>
+                        <span 
+                            style={{cursor: 'pointer', color: 'var(--primary-color)'}} 
+                            onClick={() => handleAtualizarRelease(record)}
+                        ><IoMdCreate /></span>
                     </Tooltip>
+
                     <Tooltip title="Excluir">
-                        <a onClick={() => handleExcluirRelease(record.id)}><IoMdTrash /></a>
+                        <span 
+                            style={{cursor: 'pointer', color: 'var(--primary-color)'}} 
+                            onClick={() => handleExcluirRelease(record.id)}
+                            ><IoMdTrash /></span>
                     </Tooltip>
                 </Space>
             )
@@ -231,13 +243,16 @@ const AdminReleases = () => {
             )}
 
             { isFormFiltrarVisible && (
-                <div style={{padding: '20px', borderBottom: '1px solid #ddd', borderTop: '1px solid #ddd'}}>
-                    <FormFilterReleases onChange={handleFiltrarReleases} />
+                <div style={{width: '50%'}}>
+                    <FormAdminFiltrarReleases 
+                        onCancel={handleCancelar} 
+                        onFilter={handleFiltrarReleases} 
+                    />
                 </div>
 
             )}
 
-            <div style={{margin: '20px'}}>
+            <div>
 
                 { isFormVisible && 
                     <FormRelease 
@@ -249,11 +264,8 @@ const AdminReleases = () => {
 
                 { isTableVisible && (
                     <div>
-                        <TableRelease data={releases} columns={columnsTable}/>
-                    </div>
-        
-
-                    
+                        <TableRelease data={releases} columns={columnsTableIteracoes}/>
+                    </div>                   
                 )}
             </div>
         </div>

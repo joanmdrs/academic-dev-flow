@@ -1,26 +1,24 @@
 import React, { useEffect, useState } from "react";
-import "./TabGerenciarFluxos.css"
-import FormDeBusca from "../../../../../components/Forms/FormDeBusca/FormDeBusca";
 import { atualizarFluxo, buscarFluxoPeloNome, criarFluxo, excluirFluxo, listarFluxos } from "../../../../../services/fluxoService";
 import FormFluxo from "../../../components/FormFluxo/FormFluxo";
-import { Button, Empty, Modal, Table } from "antd";
+import { Button, Form, Input, Modal, Space, Tooltip } from "antd";
 import { FaFilter, FaPlus, FaTrash } from "react-icons/fa";
 import { useContextoFluxo } from "../../../context/ContextoFluxo";
+import TableFluxos from "../../../components/TableFluxos/TableFluxos";
+import { IoMdCreate, IoMdTrash } from "react-icons/io";
 
 const TabGerenciarFluxos = () => {
 
     const {dadosFluxo, setDadosFluxo} = useContextoFluxo()
-    const [fluxosSelecionados, setFluxosSelecionados] = useState([])
     const [acaoForm, setAcaoForm] = useState("criar");
     const [isFormVisivel, setIsFormVisivel] = useState(false);
-    const [isFormFiltrarVisivel, setIsFormFiltrarVisivel] = useState(false);
-    const isBotaoExcluirVisivel = fluxosSelecionados.length === 1 ? false : true
+    const [isFormFilterVisible, setIsFormFilterVisible] = useState(false)
     const [fluxos, setFluxos] = useState([])
 
-    const COLUNAS_FLUXOS = [
+    const columnsTableFluxos = [
         {
-            title: "Código",
-            key: "codigo",
+            title: "ID",
+            key: "id",
             dataIndex: "id",
         },
         {
@@ -41,6 +39,27 @@ const TabGerenciarFluxos = () => {
             dataIndex: "descricao",
             key: "descricao",
         },
+        {
+            title: "Ações",
+            dataIndex: 'actions',
+            key: 'actions',
+            render: (_, record) => (
+                <Space>
+                    <Tooltip title="Editar">
+                        <span 
+                            style={{color: 'var(--primary-color)', cursor: 'pointer'}}  
+                            onClick={() => handleAtualizarFluxo(record)}
+                        ><IoMdCreate /></span>
+                    </Tooltip>
+                    <Tooltip title="Excluir">
+                        <span 
+                            style={{color: 'var(--primary-color)', cursor: 'pointer'}} 
+                            onClick={() => handleExcluirFluxo(record.id)}
+                        ><IoMdTrash /></span>
+                    </Tooltip>
+                </Space>
+            )
+        }
     ];
 
     const handleListarFluxos = async () => { 
@@ -57,30 +76,29 @@ const TabGerenciarFluxos = () => {
 
     const handleCancelar = () => {
         setIsFormVisivel(false)
+        setIsFormFilterVisible(false)
         setDadosFluxo(null)
     }
 
     const handleReload = async () => {
         setIsFormVisivel(false)
-        setIsFormFiltrarVisivel(false)
-        setFluxosSelecionados([])
+        setIsFormFilterVisible(false)
         setDadosFluxo(null)
         await handleListarFluxos()
     }
 
-    const handleCliqueBotaoFiltrar = () => {
-        setIsFormFiltrarVisivel((prevIsFormFiltrarVisivel) => !prevIsFormFiltrarVisivel);
-    }
 
     const handleCriarFluxo = () => {
         setAcaoForm('criar')
         setIsFormVisivel(true);
+        setIsFormFilterVisible(false)
         setDadosFluxo(null)
     };
 
     const handleAtualizarFluxo = (record) => {
         setAcaoForm("atualizar")
         setIsFormVisivel(true)
+        setIsFormFilterVisible(false)
         setDadosFluxo(record)
     }
 
@@ -95,29 +113,27 @@ const TabGerenciarFluxos = () => {
 
     const handleBuscarFluxo = async (parametro) => {
         const response = await buscarFluxoPeloNome(parametro);
-        setFluxos(response.data.results)
-        console.log(response)
+
+        if (!response.error){
+            setFluxos(response.data.results)
+        }
     }
 
-    const handleExcluirFluxo = async () => {
+    const handleExcluirFluxo = async (idFluxo) => {
         Modal.confirm({
             title: 'Confirmar exclusão',
-            content: 'Você está seguro de que deseja excluir este item ?',
+            content: 'Você está seguro de que deseja excluir o fluxo ?',
             okText: 'Sim',
             cancelText: 'Não',
             onOk: async () => {
-                const idFluxo = fluxosSelecionados.map(fluxo => fluxo.id);
                 await excluirFluxo(idFluxo);
                 await handleReload()
             }
         });
     }
 
-    const rowSelection = {
-        onChange: (selectedRowsKeys, selectedRows) => {
-          setFluxosSelecionados(selectedRows)
-        },
-    };
+    
+
 
     return (
         <div>
@@ -133,12 +149,18 @@ const TabGerenciarFluxos = () => {
 
              : (
                 <React.Fragment>
-                    <div className="button-menu">
-                        <div id="botao-filtrar"> 
+                    <div style={{
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: 'space-between',
+                        alignItems: 'baseline',
+                        padding: '20px 10px'
+                    }}>
+                        <div > 
                             <Button 
-                                type="primary" 
-                                icon={<FaFilter />} 
-                                onClick={() => handleCliqueBotaoFiltrar()}
+                                type="primary"
+                                icon={<FaFilter />}
+                                onClick={() => setIsFormFilterVisible(!isFormFilterVisible)}
                             >
                                 Filtrar
                             </Button>
@@ -151,47 +173,25 @@ const TabGerenciarFluxos = () => {
                             >
                                     Criar fluxo
                             </Button>
-                            <Button 
-                                type="primary"
-                                danger
-                                icon={<FaTrash />}
-                                onClick={() => handleExcluirFluxo()} 
-                                disabled={isBotaoExcluirVisivel}
-                            >
-                                Excluir
-                            </Button>
                         </div>
                     </div>
 
-                    { isFormFiltrarVisivel && (
-                        <div className="global-div" style={{width: '50%'}}> 
-                            <FormDeBusca executeFuncao={handleBuscarFluxo}/>
-                        </div>
-                    ) }
+                    {isFormFilterVisible && (
+                        <Form className="global-form" style={{width: '50%'}} onFinish={handleBuscarFluxo}>
+                            <Form.Item name="nome">
+                                <Input name="nome" placeholder="informe o nome do fluxo" />
+                            </Form.Item>
+
+                            <Space>
+                                <Button onClick={handleCancelar}> Cancelar </Button>
+                                <Button type="primary" htmlType="submit"> Filtrar </Button>
+                            </Space>
+                        </Form>
+                    )}
+
                 
                     <div>
-                        { fluxos.length !== 0 ? (
-                            <Table 
-                                className="bs-1"
-                                dataSource={fluxos} 
-                                columns={COLUNAS_FLUXOS} 
-                                rowKey="id"
-                                rowSelection={rowSelection}
-                            />
-                        ) : (
-                            <Empty
-                                description="Nenhum fluxo para exibir"
-                                image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-                                style={{
-                                    display: 'flex',
-                                    width: "100%",
-                                    height: "100%",
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                }}
-                            />
-                        )}
+                        <TableFluxos columns={columnsTableFluxos} data={fluxos} />
                         
                     </div>
                 </React.Fragment>

@@ -117,14 +117,15 @@ const FormMembro = ({onSubmit, onCancel}) => {
             <Collapse
                 collapsible=""
                 bordered={false}
+                style={{marginBottom: '30px'}}
                 expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
             >
                 <Panel 
                     style={{
                         padding: '30px', 
-                        boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
+                        boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
                         border: 'none', 
-                        marginBottom: '20px'
+                        backgroundColor: '#FFFFFF'
                     }} 
                     header="DADOS DO MEMBRO" key="1"
                 >
@@ -191,9 +192,9 @@ const FormMembro = ({onSubmit, onCancel}) => {
 
                 <Panel style={{
                         padding: '30px', 
-                        boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
+                        boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
                         border: 'none', 
-                        marginBottom: '20px'
+                        backgroundColor: '#FFFFFF'
                     }} 
                     header="USUÁRIO GITHUB" key="2"
                 >   
@@ -227,9 +228,9 @@ const FormMembro = ({onSubmit, onCancel}) => {
 
                 <Panel style={{
                         padding: '30px', 
-                        boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
+                        boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
                         border: 'none', 
-                        marginBottom: '20px'
+                        backgroundColor: '#FFFFFF'
                     }} 
                     header="LINKEDIN/CURRICULO" key="3"
                 >
@@ -252,9 +253,9 @@ const FormMembro = ({onSubmit, onCancel}) => {
 
                 <Panel style={{
                         padding: '30px', 
-                        boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
+                        boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
                         border: 'none', 
-                        marginBottom: '20px'
+                        backgroundColor: '#FFFFFF'
                     }} 
                     header="ACESSO" key="4"
                 >

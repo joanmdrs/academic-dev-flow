@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Form } from 'antd';
+import { Button, Form, Space } from 'antd';
 import { Input } from 'antd';
 import { Modal } from 'antd';
 import Titulo from "../../../../components/Titulo/Titulo";
@@ -19,6 +19,7 @@ const GerenciarCategoriaTarefa = () => {
 
     const handleCancelar = () => {
         setAcaoForm('criar');
+        setIsFormBuscarVisivel(false)
         setDadosCategoria(null);
         setIsFormVisivel(false);
         setIsPlusBtnEnabled(false);
@@ -101,11 +102,10 @@ const GerenciarCategoriaTarefa = () => {
 
             { isFormBuscarVisivel && (
                 <div style={{width: '50%'}}>
-                    <Form className="global-form" layout="vertical">
+                    <Form className="global-form" layout="vertical" onFinish={handleBuscarCategoriaPeloNome}>
                         <Form.Item 
                             name="nome_categoria"
                             label="Nome" 
-                            rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
                         >
                             <Input 
                                 type="text" 
@@ -116,11 +116,12 @@ const GerenciarCategoriaTarefa = () => {
                             />
                         </Form.Item>
 
-                        <Form.Item>
-                            <Button type="primary" onClick={handleBuscarCategoriaPeloNome}>
+                        <Space>
+                            <Button onClick={() => handleCancelar()}> Cancelar </Button>
+                            <Button type="primary">
                                 Filtrar
                             </Button>
-                        </Form.Item>
+                        </Space>
                     </Form>
                 </div>
             )}

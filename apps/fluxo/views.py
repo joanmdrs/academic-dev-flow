@@ -13,7 +13,7 @@ class CadastrarFluxoView(APIView):
     def post(self, request):
         try:
             
-            serializer = FluxoSerializer(data=request.data)
+            serializer = FluxoSerializer(data=request.data, context={'request': request})
             
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
