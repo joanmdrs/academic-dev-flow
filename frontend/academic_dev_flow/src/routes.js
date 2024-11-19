@@ -87,7 +87,7 @@ function Routes() {
 
                 <Route
                     path="/admin/membros/funcoes/gerenciar-categorias"
-                    Component={ScreenGerenciarCategoriaFuncaoMembro}
+                    element={<ScreenGerenciarCategoriaFuncaoMembro grupo="admin" /> }
                     exact
                 /> 
 
@@ -114,7 +114,7 @@ function Routes() {
 
                 {/* Menu Item Categorias de Tarefa */}
 
-                <Route path="/admin/tarefas/gerenciar-categorias" Component={ScreenGerenciarCategoriaTarefa} exact />
+                <Route path="/admin/tarefas/gerenciar-categorias" element={<ScreenGerenciarCategoriaTarefa grupo="admin" />} exact />
 
                 {/* Menu Item Iterações */}
 
@@ -201,6 +201,13 @@ function Routes() {
                     exact
                 />
 
+                <Route 
+                    path="/aluno/tarefas/categorias" 
+                    element={<ScreenGerenciarCategoriaTarefa grupo="aluno" />} 
+                    exact 
+                />
+
+
 
 
                 <Route
@@ -220,6 +227,12 @@ function Routes() {
                     element={<ScreenQuadroMembros grupo="aluno" />}
                     exact
                 />
+
+                <Route
+                    path="/aluno/membros/funcoes"
+                    element={<ScreenGerenciarCategoriaFuncaoMembro grupo="aluno" />}
+                    exact
+                /> 
 
                 <Route
                     path="/aluno/membros/equipe"

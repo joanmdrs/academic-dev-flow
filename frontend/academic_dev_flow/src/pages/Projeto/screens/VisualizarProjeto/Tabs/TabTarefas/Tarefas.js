@@ -159,7 +159,7 @@ const Tarefas = () => {
     const handleSalvarTarefa = async (dadosForm) => {
         setIsLoading(true);
         
-        dadosForm.projeto = dadosProjeto.id;
+        dadosForm['projeto'] = dadosProjeto.id;
         let dadosIssue = null;
         
         console.log(dadosForm['sicronizar-github'])
@@ -176,16 +176,15 @@ const Tarefas = () => {
         }
     
         try {
-            if (actionForm === 'criar') {
+            if (actionForm === 'create') {
                 await criarTarefa(dadosForm, dadosIssue);
-            } else {
+            } else if (actionForm === 'update') {
                 await atualizarTarefa(dadosTarefa.id, dadosForm, dadosIssue);
             }
             handleReload();
     
         } catch (error) {
-            console.log(error)
-            NotificationManager.error('Erro ao salvar a tarefa');
+            return handleError(error, 'Falha ao tentar salvar a tarefa')
         }
         
         setIsLoading(false);
@@ -351,9 +350,7 @@ const Tarefas = () => {
                                 onShowComments={handleExibirComentarios}
                             />
                         </TabPane>
-                        <TabPane tab={<span> <LuCalendarDays /> Calendário </span>} key="3" >
-                           {/* <CalendarTask tarefas={tarefas} /> */}
-                        </TabPane>
+                       
                     </Tabs>
                 )}
 

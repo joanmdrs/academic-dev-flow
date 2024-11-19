@@ -12,25 +12,16 @@ const ModalSelectMembros = ({idProjeto, isModalVisible, onSubmit, onCancel}) => 
     useEffect(() => {
         const fetchData = async () => {
 
-            if (idProjeto){
-                const response = await buscarMembrosPorProjeto(idProjeto)
-                if (!response.error){
-                    const resultados = response.data.map((item) => ({
-                        value: item.id,
-                        label: `${item.nome_membro} - ${item.nome_grupo} `,
-                    }));
-                    setOptionsMembros(resultados);
-                }
-            } else {
-                const response = await listarMembros();
-                if (!response.error){
-                    const resultados = response.data.map((item) => ({
-                        value: item.id,
-                        label: `${item.nome} - ${item.nome_grupo} `,
-                    }));
-                    setOptionsMembros(resultados);
-                }
+            
+            const response = await listarMembros();
+            if (!response.error){
+                const resultados = response.data.map((item) => ({
+                    value: item.id,
+                    label: `${item.nome} - ${item.nome_grupo} `,
+                }));
+                setOptionsMembros(resultados);
             }
+            
             
         }
         fetchData()

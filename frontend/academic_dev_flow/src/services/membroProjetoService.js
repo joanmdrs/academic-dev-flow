@@ -39,7 +39,6 @@ export const atualizarMembroProjeto = async (requestData, idMembroProjeto) => {
 
 export const excluirMembroProjeto = async (idsMembroProjeto) => {
 
-    console.log(idsMembroProjeto)
     try {
         const response = await api.delete(
             'membro-projeto/excluir/', {data: {ids_membro_projeto: idsMembroProjeto }})
@@ -154,6 +153,13 @@ export const listarFuncoes = async () => {
 export const listarEquipesDoMembro = async (idMembro) => {
     try {
         const response = await api.get('membro-projeto/listar-equipes/', {params: {id_membro: idMembro}})
+        if (response.data?.code === 'MEMBRO_SEM_PROJETO') {
+            // Trate o caso específico onde o membro não está vinculado a nenhum projeto
+            return {
+                message: 'O membro não está vinculado a nenhum projeto',
+                empty: true, // Define um indicador customizado para que o frontend saiba que não há projetos
+            };
+        }
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)

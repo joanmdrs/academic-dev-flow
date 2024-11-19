@@ -10,18 +10,23 @@ import RenderStatus from "../../../../components/RenderStatus/RenderStatus";
 import { optionsStatusTarefas } from "../../../../services/optionsStatus";
 import { listarCategoriaTarefa } from "../../../../services/categoriaTarefaService";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
-import OptionWithColor from "../../../../components/OptionStyle/OptionStyle";
+import { useContextoTarefa } from "../../context/ContextoTarefa";
+import RenderEmpty from "../../../../components/Empty/Empty";
+import { IoChatbubblesOutline } from "react-icons/io5";
 
-const TableTask = ({tarefas, onUpdate, onDelete, onStartTarefa, onPauseTarefa, onShowComments}) => {
+const TableTask = ({onUpdate, onDelete, onStartTarefa, onPauseTarefa, onShowComments}) => {
     
     const [optionsCategorias, setOptionsCategorias] = useState([]);
-
+    const {tarefas} = useContextoTarefa()
 
     const columnsTable = [
         {
             title: 'Tarefa',
             dataIndex: 'nome',
-            key: 'nome'
+            key: 'nome',
+            render: (_, record) => (
+                <span className="ff-pop"> {record.nome} </span>
+            )
         },
         {
             title: 'Categoria',
@@ -31,17 +36,19 @@ const TableTask = ({tarefas, onUpdate, onDelete, onStartTarefa, onPauseTarefa, o
                 text: option.label,
                 value: option.value
             })),
+            onFilter: (value, record) => record.categoria === value, 
             render: (_, record) => (
                 <span style={{
                     fontSize: '10px',
                     fontWeight: 'bold',
-                    color: '#FFFFFF', 
+                    color: '#FFFFFF',
                     backgroundColor: `${record.cor_categoria}`,
                     padding: '10px',
-                    borderRadius: '10px',
+                    borderRadius: '5px',
                     textTransform: 'uppercase'
-
-                }}> {record.nome_categoria} </span>
+                }}>
+                    {record.nome_categoria}
+                </span>
             )
         },
         {
@@ -151,14 +158,14 @@ const TableTask = ({tarefas, onUpdate, onDelete, onStartTarefa, onPauseTarefa, o
             render: (_, record) => (
                 <Space>
                     <Tooltip title="Comentários">
-                        <a onClick={() => onShowComments()}><GoCommentDiscussion size="20px" /></a>
+                        <span style={{cursor: 'pointer'}} onClick={() => onShowComments()}><IoChatbubblesOutline size="20px" /></span>
                     </Tooltip>
                     
                     <Tooltip title="Editar">
-                        <a onClick={() => onUpdate(record)}><IoMdCreate /></a>
+                        <span style={{cursor: 'pointer'}}  onClick={() => onUpdate(record)}><IoMdCreate /></span>
                     </Tooltip>
                     <Tooltip title="Excluir">
-                        <a onClick={() => onDelete(record.id)}><IoMdTrash /></a>
+                        <span style={{cursor: 'pointer'}} onClick={() => onDelete(record.id)}><IoMdTrash /></span>
                     </Tooltip>
                 </Space>
             )
@@ -196,19 +203,7 @@ const TableTask = ({tarefas, onUpdate, onDelete, onStartTarefa, onPauseTarefa, o
 
                 
             ) : (
-                <Empty
-                    description="Nenhuma tarefa para exibir"
-                    image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-                    style={{
-                        display: 'flex',
-                        width: "100%",
-                        height: "100%",
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                >
-                </Empty>
+                <RenderEmpty title="Nenhuma tarefa para exibir" />
             )
         }
         </React.Fragment>

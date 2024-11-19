@@ -1,17 +1,17 @@
 import React from "react";
 import "./ItemGridArtefato.css"
-import { formatDate, getRandomColor, limitarCaracteres } from "../../../../../services/utils";
-import { Avatar, Tooltip } from "antd";
+import { formatDate, limitarCaracteres } from "../../../../../services/utils";
+import { Tooltip } from "antd";
 import { IoMdCreate, IoMdTrash } from "react-icons/io";
 import { FaRegClock } from "react-icons/fa";
 import { FaCircleInfo } from "react-icons/fa6";
 import { GoCommentDiscussion } from "react-icons/go";
-import { IoDocumentText } from "react-icons/io5";
 import RenderMembers from "../../../../../components/RenderMembers/RenderMembers";
+import { IoChatbubblesOutline } from "react-icons/io5";
 
 function verificarAtraso(task) {
     const dataAtual = new Date().toISOString().split('T')[0]; 
-    const tarefaAtrasada = task.data_termino < dataAtual && task.status !== 'concluida'; 
+    const tarefaAtrasada = task.data_termino < dataAtual && task.status !== 'finalizado'; 
     return tarefaAtrasada ? true : false;
 }
 
@@ -32,11 +32,8 @@ const ItemGridArtefato = ({item, onUpdate, onDelete, onShowComments}) => {
             </div>
 
             <div className="artefatos-datas">
-                <Tooltip title="Data de criação">
-                    <span className="artefato-data-criacao"><FaRegClock /> {formatDate(item.data_criacao)}</span>
-                </Tooltip>
 
-                <Tooltip title="Data de término">
+                <Tooltip title="Data de entrega">
                     <span className="artefato-data-termino"><FaRegClock /> {formatDate(item.data_termino)}</span>
                 </Tooltip>
                 
@@ -52,18 +49,18 @@ const ItemGridArtefato = ({item, onUpdate, onDelete, onShowComments}) => {
                 </div>
 
                 <div className="artefato-actions">
-                    <a onClick={() => onShowComments(item)}><GoCommentDiscussion size="20px" /></a>
+                    <span style={{cursor: 'pointer'}} onClick={() => onShowComments(item)}><IoChatbubblesOutline size="20px" /></span>
                     <span style={{display: 'flex', gap: '10px'}}>
-                        <a onClick={() => onUpdate(item)}>
+                        <span style={{cursor: 'pointer'}} onClick={() => onUpdate(item)}>
                             <Tooltip title="Editar">
                                 <IoMdCreate size="15px"  />
                             </Tooltip>
-                        </a> 
-                        <a onClick={() => onDelete(item.id)}>
+                        </span> 
+                        <span style={{cursor: 'pointer'}} onClick={() => onDelete(item.id)}>
                             <Tooltip title="Excluir">
                                 <IoMdTrash size="15px" />
                             </Tooltip>
-                        </a> 
+                        </span> 
                     </span>
                 </div>
             </div>

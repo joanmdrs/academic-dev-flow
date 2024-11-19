@@ -88,14 +88,9 @@ export const buscarMembroPeloId = async (idMembro) => {
 export const buscarMembroPeloUser = async (idUser) => {
     try {
         const response = await api.get('/membro/buscar-por-id-usuario/', {params: {id_usuario: idUser}})
-
-        if (response.status === 200){
-            return response
-        }
+        return response
         
     } catch (error) {
-        console.log(error)
-        NotificationManager.error('Não foi possível encontrar o membro, contate o suporte!')
         return {error: 'Falha ao buscar o recurso!'}
     }
 }

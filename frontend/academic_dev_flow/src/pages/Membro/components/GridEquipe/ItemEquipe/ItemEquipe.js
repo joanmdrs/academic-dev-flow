@@ -8,7 +8,7 @@ const ItemEquipe = ({data, onDelete}) => {
     return (
         <div 
             style={{
-                backgroundColor: `${getRandomColor()}`,
+                backgroundColor: "#FFFFFF",
                 border: '1px solid #ddd',
                 borderRadius: '20px',
                 height: '280px',

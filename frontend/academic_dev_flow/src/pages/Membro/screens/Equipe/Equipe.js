@@ -9,10 +9,11 @@ import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 import ListEquipe from "../../components/ListEquipe/ListEquipe";
 import ModalSelectMembros from "../../components/ModalSelectMembros/ModalSelectMembros";
-import { cadastrarFuncaoMembroProjeto, excluirFuncaoMembroProjeto } from "../../../../services/funcaoMembroProjetoService";
+import { atualizarFuncaoMembroProjeto, cadastrarFuncaoMembroProjeto, excluirFuncaoMembroProjeto } from "../../../../services/funcaoMembroProjetoService";
 import FormFuncaoMembro from "../../components/FormFuncaoMembro/FormFuncaoMembro";
 import { useMembroContexto } from "../../context/MembroContexto";
 import GridEquipe from "../../components/GridEquipe/GridEquipe";
+import { IoArrowBackOutline } from "react-icons/io5";
 
 const {TabPane } = Tabs
 
@@ -39,6 +40,18 @@ const Equipe = () => {
 
         if (!response.error){
             setMembrosEquipe(response.data)
+        }
+    }
+
+    const handleAtualizarStatusFuncaoMembro = async (id, status) => {
+        try {
+            const formData = {
+                status: status
+            }
+            await atualizarFuncaoMembroProjeto(id, formData)
+            handleReload()
+        } catch (error) {
+            return handleError(error, 'Falha ao atualizar o status da função do membro!')
         }
     }
 
@@ -130,21 +143,35 @@ const Equipe = () => {
     }
 
     return (
-        <div className="global-div" style={{backgroundColor: "#FFFFFF", height: '100%'}}>
+        <div className="content">
             <div style={{
                 borderBottom: '1px solid #ddd',
                 display: 'flex',
-                flexDirection: 'column',
-                gap: '10px',
+                justifyContent: 'space-between',
                 padding: '20px',
                 backgroundColor: '#FFFFFF'
             }}> 
-                <h3 style={{margin: '0', fontFamily: 'Poppins, sans-serif'}}> Sua Equipe </h3>
-                <h4 style={{margin: '0', fontFamily: 'Poppins, sans-serif'}}>
-                    {dadosProjeto && dadosProjeto.nome && (
-                        dadosProjeto.nome
-                    )} 
-                </h4>
+                <div style={{}}>
+                    <h3 style={{margin: '0', fontFamily: 'Poppins, sans-serif'}}> Sua Equipe </h3>
+                    <h4 style={{margin: '0', fontFamily: 'Poppins, sans-serif'}}>
+                        {dadosProjeto && dadosProjeto.nome && (
+                            dadosProjeto.nome
+                        )} 
+                    </h4>
+                </div>
+
+                <div>
+                    <Button
+                        onClick={() => navigate(-1)}
+                        type="default"
+                        icon={<IoArrowBackOutline />}
+                    > VOLTAR 
+                    </Button>
+
+                    
+                </div>
+
+                    
             </div>
 
             { isFormFuncaoMembroVisible ? (
@@ -170,6 +197,7 @@ const Equipe = () => {
                                     data={membrosEquipe} 
                                     onDelete={handleRemoverMembro}
                                     onDeleteFunction={handleRemoverFuncao}
+                                    onDisable={handleAtualizarStatusFuncaoMembro}
                                 />
                             </TabPane>
                             

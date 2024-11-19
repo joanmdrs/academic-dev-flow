@@ -1,6 +1,6 @@
 import React from "react";
-import { Row, Col, Empty } from "antd";
 import ItemGridArtefato from "./ItemGridArtefato/ItemGridArtefato";
+import RenderEmpty from "../../../../components/Empty/Empty";
 
 const GridArtefatos = ({data, onUpdate, onDelete, onShowComments}) => {
 
@@ -22,19 +22,7 @@ const GridArtefatos = ({data, onUpdate, onDelete, onShowComments}) => {
                    
                                            
                 ) : (
-                    <Empty
-                        description="Nenhum artefato para exibir"
-                        image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-                        style={{
-                            display: 'flex',
-                            width: "100%",
-                            height: "100%",
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}
-                    >
-                    </Empty>
+                    <RenderEmpty title="Nenhum artefato para exibir " />
                 )
             }
         </div>

@@ -5,12 +5,13 @@ import { atualizarStatusTarefa, listarTarefasDosProjetosDoMembro } from "../../.
 import { useContextoGlobalUser } from "../../../context/ContextoGlobalUser/ContextoGlobalUser";
 import { listarArtefatosDosProjetosDoMembro } from "../../../services/artefatoService";
 import { buscarProjetosDoMembro } from "../../../services/membroProjetoService";
-import { Splitter } from 'antd';
+import { Empty, Splitter } from 'antd';
 import MinhasTarefas from "../components/MinhasTarefas/MinhasTarefas";
 import MeusArtefatos from "../components/MeusArtefatos/MeusArtefatos";
 import MeusProjetos from "../components/Meus Projetos/MeusProjetos";
 import ChartStatusTarefa from "../components/ChartStatusTarefa/ChartStatusTarefa";
 import MinhasEquipes from "../components/MinhasEquipes/MinhasEquipes";
+import RenderEmpty from "../../../components/Empty/Empty";
 
 const HomeDiscente = () => {
 
@@ -24,7 +25,9 @@ const HomeDiscente = () => {
 
         if (!response.error){
             setTarefas(response.data)
-        } 
+        } else {
+            setTarefas([])
+        }
     }
 
     const handleGetArtefatosDoMembro = async () => {
@@ -32,6 +35,8 @@ const HomeDiscente = () => {
 
         if (!response.error){
             setArtefatos(response.data)
+        } else {
+            setArtefatos([])
         }
     }
 
@@ -39,6 +44,8 @@ const HomeDiscente = () => {
         const response = await buscarProjetosDoMembro(usuario.id)
         if (!response.error){
             setProjetos(response.data)
+        } else {
+            setProjetos([])
         }
     }
 
@@ -51,6 +58,9 @@ const HomeDiscente = () => {
             }
         }
         fetchData()
+        console.log(tarefas)
+        console.log(artefatos)
+        console.log(projetos)
 
     }, [usuario])
 
@@ -70,33 +80,85 @@ const HomeDiscente = () => {
     }
 
     return (
-        <div className="bloco-principal" style={{height: '100%', backgroundColor: '#FFFFFF'}}>
-            <Splitter            >
-                <Splitter.Panel defaultSize="55%" min="20%" max="70%">
-                    
-                        <div className="caixa-direita"> 
-                            <div>
-                                <h2> Hoje </h2>
-                                <span> {getDataHoraNow()} </span>
+            <div>
+                <Splitter>
+                    <Splitter.Panel defaultSize="55%" min="20%" max="70%">
+                            <div className="caixa-direita"> 
+                                <div>
+                                    <h2 className="ff-pop"> Hoje </h2>
+                                    <span className="ff-pop"> {getDataHoraNow()} </span>
+                                </div>
+    
+                                {tarefas && tarefas.length !== 0 ? (
+                                    <MinhasTarefas tarefas={tarefas} atualizarStatus={handleAlterarSituacaoTarefa} />
+    
+                                ) : (
+                                    <Empty
+                                        className="box-model"
+                                        description="Nenhuma tarefa para exibir"
+                                        image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+                                        style={{
+                                            display: 'flex',
+                                            width: "100%",
+                                            height: "100%",
+                                            flexDirection: 'column',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                        }}
+                                    />
+                                )}
+    
+                                {artefatos && artefatos.length !== 0 ? (
+                                    <MeusArtefatos artefatos={artefatos} />
+                                ) : (
+                                    <Empty
+                                        className="box-model"
+                                        description="Nenhum artefato para exibir"
+                                        image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+                                        style={{
+                                            display: 'flex',
+                                            width: "100%",
+                                            height: "100%",
+                                            flexDirection: 'column',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                        }}
+                                    />
+                                    
+                                )}
+    
+    
+                                
                             </div>
-
-                            <MinhasTarefas tarefas={tarefas} atualizarStatus={handleAlterarSituacaoTarefa} />
-
-                            <MeusArtefatos artefatos={artefatos} />
+                    </Splitter.Panel>
+    
+                    <Splitter.Panel>
+                        <div className="caixa-esquerda"> 
+    
+                            {projetos && projetos.length !== 0 ? (
+                                <MeusProjetos projetos={projetos} />
+                            ) : (
+                                <Empty
+                                    className="box-model"
+                                    description="Nenhum projeto para exibir"
+                                    image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+                                    style={{
+                                        display: 'flex',
+                                        width: "100%",
+                                        height: "100%",
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}
+                                />
+                            )}
                             
                         </div>
-                </Splitter.Panel>
-
-                <Splitter.Panel>
-                    <div className="caixa-esquerda"> 
-                        <MeusProjetos projetos={projetos} />
-                        {/* <MinhasEquipes  equipes={projetos}/> */}
-                    </div>
-                </Splitter.Panel>
-            </Splitter>
-            
-            
-        </div>
+                    </Splitter.Panel>
+                </Splitter>
+                
+                
+            </div>
     )
 }
 

@@ -8,11 +8,13 @@ from apps.membro_projeto.models import MembroProjeto
 from apps.membro_projeto.serializers import MembroProjetoSerializer
 from apps.membro.models import Membro
 from apps.projeto.models import Projeto
+from apps.iteracao.models import Iteracao
 from .models import CategoriaFuncaoMembro, FuncaoMembro
 from .serializers import CategoriaFuncaoMembroSerializer, FuncaoMembroSerializer
 from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.timezone import now
 
 class CadastrarCategoriaFuncaoMembroView(APIView):
     permission_classes = [IsAuthenticated]
@@ -330,5 +332,47 @@ class ExcluirFuncaoMembroProjetoView(APIView):
                 
             return Response({'error': 'O objeto FuncaoMembro não foi encontrado!'}, status=status.HTTP_404_NOT_FOUND)
                     
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class BuscarFuncaoMembroProjetoAtualView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        try:
+            hoje = now().date()
+            id_projeto = request.GET.get('id_projeto', None)
+            id_membro_projeto = request.GET.get('id_membro_projeto', None)
+            
+            if not id_projeto:
+                return Response({'error': 'O ID do projeto não foi fornecido !'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            if not id_membro_projeto: 
+                return Response({'error': 'O ID do membro do projeto não foi fornecido !'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            iteracao = Iteracao.objects.filter(
+                projeto_id=id_projeto,
+                data_inicio__lte=hoje,
+                data_termino__gte=hoje
+            ).first()
+            
+            if iteracao:
+                
+                funcao_membro_projeto = FuncaoMembro.objects.filter(
+                    membro_projeto=id_membro_projeto, iteracao=iteracao.id, status=True)
+                if funcao_membro_projeto:
+                    serializer = FuncaoMembroSerializer(funcao_membro_projeto, many=True)
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+                    
+                return Response({
+                    "message": "Não foi encontrada nenhuma função definida para este membro",
+                    "code": "MEMBRO_SEM_FUNCAO_ATUAL"
+                }, status=status.HTTP_204_NO_CONTENT)
+                
+            return Response(
+                {   
+                    "message": 'Não foi encontrada nenhuma iteração em andamento no momento!',
+                    "code": "ITERACAO_NAO_ENCONTRADA"}, status=status.HTTP_204_NO_CONTENT)
+                
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

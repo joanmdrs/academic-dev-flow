@@ -54,7 +54,7 @@ const FormVincularEtapas = ({onSubmit, onCancel}) => {
 
         fetchData()
     }, [dadosFluxoEtapa, form])
-    
+    const filterOption = (input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
     return (
         <Form form={form} className="global-form" onFinish={onSubmit}>
             <Form.Item>
@@ -85,9 +85,11 @@ const FormVincularEtapas = ({onSubmit, onCancel}) => {
             >
                 <Select 
                     allowClear
+                    showSearch
                     style={{ width: '100%' }}
                     placeholder="Selecione a etapa"
                     options={optionsEtapas} 
+                    filterOption={filterOption}
                 />
             </Form.Item>
 

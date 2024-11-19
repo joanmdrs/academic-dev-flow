@@ -32,8 +32,8 @@ const GerenciarMembros = () => {
         },
         {
             title: "Grupo",
-            dataIndex: "grupo",
-            key: "grupo",
+            dataIndex: "nome_grupo",
+            key: "nome_grupo",
         },
     ];
 
@@ -158,38 +158,37 @@ const GerenciarMembros = () => {
                 paragrafo='Membros > Gerenciar membros'
             />
 
-            { !isFormVisivel && (
-                <div className="button-menu"> 
+            <div className="button-menu"> 
+                <Button
+                    type="primary"
+                    icon={<FaSearch />}
+                    onClick={() => handleAbrirModal()}
+                    disabled={isSearchBtnEnabled}
+                >
+                    Buscar
+                </Button>
+                <div className="grouped-buttons">
                     <Button
                         type="primary"
-                        icon={<FaSearch />}
-                        onClick={() => handleAbrirModal()}
-                        disabled={isSearchBtnEnabled}
+                        icon={<FaPlus />}
+                        onClick={() => handleAdicionarMembro()}
+                        disabled={isPlusBtnEnabled}
                     >
-                        Buscar
+                        Criar Membro
                     </Button>
-                    <div className="grouped-buttons">
-                        <Button
-                            type="primary"
-                            icon={<FaPlus />}
-                            onClick={() => handleAdicionarMembro()}
-                            disabled={isPlusBtnEnabled}
-                        >
-                            Criar Membro
-                        </Button>
 
-                        <Button
-                            type="primary"
-                            danger
-                            icon={<FaTrash />}
-                            onClick={() => handleExcluirMembro()}
-                            disabled={isTrashBtnEnabled}
-                        >
-                            Excluir
-                        </Button>
-                    </div>
+                    <Button
+                        type="primary"
+                        danger
+                        icon={<FaTrash />}
+                        onClick={() => handleExcluirMembro()}
+                        disabled={isTrashBtnEnabled}
+                    >
+                        Excluir
+                    </Button>
                 </div>
-            )}
+            </div>
+    
 
             <ModalDeBusca  
                 titulo="Buscar membro" 

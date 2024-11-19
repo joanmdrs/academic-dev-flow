@@ -15,6 +15,7 @@ urlpatterns = [
     path('buscar-iteracoes-dos-projetos-do-membro/', BuscarIteracoesDosProjetosDoMembroView.as_view(), 
         name='buscar_iteracoes_dos_projetos_do_membro'),
     path('buscar-ultima-iteracao/', BuscarUltimaIteracaoDoProjetoView.as_view(), name='buscar_ultima_iteracao_do_projeto'),
-    path('buscar-iteracoes-adjacentes/', BuscarIteracoesAdjacentesView.as_view(), name='buscar_iteracoes_adjacentes')
+    path('buscar-iteracoes-adjacentes/', BuscarIteracoesAdjacentesView.as_view(), name='buscar_iteracoes_adjacentes'),
+    path('buscar-iteracao-atual-do-projeto/', BuscarIteracaoAtualDoProjetoView.as_view(), name='buscar_iteracao_atual_do_projeto')
     
 ]

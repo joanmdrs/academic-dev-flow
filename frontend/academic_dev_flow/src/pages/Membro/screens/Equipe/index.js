@@ -21,8 +21,8 @@ const ScreenEquipe = ({grupo}) => {
 
             <Layout>
                 <MyHeader/>
-                <CustomBreadcrumb routes={breadcrumbRoutes} />
-                <Content style={{height: '100vh'}}>
+                {/* <CustomBreadcrumb routes={breadcrumbRoutes} /> */}
+                <Content>
                     <MembroProvider>
                         <Equipe />
                     </MembroProvider>

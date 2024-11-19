@@ -3,14 +3,13 @@ from apps.membro_projeto.models import MembroProjeto
 from apps.iteracao.models import Iteracao
 from django.utils import timezone
 
-
 class CategoriaFuncaoMembro(models.Model):
     nome = models.CharField(max_length=100, default='membro')
     descricao = models.TextField(null=True, blank=True)
+    cor = models.CharField(max_length=7, null=True, blank=True)
     
     def __str__(self):
-        return self.nome
-    
+        return self.nome 
 
 class FuncaoMembro(models.Model):
     membro_projeto = models.ForeignKey(MembroProjeto, on_delete=models.CASCADE)

@@ -207,7 +207,6 @@ const FormIteracao = ({ onSubmit, onCancel, selectProject }) => {
                                 type="date" 
                                 name="data_inicio" 
                                 style={{ width: 'fit-content' }}
-                                disabled={dadosRelease ? false : true}  
                             />
                         </Form.Item>
 
@@ -233,7 +232,6 @@ const FormIteracao = ({ onSubmit, onCancel, selectProject }) => {
                                 type="date" 
                                 name="data_termino" 
                                 style={{ width: 'fit-content' }} 
-                                disabled={dadosRelease ? false : true} 
                             />
                         </Form.Item>
                     </div>
@@ -250,7 +248,7 @@ const FormIteracao = ({ onSubmit, onCancel, selectProject }) => {
                             allowClear
                             onChange={(value) => handleBuscarRelease(value)}
                             options={optionsReleases}
-                            defaultValue="Selecione"
+                            placeholder="Selecione a release"
                         />
                     </Form.Item>
 
@@ -260,24 +258,23 @@ const FormIteracao = ({ onSubmit, onCancel, selectProject }) => {
                         style={{ flex: "1" }}
                         rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
                     >
-                        <Select options={optionsStatusIteracoes} />
+                        <Select options={optionsStatusIteracoes}  placeholder="Selecione o status" />
                     </Form.Item>
 
                     <Form.Item
-                        label="Etapas"
+                        label="Etapa"
                         name="etapa"
                         style={{ flex: "1" }}
                         rules={[{ required: true, message: 'Por favor, selecione a etapa!' }]}
                     >
-                        <Select options={optionsEtapas} />
+                        <Select options={optionsEtapas} placeholder="Selecione a etapa" />
                     </Form.Item>
 
                     <Form.Item
-                        label="Membros"
-                        name="membros"
+                        label="Responsável"
+                        name="responsavel"
                     >
                         <Select
-                            mode="multiple"
                             style={{ width: '100%' }}
                             placeholder="Selecione os membros"
                             options={optionsMembros}

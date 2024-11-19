@@ -1,9 +1,9 @@
 import { Empty, Flex } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ColumnTaskBoard from "./ColumnTaskBoard/ColumnTaskBoard";
+import { useContextoTarefa } from "../../context/ContextoTarefa";
 
 const TaskBoard = ({ 
-        tarefas, 
         onCreate, 
         onUpdate, 
         onDelete, 
@@ -11,11 +11,23 @@ const TaskBoard = ({
         onPauseTarefa,
         onShowComments
 }) => {
-    // Filtra as tarefas com base no status
-    const tarefasToDo = tarefas.filter(tarefa => tarefa.status === 'criada');
-    const tarefasDoing = tarefas.filter(tarefa => tarefa.status === 'andamento');
-    const tarefasDone = tarefas.filter(tarefa => tarefa.status === 'concluida');
 
+    const {tarefas} = useContextoTarefa()
+    const [tarefasToDo, setTarefasToDo] = useState([])
+    const [tarefasDone, setTarefasDone] = useState([])
+    const [tarefasDoing, setTarefasDoing] = useState([])
+
+
+    useEffect(() => {
+        const fetchData = () => {
+            if (tarefas.length !== 0){
+                setTarefasToDo(tarefas.filter(tarefa => tarefa.status === 'criada'))
+                setTarefasDoing(tarefas.filter(tarefa => tarefa.status === 'andamento'))
+                setTarefasDone(tarefas.filter(tarefa => tarefa.status === 'concluida'))
+            }
+        }
+        fetchData()
+    }, [tarefas])
     return (
         <React.Fragment>
             {

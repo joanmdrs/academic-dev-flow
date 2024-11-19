@@ -61,6 +61,7 @@ const FormProjeto = () => {
 
         if (!response.error){
             await handleReload()
+            console.log(dadosProjeto)
         }
     }
 
@@ -72,12 +73,21 @@ const FormProjeto = () => {
                 <SpinLoading />
             ) : (
                <React.Fragment> 
-                    <div style={{width: '100%', display: 'flex', justifyContent: 'flex-end', padding: '10px 0'}}> 
+                    {/* <div style={{width: '100%', display: 'flex', justifyContent: 'flex-end', padding: '10px 0'}}> 
                         <Button onClick={() => handleEditar()} type="primary" icon={<MdEdit />}> Editar </Button>
-                    </div>
+                    </div> */}
 
-                    <Form form={form} layout="vertical" disabled={!isUpdate} onFinish={handleAtualizarDados}>
+                    <Form 
+                        className="global-form"
+                        form={form} 
+                        layout="vertical" 
+                        disabled={!isUpdate} 
+                        onFinish={handleAtualizarDados}
+                    >
 
+                        <Form.Item name="nome" label="Nome">
+                            <Input name="nome" />
+                        </Form.Item>
                         <Form.Item label="Descrição:" name="descricao">
                             <Input.TextArea id="descricao" name="descricao" rows={6} />
                         </Form.Item>

@@ -6,10 +6,11 @@ import RenderStatus from "../../../../components/RenderStatus/RenderStatus";
 import { optionsStatusProjetos } from "../../../../services/optionsStatus";
 import RenderMembers from "../../../../components/RenderMembers/RenderMembers";
 import RenderDate from "../../../../components/RenderDate/RenderDate";
+import { IoOpenOutline } from "react-icons/io5";
 
 const { Panel } = Collapse;
 
-const ListProjetos = ({ data, onUpdate, onDelete }) => {
+const ListProjetos = ({ data, onUpdate, onDelete, onOpen }) => {
 
     return (
         <React.Fragment>
@@ -48,13 +49,23 @@ const ListProjetos = ({ data, onUpdate, onDelete }) => {
                                                     gap: '20px'
                                                 }}
                                             >
-                                                <span style={{
-                                                    width: '400px',
-                                                    fontWeight: '600',
-                                                    fontSize: '15px', 
-                                                    fontFamily: 'Poppins, sans-serif'
-                                                }}>{limitarCaracteres(item.nome_projeto, 100)}</span>
+                                                <Space>
+                                                    <span 
+                                                        style={{
+                                                        width: '400px',
+                                                        fontWeight: '600',
+                                                        fontSize: '15px', 
+                                                        fontFamily: 'Poppins, sans-serif'
+                                                    }}> {limitarCaracteres(item.nome_projeto, 100)} </span>
 
+                                                    <span onClick={() => onOpen(item)}> 
+                                                        <Tooltip title="Visualizar">
+                                                            <IoOpenOutline size="18px" />
+                                                        </Tooltip>
+                                                    </span>
+                                                    
+                                                </Space>
+                                               
                                                 <RenderStatus optionsStatus={optionsStatusProjetos} propStatus={item.status_projeto} />
                                             </div>
                                         }
@@ -67,11 +78,15 @@ const ListProjetos = ({ data, onUpdate, onDelete }) => {
                                                 <RenderDate dateType="inicio" dateValue={item.data_inicio_projeto} />
                                                 <RenderDate dateType="fim" dateValue={item.data_termino_projeto} />
                                             </div>
-                                            <RenderMembers 
-                                                membros={item.equipe} 
-                                                maxAvatars={3} 
-                                                quantMembros={item.quantidade_membros} 
-                                            /> 
+                                            <div>
+                                                <RenderMembers 
+                                                    membros={item.equipe} 
+                                                    maxAvatars={3} 
+                                                    quantMembros={item.quantidade_membros} 
+                                                /> 
+
+                                            </div>
+                                            
                                         </div>
                                     </Panel>
                                 </Collapse>

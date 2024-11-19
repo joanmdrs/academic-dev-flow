@@ -4,6 +4,7 @@ from .models import FuncaoMembro, CategoriaFuncaoMembro
 class FuncaoMembroSerializer(serializers.ModelSerializer):
     
     nome_categoria_funcao = serializers.SerializerMethodField()
+    cor_categoria_funcao = serializers.SerializerMethodField()
     nome_membro = serializers.SerializerMethodField()
     nome_grupo = serializers.SerializerMethodField()
     nome_projeto = serializers.SerializerMethodField()
@@ -18,6 +19,7 @@ class FuncaoMembroSerializer(serializers.ModelSerializer):
             'nome_grupo',
             'categoria_funcao', 
             'nome_categoria_funcao', 
+            'cor_categoria_funcao',
             'nome_projeto',
             'iteracao',
             'nome_iteracao',
@@ -29,6 +31,9 @@ class FuncaoMembroSerializer(serializers.ModelSerializer):
         
     def get_nome_categoria_funcao(self, obj):
         return obj.categoria_funcao.nome
+    
+    def get_cor_categoria_funcao(self, obj):
+        return obj.categoria_funcao.cor
     
     def get_nome_membro(self, obj):
         return obj.membro_projeto.membro.nome

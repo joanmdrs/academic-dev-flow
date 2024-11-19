@@ -61,11 +61,18 @@ export const listarReleasesPorProjeto = async (idProjeto) => {
 export const buscarReleasesDosProjetosDoMembro = async (idMembro) => {
     try {
         const response = await api.get('/release/buscar-releases-dos-projetos-do-membro/', {params: {id_membro: idMembro}})
+        if (response.data?.code === 'MEMBRO_SEM_PROJETO') {
+            return {
+                message: 'O membro não está vinculado a nenhum projeto',
+                empty: true
+            };
+        }
         return response
     } catch (error) {
         return handleError(error, 'Falha ao tentar buscar as releases !')
     }
 }
+
 
 export const excluirReleases = async (idsReleases) => {
     try {

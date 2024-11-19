@@ -9,6 +9,7 @@ import { atualizarFluxoEtapa, desvincularEtapaFluxo, listarEtapasPorFluxo, lista
 import TableFluxoEtapas from "../../../components/TableFluxoEtapas/TableFluxoEtapas";
 import { IoMdCreate, IoMdTrash } from "react-icons/io";
 import { NotificationManager } from "react-notifications";
+import { limitarCaracteres } from "../../../../../services/utils";
 
 const TabVincularEtapas = () => {
 
@@ -130,9 +131,18 @@ const TabVincularEtapas = () => {
             key: 'nome_etapa'
         }, 
         {
+            title: 'Ordem',
+            dataIndex: 'ordem_no_fluxo',
+            key: 'ordem_no_fluxo',
+            align: 'center'
+        },
+        {
             title: 'Descrição',
             dataIndex: 'descricao_etapa',
-            key: 'descricao_etapa'
+            key: 'descricao_etapa',
+            render: (_, record) => (
+                <span> {limitarCaracteres(record.descricao_etapa, 200)}</span>
+            )
         }, 
         {
             title: "Ações",

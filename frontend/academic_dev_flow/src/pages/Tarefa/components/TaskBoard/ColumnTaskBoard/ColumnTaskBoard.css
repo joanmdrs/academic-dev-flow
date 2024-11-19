@@ -9,7 +9,8 @@
 .column-task-board-header {
     width: 100%;
     color: #FFFFFF;
-    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 5px;
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;

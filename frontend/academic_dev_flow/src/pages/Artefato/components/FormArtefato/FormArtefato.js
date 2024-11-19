@@ -45,13 +45,11 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto}) => {
             const resultados = iteracoesOrdenadas.map((item) => {
                 return {
                     value: item.id,
-                    label: item.nome
+                    label: `${item.nome} (${item.nome_etapa})`
                 }
             })
 
             setOptionsIteracao(resultados)
-        } else {
-            return handleInfo(response, "Este projeto não possui iterações cadastradas, cadastre as iterações antes de criar o artefato.")
         }
     }
     useEffect(() => {
@@ -121,7 +119,7 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto}) => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Data de Término (Previsão)"
+                        label="Data de Entrega"
                         name="data_termino"
                         rules={[
                             { required: true, message: 'Por favor, preencha este campo!' }
@@ -149,6 +147,7 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto}) => {
                     <Form.Item 
                         label="Iteração" 
                         name="iteracao"
+                        rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
                     >
                         <Select options={optionsIteracao} name="iteracao" defaultValue="selecione" />
                     </Form.Item>

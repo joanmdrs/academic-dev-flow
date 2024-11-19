@@ -131,3 +131,22 @@ export const excluirFuncaoMembroProjeto = async (idFuncaoMembroProjeto) => {
         return handleError(error, 'Falha ao tentar excluir a função do membro selecionado !')
     }
 }
+
+
+export const buscarFuncaoAtualDoMembroProjeto = async (idProjeto, idMembroProjeto) => {
+    try {
+        const response = await api.get(
+            'funcao-membro/buscar-funcao-atual-do-membro/', 
+            {params: { id_projeto: idProjeto, id_membro_projeto: idMembroProjeto}})
+        
+        if (response.data?.code === 'MEMBRO_SEM_FUNCAO_ATUAL' || response.data?.code === 'ITERACAO_NAO_ENCONTRADA') {
+            return {
+                message: response.data?.message,
+                empty: true,
+            };
+        } 
+        return response
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar buscar as funções atuais do membro !')
+    }
+}

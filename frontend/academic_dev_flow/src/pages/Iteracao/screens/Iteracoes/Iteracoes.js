@@ -24,10 +24,12 @@ const Iteracoes = () => {
     const {actionForm, setActionForm, dadosIteracao, setDadosIteracao, iteracoes, setIteracoes} = useContextoIteracao()
     const [isFormVisible, setIsFormVisible] = useState(false)
     const [isTableVisible, setIsTableVisible] = useState(true)
+    const [isDrawerVisible, setIsDrawerVisible] = useState(false)
 
     const handleBuscarIteracoesDosProjetosDoMembro = async () => {
         const response = await buscarIteracoesDosProjetosDoMembro(usuario.id)
-        if (!response.error){
+
+        if (!response.error && !response.empty){
             setIteracoes(response.data)
         }
     }
@@ -39,6 +41,8 @@ const Iteracoes = () => {
                 await handleBuscarIteracoesDosProjetosDoMembro()
             }
         }
+
+        console.log(iteracoes)
 
         fetchData()
     }, [usuario])
@@ -125,6 +129,11 @@ const Iteracoes = () => {
             }
         });
     };
+
+    const handleVisualizarIteracao = () => {
+
+        
+    }
 
     const columnsTable = [
         {
@@ -262,7 +271,7 @@ const Iteracoes = () => {
                     />
                 }
 
-                { isTableVisible && (
+                {(iteracoes && isTableVisible) && (
                     <div>
                         <TableIteracoes 
                             columns={columnsTable}

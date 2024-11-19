@@ -68,74 +68,70 @@ const FormFuncaoMembro = ({ onCancel, onSubmit }) => {
             })
 
             setOptionsIteracao(resultados)
-        } else {
-            return handleInfo(response, "Este projeto não possui iterações cadastradas, cadastre as iterações antes de definir a função do membro.")
         }
     }
 
     return (
-        <div className="global-div">
-            <Form className="global-form" layout="vertical" onFinish={onSubmit} form={form} style={{width: '50%'}}>
-                <Form.Item>
-                    <h4> {titulo} </h4>
-                </Form.Item>
+        <Form className="global-form" layout="vertical" onFinish={onSubmit} form={form}>
+            <Form.Item>
+                <h4> {titulo} </h4>
+            </Form.Item>
 
-                <Form.Item
-                    label="Projeto"
-                    name="projeto"
-                    initialValue={dadosProjeto?.nome}
-                >
-                    <Input name="projeto" disabled/>
+            <Form.Item
+                label="Projeto"
+                name="projeto"
+                initialValue={dadosProjeto?.nome}
+            >
+                <Input name="projeto" disabled/>
 
-                </Form.Item>
+            </Form.Item>
 
-                <Form.Item
-                    label="Membro"
-                    name="membro_projeto"
-                    initialValue={dadosMembroProjeto?.nome_membro}
-                >
-                    <Input name="membro_projeto" disabled />
-                </Form.Item>
+            <Form.Item
+                label="Membro"
+                name="membro_projeto"
+                initialValue={dadosMembroProjeto?.nome_membro}
+            >
+                <Input name="membro_projeto" disabled />
+            </Form.Item>
 
-                <Form.Item
-                    label="Iteracao"
+            <Form.Item
+                label="Iteracao"
+                name="iteracao"
+                rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
+            >
+                <Select
                     name="iteracao"
-                    rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
-                >
-                    <Select
-                        name="iteracao"
-                        allowClear
-                        placeholder="Selecione a iteração"
-                        options={optionsIteracao}
-                        showSearch
-                        filterOption={(input, option) => option?.label.toLowerCase().includes(input.toLowerCase())}
-                    />
-                </Form.Item>
+                    allowClear
+                    placeholder="Selecione a iteração"
+                    options={optionsIteracao}
+                    showSearch
+                    filterOption={(input, option) => option?.label.toLowerCase().includes(input.toLowerCase())}
+                />
+            </Form.Item>
 
-                <Form.Item
-                    label="Função"
-                    name="categoria_funcao"
-                    rules={[{ required: true, message: "Por favor, selecione uma opção!" }]}
-                >
-                    <Select
-                        mode="multiple"
-                        allowClear
-                        showSearch
-                        placeholder="Pesquise ou selecione a categoria"
-                        options={optionsCategorias}
-                        filterOption={(input, option) => option?.label.toLowerCase().includes(input.toLowerCase())}
-                    />
-                </Form.Item>
-                <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                        Salvar
-                    </Button>
-                    <Button type="primary" style={{ marginLeft: "10px" }} danger onClick={() => onCancel()}>
-                        Cancelar
-                    </Button>
-                </Form.Item>
-            </Form>
-        </div>
+            <Form.Item
+                label="Função"
+                name="categoria_funcao"
+                rules={[{ required: true, message: "Por favor, selecione uma opção!" }]}
+            >
+                <Select
+                    mode="multiple"
+                    allowClear
+                    showSearch
+                    placeholder="Pesquise ou selecione a categoria"
+                    options={optionsCategorias}
+                    filterOption={(input, option) => option?.label.toLowerCase().includes(input.toLowerCase())}
+                />
+            </Form.Item>
+            <Form.Item>
+                <Button type="primary" htmlType="submit">
+                    Salvar
+                </Button>
+                <Button type="primary" style={{ marginLeft: "10px" }} danger onClick={() => onCancel()}>
+                    Cancelar
+                </Button>
+            </Form.Item>
+        </Form>
     );
 };
 

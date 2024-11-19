@@ -108,3 +108,18 @@ export const buscarIteracoesAdjacentes = async (idIteracao, idProjeto) => {
         return handleError(error, 'Falha ao buscar os dados das iterações adjacentes !')
     }
 }
+
+export const buscarIteracaoAtualDoProjeto = async (idProjeto) => {
+    try {
+        const response = await api.get('iteracao/buscar-iteracao-atual-do-projeto/', {params: {id_projeto: idProjeto}})
+        if (response.data?.code === 'ITERACAO_NAO_ENCONTRADA') {
+            return {
+                message: response.data?.message,
+                empty: true,
+            };
+        }
+        return response
+    } catch (error) {
+        return handleError(error, 'Falha ao buscar os dados da iteração atual do projeto !')
+    }
+}

@@ -22,28 +22,24 @@ const Release = () => {
     const {usuario} = useContextoGlobalUser()
 
     const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
-    const {releaseData, setReleaseData, releases, setReleases} = useContextoRelease()
     const [isFormVisible, setIsFormVisible] = useState(false)
     const [isTableVisible, setIsTableVisible] = useState(true)
-    const {actionForm, setActionForm} = useContextoRelease()
+    const {
+        actionForm, 
+        setActionForm,
+        releaseData, 
+        setReleaseData, 
+        releases, 
+        setReleases} = useContextoRelease()
+
 
     const handleBuscarReleasesDosProjetosDoMembro = async () => {
         const response = await buscarReleasesDosProjetosDoMembro(usuario.id)
-        if (!response.error){
+
+        if (!response.error && !response.empty){
             setReleases(response.data)
         }
     }
-
-    useEffect(() => {
-        const fetchData = async () => {
-
-            if (usuario && usuario.id) {
-                await handleBuscarReleasesDosProjetosDoMembro()
-            }
-        }
-
-        fetchData()
-    }, [usuario])
 
     const handleReload = async () => {
         setIsFormVisible(false)
@@ -198,6 +194,17 @@ const Release = () => {
             )
         }
     ]
+
+    useEffect(() => {
+        const fetchData = async () => {
+
+            if (usuario && usuario.id) {
+                await handleBuscarReleasesDosProjetosDoMembro()
+            }
+        }
+
+        fetchData()
+    }, [usuario])
 
 
     return (

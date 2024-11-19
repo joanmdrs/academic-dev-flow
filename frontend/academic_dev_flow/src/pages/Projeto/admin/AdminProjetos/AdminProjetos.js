@@ -89,33 +89,22 @@ const AdminProjetos = () => {
     }
 
     const handleCriarProjeto = async (dados) => {
-        try {
-            const resposta = await criarProjeto(dados)
-            
-            if(resposta.status === 200){
-                NotificationManager.success('Projeto criado com sucesso!');
-                setDadosProjeto(resposta.data)          
-            } else {
-                NotificationManager.error("Ocorreu um problema, contate o suporte!");
-            }
-        }catch (error) {
-            NotificationManager.error("Ocorreu um problema, contate o suporte!");
+        
+        const response = await criarProjeto(dados)
+        
+        if(response.status === 200){
+            setDadosProjeto(response.data)          
         }
+        
     }
   
     const handleAtualizarProjeto = async (dados, id) => {
-        try {
-            const resposta = await atualizarProjeto(dados, id)
-            
-            if(resposta.status === 200){
-                NotificationManager.success('Projeto atualizado com sucesso!');
-                setDadosProjeto(resposta.data)
-            } else {
-                NotificationManager.error("Ocorreu um problema, contate o suporte!");
-            }
-        }catch (error) {
-            NotificationManager.error("Ocorreu um problema, contate o suporte!");
+        const response = await atualizarProjeto(dados, id)
+        
+        if(!response.error){
+            setDadosProjeto(response.data)
         }
+
     }
   
     const handleSalvarProjeto = async (dados) => {
@@ -131,6 +120,7 @@ const AdminProjetos = () => {
         setIsBotaoAdicionarVisivel(false)
         setIsBotaoBuscarVisivel(false)
         setIsBotaoExcluirVisivel(true)
+        handleFecharModal()
     }
 
     const handleExcluirProjeto = async () => {
@@ -139,7 +129,11 @@ const AdminProjetos = () => {
             content: 'Tem certeza que deseja excluir o projeto ? Esta ação é irreversível !',
             okText: 'Sim',
             cancelText: 'Não',
-            onOk: async () =>  await excluirProjeto(dadosProjeto.id)
+            onOk: async () =>  {
+                await excluirProjeto(dadosProjeto.id)
+                handleCancelar()
+            }
+                
         });
     }
 
@@ -161,37 +155,36 @@ const AdminProjetos = () => {
                 paragrafo="Administração > Gerenciar projetos"
             />
 
-            { ! isTabsVisible && (
-                <div className="button-menu"> 
+            <div className="button-menu"> 
+                <Button 
+                    type="primary"
+                    onClick={() => handleExibirModal()} 
+                    disabled={isBotaoBuscarVisivel}
+                    icon={<FaSearch />}
+                >
+                    Buscar Projeto
+                </Button>
+                <div className="grouped-buttons">
+                    <Button 
+                        type="primary" 
+                        icon={<FaPlus />} 
+                        onClick={() => handleBotaoAdicionar()}  
+                        disabled={isBotaoAdicionarVisivel}
+                    >
+                        Criar Projeto
+                    </Button> 
                     <Button 
                         type="primary"
-                        onClick={() => handleExibirModal()} 
-                        disabled={isBotaoBuscarVisivel}
-                        icon={<FaSearch />}
+                        danger
+                        icon={<FaTrash />}
+                        onClick={handleExcluirProjeto} 
+                        disabled={isBotaoExcluirVisivel}
                     >
-                        Buscar Projeto
+                        Excluir
                     </Button>
-                    <div className="grouped-buttons">
-                        <Button 
-                            type="primary" 
-                            icon={<FaPlus />} 
-                            onClick={() => handleBotaoAdicionar()}  
-                            disabled={isBotaoAdicionarVisivel}
-                        >
-                            Criar Projeto
-                        </Button> 
-                        <Button 
-                            type="primary"
-                            danger
-                            icon={<FaTrash />}
-                            onClick={handleExcluirProjeto} 
-                            disabled={isBotaoExcluirVisivel}
-                        >
-                            Excluir
-                        </Button>
-                    </div>
                 </div>
-            ) }
+            </div>
+
 
             {isTabsVisible && 
                 <React.Fragment>

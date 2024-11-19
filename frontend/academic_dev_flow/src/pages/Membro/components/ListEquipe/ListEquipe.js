@@ -7,8 +7,9 @@ import { getRandomColor } from "../../../../services/utils";
 const { Panel } = Collapse;
 
 
-const ListEquipe = ({data, onAddFunction, onDeleteFunction, onAdd, onDelete}) => {
+const ListEquipe = ({data, onAddFunction, onDeleteFunction, onAdd, onDelete, onDisable}) => {
 
+    
     return (
         <React.Fragment>
 
@@ -85,7 +86,11 @@ const ListEquipe = ({data, onAddFunction, onDeleteFunction, onAdd, onDelete}) =>
                                                                 Adicionar função
                                                             </Button>
                                                         </div>
-                                                        <ListFuncoes data={item.funcoes_membro} onDelete={onDeleteFunction} />
+                                                        <ListFuncoes 
+                                                            data={item.funcoes_membro} 
+                                                            onDelete={onDeleteFunction} 
+                                                            onDisable={onDisable}
+                                                        />
                                                     </Panel>
                                                 </Collapse>
                                                 

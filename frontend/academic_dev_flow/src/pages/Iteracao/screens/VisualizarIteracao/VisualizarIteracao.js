@@ -1,51 +1,29 @@
-import { Button, Collapse, Layout, List, Result } from "antd";
+import { Collapse, Drawer, Layout, List } from "antd";
 import React, { useEffect, useState } from "react";
-import BotaoVoltar from "../../../../components/Botoes/BotaoVoltar/BotaoVoltar";
 import { useContextoIteracao } from "../../context/contextoIteracao";
-import { useLocation, useNavigate } from "react-router-dom";
-import { buscarIteracaoPeloId } from "../../../../services/iteracaoService";
 import { listarTarefasPorIteracao } from "../../../../services/tarefaService";
 import { listarArtefatosPorIteracao } from "../../../../services/artefatoService";
 import Loading from "../../../../components/Loading/Loading";
 import ExibirIteracao from "../../components/ExibirIteracao/ExibirIteracao";
-import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 
 const {Content} = Layout
 
-const VisualizarIteracao = () => {
+const VisualizarIteracao = ({isDrawerVisible, closeDrawer}) => {
 
-    const {dadosIteracao, setDadosIteracao} = useContextoIteracao()
-    const {setDadosProjeto} = useContextoGlobalProjeto()
+    const {dadosIteracao} = useContextoIteracao()
+    const {dadosProjeto} = useContextoGlobalProjeto()
 
     const [tarefas, setTarefas] = useState([])
     const [artefatos, setArtefatos] = useState([])
     const [loading, setLoading] = useState(true)
 
-    const navigate = useNavigate(); 
-    const location = useLocation();
-    const { state } = location;
 
-    const handleBuscarProjeto = async () => {
-        const response = await buscarProjetoPeloId(state.idProjeto)
-        if(!response.error){
-            setDadosProjeto(response.data)
-        }
-    }
-
-    const handleBuscarIteracao = async () => {
-        const response = await buscarIteracaoPeloId(state.id)
-        if (!response.error){
-            setDadosIteracao(response.data)
-        }
-
-        console.log(dadosIteracao)
-    }
 
     const handleGetTarefas = async () => {
 
-        const response = await listarTarefasPorIteracao(state.id)
+        const response = await listarTarefasPorIteracao(dadosIteracao.id)
 
         if (!response.error) {
             setTarefas(response.data)
@@ -54,40 +32,26 @@ const VisualizarIteracao = () => {
 
     const handleGetArtefatos = async () => {
 
-        const response = await listarArtefatosPorIteracao(state.id)
+        const response = await listarArtefatosPorIteracao(dadosIteracao.id)
 
         if (!response.error){
             setArtefatos(response.data)
         }
     }
 
-    const handleBack = () => {
-        navigate(-1); 
-    }
+    
     
     useEffect(() => {
         const fetchData = async () => {
-            if (state) {
-                await handleBuscarProjeto()
-                await handleBuscarIteracao()
+            if (dadosProjeto) {
                 await handleGetTarefas()
                 await handleGetArtefatos()
             }
             setLoading(false);
         };
         fetchData();
-    }, []);
+    }, [dadosProjeto]);
 
-    if (!state) {
-        return (
-            <Result
-                status="404"
-                title="Erro"
-                subTitle="Desculpe, a página visitada não existe, contate o suporte"
-                extra={<Button type="primary" onClick={handleBack}>Voltar </Button>}
-            />
-        )
-    }
 
 
     if (loading) {
@@ -141,16 +105,21 @@ const VisualizarIteracao = () => {
     ];
 
     return (
-        <React.Fragment>
-            <Layout>
-                <Content className="global-div">
-                    <BotaoVoltar funcao={handleBack} />
-                    <Collapse style={{marginTop: '20px'}} items={items} defaultActiveKey={['1']} />
-                </Content>
-            </Layout>
-        </React.Fragment>
+        <Drawer
+            title={`${dadosIteracao?.nome} - ${dadosIteracao?.nome_projeto}`}
+            width={1000}  // Define uma largura máxima para o Drawer
+            onClose={closeDrawer}
+            open={isDrawerVisible}
+            placement="right"
+            maskClosable={false}
+        >
+            
+            <Collapse bordered={false} style={{marginTop: '20px'}} items={items} defaultActiveKey={['1']} />
+        </Drawer>
     )
 
 }
+
+
 
 export default VisualizarIteracao

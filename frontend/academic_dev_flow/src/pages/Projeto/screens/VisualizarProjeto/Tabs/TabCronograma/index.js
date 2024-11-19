@@ -1,26 +1,26 @@
 import React from "react";
 import { ProviderRelease } from "../../../../../Release/context/ContextoRelease";
 import { ProviderIteracao } from "../../../../../Iteracao/context/contextoIteracao";
-import { Collapse } from "antd";
+import { Tabs } from "antd";
 import Releases from "./Releases";
 import Iteracoes from "./Iteracoes";
 
-const {Panel} = Collapse
-
+const {TabPane} = Tabs
 
 const TabCronograma = () => {
     return (
         <React.Fragment>
             <ProviderRelease>
                 <ProviderIteracao>
-                    <Collapse bordered={false}>
-                        <Panel header="Releses">
+                    <Tabs indicator={{align: 'center'}}>
+                        <TabPane tab="Releases" key="1">
                             <Releases />
-                        </Panel>
-                        <Panel header="Iterações">
+                        </TabPane>
+
+                        <TabPane tab="Iterações" key="2">
                             <Iteracoes />
-                        </Panel>
-                    </Collapse>
+                        </TabPane>
+                    </Tabs>
                 </ProviderIteracao>
             </ProviderRelease>
         </React.Fragment>

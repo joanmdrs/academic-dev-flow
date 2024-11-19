@@ -50,7 +50,7 @@ const Artefatos = () => {
     const handleBuscarArtefatosDosProjetosDoMembro = async () => {
         const response = await listarArtefatosDosProjetosDoMembro(usuario.id)
 
-        if (!response.error){
+        if (!response.error && !response.empty){
             setArtefatos(response.data)
         }
     }
@@ -129,7 +129,6 @@ const Artefatos = () => {
     }
 
     const handleSalvarArtefato = async (dadosForm) => {
-        console.log(dadosForm)
         setIsLoading(true);
         
         dadosForm.projeto = dadosProjeto.id;
@@ -221,7 +220,7 @@ const Artefatos = () => {
     
     
     return (
-        <div className="global-div" style={{height: '100%'}}> 
+        <div className="content"> 
 
             {isDrawerCommentsVisible && < DrawerComments
                 isDrawerVisible={isDrawerCommentsVisible} 
@@ -236,7 +235,6 @@ const Artefatos = () => {
             }}> 
                <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
                     <h2 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '600'}}> Artefatos </h2>
-                    <h4 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '400'}}> </h4>
                 </div>
 
                 <div>
@@ -250,100 +248,93 @@ const Artefatos = () => {
                     </Button>
                 </div>
             </div>
-
-            <div style={{backgroundColor: "#FFFFFF", height: '100vh'}}>
-
-                { isFormVisible && 
-                    <React.Fragment>
-                         {isLoading && ( 
+            
+            {isFormVisible && (
+                <div> 
+                    {isLoading && ( 
                             <SpinLoading />
                         )}
-                        <div className="global-div"> 
-                            <FormArtefato 
-                                onSubmit={handleSalvarArtefato}
-                                selectProjeto={<SelecionarProjeto idMembro={usuario.id} />} 
-                                onCancel={handleCancelar} 
-                            />
+                    
+                        <FormArtefato 
+                            onSubmit={handleSalvarArtefato}
+                            selectProjeto={<SelecionarProjeto idMembro={usuario.id} />} 
+                            onCancel={handleCancelar} 
+                        />            
 
-                        </div>
- 
-                    </React.Fragment>
-                }
+                </div>
+            )}
 
-                {
-                    isGridVisible && (
-                        <React.Fragment>
-                           <div style={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'baseline',
-                                padding: '20px',
-                                borderBottom: '1px solid #DDD'
-                            }}>
-                                <Flex horizontal gap="middle">
-                                    <Space>
-                                        <Search
-                                            style={{width: '500px'}}
-                                            placeholder="pesquise pelo nome"
-                                            allowClear
-                                            enterButton="Pesquisar"
-                                            size="middle"
-                                            onSearch={handleBuscarArtefatosPeloNome}
-                                        />
-                                    </Space>
-
-                                    <Space>
-                                        <FormFilterArtefatos idMembro={usuario.id} onChange={handleFiltrarArtefatos} />
-                                    </Space>
-                                    
-                                </Flex>
-                                
-                                <Flex horizontal gap="middle">
-                                    <Tooltip title="Ordenar de A a Z">
-                                        <Button 
-                                            onClick={() => handleOrdenarArtefatosDeAaZ()}
-                                        >
-                                            <MdSortByAlpha />
-                                        </Button>
-                                    </Tooltip>
-                                    <Tooltip title="Ordenar em ordem crescente">
-                                        <Button onClick={() => handleOrdenarArtefatosPorData()}>
-                                            <TbCalendarUp />
-                                        </Button>
-                                    </Tooltip>
-                                </Flex>
-                            </div>
-                            <div style={{padding: '20px'}}> 
-                                <Tabs
-                                    style={{paddingTop: '10px'}}
+            { isGridVisible && (
+                <div>
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'baseline',
+                        padding: '20px',
+                        borderBottom: '1px solid #DDD'
+                    }}>
+                        <Flex horizontal gap="middle">
+                            <Space>
+                                <Search
+                                    style={{width: '500px'}}
+                                    placeholder="pesquise pelo nome"
+                                    allowClear
+                                    enterButton="Pesquisar"
                                     size="middle"
-                                    tabPosition="left"
-                                    indicator={{align: "center"}}
-                                    defaultActiveKey="2"
-                                > 
-                                    <TabPane style={{padding: '20px'}} tab={ <BsGrid3X3GapFill /> } key="1"  >
-                                        <GridArtefatos 
-                                            data={artefatos}
-                                            onUpdate={handleAtualizarArtefato}
-                                            onDelete={handleExcluirArtefato}
-                                            onShowComments={handleExibirComentarios}
-                                        />
-                                    </TabPane>
-                                    <TabPane style={{padding: '20px'}} tab={<FaListUl />} key="2" >
-                                        <TableArtefatos 
-                                            data={artefatos}
-                                            onUpdate={handleAtualizarArtefato}
-                                            onDelete={handleExcluirArtefato}
-                                            onShowComments={handleExibirComentarios}
-                                        />
-                                    </TabPane>
-                                    
-                                </Tabs>
-                            </div>                        
-                        </React.Fragment>        
-                    )
-                }    
-            </div>
+                                    onSearch={handleBuscarArtefatosPeloNome}
+                                />
+                            </Space>
+
+                            <Space>
+                                <FormFilterArtefatos idMembro={usuario.id} onChange={handleFiltrarArtefatos} />
+                            </Space>
+                            
+                        </Flex>
+                        
+                        <Flex horizontal gap="middle">
+                            <Tooltip title="Ordenar de A a Z">
+                                <Button 
+                                    onClick={() => handleOrdenarArtefatosDeAaZ()}
+                                >
+                                    <MdSortByAlpha />
+                                </Button>
+                            </Tooltip>
+                            <Tooltip title="Ordenar em ordem crescente">
+                                <Button onClick={() => handleOrdenarArtefatosPorData()}>
+                                    <TbCalendarUp />
+                                </Button>
+                            </Tooltip>
+                        </Flex>
+                    </div>
+                    <div style={{padding: '20px'}}> 
+                        <Tabs
+                            style={{paddingTop: '10px'}}
+                            size="middle"
+                            tabPosition="left"
+                            indicator={{align: "center"}}
+                            defaultActiveKey="2"
+                        > 
+                            <TabPane style={{padding: '20px'}} tab={ <BsGrid3X3GapFill /> } key="1"  >
+                                <GridArtefatos 
+                                    data={artefatos}
+                                    onUpdate={handleAtualizarArtefato}
+                                    onDelete={handleExcluirArtefato}
+                                    onShowComments={handleExibirComentarios}
+                                />
+                            </TabPane>
+                            <TabPane style={{padding: '20px'}} tab={<FaListUl />} key="2" >
+                                <TableArtefatos 
+                                    data={artefatos}
+                                    onUpdate={handleAtualizarArtefato}
+                                    onDelete={handleExcluirArtefato}
+                                    onShowComments={handleExibirComentarios}
+                                />
+                            </TabPane>
+                            
+                        </Tabs>
+                    </div>                        
+                </div>
+            )}            
         </div>
     );
 }

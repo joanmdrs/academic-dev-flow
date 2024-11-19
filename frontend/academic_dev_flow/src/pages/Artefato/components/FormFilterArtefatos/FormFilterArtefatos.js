@@ -21,7 +21,7 @@ const FormFilterArtefatos = ({idMembro, onChange}) => {
 
     const handleGetMembros = async () => {
         const response = await listarEquipesDoMembro(idMembro);
-        if(!response.error) {
+        if(!response.error && !response.empty) {
             const resultados = response.data.map((item) => ({
                 value: item.id,
                 label: item.nome

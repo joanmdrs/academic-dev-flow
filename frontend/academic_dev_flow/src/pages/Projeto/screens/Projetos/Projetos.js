@@ -13,6 +13,7 @@ import ListProjetos from '../../components/ListProjetos/ListProjetos';
 import { optionsStatusProjetos } from '../../../../services/optionsStatus';
 import { listarFluxos } from '../../../../services/fluxoService';
 import { useNavigate } from 'react-router-dom';
+import SpinLoading from '../../../../components/SpinLoading/SpinLoading';
 
 const { Search } = Input;
 const {TabPane} = Tabs 
@@ -27,6 +28,7 @@ const Projetos = () => {
     const [isTableVisible, setIsTableVisible] = useState(true);
     const [actionForm, setActionForm] = useState('create');
     const [optionsFluxo, setOptionsFluxo] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
 
 
     useEffect(() => {
@@ -145,9 +147,10 @@ const Projetos = () => {
         await handleBuscarProjetosDoMembro()
     }
 
-    const handleSalvarProjeto = async (formData) => {        
+    const handleSalvarProjeto = async (formData) => {    
+        setIsLoading(true)
+    
         try {
-
             if (actionForm === 'create' && dadosProjeto == null){
                 const response = await criarProjeto(formData)
                 
@@ -156,15 +159,21 @@ const Projetos = () => {
                         membros: [usuario.id],
                         projeto: response.data.id
                     })
+                    setActionForm('update')
                     setDadosProjeto(response.data)
     
                 }
             }else if(actionForm === 'update'){
-                await atualizarProjeto(formData, dadosProjeto.id)
+                const response = await atualizarProjeto(formData, dadosProjeto.id)
+                if (!response.error){
+                    setDadosProjeto(response.data)
+                }
             }
         } catch (error) {
             return handleError(error, 'Falha ao tentar salvar os dados do projeto !')
         }
+
+        setIsLoading(false)
     };
 
     const handleExcluirProjeto = async (id) => {
@@ -182,23 +191,7 @@ const Projetos = () => {
 
     return (
         <div className='content'>
-
-            {/* {isDrawerVisible && (
-                <Drawer
-                    width="80%"
-                    onClose={handleCloseDrawer}
-                    open={isDrawerVisible}
-                    placement="right"
-                    maskClosable={false}
-                >
-                    <TabsProjeto
-                        onSaveProject={handleSalvarProjeto}
-                        onCancel={handleCancelar}
-                    />
-
-                </Drawer>
-            )} */}
-
+            
             {!isTabsVisible ? (
                 <React.Fragment>
                     <div style={{
@@ -224,7 +217,7 @@ const Projetos = () => {
                     </div>
         
                     <div style={{
-                            borderBottom: '1px solid #ddd',
+                            
                             padding: '20px',
                             display: 'flex',
                             justifyContent: 'space-between'
@@ -264,18 +257,24 @@ const Projetos = () => {
                 </React.Fragment>
                 
             ) : (
-                <TabsProjeto
-                    onSaveProject={handleSalvarProjeto}
-                    onCancel={handleCancelar}
-                />
+                <React.Fragment>
+                    {isLoading ? (
+                        <SpinLoading />
+                    ) : (
+                        <TabsProjeto
+                            onSubmit={handleSalvarProjeto}
+                            onCancel={handleCancelar}
+                        />
+                    )}
+                </React.Fragment>
+                
+                
             ) }
 
             
             
 
-            <div style={{
-                padding: '20px'
-            }}>
+            <div>
 
                 {isTableVisible && (
                     <React.Fragment>
@@ -283,7 +282,7 @@ const Projetos = () => {
                         <Tabs
                             style={{paddingTop: '10px'}}
                             size="middle"
-                            tabPosition="left"
+                            tabPosition="right"
                             indicator={{align: "center"}}
                             defaultActiveKey="1"
                         > 
@@ -299,6 +298,7 @@ const Projetos = () => {
                                         data={projetos} 
                                         onUpdate={handleAtualizarProjeto}
                                         onDelete={handleExcluirProjeto}
+                                        onOpen={handleVisualizarProjeto}
                                     />
                             </TabPane>
                             
@@ -315,7 +315,7 @@ const Projetos = () => {
                                     projetos={projetos} 
                                     onUpdate={handleAtualizarProjeto}
                                     onDelete={handleExcluirProjeto}
-                                    onView={handleVisualizarProjeto}
+                                    onOpen={handleVisualizarProjeto}
                                 />
                             </TabPane>
                             

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { buscarProjetosDoMembro, listarEquipesDoMembro } from "../../../../services/membroProjetoService";
 
 const FormFiltrarTarefas = ({idMembro, onChange}) => {
+
     const [optionsMembros, setOptionsMembros] = useState([]);
     const [optionsProjetos, setOptionsProjetos] = useState([]);
 
@@ -20,7 +21,7 @@ const FormFiltrarTarefas = ({idMembro, onChange}) => {
 
     const handleGetMembros = async () => {
         const response = await listarEquipesDoMembro(idMembro);
-        if(!response.error) {
+        if(!response.error && !response.empty) {
             const resultados = response.data.map((item) => ({
                 value: item.id,
                 label: item.nome

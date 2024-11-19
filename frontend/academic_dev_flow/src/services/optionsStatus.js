@@ -115,6 +115,6 @@ export const optionsStatusArtefatos = [
     {
         value: 'finalizado',
         label: 'Finalizado',
-        color: '#343a40' // Preto
+        color: '#7401DF' // Roxo
     }
 ]

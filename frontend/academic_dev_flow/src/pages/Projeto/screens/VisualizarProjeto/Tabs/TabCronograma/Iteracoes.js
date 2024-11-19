@@ -1,7 +1,7 @@
 import { Button, Modal, Space, Tooltip } from "antd";
 import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
-import { IoMdCreate, IoMdTrash } from "react-icons/io";
+import { IoMdCreate, IoMdOpen, IoMdTrash } from "react-icons/io";
 
 import { NotificationManager } from "react-notifications";
 import RenderDate from "../../../../../../components/RenderDate/RenderDate";
@@ -12,6 +12,9 @@ import { useContextoIteracao } from "../../../../../Iteracao/context/contextoIte
 import { atualizarIteracao, criarIteracao, excluirIteracoes, listarIteracoesPorProjeto } from "../../../../../../services/iteracaoService";
 import FormIteracao from "../../../../../Iteracao/components/FormIteracao/FormIteracao";
 import TableIteracoes from "../../../../../Iteracao/components/TableIteracoes/TableIteracoes"
+import { useContextoGlobalUser } from "../../../../../../context/ContextoGlobalUser/ContextoGlobalUser";
+import { useNavigate } from "react-router-dom";
+import VisualizarIteracao from "../../../../../Iteracao/screens/VisualizarIteracao/VisualizarIteracao";
 
 
 const Iteracoes = () => {
@@ -73,6 +76,9 @@ const Iteracoes = () => {
             key: 'actions',
             render: (_, record) => (
                 <Space>
+                    <Tooltip title="Visualizar"> 
+                        <a onClick={() => handleShowDrawer(record)}><IoMdOpen /> </a>
+                    </Tooltip>
                     <Tooltip title="Editar">
                         <a onClick={() => handleAtualizarIteracao(record)}><IoMdCreate /></a>
                     </Tooltip>
@@ -89,6 +95,16 @@ const Iteracoes = () => {
     const {dadosProjeto} = useContextoGlobalProjeto()
     const {dadosIteracao, setDadosIteracao} = useContextoIteracao()
     const [actionForm, setActionForm] = useState('create')
+    const [isDrawerVisible, setIsDrawerVisible] = useState(false)
+
+    const handleShowDrawer = (record) => {
+        setDadosIteracao(record)
+        setIsDrawerVisible(true)
+    }
+
+    const handleCloseDrawer = () => {
+        setIsDrawerVisible(false)
+    }
 
     
     const handleBuscarIteracoes = async () => {
@@ -165,6 +181,11 @@ const Iteracoes = () => {
 
     return (
         <div>
+            {isDrawerVisible && <VisualizarIteracao 
+                isDrawerVisible={isDrawerVisible} 
+                closeDrawer={handleCloseDrawer} 
+            />}
+            
             
             <div className="df jc-end w-100 mt-10 mb-10">
                 <Button onClick={handleAdicionarIteracao} type="primary" icon={<FaPlus />}> Criar Iteração </Button>

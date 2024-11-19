@@ -1,8 +1,8 @@
 .artefato-container {
     width: 250px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    border-radius: 20px;
-    padding: 35px;
+    border-radius: 5px;
+    padding: 20px;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -15,6 +15,8 @@
 
 .artefato-title {
     margin: 0;
+    font-family: 'Poppins', sans-serif;
+
 }
 
 .artefato-projeto-nome {

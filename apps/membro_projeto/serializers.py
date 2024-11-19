@@ -101,7 +101,7 @@ class MembroProjetoSerializer(serializers.ModelSerializer):
         return obj.membro.avatar
     
     def get_funcoes_membro(self, obj):
-        funcoes_membro = FuncaoMembro.objects.filter(membro_projeto=obj.id)
+        funcoes_membro = FuncaoMembro.objects.filter(membro_projeto=obj.id).order_by("id")
         serializer = FuncaoMembroSerializer(funcoes_membro, many=True)
         return serializer.data
     

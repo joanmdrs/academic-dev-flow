@@ -5,6 +5,7 @@ import { useContextoGlobalUser } from "../../../../context/ContextoGlobalUser/Co
 import { handleError } from "../../../../services/utils";
 import { buscarProjetosDoMembro } from "../../../../services/membroProjetoService";
 import { useNavigate } from "react-router-dom";
+import ListProjetoEquipe from "../../components/ListProjetoEquipe/ListProjetoEquipe";
 
 const QuadroMembros = () => {
 
@@ -54,7 +55,7 @@ const QuadroMembros = () => {
     }, [usuario])
 
     return (
-        <div className="global-div" style={{height: '100%'}}> 
+        <div className="content"> 
             <div style={{
                 borderBottom: '1px solid #ddd',
                 display: 'flex',

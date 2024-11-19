@@ -1,8 +1,9 @@
 import "./ListFuncoes.css"
-import { Empty, Space, Table, Tooltip } from "antd";
+import { Empty, Space, Switch, Table, Tooltip } from "antd";
 import React from "react";
 import { getRandomColor } from "../../../../services/utils";
-import { IoMdCreate, IoMdTrash } from "react-icons/io";
+import { IoIosCheckmark, IoIosClose, IoMdCreate, IoMdTrash } from "react-icons/io";
+import RenderEmpty from "../../../../components/Empty/Empty";
 
 const formatarData = (dataIso) => {
     const data = new Date(dataIso);
@@ -16,7 +17,7 @@ const formatarData = (dataIso) => {
 };
 
 
-const ListFuncoes = ({data, onDelete}) => {
+const ListFuncoes = ({data, onDelete, onDisable}) => {
 
     const columnsTable = [
         {
@@ -25,19 +26,15 @@ const ListFuncoes = ({data, onDelete}) => {
             key: 'funcao',
 
             render: (_, record) => (
-                <span 
+                <span
                     style={{
-                        padding: '10px',
-                        width: 'fit-content',
-                        borderRadius: '5px',
-                        backgroundColor: `${getRandomColor()}`,
+                        backgroundColor: `${record.cor_categoria_funcao}`,
                         color: '#FFFFFF',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}
-                >
-                    {record.nome_categoria_funcao}
+                        padding: '10px',
+                        borderRadius: '5px',
+                        fontSize: '12px'
+
+                    }}> {record.nome_categoria_funcao}
                 </span>
             )
         }, 
@@ -51,6 +48,35 @@ const ListFuncoes = ({data, onDelete}) => {
                     {record.nome_iteracao}
                 </Space>
             )
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+            render: (_, record) => (
+                <Space>
+                    { record.status ? 
+                        <span> <Tooltip title="Ativo"><IoIosCheckmark color="green" size="25px"/> </Tooltip></span>
+                        : <span> <Tooltip title="Inativo"><IoIosClose color="red"  size="25px" /> </Tooltip></span>
+                    }
+                </Space>
+            )
+        },
+
+        {
+            title: 'Alterar status',
+            key: 'action',
+            render: (_, record) => (
+                <Space size="middle">
+                    <Switch
+                        checked={record.status}
+                        checkedChildren="Desativar"
+                        unCheckedChildren="Ativar"
+                        onChange={() => onDisable(record.id, !record.status)}
+                        
+                    />
+                </Space>
+            ),
         },
         {
             title: 'Data atribuição',
@@ -100,20 +126,7 @@ const ListFuncoes = ({data, onDelete}) => {
                 
                 
             ) : (
-                <Empty
-                    description="Nenhua função para exibir"
-                    image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-                    style={{
-                        display: 'flex',
-                        width: "100%",
-                        height: "100%",
-                        padding: '20px',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                >
-                </Empty>
+                <RenderEmpty title="Nenhuma função para exibir" />
             )
 
             } 

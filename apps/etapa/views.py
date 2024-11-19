@@ -25,18 +25,19 @@ class BuscarEtapaPeloNomeView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
         try:
-            parametro = request.GET.get('nome', None)
-            if parametro is not None: 
-                etapas = Etapa.objects.filter(nome__icontains=parametro)
+            nome_etapa = request.GET.get('nome_etapa', None)
+            
+            if nome_etapa is not None: 
+                etapas = Etapa.objects.filter(nome__icontains=nome_etapa)
             else:
                 etapas = Etapa.objects.all()    
                 
             if not etapas : 
-                return Response({'message': 'Nenhuma etapa encontrada', 'results': []}, status=status.HTTP_200_OK)
+                return Response([], status=status.HTTP_200_OK)
             
             serializer = EtapaSerializer(etapas, many=True)
             
-            return Response({'message': 'Etapas encontradas com sucesso.', 'results': serializer.data}, status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_200_OK)
                         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

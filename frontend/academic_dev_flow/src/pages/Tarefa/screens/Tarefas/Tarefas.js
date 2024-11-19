@@ -18,24 +18,10 @@ import { buscarMembroProjetoPeloIdMembroEPeloIdProjeto } from "../../../../servi
 import { handleError } from "../../../../services/utils";
 import { TbLayoutCardsFilled } from "react-icons/tb";
 import { LuCalendarDays } from "react-icons/lu";
-import FormComentario from "../../../Comentario/components/FormComentario/FormComentario";
-import DrawerComments from "../DrawerComments/DrawerComments";
 import ScreenDrawerComments from "../DrawerComments";
+import SpinLoading from "../../../../components/SpinLoading/SpinLoading";
 
 const {Search} = Input 
-
-const StyleSpin = {
-    position: 'fixed', 
-    top: 0, 
-    left: 0, 
-    width: '100%', 
-    height: '100%', 
-    backgroundColor: 'rgba(255, 255, 255, 0.5)', 
-    zIndex: 9999, 
-    display: 'flex', 
-    justifyContent: 'center', 
-    alignItems: 'center'
-};
 
 const Tarefas = () => {
 
@@ -63,7 +49,8 @@ const Tarefas = () => {
 
     const handleBuscarTarefasDosProjetosDoMembro = async () => {
         const response = await listarTarefasDosProjetosDoMembro(usuario.id)
-        if(!response.error){
+
+        if(!response.error && !response.empty){
             setTarefas(response.data)
         }
     }
@@ -264,7 +251,7 @@ const Tarefas = () => {
     }, [usuario])
 
     return (
-        <div className="global-div" style={{height: '100%'}}> 
+        <div className="content"> 
 
             {isDrawerCommentsVisible && <ScreenDrawerComments 
                 isDrawerVisible={isDrawerCommentsVisible} 
@@ -280,7 +267,6 @@ const Tarefas = () => {
             }}> 
                 <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
                     <h2 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '600'}}> Tarefas </h2>
-                    <h4 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '400'}}> </h4>
                 </div>
 
                 <div>
@@ -296,31 +282,22 @@ const Tarefas = () => {
 
             </div>
 
-            <div style={{
-                backgroundColor: '#FFFFFF',
-                padding: '20px',
-                minHeight: '100vh'
-            }}>
-                 {isFormVisible  && (
-                    <React.Fragment>
-                        {isLoading && ( 
-                            <div style={StyleSpin}>
-                                <Spin size="large" />
-                            </div>
-                        )}
+            { isFormVisible && (
+                <div> 
+                    {isLoading && ( 
+                        <SpinLoading />
+                    )}
+                    
+                    <FormTarefa 
+                        selectProject={<SelecionarProjeto />} 
+                        onSubmit={handleSalvarTarefa} 
+                        onCancel={handleCancelar} 
+                    />
+                </div>
+            )}
 
-                        <div className="global-div">
-                            <FormTarefa 
-                                selectProject={<SelecionarProjeto />} 
-                                onSubmit={handleSalvarTarefa} 
-                                onCancel={handleCancelar} 
-                            />
-                        </div>
-
-                    </React.Fragment>
-                )}
-            
-                { isTabsVisible && (
+            { isTabsVisible && (
+                <div className="pa-20"> 
                     <Tabs
                         tabBarExtraContent={
                             <div style={{display: 'flex', gap: '20px'}}> 
@@ -341,7 +318,6 @@ const Tarefas = () => {
                     > 
                         <Item tab={<span><TbLayoutCardsFilled /> Quadro</span>} key="1" >
                             <TaskBoard 
-                                tarefas={tarefas} 
                                 onCreate={handleAdicionarTarefa}
                                 onUpdate={handleAtualizarTarefa} 
                                 onDelete={handleExcluirTarefa}
@@ -352,7 +328,6 @@ const Tarefas = () => {
                         </Item>
                         <Item tab={<span> <FaListUl /> Tabela </span>} key="2" >
                             <TableTask 
-                                tarefas={tarefas} 
                                 onUpdate={handleAtualizarTarefa} 
                                 onDelete={handleExcluirTarefa}
                                 onPauseTarefa={handlePararContagemTempoTarefa}
@@ -360,15 +335,13 @@ const Tarefas = () => {
                                 onShowComments={handleExibirComentarios}
                             />
                         </Item>
-                        <Item tab={<span> <LuCalendarDays /> Calendário </span>} key="3" >
-                           {/* <CalendarTask tarefas={tarefas} /> */}
-                        </Item>
+                        
                     </Tabs>
-                )}
 
+                </div>
+            )}
 
-
-            </div>
+            
         </div>
     )
 }

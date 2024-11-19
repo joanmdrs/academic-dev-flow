@@ -6,18 +6,16 @@ import MyDropdown from '../Dropdown/Dropdown';
 import { useAuth } from '../../hooks/AuthProvider';
 import { useNavigate } from 'react-router-dom';
 import { CiUser, CiLogout} from "react-icons/ci";
-import { useContextoGlobalProjeto } from '../../context/ContextoGlobalProjeto/ContextoGlobalProjeto';
-import { useContextoGlobalUser } from '../../context/ContextoGlobalUser/ContextoGlobalUser';
 import { useContextoGlobalTheme } from '../../context/ContextoTheme/ContextoTheme';
-import { FaBrush } from "react-icons/fa6";
+import { useContextoGlobalUser } from '../../context/ContextoGlobalUser/ContextoGlobalUser';
 
 const { Header } = Layout;
 
 const MyHeader = () => {
     const { logOut } = useAuth();
     const navigate = useNavigate();
-    const { grupo } = useContextoGlobalProjeto();
-    const { theme, setTheme } = useContextoGlobalTheme();
+    const { grupo } = useContextoGlobalUser()
+    const { theme } = useContextoGlobalTheme();
 
     const handleAcessarPerfil = async () => {
         if (grupo === 'Docentes') {

@@ -15,6 +15,18 @@ const TableCategoriaFuncaoMembro = ({onEdit, onDelete}) => {
             title: 'Nome', 
             dataIndex: 'nome',
             key: 'nome',
+            render: (_, record) => (
+                <span style={{
+                    backgroundColor: `${record.cor}`,
+                    color: '#FFFFFF',
+                    padding: '10px',
+                    borderRadius: '5px',
+                    fontSize: '12px'
+
+                }}> 
+                    {record.nome}
+                </span>
+            )
         },
         {
             title: 'Descrição',
@@ -71,6 +83,7 @@ const TableCategoriaFuncaoMembro = ({onEdit, onDelete}) => {
         <React.Fragment>
             { itemsCategoriaFuncaoMembro.length !== 0 ? (
                 <Table
+                    className="bs-1 pa-20"
                     columns={COLUNAS_TABELA}
                     dataSource={itemsCategoriaFuncaoMembro}
                     rowKey="id"  

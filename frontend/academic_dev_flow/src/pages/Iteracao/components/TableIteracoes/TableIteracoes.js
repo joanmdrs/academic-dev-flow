@@ -1,45 +1,24 @@
-import { Empty, Table } from "antd";
+import { Table } from "antd";
 import React from "react";
+import RenderEmpty from "../../../../components/Empty/Empty";
 
 const TableIteracoes = ({columns, data}) => {
 
-    
-
-    const rowSelection = {
-        onChange: (selectedRowsKeys, selectedRows) => {
-            console.log(selectedRows)
-        },
-    };
 
     return (
         <React.Fragment>
             {
             data.length !== 0 ? (
                 <Table  
-                    className="bs-1 pd-20"
+                    className="bs-1 pa-20"
                     columns={columns}
                     dataSource={data}
                     rowKey="id"
-                    rowSelection={rowSelection}
-                
                 />
 
                 
             ) : (
-                <Empty
-                    description="Nenhuma iteração para exibir"
-                    image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-                    style={{
-                        display: 'flex',
-                        width: "100%",
-                        height: "100%",
-                        padding: '40px',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                >
-                </Empty>
+                <RenderEmpty title="Nenhuma iteração para exibir" />
             )
         }
         </React.Fragment>

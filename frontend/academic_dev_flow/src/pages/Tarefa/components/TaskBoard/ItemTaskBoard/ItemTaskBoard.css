@@ -1,13 +1,12 @@
 .task-container {
     width: 100%;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    border-radius: 10px;
+    border-radius: 5px;
     padding: 30px;
     display: flex;
     justify-content: center;
     flex-direction: column;
     gap: 10px;
-    background-color: #FFFFFF;
+    border: 1px solid #ddd;
 }
 
 .task-header {
@@ -19,6 +18,7 @@
 
 .task-title {
     margin: 0;
+    font-family: 'Poppins', sans-serif;
 }
 
 .task-project-name {

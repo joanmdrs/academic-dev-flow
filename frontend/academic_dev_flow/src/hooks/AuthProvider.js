@@ -6,6 +6,8 @@ import { NotificationManager } from "react-notifications";
 
 const AuthContext = createContext();
 
+
+
 export const useAuth = () => {
   return useContext(AuthContext);
 };
@@ -37,36 +39,46 @@ const AuthProvider = ({ children }) => {
       checkToken();
     });
 
-  const loginAction = async (username, password) => {
-    try {
-      const response = await api.post("/auth/login/", { username, password });
-
-      if (response.status === 200) {
-        const data = await response.data;
-        localStorage.setItem("token", data.token);
-
-        const newToken = await waitForToken();
-
-        if (newToken) {
-          try {
-            const decodedUser = await decodeToken(newToken);
-            redirectUser(decodedUser);
-            NotificationManager.success("Login realizado com sucesso !");
-          } catch (decodeError) {
-            console.error("Erro ao decodificar o token:", decodeError);
-            logOut(); 
+    const loginAction = async (username, password) => {
+      try {
+        const response = await api.post("/auth/login/", { username, password });
+    
+        if (response.status === 200) {
+          const data = response.data;
+          localStorage.setItem("token", data.token);
+    
+          const newToken = await waitForToken();
+    
+          if (newToken) {
+            try {
+              const decodedUser = await decodeToken(newToken);
+              redirectUser(decodedUser);
+              NotificationManager.success("Login realizado com sucesso!");
+            } catch (decodeError) {
+              console.error("Erro ao decodificar o token:", decodeError);
+              logOut();
+            }
+          } else {
+            NotificationManager.error("Token não disponível");
+          }
+        }
+      } catch (err) {
+        if (err.response) {
+          // Tratar erros específicos do backend
+          if (err.response.status === 403 && err.response.data.code === "USER_NOT_ASSOCIATED") {
+            NotificationManager.error("Este usuário não possui um perfil de acesso. Contate o administrador do sistema !");
+          } else if (err.response.status === 401) {
+            NotificationManager.error("Usuário/senha inválidos!");
+          } else {
+            NotificationManager.error("Erro desconhecido durante o login.");
           }
         } else {
-          NotificationManager.error("Token não disponível");
+          console.error("Erro durante o login:", err);
+          NotificationManager.error("Erro ao conectar com o servidor.");
         }
-      } else {
-        NotificationManager.error("Usuário/senha inválidos !");
       }
-    } catch (err) {
-      console.error("Erro durante o login:", err);
-      NotificationManager.error("Usuário/senha inválidos !");
-    }
-  };
+    };
+    
 
   const logOut = () => {
     localStorage.removeItem("token");

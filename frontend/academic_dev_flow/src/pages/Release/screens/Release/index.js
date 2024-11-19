@@ -17,11 +17,10 @@ const ScreenRelease = ({grupo}) => {
             <Layout>
                 <MyHeader/>
 
-                <Content>
-                    <ProviderRelease>
-                        <Release />
-                    </ProviderRelease>
-                </Content>
+                <ProviderRelease>
+                    <Release />
+                </ProviderRelease>
+
             </Layout>
         </React.Fragment>   
     )

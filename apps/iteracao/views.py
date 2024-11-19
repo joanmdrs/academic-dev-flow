@@ -10,11 +10,11 @@ from apps.projeto.models import Projeto
 from apps.fluxo_etapa.models import FluxoEtapa
 from apps.etapa.models import Etapa
 from apps.membro_projeto.models import MembroProjeto
-# from apps.membro_projeto.models import FuncaoMembroProjetoAtual, FuncaoMembroProjeto
-# from apps.membro_projeto.serializers import FuncaoMembroProjetoAtualSerializer
 from apps.membro.models import Membro
 from rest_framework.permissions import IsAuthenticated
-    
+from django.utils.timezone import now
+
+
 class CadastrarIteracaoView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -287,5 +287,34 @@ class BuscarIteracoesAdjacentesView(APIView):
             
             return Response(data, status=status.HTTP_200_OK)
 
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class BuscarIteracaoAtualDoProjetoView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        try:
+            hoje = now().date()
+            id_projeto = request.GET.get('id_projeto', None)
+            
+            if not id_projeto:
+                return Response({'error': 'O ID do projeto não foi fornecido !'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            iteracao = Iteracao.objects.filter(
+                projeto_id=id_projeto,
+                data_inicio__lte=hoje,
+                data_termino__gte=hoje
+            ).first()
+
+            
+            if iteracao:
+                serializer = IteracaoSerializer(iteracao, many=False)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+                
+            return Response(
+                {   
+                    "message": 'Não foi encontrada nenhuma iteração em andamento no momento!',
+                    "code": "ITERACAO_NAO_ENCONTRADA"}, status=status.HTTP_204_NO_CONTENT)
+            
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

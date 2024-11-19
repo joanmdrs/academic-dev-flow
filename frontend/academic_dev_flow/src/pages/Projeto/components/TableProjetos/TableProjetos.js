@@ -5,8 +5,10 @@ import { IoMdCreate, IoMdTrash } from "react-icons/io";
 import RenderDate from "../../../../components/RenderDate/RenderDate";
 import RenderStatus from "../../../../components/RenderStatus/RenderStatus";
 import RenderMembers from "../../../../components/RenderMembers/RenderMembers";
+import { limitarCaracteres } from "../../../../services/utils";
+import { IoOpenOutline } from "react-icons/io5";
 
-const TableProjetos = ({projetos, onUpdate, onDelete, onView}) => {
+const TableProjetos = ({projetos, onUpdate, onDelete, onOpen}) => {
 
     const columns = [
         {
@@ -15,7 +17,20 @@ const TableProjetos = ({projetos, onUpdate, onDelete, onView}) => {
             key: 'nome_projeto',
             render: (_, record) => (
                 <Space>
-                    <a onClick={() => onView(record)}> {record.nome_projeto} </a>
+                    <span 
+                        style={{
+                        width: '400px',
+                        fontWeight: '600',
+                        fontSize: '13px', 
+                        fontFamily: 'Poppins, sans-serif'
+                    }}> {limitarCaracteres(record.nome_projeto, 100)} </span>
+
+                    <span style={{cursor: 'pointer'}} onClick={() => onOpen(record)}> 
+                        <Tooltip title="Visualizar">
+                            <IoOpenOutline size="18px" />
+                        </Tooltip>
+                    </span>
+                    
                 </Space>
             )
         },

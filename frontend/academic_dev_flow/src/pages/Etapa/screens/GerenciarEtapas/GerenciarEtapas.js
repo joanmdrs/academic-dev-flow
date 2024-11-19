@@ -60,8 +60,10 @@ const GerenciarEtapas = () => {
 
     const handleCancelar = async () => {
         setIsFormVisivel(false)
+        setIsFormFiltrarVisivel(false)
         setDadosEtapa(null)
         setEtapasSelecionadas([])
+        await handleListarEtapas()
     }
 
     const handleReload = async () => {
@@ -75,11 +77,12 @@ const GerenciarEtapas = () => {
         setIsFormFiltrarVisivel((prevIsFormFiltrarVisivel) => !prevIsFormFiltrarVisivel);
     }
 
-    const handleFiltrarEtapas = async (parametro) => {
+    const handleFiltrarEtapas = async (formData) => {
 
-        const response = await buscarEtapaPeloNome(parametro)
+        console.log(formData)
+        const response = await buscarEtapaPeloNome(formData.nome)
         if(!response.error) {
-            setEtapas(response.data.results)
+            setEtapas(response.data)
         }
     }   
 
@@ -186,6 +189,7 @@ const GerenciarEtapas = () => {
                     <div> 
                         { etapas.length !== 0 ? (
                             <Table 
+                                className="bs-1 pa-20"
                                 columns={COLUNAS_TABELA_ETAPAS}
                                 dataSource={etapas}
                                 rowKey="id"

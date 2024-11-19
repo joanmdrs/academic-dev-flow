@@ -3,10 +3,9 @@ from .models import CategoriaFuncaoMembro, FuncaoMembro
 
 
 class CategoriaFuncaoMembroAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nome', 'descricao')
+    list_display = ('id', 'nome', 'descricao', 'cor')
 
 class FuncaoMembroAdmin(admin.ModelAdmin):
-    
     list_display = ('id', 'exibir_membro', 'exibir_funcao', 'status')
     
     def exibir_membro(self, obj):

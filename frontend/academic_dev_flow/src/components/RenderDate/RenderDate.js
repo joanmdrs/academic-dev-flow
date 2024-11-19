@@ -12,9 +12,11 @@ const RenderDate = ({dateType, dateValue}) => {
             fontWeight: 'bold',
             display: 'flex',
             alignItems: 'baseline',
+            justifyContent: 'center',
+            boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
             gap: '5px',
-            backgroundColor: `${dateType === 'inicio' ? "#CEE3F6" : "#F6E3CE"}`,
-            color: `${dateType === 'inicio' ? "#0B4C5F" : "#FF8000"}`
+            backgroundColor: `${dateType === 'inicio' ? "#01DF74" : "#FF0000"}`,
+            color: `${dateType === 'inicio' ? "#FFFFFF" : "#FFFFFF"}`
         }}> 
             <FaRegClock /> {formatDate(dateValue)}
         </span>

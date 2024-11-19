@@ -8,6 +8,7 @@ import { Tooltip } from 'antd';
 import { FaCircleInfo } from 'react-icons/fa6';
 import RenderMembers from '../../../../../components/RenderMembers/RenderMembers';
 import RenderDate from '../../../../../components/RenderDate/RenderDate';
+import { IoChatbubblesOutline } from "react-icons/io5";
 
 function verificarAtraso(task) {
     const dataAtual = new Date().toISOString().split('T')[0]; // Data atual no formato YYYY-MM-DD
@@ -27,16 +28,16 @@ const ItemTaskBoard = ({ task, onUpdate, onDelete, onStartTarefa, onPauseTarefa,
                 }}
                 >{task.nome_categoria} </h4>
                 <span style={{display: 'flex', gap: '10px'}}>
-                    <a onClick={() => onUpdate(task)}>
+                    <span style={{cursor: 'pointer', color: "#585858"}} onClick={() => onUpdate(task)}>
                         <Tooltip title="Editar">
                             <IoMdCreate size="15px"  />
                         </Tooltip>
-                    </a> 
-                    <a onClick={() => onDelete(task.id)}>
+                    </span> 
+                    <span style={{cursor: 'pointer', color: "#585858"}} onClick={() => onDelete(task.id)}>
                         <Tooltip title="Excluir">
                             <IoMdTrash size="15px" />
                         </Tooltip>
-                    </a> 
+                    </span> 
                 </span>
             </div>
 
@@ -70,15 +71,22 @@ const ItemTaskBoard = ({ task, onUpdate, onDelete, onStartTarefa, onPauseTarefa,
                 <div className="task-actions">
                     { !task.estado_contagem_tempo ? (
                         <Tooltip title="Play">
-                            <a onClick={() => onStartTarefa(task)}><FaPlay size="20px" /></a>
+                            <span style={{cursor: 'pointer', color: "#585858"}} onClick={() => onStartTarefa(task)}><FaPlay size="20px" /></span>
                         </Tooltip>
                         
                     ) : (
                         <Tooltip title="Pause">
-                            <a onClick={() => onPauseTarefa(task)}><FaPause size="20px" /></a>
+                            <span style={{cursor: 'pointer', color: "#585858"}} onClick={() => onPauseTarefa(task)}><FaPause size="20px" /></span>
                         </Tooltip>
                     )}
-                    <a onClick={() => onShowComments(task)}><GoCommentDiscussion size="20px" /></a>
+                    <Tooltip title="Comentários">
+                        <span 
+                            style={{cursor: 'pointer', color: "#585858"}} 
+                            onClick={() => onShowComments(task)}
+                        > <IoChatbubblesOutline size="22px" />
+                        </span>
+                    </Tooltip>
+                    
                 </div>
             </div>
         </div>

@@ -1,8 +1,9 @@
-import { Avatar, Empty, Space, Table } from "antd";
+import {Space, Table, Tooltip } from "antd";
 import React from "react";
 import RenderMembers from "../../../../components/RenderMembers/RenderMembers";
-import { getRandomColor } from "../../../../services/utils";
-import { FaUsers } from "react-icons/fa";
+import { limitarCaracteres } from "../../../../services/utils";
+import RenderEmpty from "../../../../components/Empty/Empty";
+import { IoOpenOutline } from "react-icons/io5";
 
 const TableProjetoEquipe = ({data, onOpen}) => {
 
@@ -13,16 +14,20 @@ const TableProjetoEquipe = ({data, onOpen}) => {
             key: 'nome_projeto',
             render: (_, record) => (
                 <Space>
-                    <Avatar style={{backgroundColor: `${getRandomColor()}`}} icon={<FaUsers />} />
-                    <h4 
-                        onClick={() => onOpen(record)}
+                    <span 
                         style={{
-                            fontFamily: 'Poppins, sans-serif', 
-                            color: 'var(--primary-color)', 
-                            fontWeight: '400', 
-                            cursor: 'pointer'
-                        }}> 
-                        {record.dados_projeto.nome }</h4>
+                        width: '400px',
+                        fontWeight: '600',
+                        fontSize: '15px', 
+                        fontFamily: 'Poppins, sans-serif'
+                    }}> {limitarCaracteres(record.nome_projeto, 100)} </span>
+
+                    <span style={{cursor: 'pointer'}} onClick={() => onOpen(record)}> 
+                        <Tooltip title="Visualizar">
+                            <IoOpenOutline size="18px" />
+                        </Tooltip>
+                    </span>
+                    
                 </Space>
             )
         }, 
@@ -52,20 +57,7 @@ const TableProjetoEquipe = ({data, onOpen}) => {
                 />
                 
             ) : (
-                <Empty
-                    description="Você ainda não está vinculado a nenhum projeto"
-                    image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-                    style={{
-                        display: 'flex',
-                        width: "100%",
-                        height: "100%",
-                        padding: '40px',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                >
-                </Empty>
+                <RenderEmpty title="Você não está vinculado a nenhum projeto" />
             )
         }
         </React.Fragment>

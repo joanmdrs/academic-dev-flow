@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { decodeToken } from "react-jwt";
 import { buscarMembroPeloUser } from "../../services/membroService";
-import { handleError } from "../../services/utils";
+import { useAuth } from "../../hooks/AuthProvider";
 
 const ContextoGlobalUser = createContext();
 
@@ -11,7 +11,7 @@ export const ProviderGlobalUser = ({ children }) => {
 
     const [usuario, setUsuario] = useState(null);
     const [grupo, setGrupo] = useState(null);
-
+    const { logOut } = useAuth();
     const [token] = useState(localStorage.getItem("token") || null);
 
     useEffect(() => {
@@ -24,26 +24,29 @@ export const ProviderGlobalUser = ({ children }) => {
                     if (!response.error){
                         setUsuario(response.data)
                         setGrupo(decodedToken.groups[0])
+                    } else {
+                        logOut()
                     }
 
                 } catch (error) {
-                    return handleError(error, "Falha ao decodificar o token de autenticação, contate o suporte !")
+                    logOut()
                 }
             }
         }
         fetchData()
     }, [token])
 
-    console.log(grupo)
-
     return (
-        <ContextoGlobalUser.Provider
-            value={{
-                usuario, setUsuario,
-                grupo, setGrupo
-            }}
-        >
-            {children}
-        </ContextoGlobalUser.Provider>
+        <>
+            <ContextoGlobalUser.Provider
+                value={{
+                    usuario, setUsuario,
+                    grupo, setGrupo
+                }}
+            >
+                {children}
+            </ContextoGlobalUser.Provider>
+        </>
+        
     )
 }

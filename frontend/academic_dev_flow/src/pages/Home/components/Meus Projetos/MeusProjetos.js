@@ -10,6 +10,7 @@ const MeusProjetos = ({projetos}) => {
 
     const {grupo} = useContextoGlobalUser()
 
+
     return (
         <div className="meus-projetos box-model">
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'baseline'}}> 
@@ -31,11 +32,11 @@ const MeusProjetos = ({projetos}) => {
                             key={index}
                             className="item-model"
                             actions={[
-                                <a style={{color: '#000000'}}>
+                                <span  style={{color: '#000000', cursor: 'pointer'}}>
                                     <Tooltip title="Visualizar">
                                         <IoIosArrowForward size="15px" />
                                     </Tooltip>
-                                </a>
+                                </span>
                             ]}
                         >
                                 <List.Item.Meta

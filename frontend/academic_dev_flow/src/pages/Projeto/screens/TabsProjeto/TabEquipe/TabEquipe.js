@@ -1,4 +1,4 @@
-import { Button, Modal } from "antd";
+import { Button, Modal, Space } from "antd";
 import React, { useState } from "react";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import TableEquipe from "../../../components/TableEquipe/TableEquipe";
@@ -7,7 +7,7 @@ import { buscarMembrosPorProjeto, criarMembroProjeto, excluirMembroProjeto } fro
 import { NotificationManager } from "react-notifications";
 import { useContextoProjeto } from "../../../context/ContextoProjeto";
 
-const TabEquipe = () => {
+const TabEquipe = ({onCancel}) => {
 
     const [isFormVisible, setIsFormVisible] = useState(false)
     const [isTableVisible, setIsTableVisible] = useState(true)
@@ -46,7 +46,7 @@ const TabEquipe = () => {
         }
     }
 
-    const handleRemoverMembros = async () => {
+    const handleRemoverMembros = async (idsMembros) => {
         Modal.confirm({
             title: 'Confirmar remoção',
             content: 'Você está seguro de que deseja remover estes membros do projeto ?',
@@ -55,8 +55,7 @@ const TabEquipe = () => {
             onOk: async () => {
                 try {
 
-                    const ids = membrosSelecionados.map((item) => item.id)
-                    await excluirMembroProjeto(ids)
+                    await excluirMembroProjeto(idsMembros)
                     await handleReload()
 
                 } catch (error) {
@@ -66,9 +65,18 @@ const TabEquipe = () => {
         });
     }
 
+    const handleRemoverOneMembro = async (idMembroProjeto) => {
+        await handleRemoverMembros([idMembroProjeto])
+    }
+
+    const handleRemoverManyMembros = async () => {
+        const ids = membrosSelecionados.map((item) => item.id)
+        await handleRemoverMembros(ids)
+    }
+
     return (    
         <React.Fragment>
-            {dadosProjeto && (
+            {dadosProjeto ? (
                 <React.Fragment>
                     <div style={{display: 'flex', justifyContent: 'space-between', margin: '20px'}}> 
                         <div style={{display: 'flex', gap: '20px'}}>
@@ -86,7 +94,7 @@ const TabEquipe = () => {
                                 icon={<FaTrash />} 
                                 danger
                                 disabled={membrosSelecionados.length === 0 ? true : false}
-                                onClick={() =>  handleRemoverMembros()}
+                                onClick={() =>  handleRemoverManyMembros()}
                             >
                                 Remover
                             </Button>
@@ -96,10 +104,18 @@ const TabEquipe = () => {
 
                     <div>
                         {isFormVisible && <FormVincularMembro onSubmit={handleVincularMembros} onCancel={handleCancelar} />}
-                        {isTableVisible && <TableEquipe />}
+                        {isTableVisible && <TableEquipe onDelete={handleRemoverOneMembro} />}
                     </div>
 
+                    <Space style={{marginTop: '10px'}}>
+                        <Button type="primary" danger onClick={() => onCancel()}> Fechar </Button>
+                    </Space>
+
                 </React.Fragment>
+            ) : (
+                <div> 
+                    É necessário cadastrar os dados do projeto primeiro.
+                </div>
             )}
         </React.Fragment>
     )

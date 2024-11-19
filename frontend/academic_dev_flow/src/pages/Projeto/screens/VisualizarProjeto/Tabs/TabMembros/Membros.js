@@ -6,7 +6,7 @@ import { useContextoGlobalProjeto } from "../../../../../../context/ContextoGlob
 import { useMembroContexto } from "../../../../../Membro/context/MembroContexto";
 import { buscarMembrosPorProjeto, criarMembroProjeto, excluirMembroProjeto } from "../../../../../../services/membroProjetoService";
 import { handleError } from "../../../../../../services/utils";
-import { cadastrarFuncaoMembroProjeto, excluirFuncaoMembroProjeto } from "../../../../../../services/funcaoMembroProjetoService";
+import { atualizarFuncaoMembroProjeto, cadastrarFuncaoMembroProjeto, excluirFuncaoMembroProjeto } from "../../../../../../services/funcaoMembroProjetoService";
 import FormFuncaoMembro from "../../../../../Membro/components/FormFuncaoMembro/FormFuncaoMembro";
 import GridEquipe from "../../../../../Membro/components/GridEquipe/GridEquipe";
 import ListEquipe from "../../../../../Membro/components/ListEquipe/ListEquipe";
@@ -29,6 +29,18 @@ const Membros = () => {
 
         if (!response.error){
             setMembrosEquipe(response.data)
+        }
+    }
+
+    const handleAtualizarStatusFuncaoMembro = async (id, status) => {
+        try {
+            const formData = {
+                status: status
+            }
+            await atualizarFuncaoMembroProjeto(id, formData)
+            handleReload()
+        } catch (error) {
+            return handleError(error, 'Falha ao atualizar o status da função do membro!')
         }
     }
 
@@ -145,6 +157,7 @@ const Membros = () => {
                                     data={membrosEquipe} 
                                     onDelete={handleRemoverMembro}
                                     onDeleteFunction={handleRemoverFuncao}
+                                    onDisable={handleAtualizarStatusFuncaoMembro}
                                 />
                             </TabPane>
                             

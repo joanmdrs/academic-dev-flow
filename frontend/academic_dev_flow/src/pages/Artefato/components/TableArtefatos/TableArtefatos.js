@@ -1,12 +1,12 @@
-import { Empty, Space, Table, Tooltip } from "antd";
+import { Space, Table, Tooltip } from "antd";
 import React from "react";
-import { GoCommentDiscussion } from "react-icons/go";
 import { IoMdCreate, IoMdTrash } from "react-icons/io";
-import { IoDocumentText } from "react-icons/io5";
 import { optionsStatusArtefatos } from "../../../../services/optionsStatus";
 import RenderMembers from "../../../../components/RenderMembers/RenderMembers";
 import RenderDate from "../../../../components/RenderDate/RenderDate";
 import RenderStatus from "../../../../components/RenderStatus/RenderStatus";
+import RenderEmpty from "../../../../components/Empty/Empty";
+import { IoChatbubblesOutline } from "react-icons/io5";
 
 const TableArtefatos = ({data, onUpdate, onDelete, onShowComments}) => {
     
@@ -17,8 +17,7 @@ const TableArtefatos = ({data, onUpdate, onDelete, onShowComments}) => {
             key: 'nome',
             render: (_, record) => (
                 <Space>
-                    <span style={{color: 'var(--primary-color'}}> <IoDocumentText /> </span>
-                    <span style={{color: 'var(--primary-color'}}> {record.nome }</span>
+                    <span className="ff-pop"> {record.nome }</span>
                 </Space>
             )
         }, 
@@ -26,23 +25,12 @@ const TableArtefatos = ({data, onUpdate, onDelete, onShowComments}) => {
             title: 'Membros',
             dataIndex: 'membros',
             key: 'membros',
-            align: 'center',
             render: (_, record) => (
                 <RenderMembers membros={record.membros_info} maxAvatars={3} quantMembros={(record.membros_info).length} />
             )
         },
         {
-            title: 'Criação',
-            dataIndex: 'data_criacao',
-            key: 'data_criacao',
-            align: 'center',
-            render: (_, record) => (
-                <RenderDate dateType="inicio" dateValue={record.data_criacao} />
-                    
-            )
-        },
-        {
-            title: 'Fim',
+            title: 'Entrega',
             dataIndex: 'data_termino',
             key: 'data_termino',
             align: 'center',
@@ -60,27 +48,19 @@ const TableArtefatos = ({data, onUpdate, onDelete, onShowComments}) => {
             )
         },
         {
-            title: 'Comentários',
-            dataIndex: 'comentarios_artefato',
-            key: 'comentarios_artefato',
-            align: 'center',
-            render: (_, record) => (
-                <Space>
-                     <a onClick={() => onShowComments(record)}><GoCommentDiscussion size="20px" /></a>
-                </Space>
-            )
-        },
-        {
             title: 'Ações',
             dataIndex: 'actions',
             key: 'actions',
             render: (_, record) => (
                 <Space>
+                    <Tooltip title="Comentários">
+                        <span style={{cursor: 'pointer'}} onClick={() => onShowComments(record)}><IoChatbubblesOutline size="20px" /></span>
+                    </Tooltip>
                     <Tooltip title="Editar">
-                        <a onClick={() => onUpdate(record)}><IoMdCreate /></a>
+                        <span style={{cursor: 'pointer'}} onClick={() => onUpdate(record)}><IoMdCreate /></span>
                     </Tooltip>
                     <Tooltip title="Excluir">
-                        <a onClick={() => onDelete(record.id)}><IoMdTrash /></a>
+                        <span style={{cursor: 'pointer'}} onClick={() => onDelete(record.id)}><IoMdTrash /></span>
                     </Tooltip>
                 </Space>
             )
@@ -99,20 +79,7 @@ const TableArtefatos = ({data, onUpdate, onDelete, onShowComments}) => {
                         style={{boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px', padding: '20px'}}
                     />                
             ) : (
-                <Empty
-                    description="Nenhum artefato para exibir"
-                    image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-                    style={{
-                        display: 'flex',
-                        width: "100%",
-                        height: "100%",
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: '20px'
-                    }}
-                >
-                </Empty>
+                <RenderEmpty title="Nenhum artefato para exibir" /> 
             )
         }
         </React.Fragment>

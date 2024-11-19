@@ -17,133 +17,295 @@ import { LuUsers } from "react-icons/lu";
 import { LuClipboardList } from "react-icons/lu";
 import TabMembros from "./Tabs/TabMembros";
 import TabGitHub from "./Tabs/TabGithub";
+import { buscarIteracaoAtualDoProjeto } from "../../../../services/iteracaoService";
+import { buscarFuncaoAtualDoMembroProjeto } from "../../../../services/funcaoMembroProjetoService";
+import { useContextoGlobalUser } from "../../../../context/ContextoGlobalUser/ContextoGlobalUser";
+import { buscarMembroProjetoPeloIdMembroEPeloIdProjeto } from "../../../../services/membroProjetoService";
 
-const {TabPane} = Tabs
+const { TabPane } = Tabs;
 
 const VisualizarProjeto = () => {
 
-    const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const location = useLocation();
     const { state } = location;
+    const {usuario} = useContextoGlobalUser()
+    const { dadosProjeto, setDadosProjeto } = useContextoGlobalProjeto();
     const [collapseTabs, setCollapseTabs] = useState(false)
+    const [iteracaoAtual, setIteracaoAtual] = useState(null)
+    const [funcoesMembro, setFuncoesMembro] = useState([])
 
-    useEffect(() => {
-        const fetchData = async () => {
-            if (state && state.idProjeto){
-                const response = await buscarProjetoPeloId(state.idProjeto)
-                if (!response.error){
-                    setDadosProjeto(response.data)
-                }
+    const handleBuscarIteracaoAtualDoProjeto = async () => {
+        const response = await buscarIteracaoAtualDoProjeto(state.idProjeto)
+        if (!response.error && !response.empty){
+            setIteracaoAtual(response.data)
+        }
+    }
+
+    const handleGetProjeto = async () => {
+        const response = await buscarProjetoPeloId(state.idProjeto);
+
+        if (!response.error) {
+            setDadosProjeto(response.data);
+        }
+    }
+
+    const handleGetMembroProjeto = async () => {
+        const response = await buscarMembroProjetoPeloIdMembroEPeloIdProjeto(state.idProjeto, usuario.id);
+        if (!response.error) {
+            const resFuncoes = await buscarFuncaoAtualDoMembroProjeto(state.idProjeto, response.data.id)
+            if (!resFuncoes.error && !resFuncoes.empty){
+                setFuncoesMembro(resFuncoes.data)
             }
         }
 
-        fetchData()
-    }, [state])
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (state && state.idProjeto) {
+                await handleGetProjeto()
+                await handleBuscarIteracaoAtualDoProjeto()
+            }
+
+            if (state.idProjeto && usuario?.id){
+                await handleGetMembroProjeto()
+            }
+        };
+
+        fetchData();
+        console.log(funcoesMembro)
+    }, [state, usuario]);
 
     const handleVoltar = () => {
-        navigate(-1); 
-        
-    }
+        navigate(-1);
+    };
 
     return (
-        <div className="content"> 
-            <div style={{
-                borderBottom: '1px solid #ddd',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'baseline',
-                padding: '20px'
-            }}> 
-                <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
-                    <h3 
-                        style={{
-                            margin: 0, 
-                            fontFamily: 'Poppins, sans-serif', 
-                            fontWeight: '600'}}
-                        > {dadosProjeto?.nome} 
-                    </h3>
-                </div>
+        <div className="content">
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "baseline",
+                    padding: "20px",
+                    borderRadius: '5px',
+                    borderBottom: '1px solid #DDD'
+                }}
+            >
+                    <div style={{display: 'flex', gap: '20px', alignItems: 'baseline', border: 'none'}}>
+                        <Tooltip title="Voltar">
+                            <Button
+                                className="bs-1"
+                                style={{border: 'none'}}
+                                onClick={() => handleVoltar()}
+                                type="default"
+                                icon={<IoArrowBackOutline />}
+                            >
+                            </Button>
+                        </Tooltip>
 
-                <div>
-                    <Button 
-                        onClick={() => handleVoltar()}
-                        type="default" 
-                        icon={<IoArrowBackOutline />} 
-                    > VOLTAR </Button>
-                </div>
+                        <h3
+                            style={{
+                                margin: 0,
+                                fontFamily: "Poppins, sans-serif",
+                                fontWeight: "600",
+                            }}
+                        >
+                            {dadosProjeto?.nome} 
+                        </h3>
+                        
+                    </div>  
+
+                    <div style={{display: 'flex', gap: '20px', alignItems: 'baseline'}}>
+
+                        
+                        {iteracaoAtual && (
+                            <div 
+                                className="bs-1" 
+                                style={{
+                                    display: 'flex', 
+                                    gap: '10px', 
+                                    alignItems: 'baseline', 
+                                    borderRadius: '10px',
+                                    padding: '5px',
+                                    backgroundColor: '#FFFFFF'
+                                }}
+                            >
+                                <span style={{padding: '0 10px'}}> Fase: </span>
+                                <div style={{
+                                    color: '#FFFFFF', 
+                                    backgroundColor: "var(--primary-color)",
+                                    padding: '10px',       
+                                    borderRadius: '5px',
+                                }}> 
+                                    {iteracaoAtual?.nome_etapa}
+                                </div>  
+                        </div>                    
+
+                        )}
+                        
+                        {funcoesMembro && funcoesMembro.length > 0 && (
+                            <div 
+                                className="bs-1" 
+                                style={{
+                                    display: 'flex', 
+                                    alignItems: 'baseline', 
+                                    borderRadius: '10px',
+                                    padding: '5px',
+                                    gap: '10px',
+                                    backgroundColor: '#FFFFFF'
+                                }}> 
+                                <span style={{padding: '0 10px'}}> Funções: </span>
+                                {funcoesMembro.map((item, index) => (
+                                    <div style={{
+                                        borderRadius: '5px',
+                                        backgroundColor: `${item.cor_categoria_funcao}`,
+                                        color: '#FFFFFF', 
+                                        padding: '10px',
+                                    }} key={index}>{item.nome_categoria_funcao}</div>
+                                ))}
+                            </div>
+                        )}
+                    </div>                
+
             </div>
 
-            <div> 
+            <div>
                 <Tabs
                     size="middle"
                     tabPosition="right"
-                    indicator={{
-                        align: "center"
-                    }}
-                    tabBarExtraContent={
-                        <Button 
-                            onClick={() => setCollapseTabs(!collapseTabs)} 
-                            size="large" 
-                            style={{border: 'none'}}
-                        >
-                            { collapseTabs ? (
-                                <IoIosArrowBack />
+                    style={{paddingTop: '20px'}}
+                >
+                    <TabPane
+                        tab={
+                            collapseTabs ? (
+                                <Tooltip placement="right" title="Projeto">
+                                    <LuFolder />
+                                </Tooltip>
                             ) : (
-                                <IoIosArrowForward />
-                            )}
-                        </Button>
-                    }
-                    style={{padding: "20px"}}
-                    className="tabs-projeto"
-                > 
-                    <TabPane tab={collapseTabs ? 
-                        <Tooltip placement="right" title="Projeto"> <LuFolder/> </Tooltip> 
-                        : <Space> <LuFolder /> Projeto </Space>} key="1"
+                                <Space>
+                                    <LuFolder /> Projeto
+                                </Space>
+                            )
+                        }
+                        key="1"
                     >
                         <FormProjeto />
                     </TabPane>
 
-                    <TabPane tab={collapseTabs ? 
-                        <Tooltip placement="right" title="Cronograma"> <LuCalendarDays/> </Tooltip> 
-                        : <Space> <LuCalendarDays /> Cronograma </Space>} key="2"
+                    <TabPane
+                        tab={
+                            collapseTabs ? (
+                                <Tooltip placement="right" title="Cronograma">
+                                    <LuCalendarDays />
+                                </Tooltip>
+                            ) : (
+                                <Space>
+                                    <LuCalendarDays /> Cronograma
+                                </Space>
+                            )
+                        }
+                        key="2"
                     >
                         <TabCronograma />
                     </TabPane>
 
-                    <TabPane tab={collapseTabs ? 
-                        <Tooltip placement="right" title="Tarefas"> <LuClipboardList/> </Tooltip> 
-                        : <Space> <LuClipboardList /> Tarefas </Space>} key="3"
+                    <TabPane
+                        tab={
+                            collapseTabs ? (
+                                <Tooltip placement="right" title="Tarefas">
+                                    <LuClipboardList />
+                                </Tooltip>
+                            ) : (
+                                <Space>
+                                    <LuClipboardList /> Tarefas
+                                </Space>
+                            )
+                        }
+                        key="3"
                     >
                         <TabTarefas />
                     </TabPane>
 
-                    <TabPane tab={collapseTabs ?
-                        <Tooltip placement="right" title="Artefatos"> <LuFileCode2/> </Tooltip> 
-                        : <Space> <LuFileCode2 /> Artefatos </Space>} key="4"
+                    <TabPane
+                        tab={
+                            collapseTabs ? (
+                                <Tooltip placement="right" title="Artefatos">
+                                    <LuFileCode2 />
+                                </Tooltip>
+                            ) : (
+                                <Space>
+                                    <LuFileCode2 /> Artefatos
+                                </Space>
+                            )
+                        }
+                        key="4"
                     >
                         <TabArtefatos />
                     </TabPane>
 
-                    <TabPane tab={collapseTabs ? 
-                        <Tooltip placement="right" title="Membros"> <LuUsers/> </Tooltip> 
-                        : <Space> <LuUsers /> Membros </Space>} key="5"
+                    <TabPane
+                        tab={
+                            collapseTabs ? (
+                                <Tooltip placement="right" title="Membros">
+                                    <LuUsers />
+                                </Tooltip>
+                            ) : (
+                                <Space>
+                                    <LuUsers /> Membros
+                                </Space>
+                            )
+                        }
+                        key="5"
                     >
                         <TabMembros />
                     </TabPane>
 
-                    <TabPane tab={collapseTabs ? 
-                        <Tooltip placement="right" title="GitHub"> <LuGithub/> </Tooltip> 
-                        : <Space> <LuGithub /> GitHub </Space>} key="6"
+                    <TabPane
+                        tab={
+                            collapseTabs ? (
+                                <Tooltip placement="right" title="GitHub">
+                                    <LuGithub />
+                                </Tooltip>
+                            ) : (
+                                <Space>
+                                    <LuGithub /> GitHub
+                                </Space>
+                            )
+                        }
+                        key="6"
                     >
                         <TabGitHub />
                     </TabPane>
+                </Tabs>
 
-                    
-                </Tabs> 
+                {/* Botão Flutuante */}
+                <div
+                    style={{
+                        position: "fixed",
+                        bottom: "20px",
+                        right: "20px",
+                        zIndex: 1000,
+                    }}
+                >
+                    <Button
+                        onClick={() => setCollapseTabs(!collapseTabs)}
+                        size="large"
+                        shape="circle"
+                        style={{
+                            border: "none",
+                            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                            backgroundColor: "var(--primary-color)",
+                            color: "#FFFFFF"
+                        }}
+                    >
+                        {collapseTabs ? <IoIosArrowBack /> : <IoIosArrowForward />}
+                    </Button>
+                </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default VisualizarProjeto
+export default VisualizarProjeto;

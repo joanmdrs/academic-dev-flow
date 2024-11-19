@@ -15,15 +15,16 @@ const TableCategoriaTarefa = ({onEdit, onDelete}) => {
             dataIndex: 'nome',
             key: 'nome',
             render: (_, record) => (
-                <a
-                 style={{
-                    padding: "5px 10px",
-                    borderRadius: '10px',
-                    backgroundColor: `${record.cor}`,
-                    color: '#FFFFFF'
-                }}
-        
-                > {record.nome} </a>
+                <span
+                    style={{
+                        backgroundColor: `${record.cor}`,
+                        color: '#FFFFFF',
+                        padding: '10px',
+                        borderRadius: '5px',
+                        fontSize: '12px'
+
+                    }}> {record.nome}
+                </span>
             ),  
         },
         {
@@ -76,11 +77,11 @@ const TableCategoriaTarefa = ({onEdit, onDelete}) => {
         return <Loading />
     }
 
-
     return (
         <React.Fragment>
             { categorias.length !== 0 ? (
                 <Table
+                    className="bs-1 pa-20"
                     rowKey="id"
                     columns={COLUNAS_TABELA}
                     dataSource={categorias}  

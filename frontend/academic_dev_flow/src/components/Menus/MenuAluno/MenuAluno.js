@@ -101,13 +101,27 @@ const MenuAluno = () => {
 
                 </SubMenu>
 
-                <Menu.Item
-                    className='item-menu'
-                    key='/aluno/tarefas'
-                    icon={<LuClipboardList size="20px"/>}
+                <SubMenu
+                    className="item-menu"
+                    key="/aluno/tarefas/"
+                    icon={<LuClipboardList size="20px" />}
+                    title="Tarefas"
                 >
-                    <Link to="/aluno/tarefas">Tarefas</Link>
-                </Menu.Item>
+                    <Menu.Item
+                        className='item-menu'
+                        key='/aluno/tarefas/tarefas'
+                    >
+                        <Link to="/aluno/tarefas">Tarefas</Link>
+                    </Menu.Item>
+
+                    <Menu.Item 
+                        className="item-menu"
+                        key="/aluno/tarefas/categorias"
+                    >
+                        <Link to="/aluno/tarefas/categorias">Categorias</Link>
+                    </Menu.Item>
+
+                </SubMenu>
 
                 <Menu.Item
                     className="item-menu"
@@ -117,14 +131,28 @@ const MenuAluno = () => {
                     <Link to="/aluno/artefatos"> Artefatos </Link>
                 </Menu.Item>
 
-                <Menu.Item 
-                    className="item-menu" 
-                    key="/aluno/membros" 
+                <SubMenu
+                    className="item-menu"
+                    key="/aluno/membros/"
                     icon={<LuUsers size="20px" />}
+                    title="Membros"
                 >
-                    <Link to="/aluno/membros"> Membros </Link>
-                </Menu.Item>
-                
+                    <Menu.Item
+                        className='item-menu'
+                        key='/aluno/membros/membros'
+                    >
+                        <Link to="/aluno/membros"> Equipes</Link>
+                    </Menu.Item>
+
+                    <Menu.Item 
+                        className="item-menu"
+                        key="/aluno/membros/funcoes"
+                    >
+                        <Link to="/aluno/membros/funcoes"> Funções </Link>
+                    </Menu.Item>
+
+                </SubMenu>
+                                
                 <Menu.Item 
                     className="item-menu" 
                     key="/aluno/github-integration" 
