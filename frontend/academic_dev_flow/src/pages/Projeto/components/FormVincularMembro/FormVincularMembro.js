@@ -37,7 +37,7 @@ const FormVincularMembro = ({onSubmit, onCancel}) => {
         <div>
             <Form form={form} layout="vertical" onFinish={handleSubmitForm} className="global-form global-div">
                 <Form.Item>
-                    <h4>VINCULAR MEMBRO(S)</h4>
+                    <h4 className='global-title'>VINCULAR MEMBRO(S)</h4>
                 </Form.Item>
                 <Form.Item
                     label="Membro(s)"

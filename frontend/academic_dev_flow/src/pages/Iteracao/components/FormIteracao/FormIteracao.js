@@ -6,7 +6,7 @@ import { buscarEtapaPeloId } from "../../../../services/etapaService";
 import { buscarMembrosPorProjeto } from "../../../../services/membroProjetoService";
 import { optionsStatusIteracoes } from "../../../../services/optionsStatus";
 import { useContextoIteracao } from "../../context/contextoIteracao";
-import { formatDateIso, handleError } from "../../../../services/utils";
+import { filterOption, formatDateIso, handleError } from "../../../../services/utils";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 import { NotificationManager } from "react-notifications";
 import { buscarReleasePeloId, listarReleasesPorProjeto } from "../../../../services/releaseService";
@@ -46,16 +46,11 @@ const FormIteracao = ({ onSubmit, onCancel, selectProject }) => {
             if (dadosProjeto.fluxo) {
                 const response = await listarEtapasPorFluxo(dadosProjeto.fluxo);
                 if (!response.error) {
-                    const promises = await response.data.map(async (item) => {
-                        const response2 = await buscarEtapaPeloId(item.etapa);
-                        return {
-                            value: item.id,
-                            label: response2.data.nome,
-                        };
-                    });
-
-                    const results = (await Promise.all(promises));
-                    setOptionsEtapas(results);
+                    const resultados = response.data.map((item) => ({
+                        value: item.id,
+                        label: item.nome_etapa
+                    }))
+                    setOptionsEtapas(resultados)
                 }
             } else {
                 NotificationManager.info('O projeto selecionado não possui um fluxo associado. Vincule o fluxo ao projeto !');
@@ -156,7 +151,7 @@ const FormIteracao = ({ onSubmit, onCancel, selectProject }) => {
     return (
         <Form layout="vertical" className="global-form" form={form} onFinish={onSubmit}>
             <Form.Item>
-                <h4> {titulo} </h4>
+                <h4 className='global-title'> {titulo} </h4>
             </Form.Item>
 
             {selectProject}
@@ -180,9 +175,8 @@ const FormIteracao = ({ onSubmit, onCancel, selectProject }) => {
                         <Form.Item
                             label="Ordem"
                             name="ordem"
-                            rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
                         >
-                            <Input type="number" name="ordem" placeholder="número" />
+                            <Input type="number" name="ordem" placeholder="Ordem (opcional)" />
                         </Form.Item>
 
                         <Form.Item
@@ -262,21 +256,30 @@ const FormIteracao = ({ onSubmit, onCancel, selectProject }) => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Etapa"
-                        name="etapa"
+                        label="Etapas"
+                        name="etapas"
                         style={{ flex: "1" }}
                         rules={[{ required: true, message: 'Por favor, selecione a etapa!' }]}
                     >
-                        <Select options={optionsEtapas} placeholder="Selecione a etapa" />
+                        <Select 
+                            mode="multiple"
+                            allowClear
+                            showSearch
+                            filterOption={filterOption}
+                            options={optionsEtapas} 
+                            placeholder="Selecione a(s) etapa(s)" 
+                        
+                        />
                     </Form.Item>
 
                     <Form.Item
                         label="Responsável"
                         name="responsavel"
+                        rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
                     >
                         <Select
                             style={{ width: '100%' }}
-                            placeholder="Selecione os membros"
+                            placeholder="Selecione o responsável"
                             options={optionsMembros}
                         />
                     </Form.Item>

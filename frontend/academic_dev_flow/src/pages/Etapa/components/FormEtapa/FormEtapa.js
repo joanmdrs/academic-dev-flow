@@ -34,7 +34,7 @@ const FormEtapa = ({onSubmit, onCancel}) => {
             }}
         >
             <Form.Item>
-                <h4> {titulo} </h4>
+                <h4 className='global-title'> {titulo} </h4>
             </Form.Item>
 
             <Form.Item 

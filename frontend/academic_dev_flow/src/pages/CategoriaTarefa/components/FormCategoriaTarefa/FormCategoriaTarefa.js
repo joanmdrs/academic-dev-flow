@@ -55,7 +55,7 @@ const FormCategoriaTarefa = ({onSubmit, onCancel}) => {
             onFinish={handleFormSubmit}
         >
             <Form.Item>
-                <h4> {titulo} </h4>
+                <h4 className='global-title'> {titulo} </h4>
             </Form.Item>
 
             <Form.Item label="Nome" name="nome" rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}>

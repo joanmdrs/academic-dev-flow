@@ -7,16 +7,17 @@ from apps.membro_projeto.models import MembroProjeto
 class Artefato(models.Model):
     
     STATUS_CHOICES = [
-        ('criado', 'Criado'),
+        ('pendente', 'Pendente'),
         ('rascunho', 'Em rascunho'),
         ('revisao', 'Pendente de revisão'),
         ('aprovado', 'Aprovado'),
-        ('finalizado', 'Finalizado')
+        ('finalizado', 'Finalizado'),
+        ('cancelado', 'Cancelado')
     ]
     
     nome = models.CharField(max_length=255) 
     descricao = models.TextField(null=True, blank=True)
-    status = models.CharField(max_length=40, choices=STATUS_CHOICES, null=True, blank=True, default='criado')
+    status = models.CharField(max_length=40, choices=STATUS_CHOICES, null=True, blank=True, default='pendente')
     data_criacao = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     data_termino = models.DateField(null=True, blank=True)
     url = models.CharField(null=True, blank=True)

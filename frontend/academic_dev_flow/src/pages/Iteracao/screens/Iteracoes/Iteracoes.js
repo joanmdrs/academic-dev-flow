@@ -15,6 +15,7 @@ import RenderStatus from '../../../../components/RenderStatus/RenderStatus'
 import { optionsStatusIteracoes } from '../../../../services/optionsStatus'
 import { IoMdCreate, IoMdTrash } from 'react-icons/io'
 import { formatDate } from '../../../../services/utils'
+import RenderEtapas from '../../../../components/RenderEtapas/RenderEtapas'
 
 const Iteracoes = () => {
 
@@ -181,13 +182,11 @@ const Iteracoes = () => {
             )
         },
         {
-            title: 'Etapa',
-            dataIndex: 'etapa',
-            key: 'etapa',
+            title: 'Etapas',
+            dataIndex: 'etapas',
+            key: 'etapas',
             render: (_, record) => (
-                <Space>
-                    {record.nome_etapa}
-                </Space>
+                <RenderEtapas data={record.dados_etapas} />
             )
         },
         {

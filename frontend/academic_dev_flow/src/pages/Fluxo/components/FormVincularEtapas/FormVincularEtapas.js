@@ -58,7 +58,7 @@ const FormVincularEtapas = ({onSubmit, onCancel}) => {
     return (
         <Form form={form} className="global-form" onFinish={onSubmit}>
             <Form.Item>
-                <h4> {titleForm} </h4>
+                <h4 className='global-title'> {titleForm} </h4>
             </Form.Item>
 
             <Form.Item 

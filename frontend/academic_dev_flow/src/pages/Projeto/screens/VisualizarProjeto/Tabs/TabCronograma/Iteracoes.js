@@ -12,9 +12,8 @@ import { useContextoIteracao } from "../../../../../Iteracao/context/contextoIte
 import { atualizarIteracao, criarIteracao, excluirIteracoes, listarIteracoesPorProjeto } from "../../../../../../services/iteracaoService";
 import FormIteracao from "../../../../../Iteracao/components/FormIteracao/FormIteracao";
 import TableIteracoes from "../../../../../Iteracao/components/TableIteracoes/TableIteracoes"
-import { useContextoGlobalUser } from "../../../../../../context/ContextoGlobalUser/ContextoGlobalUser";
-import { useNavigate } from "react-router-dom";
 import VisualizarIteracao from "../../../../../Iteracao/screens/VisualizarIteracao/VisualizarIteracao";
+import RenderEtapas from "../../../../../../components/RenderEtapas/RenderEtapas";
 
 
 const Iteracoes = () => {
@@ -52,13 +51,11 @@ const Iteracoes = () => {
             )
         },
         {
-            title: 'Etapa',
-            dataIndex: 'etapa',
-            key: 'etapa',
+            title: 'Etapas',
+            dataIndex: 'etapas',
+            key: 'etapas',
             render: (_, record) => (
-                <Space>
-                    {record.nome_etapa}
-                </Space>
+                <RenderEtapas data={record.dados_etapas} />
             )
         },
         {

@@ -41,7 +41,7 @@ class ListarIteracoesPorProjetoView(APIView):
             if not id_projeto:
                 return Response({'error': 'O ID do projeto não foi fornecido!'}, status=status.HTTP_400_BAD_REQUEST)
             
-            iteracoes = Iteracao.objects.filter(projeto=id_projeto)
+            iteracoes = Iteracao.objects.filter(projeto=id_projeto).order_by('id')
             
             if iteracoes.exists():
                 serializer = IteracaoSerializer(iteracoes, many=True)

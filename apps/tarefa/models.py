@@ -16,9 +16,11 @@ class CategoriaTarefa(models.Model):
 class Tarefa(models.Model):
     
     STATUS_CHOICES = [
-        ('criada', 'Criada'),
+        ('pendente', 'Pendente'),
         ('andamento', 'Em Andamento'),
         ('concluida', 'Concluída'),
+        ('atrasada', 'Em Atraso'),
+        ('bloqueada', 'Bloqueada'),
         ('cancelada', 'Cancelada'),
     ]
     
@@ -27,7 +29,7 @@ class Tarefa(models.Model):
     data_criacao = models.DateTimeField(auto_now_add=True)
     data_inicio = models.DateField(null=True, blank=True)
     data_termino = models.DateField(null=True, blank=True)
-    status = models.CharField(choices=STATUS_CHOICES, default='criada')
+    status = models.CharField(choices=STATUS_CHOICES, default='pendente')
     tempo_gasto = models.IntegerField(default=0)
     id_issue = models.BigIntegerField(null=True, blank=True)
     number_issue = models.IntegerField(null=True, blank=True)
@@ -45,7 +47,7 @@ class Tarefa(models.Model):
         ultimo_intervalo = self.intervalos.last()
 
         if not ultimo_intervalo or ultimo_intervalo.tipo == 'pausa':
-            if self.status == 'criada':
+            if self.status == 'pendente':
                 self.status = 'andamento'
                 self.save()
 

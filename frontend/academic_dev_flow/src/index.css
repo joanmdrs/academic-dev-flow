@@ -43,6 +43,52 @@ body {
   border-color: var(--border-color);
 } */
 
+
+.content {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  margin-top: 10px;
+  margin-left: 10px;
+  background-color: #FFFFFF;
+  border-top-left-radius: 5px;
+  height: 100%;
+}
+
+
+.global-div {
+  margin: 20px;
+  padding: 20px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  background-color: #FFFFFF;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.global-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start !important;
+  padding: 30px;
+  background-color: #FFFFFF;
+}
+
+.global-title {
+  font-family: 'Poppins', sans-serif;
+}
+
+.button-menu {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 20px 10px;
+}
+
+.grouped-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+
 .ff-pop {
   font-family: 'Poppins', sans-serif;
 }
@@ -129,80 +175,4 @@ body {
 
 .bs-1 {
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-}
-
-
-
-.content {
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  margin-top: 10px;
-  margin-left: 10px;
-  background-color: #FFFFFF;
-  border-top-left-radius: 5px;
-  height: 100%;
-}
-
-
-
-
-.global-div {
-  margin: 20px;
-  padding: 20px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  background-color: #FFFFFF;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-}
-
-.global-form {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start !important;
-  border-radius: 5px;
-  padding: 30px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  /* margin: 20px 10px; */
-  background-color: #FFFFFF;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-}
-
-.global-space {
-  padding: 20px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.global-table table {
-  font-size: 13px;
-  border: 1px solid #d9d9d9;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-}
-
-.global-table table th:first-child {
-  width: 70px;
-}
-
-.style-table table {
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-}
-
-.style-table table thead th.ant-table-cell {
-  background-color: #002140;
-  color: #FFFFFF;
-}
-
-.button-menu {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  padding: 20px 10px;
-}
-
-.grouped-buttons {
-  display: flex;
-  gap: 10px;
 }

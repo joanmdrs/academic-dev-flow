@@ -44,16 +44,6 @@ const Releases = () => {
             )
         },
         {
-            title: 'Etapa',
-            dataIndex: 'etapa',
-            key: 'etapa',
-            render: (_, record) => (
-                <Space>
-                    {record.nome_etapa}
-                </Space>
-            )
-        },
-        {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',

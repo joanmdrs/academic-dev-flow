@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Iteracao
 
 class IteracaoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nome', 'status', 'data_inicio', 'data_termino', 'exibir_projeto', 'exibir_responsavel', 'exibir_etapa')
+    list_display = ('id', 'nome', 'status', 'data_inicio', 'data_termino', 'exibir_projeto', 'exibir_responsavel')
     search_fields = ('nome', )
     
     def exibir_projeto(self, obj):
@@ -16,11 +16,6 @@ class IteracaoAdmin(admin.ModelAdmin):
             return obj.responsavel.membro.nome
         return None
     exibir_responsavel.short_description = 'Responsável'
-    
-    def exibir_etapa(self, obj):
-        if (obj.etapa):
-            return obj.etapa.etapa.nome
-        return None
-    exibir_etapa.short_description = 'Etapa'
+
 
 admin.site.register(Iteracao, IteracaoAdmin)

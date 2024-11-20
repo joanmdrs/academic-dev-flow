@@ -22,7 +22,7 @@ const RenderStatus = ({optionsStatus, propStatus}) => {
             textAlign: 'center',  
             margin: '0 auto'  
         }}> 
-            {statusOption.label} 
+            {statusOption.name} 
         </Space>
     )
 }

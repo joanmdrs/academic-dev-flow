@@ -125,7 +125,7 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
     return (
         <Form form={form} layout='vertical' className='global-form' onFinish={handleSubmitForm}>
             <Form.Item>
-                <h4> {titulo} </h4>
+                <h4 className='global-title'> {titulo} </h4>
             </Form.Item>
 
             {selectProject && (

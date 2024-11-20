@@ -4,7 +4,6 @@ from .models import Release
 class ReleaseSerializer(serializers.ModelSerializer):
     nome_projeto = serializers.SerializerMethodField()
     nome_responsavel = serializers.SerializerMethodField()
-    nome_etapa = serializers.SerializerMethodField()
     
     class Meta:
         model = Release
@@ -17,9 +16,7 @@ class ReleaseSerializer(serializers.ModelSerializer):
             'projeto', 
             'nome_projeto',
             'responsavel',
-            'nome_responsavel',
-            'etapa',
-            'nome_etapa',
+            'nome_responsavel'
         ]
         
     def get_nome_projeto(self, obj):
@@ -28,5 +25,3 @@ class ReleaseSerializer(serializers.ModelSerializer):
     def get_nome_responsavel(self, obj):
         return obj.responsavel.membro.nome if obj.responsavel else None
 
-    def get_nome_etapa(self, obj):
-        return obj.etapa.etapa.nome if obj.etapa else None

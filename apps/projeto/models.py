@@ -5,10 +5,13 @@ from apps.membro.models import Membro
 class Projeto(models.Model):
     
     STATUS_CHOICES = [
+        ('planejado', 'Planejado'),
         ('criado', 'Criado'),
         ('andamento', 'Em Andamento'),
         ('concluido', 'Concluído'),
         ('cancelado', 'Cancelado'),
+        ('atrasado', 'Atrasado'),
+        ('espera', 'Em espera')
     ]
     
     nome = models.CharField(max_length=200)

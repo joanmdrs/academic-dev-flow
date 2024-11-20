@@ -3,9 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "antd/es/form/Form";
 import { useContextoRelease } from "../../context/ContextoRelease";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
-import { listarEtapasPorFluxo } from "../../../../services/fluxoEtapaService";
 import { NotificationManager } from "react-notifications";
-import { buscarEtapaPeloId } from "../../../../services/etapaService";
 import { formatDateIso, handleError } from "../../../../services/utils";
 import { buscarMembrosPorProjeto } from "../../../../services/membroProjetoService";
 import { optionsStatusReleases } from "../../../../services/optionsStatus";
@@ -15,39 +13,11 @@ const FormRelease = ({ onSubmit, onCancel, selectProject }) => {
     const { releaseData } = useContextoRelease();
     const { dadosProjeto } = useContextoGlobalProjeto();
     const [form] = useForm();
-    const [optionsEtapas, setOptionsEtapas] = useState([]);
     const [optionsMembros, setOptionsMembros] = useState([]);
     const [titulo, setTitulo] = useState("CADASTRAR RELEASE");
     const [lastRelease, setLastRelease] = useState(null);
     const [releaseAdjacentes, setReleasesAdjacentes] = useState(null);
 
-  const handleGetEtapas = async () => {
-    try {
-      if (dadosProjeto.fluxo) {
-        const response = await listarEtapasPorFluxo(dadosProjeto.fluxo);
-
-        if (!response.error) {
-          const promises = await response.data.map(async (item) => {
-            const response2 = await buscarEtapaPeloId(item.etapa);
-
-            return {
-              value: item.id,
-              label: response2.data.nome,
-            };
-          });
-
-          const results = await Promise.all(promises);
-          setOptionsEtapas(results);
-        }
-      } else {
-        NotificationManager.info(
-          "O projeto selecionado não possui um fluxo associado. Vincule o fluxo ao projeto !"
-        );
-      }
-    } catch (error) {
-      return handleError(error, "Falha ao tentar buscar as etapas do fluxo do projeto !");
-    }
-  };
 
   const handleGetMembros = async () => {
     try {
@@ -141,7 +111,6 @@ const FormRelease = ({ onSubmit, onCancel, selectProject }) => {
   useEffect(() => {
     const fetchData = async () => {
       if (dadosProjeto !== null) {
-        await handleGetEtapas();
         await handleGetMembros();
 
         if (releaseData !== null) {
@@ -155,7 +124,6 @@ const FormRelease = ({ onSubmit, onCancel, selectProject }) => {
         }
       } else {
         form.resetFields();
-        setOptionsEtapas([]);
         setOptionsMembros([]);
       }
     };
@@ -166,7 +134,7 @@ const FormRelease = ({ onSubmit, onCancel, selectProject }) => {
   return (
     <Form layout="vertical" className="global-form" form={form} onFinish={onSubmit}>
       <Form.Item>
-        <h4> {titulo} </h4>
+        <h4 className='global-title'> {titulo} </h4>
       </Form.Item>
 
       {selectProject}
@@ -201,14 +169,6 @@ const FormRelease = ({ onSubmit, onCancel, selectProject }) => {
             rules={[{ required: true, message: "Por favor, selecione uma opção!" }]}
           >
             <Select allowClear options={optionsStatusReleases} defaultValue="Selecione" />
-          </Form.Item>
-
-          <Form.Item
-            label="Etapa"
-            name="etapa"
-            rules={[{ required: true, message: "Por favor, selecione uma opção!" }]}
-          >
-            <Select allowClear options={optionsEtapas} defaultValue="Selecione" />
           </Form.Item>
 
           <Form.Item

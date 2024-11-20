@@ -81,7 +81,7 @@ const FormMembroProjeto = ({titleForm, onSubmit, onCancel}) => {
             onFinish={onSubmit}
         >
             <Form.Item>
-                <h4> {titleForm} </h4>
+                <h4 className='global-title'> {titleForm} </h4>
             </Form.Item>
 
             <Form.Item
