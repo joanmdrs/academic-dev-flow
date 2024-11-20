@@ -26,6 +26,18 @@ const TableIssues = ({data}) => {
             )
         },
         {
+            title: 'Assignee',
+            dataIndex: 'assignees',
+            key: 'assignees',
+            render: (_, record) => (
+                <span style={{display: 'flex', gap: '10px'}}> 
+                    {record.assignees.map((item, index) => (
+                        <span key={index}> {item} </span>
+                    ))}
+                </span>
+            )
+        },
+        {
             title: 'State',
             dataIndex: 'state',
             key: 'state',

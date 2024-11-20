@@ -6,7 +6,7 @@ import TableProjetos from "../../components/TableProjetos/TableProjetos";
 import { FaListUl, FaPlus } from "react-icons/fa";
 import TabsProjeto from '../TabsProjeto';
 import { atualizarProjeto, buscarProjetoPeloId, criarProjeto, excluirProjeto } from '../../../../services/projetoService';
-import { handleError } from '../../../../services/utils';
+import { filterOption, handleError } from '../../../../services/utils';
 import { useContextoProjeto } from '../../context/ContextoProjeto';
 import { TbLayoutListFilled } from "react-icons/tb";
 import ListProjetos from '../../components/ListProjetos/ListProjetos';
@@ -195,7 +195,7 @@ const Projetos = () => {
             {!isTabsVisible ? (
                 <React.Fragment>
                     <div style={{
-                        borderBottom: '1px solid #ddd',
+                        borderBottom: '1px solid var(--border-color)',
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'baseline',
@@ -217,7 +217,7 @@ const Projetos = () => {
                     </div>
         
                     <div style={{
-                            
+                            borderBottom: '1px solid var(--border-color)',
                             padding: '20px',
                             display: 'flex',
                             justifyContent: 'space-between'
@@ -237,14 +237,18 @@ const Projetos = () => {
         
                         <div className='df g-10'> 
                             <Select 
+                                style={{minWidth: '150px'}}
                                 options={optionsFluxo}
                                 allowClear
                                 placeholder="Fluxo"
+                                showSearch
+                                filterOption={filterOption}
                                 popupMatchSelectWidth={false}
                                 onChange={(value) => handleFiltrarProjetoPorFluxo(value)}
                         
                             /> 
                             <Select 
+                                style={{minWidth: '150px'}}
                                 options={optionsStatusProjetos}
                                 allowClear
                                 placeholder="Status"

@@ -1,16 +1,67 @@
-import { Empty, List, Skeleton, Space, Tooltip, Collapse } from "antd";
+import { Empty, List, Skeleton, Dropdown, Collapse, Button } from "antd";
 import React from "react";
-import { IoMdCreate, IoMdTrash } from "react-icons/io";
 import { limitarCaracteres } from "../../../../services/utils";
 import RenderStatus from "../../../../components/RenderStatus/RenderStatus";
 import { optionsStatusProjetos } from "../../../../services/optionsStatus";
 import RenderMembers from "../../../../components/RenderMembers/RenderMembers";
 import RenderDate from "../../../../components/RenderDate/RenderDate";
-import { IoOpenOutline } from "react-icons/io5";
+import { FaEllipsisH } from "react-icons/fa";
+import { IoMdCreate, IoMdTrash, IoMdFolderOpen } from "react-icons/io";
 
 const { Panel } = Collapse;
 
+const ActionDropdown = ({ item, onOpen, onUpdate, onDelete }) => {
+    const items = [
+        {
+            key: 'view',
+            label: (
+                <Button style={{border: 'none'}} onClick={() => onOpen(item)}>
+                    Abrir
+                </Button>
+            ),
+            icon: <IoMdFolderOpen size="15px" />
+        },
+        {
+            key: 'edit',
+            label: (
+                <Button style={{ border: "none" }} onClick={() => onUpdate(item)}>
+                    Editar
+                </Button>
+            ),
+            icon: <IoMdCreate size="15px" />
+        },
+        {
+            key: 'delete',
+            label: (
+                <Button style={{border: 'none'}} onClick={() => onDelete(item.projeto)}>
+                    Excluir
+                </Button>
+            ),
+            icon: <IoMdTrash size="15px" />
+        },
+    ];
+
+    return (
+        <Dropdown
+            menu={{
+                items
+            }}
+            placement="bottomRight"
+            trigger={['click']}
+        >
+            <span style={{
+                cursor: 'pointer'
+            }}>
+                <FaEllipsisH />
+            </span>
+        </Dropdown>
+    );
+};
+
+
 const ListProjetos = ({ data, onUpdate, onDelete, onOpen }) => {
+
+    
 
     return (
         <React.Fragment>
@@ -28,14 +79,7 @@ const ListProjetos = ({ data, onUpdate, onDelete, onOpen }) => {
                                 boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px'
                             }}
                             extra={
-                                <Space>
-                                    <Tooltip title="Editar">
-                                        <a onClick={() => onUpdate(item)}><IoMdCreate /></a>
-                                    </Tooltip>
-                                    <Tooltip title="Excluir">
-                                        <a onClick={() => onDelete(item.projeto)}><IoMdTrash /></a>
-                                    </Tooltip>
-                                </Space>
+                                <ActionDropdown item={item} onDelete={onDelete} onUpdate={onUpdate} onOpen={onOpen} />
                             }
                         >
                             <Skeleton avatar title={false} loading={item.loading} active>
@@ -49,23 +93,15 @@ const ListProjetos = ({ data, onUpdate, onDelete, onOpen }) => {
                                                     gap: '20px'
                                                 }}
                                             >
-                                                <Space>
-                                                    <span 
-                                                        style={{
-                                                        width: '400px',
-                                                        fontWeight: '600',
-                                                        fontSize: '15px', 
-                                                        fontFamily: 'Poppins, sans-serif'
-                                                    }}> {limitarCaracteres(item.nome_projeto, 100)} </span>
+                                                <span 
+                                                    style={{
+                                                    width: '400px',
+                                                    fontWeight: '600',
+                                                    fontSize: '15px', 
+                                                    fontFamily: 'Poppins, sans-serif'
+                                                }}> {limitarCaracteres(item.nome_projeto, 100)} </span>
 
-                                                    <span onClick={() => onOpen(item)}> 
-                                                        <Tooltip title="Visualizar">
-                                                            <IoOpenOutline size="18px" />
-                                                        </Tooltip>
-                                                    </span>
                                                     
-                                                </Space>
-                                               
                                                 <RenderStatus optionsStatus={optionsStatusProjetos} propStatus={item.status_projeto} />
                                             </div>
                                         }

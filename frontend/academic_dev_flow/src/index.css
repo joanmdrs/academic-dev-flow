@@ -8,7 +8,7 @@
   --primary-color: #1677FF;
   --second-color: #001529;
   --third-color: #002140;
-  --border-color: #A4A4A4;
+  --border-color: #BDBDBD;
 }
 
 * {
@@ -22,18 +22,22 @@ body {
 
 
 .ant-layout {
-  background-color: #F1F1F1;
+  background-color: #ddd;
 }
-/* 
+
+.ant-table-thead .ant-table-cell {
+  background-color: #F1F1F1  !important;
+  color: #585858 !important;
+}
 .ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector {
   border: 1px solid var(--border-color);
-  color: var(--border-color) !important;
+  color: #585858 !important;
 
 }
 .ant-input-outlined {
   border: 1px solid var(--border-color);
-  color: var(--border-color) !important;
-} */
+  color: #585858 !important;
+}
 
 /* .ant-btn-default {
   border-color: var(--border-color);
@@ -131,9 +135,8 @@ body {
 
 .content {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  padding: 20px;
-  margin-top: 15px;
-  margin-left: 15px;
+  margin-top: 10px;
+  margin-left: 10px;
   background-color: #FFFFFF;
   border-top-left-radius: 5px;
   height: 100%;

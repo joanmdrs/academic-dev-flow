@@ -1,4 +1,4 @@
-import { Button, Form, Input, Select, Space } from "antd";
+import { Button, Form, Input, notification, Select, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { optionsStatusProjetos } from "../../../../services/optionsStatus";
 import { listarFluxos } from "../../../../services/fluxoService";
@@ -7,6 +7,8 @@ import { useForm } from "antd/es/form/Form";
 import { MdEdit } from "react-icons/md";
 import { atualizarProjeto, buscarProjetoPeloId } from "../../../../services/projetoService";
 import SpinLoading from "../../../../components/SpinLoading/SpinLoading";
+import { useContextoVisualizarProjeto } from "../../screens/VisualizarProjeto/context/ContextVisualizarProjeto";
+import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
 
 const FormProjeto = () => {
 
@@ -14,7 +16,7 @@ const FormProjeto = () => {
     const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
     const [form] = useForm()
     const [isUpdate, setIsUpdate] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
+    const {isLoading, setIsLoading} = useContextoVisualizarProjeto()
 
     const handleEditar = () => {
         setIsUpdate(true)
@@ -48,6 +50,7 @@ const FormProjeto = () => {
     const handleReload = async () => {
         setIsLoading(true)
         setIsUpdate(false)
+        form.resetFields()
         const response = await buscarProjetoPeloId(dadosProjeto.id)
 
         if (!response.error){
@@ -57,11 +60,24 @@ const FormProjeto = () => {
     }
 
     const handleAtualizarDados = async (formData) => {
-        const response = atualizarProjeto(formData, dadosProjeto.id)
+
+        if (formData.fluxo !== dadosProjeto.fluxo) {
+            const iteracoes = await listarIteracoesPorProjeto(dadosProjeto.id);
+    
+            if (iteracoes.data.length > 0) {
+                notification.error({
+                    duration: 3,
+                    message: "Alteração não permitida",
+                    description: "Para alterar o fluxo, exclua as iterações cadastradas."
+                });
+                return; 
+            }
+        }
+    
+        const response = await atualizarProjeto(formData, dadosProjeto.id);
 
         if (!response.error){
             await handleReload()
-            console.log(dadosProjeto)
         }
     }
 
@@ -73,9 +89,9 @@ const FormProjeto = () => {
                 <SpinLoading />
             ) : (
                <React.Fragment> 
-                    {/* <div style={{width: '100%', display: 'flex', justifyContent: 'flex-end', padding: '10px 0'}}> 
+                    <div style={{width: '100%', display: 'flex', justifyContent: 'flex-end', padding: '10px 0'}}> 
                         <Button onClick={() => handleEditar()} type="primary" icon={<MdEdit />}> Editar </Button>
-                    </div> */}
+                    </div>
 
                     <Form 
                         className="global-form"

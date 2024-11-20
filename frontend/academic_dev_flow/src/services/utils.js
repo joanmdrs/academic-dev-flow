@@ -164,3 +164,5 @@ export const getDataHoraNow = () => {
     return `${mes}, ${dia}, ${ano} | ${horas}:${minutos}`;
 
 }
+
+export const filterOption = (input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());

@@ -18,19 +18,15 @@ const TableProjetos = ({projetos, onUpdate, onDelete, onOpen}) => {
             render: (_, record) => (
                 <Space>
                     <span 
+                        onClick={() => onOpen(record)}
                         style={{
-                        width: '400px',
-                        fontWeight: '600',
-                        fontSize: '13px', 
-                        fontFamily: 'Poppins, sans-serif'
-                    }}> {limitarCaracteres(record.nome_projeto, 100)} </span>
-
-                    <span style={{cursor: 'pointer'}} onClick={() => onOpen(record)}> 
-                        <Tooltip title="Visualizar">
-                            <IoOpenOutline size="18px" />
-                        </Tooltip>
-                    </span>
-                    
+                            width: '400px',
+                            fontWeight: '600',
+                            fontSize: '13px', 
+                            fontFamily: 'Poppins, sans-serif',
+                            cursor: 'pointer'
+                        }}
+                    > {limitarCaracteres(record.nome_projeto, 100)} </span>
                 </Space>
             )
         },
@@ -55,19 +51,17 @@ const TableProjetos = ({projetos, onUpdate, onDelete, onOpen}) => {
             align: 'center'
         },
         {
-            title: 'Início',
+            title: 'Dt. Início',
             dataIndex: 'data_inicio_projeto',
             key: 'data_inicio_projeto',
-            align: 'center',
             render: (_, record) => (
                 <RenderDate dateType="inicio" dateValue={record.data_inicio_projeto} />
             )
         },
         {
-            title: 'Fim',
+            title: 'Dt. Término',
             dataIndex: 'data_termino_projeto',
             key: 'data_termino_projeto',
-            align: 'center',
             render: (_, record) => (
                 <RenderDate dateType="fim" dateValue={record.data_termino_projeto} />
             )
@@ -110,7 +104,7 @@ const TableProjetos = ({projetos, onUpdate, onDelete, onOpen}) => {
             projetos.length !== 0 ? (
                 
                 <Table
-                    style={{boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px', padding: '20px'}}
+                    className="pa-10 bs-1"
                     dataSource={projetos}
                     columns={columns}
                     rowKey="id"

@@ -5,6 +5,7 @@ import { Layout } from "antd";
 import MyHeader from "../../../../components/Header/Header";
 import { Content } from "antd/es/layout/layout";
 import VisualizarProjeto from "./VisualizarProjeto";
+import { ProviderVisualizarProjeto } from "./context/ContextVisualizarProjeto";
 
 const ScreenVisualizarProjeto = ({grupo}) => {
 
@@ -15,7 +16,9 @@ const ScreenVisualizarProjeto = ({grupo}) => {
             <Layout>
                 <MyHeader/>
                 <Content>
-                    <VisualizarProjeto />
+                    <ProviderVisualizarProjeto>
+                        <VisualizarProjeto />
+                    </ProviderVisualizarProjeto>
                 </Content>
             </Layout>
         </React.Fragment>   

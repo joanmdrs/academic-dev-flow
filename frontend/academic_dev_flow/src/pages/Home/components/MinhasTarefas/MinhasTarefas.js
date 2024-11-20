@@ -1,6 +1,8 @@
 import { List, Progress, Tooltip } from "antd";
 import React from "react";
 import { MdCheckCircleOutline, MdOutlineCircle } from "react-icons/md";
+import { useContextoGlobalUser } from "../../../../context/ContextoGlobalUser/ContextoGlobalUser";
+import { Link } from "react-router-dom";
 
 const MinhasTarefas = ({ tarefas, atualizarStatus }) => {
 
@@ -8,12 +10,15 @@ const MinhasTarefas = ({ tarefas, atualizarStatus }) => {
     const totalTarefas = tarefas.length;
 
     const porcentagemConcluida = totalTarefas > 0 ? ((tarefasConcluidas / totalTarefas) * 100).toFixed(0) : '';
+    const {grupo} = useContextoGlobalUser()
 
     return (
         <div className="minhas-tarefas box-model">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                <h3 className="ff-pop">Minhas tarefas</h3>
-                <a style={{fontSize: '12px', fontWeight: 'bold'}} href="/academic-dev-flow/aluno/tarefas">Visualize todas</a>
+            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'baseline'}}> 
+                <h3 className="ff-pop">Meus artefatos</h3>
+                { grupo === 'Administradores' && <Link to={`/admin/tarefas`}> Visualize todos </Link> }
+                { grupo === 'Discentes' && <Link to={`/aluno/tarefas`}> Visualize todos </Link> }
+                { grupo === 'Docentes' && <Link to={`/professor/tarefas`}> Visualize todos </Link> }
             </div>
 
             <div> 
@@ -45,10 +50,10 @@ const MinhasTarefas = ({ tarefas, atualizarStatus }) => {
                             ]}
                         >
                             <List.Item.Meta
-                                avatar={
+                                avatar={[
                                     <div style={{ fontSize: '15px', fontWeight: 'bold', color: "#BDBDBD" }}>
                                         {String(index + 1).padStart(2, '0')}
-                                    </div>
+                                    </div>]
                                 }
                                 title={<span className="ff-pop fw-500"> {item.nome} </span>}
 

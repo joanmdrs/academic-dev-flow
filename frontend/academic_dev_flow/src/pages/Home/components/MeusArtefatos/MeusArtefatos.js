@@ -23,13 +23,7 @@ const MeusArtefatos = ({artefatos}) => {
                     pagination={false}
                     renderItem={(item, index) => (
                         <List.Item
-                        className="item-model ff-pop"
-                            actions={[
-                                <Tooltip title="Visualizar">
-                                    <a href={item.url} target="_blank" rel="noreferrer"> <MdOpenInNew /> </a>
-                                </Tooltip>
-                                
-                            ]}
+                            className="item-model ff-pop"
                         >
                             <List.Item.Meta
                                 avatar={

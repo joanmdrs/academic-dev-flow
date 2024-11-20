@@ -21,6 +21,8 @@ import { buscarIteracaoAtualDoProjeto } from "../../../../services/iteracaoServi
 import { buscarFuncaoAtualDoMembroProjeto } from "../../../../services/funcaoMembroProjetoService";
 import { useContextoGlobalUser } from "../../../../context/ContextoGlobalUser/ContextoGlobalUser";
 import { buscarMembroProjetoPeloIdMembroEPeloIdProjeto } from "../../../../services/membroProjetoService";
+import { useContextoVisualizarProjeto } from "./context/ContextVisualizarProjeto";
+import SpinLoading from "../../../../components/SpinLoading/SpinLoading";
 
 const { TabPane } = Tabs;
 
@@ -34,6 +36,7 @@ const VisualizarProjeto = () => {
     const [collapseTabs, setCollapseTabs] = useState(false)
     const [iteracaoAtual, setIteracaoAtual] = useState(null)
     const [funcoesMembro, setFuncoesMembro] = useState([])
+    const {isLoading} = useContextoVisualizarProjeto()
 
     const handleBuscarIteracaoAtualDoProjeto = async () => {
         const response = await buscarIteracaoAtualDoProjeto(state.idProjeto)
@@ -74,15 +77,19 @@ const VisualizarProjeto = () => {
         };
 
         fetchData();
-        console.log(funcoesMembro)
-    }, [state, usuario]);
+    }, [state, usuario, isLoading]);
 
     const handleVoltar = () => {
         navigate(-1);
     };
 
+    if (isLoading) {
+        return <SpinLoading />
+    }
+
     return (
         <div className="content">
+
             <div
                 style={{
                     display: "flex",
@@ -90,7 +97,7 @@ const VisualizarProjeto = () => {
                     alignItems: "baseline",
                     padding: "20px",
                     borderRadius: '5px',
-                    borderBottom: '1px solid #DDD'
+                    borderBottom: '1px solid var(--border-color)'
                 }}
             >
                     <div style={{display: 'flex', gap: '20px', alignItems: 'baseline', border: 'none'}}>
@@ -171,7 +178,7 @@ const VisualizarProjeto = () => {
 
             </div>
 
-            <div>
+            <div style={{paddingLeft: '20px'}}>
                 <Tabs
                     size="middle"
                     tabPosition="right"

@@ -8,7 +8,7 @@ const RenderMembers = ({membros, quantMembros, maxAvatars}) => {
         <div style={{ display: 'flex', marginLeft: '8px'}}>
             <div style={{ display: 'flex', position: 'relative', marginLeft: -8 }}>
                 {
-                    membros.map((item, index) => (
+                    membros.slice(0, maxAvatars).map((item, index) => (
                         <Tooltip title={`${item.nome}`}>
                             <Avatar
                                 src={`https://avatar.iran.liara.run/public/${item.avatar}`}
@@ -27,8 +27,11 @@ const RenderMembers = ({membros, quantMembros, maxAvatars}) => {
                         <Avatar
                             key={quantMembros - maxAvatars}
                             style={{
-                                backgroundColor: getRandomColor(),
-                                zIndex: (quantMembros - maxAvatars),
+                                fontSize: '12px',
+                                fontFamily: 'Poppins, sans-serif',
+                                backgroundColor: "var(--primary-color)",
+                                color: "#FFFFFF",
+                                zIndex: `${quantMembros *2}`,
                                 marginLeft: (quantMembros - maxAvatars) > 0 ? -10 : 0
                             }}
                         >
