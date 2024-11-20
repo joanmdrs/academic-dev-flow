@@ -2,8 +2,7 @@ import React from "react";
 import { FaRegClock } from "react-icons/fa";
 import { formatDate } from "../../services/utils";
 
-const RenderDate = ({dateType, dateValue}) => {
-
+const RenderDate = ({dateType, dateValue}) => {   
     return (
         <span style={{
             padding: '7px',

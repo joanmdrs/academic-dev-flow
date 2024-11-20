@@ -302,6 +302,7 @@ const Tarefas = () => {
                     <Button
                         onClick={() => handleAdicionarTarefa()} 
                         type="primary" 
+                        size="large"
                         icon={<FaPlus />}> 
                         Criar Tarefa 
                     </Button>

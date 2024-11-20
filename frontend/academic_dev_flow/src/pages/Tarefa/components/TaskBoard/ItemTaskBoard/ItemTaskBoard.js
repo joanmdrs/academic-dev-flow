@@ -1,10 +1,10 @@
 import React from 'react';
-import './ItemTaskBoard.css'
+import './ItemTaskBoard.css';
 import { IoMdCreate, IoMdTrash } from 'react-icons/io';
 import { FaRegClock, FaPlay, FaPause } from 'react-icons/fa';
 import { GoCommentDiscussion } from 'react-icons/go';
 import { formatDate, limitarCaracteres } from '../../../../../services/utils';
-import { Tooltip } from 'antd';
+import { Badge, Space, Tooltip } from 'antd';
 import { FaCircleInfo } from 'react-icons/fa6';
 import RenderMembers from '../../../../../components/RenderMembers/RenderMembers';
 import RenderDate from '../../../../../components/RenderDate/RenderDate';
@@ -17,8 +17,9 @@ function verificarAtraso(task) {
 }
 
 const ItemTaskBoard = ({ task, onUpdate, onDelete, onStartTarefa, onPauseTarefa, onShowComments}) => {
+    const isAtrasada = verificarAtraso(task);
 
-    return (
+    const TaskContent = (
         <div className="task-container">
             <div className="task-header">
                 <h4 style={{
@@ -27,13 +28,13 @@ const ItemTaskBoard = ({ task, onUpdate, onDelete, onStartTarefa, onPauseTarefa,
                     fontFamily: 'Poppins, sans-serif'
                 }}
                 >{task.nome_categoria} </h4>
-                <span style={{display: 'flex', gap: '10px'}}>
-                    <span style={{cursor: 'pointer', color: "#585858"}} onClick={() => onUpdate(task)}>
+                <span style={{ display: 'flex', gap: '10px' }}>
+                    <span style={{ cursor: 'pointer', color: "#585858" }} onClick={() => onUpdate(task)}>
                         <Tooltip title="Editar">
-                            <IoMdCreate size="15px"  />
+                            <IoMdCreate size="15px" />
                         </Tooltip>
                     </span> 
-                    <span style={{cursor: 'pointer', color: "#585858"}} onClick={() => onDelete(task.id)}>
+                    <span style={{ cursor: 'pointer', color: "#585858" }} onClick={() => onDelete(task.id)}>
                         <Tooltip title="Excluir">
                             <IoMdTrash size="15px" />
                         </Tooltip>
@@ -42,25 +43,14 @@ const ItemTaskBoard = ({ task, onUpdate, onDelete, onStartTarefa, onPauseTarefa,
             </div>
 
             <div>
-                <h3 
-                    className="task-title" 
-                >
-                    {task.nome}
-                    
-                </h3>
-
-                <h5 className="task-project-name">{task.nome_projeto}</h5>
+                <h3 className="task-title">{limitarCaracteres(task.nome, 50)}</h3>
+                <h5 className="task-project-name">Projeto: {task.nome_projeto}</h5>
                 <p className="task-description">{limitarCaracteres(task.descricao, 100)}</p>
             </div>
 
             <div className="task-dates">
                 <RenderDate dateType="inicio" dateValue={task.data_inicio} />
                 <RenderDate dateType="termino" dateValue={task.data_termino} />
-                
-                { verificarAtraso(task) && (
-                    <span className="task-atrasada"><FaCircleInfo /> Em atraso </span>
-                )}
-                
             </div>
 
             <div className="task-footer">
@@ -69,27 +59,40 @@ const ItemTaskBoard = ({ task, onUpdate, onDelete, onStartTarefa, onPauseTarefa,
                 </div>
 
                 <div className="task-actions">
-                    { !task.estado_contagem_tempo ? (
+                    {!task.estado_contagem_tempo ? (
                         <Tooltip title="Play">
-                            <span style={{cursor: 'pointer', color: "#585858"}} onClick={() => onStartTarefa(task)}><FaPlay size="20px" /></span>
+                            <span style={{ cursor: 'pointer', color: "#585858" }} onClick={() => onStartTarefa(task)}><FaPlay size="20px" /></span>
                         </Tooltip>
-                        
                     ) : (
                         <Tooltip title="Pause">
-                            <span style={{cursor: 'pointer', color: "#585858"}} onClick={() => onPauseTarefa(task)}><FaPause size="20px" /></span>
+                            <span style={{ cursor: 'pointer', color: "#585858" }} onClick={() => onPauseTarefa(task)}><FaPause size="20px" /></span>
                         </Tooltip>
                     )}
                     <Tooltip title="Comentários">
                         <span 
-                            style={{cursor: 'pointer', color: "#585858"}} 
+                            style={{ cursor: 'pointer', color: "#585858" }} 
                             onClick={() => onShowComments(task)}
-                        > <IoChatbubblesOutline size="22px" />
+                        >
+                            <IoChatbubblesOutline size="22px" />
                         </span>
                     </Tooltip>
-                    
                 </div>
             </div>
         </div>
-    )
+    );
+
+    return (
+        isAtrasada ? (
+            <Badge.Ribbon 
+                style={{fontSize: '12px', padding: '5px'}} 
+                placement='start' 
+                text={<Space> <FaCircleInfo /> Em atraso</Space>}
+                color='blue'
+            >
+                {TaskContent}
+            </Badge.Ribbon>
+        ) : TaskContent
+    );
 }
+
 export default ItemTaskBoard;

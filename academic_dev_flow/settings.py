@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'apps.categoria',
     'apps.comentario',
     'apps.pontuacao',
+    'apps.tags',
     'apps.api',
     'apps.github_integration',
 ]

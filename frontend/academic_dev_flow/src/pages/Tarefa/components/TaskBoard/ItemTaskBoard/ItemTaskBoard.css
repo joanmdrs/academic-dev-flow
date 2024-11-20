@@ -5,8 +5,8 @@
     display: flex;
     justify-content: center;
     flex-direction: column;
-    gap: 10px;
-    border: 1px solid #ddd;
+    gap: 15px;
+    border: 1px solid var(--border-color);
 }
 
 .task-header {

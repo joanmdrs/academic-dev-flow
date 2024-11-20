@@ -1,7 +1,7 @@
 import { Button, Empty, Space, Table, Tooltip } from "antd";
 import React, { useEffect, useState } from "react";
 import { IoMdCreate, IoMdTrash } from "react-icons/io";
-import { formatarTempo, handleError } from "../../../../services/utils";
+import { formatarTempo, handleError, limitarCaracteres } from "../../../../services/utils";
 import { FaPause, FaPlay } from "react-icons/fa";
 import { GoCommentDiscussion } from "react-icons/go";
 import RenderMembers from "../../../../components/RenderMembers/RenderMembers";
@@ -25,7 +25,9 @@ const TableTask = ({onUpdate, onDelete, onStartTarefa, onPauseTarefa, onShowComm
             dataIndex: 'nome',
             key: 'nome',
             render: (_, record) => (
-                <span className="ff-pop"> {record.nome} </span>
+                <Tooltip placement="rightTop" title={record.nome}>
+                    <span className="ff-pop"> {limitarCaracteres(record.nome, 20)} </span>
+                </Tooltip>
             )
         },
         {
@@ -158,7 +160,7 @@ const TableTask = ({onUpdate, onDelete, onStartTarefa, onPauseTarefa, onShowComm
             render: (_, record) => (
                 <Space>
                     <Tooltip title="Comentários">
-                        <span style={{cursor: 'pointer'}} onClick={() => onShowComments()}><IoChatbubblesOutline size="20px" /></span>
+                        <span style={{cursor: 'pointer'}} onClick={() => onShowComments(record)}><IoChatbubblesOutline size="20px" /></span>
                     </Tooltip>
                     
                     <Tooltip title="Editar">

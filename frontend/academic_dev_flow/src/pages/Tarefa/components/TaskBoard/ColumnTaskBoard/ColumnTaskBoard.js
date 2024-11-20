@@ -7,12 +7,14 @@ import { getRandomColor } from '../../../../../services/utils';
 
 const getColorByStatus = (title) => {
     switch (title) {
-        case 'To Do':
+        case 'Para fazer':
             return '#4788FF'; 
-        case 'In Progress':
+        case 'Em andamento':
             return '#f56a00'; 
-        case 'Done':
+        case 'Feito':
             return '#00a2ae';
+        case 'Em bloqueio':
+            return '#6F42C1'
         default:
             return getRandomColor(); 
     }
