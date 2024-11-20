@@ -3,6 +3,7 @@ from apps.membro_projeto.models import MembroProjeto
 from apps.projeto.models import Projeto
 from apps.iteracao.models import Iteracao
 from apps.categoria.models import Categoria
+from apps.tags.models import Tag
 
 class CategoriaTarefa(models.Model): 
     
@@ -38,6 +39,7 @@ class Tarefa(models.Model):
     membros = models.ManyToManyField(MembroProjeto, blank=True)
     iteracao = models.ForeignKey(Iteracao, on_delete=models.CASCADE, null=True, blank=True)
     categoria = models.ForeignKey(CategoriaTarefa, on_delete=models.SET_NULL, null=True, blank=True)
+    tags  = models.ManyToManyField(Tag, blank=True)
     
     def __str__(self):
         return self.nome

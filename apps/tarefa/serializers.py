@@ -24,7 +24,8 @@ class TarefaSerializer(serializers.ModelSerializer):
     membros_info = serializers.SerializerMethodField()
     nomes_membros = serializers.SerializerMethodField()
     ids_membros = serializers.SerializerMethodField()
-
+    dados_tags = serializers.SerializerMethodField()
+    
     class Meta:
         model = Tarefa
         fields = [
@@ -50,7 +51,8 @@ class TarefaSerializer(serializers.ModelSerializer):
             'estado_contagem_tempo',
             'membros_info',
             'ids_membros',
-            'nomes_membros'
+            'nomes_membros',
+            'tags'
         ]
 
     def get_nome_projeto(self, obj):
@@ -85,3 +87,15 @@ class TarefaSerializer(serializers.ModelSerializer):
         nomes_membros = [membro.membro.nome for membro in membros]
         return nomes_membros
 
+    def get_dados_tags(self, obj):
+        if obj.tags.exists():
+            tags = obj.tags.all()  
+            return [
+                {
+                    "id": tag.id, 
+                    "nome": tag.nome, 
+                    "cor": tag.cor  
+                }
+                for tag in tags 
+            ]
+        return []

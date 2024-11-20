@@ -33,6 +33,7 @@ urlpatterns = [
     path('academicflow-api/release/', include('apps.release.urls', namespace='release')),
     path('academicflow-api/tarefa/', include('apps.tarefa.urls', namespace='tarefa')),
     path('academicflow-api/categoria/', include('apps.categoria.urls', namespace='categoria')),
+    path('academicflow-api/tags/', include('apps.tags.urls', namespace='tags')),
     path('academicflow-api/comentario/', include('apps.comentario.urls', namespace='comentario')),
     path('academicflow-api/pontuacao/', include('apps.pontuacao.urls', namespace='pontuacao')),
     path('academicflow-api/auth/', include('apps.api.urls', namespace='api')),
