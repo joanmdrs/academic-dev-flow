@@ -5,17 +5,20 @@ from apps.membro.models import Membro
 class Projeto(models.Model):
     
     STATUS_CHOICES = [
+        ('planejado', 'Planejado'),
         ('criado', 'Criado'),
         ('andamento', 'Em Andamento'),
         ('concluido', 'Concluído'),
         ('cancelado', 'Cancelado'),
+        ('atrasado', 'Atrasado'),
+        ('espera', 'Em espera')
     ]
     
     nome = models.CharField(max_length=200)
     descricao = models.TextField(blank=True, null=True)
     status = models.CharField(choices=STATUS_CHOICES, default='criado')
     data_inicio = models.DateField("Data Início")
-    data_fim = models.DateField("Data Fim")
+    data_termino = models.DateField("Data Fim")
     nome_repo = models.CharField(max_length=200, null=True, blank=True)
     link_repo = models.CharField(max_length=200, null=True, blank=True)
     link_site = models.CharField(max_length=200, null=True, blank=True)

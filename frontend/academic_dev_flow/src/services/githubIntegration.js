@@ -1,6 +1,6 @@
 import api from "../api/api";
 import { ERROR_MESSAGE_ABSENCE_PARAMETERS, ERROR_MESSAGE_ON_CREATION_THE_CONTENT, ERROR_MESSAGE_ON_DELETION, ERROR_MESSAGE_ON_LIST_CONTENTS, ERROR_MESSAGE_ON_SEARCHING, ERROR_MESSAGE_ON_SEARCHING_THE_CONTENT, SUCCESS_MESSAGE_ON_CREATION_THE_CONTENT, SUCCESS_MESSAGE_ON_DELETION_THE_CONTENT } from "./messages";
-import { handleError, handleSuccess } from "./utils";
+import { handleError, handleInfo, handleSuccess } from "./utils";
 
 export const createContent = async (dados) => {
 
@@ -23,6 +23,22 @@ export const createContent = async (dados) => {
         } else {
             return handleError(error, ERROR_MESSAGE_ON_CREATION_THE_CONTENT);
         }
+    }
+}
+
+export const updateContent = async (data) => {
+    const sendData = {
+        github_token: data.github_token,
+        repository: data.repository,
+        content: data.content,
+        commit_message: data.commit_message,
+        path: data.path_file,
+    }
+    try {
+        const response = await api.patch('github_integration/update_content', sendData)
+        return handleSuccess(response, 'Informações do content atualizadas com sucesso !')
+    } catch (error) {
+        
     }
 }
 
@@ -65,12 +81,14 @@ export const deleteContent = async (parametros) => {
 
 export const listContents = async (parametros) => {
     try {
-        const response = await api.get('github_integration/contents/list_contents/', {params: parametros})
-
+        const response = await api.get(
+            'github_integration/contents/list_contents/', {params: parametros})
         return response
     } catch (error) {
+        
         if (error.response && error.response.status === 404){
-            return handleError(error, ERROR_MESSAGE_ON_LIST_CONTENTS)
+            return handleError(
+                error, 'Conteúdo não encontrado no repositório ou no caminho especificado.')
         } else {
             return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
         }

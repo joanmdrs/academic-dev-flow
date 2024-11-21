@@ -12,8 +12,7 @@ class CadastrarFluxoEtapaView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
         try:
-            etapas_data = request.data.get('etapas', [])
-            serializer = FluxoEtapaSerializer(data=etapas_data, many=True)
+            serializer = FluxoEtapaSerializer(data=request.data, context={'request': request})
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
@@ -25,18 +24,20 @@ class CadastrarFluxoEtapaView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-class BuscarFluxoEtapaPeloIdFluxoView(APIView): 
+class FiltrarFluxoEtapaPorFluxoView(APIView): 
     permission_classes = [IsAuthenticated]
-    def get(self, request, idFluxo):
+    def get(self, request):
         try: 
-            objetos = FluxoEtapa.objects.filter(fluxo=idFluxo)
+            id_fluxo = request.GET.get('id_fluxo', None)
+            fluxo_etapas = FluxoEtapa.objects.filter(fluxo=id_fluxo)
             
-            if objetos is not None:
-                serializer = FluxoEtapaSerializer(objetos, many=True)
-                return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
-
-            return Response({'error': 'Objeto não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
-
+            if fluxo_etapas:
+                serializer = FluxoEtapaSerializer(fluxo_etapas, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response([], status=status.HTTP_200_OK)
+            
+            
         except Exception as e: 
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
@@ -47,7 +48,7 @@ class AtualizarEtapaFluxoView(APIView):
             
             fluxoEtapa = FluxoEtapa.objects.get(id=id) 
             
-            serializer = FluxoEtapaSerializer(fluxoEtapa, data=request.data)
+            serializer = FluxoEtapaSerializer(fluxoEtapa, data=request.data, partial=True)
             
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
@@ -62,19 +63,33 @@ class ExcluirEtapaFluxoView(APIView):
     permission_classes = [IsAuthenticated]
     def delete(self, request):
         try:
-            id_fluxo = request.GET.get('id_fluxo', None)
-            ids_etapas = request.GET.getlist('ids_etapas[]', [])
-                        
-            if not ids_etapas or not id_fluxo:
-                return Response({'error': 'Ausência de parâmetros'}, status=status.HTTP_400_BAD_REQUEST)
+            ids_fluxo_etapas = request.data.get('ids_fluxo_etapas', [])
 
-            fluxo_etapas = FluxoEtapa.objects.filter(fluxo=id_fluxo, etapa__in=ids_etapas)
+            if not ids_fluxo_etapas:
+                return Response({'error': 'O IDs das tarefas não foram fornecidos'}, status=status.HTTP_400_BAD_REQUEST)
+                
+            fluxo_etapas = FluxoEtapa.objects.filter(id__in=ids_fluxo_etapas)
             
             if fluxo_etapas.exists():
                 fluxo_etapas.delete()
-                return Response({'message': 'O vínvulo entre as etapas e o fluxo foi excluído com sucesso!'}, status=status.HTTP_204_NO_CONTENT)
-            else:
-                return Response({'error': 'Nenhum objeto encontrado para exclusão!'}, status=status.HTTP_404_NOT_FOUND)
+                return Response({"detail": "Etapas desvinculadas do fluxo com sucesso"}, status=status.HTTP_204_NO_CONTENT)
+            
+            return Response({'error': 'Uma ou mais etapas não foram encontradas'}, status=status.HTTP_404_NOT_FOUND)
 
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+class ListarFluxoEtapasView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        try:
+            fluxo_etapas = FluxoEtapa.objects.all()
+            
+            if fluxo_etapas:
+                serializer = FluxoEtapaSerializer(fluxo_etapas, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response([], status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

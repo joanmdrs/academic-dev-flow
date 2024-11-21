@@ -37,7 +37,7 @@ const FormFluxo = ({onSubmit, onCancel}) => {
                 onFinish={onSubmit}
             >
                 <Form.Item>
-                    <h4> {titulo} </h4>
+                    <h4 className='global-title'> {titulo} </h4>
                 </Form.Item>
 
                 <Form.Item name="nome" label="Nome" rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}>

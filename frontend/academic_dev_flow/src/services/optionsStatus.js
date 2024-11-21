@@ -1,86 +1,184 @@
+import RenderOption from "../components/RenderOption/RenderOption";
+
 export const optionsStatusProjetos = [
     {
+        value: 'planejado',
+        name: 'Planejado',
+        label: RenderOption('Planejado', "#6f42c1"),
+        color: '#6f42c1' // Roxo
+    },
+    {
         value: 'criado', 
-        label: 'Criado'
+        name: 'Criado',
+        label: RenderOption('Criado', '#007bff'),
+        color: '#007bff' // Azul
     },
     {
         value: 'andamento',
-        label: 'Em andamento'
+        name: 'Andamento',
+        label: RenderOption('Andamento', '#ffc107'),
+        color: '#ffc107' // Amarelo
+    },
+    {
+        value: 'atrasado',
+        name: 'Atrasado',
+        label: RenderOption('Atrasado', '#dc3545'),
+        color: '#dc3545' // Vermelho
     },
     {
         value: 'concluido', 
-        label: 'Concluído'
+        name: 'Concluído',
+        label: RenderOption('Concluído', '#28a745'),
+        color: '#28a745' // Verde
     },
     {
         value: 'cancelado',
-        label: 'Cancelado'
-    },
-]
-
-
+        name: 'Cancelado',
+        label: RenderOption('Cancelado', '#fd7e14'),
+        color: '#fd7e14' // Laranja
+    }
+];
 
 export const optionsStatusTarefas = [
     {
-        value: 'criada', 
-        label: 'Criada'
+        value: 'pendente', 
+        name: 'Pendente',
+        label: RenderOption('Pendente', '#007bff'),
+        color: '#007bff' // Azul
     },
     {
         value: 'andamento',
-        label: 'Em andamento'
-    },
-    {
-        value: 'revisao',
-        label: 'Em revisão'
-
+        name: 'Andamento',
+        label: RenderOption('Andamento', '#ffc107'),
+        color: '#ffc107' // Amarelo
     },
     {
         value: 'concluida', 
-        label: 'Concluída'
+        name: 'Concluída',
+        label: RenderOption('Concluída', '#28a745'),
+        color: '#28a745' // Verde
+    },
+    {
+        value: 'atrasada',
+        name: 'Atrasada',
+        label: RenderOption('Atrasada', '#dc3545'),
+        color: '#dc3545' // Vermelho
+    },
+    {
+        value: 'bloqueada',
+        name: 'Bloqueada',
+        label: RenderOption('Bloqueada', '#6f42c1'),
+        color: '#6f42c1' // Roxo
     },
     {
         value: 'cancelada',
-        label: 'Cancelada'
+        name: 'Cancelada',
+        label: RenderOption('Cancelada', '#fd7e14'),
+        color: '#fd7e14' // Laranja
     }
-]
+];
 
 export const optionsStatusIteracoes = [
     {
-        value: 'planejamento',
-        label: 'Em Planejamento'
+        value: 'pendente', 
+        name: 'Pendente',
+        label: RenderOption('Pendente', '#007bff'),
+        color: '#007bff' // Azul
     },
     {
         value: 'andamento',
-        label: 'Em andamento'
+        name: 'Andamento',
+        label: RenderOption('Andamento', '#ffc107'),
+        color: '#ffc107' // Amarelo
+    },
+    {
+        value: 'bloqueada',
+        name: 'Bloqueada',
+        label: RenderOption('Bloqueada', '#6f42c1'),
+        color: '#6f42c1' // Roxo
     },
     {
         value: 'concluida',
-        label: 'Concluída'
+        name: 'Concluída',
+        label: RenderOption('Concluída', '#28a745'),
+        color: '#28a745' // Verde
     },
     {
         value: 'cancelada',
-        label: 'Cancelada'
+        name: 'Cancelada',
+        label: RenderOption('Cancelada', '#fd7e14'),
+        color: '#fd7e14' // Laranja
     }
-]
+];
+
+export const optionsStatusReleases = [
+    {
+        value: 'pendente', 
+        name: 'Pendente',
+        label: RenderOption('Pendente', '#007bff'),
+        color: '#007bff' // Azul
+    },
+    {
+        value: 'andamento',
+        name: 'Andamento',
+        label: RenderOption('Andamento', '#ffc107'),
+        color: '#ffc107' // Amarelo
+    },
+    {
+        value: 'bloqueada',
+        name: 'Bloqueada',
+        label: RenderOption('Bloqueada', '#6f42c1'),
+        color: '#6f42c1' // Roxo
+    },
+    {
+        value: 'concluida',
+        name: 'Concluída',
+        label: RenderOption('Concluída', '#28a745'),
+        color: '#28a745' // Verde
+    },
+    {
+        value: 'cancelada',
+        name: 'Cancelada',
+        label: RenderOption('Cancelada', '#fd7e14'),
+        color: '#fd7e14' // Laranja
+    }
+];
 
 export const optionsStatusArtefatos = [
     {
-        value: 'criado',
-        label: 'Criado'
+        value: 'pendente',
+        name: 'Pendente',
+        label: RenderOption('Pendente', '#007bff'),
+        color: '#007bff' // Azul
     },
     {
         value: 'rascunho',
-        label: 'Em rascunho'
+        name: 'Em rascunho',
+        label: RenderOption('Em rascunho', '#ffc107'),
+        color: '#ffc107' // Amarelo
     },
     {
         value: 'revisao',
-        label: 'Em revisão'
+        name: 'Em revisão',
+        label: RenderOption('Em revisão', '#6f42c1'),
+        color: '#6f42c1' // Roxo
     },
     {
         value: 'aprovado',
-        label: 'Aprovado'
+        name: 'Aprovado',
+        label: RenderOption('Aprovado', '#28a745'),
+        color: '#28a745' // Verde
     },
     {
         value: 'finalizado',
-        label: 'Finalizado'
+        name: 'Finalizado',
+        label: RenderOption('Finalizado', '#fd7e14'),
+        color: '#fd7e14' // Laranja
+    },
+    {
+        value: 'cancelado',
+        name: 'Cancelado',
+        label: RenderOption('Cancelado', '#fd7e14'),
+        color: '#fd7e14' // Laranja
     }
-]
+];

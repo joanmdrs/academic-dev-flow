@@ -2,44 +2,35 @@ import React, { useState } from "react";
 import Titulo from "../../../../components/Titulo/Titulo";
 import { FaFilter, FaPlus, FaTrash } from "react-icons/fa";
 import {Button, Modal, Spin} from 'antd'
-import ListaTarefas from "../../components/ListaTarefas/ListaTarefas"
 import SelecionarProjeto from "../../components/SelecionarProjeto/SelecionarProjeto";
 import FormBuscarTarefa from "../../components/FormBuscarTarefa/FormBuscarTarefa";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
 import { 
     atualizarTarefa, 
+    BuscarTarefasPeloNomeEPeloProjeto, 
     criarTarefa, 
-    excluirTarefas, 
-    filtrarTarefasPeloNomeEPeloProjeto } from "../../../../services/tarefaService";
+    excluirTarefas } from "../../../../services/tarefaService";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { createIssue, updateIssue } from "../../../../services/githubIntegration/issueService";
 import FormTarefa from "../../components/FormTarefa/FormTarefa";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import InputsAdminTarefa from "../../components/InputsAdminTarefa/InputsAdminTarefa";
-
-const StyleSpin = {
-    position: 'fixed', 
-    top: 0, 
-    left: 0, 
-    width: '100%', 
-    height: '100%', 
-    backgroundColor: 'rgba(255, 255, 255, 0.5)', 
-    zIndex: 9999, 
-    display: 'flex', 
-    justifyContent: 'center', 
-    alignItems: 'center'
-};
+import { NotificationManager } from "react-notifications";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
+import TableAdminTarefas from "../../components/TableAdminTarefas/TableAdminTarefas";
+import SpinLoading from "../../../../components/SpinLoading/SpinLoading";
 
 const GerenciarTarefas = () => {
 
     const [isFormVisivel, setIsFormVisivel] = useState(false)
     const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false)
-    const [acaoForm, setAcaoForm] = useState('criar')
+    const [isTableVisivel, setIsTableVisivel] = useState(true)
     const [isLoading, setIsLoading] = useState(false)
 
     const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
 
     const {
+        acaoForm, 
+        setAcaoForm,
         setTarefas,
         dadosTarefa, 
         setDadosTarefa,
@@ -48,10 +39,13 @@ const GerenciarTarefas = () => {
 
     const handleCancelar = () => {
         setIsFormVisivel(false)
+        setIsFormBuscarVisivel(false)
         setDadosTarefa(null)
+        setDadosProjeto(null)
     }
 
     const handleReload = () => {
+        setIsTableVisivel(true)
         setIsFormVisivel(false)
         setIsFormBuscarVisivel(false)
         setAcaoForm('criar')
@@ -60,7 +54,7 @@ const GerenciarTarefas = () => {
     }
 
     const handleFiltrarTarefas = async (dados) => {
-        const response = await filtrarTarefasPeloNomeEPeloProjeto(dados.nome_tarefa, dados.id_projeto)
+        const response = await BuscarTarefasPeloNomeEPeloProjeto(dados.nome_tarefa, dados.id_projeto)
         if (!response.error) {
             setTarefas(response.data)
         }
@@ -87,77 +81,110 @@ const GerenciarTarefas = () => {
     }
 
     const handleSaveIssue = async (dadosForm) => {
+        
+        if (!dadosProjeto.token || !dadosProjeto.nome_repo) {
+            NotificationManager.info('Não é possível sincronizar com o GitHub. O projeto não possui token ou repositório configurado.');
+            return { error: 'Projeto sem token ou repositório configurado' };
+        }
+    
         const dadosEnviar = {
             github_token: dadosProjeto.token,
             repository: dadosProjeto.nome_repo,
             title: dadosForm.nome,
             body: dadosForm.descricao,
-            labels: dadosForm.labelsNames,
-            assignees: dadosForm.assignees 
+            assignees: dadosForm.assignees
         };
-    
-        const response = acaoForm === 'criar' ?
-            await createIssue(dadosEnviar) :
-            await updateIssue(dadosTarefa.number_issue, dadosEnviar);
-    
-        return response;
+
+        if (acaoForm === 'criar') {
+            const response = await createIssue(dadosEnviar)
+            return response
+        } else if (acaoForm === 'atualizar' && !dadosTarefa.number_issue){
+            const response = await createIssue(dadosEnviar)
+            return response
+        } else if (acaoForm === 'atualizar' && dadosTarefa.number_issue){
+            const response = await updateIssue(dadosTarefa.number_issue, dadosEnviar);
+            return response
+        }
     };
+    
     
     const handleSalvarTarefa = async (dadosForm) => {
-        setIsLoading(true)
-        dadosForm['projeto'] = dadosProjeto.id;
-        const resIssue = await handleSaveIssue(dadosForm);
+        setIsLoading(true);
+
+        console.log(dadosForm)
+        
+        dadosForm.projeto = dadosProjeto.id;
+        let dadosIssue = null;
+        
+        console.log(dadosForm['sicronizar-github'])
+        if (dadosForm['sicronizar-github']) {
+            console.log('estou entrando aqui')
+            const resIssue = await handleSaveIssue(dadosForm);
     
-        if (acaoForm === 'criar' && !resIssue.error) {
-            const dadosIssue = resIssue.data;
-            await criarTarefa(dadosForm, dadosIssue);
-        } else if (acaoForm === 'atualizar') {
-            await atualizarTarefa(dadosTarefa.id, dadosForm);
+            if (resIssue.error) {
+                setIsLoading(false);
+                return;
+            }
+    
+            // Atribui os dados da issue apenas se a sincronização for bem-sucedida
+            dadosIssue = resIssue.data;
+        }
+    
+        // Decide entre criar ou atualizar a tarefa
+        try {
+            if (acaoForm === 'criar') {
+                await criarTarefa(dadosForm, dadosIssue);
+            } else {
+                await atualizarTarefa(dadosTarefa.id, dadosForm, dadosIssue);
+            }
+            handleReload();
+    
+        } catch (error) {
+            console.log(error)
+            NotificationManager.error('Erro ao salvar a tarefa');
         }
         
-        handleReload();
-        setIsLoading(false)
+        setIsLoading(false);
     };
 
-    const handleExcluirTarefas = async () => {
+    const handleExcluirTarefa = async (ids) => {
         Modal.confirm({
             title: 'Confirmar exclusão',
-            content: 'Você está seguro de que deseja excluir este(s) item(s) ?',
+            content: 'Você está seguro de que deseja excluir este(s) item(s)?',
             okText: 'Sim',
             cancelText: 'Não',
             onOk: async () => {
-                if (tarefasSelecionadas !== null) {
-                    const ids = tarefasSelecionadas.map((item) => item.id)
-                    await excluirTarefas(ids)
-                    handleReload() 
-                }
-            }
-        });
-    }
+                setIsTableVisivel(false)
+                setIsLoading(true);
+                try {
+                    await excluirTarefas(ids);
+                    handleReload()
 
-    const handleExcluirTarefa = async (id) => {
-        Modal.confirm({
-            title: 'Confirmar exclusão',
-            content: 'Você está seguro de que deseja excluir este(s) item(s) ?',
-            okText: 'Sim',
-            cancelText: 'Não',
-            onOk: async () => {
-                setIsLoading(true)
-                await excluirTarefas([id])
-                handleReload()
-                setIsLoading(false)
+                } catch (error) {
+                    NotificationManager.error('Erro ao excluir a tarefa');
+                } 
+                setIsLoading(false);
             }
         });
-    }
+    };
+
+    const handleExcluirTarefasSelecionadas = async () => {
+        const ids = tarefasSelecionadas.map(item => item.id);
+        await handleExcluirTarefa(ids);
+    };
+    
+    const handleExcluirTarefaUnica = async (id) => {
+        await handleExcluirTarefa([id]);
+    };
 
     return (
-        <React.Fragment>
+        <div className="content">
             <Titulo 
                 titulo='Tarefas'
                 paragrafo='Tarefas > Gerenciar tarefas'
             />
 
-            <div style={{display: 'flex', justifyContent: 'space-between', margin: '20px'}}> 
+            <div className="button-menu"> 
                 <div> 
                     <Button
                         icon={<FaFilter />} 
@@ -168,7 +195,7 @@ const GerenciarTarefas = () => {
                     </Button>
                 </div>
 
-                <div style={{display: 'flex', gap: '10px'}}> 
+                <div className="grouped-buttons"> 
                     <Button 
                         icon={<FaPlus />} 
                         type="primary" 
@@ -181,7 +208,7 @@ const GerenciarTarefas = () => {
                         type="primary" 
                         disabled={tarefasSelecionadas.length === 0 ? true : false}
                         danger
-                        onClick={handleExcluirTarefas}
+                        onClick={handleExcluirTarefasSelecionadas}
                     >
                         Excluir
                     </Button>
@@ -190,23 +217,20 @@ const GerenciarTarefas = () => {
             </div>
 
             {isFormBuscarVisivel && (
-                <div className="global-div" style={{width: '50%'}}>   
-                    <FormBuscarTarefa onSearch={handleFiltrarTarefas}  />
+                <div className="pa-20" style={{width: '50%'}}>   
+                    <FormBuscarTarefa onSearch={handleFiltrarTarefas} onCancel={handleCancelar} />
                 </div>
             )}
 
-            <div className="global-div"> 
+            <div className="pa-20"> 
                 {isFormVisivel && acaoForm === 'criar' && (
                     <React.Fragment>
                         {isLoading && ( 
-                            <div style={StyleSpin}>
-                                <Spin size="large" />
-                            </div>
+                            <SpinLoading />
                         )}
 
                         <FormTarefa 
-                            additionalFields={                <SelecionarProjeto />
-                        } 
+                            selectProject={<SelecionarProjeto />} 
                             onSubmit={handleSalvarTarefa} 
                             onCancel={handleCancelar} 
                         />
@@ -216,15 +240,11 @@ const GerenciarTarefas = () => {
                 {isFormVisivel && acaoForm === 'atualizar' && (
                     <React.Fragment>
                         {isLoading && ( 
-                            <div style={StyleSpin}>
-                                <Spin size="large" />
-                            </div>
+                            <SpinLoading />
                         )}
 
                         <FormTarefa 
-                            additionalFields={                <SelecionarProjeto />
-                        } 
-                            inputsAdmin={<InputsAdminTarefa />}
+                            selectProject={<SelecionarProjeto />} 
                             onSubmit={handleSalvarTarefa} 
                             onCancel={handleCancelar} 
                         />
@@ -233,20 +253,18 @@ const GerenciarTarefas = () => {
                     
                 )}
 
-                
-
                 {!isFormVisivel  && (
                     <React.Fragment>
                         {isLoading && ( 
-                            <div style={StyleSpin}>
-                                <Spin size="large" />
-                            </div>
+                            <SpinLoading />
                         )}
-                        <ListaTarefas onEdit={handleAtualizarTarefa} onDelete={handleExcluirTarefa} />
+                        {isTableVisivel && (
+                            <TableAdminTarefas onEdit={handleAtualizarTarefa} onDelete={handleExcluirTarefaUnica} />
+                        )}
                     </React.Fragment>
                 )}
             </div>
-        </React.Fragment>            
+        </div>            
     )
 }
 

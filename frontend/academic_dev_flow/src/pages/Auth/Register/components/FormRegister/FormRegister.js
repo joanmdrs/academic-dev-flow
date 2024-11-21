@@ -7,8 +7,8 @@ import { useForm } from "antd/es/form/Form";
 import { useNavigate } from "react-router-dom";
 
 import { useRegisterContexto } from "../../context/RegisterContexto";
-import { criarConta } from "../../../../../services/membroService";
 import { converterData } from "../../../../../services/utils";
+import { criarMembro } from "../../../../../services/membroService";
 const FormRegister = () => {
 
     const [form] = useForm();
@@ -26,17 +26,20 @@ const FormRegister = () => {
     }
 
     const handleCriarConta = async (dados) => {
-        dados['usuario_github'] = infoGithub !== null ? infoGithub.usuario_github : null
-        dados['nome_github'] = infoGithub !== null ? infoGithub.nome_github : null
-        dados['email_github'] = infoGithub !== null ? infoGithub.email_github : null
+        dados['usuario_github'] = infoGithub !== undefined ? infoGithub.usuario_github : null
+        dados['nome_github'] = infoGithub !== undefined ? infoGithub.nome_github : null
+        dados['email_github'] = infoGithub !== undefined ? infoGithub.email_github : null
         dados['grupo'] = grupoUsuario 
-        dados['usuario'] = dados.email
+        dados['username'] = dados.email
+        dados['password'] = dados.senha
         dados['data_nascimento'] = converterData(dados.data_nascimento)
 
-        await criarConta(dados)
-        setInterval(() => {
-            navigate("/")
-        }, 1500);
+        console.log(dados)
+
+        await criarMembro(dados)
+        // setInterval(() => {
+        //     navigate("/")
+        // }, 1500);
 
     }
 

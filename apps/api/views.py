@@ -6,6 +6,7 @@ from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.permissions import AllowAny
 from .authentication import TokenService
 from django.contrib.auth.models import Group
+from apps.membro.models import Membro  # Substitua pelo caminho correto do modelo Membro
 
 @authentication_classes([])
 @permission_classes([AllowAny])
@@ -18,6 +19,17 @@ class LoginView(APIView):
             user = authenticate(request, username=username, password=password)
 
             if user is not None:
+                # Verifica se o usuário está associado a um membro
+                membro = Membro.objects.filter(usuario=user).first()
+                if not membro:
+                    return Response(
+                        {
+                            'detail': 'Usuário não está associado a um membro.',
+                            'code': 'USER_NOT_ASSOCIATED'
+                        }, 
+                        status=status.HTTP_403_FORBIDDEN
+                    )
+
                 login(request, user)
 
                 # Obtém todos os grupos associados ao usuário
@@ -38,12 +50,20 @@ class LoginView(APIView):
 
                 return Response(
                     {
-                    'user': user_data,
-                    'token': token, 
-                    'detail': 'Login bem-sucedido.',
-                    }, status=status.HTTP_200_OK)
+                        'user': user_data,
+                        'token': token, 
+                        'detail': 'Login bem-sucedido.',
+                    }, 
+                    status=status.HTTP_200_OK
+                )
             else:
-                return Response({'detail': 'Credenciais inválidas.'}, status=status.HTTP_401_UNAUTHORIZED)
+                return Response(
+                    {'detail': 'Credenciais inválidas.'}, 
+                    status=status.HTTP_401_UNAUTHORIZED
+                )
 
         except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                {'error': str(e)}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

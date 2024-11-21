@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Titulo from "../../../../components/Titulo/Titulo";
 import { atualizarEtapa, buscarEtapaPeloNome, criarEtapa, excluirEtapas, listarEtapas } from "../../../../services/etapaService";
-import FormDeBusca from "../../../../components/Forms/FormDeBusca/FormDeBusca";
 import FormEtapa from "../../components/FormEtapa/FormEtapa";
 import { useContextoEtapa } from "../../context/ContextoEtapa";
-import { Button, Modal, Table } from "antd";
+import { Button, Modal } from "antd";
 import { FaFilter, FaPlus, FaTrash } from "react-icons/fa";
+import FormFiltrarEtapas from "../../components/FormFiltrarEtapas/FormFiltrarEtapas";
+import TableEtapas from "../../components/TableEtapas/TableEtapas";
 
 const GerenciarEtapas = () => {
 
@@ -17,7 +18,7 @@ const GerenciarEtapas = () => {
     const [isFormFiltrarVisivel, setIsFormFiltrarVisivel] = useState(false);
     const isBotaoExcluirVisivel = etapasSelecionadas.length !== 0 ? false : true
 
-    const COLUNAS_TABELA_ETAPAS = [
+    const columnsTableEtapas = [
         {
             title: "Código",
             key: "codigo",
@@ -58,8 +59,10 @@ const GerenciarEtapas = () => {
 
     const handleCancelar = async () => {
         setIsFormVisivel(false)
+        setIsFormFiltrarVisivel(false)
         setDadosEtapa(null)
         setEtapasSelecionadas([])
+        await handleListarEtapas()
     }
 
     const handleReload = async () => {
@@ -73,11 +76,12 @@ const GerenciarEtapas = () => {
         setIsFormFiltrarVisivel((prevIsFormFiltrarVisivel) => !prevIsFormFiltrarVisivel);
     }
 
-    const handleFiltrarEtapas = async (parametro) => {
+    const handleFiltrarEtapas = async (formData) => {
 
-        const response = await buscarEtapaPeloNome(parametro)
+        console.log(formData)
+        const response = await buscarEtapaPeloNome(formData.nome)
         if(!response.error) {
-            setEtapas(response.data.results)
+            setEtapas(response.data)
         }
     }   
 
@@ -119,81 +123,67 @@ const GerenciarEtapas = () => {
         });
     }
 
-    const rowSelection = {
-        onChange: (selectedRowsKeys, selectedRows) => {
-          setEtapasSelecionadas(selectedRows)
-        },
-    };
-
     return (
-        <React.Fragment>
+        <div className="content">
 
             <Titulo
                 titulo='Etapas'
                 paragrafo='Etapas > Gerenciar etapas'
             />
 
-            {isFormVisivel ? (
-                <div className="global-div">
+
+            {!isFormVisivel && (
+                <div className="button-menu">
+                    <Button 
+                        type="primary"
+                        icon={<FaFilter />}
+                        onClick={() => handleCliqueBotaoFiltrar()}
+                    >
+                        Filtrar
+                    </Button>
+                    <div className="grouped-buttons"> 
+                        <Button
+                            type="primary"
+                            onClick={() => handleCriarEtapa()} 
+                            icon={<FaPlus />}
+                        >
+                            Criar Etapa
+                        </Button>
+
+                        <Button
+                            type="primary"
+                            danger
+                            icon={<FaTrash />}
+                            disabled={isBotaoExcluirVisivel}
+                            onClick={async () => await handleExcluirEtapa()}
+                        
+                        >
+                            Excluir
+                        </Button>
+                    </div>
+                </div>
+            )}
+
+            {isFormFiltrarVisivel && (
+                <div className="pa-20" style={{width: '50%'}}>
+                    <FormFiltrarEtapas onCancel={handleCancelar} onFilter={handleFiltrarEtapas} />
+                </div>
+            )} 
+
+            <div className="pa-20"> 
+                {isFormVisivel ? (
                     <FormEtapa 
                         onSubmit={handleSalvarEtapa} 
                         onCancel={handleCancelar}
                     />
-                </div>
 
-            ) : (
-
-                <div>
-                    <div className="button-menu">
-                        <div id="botao-filtrar"> 
-                            <Button 
-                                type="primary"
-                                icon={<FaFilter />}
-                                onClick={() => handleCliqueBotaoFiltrar()}
-                            >
-                                Filtrar
-                            </Button>
-                        </div>
-                        <div className="grouped-buttons"> 
-                            <Button
-                                type="primary"
-                                onClick={() => handleCriarEtapa()} 
-                                icon={<FaPlus />}
-                            >
-                                Criar Etapa
-                            </Button>
-
-                            <Button
-                                type="primary"
-                                danger
-                                icon={<FaTrash />}
-                                disabled={isBotaoExcluirVisivel}
-                                onClick={async () => await handleExcluirEtapa()}
-                            
-                            >
-                                Excluir
-                            </Button>
-                        </div>
-                    </div>
-
-                    {isFormFiltrarVisivel && (
-                        <div className="global-div" style={{width: '50%'}}>
-                            <FormDeBusca executeFuncao={handleFiltrarEtapas}/>
-                        </div>
-                    )}
-
-                    <div className="global-div"> 
-                        <Table 
-                            columns={COLUNAS_TABELA_ETAPAS}
-                            dataSource={etapas}
-                            rowKey="id"
-                            rowSelection={rowSelection}
-                        />
-                    </div>
-                </div> 
-            )}
-            
-        </React.Fragment>
+                ) : (
+                   <TableEtapas data={etapas}  columns={columnsTableEtapas} />
+                )}
+        
+            </div>
+           
+        </div>
 
     )
 }

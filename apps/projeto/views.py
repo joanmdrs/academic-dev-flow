@@ -9,6 +9,7 @@ from apps.fluxo.models import Fluxo
 from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
 from apps.membro_projeto.models import MembroProjeto
+from apps.membro_projeto.serializers import MembroProjetoSerializer
 
     
 class CadastrarProjetoView(APIView):
@@ -25,24 +26,26 @@ class CadastrarProjetoView(APIView):
 
 class BuscarProjetosPorNomeView(APIView):
     permission_classes = [IsAuthenticated]
+    
     def get(self, request):
         try:
-            parametro = request.GET.get('name', None)
-            print(parametro)
+            nome_projeto = request.GET.get('nome_projeto', None)
 
-            if parametro is not None:
-                projetos = Projeto.objects.filter(nome__icontains=parametro)
-
-            else:
+            # Certifique-se de que a variável 'projetos' seja sempre definida
+            if not nome_projeto:
                 projetos = Projeto.objects.all()
+            else:
+                projetos = Projeto.objects.filter(nome__icontains=nome_projeto)
 
-            if not projetos: 
-                return Response({'message': 'Nenhum projeto encontrado.', 'results': []}, status=status.HTTP_200_OK)
+            if projetos.exists(): 
+                serializer = ProjetoSerializer(projetos, many=True)
+                return Response({'message': 'Projetos encontrados com sucesso.', 'results': serializer.data}, status=status.HTTP_200_OK)
 
-            serializer = ProjetoSerializer(projetos, many=True)
-            return Response({'message': 'Projetos encontrados com sucesso.', 'results': serializer.data}, status=status.HTTP_200_OK)
+            return Response({'message': 'Nenhum projeto encontrado.', 'results': []}, status=status.HTTP_200_OK)
+
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
     
 class ListarProjetoPorIdView(APIView):
     permission_classes = [IsAuthenticated]
@@ -76,32 +79,49 @@ class BuscarProjetosPorListaDeIdsView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    
-    
+  
 class ExcluirProjetoView(APIView):
     permission_classes = [IsAuthenticated]
-    def delete(self, request, id):
+    def delete(self, request):
         try:
-            projeto = get_object_or_404(Projeto, id=id)
-            if projeto is not None:
+            id_projeto = request.GET.get('id_projeto', None)
+            
+            if not id_projeto:
+                return Response({'error': 'O ID do projeto não foi fornecido !'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            projeto = Projeto.objects.get(id=id_projeto)
+            
+            if projeto:
                 projeto.delete()
-                return Response(status=status.HTTP_204_NO_CONTENT)
-            else:
-                return JsonResponse({'error': 'Recurso não encontrado'}, status=404)
+                return Response({'message': 'Projeto excluído com sucesso!'}, status=status.HTTP_204_NO_CONTENT)
+            
+            return Response({'error': 'Projeto não localizado !'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class AtualizarProjetoView(APIView):
     permission_classes = [IsAuthenticated]
-    def patch(self, request, id):
+    def patch(self, request):
         try:
-            projeto = Projeto.objects.get(pk=id)
-            serializer = ProjetoSerializer(projeto, data=request.data)
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            else:
-                return JsonResponse({'error': 'Dados inválidos'}, status=400)
+            
+            id_projeto = request.GET.get('id_projeto', None)
+            
+            if not id_projeto:
+                return Response({'error': 'O ID do projeto não foi fornecido!'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            
+            projeto = Projeto.objects.get(id=id_projeto)
+            
+            if projeto:
+                serializer = ProjetoSerializer(projeto, data=request.data, partial=True)
+                if serializer.is_valid(raise_exception=True):
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+                
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+            return Response({'error': 'Projeto não localizado !'}, status=status.HTTP_404_NOT_FOUND)
+        
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
@@ -144,6 +164,6 @@ class ListarProjetosView(APIView):
                 serializer = ProjetoSerializer(projetos, many=True)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             
-            return Response(data=[], status=status.HTTP_204_CONTENT)
+            return Response(data=[], status=status.HTTP_204_NO_CONTENT)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

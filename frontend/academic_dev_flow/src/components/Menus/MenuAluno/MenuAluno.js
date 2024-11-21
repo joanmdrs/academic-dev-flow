@@ -2,104 +2,141 @@ import { Menu } from "antd";
 import Sider from "antd/es/layout/Sider";
 import React, { useState } from "react";
 import { Link, useLocation } from 'react-router-dom';
-import { MdOutlineSpaceDashboard } from "react-icons/md";
-import { HiOutlineHome } from "react-icons/hi2";
-import { LuLayoutGrid } from "react-icons/lu";
-import { IoDocumentTextOutline } from "react-icons/io5";
-import { VscGraph } from "react-icons/vsc";
-import { RiFlowChart } from "react-icons/ri";
+import { FaCoffee } from "react-icons/fa";
+import { LuClipboardList, LuFileCode2, LuFolder, LuLayoutDashboard, LuWorkflow, LuCalendarDays, LuGithub, LuUsers } from "react-icons/lu";
+import { useContextoGlobalTheme } from "../../../context/ContextoTheme/ContextoTheme";
 
-const { SubMenu } = Menu
+const { SubMenu } = Menu;
 
 const MenuAluno = () => {
     const [collapsed, setCollapsed] = useState(false);
     const location = useLocation();
+    const { theme } = useContextoGlobalTheme();
 
     return (
-        <Sider width={250} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+        <Sider 
+            style={{ borderRight: '1px solid #ddd' }}
+            theme={theme}
+            width={250} 
+            collapsible 
+            collapsed={collapsed} 
+            onCollapse={(value) => setCollapsed(value)}
+        >
             <div 
                 style={{
                     display: "flex", 
-                    flex: '1',
                     justifyContent: "center",
                     alignItems: "center",
+                    gap: '10px',
                     padding: "10px",
-                    color: "#FFFFFF",
-                    height: '64px',
-                }} className="demo-logo-vertical">
-                Academic Dev Flow
+                    color: `${theme === 'light' ? 'var(--primary-color)' : '#FFFFFF'}`,
+                    height: '64px'
+                }} 
+            >
+                <span><FaCoffee size="25px" /></span>
+                {!collapsed && <span>Academic Dev Flow</span>}
             </div>
             <Menu
-                theme="dark"
+                theme={theme}
                 mode="inline"
-                style={{
-                    marginTop: "20px"
-                }}
+                style={{ marginTop: "20px" }}
                 selectedKeys={[location.pathname]}
             >
-
                 <Menu.Item
                     className='item-menu'
                     key='/aluno/home'
-                    icon={<HiOutlineHome size="20px"/>}
+                    icon={<LuLayoutDashboard size="20px" />}
                 >
-                    <Link to="/aluno/home">Dashboard</Link>
+                    <Link to="/aluno/home">Home</Link>
                 </Menu.Item>
-
-                <SubMenu
-                    className='item-menu'
-                    key='/aluno/projetos'
-                    icon={<MdOutlineSpaceDashboard style={{ fontSize: "20px" }} />}
-                    title="Projetos"
+               
+                <Menu.Item
+                    className="item-menu"
+                    key="/aluno/projetos"
+                    icon={<LuFolder size="20px" />}
                 >
-                    <Menu.Item key="/aluno/projetos/gerenciar">
-                        <Link to="/aluno/projetos/gerenciar">Gerenciar</Link>
-                    </Menu.Item>
-                    
-                    <Menu.Item key="/aluno/projetos/meus-projetos">
-                        <Link to="/aluno/projetos/meus-projetos">Meus Projetos</Link>
-                    </Menu.Item>
-                </SubMenu>
-
+                    <Link to="/aluno/projetos">Projetos</Link>
+                </Menu.Item>
+        
                 <SubMenu
                     className="item-menu"
-                    key="/aluno/fluxos"
-                    icon={<RiFlowChart style={{ fontSize: "20px" }} />}
+                    key="fluxos"
+                    icon={<LuWorkflow style={{ fontSize: "20px" }} />}
                     title="Fluxos"
                 >
-                    <Menu.Item key="gerenciar-fluxos">
+                    <Menu.Item key="/aluno/fluxos/gerenciar">
                         <Link to="/aluno/fluxos/gerenciar">Gerenciar fluxos</Link>
                     </Menu.Item>
 
-                    <Menu.Item key="etapas">
+                    <Menu.Item key="/aluno/etapas">
                         <Link to="/aluno/etapas">Gerenciar etapas</Link>
                     </Menu.Item>
                 </SubMenu>
 
-                <Menu.Item
-                    className='item-menu'
-                    key='/aluno/tarefas'
-                    icon={<LuLayoutGrid size="20px"/>}
+                <SubMenu
+                    className="item-menu"
+                    key="cronograma"
+                    icon={<LuCalendarDays size="20px" />}
+                    title="Cronograma"
                 >
-                    <Link to="/aluno/tarefas">Tarefas</Link>
-                </Menu.Item>
+                    <Menu.Item key="/aluno/cronograma/releases">
+                        <Link to="/aluno/cronograma/releases">Releases</Link>
+                    </Menu.Item>
+
+                    <Menu.Item key="/aluno/cronograma/iterations">
+                        <Link to="/aluno/cronograma/iterations">Iterações</Link>
+                    </Menu.Item>
+                </SubMenu>
+
+                <SubMenu
+                    className="item-menu"
+                    key="tarefas"
+                    icon={<LuClipboardList size="20px" />}
+                    title="Tarefas"
+                >
+                    <Menu.Item key="/aluno/tarefas">
+                        <Link to="/aluno/tarefas">Tarefas</Link>
+                    </Menu.Item>
+
+                    <Menu.Item key="/aluno/tarefas/categorias">
+                        <Link to="/aluno/tarefas/categorias">Categorias</Link>
+                    </Menu.Item>
+
+                    <Menu.Item key="/aluno/tarefas/tags"> 
+                        <Link to="/aluno/tarefas/tags">Tags</Link>
+                    </Menu.Item>
+                </SubMenu>
 
                 <Menu.Item
                     className="item-menu"
                     key='/aluno/artefatos'
-                    icon={<IoDocumentTextOutline size="20px" />}
+                    icon={<LuFileCode2 size="20px" />}
                 >
-                    <Link to="/aluno/artefatos"> Artefatos </Link>
+                    <Link to="/aluno/artefatos">Artefatos</Link>
                 </Menu.Item>
 
-                <Menu.Item
-                    className='item-menu'
-                    key='/aluno/relatorios' 
-                    icon={<VscGraph size="20px"/>}
+                <SubMenu
+                    className="item-menu"
+                    key="membros"
+                    icon={<LuUsers size="20px" />}
+                    title="Membros"
                 >
-                    <Link to="/aluno/relatorios">Relatórios</Link>
-                </Menu.Item>
+                    <Menu.Item key="/aluno/membros">
+                        <Link to="/aluno/membros">Equipes</Link>
+                    </Menu.Item>
 
+                    <Menu.Item key="/aluno/membros/funcoes">
+                        <Link to="/aluno/membros/funcoes">Funções</Link>
+                    </Menu.Item>
+                </SubMenu>
+                                
+                <Menu.Item 
+                    className="item-menu" 
+                    key="/aluno/github-integration" 
+                    icon={<LuGithub size="20px" />}
+                >
+                    <Link to="/aluno/github-integration">GitHub</Link>
+                </Menu.Item>
             </Menu>
         </Sider>
     );

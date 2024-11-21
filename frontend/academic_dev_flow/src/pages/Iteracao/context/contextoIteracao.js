@@ -7,6 +7,7 @@ export const ProviderIteracao = ({ children }) => {
 
     const [iteracoes, setIteracoes] = useState([])
     const [dadosIteracao, setDadosIteracao] = useState(null)
+    const [actionForm, setActionForm] = useState('create')
     const [iteracoesSelecionadas, setIteracoesSelecionadas] = useState([])
 
     return (
@@ -15,6 +16,7 @@ export const ProviderIteracao = ({ children }) => {
                 iteracoes, setIteracoes,
                 dadosIteracao, setDadosIteracao,
                 iteracoesSelecionadas, setIteracoesSelecionadas,
+                actionForm, setActionForm
             }}
         >
             {children}

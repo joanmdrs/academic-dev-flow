@@ -6,7 +6,7 @@ import { useMembroContexto } from "../../context/MembroContexto"
 import { buscarUsuarioPeloId } from "../../../../services/usuarioService"
 import Loading from "../../../../components/Loading/Loading"
 import FormMembro from "../../components/FormMembro/FormMembro"
-import { Button } from "antd"
+import { Button, Modal } from "antd"
 import { FaPlus, FaSearch, FaTrash } from "react-icons/fa"
 
 const GerenciarMembros = () => {
@@ -32,8 +32,8 @@ const GerenciarMembros = () => {
         },
         {
             title: "Grupo",
-            dataIndex: "grupo",
-            key: "grupo",
+            dataIndex: "nome_grupo",
+            key: "nome_grupo",
         },
     ];
 
@@ -111,12 +111,21 @@ const GerenciarMembros = () => {
         setIsSearchBtnEnabled(true)
     }
 
-    const handleSalvarMembro = async (dados) => {
+    const handleSalvarMembro = async (dadosForm) => {
         if (acaoForm === 'criar'){
-            const response = await criarMembro(dados)
+            let avatarNumber;
+            if (dadosForm.sexo === 'M') {
+                avatarNumber = Math.floor(Math.random() * 50) + 1;
+            } else if (dadosForm.sexo === 'F') {
+                avatarNumber = Math.floor(Math.random() * 50) + 51;
+            } else if (dadosForm.sexo === 'O') {
+                avatarNumber = Math.floor(Math.random() * 100) + 1;
+            }
+            dadosForm['avatar'] = avatarNumber;
+            const response = await criarMembro(dadosForm)
             handleReload('atualizar', response.data)
         } else if (acaoForm === 'atualizar') {
-            const response = await atualizarMembro(dadosMembro.id, dados)
+            const response = await atualizarMembro(dadosMembro.id, dadosForm)
             handleReload('atualizar', response.data )
         }
     }
@@ -127,12 +136,23 @@ const GerenciarMembros = () => {
     }
 
     const handleExcluirMembro = async () => {
-        await excluirMembro(dadosMembro.id)
-        handleCancelar()
+
+        Modal.confirm({
+            title: 'Confirmar exclusão',
+            content: 'Você está seguro de que deseja excluir este item ?',
+            okText: 'Sim',
+            cancelText: 'Não',
+            onOk:  async () => {
+                await excluirMembro(dadosMembro.id)
+                handleCancelar()
+            }
+        });
+
+        
     }
 
     return (
-        <div> 
+        <div className="content"> 
             <Titulo 
                 titulo='Membros'
                 paragrafo='Membros > Gerenciar membros'
@@ -168,6 +188,7 @@ const GerenciarMembros = () => {
                     </Button>
                 </div>
             </div>
+    
 
             <ModalDeBusca  
                 titulo="Buscar membro" 
@@ -181,7 +202,7 @@ const GerenciarMembros = () => {
                         
             {isFormVisivel &&  (
 
-                <div className="global-div"> 
+                <div className="pa-20"> 
                     <FormMembro onSubmit={handleSalvarMembro} onCancel={handleCancelar}/>
                 </div>
             )}

@@ -12,15 +12,39 @@ export const formatDate = (dateString) => {
     'jul', 'ago', 'set', 'out', 'nov', 'dez'
   ];
 
+  const [year, month, day] = dateString.split('-'); // Supondo formato 'YYYY-MM-DD'
+  const date = new Date(year, month - 1, day);
+
+  const formattedDate = `${day} ${months[date.getMonth()]}. ${year}`;
+  return formattedDate;
+};
+
+
+export const formatDateTime = (dateString) => {
+  const months = [
+    'jan', 'fev', 'mar', 'abr', 'mai', 'jun',
+    'jul', 'ago', 'set', 'out', 'nov', 'dez'
+  ];
+
   const date = new Date(dateString);
   const day = date.getDate();
   const monthIndex = date.getMonth();
   const year = date.getFullYear();
 
-  const formattedDate = `${day} ${months[monthIndex]}. ${year}`;
+  // Extraindo horas e minutos
+  const hours = date.getHours().toString().padStart(2, '0'); // Adiciona o zero à esquerda, se necessário
+  const minutes = date.getMinutes().toString().padStart(2, '0'); // Adiciona o zero à esquerda, se necessário
+
+  const formattedDate = `${day} ${months[monthIndex]}. ${year} às ${hours}:${minutes}`;
 
   return formattedDate;
 };
+
+export const formatDateIso = (dateString) => {
+  const [year, month, day] = dateString.split('-'); // Divide a data no formato 'YYYY-MM-DD'
+  return `${day}/${month}/${year}`; // Retorna no formato 'DD/MM/AAAA'
+};
+
 
 export const converterData = (dataString) => {
   const partes = dataString.split('/');
@@ -33,6 +57,12 @@ export const converterData = (dataString) => {
   return dataFormatada
   
 }
+
+export const getRandomColor = () => {
+  const colors = ['#f56a00', '#7265e6', '#ffbf00', '#00a2ae', '#00429d', '#b80000'];
+
+  return colors[Math.floor(Math.random() * colors.length)];
+};
 
 export const limitarCaracteres = (texto, limite) => {
 
@@ -116,3 +146,34 @@ export const lightenDarkenColor = (col, amt) => {
   else if (g < 0) g = 0;
   return (usePound ? '#' : '') + (g | (b << 8) | (r << 16)).toString(16);
 }
+
+export const getDataHoraNow = () => {
+    const meses = [
+        "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    ];
+
+    const agora = new Date();
+    const mes = meses[agora.getMonth()];
+    const dia = String(agora.getDate()).padStart(2, '0');
+    const ano = agora.getFullYear();
+    
+    const horas = String(agora.getHours()).padStart(2, '0');
+    const minutos = String(agora.getMinutes()).padStart(2, '0');
+
+    return `${mes}, ${dia}, ${ano} | ${horas}:${minutos}`;
+
+}
+
+export const convertHexToRgba = (hex) => {
+  hex = hex.replace('#', '');
+
+  let r = parseInt(hex.substring(0, 2), 16);
+  let g = parseInt(hex.substring(2, 4), 16);
+  let b = parseInt(hex.substring(4, 6), 16);
+
+  return `rgba(${r}, ${g}, ${b}, 0.4)`;
+}
+
+
+export const filterOption = (input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());

@@ -24,7 +24,8 @@ export const createIssue = async (dados) => {
 
 export const updateIssue = async (numberIssue, dados) => {
     try {
-        const response = await api.put(`github_integration/issues/update_issue/${numberIssue}/`, dados)
+        const response = await api.put(
+            `github_integration/issues/update_issue/`, dados, {params: {number_issue: numberIssue}})
         return handleSuccess(response, SUCCESS_MESSAGE_ON_UPDATE_THE_ISSUE)
     } catch (error) {
         if (error.response && error.response.status === 422) {

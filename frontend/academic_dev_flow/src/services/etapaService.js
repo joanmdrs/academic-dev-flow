@@ -22,7 +22,7 @@ export const criarEtapa = async (dadosEtapa, fluxoId) => {
 
 export const buscarEtapaPeloNome = async (nomeEtapa) => {
     try {
-        const response = await api.get(`etapa/buscar/nome/?nome=${encodeURIComponent(nomeEtapa)}`)
+        const response = await api.get(`etapa/buscar-pelo-nome/`, {params: {nome_etapa: nomeEtapa}})
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)

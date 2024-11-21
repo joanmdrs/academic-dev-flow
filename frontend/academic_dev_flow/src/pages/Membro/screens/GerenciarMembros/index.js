@@ -5,12 +5,16 @@ import { MembroProvider } from "../../context/MembroContexto";
 import GerenciarMembros from "./GerenciarMembros";
 import MenuAdmin from "../../../../components/Menus/MenuAdmin/MenuAdmin";
 import { Content } from "antd/es/layout/layout";
+import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfessor";
 
-const ScreenGerenciarMembros = () => {
+const ScreenGerenciarMembros = ({grupo}) => {
 
     return (
         <React.Fragment>
-            <MenuAdmin/>
+            { grupo === 'admin' && <MenuAdmin />}
+            { grupo === 'professor' && <MenuProfessor />}
+
+
             <Layout>
                 <MyHeader/>
                 <Content>

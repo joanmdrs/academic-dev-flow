@@ -29,11 +29,20 @@ class CadastrarComentarioTarefaView(APIView):
 class BuscarComentarioTarefaPeloIdView(APIView):
     permission_classes = [IsAuthenticated]
     
-    def get(self, request, id): 
+    def get(self, request): 
         try:
-            comentario = ComentarioTarefa.objects.get(pk=id)
-            serializer = ComentarioTarefaSerializer(comentario, many=False)
-            return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+            id_comentario = request.GET.get('id_comentario', None)
+            
+            if not id_comentario:
+                return Response({'error': 'O ID do comentário não foi fornecido !'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            comentario = ComentarioTarefa.objects.get(id=id_comentario)
+            
+            if comentario:
+                serializer = ComentarioTarefaSerializer(comentario, many=False)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response({'error': 'Comentário não localizado !'}, status=status.HTTP_404_NOT_FOUND)
             
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -41,66 +50,69 @@ class BuscarComentarioTarefaPeloIdView(APIView):
 class AtualizarComentarioTarefaView(APIView):
     permission_classes = [IsAuthenticated]
     
-    def patch(self, request, id): 
+    def patch(self, request): 
         try:
+            id_comentario = request.GET.get('id_comentario', None)
             
-            comentario = ComentarioTarefa.objects.get(pk=id)
+            if not id_comentario:
+                return Response({'error': 'O ID do comentário não foi fornecido!'}, status=status.HTTP_400_BAD_REQUEST)
+                
+            comentario = ComentarioTarefa.objects.get(id=id_comentario)
             
-            serializer = ComentarioTarefaSerializer(comentario, data=request.data, partial=True)
+            if comentario:
+        
+                serializer = ComentarioTarefaSerializer(comentario, data=request.data, partial=True)
+                
+                if serializer.is_valid(raise_exception=True):
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Comentário não localizado !'}, status=status.HTTP_404_NOT_FOUND)
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 class ExcluirComentarioTarefaView(APIView):
     permission_classes = [IsAuthenticated]
-    def delete(self, request, id):
+    def delete(self, request):
         try:
-            comentario = ComentarioTarefa.objects.get(pk=id)
-            if comentario is not None:
+            id_comentario = request.GET.get('id_comentario', None)
+            
+            if not id_comentario:
+                return Response(
+                    {'error': 'O ID do comentário não foi fornecido !'}, 
+                    status=status.HTTP_400_BAD_REQUEST)
+                
+            comentario = ComentarioTarefa.objects.get(id=id_comentario)
+            
+            if comentario:
                 comentario.delete()
                 return Response({"detail": "Comentário excluído com sucesso"}, status=status.HTTP_204_NO_CONTENT)
-            else:
-                return JsonResponse({'error': 'Recurso não encontrado'}, status=status.HTTP_404_NOT_FOUND)
+            
+            return Response({'error': 'Comentário não localizado !'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 class ListarComentariosPorTarefaView(APIView):
     permission_classes = [IsAuthenticated]
     
-    def get(self, request, id_tarefa):
+    def get(self, request):
         try:
-            comentarios = ComentarioTarefa.objects.filter(tarefa=id_tarefa)
-            comentarios_info = []
-        
-            for comentario in comentarios:
+            id_tarefa = request.GET.get('id_tarefa', None)
             
-                membro_projeto = MembroProjeto.objects.get(pk=comentario.autor_id)
-                membro = Membro.objects.get(id=membro_projeto.membro_id)
+            if not id_tarefa:
+                return Response(
+                    {'error': 'O ID da tarefa não foi fornecido !'}, 
+                    status=status.HTTP_400_BAD_REQUEST)
+            
+            comentarios = ComentarioTarefa.objects.filter(tarefa=id_tarefa).order_by('data_hora')
+            
+            if comentarios:
+                serializer = ComentarioTarefaSerializer(comentarios, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
                 
-                comentario_info = {
-                    'id': comentario.id,
-                    'texto': comentario.texto,
-                    'data_hora': comentario.data_hora,
-                    'comentario_pai': comentario.comentario_pai,
-                    'autor': comentario.autor.id,
-                    'nome_autor': membro.nome
-                }
-                
-                comentarios_info.append(comentario_info)
-
-            return JsonResponse(comentarios_info, safe=False, json_dumps_params={'ensure_ascii': False})
+            return Response([], status=status.HTTP_200_OK)
             
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-# class ComentarioTreeView(APIView):
-#     permission_classes = [IsAuthenticated]
-#     def get(self, request):
-#         comentarios = Comentario.objects.filter(tarefa_id=id_documento, comentario_pai__isnull=True)
-#         arvore_comentarios = Comentario.construir_arvore(comentarios)
-#         return Response(arvore_comentarios)

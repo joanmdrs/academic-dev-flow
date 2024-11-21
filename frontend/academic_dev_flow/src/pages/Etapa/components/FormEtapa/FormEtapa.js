@@ -22,6 +22,7 @@ const FormEtapa = ({onSubmit, onCancel}) => {
 
     return (
         <Form
+            className="global-form"
             layout="vertical" 
             form={form} 
             onFinish={onSubmit} 
@@ -33,7 +34,7 @@ const FormEtapa = ({onSubmit, onCancel}) => {
             }}
         >
             <Form.Item>
-                <h4> {titulo} </h4>
+                <h4 className='global-title'> {titulo} </h4>
             </Form.Item>
 
             <Form.Item 
@@ -46,7 +47,6 @@ const FormEtapa = ({onSubmit, onCancel}) => {
             <Form.Item 
                 label="Descrição" 
                 name="descricao" 
-                rules={[{required: true, message: 'Por favor, insira a descrição da etapa!'}]}
             >
                 <Input.TextArea
                     rows={8}

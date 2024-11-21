@@ -6,11 +6,14 @@ import { listarIteracoesPorProjeto } from "../../services/iteracaoService";
 import Loading from "../../components/Loading/Loading";
 import Cronograma from "./components/Cronograma/Cronograma";
 import FormIteracao from "./components/FormIteracao/FormIteracao";
+import { useContextoGlobalProjeto } from "../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
+import { useContextoIteracao } from "./context/contextoIteracao";
 
 const CronogramaIteracoes = () => {
 
     const [mostrarIteracoes, setMostrarIteracoes] = useState(true)
-    const {dadosProjeto, setDadosIteracao} = useProjetoContext()
+    const {dadosProjeto} = useContextoGlobalProjeto()
+    const {setDadosIteracao} = useContextoIteracao()
     const [iteracoes, setIteracoes] = useState(null)
     const [loading, setLoading] = useState(true)
 

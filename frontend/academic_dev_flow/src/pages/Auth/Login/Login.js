@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import "./Login.css"
 import imgPageLogin from "../../../../src/assets/img-page-login.svg"
 import { useAuth } from '../../../hooks/AuthProvider';
+import imgLogo from '../../../assets/logo.jpg'
 
 const Login = () => {
     const {loginAction} = useAuth();
@@ -28,11 +29,11 @@ const Login = () => {
 
             <div className='form-login-header'> 
                 <div className='demo-logo'> 
-
+                    <img src={imgLogo} alt='Logo do sistema'/>
                 </div>
 
-                <div> 
-                    <h3> Logo </h3>
+                <div className='title-system'> 
+                    <h4> ACADEMIC DEV FLOW </h4>
                 </div>
 
 
@@ -55,16 +56,16 @@ const Login = () => {
                         <Form.Item
                             className='form-item'
                             name="username"
-                            label="Nome de usuário"
+                            label="Email"
                             rules={[
                                 {
-                                message: 'Please input your username!',
+                                message: 'Por favor, informe seu e-mail!',
                                 required: true
                                 },
                 
                             ]}
                             >
-                                <Input placeholder='Informe o nome de usuário'/>
+                                <Input placeholder='Informe seu email '/>
                             </Form.Item>
 
                         <Form.Item
@@ -73,7 +74,7 @@ const Login = () => {
                             name="password"
                             rules={[
                                 {
-                                message: 'Please input your password!',
+                                message: 'Por favor, informe seu e-mail!',
                                 required: true
                                 },
                             ]}
@@ -86,7 +87,7 @@ const Login = () => {
                         </Form.Item>
                         <Form.Item>
                             <Button type="primary" htmlType="submit">
-                                Log in
+                                Entrar
                             </Button>
                         </Form.Item>
                     </Form>

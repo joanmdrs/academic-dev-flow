@@ -1,82 +1,58 @@
 import { NotificationManager } from "react-notifications";
 import api from "../api/api";
-import { handleError, handleSuccess } from "./utils";
+import { handleError } from "./utils";
+import { ERROR_MESSAGE_ON_DELETION, ERROR_MESSAGE_ON_SEARCHING } from "./messages";
 
-export const criarConta = async (dados) => {
+export const listarGrupos = async () => {
+    try {
+        const response = await api.get('/membro/listar-grupos/')
+        return response
+    } catch (error) {
+        return handleError(error, "Falha ao listar os grupos")
+    }
+}
+
+export const criarMembro = async (dados) => {
+
+    console.log(dados)
     const dadosEnviar = {
-        grupo: dados.grupo,
-        
         usuario : {
-            username: dados.usuario,
-            password: dados.senha
+            username: dados.username,
+            password: dados.password
         },
         membro : {
             nome: dados.nome,
             data_nascimento: dados.data_nascimento,
+            sexo: dados.sexo,
             telefone: dados.telefone,
             email: dados.email,
             linkedin: dados.linkedin,
-            lattes: dados.lattes
-        },
-
-        github: {
-            nome: dados.nome_github,
+            lattes: dados.lattes,
+            nome_github: dados.nome_github,
             email_github: dados.email_github,
-            usuario_github: dados.usuario_github
+            usuario_github: dados.usuario_github,
+            grupo: dados.grupo,
+            avatar: dados.avatar
         }
     }
-    
+
     try {
-        const response = await api.post('/membro/cadastrar/', dadosEnviar)
-        return handleSuccess(response, 'Contra criada com sucesso !')
+        const resposta = await api.post('/membro/cadastrar/', dadosEnviar)
+        NotificationManager.success('Membro criado com sucesso !')
+        return resposta
     } catch (error) {
         if (error.response && error.response.status === 409){
-            return handleError(error, 'Já existe uma conta cadastrada com este endereço de e-mail!')
+            return handleError(error, 'Já existe um membro cadastrado com este endereço de e-mail!')
         } else {
             return handleError(error, 'Falha ao tentar criar a conta, contate o suporte!')
         }
     }
 }
 
-export const criarMembro = async (dados) => {
-
-    const dadosEnviar = {
-        grupo: dados.grupo,
-        
-        usuario : {
-            username: dados.usuario,
-            password: dados.senha
-        },
-        membro : {
-            nome: dados.nome,
-            data_nascimento: dados.data_nascimento,
-            telefone: dados.telefone,
-            email: dados.email,
-            linkedin: dados.linkedin,
-            lattes: dados.lattes
-        },
-
-        github: {
-            nome: dados.nome_github,
-            email_github: dados.email_github,
-            usuario_github: dados.usuario_github
-        }
-    }
-    try {
-        const resposta = await api.post('/membro/cadastrar/', dadosEnviar)
-        NotificationManager.success('Membro criado com sucesso !')
-        return resposta
-    } catch (error) {
-        console.log(error)
-        NotificationManager.error('Falha ao criar o membro, contate o suporte!')
-        return {error: "Erro durante a operação, contate o suporte!"}
-    }
-}
-
 export const buscarMembroPeloNome = async (nomeMembro) => {
 
     try {
-        const resposta = await api.get('/membro/buscar/nome/', {params: {nome: nomeMembro}})
+        const resposta = await api.get('/membro/buscar-por-nome/', {params: {nome: nomeMembro}})
         return resposta
     } catch (error) {
         console.log(error)
@@ -88,7 +64,8 @@ export const buscarMembroPeloNome = async (nomeMembro) => {
 export const buscarMembroPorGrupoENome = async (nomeMembro, grupoMembro) => {
 
     try {
-        const resposta = await api.get(`membro/buscar/grupo/?nome=${encodeURIComponent(nomeMembro)}&grupo=${encodeURIComponent(grupoMembro)}`)
+        const resposta = await api.get(`membro/buscar-por-nome-e-grupo/`, 
+            {params: {nome: nomeMembro, grupo: grupoMembro}})
         return resposta
     } catch (error) {
         console.log(error)
@@ -99,7 +76,7 @@ export const buscarMembroPorGrupoENome = async (nomeMembro, grupoMembro) => {
 
 export const buscarMembroPeloId = async (idMembro) => {
     try {
-        const resposta = await api.get(`membro/buscar/${encodeURIComponent(idMembro)}/`)
+        const resposta = await api.get('/membro/buscar-por-id/', {params: {id_membro: idMembro}})
         return resposta
     } catch (error) {
         console.log(error)
@@ -111,19 +88,15 @@ export const buscarMembroPeloId = async (idMembro) => {
 
 export const buscarMembroPeloUser = async (idUser) => {
     try {
-        const response = await api.get(`membro/buscar/usuario/${encodeURIComponent(idUser)}/`)
-
-        if (response.status === 200){
-            return response
-        }
+        const response = await api.get('/membro/buscar-por-id-usuario/', {params: {id_usuario: idUser}})
+        return response
         
     } catch (error) {
-        console.log(error)
-        NotificationManager.error('Não foi possível encontrar o membro, contate o suporte!')
         return {error: 'Falha ao buscar o recurso!'}
     }
 }
 
+// Analisar depois
 export const buscarUsuarioPeloIdMembroProjeto = async (idMembroProjeto) => {
     try {
         const response = await api.get(`membro/buscar-usuario-github/${encodeURIComponent(idMembroProjeto)}/`)
@@ -135,7 +108,7 @@ export const buscarUsuarioPeloIdMembroProjeto = async (idMembroProjeto) => {
 
 export const excluirMembro = async (idMembro) => {
     try {
-        const resposta = await api.delete(`/membro/excluir/${encodeURIComponent(idMembro)}/`)
+        const resposta = await api.delete('/membro/excluir/', {params: {id_membro: idMembro}})
         NotificationManager.success("Membro excluído com sucesso!")
         return resposta
     } catch (error) {
@@ -148,32 +121,30 @@ export const excluirMembro = async (idMembro) => {
 export const atualizarMembro = async (idMembro, dados) => {
 
     const dadosEnviar = {
-        grupo: dados.grupo,
-        
         usuario : {
-            username: dados.usuario,
-            password: dados.senha
+            username: dados.username,
+            password: dados.password
         },
         membro : {
             nome: dados.nome,
             data_nascimento: dados.data_nascimento,
+            sexo: dados.sexo, 
             telefone: dados.telefone,
             email: dados.email,
             linkedin: dados.linkedin,
-            lattes: dados.lattes
-        },
-
-        github: {
-            nome: dados.nome_github,
+            lattes: dados.lattes,
+            nome_github: dados.nome_github,
             email_github: dados.email_github,
-            usuario_github: dados.usuario_github
+            usuario_github: dados.usuario_github,
+            grupo: dados.grupo,
+            avatar: dados.avatar
         }
     }
 
     try {
-        const resposta = await api.patch(`/membro/atualizar/${encodeURIComponent(idMembro)}/`, dadosEnviar)
-        NotificationManager.success('Membro atualizado com sucesso!')
-        return resposta
+        const resposta = await api.patch(`/membro/atualizar/?id_membro=${idMembro}`, dadosEnviar);
+        NotificationManager.success('Membro atualizado com sucesso!');
+        return resposta;
     } catch (error) {
         console.log(error)
         NotificationManager.error('Falha ao atualizar o membro, contate o suporte!')
@@ -181,6 +152,17 @@ export const atualizarMembro = async (idMembro, dados) => {
     }
 }
 
+export const listarMembros = async () => {
+    try {
+        const response = await api.get('membro/listar/')
+        return response
+    } catch (error) {
+        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
+    }
+}
+
+
+// Analisar depois 
 export const buscarMembrosPorListaIds = async (listaIds) => {
 
     try {

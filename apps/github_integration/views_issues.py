@@ -6,32 +6,35 @@ from github import Github, GithubException
 from .github_auth import get_github_client
 from github import InputGitAuthor
 from apps.tarefa.models import Tarefa 
-from apps.tarefa.models import Label
 from apps.membro.models import Membro
 from apps.membro_projeto.models import MembroProjeto
 import base64
 import json
 
 def create_issue(request):
-    
     try:
         data = json.loads(request.body)
-        
+
         github_token = data.get('github_token')
         repository = data.get('repository')
         title = data.get('title')
-        body = data.get('body', '') 
-        labels = data.get('labels', [])
-        assignees = data.get('assignees', [])
-        
+        body = data.get('body', None)
+        assignees = data.get('assignees', None)
+
         if not github_token or not repository or not title:
             return JsonResponse({'error': 'Ausência de parâmetros'}, status=status.HTTP_400_BAD_REQUEST)
-        
+
         g = get_github_client(github_token)
         repo = g.get_repo(repository)
-        
-        create_result = repo.create_issue(title=title, body=body, labels=labels, assignees=assignees)
-        
+
+        if assignees == [None] and body == None:
+            create_result = repo.create_issue(title=title)
+        elif assignees == [None] and body != None:
+            create_result = repo.create_issue(title=title, body=body) 
+        else:
+            create_result = repo.create_issue(title=title, body=body, assignees=assignees) 
+
+        # Preparar a resposta com os dados da issue criada
         response_data = {
             'success': 'Issue criada com sucesso!',
             'issue_id': create_result.id,
@@ -41,10 +44,11 @@ def create_issue(request):
             'body': create_result.body,
             'assignee': create_result.assignee.login if create_result.assignee else None
         }
-        
-        return JsonResponse(response_data, status=status.HTTP_201_CREATED)        
-        
+
+        return JsonResponse(response_data, status=status.HTTP_201_CREATED)
+
     except GithubException as e:
+        # Manipulação de erros de validação do GitHub
         error_message = str(e.data.get('message', str(e)))
         errors = e.data.get('errors', [])
 
@@ -55,43 +59,42 @@ def create_issue(request):
                     error_details.append(f"Assignee inválido: {error['value']}")
 
             return JsonResponse({'error': 'Erro de validação', 'details': error_details}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
-        
+
         return JsonResponse({'error': error_message}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
-def update_issue(request, issue_number):
+
+def update_issue(request):
     try:
         data = json.loads(request.body)
+        
+        number_issue = request.GET.get('number_issue', None)
         
         github_token = data.get('github_token')
         repository = data.get('repository')
         title = data.get('title')
-        body = data.get('body', '')
-        labels = data.get('labels', [])
+        body = data.get('body', None)
         assignees = data.get('assignees', [])
         
-        if not github_token or not repository or not issue_number:
+        if not github_token or not repository:
             return JsonResponse({'error': 'Ausência de parâmetros'}, status=status.HTTP_400_BAD_REQUEST)
         
         g = get_github_client(github_token)
         repo = g.get_repo(repository)
-        
-        issue = repo.get_issue(number=issue_number)
-        
+            
+        issue = repo.get_issue(number=int(number_issue))
+
         if title:
             issue.edit(title=title)
-        
+
         if body:
             issue.edit(body=body)
-        
-        if labels:
-            issue.edit(labels=labels)
-        
-        if assignees:
+
+        if assignees and assignees != [None]:
             issue.edit(assignees=assignees)
         
-        return JsonResponse({'success': 'Issue atualizada com sucesso!'}, status=status.HTTP_200_OK)        
-        
+        return JsonResponse({'success': 'Issue atualizada com sucesso!'}, status=status.HTTP_200_OK)
+
     except GithubException as e:
+        # Manipulação de erros de validação do GitHub
         error_message = str(e.data.get('message', str(e)))
         errors = e.data.get('errors', [])
 
@@ -102,8 +105,14 @@ def update_issue(request, issue_number):
                     error_details.append(f"Assignee inválido: {error['value']}")
 
             return JsonResponse({'error': 'Erro de validação', 'details': error_details}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
-        
+
         return JsonResponse({'error': error_message}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    except Tarefa.DoesNotExist:
+        return JsonResponse({'error': 'Tarefa não encontrada.'}, status=status.HTTP_404_NOT_FOUND)
+
+
+
 
 def filter_membro_projeto_by_assignee_and_by_projeto(assignee, projeto):
     try:
@@ -115,23 +124,22 @@ def filter_membro_projeto_by_assignee_and_by_projeto(assignee, projeto):
     except MembroProjeto.DoesNotExist:
         return None
 
-def get_label_ids(labels):
-    label_ids = []
-    for label_name in labels:
-        try:
-            # Verificar se o label existe no banco de dados
-            label = Label.objects.get(nome=label_name)
-            label_ids.append(label.id)
-        except Label.DoesNotExist:
-            pass
-    return label_ids
+# def get_label_ids(labels):
+#     label_ids = []
+#     for label_name in labels:
+#         try:
+#             # Verificar se o label existe no banco de dados
+#             label = Label.objects.get(nome=label_name)
+#             label_ids.append(label.id)
+#         except Label.DoesNotExist:
+#             pass
+#     return label_ids
 
 def list_issues(request):
     try:
         github_token = request.GET.get('github_token')
         repository = request.GET.get('repository')
         state = request.GET.get('state')
-        projeto = request.GET.get('projeto')
         
         if not github_token or not repository:
             return JsonResponse({'error': 'Ausência de parâmetros'}, status=status.HTTP_400_BAD_REQUEST)
@@ -159,13 +167,6 @@ def list_issues(request):
             
             tarefa_vinculada = Tarefa.objects.filter(id_issue=issue.id).exists()
             issue_data['exists'] = tarefa_vinculada
-            
-            membros_ids = []
-            for assignee in issue_data['assignees']:
-                membro = filter_membro_projeto_by_assignee_and_by_projeto(assignee, projeto)
-                if membro:
-                    membros_ids.append(membro)
-            issue_data['membros_ids'] = membros_ids
             
             issues_list.append(issue_data)
         

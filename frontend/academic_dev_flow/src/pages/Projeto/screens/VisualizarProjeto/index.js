@@ -1,38 +1,27 @@
 import React from "react";
 import MenuAluno from "../../../../components/Menus/MenuAluno/MenuAluno";
 import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfessor";
-import MenuAdmin from "../../../../components/Menus/MenuAdmin/MenuAdmin";
 import { Layout } from "antd";
 import MyHeader from "../../../../components/Header/Header";
-import { ProviderGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
+import { Content } from "antd/es/layout/layout";
 import VisualizarProjeto from "./VisualizarProjeto";
-import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
-
+import { ProviderVisualizarProjeto } from "./context/ContextVisualizarProjeto";
 
 const ScreenVisualizarProjeto = ({grupo}) => {
-    
-    const breadcrumbRoutes = [
-        { title: 'Home', path: `/${grupo}/home` },
-        { title: 'Projetos', path: `/${grupo}/projetos/meus-projetos`  },
-        { title: 'Visualizar', path: `/${grupo}/projetos/visualizar` }
-    ];
 
     return (
         <React.Fragment>
-            { grupo === "aluno" && <MenuAluno />}
-            { grupo === "professor" && <MenuProfessor />}
-            { grupo === "admin" && <MenuAdmin />}
-
+            { grupo === 'aluno' && <MenuAluno />}
+            { grupo === 'professor' && <MenuProfessor />}
             <Layout>
-                <MyHeader />
-                <CustomBreadcrumb routes={breadcrumbRoutes} />
-                <ProviderGlobalProjeto>
-                    <VisualizarProjeto />
-                </ProviderGlobalProjeto>
+                <MyHeader/>
+                <Content>
+                    <ProviderVisualizarProjeto>
+                        <VisualizarProjeto />
+                    </ProviderVisualizarProjeto>
+                </Content>
             </Layout>
-            
-        </React.Fragment>
-        
+        </React.Fragment>   
     )
 }
 

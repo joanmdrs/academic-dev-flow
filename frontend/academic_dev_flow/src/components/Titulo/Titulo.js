@@ -1,11 +1,18 @@
 import React from "react";
-import './Titulo.css';
 
 const Titulo = ({titulo, paragrafo}) => {
     return (
-        <div className="component-title">
-            <h3>{titulo}</h3>
-            <p>{paragrafo}</p>
+        <div 
+            style={{
+                borderBottom: '1px solid var(--border-color)', 
+                paddingLeft: '15px', 
+                paddingBottom: '15px', 
+                paddingTop: '15px',
+                backgroundColor: '#FFFFFF'
+            }}
+        >
+            <h3 className="ff-pop">{titulo}</h3>
+            <p className="ff-pop">{paragrafo}</p>
         </div>
     );
 }

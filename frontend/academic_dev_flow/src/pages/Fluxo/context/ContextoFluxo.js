@@ -7,18 +7,16 @@ export const ProviderFluxo = ({ children }) => {
 
     const [fluxos, setFluxos] = useState([])
     const [dadosFluxo, setDadosFluxo] = useState(null)
-    const [fluxosSelecionados, setFluxosSelecionados] = useState([])
-    const [dadosEtapas, setDadosEtapas] = useState([]);
-    const [current, setCurrent] = useState("1");
+    const [fluxoEtapas, setFluxoEtapas] = useState([])
+    const [dadosFluxoEtapa, setDadosFluxoEtapa] = useState(null);
 
     return (
         <ContextoFluxo.Provider
             value={{
                 fluxos, setFluxos,
                 dadosFluxo, setDadosFluxo,
-                dadosEtapas, setDadosEtapas,
-                fluxosSelecionados, setFluxosSelecionados,
-                current, setCurrent
+                dadosFluxoEtapa, setDadosFluxoEtapa,
+                fluxoEtapas, setFluxoEtapas
             }}
         >
             {children}

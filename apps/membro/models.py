@@ -1,25 +1,27 @@
 from django.db import models
 from apps.usuario.models import Usuario
-
-class UsuarioGithub(models.Model):
-    nome = models.CharField(max_length=200)
-    email_github = models.EmailField()
-    usuario_github = models.CharField(max_length=200) 
-    
-    def __str__(self):
-        return self.usuario_github    
-
+from django.contrib.auth.models import Group 
 
 class Membro(models.Model):
+    SEXO_CHOICES = [
+        ('M', 'Masculino'),
+        ('F', 'Feminino'),
+        ('O', 'Outro'),  # Opcional para incluir uma terceira opção
+    ]
+
     nome = models.CharField(max_length=200)
     data_nascimento = models.DateField("Data de nascimento")
+    sexo = models.CharField(max_length=1, choices=SEXO_CHOICES, default='M')  # Novo campo sexo
     telefone = models.CharField(max_length=20)
     email = models.EmailField(max_length=200)
-    github = models.ForeignKey(UsuarioGithub, on_delete=models.SET_NULL, null=True, blank=True)  # Corrija a referência ao modelo
     linkedin = models.CharField(max_length=200, null=True, blank=True)
     lattes = models.CharField(max_length=200, null=True, blank=True)
-    grupo = models.CharField(max_length=100, blank=True, null=True)
+    nome_github = models.CharField(max_length=200, blank=True, null=True)
+    email_github = models.EmailField(max_length=200, blank=True, null=True)
+    usuario_github = models.CharField(max_length=200, blank=True, null=True, unique=True) 
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, null=True)
-    
+    grupo = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True) 
+    avatar = models.IntegerField(null=True, blank=True)
+
     def __str__(self):
         return self.nome

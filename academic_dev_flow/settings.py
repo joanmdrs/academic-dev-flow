@@ -53,13 +53,16 @@ INSTALLED_APPS = [
     'apps.fluxo_etapa',
     'apps.artefato',
     'apps.usuario',
+    'apps.funcao_membro',
     'apps.membro', 
     'apps.membro_projeto',
+    'apps.release',
     'apps.iteracao',
     'apps.tarefa',
-    'apps.tipo',
+    'apps.categoria',
     'apps.comentario',
     'apps.pontuacao',
+    'apps.tags',
     'apps.api',
     'apps.github_integration',
 ]
@@ -122,7 +125,7 @@ WSGI_APPLICATION = 'academic_dev_flow.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': config('DATABASE_NAME'),
         'USER': config('DATABASE_USER'),
@@ -132,6 +135,7 @@ DATABASES = {
         
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

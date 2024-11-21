@@ -1,16 +1,32 @@
 import api from "../api/api";
-import { ERROR_MESSAGE_ON_SEARCHING, INFO_MESSAGE_ON_SEARCHING } from "./messages";
+import { ERROR_MESSAGE_ON_SEARCHING } from "./messages";
 import { handleError, handleInfo, handleSuccess } from "./utils";
 
-export const criarProjeto = (dados) => {
-    
-    const resposta  = api.post("/projeto/cadastrar/", dados)
-    return resposta;
+export const criarProjeto = async (data) => {
+    try {
+        const response = await api.post('/projeto/cadastrar/', data)
+        return handleSuccess(response, 'Projeto criado com sucesso !')
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar criar o projeto !')
+    }
+}
+
+export const atualizarProjeto = async (data, idProjeto) => {
+    try {
+        const response = await api.patch(`/projeto/atualizar/`, data, {params: {id_projeto: idProjeto}})
+        return handleSuccess(response, 'Informações atualizadas com sucesso !')
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar atualizar os dados do projeto!')
+    }
 }
 
 export const buscarProjetoPeloNome = async (parametro) => {
-    const resposta = await api.get(`/projeto/buscar/?name=${encodeURIComponent(parametro)}`);
-    return resposta;
+    try {
+        const response = await api.get('/projeto/buscar-por-nome/', {params: {nome_projeto: parametro}});
+        return response
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar buscar os dados de projeto !')
+    }
 };
 
 export const buscarProjetoPeloId = async (idProjeto) => {
@@ -23,15 +39,15 @@ export const buscarProjetosPorListaIds = async (listaIds) => {
     return response;
 }
 
-export const excluirProjeto = (id) => {
-    const resposta = api.delete(`/projeto/excluir/${encodeURIComponent(id)}/`);
-    return resposta;
+export const excluirProjeto = async (idProjeto) => {
+    try {
+        const response = await api.delete('/projeto/excluir/', {params: {id_projeto: idProjeto}});
+        return handleSuccess(response, 'Projeto excluído com sucesso!')
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar excluir o projeto !')
+    }
 }
 
-export const atualizarProjeto = (dados, id) => {
-    const resposta = api.patch(`/projeto/atualizar/${encodeURIComponent(id)}/`, dados);
-    return resposta
-}
 
 export const atualizarFluxoProjeto = (idFluxo, idProjeto ) => {
     const resposta = api.patch(`/projeto/atualizar/fluxo/${encodeURIComponent(idProjeto)}/`, { fluxo_id: idFluxo})
@@ -41,9 +57,6 @@ export const atualizarFluxoProjeto = (idFluxo, idProjeto ) => {
 export const listarProjetos = async () => {
     try {
         const response = await api.get('projeto/listar/')
-        if (response.status === 204) {
-            return handleInfo(response, INFO_MESSAGE_ON_SEARCHING)
-        }
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)

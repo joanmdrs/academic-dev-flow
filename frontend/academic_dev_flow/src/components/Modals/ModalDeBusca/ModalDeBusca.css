@@ -1,12 +1,14 @@
 .ant-modal .ant-modal-content {
     border-radius: 5px;
     flex: 1 !important;
+    padding: 30px;
 }
 
 .ant-modal .ant-modal-header {
     margin-bottom: 20px;
 }
 
+
 .ant-modal .ant-modal-title {
-    font-size: 20px;
-}
+    font-size: 30px;
+} 

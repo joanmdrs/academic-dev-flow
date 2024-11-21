@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Descriptions } from 'antd';
 import { optionsStatusIteracoes } from "../../../../services/optionsStatus";
-import { listarMembrosPeloIdProjeto } from "../../../../services/membroProjetoService";
+import { buscarMembrosPorProjeto } from "../../../../services/membroProjetoService";
 import { formatDate, handleError } from "../../../../services/utils";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 import { listarEtapasPorFluxo } from "../../../../services/fluxoEtapaService";
 import { buscarEtapaPeloId } from "../../../../services/etapaService";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto";
 import { useContextoIteracao } from "../../context/contextoIteracao";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 const ExibirIteracao = () => {
 
@@ -45,11 +45,11 @@ const ExibirIteracao = () => {
     const handleGetMembros = async () => {
 
         try {
-            const response = await listarMembrosPeloIdProjeto(dadosIteracao.projeto)
+            const response = await buscarMembrosPorProjeto(dadosIteracao.projeto)
             const resultados = response.data.map((item) => {
                 return {
-                    value: item.id_membro_projeto,
-                    label: `${item.nome_membro} (${item.grupo_membro})`,
+                    value: item.id,
+                    label: `${item.nome_membro} (${item.nome_grupo})`,
                 }
             })
             setOptionsMembros(resultados)
@@ -90,8 +90,8 @@ const ExibirIteracao = () => {
         },
         {
             key: "4",
-            label: 'Número',
-            children: dadosIteracao.numero
+            label: 'Ordem',
+            children: dadosIteracao.ordem
         },
         {
             key: "5",
@@ -100,13 +100,13 @@ const ExibirIteracao = () => {
         },
         {
             key: "6",
-            label: "Líder",
-            children: optionsMembros.find((membro) => membro.value === dadosIteracao.lider)?.label,
+            label: "Responsável",
+            children: optionsMembros.find((membro) => membro.value === dadosIteracao.responsavel)?.label,
         },
         {
             key: "7",
-            label: "Fase",
-            children: optionsEtapas.find((etapa) => etapa.value === dadosIteracao.fase)?.label,
+            label: "Etapa",
+            children: dadosIteracao.nome_etapa,
         },
         {
             key: "8",
@@ -115,7 +115,7 @@ const ExibirIteracao = () => {
         },
     ];
 
-    return <Descriptions title="Informações da iteração" items={items} />;
+    return <Descriptions items={items} />;
 };
 
 export default ExibirIteracao;
