@@ -7,6 +7,7 @@ import SelectProject from "../../components/SelectProject/SelectProject";
 import SpinLoading from "../../../../components/SpinLoading/SpinLoading";
 import RenderEmpty from "../../../../components/Empty/Empty";
 import { VscGraph } from "react-icons/vsc";
+import GraficoBarrasCommits from "../../../Graficos/GraficoBarrasCommits/GraficoBarrasCommits";
 
 const {TabPane} = Tabs
 
@@ -37,7 +38,7 @@ const AdminCommits = () => {
                             <Tabs tabPosition="right">
                                 <TabPane tab={<VscGraph size="20px"/>} key="1">
                                     <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}> 
-                                        {/* <GraphBarCommits data={commits} /> */}
+                                        <GraficoBarrasCommits data={commits} />
                                     </div>
                                 </TabPane>
                             </Tabs>

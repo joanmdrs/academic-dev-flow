@@ -3,9 +3,8 @@ import {Layout} from 'antd'
 import MyHeader from "../../../../components/Header/Header";
 import MenuAluno from "../../../../components/Menus/MenuAluno/MenuAluno";
 import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfessor";
-import PainelGitHub from "./PainelGitHub";
 import { ProviderCommits } from "../../context/ContextoCommits";
-import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
+import PainelGitHub from "./PainelGithub";
 const {Content} = Layout
 
 const ScreenPainelGitHub = ({grupo}) => {
