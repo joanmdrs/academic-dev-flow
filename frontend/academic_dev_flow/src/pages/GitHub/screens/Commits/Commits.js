@@ -4,7 +4,6 @@ import { Empty, Result, Tabs } from "antd";
 import SpinLoading from "../../../../components/SpinLoading/SpinLoading";
 import FormBuscarCommits from "../../components/FormBuscarCommits/FormBuscarCommits";
 import { useContextoCommits } from "../../context/ContextoCommits";
-import GraphBarCommits from "../../components/GraphBarCommits/GraphBarCommits";
 import { VscGraph } from "react-icons/vsc";
 
 const {TabPane} = Tabs
@@ -47,7 +46,6 @@ const Commits = () => {
                                     <Tabs tabPosition="right">
                                         <TabPane tab={<VscGraph size="20px"/>} key="1">
                                             <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}> 
-                                                <GraphBarCommits data={commits} />
                                             </div>
                                         </TabPane>
                                     </Tabs>

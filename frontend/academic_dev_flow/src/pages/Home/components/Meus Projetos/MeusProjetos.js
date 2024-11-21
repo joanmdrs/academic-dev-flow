@@ -1,6 +1,5 @@
 import { List, Tooltip } from "antd";
-import React, { useEffect, useState } from "react";
-import ChartStatusProjeto from "../ChartStatusProjeto/ChartStatusProjeto";
+import React, { useState } from "react";
 import { CiFolderOn } from "react-icons/ci";
 import { IoIosArrowForward } from "react-icons/io";
 import { useContextoGlobalUser } from "../../../../context/ContextoGlobalUser/ContextoGlobalUser";

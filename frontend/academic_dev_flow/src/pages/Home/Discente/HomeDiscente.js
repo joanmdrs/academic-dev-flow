@@ -9,7 +9,6 @@ import { Empty, Splitter } from 'antd';
 import MinhasTarefas from "../components/MinhasTarefas/MinhasTarefas";
 import MeusArtefatos from "../components/MeusArtefatos/MeusArtefatos";
 import MeusProjetos from "../components/Meus Projetos/MeusProjetos";
-import ChartStatusTarefa from "../components/ChartStatusTarefa/ChartStatusTarefa";
 import MinhasEquipes from "../components/MinhasEquipes/MinhasEquipes";
 import RenderEmpty from "../../../components/Empty/Empty";
 
