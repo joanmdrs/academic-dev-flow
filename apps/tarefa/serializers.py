@@ -52,7 +52,8 @@ class TarefaSerializer(serializers.ModelSerializer):
             'membros_info',
             'ids_membros',
             'nomes_membros',
-            'tags'
+            'tags',
+            'dados_tags'
         ]
 
     def get_nome_projeto(self, obj):

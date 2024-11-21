@@ -1,4 +1,4 @@
-import { Button, Form, Input, Select } from 'antd';
+import { Button, Form, Input, Select, Tag } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { Switch } from 'antd';
 import React, { useEffect, useState } from 'react';
@@ -7,11 +7,12 @@ import { buscarMembrosPorProjeto } from '../../../../services/membroProjetoServi
 import { listarIteracoesPorProjeto } from '../../../../services/iteracaoService';
 import Loading from '../../../../components/Loading/Loading';
 import { optionsStatusTarefas } from '../../../../services/optionsStatus';
-import { handleError } from '../../../../services/utils';
+import { convertHexToRgba, filterOption, handleError } from '../../../../services/utils';
 import { ERROR_MESSAGE_ON_SEARCHING } from '../../../../services/messages';
 import { useContextoGlobalProjeto } from '../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto';
 import { listarCategoriaTarefa } from '../../../../services/categoriaTarefaService';
 import { NotificationManager } from 'react-notifications';
+import { listarTags } from '../../../../services/tagService';
 
 function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
 
@@ -21,6 +22,7 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
     const [optionsMembros, setOptionsMembros] = useState([]);
     const [optionsIteracoes, setOptionsIteracoes] = useState([]);
     const [optionsCategorias, setOptionsCategorias] = useState([]);
+    const [optionsTags, setOptionsTags] = useState([])
     const [titulo, setTitulo] = useState('CADASTRAR TAREFA');
 
     useEffect(() => {
@@ -30,6 +32,7 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
                     await handleGetMembros();
                     await handleGetIteracoes();
                     await handleGetCategorias();
+                    await handleGetTags()
 
                     if (dadosTarefa !== null) {
                         form.setFieldsValue(dadosTarefa);
@@ -51,7 +54,6 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
         try {
             const response = await buscarMembrosPorProjeto(dadosProjeto.id);
 
-            console.log(response.data)
             const resultados = response.data.map(item => ({
                     value: item.id,
                     label: `${item.nome_membro} (${item.nome_grupo})`,
@@ -102,6 +104,19 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
             return handleError(error, ERROR_MESSAGE_ON_SEARCHING);
         }
     };
+
+    const handleGetTags = async () => {
+        const response = await listarTags()
+        if(!response.error){
+            const resultados = response.data.map((item) => ({
+                value: item.id,
+                label: <Tag color={item.cor}>{item.nome}</Tag>
+            }));
+            
+            setOptionsTags(resultados)
+        }
+
+    }
 
     const handleSubmitForm = () => {
 
@@ -190,6 +205,18 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
                             <Input type='date' name='data_termino' style={{ width: 'fit-content' }} />
                         </Form.Item>
 
+                        <Form.Item label="Tags" name='tags' style={{flex: '1'}}>
+                            <Select 
+                                allowClear
+                                showSearch
+                                mode='tags'
+                                options={optionsTags}
+                                filterOption={filterOption}
+                                placeholder="Tags (opcional)"
+                                
+                            /> 
+                        </Form.Item>
+
                     </div>
 
                     {inputsAdmin}
@@ -205,6 +232,8 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
                             allowClear
                             placeholder="Selecione"
                             options={optionsIteracoes}
+                            showSearch
+                            filterOption={filterOption}
                         />
                     </Form.Item>
 
@@ -219,6 +248,8 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
                             style={{ width: '100%' }}
                             placeholder="Selecione"
                             options={optionsMembros}
+                            showSearch
+                            filterOption={filterOption}
                         />
                     </Form.Item>
 
@@ -233,6 +264,8 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
                             placeholder='Selecione'
                             name='status'
                             options={optionsStatusTarefas}
+                            showSearch
+                            filterOption={filterOption}
                         />
                     </Form.Item>
 
@@ -247,21 +280,23 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
                             placeholder="Selecione"
                             name="categoria"
                             options={optionsCategorias}
+                            showSearch
+                            filterOption={filterOption}
                         />
                     </Form.Item>
                 </div>
             </div>
 
-            <Form.Item 
+            {/* <Form.Item 
                 label="Sicronizar com o GitHub ?"
                 name="sicronizar-github" 
             >
                 <Switch name="sicronizar-github" checkedChildren="Sicronizar" unCheckedChildren="Não sicronizar" />
-            </Form.Item>
+            </Form.Item> */}
 
             <Form.Item>
-                <Button type="primary" htmlType='submit'> Salvar </Button>
-                <Button style={{ marginLeft: "10px" }} onClick={onCancel} type='primary' danger> Cancelar </Button>
+                <Button size='large' type="primary" htmlType='submit'> Salvar </Button>
+                <Button size='large' style={{ marginLeft: "10px" }} onClick={onCancel} type='primary' danger> Cancelar </Button>
             </Form.Item>
         </Form>
     );

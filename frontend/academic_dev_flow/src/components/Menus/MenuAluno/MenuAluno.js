@@ -121,6 +121,10 @@ const MenuAluno = () => {
                         <Link to="/aluno/tarefas/categorias">Categorias</Link>
                     </Menu.Item>
 
+                    <Menu.Item className="item-menu" key="/admin/tarefas/tags"> 
+                        <Link to="/aluno/tarefas/tags"> Tags </Link>
+                    </Menu.Item>
+
                 </SubMenu>
 
                 <Menu.Item

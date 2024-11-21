@@ -39,6 +39,7 @@ import ScreenAdminProjetos from "./pages/Projeto/admin/AdminProjetos";
 import ScreenAdminReleases from "./pages/Release/admin/AdminReleases";
 import ScreenAdminCommits from "./pages/GitHub/admin/AdminCommits";
 import ScreenAdminIteracoes from "./pages/Iteracao/admin/AdminIteracoes";
+import ScreenGerenciarTags from "./pages/Tag";
 
 function Routes() {
     return (
@@ -115,6 +116,11 @@ function Routes() {
                 {/* Menu Item Categorias de Tarefa */}
 
                 <Route path="/admin/tarefas/gerenciar-categorias" element={<ScreenGerenciarCategoriaTarefa grupo="admin" />} exact />
+
+                <Route 
+                    path="/admin/tarefas/tags"
+                    element={<ScreenGerenciarTags grupo="admin" />}
+                />
 
                 {/* Menu Item Iterações */}
 
@@ -205,6 +211,11 @@ function Routes() {
                     path="/aluno/tarefas/categorias" 
                     element={<ScreenGerenciarCategoriaTarefa grupo="aluno" />} 
                     exact 
+                />
+
+                <Route 
+                    path="/aluno/tarefas/tags"
+                    element={<ScreenGerenciarTags grupo="aluno" />}
                 />
 
 

@@ -151,6 +151,10 @@ const MenuAdmin = () => {
                     <Menu.Item key="/admin/tarefas/gerenciar-categorias">
                         <Link to="/admin/tarefas/gerenciar-categorias"> Categorias </Link>
                     </Menu.Item>
+
+                    <Menu.Item key="/admin/tarefas/tags"> 
+                        <Link to="/admin/tarefas/tags"> Tags </Link>
+                    </Menu.Item>
                 </SubMenu>
 
                 <SubMenu

@@ -23,7 +23,8 @@ export const criarTarefa = async (formData, issueData) => {
         projeto: formData.projeto,
         membros: formData.membros,
         iteracao: formData.iteracao,
-        categoria: formData.categoria
+        categoria: formData.categoria,
+        tags: formData.tags
     }
     
     try {
@@ -47,7 +48,9 @@ export const atualizarTarefa = async (idTarefa, formData, issueData) => {
         projeto: formData.projeto,
         membros: formData.membros,
         iteracao: formData.iteracao,
-        categoria: formData.categoria
+        categoria: formData.categoria,
+        tags: formData.tags
+
     }
     
     try {
