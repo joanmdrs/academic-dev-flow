@@ -30,7 +30,8 @@ const FormRegister = () => {
         dados['nome_github'] = infoGithub !== undefined ? infoGithub.nome_github : null
         dados['email_github'] = infoGithub !== undefined ? infoGithub.email_github : null
         dados['grupo'] = grupoUsuario 
-        dados['usuario'] = dados.email
+        dados['username'] = dados.email
+        dados['password'] = dados.senha
         dados['data_nascimento'] = converterData(dados.data_nascimento)
 
         console.log(dados)

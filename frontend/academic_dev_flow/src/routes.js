@@ -321,10 +321,7 @@ function Routes() {
                     path="/professor/tarefas/tags"
                     element={<ScreenGerenciarTags grupo="professor" />}
                 />
-
-
-
-
+                
                 <Route
                     path="/professor/artefatos"
                     element={<ScreenArtefatos grupo="professor" />}

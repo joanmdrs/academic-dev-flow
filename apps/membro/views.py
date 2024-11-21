@@ -323,7 +323,7 @@ class BuscarMembrosPorListaIdsView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class ListarGruposView(APIView): 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     
     def get(self, request): 
         try: 

@@ -14,6 +14,7 @@ export const listarGrupos = async () => {
 
 export const criarMembro = async (dados) => {
 
+    console.log(dados)
     const dadosEnviar = {
         usuario : {
             username: dados.username,
