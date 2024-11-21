@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import ScreenDrawerComments from "../../../../../Tarefa/screens/DrawerComments";
-import { Button, Input, Modal, Select, Tabs } from "antd";
+import { Button, Form, Input, Modal, Select, Tabs } from "antd";
 import { FaCalendar, FaListUl, FaPlus, FaTasks } from "react-icons/fa";
 import SpinLoading from "../../../../../../components/SpinLoading/SpinLoading";
 import FormTarefa from "../../../../../Tarefa/components/FormTarefa/FormTarefa";
 import TaskBoard from "../../../../../Tarefa/components/TaskBoard/TaskBoard";
-import { TbLayoutCardsFilled } from "react-icons/tb";
+import { TbLayoutCards, TbLayoutCardsFilled, TbLayoutList, TbLayoutNavbar } from "react-icons/tb";
 import TableTask from "../../../../../Tarefa/components/TableTask/TableTask";
 import { LuCalendarDays } from "react-icons/lu";
 import FormFiltrarTarefas from "../../../../../Tarefa/components/FormFiltrarTarefas/FormFiltrarTarefas";
@@ -19,6 +19,7 @@ import { handleError } from "../../../../../../services/utils";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../../../services/messages";
 import { NotificationManager } from "react-notifications";
 import { createIssue, updateIssue } from "../../../../../../services/githubIntegration/issueService";
+import ListTask from "../../../../../Tarefa/components/ListTask/ListTask";
 const {TabPane} = Tabs
 const {Search} = Input
 
@@ -261,6 +262,44 @@ const Tarefas = () => {
         setDadosTarefa(record)
     }
 
+    const handleFiltrarTarefas = async (filters) => {
+        try {
+            // Chama a API para listar as tarefas de um projeto
+            const response = await listarTarefasPorProjeto(dadosProjeto.id);
+    
+            if (response && response.data) {
+                let tarefasFiltradas = response.data;
+    
+                // Aplica o filtro por membro, se fornecido
+                if (filters.membroSelect) {
+                    tarefasFiltradas = tarefasFiltradas.filter(
+                        tarefa => tarefa.membros?.some(
+                            membro => membro === filters.membroSelect
+                        )
+                    );
+                }
+    
+                // Aplica o filtro por categoria, se fornecido
+                if (filters.categoriaSelect) {
+                    tarefasFiltradas = tarefasFiltradas.filter(
+                        tarefa => tarefa.categoria === filters.categoriaSelect
+                    );
+                }
+    
+                // Atualiza o estado com as tarefas filtradas
+                setTarefas(tarefasFiltradas);
+            } else {
+                // Se não houver dados na resposta, define o estado como uma lista vazia
+                setTarefas([]);
+            }
+        } catch (error) {
+            // Lida com erros chamando a função handleError
+            return handleError(error, 'Falha ao tentar filtrar tarefas');
+        }
+    };
+    
+    
+
 
     return (
         <div> 
@@ -281,23 +320,36 @@ const Tarefas = () => {
                             onSearch={handleFiltrarTarefaPeloNome}
                         />
 
-                        <Select
-                            showSearch
-                            allowClear
-                            placeholder="Membro"
-                            optionFilterProp="children"
-                            options={optionsMembros}
-                            popupMatchSelectWidth={false}
-                        />
+                        <Form 
+                            style={{display: 'flex', gap: '10px'}} 
+                            onValuesChange={(changedValues, allValues) => handleFiltrarTarefas(allValues)}
+                        > 
+                            <Form.Item name="membroSelect">
+                                <Select
+                                    showSearch
+                                    allowClear
+                                    placeholder="Membro"
+                                    optionFilterProp="children"
+                                    options={optionsMembros}
+                                    popupMatchSelectWidth={false}
+                                />
+                            </Form.Item>
 
-                        <Select
-                            showSearch
-                            allowClear
-                            placeholder="Categoria"
-                            optionFilterProp="children"
-                            options={optionsCategorias}
-                            popupMatchSelectWidth={false}
-                        />
+                            <Form.Item name="categoriaSelect">
+                                <Select
+                                    showSearch
+                                    allowClear
+                                    placeholder="Categoria"
+                                    optionFilterProp="children"
+                                    options={optionsCategorias}
+                                    
+                                    popupMatchSelectWidth={false}
+                                />
+                            </Form.Item>                           
+
+                        </Form>
+
+                        
                     </div>
                     <Button
                         onClick={() => handleAdicionarTarefa()} 
@@ -330,9 +382,8 @@ const Tarefas = () => {
                         size="middle"
                         indicator={{align: "center"}}
                     > 
-                        <TabPane tab={<span><TbLayoutCardsFilled /> Quadro</span>} key="1" >
+                        <TabPane tab={<span><TbLayoutCards /> Quadro</span>} key="1" >
                             <TaskBoard 
-                                tarefas={tarefas} 
                                 onCreate={handleAdicionarTarefa}
                                 onUpdate={handleAtualizarTarefa} 
                                 onDelete={handleExcluirTarefa}
@@ -341,9 +392,20 @@ const Tarefas = () => {
                                 onShowComments={handleExibirComentarios}
                             />
                         </TabPane>
-                        <TabPane tab={<span> <FaListUl /> Tabela </span>} key="2" >
+
+                        <TabPane tab={<span><TbLayoutList /> Quadro</span>} key="2" >
+                            <ListTask  
+                                onUpdate={handleAtualizarTarefa} 
+                                onDelete={handleExcluirTarefa}
+                                onPauseTarefa={handlePararContagemTempoTarefa}
+                                onStartTarefa={handleIniciarContagemTempoTarefa}
+                                onShowComments={handleExibirComentarios}
+                            />
+                        </TabPane>
+
+                        
+                        <TabPane tab={<span> <TbLayoutNavbar /> Tabela </span>} key="3" >
                             <TableTask 
-                                tarefas={tarefas} 
                                 onUpdate={handleAtualizarTarefa} 
                                 onDelete={handleExcluirTarefa}
                                 onPauseTarefa={handlePararContagemTempoTarefa}

@@ -1,25 +1,27 @@
 import React from "react";
 import { FaRegClock } from "react-icons/fa";
 import { formatDate } from "../../services/utils";
+import { Space } from "antd";
 
 const RenderDate = ({dateType, dateValue}) => {   
     return (
-        <span style={{
-            padding: '7px',
+        <Space align="center" style={{
+            display: 'flex',
+            gap: '2px',
+            padding: '10px',
             width: 'fit-content',
             borderRadius: '5px',
+            height: '30px',
             fontSize: '10px',
             fontWeight: 'bold',
-            display: 'flex',
-            alignItems: 'baseline',
-            justifyContent: 'center',
-            boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
-            gap: '5px',
             backgroundColor: `${dateType === 'inicio' ? "#00BFFF" : "#DF013A"}`,
-            color: `${dateType === 'inicio' ? "#FFFFFF" : "#FFFFFF"}`
+            color: "#FFFFFF",
+            whiteSpace: 'nowrap', // Não permite quebra de linha
+            overflow: 'hidden',   // Oculta o conteúdo que ultrapassa
+            textOverflow: 'ellipsis', // 
         }}> 
             <FaRegClock /> {formatDate(dateValue)}
-        </span>
+        </Space>
     )
 }
 

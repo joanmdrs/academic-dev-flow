@@ -16,10 +16,11 @@ import { createIssue, updateIssue } from "../../../../services/githubIntegration
 import FormFiltrarTarefas from "../../components/FormFiltrarTarefas/FormFiltrarTarefas";
 import { buscarMembroProjetoPeloIdMembroEPeloIdProjeto } from "../../../../services/membroProjetoService";
 import { handleError } from "../../../../services/utils";
-import { TbLayoutCardsFilled } from "react-icons/tb";
+import { TbLayoutCards, TbLayoutCardsFilled, TbLayoutList, TbLayoutNavbar } from "react-icons/tb";
 import { LuCalendarDays } from "react-icons/lu";
 import ScreenDrawerComments from "../DrawerComments";
 import SpinLoading from "../../../../components/SpinLoading/SpinLoading";
+import ListTask from "../../components/ListTask/ListTask";
 
 const {Search} = Input 
 
@@ -316,7 +317,7 @@ const Tarefas = () => {
                         size="middle"
                         indicator={{align: "center"}}
                     > 
-                        <Item tab={<span><TbLayoutCardsFilled /> Quadro</span>} key="1" >
+                        <Item tab={<span><TbLayoutCards /> Quadro</span>} key="1" >
                             <TaskBoard 
                                 onCreate={handleAdicionarTarefa}
                                 onUpdate={handleAtualizarTarefa} 
@@ -326,7 +327,17 @@ const Tarefas = () => {
                                 onShowComments={handleExibirComentarios}
                             />
                         </Item>
-                        <Item tab={<span> <FaListUl /> Tabela </span>} key="2" >
+                        <Item tab={<span> <TbLayoutList /> Lista </span>} key="2" >
+                            <ListTask 
+                                onUpdate={handleAtualizarTarefa} 
+                                onDelete={handleExcluirTarefa}
+                                onPauseTarefa={handlePararContagemTempoTarefa}
+                                onStartTarefa={handleIniciarContagemTempoTarefa}
+                                onShowComments={handleExibirComentarios}
+                            />
+                        </Item>
+
+                        <Item tab={<span> <TbLayoutNavbar /> Tabela </span>} key="3" >
                             <TableTask 
                                 onUpdate={handleAtualizarTarefa} 
                                 onDelete={handleExcluirTarefa}

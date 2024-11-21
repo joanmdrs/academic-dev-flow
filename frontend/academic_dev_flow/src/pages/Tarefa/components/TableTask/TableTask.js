@@ -13,6 +13,7 @@ import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
 import RenderEmpty from "../../../../components/Empty/Empty";
 import { IoChatbubblesOutline } from "react-icons/io5";
+import RenderCategoria from "../../../../components/RenderCategoria/RenderCategoria";
 
 const TableTask = ({onUpdate, onDelete, onStartTarefa, onPauseTarefa, onShowComments}) => {
     
@@ -40,17 +41,7 @@ const TableTask = ({onUpdate, onDelete, onStartTarefa, onPauseTarefa, onShowComm
             })),
             onFilter: (value, record) => record.categoria === value, 
             render: (_, record) => (
-                <span style={{
-                    fontSize: '10px',
-                    fontWeight: 'bold',
-                    color: '#FFFFFF',
-                    backgroundColor: `${record.cor_categoria}`,
-                    padding: '10px',
-                    borderRadius: '5px',
-                    textTransform: 'uppercase'
-                }}>
-                    {record.nome_categoria}
-                </span>
+               <RenderCategoria nome={record.nome_categoria} cor={record.cor_categoria} />
             )
         },
         {

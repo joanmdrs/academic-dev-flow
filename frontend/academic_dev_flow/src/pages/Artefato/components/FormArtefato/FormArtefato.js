@@ -163,7 +163,7 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto}) => {
                 </div>
             </div>
          
-            <Form.Item
+            {/* <Form.Item
                 label="Sincronizar com o GitHub?"
                 name="sincronizar-github"
             >
@@ -173,7 +173,7 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto}) => {
                     unCheckedChildren="Não sincronizar"
                     onChange={handleSwitchChange} // Atualiza ao mudar o switch
                 />
-            </Form.Item>
+            </Form.Item> */}
 
             {sincronizarGitHub && (
                 <Form.Item

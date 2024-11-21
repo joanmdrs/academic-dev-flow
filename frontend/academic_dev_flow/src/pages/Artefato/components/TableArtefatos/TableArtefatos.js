@@ -33,7 +33,6 @@ const TableArtefatos = ({data, onUpdate, onDelete, onShowComments}) => {
             title: 'Entrega',
             dataIndex: 'data_termino',
             key: 'data_termino',
-            align: 'center',
             render: (_, record) => (
                 <RenderDate dateType="termino" dateValue={record.data_termino} />
             )
@@ -42,7 +41,6 @@ const TableArtefatos = ({data, onUpdate, onDelete, onShowComments}) => {
             title: 'Status', 
             dataIndex: 'status', 
             key: 'status',
-            align: 'center',
             render: (_, record) => (
                 <RenderStatus optionsStatus={optionsStatusArtefatos} propStatus={record.status} />
             )

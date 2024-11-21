@@ -185,7 +185,7 @@ const Iteracoes = () => {
             
             
             <div className="df jc-end w-100 mt-10 mb-10">
-                <Button onClick={handleAdicionarIteracao} type="primary" icon={<FaPlus />}> Criar Iteração </Button>
+                <Button onClick={handleAdicionarIteracao} type="primary" size="large" icon={<FaPlus />}> Criar Iteração </Button>
             </div>
             {
                 isFormIteracaoVisible ? (

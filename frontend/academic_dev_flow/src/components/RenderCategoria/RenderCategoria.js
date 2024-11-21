@@ -1,19 +1,21 @@
 import { Space } from "antd";
 import React from "react";
+import { MdOutlineLabel } from "react-icons/md";
 
-const RenderStatus = ({optionsStatus, propStatus}) => {
-     
-    const statusOption = optionsStatus.find(option => option.value === propStatus);
-
+const RenderCategoria = ({nome, cor}) => {
     return (
-        <Space align="center" style={{
+
+        <Space style={{
             display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: '1px',
             width: 'fit-content',
             height: '30px',
             fontSize: '10px',
             fontWeight: 'bold',
             color: '#FFFFFF',
-            backgroundColor: `${statusOption.color}`,
+            backgroundColor: `${cor}`,
             padding: '10px',
             borderRadius: '5px',
             textTransform: 'uppercase',
@@ -21,10 +23,11 @@ const RenderStatus = ({optionsStatus, propStatus}) => {
             whiteSpace: 'nowrap', // Não permite quebra de linha
             overflow: 'hidden',   // Oculta o conteúdo que ultrapassa
             textOverflow: 'ellipsis', // Adiciona "..." quando o texto ultrapassa o limite
-        }}>  
-            {statusOption.name} 
+        }}> 
+            <MdOutlineLabel size="15px" /> {nome} 
         </Space>
+        
     )
 }
 
-export default RenderStatus
+export default RenderCategoria

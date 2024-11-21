@@ -95,7 +95,7 @@ const VisualizarProjeto = () => {
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "baseline",
-                    padding: "20px",
+                    padding: "30px 20px",
                     borderRadius: '5px',
                     borderBottom: '1px solid var(--border-color)'
                 }}
@@ -112,7 +112,7 @@ const VisualizarProjeto = () => {
                             </Button>
                         </Tooltip>
 
-                        <h3
+                        <h2
                             style={{
                                 margin: 0,
                                 fontFamily: "Poppins, sans-serif",
@@ -120,11 +120,11 @@ const VisualizarProjeto = () => {
                             }}
                         >
                             {dadosProjeto?.nome} 
-                        </h3>
+                        </h2>
                         
                     </div>  
 
-                    <div style={{display: 'flex', gap: '20px', alignItems: 'baseline'}}>
+                    {/* <div style={{display: 'flex', gap: '20px', alignItems: 'baseline'}}>
 
                         
                         {iteracaoAtual && (
@@ -174,7 +174,7 @@ const VisualizarProjeto = () => {
                                 ))}
                             </div>
                         )}
-                    </div>                
+                    </div>                 */}
 
             </div>
 

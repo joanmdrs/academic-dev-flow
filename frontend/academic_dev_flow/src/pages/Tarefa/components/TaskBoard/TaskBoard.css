@@ -1,12 +1,8 @@
 .taskboard-container {
-    display: flex;
     height: 100vh;
     overflow-x: auto;
     overflow-y: auto;
-    padding: 16px;
-    gap: 16px;
-    width: 100%;
-
+    padding: 20px;
     /* Estilo geral para navegadores que suportam */
     scrollbar-width: thin; /* Reduz a largura da barra no Firefox */
     scrollbar-color: #888 #f0f0f0; /* Cor da barra e do fundo no Firefox */

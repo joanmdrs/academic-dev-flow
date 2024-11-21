@@ -1,4 +1,4 @@
-import { Button, Input, Tooltip, Modal, Tabs } from "antd";
+import { Button, Input, Tooltip, Modal, Tabs, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { TbCalendarUp } from "react-icons/tb";
@@ -16,6 +16,8 @@ import DrawerComments from "../../../../../Artefato/screens/DrawerComments/Drawe
 import FormArtefato from "../../../../../Artefato/components/FormArtefato/FormArtefato";
 import GridArtefatos from "../../../../../Artefato/components/GridArtefatos/GridArtefatos";
 import TableArtefatos from "../../../../../Artefato/components/TableArtefatos/TableArtefatos";
+import ListArtefatos from "../../../../../Artefato/components/ListArtefatos/ListArtefatos";
+import { LuLayout, LuLayoutGrid, LuLayoutList } from "react-icons/lu";
 
 const {TabPane} = Tabs
 const { Search } = Input
@@ -232,6 +234,7 @@ const Artefatos = () => {
                     <Button
                         onClick={() => handleAdicionarArtefato()} 
                         type="primary" 
+                        size="large"
                         icon={<FaPlus />}> 
                         Criar Artefato 
                     </Button>
@@ -259,19 +262,31 @@ const Artefatos = () => {
                             <Tabs
                                 style={{paddingTop: '10px'}}
                                 size="middle"
-                                tabPosition="left"
+                                tabPosition="top"
                                 indicator={{align: "center"}}
                                 defaultActiveKey="2"
                             > 
-                                <TabPane style={{padding: '20px'}} tab={ <BsGrid3X3GapFill /> } key="1"  >
+                                <TabPane style={{padding: '20px'}} tab={<Space> <LuLayoutGrid /> Grid </Space> } key="1"  >
                                     <GridArtefatos 
+                                        data={artefatos}
+                                        onCreate={handleAdicionarArtefato}
+                                        onUpdate={handleAtualizarArtefato}
+                                        onDelete={handleExcluirArtefato}
+                                        onShowComments={handleExibirComentarios}
+                                    />
+                                </TabPane>
+
+                                <TabPane style={{padding: '20px'}} tab={<Space> <LuLayoutList /> Lista </Space> } key="2"  >
+                                    <ListArtefatos 
                                         data={artefatos}
                                         onUpdate={handleAtualizarArtefato}
                                         onDelete={handleExcluirArtefato}
                                         onShowComments={handleExibirComentarios}
                                     />
                                 </TabPane>
-                                <TabPane style={{padding: '20px'}} tab={<FaListUl />} key="2" >
+
+
+                                <TabPane style={{padding: '20px'}} tab={<Space> <LuLayout /> Tabela </Space>} key="3" >
                                     <TableArtefatos 
                                         data={artefatos}
                                         onUpdate={handleAtualizarArtefato}
