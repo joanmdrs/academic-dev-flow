@@ -9,7 +9,7 @@ import 'react-notifications/lib/notifications.css';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Router basename='/academic-dev-flow'>
+    <Router basename='/academicflow'>
       <App />
     </Router>
   </React.StrictMode>

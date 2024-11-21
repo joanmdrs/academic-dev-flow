@@ -2,7 +2,7 @@
   "name": "academic_dev_flow",
   "version": "0.1.0",
   "private": true,
-  "homepage": "/academic-dev-flow",
+  "homepage": "/academicflow",
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
     "@emotion/react": "^11.13.3",
