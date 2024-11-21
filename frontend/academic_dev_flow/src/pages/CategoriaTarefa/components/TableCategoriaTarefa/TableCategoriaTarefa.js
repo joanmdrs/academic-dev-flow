@@ -5,6 +5,7 @@ import { useContextoCategoriaTarefa } from "../../context/ContextoCategoriaTaref
 import { IoMdCreate, IoMdTrash } from "react-icons/io"
 import { listarCategoriaTarefa } from "../../../../services/categoriaTarefaService"
 import RenderEmpty from "../../../../components/Empty/Empty"
+import RenderCategoria from "../../../../components/RenderCategoria/RenderCategoria"
 
 const TableCategoriaTarefa = ({onEdit, onDelete}) => {
 
@@ -15,16 +16,7 @@ const TableCategoriaTarefa = ({onEdit, onDelete}) => {
             dataIndex: 'nome',
             key: 'nome',
             render: (_, record) => (
-                <span
-                    style={{
-                        backgroundColor: `${record.cor}`,
-                        color: '#FFFFFF',
-                        padding: '10px',
-                        borderRadius: '5px',
-                        fontSize: '12px'
-
-                    }}> {record.nome}
-                </span>
+                <RenderCategoria nome={record.nome} cor={record.cor} />
             ),  
         },
         {
@@ -81,7 +73,6 @@ const TableCategoriaTarefa = ({onEdit, onDelete}) => {
         <React.Fragment>
             { categorias.length !== 0 ? (
                 <Table
-                    className="bs-1 pa-20"
                     rowKey="id"
                     columns={COLUNAS_TABELA}
                     dataSource={categorias}  

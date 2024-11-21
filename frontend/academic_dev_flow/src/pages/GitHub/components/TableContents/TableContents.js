@@ -51,7 +51,6 @@ const TableContents = ({data}) => {
                     dataSource={data}
                     columns={columnsTable}
                     rowKey="id"
-                    className="pa-20 bs-1"
                 />
                 
             ) : (

@@ -74,7 +74,6 @@ const TableArtefatos = ({data, onUpdate, onDelete, onShowComments}) => {
                         dataSource={data}
                         columns={columns}
                         rowKey="id"
-                        style={{boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px', padding: '20px'}}
                     />                
             ) : (
                 <RenderEmpty title="Nenhum artefato para exibir" /> 

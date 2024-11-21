@@ -7,6 +7,8 @@ import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 import { optionsStatusArtefatos } from "../../../../services/optionsStatus";
 import { IoMdCreate, IoMdOpen, IoMdTrash } from "react-icons/io";
 import RenderEmpty from "../../../../components/Empty/Empty";
+import RenderDate from "../../../../components/RenderDate/RenderDate";
+import RenderStatus from "../../../../components/RenderStatus/RenderStatus";
 
 const TableAdminArtefatos = ({onEdit, onDelete, onUpdateStatus}) => {
 
@@ -14,20 +16,25 @@ const TableAdminArtefatos = ({onEdit, onDelete, onUpdateStatus}) => {
         {
             title: 'Nome',
             dataIndex: 'nome',
-            key: 'nome'
+            key: 'nome',
+            render: (_, record) => (
+                <span className="ff-pop"> {record.nome} </span>
+            )
+        },
+        {
+            title: 'Data de entrega',
+            dataIndex: 'data_entrega',
+            key: 'data_entrega',
+            render: (_, record) => (
+                <RenderDate dateType="inicio" dateValue={record.data_termino} />
+            )
         },
         {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
             render: (_, record) => (
-                <Select 
-                    style={{width: '150px'}} 
-                    placeholder="Selecione"
-                    value={record.status} 
-                    options={optionsStatusArtefatos} 
-                    onChange={(value) => onUpdateStatus(record, value)}
-                /> 
+                <RenderStatus optionsStatus={optionsStatusArtefatos} propStatus={record.status} />
             )
         },
         {

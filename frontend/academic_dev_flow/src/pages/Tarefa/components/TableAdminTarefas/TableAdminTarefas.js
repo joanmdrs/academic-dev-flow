@@ -7,41 +7,48 @@ import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 import { optionsStatusTarefas } from "../../../../services/optionsStatus";
 import { IoMdCreate, IoMdOpen, IoMdTrash } from "react-icons/io";
 import RenderEmpty from "../../../../components/Empty/Empty";
+import RenderStatus from "../../../../components/RenderStatus/RenderStatus";
+import RenderCategoria from "../../../../components/RenderCategoria/RenderCategoria";
+import RenderDate from "../../../../components/RenderDate/RenderDate";
 
 const TableAdminTarefas = ({onView, onEdit, onDelete }) => {
 
     const COLUNAS_TABELA_TAREFAS = [
         {
-            title: 'ID',
-            dataIndex: 'id',
-            key: 'id'
-        },
-        {
             title: 'Nome',
             dataIndex: 'nome',
             key: 'nome',
             render: (_, record) => (
-                <Space style={{ display: 'block' }}>
-                    <a href="#" target="_blank" rel="noopener noreferrer"> {record.nome} </a>
-
-                    <span style={{ color: '#585858', fontSize: '10px' }}>
-                        { 
-                        record.data_inicio && record.data_termino &&  (
-                            <span> {formatDate(record.data_inicio)} - {formatDate(record.data_termino)} </span>
-                        )
-                    }
-                    </span>
-                </Space>
+                <span className="ff-pop"> 
+                    {record.nome}
+                </span>
             )
+        },
+        {
+            title: 'Data de início',
+            dataIndex: 'data_inicio',
+            key: 'data_inicio', 
+            render: (_, record) => (
+                <RenderDate dateType="inicio" dateValue={record.data_inicio} />
+            )
+
+        },
+        {
+            title: 'Data de término',
+            dataIndex: 'data_termino',
+            key: 'data_termino', 
+            render: (_, record) => (
+                <RenderDate dateType="termino" dateValue={record.data_termino} />
+            )
+
         },
         {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
-            render: (statusValue) => {
-                const status = optionsStatusTarefas.find(option => option.value === statusValue);
-                return status ? status.label : statusValue;
-            }
+            render: (_, record) => (
+                <RenderStatus optionsStatus={optionsStatusTarefas} propStatus={record.status} />
+            )
         },
         {
             title: 'Projeto',
@@ -51,7 +58,10 @@ const TableAdminTarefas = ({onView, onEdit, onDelete }) => {
         {
             title: 'Categoria',
             dataIndex: 'nome_categoria',
-            key: 'nome_categoria'
+            key: 'nome_categoria',
+            render: (_, record) => (
+                <RenderCategoria nome={record.nome_categoria} cor={record.cor_categoria} />
+            )
         },
         {
             title: 'Ações',
@@ -59,9 +69,6 @@ const TableAdminTarefas = ({onView, onEdit, onDelete }) => {
             key: 'action',
             render: (_, record) => (
                 <Space>
-                    <Tooltip title="Visualizar">
-                        <a><IoMdOpen /></a>
-                    </Tooltip>
                     <Tooltip title="Editar">
                         <a onClick={() => onEdit(record)}><IoMdCreate /></a>
                     </Tooltip>
@@ -75,31 +82,22 @@ const TableAdminTarefas = ({onView, onEdit, onDelete }) => {
 
     const { tarefas, setTarefas, setTarefasSelecionadas } = useContextoTarefa();
 
+    const handleListarTarefas = async () => {
+        const response = await listarTarefas()
+
+        if (!response.error){
+            setTarefas(response.data)
+        }
+    }
+
     useEffect(() => {
 
         const fetchData = async () => {
-            if (tarefas.length === 0) {
-                await handleListarTarefas()
-            }
+            await handleListarTarefas()
         }
 
         fetchData()
     }, []);
-
-    const handleListarTarefas = async () => {
-        try {
-            const response = await listarTarefas();
-
-            if (!response.error && response.data.length > 0) {
-                setTarefas(response.data)
-            } else {
-                setTarefas([]);
-            }
-        } catch (error) {
-            setTarefas([]);
-            return handleError(error, ERROR_MESSAGE_ON_SEARCHING);
-        }
-    }
     
     const rowSelection = {
         onChange: (selectedRowsKeys, selectedRows) => {

@@ -362,7 +362,7 @@ const Tarefas = () => {
                 </div>  
             )}
         
-            <div className="pa-10">
+            <div>
                  {isFormVisible  && (
                     <React.Fragment>
                         {isLoading && ( 

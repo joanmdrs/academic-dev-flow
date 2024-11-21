@@ -73,9 +73,6 @@ const Iteracoes = () => {
             key: 'actions',
             render: (_, record) => (
                 <Space>
-                    <Tooltip title="Visualizar"> 
-                        <a onClick={() => handleShowDrawer(record)}><IoMdOpen /> </a>
-                    </Tooltip>
                     <Tooltip title="Editar">
                         <a onClick={() => handleAtualizarIteracao(record)}><IoMdCreate /></a>
                     </Tooltip>

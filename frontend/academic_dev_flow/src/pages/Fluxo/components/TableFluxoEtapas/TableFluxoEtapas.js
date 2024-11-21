@@ -8,7 +8,6 @@ const TableFluxoEtapas = ({columns, data}) => {
         <React.Fragment>
             {data.length !== 0 ? (
                 <Table
-                    className="bs-1 pa-20"
                     columns={columns}
                     dataSource={data}
                     rowKey="id"

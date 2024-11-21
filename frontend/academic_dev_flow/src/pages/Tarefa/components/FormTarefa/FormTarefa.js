@@ -187,7 +187,7 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
                         </Form.Item>
 
                         <Form.Item
-                            label="Data de Término (Previsão)"
+                            label="Data de Término"
                             name="data_termino"
                             rules={[
                                 { required: true, message: 'Por favor, preencha este campo!' },

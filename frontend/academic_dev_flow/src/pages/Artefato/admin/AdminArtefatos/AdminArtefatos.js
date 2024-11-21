@@ -232,12 +232,12 @@ const AdminArtefatos = () => {
             )}
 
             {isFormFilterArtefatoVisible && (
-                <div style={{width: '50%'}}>   
+                <div className="pa-20" style={{width: '50%'}}>   
                     <FormAdminFiltrarArtefatos onFilter={handleFiltrarArtefatos} onCancel={handleCancelar} />
                 </div>
             )}
 
-            <div> 
+            <div className="pa-20"> 
 
                 {isFormVisible && actionForm === 'create' && (
                     <div> 

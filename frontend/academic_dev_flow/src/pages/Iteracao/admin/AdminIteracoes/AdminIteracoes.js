@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Modal, Space, Tooltip } from "antd";
 import { FaFilter, FaPlus } from "react-icons/fa";
 import { useContextoIteracao } from "../../context/contextoIteracao";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
-import { atualizarIteracao, criarIteracao, excluirIteracoes, filtrarIteracoesPeloNomeEPeloProjeto } from "../../../../services/iteracaoService";
+import { atualizarIteracao, criarIteracao, excluirIteracoes, filtrarIteracoesPeloNomeEPeloProjeto, listarIteracoes } from "../../../../services/iteracaoService";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import Titulo from "../../../../components/Titulo/Titulo";
 import FormIteracao from "../../components/FormIteracao/FormIteracao";
@@ -12,31 +12,33 @@ import RenderDate from "../../../../components/RenderDate/RenderDate";
 import RenderStatus from "../../../../components/RenderStatus/RenderStatus";
 import { optionsStatusIteracoes } from "../../../../services/optionsStatus";
 import { IoMdCreate, IoMdTrash } from "react-icons/io";
-import SelectProject from "../../../Release/components/SelectProject/SelectProject";
 import FormAdminFiltrarIteracoes from "../../components/FormAdminFiltrarIteracoes/FormAdminFiltrarIteracoes";
+import SelectProject from "../../components/SelectProject/SelectProject";
 
 const AdminIteracoes = () => {
 
     const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false)
     const [isFormSalvarVisivel, setIsFormSalvarVisivel] = useState(false)
-    const [acaoForm, setAcaoForm] = useState('criar')
-    const {iteracoes, setIteracoes, dadosIteracao, setDadosIteracao} = useContextoIteracao()
+    const {iteracoes, setIteracoes, dadosIteracao, setDadosIteracao, actionForm, setActionForm} = useContextoIteracao()
     const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
 
-    const handleCancelar = () => {
+    const handleCancelar = async () => {
         setIsFormBuscarVisivel(false)
         setIsFormSalvarVisivel(false)
         setDadosProjeto(null)
         setDadosIteracao(null)
-        setAcaoForm('criar')
+        setActionForm('create')
+        await handleListarIteracoes()
+
     }
 
-    const handleReload = () => {
+    const handleReload = async () => {
         setIsFormSalvarVisivel(false)
         setIsFormBuscarVisivel(false)
         setDadosProjeto(null)
         setDadosIteracao(null)
         setIteracoes([])
+        await handleListarIteracoes()
     }
 
     const handleBuscarIteracao = () => {
@@ -45,10 +47,15 @@ const AdminIteracoes = () => {
     }
 
     const handleFiltrarIteracoes = async (dados) => {
-        const response = await filtrarIteracoesPeloNomeEPeloProjeto(dados.nome_iteracao, dados.id_projeto)
-        if (!response.error) {
-            setIteracoes(response.data)
+        if (dados.nome_iteracao || dados.id_projeto){
+            const response = await filtrarIteracoesPeloNomeEPeloProjeto(dados.nome_iteracao, dados.id_projeto)
+            if (!response.error) {
+                setIteracoes(response.data)
+            }
+        } else {
+            await handleListarIteracoes()
         }
+        
     }
 
     const handleBuscarProjeto = async (id) => {
@@ -59,7 +66,7 @@ const AdminIteracoes = () => {
     const handleAdicionarIteracao = () => {
         setIsFormSalvarVisivel(true)
         setIsFormBuscarVisivel(false)
-        setAcaoForm('criar')
+        setActionForm('create')
         setDadosIteracao(null)
         setDadosProjeto(null)
     }
@@ -68,15 +75,15 @@ const AdminIteracoes = () => {
         await handleBuscarProjeto(record.projeto)
         setIsFormSalvarVisivel(true)
         setIsFormBuscarVisivel(false)
-        setAcaoForm('atualizar')
+        setActionForm('update')
         setDadosIteracao(record)
     }
 
     const handleSalvarIteracao = async (dadosForm) => {
         dadosForm['projeto'] = dadosProjeto.id
-        if (acaoForm === 'criar'){
+        if (actionForm === 'create'){
             await criarIteracao(dadosForm)
-        } else {
+        } else if (actionForm === 'update') {
             await atualizarIteracao(dadosIteracao.id, dadosForm)
         }
         handleReload()
@@ -110,7 +117,7 @@ const AdminIteracoes = () => {
             )
         },
         {
-            title: 'Data de Término (Previsão)',
+            title: 'Data de Término',
             dataIndex: 'data_termino',
             key: 'data_termino',
             render: (_, record) => (
@@ -139,7 +146,7 @@ const AdminIteracoes = () => {
                     <Tooltip title="Editar">
                         <span 
                             style={{cursor: 'pointer', color: 'var(--primary-color)'}} 
-                            onClick={() => handleAdicionarIteracao(record)}
+                            onClick={() => handleAtualizarIteracao(record)}
                         ><IoMdCreate /></span>
                     </Tooltip>
 
@@ -153,6 +160,22 @@ const AdminIteracoes = () => {
             )
         }
     ]
+
+    const handleListarIteracoes = async () => {
+        const response = await listarIteracoes()
+
+        if (!response.error){
+            setIteracoes(response.data)
+        }
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            await handleListarIteracoes()
+        }
+
+        fetchData()
+    }, [])
 
 
 
@@ -185,15 +208,15 @@ const AdminIteracoes = () => {
             )}
 
             {isFormBuscarVisivel && (
-                <div style={{width: '50%'}}>
+                <div className="pa-20" style={{width: '50%'}}>
                     <FormAdminFiltrarIteracoes onCancel={handleCancelar} onFilter={handleFiltrarIteracoes} />
                 </div>
             )}
 
             {isFormSalvarVisivel && (
-                <div>
+                <div className="pa-20">
                     <FormIteracao 
-                        additionalFields={<SelectProject />} 
+                        selectProject={<SelectProject />}
                         onCancel={handleCancelar}
                         onSubmit={handleSalvarIteracao}
                     />
@@ -201,7 +224,7 @@ const AdminIteracoes = () => {
             )}
 
             {!isFormSalvarVisivel  && (
-                <div>
+                <div className="pa-20"> 
                     <TableIteracoes data={iteracoes} columns={columnsTableIteracoes} />
                 </div>
             )}

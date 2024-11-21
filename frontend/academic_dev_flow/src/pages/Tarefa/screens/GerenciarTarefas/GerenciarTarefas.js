@@ -217,12 +217,12 @@ const GerenciarTarefas = () => {
             </div>
 
             {isFormBuscarVisivel && (
-                <div style={{width: '50%'}}>   
+                <div className="pa-20" style={{width: '50%'}}>   
                     <FormBuscarTarefa onSearch={handleFiltrarTarefas} onCancel={handleCancelar} />
                 </div>
             )}
 
-            <div> 
+            <div className="pa-20"> 
                 {isFormVisivel && acaoForm === 'criar' && (
                     <React.Fragment>
                         {isLoading && ( 
@@ -245,7 +245,6 @@ const GerenciarTarefas = () => {
 
                         <FormTarefa 
                             selectProject={<SelecionarProjeto />} 
-                            inputsAdmin={<InputsAdminTarefa />}
                             onSubmit={handleSalvarTarefa} 
                             onCancel={handleCancelar} 
                         />

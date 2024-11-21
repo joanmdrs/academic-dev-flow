@@ -248,11 +248,16 @@ const Artefatos = () => {
                          {isLoading && ( 
                             <SpinLoading />
                         )}
+                        <div> 
+                            <FormArtefato 
+                                onSubmit={handleSalvarArtefato}
+                                onCancel={handleCancelar} 
+                            />
 
-                        <FormArtefato 
-                            onSubmit={handleSalvarArtefato}
-                            onCancel={handleCancelar} 
-                        />
+                        </div>
+
+
+                        
                     </React.Fragment>
                 }
 

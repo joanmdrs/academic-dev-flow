@@ -1,10 +1,10 @@
-import { Button, Form, Input, Select, Switch } from "antd";
+import { Button, Form, Input, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import { useForm } from "antd/es/form/Form";
 import { useContextoArtefato } from "../../context/ContextoArtefato";
 import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
 import { optionsStatusArtefatos } from "../../../../services/optionsStatus";
-import { handleError, handleInfo } from "../../../../services/utils";
+import { handleError } from "../../../../services/utils";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 import { buscarMembrosPorProjeto } from "../../../../services/membroProjetoService";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
@@ -45,7 +45,7 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto}) => {
             const resultados = iteracoesOrdenadas.map((item) => {
                 return {
                     value: item.id,
-                    label: `${item.nome} (${item.nome_etapa})`
+                    label: item.nome
                 }
             })
 

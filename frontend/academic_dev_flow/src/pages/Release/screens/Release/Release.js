@@ -239,7 +239,7 @@ const Release = () => {
                 </div>
             )}
 
-            <div>
+            <div className='pa-20'>
 
                 { isFormVisible && 
                     <FormRelease 

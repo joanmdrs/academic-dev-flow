@@ -16,7 +16,7 @@ const TableMembroProjeto = ({onEdit, onDelete}) => {
             key: 'id'
         },
         {
-            title: 'Nome',
+            title: 'Membro',
             dataIndex: 'nome_membro',
             key: 'nome_membro',
         },

@@ -1,11 +1,12 @@
 import React, { useEffect } from "react"
 import {Table, Space, Tooltip, Switch} from 'antd'
-import { IoIosCheckmark, IoIosClose } from "react-icons/io"
+import { IoIosCheckmark, IoIosClose, IoMdTrash } from "react-icons/io"
 import { listarFuncaoMembro } from "../../../../services/funcaoMembroProjetoService"
 import { useFuncaoMembroContexto } from "../../context/FuncaoMembroContexto"
 import { handleError } from "../../../../services/utils"
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages"
 import RenderEmpty from "../../../../components/Empty/Empty"
+import RenderCategoria from "../../../../components/RenderCategoria/RenderCategoria"
 
 
 const TableFuncaoMembro = ({onDisable, onDelete}) => {
@@ -20,6 +21,9 @@ const TableFuncaoMembro = ({onDisable, onDelete}) => {
             title: 'Função', 
             dataIndex: 'nome_categoria_funcao',
             key: 'nome_categoria_funcao',
+            render: (_, record) => (
+                <RenderCategoria nome={record.nome_categoria_funcao} cor={record.cor_categoria_funcao} />
+            )
         },
         {
             title: 'Membro',
@@ -55,8 +59,11 @@ const TableFuncaoMembro = ({onDisable, onDelete}) => {
                         checkedChildren="Desativar"
                         unCheckedChildren="Ativar"
                         onChange={() => onDisable(record.id, !record.status)}
-                        
                     />
+
+                    <Tooltip title="Excluir">
+                        <span onClick={() => onDelete(record.id)} style={{cursor: 'pointer', color: 'var(--primary-color)'}}> <IoMdTrash/> </span>
+                    </Tooltip>
                 </Space>
             ),
         },

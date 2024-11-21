@@ -11,7 +11,7 @@ const FormAdminFiltrarReleases = ({onFilter, onCancel}) => {
             const response = await listarProjetos();
             if (!response.error){
                 const resultados = response.data.map((item) => ({
-                    value: item.projeto,
+                    value: item.id,
                     label: item.nome
                 }));
                 setOptionsProjetos(resultados);

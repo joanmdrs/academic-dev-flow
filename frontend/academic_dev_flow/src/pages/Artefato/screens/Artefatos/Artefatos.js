@@ -250,7 +250,7 @@ const Artefatos = () => {
             </div>
             
             {isFormVisible && (
-                <div> 
+                <div className="pa-20"> 
                     {isLoading && ( 
                             <SpinLoading />
                         )}

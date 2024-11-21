@@ -202,7 +202,7 @@ const GerenciarMembros = () => {
                         
             {isFormVisivel &&  (
 
-                <div> 
+                <div className="pa-20"> 
                     <FormMembro onSubmit={handleSalvarMembro} onCancel={handleCancelar}/>
                 </div>
             )}

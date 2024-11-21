@@ -5,7 +5,7 @@ import RenderStatus from "../../../../components/RenderStatus/RenderStatus";
 import RenderMembers from "../../../../components/RenderMembers/RenderMembers";
 import RenderDate from "../../../../components/RenderDate/RenderDate";
 import { IoMdCreate, IoMdTrash } from "react-icons/io";
-import { optionsStatusArtefatos, optionsStatusTarefas } from "../../../../services/optionsStatus";
+import { optionsStatusArtefatos } from "../../../../services/optionsStatus";
 import { IoChatbubblesOutline } from "react-icons/io5";
 
 const { Panel } = Collapse;
@@ -66,7 +66,7 @@ const ListArtefatos = ({data, onUpdate, onDelete, onShowComments}) => {
 
                                                 <Space style={{ flex: '1'}}> {/* 10% */}
                                                     <RenderStatus 
-                                                        optionsStatus={optionsStatusTarefas} 
+                                                        optionsStatus={optionsStatusArtefatos} 
                                                         propStatus={item.status} 
                                                     />
                                                 </Space>

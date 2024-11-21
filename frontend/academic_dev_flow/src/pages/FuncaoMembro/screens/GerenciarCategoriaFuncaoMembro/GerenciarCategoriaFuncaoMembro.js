@@ -106,7 +106,7 @@ const GerenciarCategoriaFuncaoMembro = () => {
             )}
 
             { isFormBuscarVisivel && (
-                <div style={{width: '50%'}}>
+                <div className="pa-20" style={{width: '50%'}}>
                     <Form layout="vertical" className="global-form">
                         <Form.Item 
                             name="nome"
@@ -131,7 +131,7 @@ const GerenciarCategoriaFuncaoMembro = () => {
                 </div>
             )}
 
-            <div>
+            <div className="pa-20">
                 { isFormVisivel ? (
                         <FormCategoriaFuncaoMembro onSubmit={handleSalvarCategoria} onCancel={handleCancelar}/>
                 ) : (

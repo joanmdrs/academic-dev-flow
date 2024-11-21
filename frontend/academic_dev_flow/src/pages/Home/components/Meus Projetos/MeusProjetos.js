@@ -48,9 +48,9 @@ const MeusProjetos = ({projetos}) => {
                 />
             </div>
 
-            <div className="df "> 
+            {/* <div className="df "> 
                 <ChartStatusProjeto projetos={projetos} width={400} heigth={400} />
-            </div>
+            </div> */}
 
 
         </div>

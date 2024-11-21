@@ -101,7 +101,7 @@ const GerenciarCategoriaTarefa = () => {
             )}
 
             { isFormBuscarVisivel && (
-                <div style={{width: '50%'}}>
+                <div className="pa-20" style={{width: '50%'}}>
                     <Form className="global-form" layout="vertical" onFinish={handleBuscarCategoriaPeloNome}>
                         <Form.Item 
                             name="nome_categoria"
@@ -126,9 +126,9 @@ const GerenciarCategoriaTarefa = () => {
                 </div>
             )}
 
-            <div>
+            <div className="pa-20">
                 { isFormVisivel ? (
-                        <FormCategoriaTarefa onSubmit={handleSalvarCategoria} onCancel={handleCancelar}/>
+                    <FormCategoriaTarefa onSubmit={handleSalvarCategoria} onCancel={handleCancelar}/>
                 ) : (
                     <TableCategoriaTarefa onEdit={handleAtualizarCategoria} onDelete={handleExcluirCategoria}/>
 

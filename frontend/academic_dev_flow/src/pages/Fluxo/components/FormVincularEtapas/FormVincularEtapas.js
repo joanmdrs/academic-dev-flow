@@ -74,8 +74,8 @@ const FormVincularEtapas = ({onSubmit, onCancel}) => {
                 />
             </Form.Item>
 
-            <Form.Item  label="Ordem" name="ordem_no_fluxo">
-                <Input type="number" name="ordem_no_fluxo" placeholder="(Opcional)" />
+            <Form.Item label="Ordem" name="ordem_no_fluxo">
+                <Input defaultValue={0} type="number" name="ordem_no_fluxo" placeholder="(Opcional)" />
             </Form.Item>
 
             <Form.Item 

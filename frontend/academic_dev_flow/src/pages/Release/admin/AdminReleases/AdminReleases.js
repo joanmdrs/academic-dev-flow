@@ -233,7 +233,7 @@ const AdminReleases = () => {
             )}
 
             { isFormFiltrarVisible && (
-                <div style={{width: '50%'}}>
+                <div className='pa-20' style={{width: '50%'}}>
                     <FormAdminFiltrarReleases 
                         onCancel={handleCancelar} 
                         onFilter={handleFiltrarReleases} 
@@ -242,7 +242,7 @@ const AdminReleases = () => {
 
             )}
 
-            <div>
+            <div className='pa-20'>
 
                 { isFormVisible && 
                     <FormRelease 

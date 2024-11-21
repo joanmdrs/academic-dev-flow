@@ -104,7 +104,6 @@ const TableProjetos = ({projetos, onUpdate, onDelete, onOpen}) => {
             projetos.length !== 0 ? (
                 
                 <Table
-                    className="pa-10 bs-1"
                     dataSource={projetos}
                     columns={columns}
                     rowKey="id"

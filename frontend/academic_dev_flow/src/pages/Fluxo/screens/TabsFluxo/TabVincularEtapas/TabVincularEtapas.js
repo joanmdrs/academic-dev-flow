@@ -170,14 +170,7 @@ const TabVincularEtapas = () => {
     return (
         <div>
             { !isFormVisible && (
-                <div 
-                    style={{
-                        width: "100%",
-                        display: "flex",
-                        justifyContent: 'space-between',
-                        alignItems: 'baseline',
-                        padding: '20px 10px'
-                    }}>
+                <div className="button-menu">
 
                     <Button 
                         icon={<FaFilter />} 
@@ -198,35 +191,39 @@ const TabVincularEtapas = () => {
             )}
 
             { isFormFiltrarVisible && (
-                <Form 
-                    className="global-form" 
-                    style={{width: '50%'}} 
-                    onFinish={(values) => handleListarEtapasPorFluxo(values.fluxo)}
-                > 
-                    <Form.Item name="fluxo">
-                        <Select 
-                            options={optionsFluxos} 
-                            allowClear
-                            placeholder="Selecione o fluxo"
-                            popupMatchSelectWidth={false}
-                        />
-                    </Form.Item>
+                <div className="pa-20" style={{width: '50%'}} > 
+                    <Form 
+                        layout="vertical"
+                        className="global-form" 
+                        onFinish={(values) => handleListarEtapasPorFluxo(values.fluxo)}
+                    > 
+                        <Form.Item name="fluxo" label="Filtrar por fluxo">
+                            <Select 
+                                options={optionsFluxos} 
+                                allowClear
+                                placeholder="Selecione o fluxo"
+                                popupMatchSelectWidth={false}
+                            />
+                        </Form.Item>
 
-                    <Space>
-                        <Button onClick={() => handleCancelar()}> Cancelar </Button>
-                        <Button type="primary" htmlType="submit"> Filtrar </Button>
-                    </Space>
-                </Form>
+                        <Space>
+                            <Button onClick={() => handleCancelar()}> Cancelar </Button>
+                            <Button type="primary" htmlType="submit"> Filtrar </Button>
+                        </Space>
+                    </Form>
+
+                </div>
+                
             )}
 
             { isFormVisible && (
-                <div> 
+                <div className="pa-20"> 
                     <FormVincularEtapas onCancel={handleCancelar} onSubmit={handleSalvarFluxoEtapa} />
                 </div>
             )}
 
             { isTableVisible && (
-                <div style={{marginTop: '20px'}}>
+                <div className="pa-20" style={{marginTop: '20px'}}>
                     <TableFluxoEtapas data={fluxoEtapas} columns={columnsTable} />
                 </div>
             )

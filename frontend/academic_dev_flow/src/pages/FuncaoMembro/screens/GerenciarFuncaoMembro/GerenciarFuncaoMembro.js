@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import Titulo from "../../../../components/Titulo/Titulo";
-import { Button } from "antd";
+import { Button, Modal } from "antd";
 import { FaFilter, FaPlus } from "react-icons/fa";
 import { useFuncaoMembroContexto } from "../../context/FuncaoMembroContexto";
 import FormFuncaoMembro from "../../components/FormFuncaoMembro/FormFuncaoMembro";
 import TableFuncaoMembro from "../../components/TableFuncaoMembro/TableFuncaoMembro";
-import { atualizarFuncaoMembroProjeto, cadastrarFuncaoMembroProjeto, filtrarFuncaoMembroProjeto, listarFuncaoMembro } from "../../../../services/funcaoMembroProjetoService";
+import { atualizarFuncaoMembroProjeto, cadastrarFuncaoMembroProjeto, excluirFuncaoMembroProjeto, filtrarFuncaoMembroProjeto, listarFuncaoMembro } from "../../../../services/funcaoMembroProjetoService";
 import { handleError } from "../../../../services/utils";
 import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../services/messages";
 import FormFilterFuncaoMembro from "../../components/FormFilterFuncaoMembro/FormFilterFuncaoMembro";
@@ -71,12 +71,24 @@ const GerenciarFuncaoMembro = () => {
     }
 
     const handleFiltrarFuncaoMembro = async (params) => {
-        console.log(params)
         const response = await filtrarFuncaoMembroProjeto(params)
 
         if (!response.error){
             setItemsFuncaoMembro(response.data)
         }
+    }
+
+    const handleRemoverFuncao = async (id) => {
+        Modal.confirm({
+            title: 'Confirmar exclusão',
+            content: 'Você está seguro de que deseja remover a função ?',
+            okText: 'Sim',
+            cancelText: 'Não',
+            onOk:  async () => {
+                await excluirFuncaoMembroProjeto(id)
+                await handleReload()
+            }
+        });
     }
 
     return (
@@ -108,14 +120,18 @@ const GerenciarFuncaoMembro = () => {
             )}
 
             { isFormBuscarVisivel && (
-                <div style={{width: '50%'}}>
+                <div className="pa-20" style={{width: '50%'}}>
                     <FormFilterFuncaoMembro onSubmit={handleFiltrarFuncaoMembro} />
                 </div>
             )}
 
-            <div>
+            <div className="pa-20">
                 { isFormVisible && <FormFuncaoMembro onSubmit={handleAtribuirFuncaoMembro} onCancel={handleCancelar} /> }
-                { isTableVisible && <TableFuncaoMembro onDisable={handleAtualizarStatusFuncaoMembro} /> }
+                { isTableVisible && 
+                    <TableFuncaoMembro 
+                        onDisable={handleAtualizarStatusFuncaoMembro} 
+                        onDelete={handleRemoverFuncao} 
+                    /> }
            </div>
 
         </div>

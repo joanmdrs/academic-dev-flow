@@ -5,6 +5,7 @@ import { IoMdCreate, IoMdTrash } from "react-icons/io"
 import { useFuncaoMembroContexto } from "../../context/FuncaoMembroContexto"
 import { listarCategoriaFuncaoMembro } from "../../../../services/funcaoMembroProjetoService"
 import RenderEmpty from "../../../../components/Empty/Empty"
+import RenderCategoria from "../../../../components/RenderCategoria/RenderCategoria"
 
 
 const TableCategoriaFuncaoMembro = ({onEdit, onDelete}) => {
@@ -16,16 +17,7 @@ const TableCategoriaFuncaoMembro = ({onEdit, onDelete}) => {
             dataIndex: 'nome',
             key: 'nome',
             render: (_, record) => (
-                <span style={{
-                    backgroundColor: `${record.cor}`,
-                    color: '#FFFFFF',
-                    padding: '10px',
-                    borderRadius: '5px',
-                    fontSize: '12px'
-
-                }}> 
-                    {record.nome}
-                </span>
+                <RenderCategoria nome={record.nome} cor={record.cor}/>
             )
         },
         {
@@ -83,7 +75,6 @@ const TableCategoriaFuncaoMembro = ({onEdit, onDelete}) => {
         <React.Fragment>
             { itemsCategoriaFuncaoMembro.length !== 0 ? (
                 <Table
-                    className="bs-1 pa-20"
                     columns={COLUNAS_TABELA}
                     dataSource={itemsCategoriaFuncaoMembro}
                     rowKey="id"  

@@ -9,7 +9,6 @@ const TableFluxos = ({data, columns}) => {
         <React.Fragment>
             { data.length !== 0 ? (
                 <Table 
-                    className="bs-1 pa-20" 
                     dataSource={data} 
                     columns={columns} 
                     rowKey="id"

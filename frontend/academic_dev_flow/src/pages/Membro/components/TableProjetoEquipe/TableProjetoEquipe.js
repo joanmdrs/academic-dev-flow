@@ -1,9 +1,8 @@
-import {Space, Table, Tooltip } from "antd";
+import {Table } from "antd";
 import React from "react";
 import RenderMembers from "../../../../components/RenderMembers/RenderMembers";
 import { limitarCaracteres } from "../../../../services/utils";
 import RenderEmpty from "../../../../components/Empty/Empty";
-import { IoOpenOutline } from "react-icons/io5";
 
 const TableProjetoEquipe = ({data, onOpen}) => {
 
@@ -13,22 +12,17 @@ const TableProjetoEquipe = ({data, onOpen}) => {
             dataIndex: 'nome_projeto',
             key: 'nome_projeto',
             render: (_, record) => (
-                <Space>
-                    <span 
-                        style={{
+                <span 
+                    onClick={() => onOpen(record)}
+                    style={{
+                        cursor: 'pointer',
                         width: '400px',
                         fontWeight: '600',
                         fontSize: '15px', 
                         fontFamily: 'Poppins, sans-serif'
-                    }}> {limitarCaracteres(record.nome_projeto, 100)} </span>
+                }}> {limitarCaracteres(record.nome_projeto, 100)} </span>
 
-                    <span style={{cursor: 'pointer'}} onClick={() => onOpen(record)}> 
-                        <Tooltip title="Visualizar">
-                            <IoOpenOutline size="18px" />
-                        </Tooltip>
-                    </span>
                     
-                </Space>
             )
         }, 
         {
@@ -53,7 +47,6 @@ const TableProjetoEquipe = ({data, onOpen}) => {
                     dataSource={data}
                     columns={columnsTable}
                     rowKey="id"
-                    style={{boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px', padding: '20px'}}
                 />
                 
             ) : (

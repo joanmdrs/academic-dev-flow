@@ -6,7 +6,7 @@ import { IoIosAdd } from "react-icons/io";
 const GridEquipe = ({data, onDelete, onAdd}) => {
 
     return (
-        <div style={{display: 'flex', gap: '20px', padding: '20px'}}>
+        <div style={{display: 'flex', gap: '20px', padding: '20px', flexWrap: 'wrap'}}>
             <div 
                 onClick={onAdd}
                 style={{

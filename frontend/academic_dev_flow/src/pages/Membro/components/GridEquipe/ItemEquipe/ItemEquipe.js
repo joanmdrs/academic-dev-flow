@@ -49,7 +49,7 @@ const ItemEquipe = ({data, onDelete}) => {
             </div>
 
             <div> 
-                <h4 style={{textAlign: 'center'}}> {limitarCaracteres(data.nome_membro, 15)} </h4>
+                <h4 style={{textAlign: 'center'}}> {data.nome_membro} </h4>
             </div>
 
             <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}> 

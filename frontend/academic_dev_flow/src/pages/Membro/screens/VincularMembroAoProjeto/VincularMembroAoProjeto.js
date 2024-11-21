@@ -214,7 +214,7 @@ const VincularMembroAoProjeto = () => {
             )}
 
             
-            <div> 
+            <div className="pa-20"> 
                 {isFormVisible && 
                     <FormMembroProjeto 
                         titleForm="VINCULAR MEMBRO(S) AO PROJETO"

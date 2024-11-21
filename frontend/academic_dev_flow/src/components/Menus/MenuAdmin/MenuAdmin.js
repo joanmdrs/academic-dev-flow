@@ -1,14 +1,8 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu } from "antd";
-import { HiOutlineClipboardList } from "react-icons/hi";
-import { BiGroup } from "react-icons/bi";
 import Sider from "antd/es/layout/Sider";
-import { RiFlowChart } from "react-icons/ri";
-import { MdOutlineTaskAlt } from "react-icons/md";
-import { IoDocumentTextOutline } from "react-icons/io5";
-import { BsLayers } from "react-icons/bs";
-import { FaCoffee, FaGithub } from "react-icons/fa";
+import { FaCoffee } from "react-icons/fa";
 import { useContextoGlobalTheme } from "../../../context/ContextoTheme/ContextoTheme";
 import { LuCalendarDays, LuClipboardList, LuFileCode2, LuFolder, LuGithub, LuLayoutDashboard, LuUsers, LuWorkflow } from "react-icons/lu";
 

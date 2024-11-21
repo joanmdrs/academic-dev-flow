@@ -51,7 +51,6 @@ const TableTags = ({data, onEdit, onDelete}) => {
         <React.Fragment>
             { data.length !== 0 ? (
                 <Table
-                    className="bs-1 pa-20"
                     rowKey="id"
                     columns={columnsTable}
                     dataSource={data}  

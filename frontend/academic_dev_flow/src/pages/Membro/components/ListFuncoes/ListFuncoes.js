@@ -4,6 +4,7 @@ import React from "react";
 import { getRandomColor } from "../../../../services/utils";
 import { IoIosCheckmark, IoIosClose, IoMdCreate, IoMdTrash } from "react-icons/io";
 import RenderEmpty from "../../../../components/Empty/Empty";
+import RenderCategoria from "../../../../components/RenderCategoria/RenderCategoria";
 
 const formatarData = (dataIso) => {
     const data = new Date(dataIso);
@@ -26,16 +27,7 @@ const ListFuncoes = ({data, onDelete, onDisable}) => {
             key: 'funcao',
 
             render: (_, record) => (
-                <span
-                    style={{
-                        backgroundColor: `${record.cor_categoria_funcao}`,
-                        color: '#FFFFFF',
-                        padding: '10px',
-                        borderRadius: '5px',
-                        fontSize: '12px'
-
-                    }}> {record.nome_categoria_funcao}
-                </span>
+                <RenderCategoria nome={record.nome_categoria_funcao} cor={record.cor_categoria_funcao} />
             )
         }, 
         {
