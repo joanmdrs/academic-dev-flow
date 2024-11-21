@@ -30,7 +30,6 @@ import ScreenTarefas from "./pages/Tarefa/screens/Tarefas";
 import ScreenArtefatos from "./pages/Artefato/screens/Artefatos";
 import ScreenHomeAdmin from "./pages/Home/Admin";
 import ScreenHomeDiscente from "./pages/Home/Discente";
-import ScreenHomeDocente from "./pages/Home/Docente";
 import ScreenVisualizarProjeto from "./pages/Projeto/screens/VisualizarProjeto";
 import ScreenRepositories from "./pages/GitHub/screens/Repositories";
 import ScreenPainelGitHub from "./pages/GitHub/screens/PainelGitHub";
@@ -250,13 +249,13 @@ function Routes() {
 
                 <Route 
                     path="/aluno/github-integration"
-                    element={<ScreenRepositories grupo={"aluno"} />}
+                    element={<ScreenRepositories grupo="aluno" />}
                     exact
                 />
 
                 <Route 
                     path="/aluno/github-integration/painel"
-                    element={<ScreenPainelGitHub grupo={'aluno'} />}
+                    element={<ScreenPainelGitHub grupo='aluno' />}
                     exact
                 />
                 
@@ -361,13 +360,13 @@ function Routes() {
 
                 <Route 
                     path="/professor/github-integration"
-                    element={<ScreenRepositories grupo={"professor"} />}
+                    element={<ScreenRepositories grupo="professor" />}
                     exact
                 />
 
                 <Route 
                     path="/professor/github-integration/painel"
-                    element={<ScreenPainelGitHub grupo={'professor'} />}
+                    element={<ScreenPainelGitHub grupo='professor' />}
                     exact
                 />
             </Route>
