@@ -2,7 +2,6 @@ import React from "react";
 import { Tabs } from "antd";
 import { useContextoCommits } from "../../context/ContextoCommits";
 import FormBuscarCommits from "../../components/FormBuscarCommits/FormBuscarCommits";
-import GraphBarCommits from "../../components/GraphBarCommits/GraphBarCommits";
 import Titulo from "../../../../components/Titulo/Titulo";
 import SelectProject from "../../components/SelectProject/SelectProject";
 import SpinLoading from "../../../../components/SpinLoading/SpinLoading";
@@ -38,7 +37,7 @@ const AdminCommits = () => {
                             <Tabs tabPosition="right">
                                 <TabPane tab={<VscGraph size="20px"/>} key="1">
                                     <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}> 
-                                        <GraphBarCommits data={commits} />
+                                        {/* <GraphBarCommits data={commits} /> */}
                                     </div>
                                 </TabPane>
                             </Tabs>
