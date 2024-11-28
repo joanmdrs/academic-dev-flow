@@ -14,13 +14,11 @@ import ScreenPerfilMembro from "./pages/Membro/screens/PerfilMembro";
 import ScreenGerenciarFluxos from "./pages/Fluxo";
 import ScreenGerenciarEtapas from "./pages/Etapa/screens/GerenciarEtapas";
 import ScreenGerenciarCategoriaFuncaoMembro from "./pages/FuncaoMembro/screens/GerenciarCategoriaFuncaoMembro";
-import { ProviderGlobalProjeto } from "./context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 import ScreenGerenciarCategoriaTarefa from "./pages/CategoriaTarefa";
 import ScreenAdminContents from "./pages/GitHub/admin/AdminContents";
 import ScreenAdminIssues from "./pages/GitHub/admin/AdminIssues";
 import ScreenAdminArtefatos from "./pages/Artefato/admin/AdminArtefatos";
 import ScreenGerenciarFuncaoMembro from "./pages/FuncaoMembro/screens/GerenciarFuncaoMembro";
-import { ProviderGlobalUser } from "./context/ContextoGlobalUser/ContextoGlobalUser";
 import ScreenRelease from "./pages/Release/screens/Release";
 import ScreenIteracoes from "./pages/Iteracao/screens/Iteracoes";
 import ScreenQuadroMembros from "./pages/Membro/screens/QuadroMembros";
@@ -32,12 +30,14 @@ import ScreenHomeAdmin from "./pages/Home/Admin";
 import ScreenHomeDiscente from "./pages/Home/Discente";
 import ScreenVisualizarProjeto from "./pages/Projeto/screens/VisualizarProjeto";
 import ScreenRepositories from "./pages/GitHub/screens/Repositories";
-import ScreenPainelGitHub from "./pages/GitHub/screens/PainelGitHub";
 import ScreenAdminProjetos from "./pages/Projeto/admin/AdminProjetos";
 import ScreenAdminReleases from "./pages/Release/admin/AdminReleases";
 import ScreenAdminCommits from "./pages/GitHub/admin/AdminCommits";
 import ScreenAdminIteracoes from "./pages/Iteracao/admin/AdminIteracoes";
 import ScreenGerenciarTags from "./pages/Tag";
+import ScreenPainelGitHub from "./pages/GitHub/screens/PainelGitHub";
+import { ProviderGlobalUser } from "./context/ContextoGlobalUser/ContextoGlobalUser";
+import { ProviderGlobalProjeto } from "./context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
 function Routes() {
     return (

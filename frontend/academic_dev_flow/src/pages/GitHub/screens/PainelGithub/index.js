@@ -6,8 +6,6 @@ import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfes
 import { ProviderCommits } from "../../context/ContextoCommits";
 import PainelGitHub from "./PainelGithub";
 
-const {Content} = Layout
-
 const ScreenPainelGitHub = ({grupo}) => {
 
     return (
@@ -16,11 +14,9 @@ const ScreenPainelGitHub = ({grupo}) => {
             { grupo === 'professor' && <MenuProfessor />}
             <Layout>
                 <MyHeader/>
-                <Content>
                     <ProviderCommits>
                         <PainelGitHub />
                     </ProviderCommits>
-                </Content>
             </Layout>
         </React.Fragment>   
     )
