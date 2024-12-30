@@ -11,8 +11,8 @@ const ScreenVisualizarProjeto = ({grupo}) => {
 
     return (
         <React.Fragment>
-            { grupo === 'aluno' && <MenuAluno />}
-            { grupo === 'professor' && <MenuProfessor />}
+            {/* { grupo === 'aluno' && <MenuAluno />}
+            { grupo === 'professor' && <MenuProfessor />} */}
             <Layout>
                 <MyHeader/>
                 <Content>

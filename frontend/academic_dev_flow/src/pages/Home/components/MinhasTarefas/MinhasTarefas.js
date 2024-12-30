@@ -15,7 +15,7 @@ const MinhasTarefas = ({ tarefas, atualizarStatus }) => {
     return (
         <div className="minhas-tarefas box-model">
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'baseline'}}> 
-                <h3 className="ff-pop">Meus artefatos</h3>
+                <h3 className="ff-pop">Minhas tarefas</h3>
                 { grupo === 'Administradores' && <Link to={`/admin/tarefas`}> Visualize todos </Link> }
                 { grupo === 'Discentes' && <Link to={`/aluno/tarefas`}> Visualize todos </Link> }
                 { grupo === 'Docentes' && <Link to={`/professor/tarefas`}> Visualize todos </Link> }

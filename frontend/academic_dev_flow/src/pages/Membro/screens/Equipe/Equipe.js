@@ -167,15 +167,14 @@ const Equipe = () => {
                         icon={<IoArrowBackOutline />}
                     > VOLTAR 
                     </Button>
-
-                    
-                </div>
-
-                    
+                </div>                    
             </div>
 
             { isFormFuncaoMembroVisible ? (
-                <FormFuncaoMembro onSubmit={handleDefinirFuncao} onCancel={handleCancelar} />
+
+                <div className="pa-20"> 
+                    <FormFuncaoMembro onSubmit={handleDefinirFuncao} onCancel={handleCancelar} />
+                </div>
                 ) : (
                     <div>
 
