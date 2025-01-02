@@ -40,7 +40,7 @@ class JSONWebTokenAuthentication(BaseAuthentication):
         if len(token_parts) == 2:
             return token_parts[1]
         
-        print('Token não encontrado ou malformatado')
+        # print('Token não encontrado ou malformatado')
         return None
 
     def authenticate_header(self, request):

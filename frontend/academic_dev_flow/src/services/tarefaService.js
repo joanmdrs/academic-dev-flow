@@ -76,18 +76,18 @@ export const atualizarStatusTarefa = async (idTarefa, data) => {
     }
 }
 
-export const vincularIteracaoAsTarefas = async (idsTarefas, idIteracao) => {
-    const sendData = {
-        ids_tarefas: idsTarefas,
-        id_iteracao: idIteracao
-    }
-    try {
-        const response = await api.patch('tarefa/atualizar-iteracao/', sendData)
-        return handleSuccess(response, 'Atribuição de tarefas a iteração realizada com sucesso!')
-    } catch (error) {
-        return handleError(error, 'Falha durante a atribuição das tarefas a iteração, contate o suporte!')
-    }
-}
+// export const vincularIteracaoAsTarefas = async (idsTarefas, idIteracao) => {
+//     const sendData = {
+//         ids_tarefas: idsTarefas,
+//         id_iteracao: idIteracao
+//     }
+//     try {
+//         const response = await api.patch('tarefa/atualizar-iteracao/', sendData)
+//         return handleSuccess(response, 'Atribuição de tarefas a iteração realizada com sucesso!')
+//     } catch (error) {
+//         return handleError(error, 'Falha durante a atribuição das tarefas a iteração, contate o suporte!')
+//     }
+// }
 
 export const buscarTarefaPeloId = async (idTarefa) => {
     try {

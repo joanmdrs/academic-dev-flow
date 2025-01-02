@@ -34,9 +34,9 @@ class IniciarContagemTempoView(APIView):
                     return Response(serializer.data, status=status.HTTP_200_OK)
                 return Response({'error': 'Não foi possível iniciar a contagem de tempo.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        except MembroProjeto.DoesNotExist():
+        except MembroProjeto.DoesNotExist:
             return Response({'error': 'MembroProjeto não localizado'}, status=status.HTTP_404_NOT_FOUND)
-        except Tarefa.DoesNotExist():
+        except Tarefa.DoesNotExist:
             return Response({'error': 'Tarefa não localizada'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -64,9 +64,9 @@ class PararContagemTempoView(APIView):
                     return Response(serializer.data, status=status.HTTP_200_OK)
                 return Response({'error': 'Não foi possível parar a contagem de tempo.'}, status=status.HTTP_400_BAD_REQUEST)
             
-        except MembroProjeto.DoesNotExist():
+        except MembroProjeto.DoesNotExist:
             return Response({'error': 'MembroProjeto não localizado'}, status=status.HTTP_404_NOT_FOUND)
-        except Tarefa.DoesNotExist():
+        except Tarefa.DoesNotExist:
             return Response({'error': 'Tarefa não localizada'}, status=status.HTTP_404_NOT_FOUND)       
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
