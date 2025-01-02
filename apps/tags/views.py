@@ -1,27 +1,11 @@
 from django.shortcuts import render
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from .models import Tag
-from .serializers import TagSerializer
-from django.db import IntegrityError
-from rest_framework.permissions import IsAuthenticated
-
-
-from rest_framework import status
-from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from .models import Tag
 from .serializers import TagSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-
 from rest_framework import status
 from rest_framework.response import Response
-from .models import Tag
-from .serializers import TagSerializer
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
 
 class CadastrarTagView(APIView):
     permission_classes = [IsAuthenticated]
@@ -117,13 +101,16 @@ class AtualizarTagView(APIView):
             nome_tag = request.data.get('nome')
 
             # Verifica se existe uma tag com o nome fornecido e um ID diferente do ID da tag que está sendo atualizada
-            if nome_tag and Tag.objects.filter(nome=nome_tag).exclude(id=id_tag).exists():
+            if Tag.objects.filter(nome=nome_tag).exists():
                 return Response(
                     {'error': 'Já existe uma tag com esse nome.', 'code': 'TAG_EXISTENTE'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
             tag = Tag.objects.get(id=id_tag)
+            
+            if not tag:
+                return Response({'error': 'Tag não localizada'}, status=status.HTTP_404_NOT_FOUND)
 
             if tag:
                 serializer = TagSerializer(tag, data=request.data, partial=True)
@@ -133,7 +120,7 @@ class AtualizarTagView(APIView):
 
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-            return Response({'error': 'Tag não localizada'}, status=status.HTTP_404_NOT_FOUND)
+           
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
