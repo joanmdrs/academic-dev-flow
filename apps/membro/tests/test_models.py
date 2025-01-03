@@ -1,81 +1,75 @@
 from django.test import TestCase
 from apps.usuario.models import Usuario
-from apps.membro.models import Membro, UsuarioGithub
+from apps.membro.models import Membro
+from django.contrib.auth.models import Group
+from django.db.utils import IntegrityError
 
 class MembroModelTest(TestCase):
-    
     def setUp(self):
         """Configura o ambiente de teste criando instâncias necessárias."""
-        self.usuario_github = UsuarioGithub.objects.create(
-            nome='Usuário Github Teste',
-            email_github='usuario@github.com',
-            usuario_github='usuario_test'
+        self.grupo = Group.objects.create(name="TestGroup")
+
+        self.usuario = Usuario.objects.create(
+            username="membro.teste@email.com",
+            password="senha"
         )
-        
-        self.usuario = Usuario.objects.create_user(
-            username='testuser',
-            password='testpassword'
+
+        self.membro = Membro.objects.create(
+            nome="Membro de teste",
+            data_nascimento="2000-12-11",
+            sexo="M",
+            telefone="123456789",
+            email="membro.teste@email.com",
+            linkedin="https://linkedin.com/in/membro",
+            lattes="https://lattes.com/membro",
+            nome_github="membro-teste",
+            email_github="github.membro@email.com",
+            usuario_github="membro-github",
+            usuario=self.usuario,
+            grupo=self.grupo,
+            avatar=1
         )
-    
-    def test_membro_criacao(self):
-        """Testa a criação de uma instância do modelo Membro."""
-        membro = Membro.objects.create(
-            nome='Membro Teste',
-            data_nascimento='2000-12-11',
-            telefone='(84)99999-9999',
-            email='membro@teste.com',
-            github=self.usuario_github,
-            linkedin='https://linkedin.com/in/membro_teste',
-            lattes='http://lattes.cnpq.br/1234567890123456',
-            grupo='Grupo Teste',
-            usuario=self.usuario
+
+    def test_str_representation(self):
+        """Teste da representação em string do modelo."""
+        self.assertEqual(str(self.membro), "Membro de teste")
+
+    def test_valores_dos_campos(self):
+        """Teste dos valores dos campos atribuídos corretamente."""
+        self.assertEqual(self.membro.nome, "Membro de teste")
+        self.assertEqual(self.membro.data_nascimento, "2000-12-11")
+        self.assertEqual(self.membro.sexo, "M")
+        self.assertEqual(self.membro.telefone, "123456789")
+        self.assertEqual(self.membro.email, "membro.teste@email.com")
+        self.assertEqual(self.membro.linkedin, "https://linkedin.com/in/membro")
+        self.assertEqual(self.membro.lattes, "https://lattes.com/membro")
+        self.assertEqual(self.membro.nome_github, "membro-teste")
+        self.assertEqual(self.membro.email_github, "github.membro@email.com")
+        self.assertEqual(self.membro.usuario_github, "membro-github")
+        self.assertEqual(self.membro.usuario, self.usuario)
+        self.assertEqual(self.membro.grupo, self.grupo)
+        self.assertEqual(self.membro.avatar, 1)
+
+    def test_valor_padrao_campo_sexo(self):
+        """Teste do valor padrão do campo sexo."""
+        membro_sem_sexo = Membro.objects.create(
+            nome="Sem Sexo",
+            email="sem.sexo@email.com",
         )
-        self.assertTrue(isinstance(membro, Membro))
-        self.assertEqual(membro.__str__(), 'Membro Teste')
-    
-    def test_campos_obrigatorios(self):
-        """Testa a criação de Membro com campos obrigatórios."""
-        membro = Membro(
-            nome='Membro Teste',
-            data_nascimento='2000-12-11',
-            telefone='(84)99999-9999',
-            email='membro@teste.com'
-        )
-        membro.save()
-        self.assertEqual(Membro.objects.count(), 1)
-        self.assertEqual(membro.nome, 'Membro Teste')
-    
-    def test_campos_opcionais(self):
-        """Testa a criação de Membro com campos opcionais."""
-        membro = Membro(
-            nome='Membro Teste',
-            data_nascimento='2000-12-11',
-            telefone='(84)99999-9999',
-            email='membro@teste.com',
-            linkedin='https://linkedin.com/in/membro_teste'
-        )
-        membro.save()
-        self.assertEqual(membro.linkedin, 'https://linkedin.com/in/membro_teste')
-        self.assertIsNone(membro.github)
-    
-    def test_referencia_usuario_github(self):
-        """Testa a referência ao modelo UsuarioGithub."""
-        membro = Membro.objects.create(
-            nome='Membro com Github',
-            data_nascimento='2000-12-11',
-            telefone='(84)99999-9999',
-            email='membro@teste.com',
-            github=self.usuario_github
-        )
-        self.assertEqual(membro.github, self.usuario_github)
-    
-    def test_referencia_usuario(self):
-        """Testa a referência ao modelo Usuario."""
-        membro = Membro.objects.create(
-            nome='Membro com Usuario',
-            data_nascimento='2000-12-11',
-            telefone='(84)99999-9999',
-            email='membro@teste.com',
-            usuario=self.usuario
-        )
-        self.assertEqual(membro.usuario, self.usuario)
+        self.assertEqual(membro_sem_sexo.sexo, "O")
+
+    def test_usuario_github_unico(self):
+        """Teste para garantir que o campo usuario_github é único."""
+        with self.assertRaises(IntegrityError):
+            Membro.objects.create(
+                nome="Outro Membro",
+                email="outro@email.com",
+                usuario_github="membro-github",  # Mesmo valor do campo único
+                usuario=self.usuario
+            )
+
+    def test_grupo_null_ao_deletar(self):
+        """Teste para verificar se o grupo é definido como null ao ser deletado."""
+        self.grupo.delete()
+        self.membro.refresh_from_db()
+        self.assertIsNone(self.membro.grupo)
