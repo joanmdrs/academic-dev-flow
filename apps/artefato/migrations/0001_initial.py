@@ -10,7 +10,6 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('iteracao', '0001_initial'),
-        ('pontuacao', '0001_initial'),
         ('projeto', '0001_initial'),
     ]
 
@@ -26,7 +25,6 @@ class Migration(migrations.Migration):
                 ('id_file', models.CharField(blank=True, null=True)),
                 ('path_file', models.CharField(blank=True, null=True)),
                 ('iteracao', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='iteracao.iteracao')),
-                ('pontuacao', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='pontuacao.pontuacao')),
                 ('projeto', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='projeto.projeto')),
             ],
         ),

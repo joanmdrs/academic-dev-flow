@@ -35,7 +35,6 @@ urlpatterns = [
     path('academicflow-api/categoria/', include('apps.categoria.urls', namespace='categoria')),
     path('academicflow-api/tags/', include('apps.tags.urls', namespace='tags')),
     path('academicflow-api/comentario/', include('apps.comentario.urls', namespace='comentario')),
-    path('academicflow-api/pontuacao/', include('apps.pontuacao.urls', namespace='pontuacao')),
     path('academicflow-api/auth/', include('apps.api.urls', namespace='api')),
     path('academicflow-api/github_integration/', include('apps.github_integration.urls', namespace='github_integration')),
     path('academicflow-api/', RedirectView.as_view(url='/academicflow-api/admin/')),
