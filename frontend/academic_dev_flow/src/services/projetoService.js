@@ -30,13 +30,8 @@ export const buscarProjetoPeloNome = async (parametro) => {
 };
 
 export const buscarProjetoPeloId = async (idProjeto) => {
-    const resposta = await api.get(`/projeto/buscar_por_id/${encodeURIComponent(idProjeto)}/`);
+    const resposta = await api.get(`/projeto/buscar-por-id/`, {params: {id_projeto: idProjeto}});
     return resposta
-}
-
-export const buscarProjetosPorListaIds = async (listaIds) => {
-    const response = await api.get('/projeto/buscar_por_lista_ids/', {params: {ids: listaIds}});
-    return response;
 }
 
 export const excluirProjeto = async (idProjeto) => {

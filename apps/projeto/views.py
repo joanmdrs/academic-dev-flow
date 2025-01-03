@@ -10,17 +10,44 @@ from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
 from apps.membro_projeto.models import MembroProjeto
 from apps.membro_projeto.serializers import MembroProjetoSerializer
-
+from rest_framework.exceptions import ValidationError
     
 class CadastrarProjetoView(APIView):
     permission_classes = [IsAuthenticated]
+
     def post(self, request):
         try:
+            # Verifica se os campos obrigatórios foram fornecidos
+            nome = request.data.get('nome')
+            data_inicio = request.data.get('data_inicio')
+            data_termino = request.data.get('data_termino')
+
+            missing_fields = []
+            if not nome:
+                missing_fields.append('nome')
+            if not data_inicio:
+                missing_fields.append('data_inicio')
+            if not data_termino:
+                missing_fields.append('data_termino')
+
+            if missing_fields:
+                raise ValidationError(
+                    {
+                        'error': 'Os seguintes campos obrigatórios estão ausentes: ' + ', '.join(missing_fields),
+                        'code': 'CAMPOS_OBRIGATORIOS_AUSENTES'
+                    }
+                )
+
             serializer = ProjetoSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
+
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        except ValidationError as e:
+            return Response({'error': e.detail}, status=status.HTTP_400_BAD_REQUEST)
+
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -46,39 +73,25 @@ class BuscarProjetosPorNomeView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    
-class ListarProjetoPorIdView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, id):
-        try:
-            projeto = Projeto.objects.get(pk=id)
-            serializer = ProjetoSerializer(projeto, many=False)
-            
-            return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-class BuscarProjetosPorListaDeIdsView(APIView):
+class BuscarProjetoPorIdView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         try:
-            ids_projetos = request.GET.getlist('ids[]', [])
-
-            projetos = Projeto.objects.filter(id__in=ids_projetos)
-
-            if not projetos:
-                return Response({'message': 'Nenhum projeto encontrado.', 'results': []}, status=status.HTTP_200_OK)
-
-            serializer = ProjetoSerializer(projetos, many=True)
-            return Response({'message': 'Projetos encontrados com sucesso.', 'results': serializer.data}, status=status.HTTP_200_OK)
-
-        except ValueError:
-            return Response({'error': 'IDs fornecidos são inválidos.'}, status=status.HTTP_400_BAD_REQUEST)
+            id_projeto = request.GET.get('id_projeto', None)
+            
+            if not id_projeto:
+                return Response({'error': 'O ID do projeto não foi fornecido'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            projeto = Projeto.objects.get(id=id_projeto)
+            
+            if projeto:
+                serializer = ProjetoSerializer(projeto, many=False)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            return Response({'error': 'Projeto não localizado'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
   
 class ExcluirProjetoView(APIView):
     permission_classes = [IsAuthenticated]
