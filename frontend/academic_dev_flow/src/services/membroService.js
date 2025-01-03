@@ -61,19 +61,6 @@ export const buscarMembroPeloNome = async (nomeMembro) => {
     } 
 }
 
-export const buscarMembroPorGrupoENome = async (nomeMembro, grupoMembro) => {
-
-    try {
-        const resposta = await api.get(`membro/buscar-por-nome-e-grupo/`, 
-            {params: {nome: nomeMembro, grupo: grupoMembro}})
-        return resposta
-    } catch (error) {
-        console.log(error)
-        NotificationManager.error('Falha ao buscar o membro, contate o suporte!')
-        return {error: "Erro durante a operação, contate o suporte!"}
-    }
-}
-
 export const buscarMembroPeloId = async (idMembro) => {
     try {
         const resposta = await api.get('/membro/buscar-por-id/', {params: {id_membro: idMembro}})
@@ -96,15 +83,15 @@ export const buscarMembroPeloUser = async (idUser) => {
     }
 }
 
-// Analisar depois
-export const buscarUsuarioPeloIdMembroProjeto = async (idMembroProjeto) => {
-    try {
-        const response = await api.get(`membro/buscar-usuario-github/${encodeURIComponent(idMembroProjeto)}/`)
-        return response
-    } catch (error) {
-        return handleError(error, 'Falha ao tentar buscar os dados do usuário github do membro selecionado, contate o suporte!')
-    }
-}
+// // Analisar depois
+// export const buscarUsuarioPeloIdMembroProjeto = async (idMembroProjeto) => {
+//     try {
+//         const response = await api.get(`membro/buscar-usuario-github/${encodeURIComponent(idMembroProjeto)}/`)
+//         return response
+//     } catch (error) {
+//         return handleError(error, 'Falha ao tentar buscar os dados do usuário github do membro selecionado, contate o suporte!')
+//     }
+// }
 
 export const excluirMembro = async (idMembro) => {
     try {
@@ -163,14 +150,14 @@ export const listarMembros = async () => {
 
 
 // Analisar depois 
-export const buscarMembrosPorListaIds = async (listaIds) => {
+// export const buscarMembrosPorListaIds = async (listaIds) => {
 
-    try {
-        const response = await api.get('/membro/listar/', {params: {ids: listaIds}});
-        return response;
-    } catch (error) {
-        console.log(error)
-        NotificationManager.error("Falha ao buscar os membros, contate o suporte!")
-        return {error: "Falha ao buscar os membros"}
-    }
-}
+//     try {
+//         const response = await api.get('/membro/listar/', {params: {ids: listaIds}});
+//         return response;
+//     } catch (error) {
+//         console.log(error)
+//         NotificationManager.error("Falha ao buscar os membros, contate o suporte!")
+//         return {error: "Falha ao buscar os membros"}
+//     }
+// }
