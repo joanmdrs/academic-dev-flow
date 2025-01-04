@@ -18,6 +18,7 @@ class CadastrarMembroProjetoView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
+        
         try:
             ids_membros = request.data.get('membros', [])
             id_projeto = request.data.get('projeto', None)
@@ -51,6 +52,10 @@ class AtualizarMembroProjetoView(APIView):
         try: 
             
             id_membro_projeto = request.GET.get('id_membro_projeto', None)
+            
+            if not id_membro_projeto:
+                return Response({'error': 'O ID do membro-projeto é necessário.'}, status=status.HTTP_400_BAD_REQUEST)
+            
             membroProjeto = MembroProjeto.objects.get(id=id_membro_projeto) 
             
             serializer = MembroProjetoSerializer(membroProjeto, data=request.data)
@@ -78,9 +83,9 @@ class ExcluirMembroProjetoView(APIView):
             
             if objs_membro_projeto.exists():
                 objs_membro_projeto.delete()
-                return Response({"detail": "Objetos Membro Projeto excluídos com sucesso"}, status=status.HTTP_204_NO_CONTENT)
+                return Response({"detail": "Objetos Membro Projeto excluídos com sucesso."}, status=status.HTTP_204_NO_CONTENT)
             
-            return Response({'error': 'Um ou mais objetos não foram encontrados'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Um ou mais objetos não foram encontrados.'}, status=status.HTTP_404_NOT_FOUND)
             
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)  
@@ -102,7 +107,7 @@ class BuscarMembroProjetoPeloIdMembroEPeloIdProjeto(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         
         except MembroProjeto.DoesNotExist:
-            return JsonResponse({'error': 'Membro não encontrado'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Não foi possível localizar a relação membro-projeto.'}, status=status.HTTP_404_NOT_FOUND)
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

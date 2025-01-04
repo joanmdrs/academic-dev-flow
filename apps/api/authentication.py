@@ -27,9 +27,9 @@ class JSONWebTokenAuthentication(BaseAuthentication):
             return user, None
 
         except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed('Token expirado.')
+            raise AuthenticationFailed('Token de acesso expirado. Realize o login novamente.')
         except jwt.InvalidTokenError:
-            raise AuthenticationFailed('Token inválido.')
+            raise AuthenticationFailed('O Token fornecido é inválido.')
         except get_user_model().DoesNotExist:
             raise AuthenticationFailed('Usuário associado ao token não encontrado.')
 
