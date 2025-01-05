@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.http import HttpResponseNotAllowed, JsonResponse
 from .models import Artefato
+from apps.projeto.models import Projeto
 from apps.membro_projeto.models import MembroProjeto
 from apps.membro.models import Membro
 from .serializers import ArtefatoSerializer
@@ -15,6 +16,19 @@ class CadastrarArtefatoView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
         try: 
+            
+            if not request.data:
+                return Response({'error': 'Os dados do artefato não foram fornecidos na Request.'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            nome = request.data['nome']
+            projeto = request.data['projeto']
+            
+            if not nome:
+                return Response({'error': "O campo nome é obrigatório para criação do artefato."}, status=status.HTTP_400_BAD_REQUEST)
+            
+            if not projeto:
+                return Response({'error': "O campo projeto é obrigatório para criação do artefato."}, status=status.HTTP_400_BAD_REQUEST)
+            
             serializer = ArtefatoSerializer(data=request.data)
             
             if serializer.is_valid(raise_exception=True):
@@ -45,7 +59,7 @@ class AtualizarArtefatoView(APIView):
         
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
 
-        except Artefato.DoesNotExist():
+        except Artefato.DoesNotExist:
             return Response({'error': 'Artefato não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
              
         except Exception as e: 
@@ -380,6 +394,7 @@ class FiltrarArtefatosPorMembroEPorProjetoView(APIView):
                 # Serializa as tarefas
                 serializer = ArtefatoSerializer(artefatos, many=True)
                 return Response(serializer.data, status=status.HTTP_200_OK)
+    
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

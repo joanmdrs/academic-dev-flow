@@ -26,7 +26,6 @@ class ArtefatoSerializer(serializers.ModelSerializer):
             'url',
             'id_content',
             'path_content',
-            'pontuacao',
             'membros',
             'membros_info',
             'ids_membros',
