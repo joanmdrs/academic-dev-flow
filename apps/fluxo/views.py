@@ -12,7 +12,16 @@ class CadastrarFluxoView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
         try:
-            
+            if not request.data:
+                return Response(
+                    {'error': 'Os dados do fluxo não foram fornecidos na Request.'}, 
+                    status=status.HTTP_400_BAD_REQUEST)
+                
+            if not request.data['nome']:
+                return Response(
+                    {'error': 'O campo nome é obrigatório para a criação do fluxo.'},
+                    status=status.HTTP_400_BAD_REQUEST)
+                
             serializer = FluxoSerializer(data=request.data, context={'request': request})
             
             if serializer.is_valid(raise_exception=True):
@@ -28,10 +37,10 @@ class BuscarFluxoPeloNomeView(APIView):
     def get(self, request):
         try:
         
-            parametro = request.GET.get('name_fluxo', None)
+            nome_fluxo = request.GET.get('nome_fluxo', None)
             
-            if parametro is not None:
-                fluxos = Fluxo.objects.filter(nome__icontains=parametro)
+            if nome_fluxo:
+                fluxos = Fluxo.objects.filter(nome__icontains=nome_fluxo)
             else: 
                 fluxos = Fluxo.objects.all()
                 
@@ -48,22 +57,35 @@ class BuscarFluxoPeloNomeView(APIView):
 class BuscarFluxoPeloIdView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, fluxo_id):
+    def get(self, request):
         try:
+            id_fluxo = request.GET.get('id_fluxo', None)
             
-            fluxo = get_object_or_404(Fluxo, pk=fluxo_id)
-            serializer = FluxoSerializer(fluxo, many=False)
-            return JsonResponse(serializer.data, safe=False, json_dumps_params={'ensure_ascii': False})
+            if not id_fluxo:
+                return Response({'error': 'O ID do fluxo não foi fornecido.'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            fluxo = Fluxo.objects.get(id=id_fluxo)
+            serializer = FluxoSerializer(fluxo, many=False)            
+            return Response(serializer.data, status=status.HTTP_200_OK)
+            
+        
+        except Fluxo.DoesNotExist:
+            return Response({'error': 'Fluxo não localizado.'}, status=status.HTTP_404_NOT_FOUND)
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class AtualizarFluxoView(APIView):
     permission_classes = [IsAuthenticated]
-    def patch(self, request, fluxo_id): 
+    def patch(self, request): 
         try: 
+            id_fluxo = request.GET.get('id_fluxo', None)
+            
+            if not id_fluxo:
+                return Response({'error': 'O ID fluxo não foi fornecido.'}, status=status.HTTP_400_BAD_REQUEST)
         
-            fluxo = get_object_or_404(Fluxo, pk=fluxo_id)
+            fluxo = Fluxo.objects.get(id=id_fluxo)
+            
             serializer = FluxoSerializer(fluxo, data=request.data)
             
             if serializer.is_valid(raise_exception=True):
@@ -71,21 +93,29 @@ class AtualizarFluxoView(APIView):
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+        except Fluxo.DoesNotExist:
+            return Response({'error': 'Fluxo não localizado.'}, status=status.HTTP_400_BAD_REQUEST)
+        
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class ExcluirFluxoView(APIView):
     permission_classes = [IsAuthenticated]
-    def delete(self, request, fluxo_id):
+    def delete(self, request):
         try:
+            id_fluxo = request.GET.get('id_fluxo', None)
             
-            fluxo = get_object_or_404(Fluxo, pk=fluxo_id)
+            if not id_fluxo:
+                return Response({'error': 'O ID do fluxo não foi fornecido.'}, status=status.HTTP_400_BAD_REQUEST)
             
-            if fluxo is not None: 
+            fluxo = Fluxo.objects.get(id=id_fluxo)
+            
+            if fluxo:
                 fluxo.delete()
                 return Response({'detail': 'Fluxo excluído com sucesso!'}, status=status.HTTP_204_NO_CONTENT)
-            else: 
-                return Response({'error': 'Objeto não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
+            
+        except Fluxo.DoesNotExist:
+            return Response({'error': 'Fluxo não localizado.'}, status=status.HTTP_404_NOT_FOUND)
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
