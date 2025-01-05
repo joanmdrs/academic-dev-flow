@@ -20,6 +20,13 @@ class CadastrarIteracaoView(APIView):
 
     def post(self, request):
         try:
+            
+            if not request.data:
+                return Response(
+                    {'error': 'Os dados da iteração não foram fornecidos no corpo da requisição.'}, 
+                    status=status.HTTP_400_BAD_REQUEST)
+            
+            
             serializer = IteracaoSerializer(data=request.data)
             
             if serializer.is_valid(raise_exception=True):
@@ -145,20 +152,20 @@ class FiltrarIteracoesPeloNomeEPeloProjeto(APIView):
     
     def get(self, request):
         try:
-            nome = request.GET.get('nome_iteracao')
-            projeto = request.GET.get('id_projeto')
+            nome = request.GET.get('nome_iteracao', None)
+            projeto = request.GET.get('id_projeto', None)
             
-            if not nome and not projeto:
+            if nome is None and projeto is None:
                 iteracoes = Iteracao.objects.all()
             
             if nome and projeto:
                 iteracoes = Iteracao.objects.filter(nome__icontains=nome, projeto_id=projeto)
             elif nome:
                 iteracoes = Iteracao.objects.filter(nome__icontains=nome)
-            else: 
+            elif projeto: 
                 iteracoes = Iteracao.objects.filter(projeto_id=projeto)
                 
-            if iteracoes.exists():
+            if iteracoes:
                 
                 serializer = IteracaoSerializer(iteracoes, many=True)
                 return Response(serializer.data, status=status.HTTP_200_OK)
@@ -210,85 +217,85 @@ class BuscarIteracoesDosProjetosDoMembroView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-class BuscarUltimaIteracaoDoProjetoView(APIView):
-    permission_classes = [IsAuthenticated]
-    def get(self, request):
-        try:
-            id_projeto = request.GET.get('id_projeto', None)
-            id_release = request.GET.get('id_release', None)
+# class BuscarUltimaIteracaoDoProjetoView(APIView):
+#     permission_classes = [IsAuthenticated]
+#     def get(self, request):
+#         try:
+#             id_projeto = request.GET.get('id_projeto', None)
+#             id_release = request.GET.get('id_release', None)
             
-            if not id_projeto or not id_release:
-                return Response(
-                    {'error': 'IDs do projeto e da release são necessários!'}, 
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+#             if not id_projeto or not id_release:
+#                 return Response(
+#                     {'error': 'IDs do projeto e da release são necessários!'}, 
+#                     status=status.HTTP_400_BAD_REQUEST
+#                 )
             
-            # Busca a última iteração da release específica
-            ultima_iteracao = Iteracao.objects.filter(projeto=id_projeto, release=id_release).order_by('-ordem').first()
+#             # Busca a última iteração da release específica
+#             ultima_iteracao = Iteracao.objects.filter(projeto=id_projeto, release=id_release).order_by('-ordem').first()
             
-            if ultima_iteracao:
-                serializer = IteracaoSerializer(ultima_iteracao)
-                return Response(serializer.data, status=status.HTTP_200_OK)
+#             if ultima_iteracao:
+#                 serializer = IteracaoSerializer(ultima_iteracao)
+#                 return Response(serializer.data, status=status.HTTP_200_OK)
             
-            return Response(
-                {
-                    'message': 'Este projeto ainda não possui iterações na release selecionada.',
-                    'code': 'RELEASE_SEM_ITERACOES'
-                }, 
-                status=status.HTTP_200_OK
-            )
+#             return Response(
+#                 {
+#                     'message': 'Este projeto ainda não possui iterações na release selecionada.',
+#                     'code': 'RELEASE_SEM_ITERACOES'
+#                 }, 
+#                 status=status.HTTP_200_OK
+#             )
             
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+#         except Exception as e:
+#             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-class BuscarIteracoesAdjacentesView(APIView):
-    permission_classes = [IsAuthenticated]
-    def get(self, request):
-        try:
-            id_projeto = request.GET.get('id_projeto', None)
-            id_iteracao_atual = request.GET.get('id_iteracao', None)
+# class BuscarIteracoesAdjacentesView(APIView):
+#     permission_classes = [IsAuthenticated]
+#     def get(self, request):
+#         try:
+#             id_projeto = request.GET.get('id_projeto', None)
+#             id_iteracao_atual = request.GET.get('id_iteracao', None)
             
-            if not id_projeto or not id_iteracao_atual:
-                return Response(
-                    {'error': 'ID do projeto e da iteração atual são necessários!'}, 
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+#             if not id_projeto or not id_iteracao_atual:
+#                 return Response(
+#                     {'error': 'ID do projeto e da iteração atual são necessários!'}, 
+#                     status=status.HTTP_400_BAD_REQUEST
+#                 )
 
-            # Busca a iteração atual
-            iteracao_atual = Iteracao.objects.filter(projeto=id_projeto, id=id_iteracao_atual).first()
-            if not iteracao_atual:
-                return Response(
-                    {'error': 'A iteração atual não foi encontrada.'},
-                    status=status.HTTP_404_NOT_FOUND
-                )
+#             # Busca a iteração atual
+#             iteracao_atual = Iteracao.objects.filter(projeto=id_projeto, id=id_iteracao_atual).first()
+#             if not iteracao_atual:
+#                 return Response(
+#                     {'error': 'A iteração atual não foi encontrada.'},
+#                     status=status.HTTP_404_NOT_FOUND
+#                 )
 
-            # Filtro para considerar apenas iterações da mesma release da iteração atual
-            release_atual = iteracao_atual.release
+#             # Filtro para considerar apenas iterações da mesma release da iteração atual
+#             release_atual = iteracao_atual.release
 
-            # Busca a iteração anterior (ordem imediatamente menor na mesma release)
-            iteracao_anterior = Iteracao.objects.filter(
-                projeto=id_projeto,
-                release=release_atual,
-                ordem__lt=iteracao_atual.ordem
-            ).order_by('-ordem').first()
+#             # Busca a iteração anterior (ordem imediatamente menor na mesma release)
+#             iteracao_anterior = Iteracao.objects.filter(
+#                 projeto=id_projeto,
+#                 release=release_atual,
+#                 ordem__lt=iteracao_atual.ordem
+#             ).order_by('-ordem').first()
 
-            # Busca a próxima iteração (ordem imediatamente maior na mesma release)
-            iteracao_posterior = Iteracao.objects.filter(
-                projeto=id_projeto,
-                release=release_atual,
-                ordem__gt=iteracao_atual.ordem
-            ).order_by('ordem').first()
+#             # Busca a próxima iteração (ordem imediatamente maior na mesma release)
+#             iteracao_posterior = Iteracao.objects.filter(
+#                 projeto=id_projeto,
+#                 release=release_atual,
+#                 ordem__gt=iteracao_atual.ordem
+#             ).order_by('ordem').first()
 
-            # Serializa as iterações encontradas (anterior, atual, posterior)
-            data = {
-                'iteracao_anterior': IteracaoSerializer(iteracao_anterior).data if iteracao_anterior else None,
-                'iteracao_posterior': IteracaoSerializer(iteracao_posterior).data if iteracao_posterior else None,
-            }
+#             # Serializa as iterações encontradas (anterior, atual, posterior)
+#             data = {
+#                 'iteracao_anterior': IteracaoSerializer(iteracao_anterior).data if iteracao_anterior else None,
+#                 'iteracao_posterior': IteracaoSerializer(iteracao_posterior).data if iteracao_posterior else None,
+#             }
             
-            return Response(data, status=status.HTTP_200_OK)
+#             return Response(data, status=status.HTTP_200_OK)
 
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+#         except Exception as e:
+#             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class BuscarIteracaoAtualDoProjetoView(APIView):
     permission_classes = [IsAuthenticated]

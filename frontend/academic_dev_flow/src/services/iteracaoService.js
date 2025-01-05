@@ -87,27 +87,27 @@ export const buscarIteracoesDosProjetosDoMembro = async (idMembro) => {
     }
 }
 
-export const buscarUltimaIteracaoDoProjeto = async (idProjeto, idRelease) => {
-    try {
-        const response = await api.get(
-            'iteracao/buscar-ultima-iteracao/', 
-            {params: {id_projeto: idProjeto, id_release: idRelease}})
-        return response
-    } catch (error) {
-        return handleError(error, 'Falha ao buscar os dados da última iteração cadastrada para este projeto!')
-    }
-}
+// export const buscarUltimaIteracaoDoProjeto = async (idProjeto, idRelease) => {
+//     try {
+//         const response = await api.get(
+//             'iteracao/buscar-ultima-iteracao/', 
+//             {params: {id_projeto: idProjeto, id_release: idRelease}})
+//         return response
+//     } catch (error) {
+//         return handleError(error, 'Falha ao buscar os dados da última iteração cadastrada para este projeto!')
+//     }
+// }
 
-export const buscarIteracoesAdjacentes = async (idIteracao, idProjeto) => {
-    try {
-        const response = await api.get(
-            'iteracao/buscar-iteracoes-adjacentes/',
-            {params: {id_iteracao: idIteracao, id_projeto: idProjeto}})
-        return response
-    } catch (error) {
-        return handleError(error, 'Falha ao buscar os dados das iterações adjacentes !')
-    }
-}
+// export const buscarIteracoesAdjacentes = async (idIteracao, idProjeto) => {
+//     try {
+//         const response = await api.get(
+//             'iteracao/buscar-iteracoes-adjacentes/',
+//             {params: {id_iteracao: idIteracao, id_projeto: idProjeto}})
+//         return response
+//     } catch (error) {
+//         return handleError(error, 'Falha ao buscar os dados das iterações adjacentes !')
+//     }
+// }
 
 export const buscarIteracaoAtualDoProjeto = async (idProjeto) => {
     try {
