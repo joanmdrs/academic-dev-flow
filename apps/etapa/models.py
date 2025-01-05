@@ -1,5 +1,4 @@
 from django.db import models
-from apps.fluxo.models import Fluxo
 from django.conf import settings
 
 class Etapa(models.Model):
