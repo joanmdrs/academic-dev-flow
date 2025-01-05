@@ -2,7 +2,7 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
 from apps.usuario.models import Usuario
-from apps.projeto.models import Fluxo
+from apps.fluxo.models import Fluxo
 from django.contrib.auth.models import Group
 
 class FluxoViewsTest(APITestCase):

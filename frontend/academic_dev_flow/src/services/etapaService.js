@@ -31,20 +31,11 @@ export const buscarEtapaPeloNome = async (nomeEtapa) => {
 
 export const buscarEtapaPeloId = async (idEtapa) => {
     try {
-        const response = await api.get(`etapa/buscar/${encodeURIComponent(idEtapa)}/`)
+        const response = await api.get(`etapa/buscar/?id_etapa=${encodeURIComponent(idEtapa)}/`)
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
     }
-}
-
-export const buscarEtapasPeloIdFluxo = async (fluxoId) => {
-    try {
-        const response = await api.get(`etapa/buscar/?fluxo_id=${encodeURIComponent(fluxoId)}`);
-        return response;
-    } catch (error) {
-        return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
-    } 
 }
 
 export const listarEtapas = async () => {
@@ -62,7 +53,7 @@ export const atualizarEtapa = async (dadosEtapa, idEtapa) => {
             nome: dadosEtapa.nome,
             descricao: dadosEtapa.descricao,
         }
-        const response = await api.patch(`etapa/atualizar/${encodeURIComponent(idEtapa)}/`, dados)
+        const response = await api.patch(`etapa/atualizar/?id_fluxo=${encodeURIComponent(idEtapa)}/`, dados)
         return handleSuccess(response, SUCCESS_MESSAGE_ON_UPDATE) 
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_UPDATE)
@@ -71,7 +62,7 @@ export const atualizarEtapa = async (dadosEtapa, idEtapa) => {
 
 export const excluirEtapas = async (idsEtapas) => {
     try {
-        const response = await api.delete('etapa/excluir/', {params: {
+        const response = await api.delete('etapa/excluir/', {data: {
             ids_etapas: idsEtapas
         }})
         return handleSuccess(response, SUCCESS_MESSAGE_ON_DELETION)
