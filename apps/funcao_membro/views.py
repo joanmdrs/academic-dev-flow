@@ -15,17 +15,32 @@ from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.timezone import now
+from django.db.utils import IntegrityError
+
 
 class CadastrarCategoriaFuncaoMembroView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
         try:
-            categoria_funcao_membro = request.data
+            if not request.data:
+                return Response(
+                    {'error': 'Os dados da categoria não foram fornecidos na Request.'}, 
+                    status=status.HTTP_400_BAD_REQUEST)
             
-            serializer = CategoriaFuncaoMembroSerializer(data=categoria_funcao_membro)
+            if not request.data['nome']:
+                return Response(
+                    {'error': 'O campo nome é obrigatório para a criação da Categoria.'}, 
+                    status=status.HTTP_400_BAD_REQUEST)
+                
+            if len(request.data['cor']) > 7:
+                return Response(
+                    {'error': 'O campo cor não pode possuir mais que 7 caracteres.'},
+                    status=status.HTTP_400_BAD_REQUEST)
+            
+            serializer = CategoriaFuncaoMembroSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
             
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
             
@@ -42,7 +57,7 @@ class AtualizarCategoriaFuncaoMembroView(APIView):
             if not id_categoria: 
                 return Response({'error': 'ID da categoria não fornecido'}, status=status.HTTP_400_BAD_REQUEST)
             
-            if not data_categoria: 
+            if not request.data: 
                 return Response({'error': 'Os dados atualizados da categoria não foram fornecidos'}, status=status.HTTP_400_BAD_REQUEST)
             
             obj_categoria = CategoriaFuncaoMembro.objects.get(id=id_categoria)
@@ -78,7 +93,7 @@ class BuscarCategoriaFuncaoMembroPeloNomeView(APIView):
             
             serializer = CategoriaFuncaoMembroSerializer(objs_categoria, many=True)
         
-            return Response({'message': 'Membros encontrados com sucesso.', 'results': serializer.data}, status=status.HTTP_200_OK)
+            return Response({'message': 'Categorias encontradas com sucesso.', 'results': serializer.data}, status=status.HTTP_200_OK)
             
         except Exception as e: 
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -98,7 +113,8 @@ class BuscarCategoriaFuncaoMembroPeloIdView(APIView):
                 serializer = CategoriaFuncaoMembroSerializer(obj_categoria, many=False)
                 return Response(serializer.data, status=status.HTTP_200_OK)
 
-            return Response({'error': 'Objeto não encontrado !'}, status=status.HTTP_404_NOT_FOUND)
+        except CategoriaFuncaoMembro.DoesNotExist:
+            return Response({'error': 'Categoria não localizada.'}, status=status.HTTP_404_NOT_FOUND)
             
         except Exception as e: 
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -149,6 +165,13 @@ class CadastrarFuncaoMembroProjetoView(APIView):
     
     def post(self, request):
         try:
+            
+            if not request.data:
+                return Response(
+                    {'error': 'Os dados não foram fornecidos na Request.'},
+                    status=status.HTTP_400_BAD_REQUEST)
+                
+                
             serializer = FuncaoMembroSerializer(data=request.data, many=True)
             
             if serializer.is_valid(raise_exception=True):
@@ -203,7 +226,6 @@ class AtualizarFuncaoMembroProjetoView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        
 class ListarFuncaoMembroProjetoPeloIDView(APIView):
     permission_classes = [IsAuthenticated]
     
@@ -330,6 +352,8 @@ class ExcluirFuncaoMembroProjetoView(APIView):
                 funcao_membro_projeto.delete()
                 return Response({"detail": "Objeto FuncaoMembro excluído com sucesso"}, status=status.HTTP_204_NO_CONTENT)
                 
+                
+        except FuncaoMembro.DoesNotExist:
             return Response({'error': 'O objeto FuncaoMembro não foi encontrado!'}, status=status.HTTP_404_NOT_FOUND)
                     
         except Exception as e:
