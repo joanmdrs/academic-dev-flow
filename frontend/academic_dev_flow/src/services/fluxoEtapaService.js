@@ -13,7 +13,7 @@ export const vincularEtapaFluxo = async (data) => {
 
 export const atualizarFluxoEtapa = async (idFluxoEtapa, data) => {
     try {
-        const response = await api.patch(`fluxo_etapa/atualizar/${encodeURIComponent(idFluxoEtapa)}/`, data)
+        const response = await api.patch(`fluxo_etapa/atualizar/?id_fluxo_etapa=${encodeURIComponent(idFluxoEtapa)}/`, data)
         return handleSuccess(response, 'Os dados foram atualizados com sucesso !')
     } catch (error) {
         return handleError(error, 'Ocorreu um problema durante a operação, contate o suporte!')
