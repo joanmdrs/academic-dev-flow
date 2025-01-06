@@ -11,7 +11,6 @@ class FluxoModelTest(TestCase):
             username='testuser',
             password='testpassword123'
         )
-        # Criar um objeto Fluxo
         self.fluxo = Fluxo.objects.create(
             nome='Teste de Fluxo',
             descricao='Descrição do fluxo de teste.',
