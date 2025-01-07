@@ -14,9 +14,9 @@ const ScreenPainelGitHub = ({grupo}) => {
             { grupo === 'professor' && <MenuProfessor />}
             <Layout>
                 <MyHeader/>
-                    <ProviderCommits>
-                        <PainelGitHub />
-                    </ProviderCommits>
+                <ProviderCommits>
+                    <PainelGitHub />
+                </ProviderCommits>
             </Layout>
         </React.Fragment>   
     )
