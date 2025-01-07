@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import *
+from .views import CadastrarFluxoEtapaView, FiltrarFluxoEtapaPorFluxoView, AtualizarEtapaFluxoView, ExcluirEtapaFluxoView, ListarFluxoEtapasView
 
 app_name = 'fluxo_etapa'
 

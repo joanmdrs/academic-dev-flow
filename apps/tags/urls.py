@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import *
+from .views import CadastrarTagView, BuscarTagPeloIdView, BuscarTagPeloNomeView, AtualizarTagView, ListarTagsView, ExcluirTagsView
 
 app_name = 'tags'
 

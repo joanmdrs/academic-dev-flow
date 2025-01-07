@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import *
+from .views import CadastrarTipoView, BuscarTipoPeloNomeView, AtualizarTipoView, ExcluirTipoView, ListarTiposViews
 
 app_name = 'categoria'
 

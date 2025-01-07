@@ -1,6 +1,6 @@
 from django.urls import path
-from .views_tarefas import *
-from .views_artefatos import *
+from .views_tarefas import CadastrarComentarioTarefaView, BuscarComentarioTarefaPeloIdView, AtualizarComentarioTarefaView, ExcluirComentarioTarefaView, ListarComentariosPorTarefaView
+from .views_artefatos import CadastrarComentarioArtefatoView, BuscarComentarioArtefatoPeloIdView, AtualizarComentarioArtefatoView, ExcluirComentarioArtefatoView, ListarComentariosPorArtefatoView
 
 app_name = 'comentario'
 

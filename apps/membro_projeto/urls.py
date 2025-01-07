@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import *
+from .views import CadastrarMembroProjetoView, AtualizarMembroProjetoView, ExcluirMembroProjetoView, BuscarMembroProjetoPeloIdMembroEPeloIdProjeto, BuscarMembrosPorProjetoView, BuscarProjetosDoMembroView, ExcluirMembroProjetoView, ListarEquipesDoMembroView, ListarMembroProjetoView
 
 app_name = 'membro-projeto'
 

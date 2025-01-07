@@ -1,7 +1,9 @@
 from django.urls import path
-from .views_tarefa import *
-from .views_categoria import *
-from .views_intervalo_tempo import *
+from .views_tarefa import CadastrarTarefaView, AtualizarTarefaView, AtualizarStatusTarefaView, BuscarTarefaPeloIdView, BuscarTarefasPeloNomeEPeloProjeto, FiltrarTarefasPorMembroEPorProjetoView, ListarTarefasDosProjetosDoMembroView, ListarTarefasPorIteracaoView, ListarTarefasPorProjetoView, ListarTarefasView, ExcluirTarefaView, VerificarIssueExisteView, SicronizarIssuesView
+
+from .views_categoria import CadastrarCategoriaTarefaView, AtualizarCategoriaTarefaView, BuscarCategoriaTarefaPeloIdView, BuscarCategoriaTarefaPeloNomeView, ExcluirCategoriaTarefaView, ListarCategoriaTarefaView
+
+from .views_intervalo_tempo import IniciarContagemTempoView, PararContagemTempoView
 
 app_name='tarefa'
 

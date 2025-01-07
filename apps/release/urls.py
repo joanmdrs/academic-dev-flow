@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import *
+from .views import CadastrarReleaseView, AtualizarReleaseView, BuscarReleasePeloIDView, BuscarReleasesAdjacentesView, BuscarReleasesDosProjetosDoMembroView, BuscarUltimaReleaseDoProjetoView, ListarReleasesPorProjetoView, ListarReleasesView, ExcluirReleasesView, FiltrarReleasesPeloNomeEPeloProjeto
 
 app_name = 'release'
 

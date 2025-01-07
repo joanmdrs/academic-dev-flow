@@ -4,6 +4,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from github import Github, GithubException
 from .github_auth import get_github_client
+from rest_framework.decorators import permission_classes
+from django.views.decorators.http import require_http_methods
 from github import InputGitAuthor
 from apps.artefato.models import Artefato
 import base64

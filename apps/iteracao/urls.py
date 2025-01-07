@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import *
+from .views import CadastrarIteracaoView, AtualizarIteracaoView, BuscarIteracaoAtualDoProjetoView, BuscarIteracaoPeloId, ListarIteracoesPorProjetoView, ListarIteracoesView, FiltrarIteracoesPeloNomeEPeloProjeto, ExcluirIteracoesView, BuscarIteracoesDosProjetosDoMembroView
 
 app_name = 'iteracao'
 

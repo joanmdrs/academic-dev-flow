@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import *
+from .views import CadastrarProjetoView, AtualizarFluxoProjetoView, AtualizarProjetoView, BuscarProjetoPorIdView, BuscarProjetosPorNomeView, ExcluirProjetoView, ListarProjetosView
 
 app_name = 'projeto'
 

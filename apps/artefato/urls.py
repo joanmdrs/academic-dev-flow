@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import *
+from .views import CadastrarArtefatoView, AtualizarArtefatoView, AtualizarIteracaoArtefatosView, BuscarArtefatoPeloIdView, BuscarArtefatoPorNomeView, ListarArtefatosDosProjetosDoMembroView, ListarArtefatosPorIteracao, ListarArtefatosPorProjeto, ListarArtefatosView, FiltrarArtefatosPorMembroEPorProjetoView, ExcluirArtefatoView, VerificarExistenciaArtefatoView, SicronizarContentsView, BuscarArtefatosPeloNomeEPeloProjeto
 
 app_name = 'artefato'
 

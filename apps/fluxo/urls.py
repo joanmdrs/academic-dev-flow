@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import *
+from .views import CadastrarFluxoView, AtualizarFluxoView, BuscarFluxoPeloIdView, BuscarFluxoPeloNomeView, ExcluirFluxoView, ListarFluxosView
 
 app_name = 'fluxo'
 
