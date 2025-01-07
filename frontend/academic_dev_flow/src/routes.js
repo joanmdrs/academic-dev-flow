@@ -35,7 +35,7 @@ import ScreenAdminReleases from "./pages/Release/admin/AdminReleases";
 import ScreenAdminCommits from "./pages/GitHub/admin/AdminCommits";
 import ScreenAdminIteracoes from "./pages/Iteracao/admin/AdminIteracoes";
 import ScreenGerenciarTags from "./pages/Tag";
-import ScreenPainelGitHub from "./pages/GitHub/screens/PainelGitHub";
+// import ScreenPainelGitHub from "./pages/GitHub/screens/PainelGitHub";
 import { ProviderGlobalUser } from "./context/ContextoGlobalUser/ContextoGlobalUser";
 import { ProviderGlobalProjeto } from "./context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 
@@ -253,11 +253,11 @@ function Routes() {
                     exact
                 />
 
-                <Route 
+                {/* <Route 
                     path="/aluno/github-integration/painel"
                     element={<ScreenPainelGitHub grupo='aluno' />}
                     exact
-                />
+                /> */}
                 
             </Route>
 
@@ -364,11 +364,11 @@ function Routes() {
                     exact
                 />
 
-                <Route 
+                {/* <Route 
                     path="/professor/github-integration/painel"
                     element={<ScreenPainelGitHub grupo='professor' />}
                     exact
-                />
+                /> */}
             </Route>
         </Switch>
   ) ;
