@@ -9,6 +9,7 @@ from apps.artefato.models import Artefato
 import base64
 import json
 
+@require_http_methods(["POST"])
 def create_content(request):
     try:
     
@@ -41,7 +42,7 @@ def create_content(request):
     except GithubException as e:
         return JsonResponse({'error': str(e)}, status=500)
     
-  
+@require_http_methods(["GET"])
 def get_content(request):
     try: 
         
@@ -67,12 +68,12 @@ def get_content(request):
     except GithubException as e:
         return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    
+@require_http_methods(["PUT"])
 def update_content(request):
     try:
     
         data = json.loads(request.body)
-        
+        github_token = data.get('github_token')
         content = data.get('content')
         repository = data.get('repository')
         commit_message = data.get('commit_message')
@@ -84,7 +85,7 @@ def update_content(request):
                 status=status.HTTP_400_BAD_REQUEST
             )
         
-        g = get_github_client()
+        g = get_github_client(github_token)
     
         repo = g.get_repo(repository)
         
@@ -97,7 +98,7 @@ def update_content(request):
     except GithubException as e:
         return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-        
+@require_http_methods(["DELETE"])
 def delete_content(request):
     try:
 
@@ -123,10 +124,7 @@ def delete_content(request):
     except GithubException as e:
         return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-from django.http import JsonResponse
-from rest_framework import status
-from github import GithubException
-
+@require_http_methods(["GET"])
 def list_contents(request):
     try:
         github_token = request.GET.get('github_token')

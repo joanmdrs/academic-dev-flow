@@ -13,6 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
 
 @permission_classes([IsAuthenticated])
+@require_GET
 def list_commits_by_repository(request):
     try:
         github_token = request.GET.get('github_token')
@@ -84,46 +85,27 @@ def filter_commits_by_period_and_assignee(request):
             for commit in repo.get_commits(author=user):
                 commit_date = commit.commit.author.date.replace(tzinfo=None).replace(hour=0, minute=0, second=0, microsecond=0)
 
-                if period == 'interval':
-                    if start_date <= commit_date <= end_date:
-                        user_commits.append({
-                            'sha': commit.sha,
-                            'message': commit.commit.message,
-                            'assignee': commit.author.login,
-                            'author': commit.commit.author.name,
-                            'date': commit.commit.author.date
-                        })
-                else:
-                    if start_date <= commit_date <= end_date:
-                        user_commits.append({
-                            'sha': commit.sha,
-                            'message': commit.commit.message,
-                            'assignee': commit.author.login,
-                            'author': commit.commit.author.name,
-                            'date': commit.commit.author.date
-                        })
+                if start_date <= commit_date <= end_date:
+                    user_commits.append({
+                        'sha': commit.sha,
+                        'message': commit.commit.message,
+                        'assignee': commit.author.login,
+                        'author': commit.commit.author.name,
+                        'date': commit.commit.author.date
+                    })
         else:
             for commit in repo.get_commits():
                 commit_date = commit.commit.author.date.replace(tzinfo=None).replace(hour=0, minute=0, second=0, microsecond=0)
-
-                if period == 'interval':
-                    if start_date <= commit_date <= end_date:
-                        user_commits.append({
-                            'sha': commit.sha,
-                            'message': commit.commit.message,
-                            'assignee': commit.author.login,
-                            'author': commit.commit.author.name,
-                            'date': commit.commit.author.date
-                        })
-                else:
-                    if start_date <= commit_date <= end_date:
-                        user_commits.append({
-                            'sha': commit.sha,
-                            'message': commit.commit.message,
-                            'assignee': commit.author.login,
-                            'author': commit.commit.author.name,
-                            'date': commit.commit.author.date
-                        })
+                
+                if start_date <= commit_date <= end_date:
+                    user_commits.append({
+                        'sha': commit.sha,
+                        'message': commit.commit.message,
+                        'assignee': commit.author.login,
+                        'author': commit.commit.author.name,
+                        'date': commit.commit.author.date
+                    })
+                
 
         return JsonResponse(user_commits, safe=False)
 

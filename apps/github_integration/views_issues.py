@@ -10,7 +10,9 @@ from apps.membro.models import Membro
 from apps.membro_projeto.models import MembroProjeto
 import base64
 import json
+from django.views.decorators.http import require_http_methods
 
+@require_http_methods(["POST"])
 def create_issue(request):
     try:
         data = json.loads(request.body)
@@ -61,7 +63,8 @@ def create_issue(request):
             return JsonResponse({'error': 'Erro de validação', 'details': error_details}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
         return JsonResponse({'error': error_message}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+    
+@require_http_methods(["PUT"])
 def update_issue(request):
     try:
         data = json.loads(request.body)
@@ -113,7 +116,7 @@ def update_issue(request):
 
 
 
-
+@require_http_methods(["GET"])
 def filter_membro_projeto_by_assignee_and_by_projeto(assignee, projeto):
     try:
         membro = Membro.objects.get(github__usuario_github=assignee)
@@ -135,6 +138,7 @@ def filter_membro_projeto_by_assignee_and_by_projeto(assignee, projeto):
 #             pass
 #     return label_ids
 
+@require_http_methods(["GET"])
 def list_issues(request):
     try:
         github_token = request.GET.get('github_token')
@@ -175,7 +179,7 @@ def list_issues(request):
     except GithubException as e:
         return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
-    
+@require_http_methods(["GET"])
 def get_repository_labels(request):
     try:
         
