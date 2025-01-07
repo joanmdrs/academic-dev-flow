@@ -322,79 +322,78 @@ class ListarArtefatosDosProjetosDoMembroView(APIView):
 
 class FiltrarArtefatosPorMembroEPorProjetoView(APIView):
     permission_classes = [IsAuthenticated]
-    
+
     def get(self, request):
         try:
             id_membro = request.GET.get('id_membro', None)
             id_projeto = request.GET.get('id_projeto', None)
-            
+
             # Valida se pelo menos um dos IDs foi fornecido
             if not id_membro and not id_projeto:
-                return Response(
-                    {'error': 'O ID do membro e o ID do projeto não foram fornecidos!'}, 
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-                
-            # Se o id_membro foi fornecido e id_projeto não foi
-            if id_membro and not id_projeto:
-                membros_projeto = MembroProjeto.objects.filter(membro=id_membro)
-                
-                if not membros_projeto.exists():
-                    return Response(
-                        {
-                            'message': 'O membro não está vinculado a nenhum projeto',
-                            'code': 'MEMBRO_SEM_PROJETO'
-                        }, 
-                        status=status.HTTP_200_OK
-                    )
+                return self._response_error('O ID do membro e o ID do projeto não foram fornecidos!', 'INVALID_INPUT')
 
-                # Extrai os IDs dos projetos
-                ids_membro_projeto = membros_projeto.values_list('id', flat=True)
-                
-                # Busca as tarefas associadas aos projetos que o membro faz parte, mas filtrando também por aquele membro
-                artefatos = Artefato.objects.filter(membros__in=ids_membro_projeto).distinct().order_by('id')
-                
-                if not artefatos.exists():
-                    return Response([], status=status.HTTP_200_OK)
-                
-                # Serializa as tarefas
-                serializer = ArtefatoSerializer(artefatos, many=True)
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            
-            # Se o id_projeto foi fornecido e id_membro não foi
-            if id_projeto and not id_membro:
-                artefatos = Artefato.objects.filter(projeto=id_projeto).distinct().order_by('id')
-                
-                if not artefatos.exists():
-                    return Response([], status=status.HTTP_200_OK)
-                
-                # Serializa as tarefas
-                serializer = ArtefatoSerializer(artefatos, many=True)
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            
-            # Se ambos id_membro e id_projeto foram fornecidos
-            if id_membro and id_projeto:
-                membros_projeto = MembroProjeto.objects.filter(membro=id_membro, projeto=id_projeto)
-                
-                if not membros_projeto.exists():
-                    return Response(
-                        {
-                            'message': 'O membro não está vinculado ao projeto informado',
-                            'code': 'MEMBRO_SEM_PROJETO'
-                        }, 
-                        status=status.HTTP_200_OK
-                    )
-                
-                # Busca as tarefas do membro dentro do projeto
-                artefatos = Artefato.objects.filter(projeto=id_projeto, membros__in=membros_projeto).distinct().order_by('id')
-                
-                if not artefatos.exists():
-                    return Response([], status=status.HTTP_200_OK)
-                
-                # Serializa as tarefas
-                serializer = ArtefatoSerializer(artefatos, many=True)
-                return Response(serializer.data, status=status.HTTP_200_OK)
-    
-        
+            # Lógica principal de busca de artefatos
+            artefatos, error = self._buscar_artefatos(id_membro, id_projeto)
+            if error:
+                return self._response_error(error['message'], error['code'])
+
+            # Retorna a lista de artefatos serializada
+            return self._response_success(artefatos)
+
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def _buscar_artefatos(self, id_membro, id_projeto):
+        """
+        Busca os artefatos com base nos IDs fornecidos.
+        Retorna (artefatos, None) em caso de sucesso ou (None, error) em caso de erro.
+        """
+        if id_membro and not id_projeto:
+            return self._artefatos_por_membro(id_membro)
+
+        if id_projeto and not id_membro:
+            return self._artefatos_por_projeto(id_projeto)
+
+        if id_membro and id_projeto:
+            return self._artefatos_por_membro_e_projeto(id_membro, id_projeto)
+
+        return None, {'message': 'Nenhum critério de filtro válido foi fornecido.', 'code': 'INVALID_FILTER'}
+
+    def _artefatos_por_membro(self, id_membro):
+        membros_projeto = MembroProjeto.objects.filter(membro=id_membro)
+        if not membros_projeto.exists():
+            return None, {
+                'message': 'O membro não está vinculado a nenhum projeto',
+                'code': 'MEMBRO_SEM_PROJETO'
+            }
+
+        ids_membro_projeto = membros_projeto.values_list('id', flat=True)
+        artefatos = Artefato.objects.filter(membros__in=ids_membro_projeto).distinct().order_by('id')
+        return artefatos, None
+
+    def _artefatos_por_projeto(self, id_projeto):
+        artefatos = Artefato.objects.filter(projeto=id_projeto).distinct().order_by('id')
+        return artefatos, None
+
+    def _artefatos_por_membro_e_projeto(self, id_membro, id_projeto):
+        membros_projeto = MembroProjeto.objects.filter(membro=id_membro, projeto=id_projeto)
+        if not membros_projeto.exists():
+            return None, {
+                'message': 'O membro não está vinculado ao projeto informado',
+                'code': 'MEMBRO_SEM_PROJETO'
+            }
+
+        artefatos = Artefato.objects.filter(
+            projeto=id_projeto, membros__in=membros_projeto
+        ).distinct().order_by('id')
+        return artefatos, None
+
+    def _response_success(self, artefatos):
+        if not artefatos.exists():
+            return Response([], status=status.HTTP_200_OK)
+
+        serializer = ArtefatoSerializer(artefatos, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def _response_error(self, message, code):
+        return Response({'message': message, 'code': code}, status=status.HTTP_400_BAD_REQUEST)

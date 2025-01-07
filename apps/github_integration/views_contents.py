@@ -32,7 +32,6 @@ def create_content(request):
         repo = g.get_repo(repository)
         
         try:
-            existing_file = repo.get_contents(path)
             return JsonResponse({'error': 'Um arquivo com o mesmo caminho já existe. Informe outro caminho.'}, status=status.HTTP_409_CONFLICT)
 
         except Exception as e:

@@ -36,7 +36,7 @@ class FiltrarFluxoEtapaPorFluxoView(APIView):
             if not id_fluxo:
                 return Response({'error': 'O ID do fluxo não foi fornecido.'}, status=status.HTTP_400_BAD_REQUEST)
             
-            fluxo = Fluxo.objects.get(id=id_fluxo)
+            Fluxo.objects.get(id=id_fluxo)
             
             fluxo_etapas = FluxoEtapa.objects.filter(fluxo=id_fluxo)
             
@@ -64,9 +64,9 @@ class AtualizarEtapaFluxoView(APIView):
             if not id_fluxo_etapa:
                 return Response({'error': 'O ID da ligação fluxo-etapa não foi fornecido.'}, status=status.HTTP_400_BAD_REQUEST)
             
-            fluxoEtapa = FluxoEtapa.objects.get(id=id_fluxo_etapa) 
+            fluxo_etapa = FluxoEtapa.objects.get(id=id_fluxo_etapa) 
             
-            serializer = FluxoEtapaSerializer(fluxoEtapa, data=request.data, partial=True)
+            serializer = FluxoEtapaSerializer(fluxo_etapa, data=request.data, partial=True)
             
             if serializer.is_valid(raise_exception=True):
                 serializer.save()

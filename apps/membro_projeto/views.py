@@ -56,9 +56,9 @@ class AtualizarMembroProjetoView(APIView):
             if not id_membro_projeto:
                 return Response({'error': 'O ID do membro-projeto é necessário.'}, status=status.HTTP_400_BAD_REQUEST)
             
-            membroProjeto = MembroProjeto.objects.get(id=id_membro_projeto) 
+            membro_projeto = MembroProjeto.objects.get(id=id_membro_projeto) 
             
-            serializer = MembroProjetoSerializer(membroProjeto, data=request.data)
+            serializer = MembroProjetoSerializer(membro_projeto, data=request.data)
             
             if serializer.is_valid(raise_exception=True):
                 serializer.save()

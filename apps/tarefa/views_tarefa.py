@@ -42,7 +42,6 @@ class AtualizarTarefaView(APIView):
     def patch(self, request): 
         try: 
             id_tarefa = request.GET.get('id_tarefa', None)
-            data_tarefa = request.data
                         
             # Verifica se o ID da tarefa foi fornecido
             if not id_tarefa: 
