@@ -4,6 +4,7 @@ from apps.projeto.models import Projeto
 from apps.iteracao.models import Iteracao
 from apps.categoria.models import Categoria
 from apps.tags.models import Tag
+from django.utils.timezone import now
 
 class CategoriaTarefa(models.Model): 
     
@@ -18,6 +19,7 @@ class Tarefa(models.Model):
     
     STATUS_CHOICES = [
         ('pendente', 'Pendente'),
+        ('planejada', 'Planejada'),
         ('andamento', 'Em Andamento'),
         ('concluida', 'Concluída'),
         ('atrasada', 'Em Atraso'),
@@ -30,6 +32,7 @@ class Tarefa(models.Model):
     data_criacao = models.DateTimeField(auto_now_add=True)
     data_inicio = models.DateField(null=True, blank=True)
     data_termino = models.DateField(null=True, blank=True)
+    data_conclusao = models.DateField(null=True, blank=True)
     status = models.CharField(choices=STATUS_CHOICES, default='pendente')
     tempo_gasto = models.IntegerField(default=0)
     id_issue = models.BigIntegerField(null=True, blank=True)
@@ -37,13 +40,24 @@ class Tarefa(models.Model):
     url_issue = models.URLField(null=True, blank=True)
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, null=True, blank=True)
     membros = models.ManyToManyField(MembroProjeto, blank=True)
-    iteracao = models.ForeignKey(Iteracao, on_delete=models.CASCADE, null=True, blank=True)
+    iteracao = models.ForeignKey(Iteracao, on_delete=models.SET_NULL, null=True, blank=True)
     categoria = models.ForeignKey(CategoriaTarefa, on_delete=models.SET_NULL, null=True, blank=True)
     tags  = models.ManyToManyField(Tag, blank=True)
     
     def __str__(self):
         return self.nome
     
+    def save(self, *args, **kwargs):
+        # Verifica se o status mudou para 'concluida' e se o campo data_conclusao está vazio
+        if self.status == 'concluida' and self.data_conclusao is None:
+            self.data_conclusao = now().date()  # Apenas a data
+        elif self.status != 'concluida':
+            # Limpa o campo data_conclusao se o status mudar para outro valor
+            self.data_conclusao = None
+
+        # Chama o método save original
+        super().save(*args, **kwargs)
+        
     def iniciar_contagem_tempo(self, membro_projeto):
         """Inicia a contagem de tempo se a tarefa estiver pausada ou não tiver intervalos."""
         ultimo_intervalo = self.intervalos.last()
