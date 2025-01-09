@@ -15,6 +15,8 @@ from rest_framework.permissions import IsAuthenticated
 from apps.api.permissions import IsAdminUserOrReadOnly 
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.timezone import now
+from django.db import IntegrityError
+
 
 class CadastrarCategoriaFuncaoMembroView(APIView):
     permission_classes = [IsAuthenticated]
@@ -158,10 +160,17 @@ class CadastrarFuncaoMembroProjetoView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         except IntegrityError as e:
+            # Captura o erro de integridade e personaliza a mensagem
             if 'unique_funcao_membro' in str(e):
-                return Response({'error': 'Este membro já possui essa função atribuída.'}, status=status.HTTP_400_BAD_REQUEST)
-            else:
-                return Response({'error': 'Erro de integridade no banco de dados.'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    {
+                        'error': 'Já existe uma função com essa configuração para o membro.',
+                        'code': 'UNIQUE_FUNCAO_MEMBRO'
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': str(e), 'code': 'UNIQUE_FUNCAO_MEMBRO'}, status=status.HTTP_400_BAD_REQUEST)
         
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

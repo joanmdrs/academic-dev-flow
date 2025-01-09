@@ -19,14 +19,6 @@ class FuncaoMembro(models.Model):
     data_atribuicao = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     data_desativacao = models.DateTimeField(null=True, blank=True)
 
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['membro_projeto', 'categoria_funcao', 'iteracao', 'status'], name='unique_funcao_membro')
-        ]
-
-    def __str__(self):
-        return f"{self.membro_projeto.membro.nome} - {self.categoria_funcao.nome}"
-
     def desativar_funcao(self):
         """Desativa a função e define a data de desativação."""
         self.status = False
@@ -35,7 +27,16 @@ class FuncaoMembro(models.Model):
     
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['membro_projeto', 'categoria_funcao', 'iteracao', 'status'], name='unique_funcao_membro')
+            models.UniqueConstraint(
+                fields=['membro_projeto', 'categoria_funcao', 'iteracao'],
+                condition=models.Q(status=True),
+                name='unique_funcao_membro_iteracao'
+            ),
+            models.UniqueConstraint(
+                fields=['membro_projeto', 'categoria_funcao'],
+                condition=models.Q(iteracao__isnull=True, status=True),
+                name='unique_funcao_membro_no_iteracao'
+            ),
         ]
         
     def __str__(self):
