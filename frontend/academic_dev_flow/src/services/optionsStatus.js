@@ -47,6 +47,13 @@ export const optionsStatusTarefas = [
         color: '#007bff' // Azul
     },
     {
+        value: 'planejada',
+        name: 'Planejada',
+        label: RenderOption('Planejada', "#6f42c1"),
+        color: '#6f42c1' // Roxo
+
+    },
+    {
         value: 'andamento',
         name: 'Andamento',
         label: RenderOption('Andamento', '#ffc107'),

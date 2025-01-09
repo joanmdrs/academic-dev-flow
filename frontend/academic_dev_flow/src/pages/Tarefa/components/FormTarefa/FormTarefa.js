@@ -1,4 +1,4 @@
-import { Button, Form, Input, Select, Tag } from 'antd';
+import { Button, Form, Input, Select, Space, Tag } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { Switch } from 'antd';
 import React, { useEffect, useState } from 'react';
@@ -125,11 +125,11 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
             return {'error': 'Selecione um projeto'}
         }
         const dadosForm = form.getFieldsValue();
-        const membrosSelecionados = dadosForm.membros;
-        const usuariosGithub = optionsMembros
-            .filter((option) => membrosSelecionados.includes(option.value))
-            .map((option) => option.user);
-        dadosForm['assignees'] = usuariosGithub;
+        // const membrosSelecionados = dadosForm.membros;
+        // const usuariosGithub = optionsMembros
+        //     .filter((option) => membrosSelecionados.includes(option.value))
+        //     .map((option) => option.user);
+        // dadosForm['assignees'] = usuariosGithub;
         onSubmit(dadosForm);
     };
 
@@ -143,78 +143,65 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
                 <h4 className='global-title'> {titulo} </h4>
             </Form.Item>
 
-            {selectProject && (
-                <Form.Item>
-                    {selectProject}
-                </Form.Item>
-            )}
-
-            <div style={{ display: 'flex', gap: "20px" }}>
+            <div style={{ display: 'flex', gap: "20px", flexWrap: 'wrap' }}>
                 <div style={{ flex: "2" }}>
+
+                    {selectProject && (
+                        <>
+                            {selectProject}
+                        </>
+                    )}
                     <Form.Item
                         label="Nome"
                         name="nome"
                         rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
                     >
-                        <Input type='text' name='nome' />
+                        <Input type='text' name='nome' placeholder='Nome da tarefa'/>
                     </Form.Item>
 
                     <Form.Item
                         label="Descrição"
                         name="descricao"
                     >
-                        <Input.TextArea rows={6} name='descricao' />
+                        <Input.TextArea rows={5} name='descricao' placeholder='Descrição da tarefa'/>
                     </Form.Item>
+
 
                     <div style={{display: 'flex', gap: '10px'}}> 
                         <Form.Item
-                            label="Data de Início"
+                            label="Data de início"
                             name="data_inicio"
-                            rules={[
-                                { required: true, message: 'Por favor, preencha este campo!' },
-                                ({ getFieldValue }) => ({
-                                    validator(_, value) {
-                                        const dataTermino = getFieldValue('data_termino');
-                                        if (!value || !dataTermino || value <= dataTermino) {
-                                            return Promise.resolve();
-                                        }
-                                        return Promise.reject(new Error('A data de início não pode ser maior que a data de término!'));
-                                    },
-                                }),
-                            ]}
                         >
-                            <Input type='date' name='data_inicio' style={{ width: 'fit-content' }} />
+                            <Input type='date' name='data_inicio' />
                         </Form.Item>
 
                         <Form.Item
-                            label="Data de Término"
+                            label="Data de término"
                             name="data_termino"
-                            rules={[
-                                { required: true, message: 'Por favor, preencha este campo!' },
-                                ({ getFieldValue }) => ({
-                                    validator(_, value) {
-                                        const dataInicio = getFieldValue('data_inicio');
-                                        if (!value || !dataInicio || value >= dataInicio) {
-                                            return Promise.resolve();
-                                        }
-                                        return Promise.reject(new Error('A data de término não pode ser menor que a data de início!'));
-                                    },
-                                }),
-                            ]}
                         >
-                            <Input type='date' name='data_termino' style={{ width: 'fit-content' }} />
+                            <Input type='date' name='data_termino' />
                         </Form.Item>
 
-                        <Form.Item label="Tags" name='tags' style={{flex: '1'}}>
-                            <Select 
+                        <Form.Item
+                            label="Data de conclusão"
+                            name="data_conclusao"
+                        >
+                            <Input type='date' name='data_termino'/>
+                        </Form.Item>
+
+                        <Form.Item
+                            label="Atribuir à"
+                            name="membros"
+                            style={{flex: '2'}}
+                        >
+                            <Select
+                                mode="multiple"
                                 allowClear
+                                options={optionsMembros}
                                 showSearch
-                                mode='tags'
-                                options={optionsTags}
                                 filterOption={filterOption}
-                                placeholder="Tags (opcional)"
-                                
-                            /> 
+                                placeholder="Atribuir à (opcional)"
+                            />
                         </Form.Item>
 
                     </div>
@@ -223,51 +210,6 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
                 </div>
 
                 <div style={{ flex: "1" }}>
-                    <Form.Item
-                        label="Iteração"
-                        name="iteracao"
-                        rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
-                    >
-                        <Select
-                            allowClear
-                            placeholder="Selecione"
-                            options={optionsIteracoes}
-                            showSearch
-                            filterOption={filterOption}
-                        />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Atribuir à"
-                        name="membros"
-                        rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
-                    >
-                        <Select
-                            mode="multiple"
-                            allowClear
-                            style={{ width: '100%' }}
-                            placeholder="Selecione"
-                            options={optionsMembros}
-                            showSearch
-                            filterOption={filterOption}
-                        />
-                    </Form.Item>
-
-                    <Form.Item
-                        label='Status'
-                        name='status'
-                        rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
-                    >
-                        <Select
-                            allowClear
-                            style={{ width: '100%' }}
-                            placeholder='Selecione'
-                            name='status'
-                            options={optionsStatusTarefas}
-                            showSearch
-                            filterOption={filterOption}
-                        />
-                    </Form.Item>
 
                     <Form.Item
                         label='Categoria'
@@ -284,6 +226,51 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
                             filterOption={filterOption}
                         />
                     </Form.Item>
+
+                    <Form.Item
+                        label='Status'
+                        name='status'
+                        rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
+                    >
+                        <Select
+                            allowClear
+                            placeholder='Selecione'
+                            name='status'
+                            options={optionsStatusTarefas}
+                            showSearch
+                            filterOption={filterOption}
+                        />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Iteração"
+                        name="iteracao"
+                    >
+                        <Select
+                            allowClear
+                            options={optionsIteracoes}
+                            showSearch
+                            filterOption={filterOption}
+                            placeholder="Iteração (opcional)"
+                        />
+                    </Form.Item>
+
+                    <Form.Item label="Tags" name='tags' style={{flex: '1'}}>
+                        <Select 
+                            allowClear
+                            showSearch
+                            mode='tags'
+                            options={optionsTags}
+                            filterOption={filterOption}
+                            placeholder="Tags (opcional)"
+                            
+                        /> 
+                    </Form.Item>
+
+                    <Form.Item name="url_issue" label="URL da issue"> 
+                        <Input type='url' name='url_issue' placeholder='url da issue (opcional)'/>
+                    </Form.Item>
+
                 </div>
             </div>
 
@@ -294,10 +281,10 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
                 <Switch name="sicronizar-github" checkedChildren="Sicronizar" unCheckedChildren="Não sicronizar" />
             </Form.Item> */}
 
-            <Form.Item>
+            <Space style={{marginTop: '20px'}}>
                 <Button size='large' type="primary" htmlType='submit'> Salvar </Button>
                 <Button size='large' style={{ marginLeft: "10px" }} onClick={onCancel} type='primary' danger> Cancelar </Button>
-            </Form.Item>
+            </Space>
         </Form>
     );
 }

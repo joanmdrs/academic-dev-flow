@@ -290,7 +290,7 @@ const Tarefas = () => {
                     )}
                     
                     <FormTarefa 
-                        selectProject={<SelecionarProjeto />} 
+                        selectProject={<SelecionarProjeto idMembro={usuario.id}/>} 
                         onSubmit={handleSalvarTarefa} 
                         onCancel={handleCancelar} 
                     />
@@ -317,7 +317,17 @@ const Tarefas = () => {
                         size="middle"
                         indicator={{align: "center"}}
                     > 
-                        <Item tab={<span><TbLayoutCards /> Quadro</span>} key="1" >
+                        <Item tab={<span> <TbLayoutNavbar /> Tabela </span>} key="1" >
+                            <TableTask 
+                                onUpdate={handleAtualizarTarefa} 
+                                onDelete={handleExcluirTarefa}
+                                onPauseTarefa={handlePararContagemTempoTarefa}
+                                onStartTarefa={handleIniciarContagemTempoTarefa}
+                                onShowComments={handleExibirComentarios}
+                            />
+                        </Item>
+
+                        <Item tab={<span><TbLayoutCards /> Quadro</span>} key="2" >
                             <TaskBoard 
                                 onCreate={handleAdicionarTarefa}
                                 onUpdate={handleAtualizarTarefa} 
@@ -327,18 +337,8 @@ const Tarefas = () => {
                                 onShowComments={handleExibirComentarios}
                             />
                         </Item>
-                        <Item tab={<span> <TbLayoutList /> Lista </span>} key="2" >
+                        <Item tab={<span> <TbLayoutList /> Lista </span>} key="3" >
                             <ListTask 
-                                onUpdate={handleAtualizarTarefa} 
-                                onDelete={handleExcluirTarefa}
-                                onPauseTarefa={handlePararContagemTempoTarefa}
-                                onStartTarefa={handleIniciarContagemTempoTarefa}
-                                onShowComments={handleExibirComentarios}
-                            />
-                        </Item>
-
-                        <Item tab={<span> <TbLayoutNavbar /> Tabela </span>} key="3" >
-                            <TableTask 
                                 onUpdate={handleAtualizarTarefa} 
                                 onDelete={handleExcluirTarefa}
                                 onPauseTarefa={handlePararContagemTempoTarefa}
