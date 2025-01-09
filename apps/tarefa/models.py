@@ -19,7 +19,7 @@ class Tarefa(models.Model):
     
     STATUS_CHOICES = [
         ('pendente', 'Pendente'),
-        ('planejada', 'Planejada'),
+        ('planejamento', 'Em planejamento'),
         ('andamento', 'Em Andamento'),
         ('concluida', 'Concluída'),
         ('atrasada', 'Em Atraso'),

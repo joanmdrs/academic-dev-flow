@@ -5,7 +5,7 @@ from apps.membro.models import Membro
 class Projeto(models.Model):
     
     STATUS_CHOICES = [
-        ('planejado', 'Planejado'),
+        ('planejamento', 'Em Planejamento'),
         ('criado', 'Criado'),
         ('andamento', 'Em Andamento'),
         ('concluido', 'Concluído'),
