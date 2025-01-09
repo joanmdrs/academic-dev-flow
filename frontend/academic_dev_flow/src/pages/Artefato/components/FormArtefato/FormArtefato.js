@@ -17,7 +17,7 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto}) => {
     const [optionsIteracao, setOptionsIteracao] = useState(null)
     const [optionsMembros, setOptionsMembros] = useState([])
     const [form] = useForm()
-    const [titulo, setTitulo] = useState('CADASTRAR ARTEFATO')
+    const [titulo, setTitulo] = useState('Cadastrar Artefato')
     const [sincronizarGitHub, setSincronizarGitHub] = useState(false); 
 
     const handleGetMembros = async () => {
@@ -60,11 +60,11 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto}) => {
 
                 if (dadosArtefato !== null) {
                     form.setFieldsValue(dadosArtefato)
-                    setTitulo('ATUALIZAR ARTEFATO')
+                    setTitulo('Atualizar Artefato')
 
                 } else {
                     form.resetFields()
-                    setTitulo('CADASTRAR ARTEFATO')
+                    setTitulo('Cadastrar Artefato')
                 }
             }
         }
@@ -98,10 +98,11 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto}) => {
                 <h4 className="global-title"> {titulo} </h4>
             </Form.Item>
 
-            {selectProjeto}
 
             <div style={{ display: 'flex', gap: "20px" }}>
                 <div style={{flex: '2'}}>
+
+                    {selectProjeto}
                     <Form.Item 
                         label="Nome" 
                         name="nome"
@@ -111,35 +112,38 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto}) => {
                     </Form.Item>
 
                     <Form.Item label="Descrição" name="descricao">
-                        <Input.TextArea rows={4} name="descricao" placeholder="descrição do artefato"/>
+                        <Input.TextArea rows={6} name="descricao" placeholder="descrição do artefato"/>
                     </Form.Item>
 
-                    <Form.Item label="Url do artefato" name="url">
-                        <Input name="url" placeholder="url do artefato"/>
-                    </Form.Item>
+                    <div style={{display: 'flex', gap: '20px'}}>
 
-                    <Form.Item
-                        label="Data de Entrega"
-                        name="data_termino"
-                        rules={[
-                            { required: true, message: 'Por favor, preencha este campo!' }
-                        ]}
-                    >
-                        <Input type='date' name='data_termino' style={{ width: 'fit-content' }} />
-                    </Form.Item>
+                        <Form.Item
+                            label="Data de Entrega"
+                            name="data_entrega"
+                        >
+                            <Input type='date' name='data_entrega' style={{ width: 'fit-content' }} />
+                        </Form.Item>
+                    </div>
                 </div>
 
                 <div style={{flex: '1'}}>
+                    <Form.Item 
+                        label="Status" 
+                        name="status"
+                        rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
+                    >
+                        <Select options={optionsStatusArtefatos} name="status" placeholder="Selecione o status" />
+                    </Form.Item>
+
                     <Form.Item
                         label="Atribuir à"
                         name="membros"
-                        rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
                     >
                         <Select
                             mode="multiple"
                             allowClear
                             style={{ width: '100%' }}
-                            placeholder="Selecione"
+                            placeholder="Atribuir à (opcional)"
                             options={optionsMembros}
                         />
                     </Form.Item>
@@ -147,18 +151,14 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto}) => {
                     <Form.Item 
                         label="Iteração" 
                         name="iteracao"
-                        rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
                     >
-                        <Select options={optionsIteracao} name="iteracao" defaultValue="selecione" />
+                        <Select options={optionsIteracao} name="iteracao" placeholder="Iteração (opcional)" />
                     </Form.Item>
-                    
-                    <Form.Item 
-                        label="Status" 
-                        name="status"
-                        rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
-                    >
-                        <Select options={optionsStatusArtefatos} name="status" defaultValue="selecione" />
+
+                    <Form.Item label="Url do artefato" name="url">
+                        <Input name="url" placeholder="url do artefato (opcional)"/>
                     </Form.Item>
+
 
                 </div>
             </div>

@@ -62,7 +62,7 @@ const ListArtefatos = ({data, onUpdate, onDelete, onShowComments}) => {
                                                     /> 
                                                 </Space>
 
-                                                <RenderDate dateType="fim" dateValue={item.data_termino} />
+                                                <RenderDate dateType="fim" dateValue={item.data_entrega} />
 
                                                 <Space style={{ flex: '1'}}> {/* 10% */}
                                                     <RenderStatus 
@@ -99,7 +99,7 @@ const ListArtefatos = ({data, onUpdate, onDelete, onShowComments}) => {
                                            
                                             <div>{`Descrição: ${item.descricao ? item.descricao : ''}`}</div>
                                             <div style={{display: 'flex', gap: '10px'}}> 
-                                                <RenderDate dateType="fim" dateValue={item.data_termino} />
+                                                <RenderDate dateType="fim" dateValue={item.data_entrega} />
                                             </div>
 
 

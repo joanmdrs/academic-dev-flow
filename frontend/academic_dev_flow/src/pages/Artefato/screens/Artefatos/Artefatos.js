@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { TbCalendarUp } from "react-icons/tb";
 import FormFilterArtefatos from "../../components/FormFilterArtefatos/FormFilterArtefatos";
-import { MdSortByAlpha } from "react-icons/md";
+import { MdFilterAlt, MdSortByAlpha } from "react-icons/md";
 import GridArtefatos from "../../components/GridArtefatos/GridArtefatos";
 import { atualizarArtefato, criarArtefato, excluirArtefato, filtrarArtefatosPorProjetoEPorMembro, listarArtefatosDosProjetosDoMembro } from "../../../../services/artefatoService";
 import { useContextoGlobalUser } from "../../../../context/ContextoGlobalUser/ContextoGlobalUser";
@@ -275,13 +275,22 @@ const Artefatos = () => {
                     }}>
                         <Flex horizontal gap="middle">
                             <Space>
-                                <Search
-                                    style={{width: '500px'}}
-                                    placeholder="pesquise pelo nome"
-                                    allowClear
-                                    enterButton="Pesquisar"
-                                    size="middle"
-                                    onSearch={handleBuscarArtefatosPeloNome}
+                                <div> 
+                                    <p 
+                                        style={{
+                                            color: "var(--border-color)", 
+                                            display: 'flex', 
+                                            alignItems: 'center'
+                                        }}
+                                    > <MdFilterAlt size={"20px"} /> Filtros </p>
+                                </div>
+                            </Space>
+                            <Space>
+                                <Input 
+                                    style={{width: "500px"}}
+                                    name="nome"
+                                    placeholder="Pesquise pelo nome do artefato"
+                                    onChange={(event) => handleBuscarArtefatosPeloNome(event.target.value)}
                                 />
                             </Space>
 

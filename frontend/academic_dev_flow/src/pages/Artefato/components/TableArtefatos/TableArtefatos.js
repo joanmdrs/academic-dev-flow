@@ -31,10 +31,10 @@ const TableArtefatos = ({data, onUpdate, onDelete, onShowComments}) => {
         },
         {
             title: 'Entrega',
-            dataIndex: 'data_termino',
-            key: 'data_termino',
+            dataIndex: 'data_entrega',
+            key: 'data_entrega',
             render: (_, record) => (
-                <RenderDate dateType="termino" dateValue={record.data_termino} />
+                <RenderDate dateType="termino" dateValue={record.data_entrega} />
             )
         },
         {
