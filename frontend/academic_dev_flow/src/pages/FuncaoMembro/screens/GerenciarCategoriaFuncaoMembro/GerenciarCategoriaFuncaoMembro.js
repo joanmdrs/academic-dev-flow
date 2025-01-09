@@ -110,12 +110,12 @@ const GerenciarCategoriaFuncaoMembro = () => {
                     <Form layout="vertical" className="global-form">
                         <Form.Item 
                             name="nome"
-                            label="Nome" 
+                            label="Filtrar função" 
                         >
                             <Input 
                                 type="text" 
                                 name="nome_tipo" 
-                                placeholder="informe o nome da função"
+                                placeholder="Pesquise pelo nome da função"
                                 value={nomeCategoria} 
                                 onChange={(e) => setNomeCategoria(e.target.value)}
                             />

@@ -9,7 +9,7 @@ const FormCategoriaFuncaoMembro = ({onSubmit, onCancel}) => {
     const {dadosCategoriaFuncaoMembro} = useFuncaoMembroContexto()
     const [cor, setCor] = useState('');
     const [form] = Form.useForm()
-    const [titulo, setTitulo] = useState("CADASTRAR NOVA FUNÇÃO")
+    const [titulo, setTitulo] = useState("Cadastrar Função")
 
     useEffect(() => {
         const fetchData = async () => {
@@ -17,12 +17,12 @@ const FormCategoriaFuncaoMembro = ({onSubmit, onCancel}) => {
             if (dadosCategoriaFuncaoMembro !== null) {
                 setCor(dadosCategoriaFuncaoMembro.cor)
                 form.setFieldsValue(dadosCategoriaFuncaoMembro)
-                setTitulo("ATUALIZAR DADOS DA FUNÇÃO")
+                setTitulo("Atualizar dados da Função")
 
             } else {
                 handleGerarCor()
                 form.resetFields()
-                setTitulo("CADASTRAR NOVA FUNÇÃO")
+                setTitulo("Cadastrar Função")
             }
         }
 

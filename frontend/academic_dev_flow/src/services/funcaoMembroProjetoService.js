@@ -68,6 +68,10 @@ export const cadastrarFuncaoMembroProjeto = async (formData) => {
         const response = await api.post('funcao-membro/cadastrar/', formData)
         return handleSuccess(response, 'Função(es) atribuída(s) ao membro com sucesso !')
     } catch (error) {
+        console.log(error.response)
+        if (error.response.data?.code && error.response.data.code === 'UNIQUE_FUNCAO_MEMBRO') {
+            return handleError(error, 'Esta função já foi atribuída ao membro.')
+        }
         return handleError(error, 'Falha ao tentar atribuir a função do membro !')   
     }
 }
