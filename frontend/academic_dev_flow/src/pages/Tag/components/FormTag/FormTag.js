@@ -10,7 +10,7 @@ const FormTag = ({onSubmit, onCancel}) => {
     const [corClara, setCorClara] = useState('')
     const {dadosTag} = useContextoTag()
     const [form] = Form.useForm()
-    const [titulo, setTitulo] = useState("CADASTRAR TAG")
+    const [titulo, setTitulo] = useState("Cadastrar Tag")
 
     useEffect(() => {
         const fetchData = async () => {
@@ -18,11 +18,11 @@ const FormTag = ({onSubmit, onCancel}) => {
             if (dadosTag !== null) {
                 form.setFieldsValue(dadosTag)
                 setCor(dadosTag.cor)
-                setTitulo("ATUALIZAR TAG")
+                setTitulo("Atualizar Tag")
 
             } else {
                 form.resetFields()
-                setTitulo("CADASTRAR TAG")
+                setTitulo("Cadastrar Tag")
                 handleGerarCor()
             }
         }

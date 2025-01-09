@@ -23,7 +23,7 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
     const [optionsIteracoes, setOptionsIteracoes] = useState([]);
     const [optionsCategorias, setOptionsCategorias] = useState([]);
     const [optionsTags, setOptionsTags] = useState([])
-    const [titulo, setTitulo] = useState('CADASTRAR TAREFA');
+    const [titulo, setTitulo] = useState('Cadastrar Tarefa');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -39,7 +39,7 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
                         setTitulo('ATUALIZAR TAREFA');
                     } else {
                         form.resetFields();
-                        setTitulo('CADASTRAR TAREFA');
+                        setTitulo('Cadastrar Tarefa');
                     }
                 } 
             } catch (error) {
@@ -282,8 +282,8 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
             </Form.Item> */}
 
             <Space style={{marginTop: '20px'}}>
-                <Button size='large' type="primary" htmlType='submit'> Salvar </Button>
-                <Button size='large' style={{ marginLeft: "10px" }} onClick={onCancel} type='primary' danger> Cancelar </Button>
+                <Button type="primary" htmlType='submit'> Salvar </Button>
+                <Button style={{ marginLeft: "10px" }} onClick={onCancel} type='primary' danger> Cancelar </Button>
             </Space>
         </Form>
     );

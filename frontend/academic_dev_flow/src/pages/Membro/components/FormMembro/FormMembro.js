@@ -31,7 +31,7 @@ const FormMembro = ({onSubmit, onCancel}) => {
     const [form] = Form.useForm()
     const [loading, setLoading] = useState(false)
     const [optionsGrupos, setOptionsGrupos] = useState([])
-    const [titulo, setTitulo] = useState('CADASTRAR MEMBRO')
+    const [titulo, setTitulo] = useState('Cadastrar Membro')
 
     const handleListarGrupos = async () => {
 
@@ -64,10 +64,10 @@ const FormMembro = ({onSubmit, onCancel}) => {
 
                 if (dadosMembro !== null){
                     form.setFieldsValue(dadosMembro)
-                    setTitulo('ATUALIZAR DADOS DO MEMBRO')
+                    setTitulo('Atualizar Membro')
                 } else {
                     form.resetFields()
-                    setTitulo('CADASTRAR MEMBRO')
+                    setTitulo('Cadastrar Membro')
                 }
                 
             } catch (error) {

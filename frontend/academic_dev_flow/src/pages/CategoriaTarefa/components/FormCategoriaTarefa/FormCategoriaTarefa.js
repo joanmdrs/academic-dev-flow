@@ -10,7 +10,7 @@ const FormCategoriaTarefa = ({onSubmit, onCancel}) => {
     const [corClara, setCorClara] = useState('')
     const {dadosCategoria} = useContextoCategoriaTarefa()
     const [form] = Form.useForm()
-    const [titulo, setTitulo] = useState("CADASTRAR CATEGORIA")
+    const [titulo, setTitulo] = useState("Cadastrar Categoria")
 
     useEffect(() => {
         const fetchData = async () => {
@@ -18,11 +18,11 @@ const FormCategoriaTarefa = ({onSubmit, onCancel}) => {
             if (dadosCategoria !== null) {
                 form.setFieldsValue(dadosCategoria)
                 setCor(dadosCategoria.cor)
-                setTitulo("ATUALIZAR CATEGORIA")
+                setTitulo("Atualizar Categoria")
 
             } else {
                 form.resetFields()
-                setTitulo("CADASTRAR CATEGORIA")
+                setTitulo("Cadastrar Categoria")
                 handleGerarCor()
             }
         }

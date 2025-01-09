@@ -19,7 +19,7 @@ const FormIteracao = ({ onSubmit, onCancel, selectProject }) => {
     const [optionsReleases, setOptionsReleases] = useState([]);
     const [optionsEtapas, setOptionsEtapas] = useState([]);
     const [optionsMembros, setOptionsMembros] = useState([]);
-    const [titulo, setTitulo] = useState('CADASTRAR ITERAÇÃO');
+    const [titulo, setTitulo] = useState('Cadastrar Iteração');
     const [form] = useForm();
 
     const handleGetReleases = async () => {
@@ -93,10 +93,10 @@ const FormIteracao = ({ onSubmit, onCancel, selectProject }) => {
                 await handleGetMembros();
                 if (dadosIteracao !== null) {
                     form.setFieldsValue(dadosIteracao);
-                    setTitulo("ATUALIZAR ITERAÇÃO");
+                    setTitulo("Atualizar Iteração");
                 } else {
                     form.resetFields();
-                    setTitulo('CADASTRAR ITERAÇÃO');
+                    setTitulo('Cadastrar Iteração');
                 }
             } else {
                 setOptionsEtapas([]);
@@ -154,10 +154,9 @@ const FormIteracao = ({ onSubmit, onCancel, selectProject }) => {
                 <h4 className='global-title'> {titulo} </h4>
             </Form.Item>
 
-            {selectProject}
-
             <div style={{ display: 'flex', gap: '20px' }}>
                 <div style={{ flex: '2' }}>
+                    {selectProject}
                     <Form.Item
                         label="Nome"
                         name="nome"
@@ -168,7 +167,7 @@ const FormIteracao = ({ onSubmit, onCancel, selectProject }) => {
                     </Form.Item>
 
                     <Form.Item label="Descrição" name="descricao">
-                        <Input.TextArea rows={5} name="descricao" placeholder="descrição ..." />
+                        <Input.TextArea rows={8} name="descricao" placeholder="descrição ..." />
                     </Form.Item>
 
                     <div style={{ display: 'flex', gap: '10px' }}>
@@ -236,7 +235,6 @@ const FormIteracao = ({ onSubmit, onCancel, selectProject }) => {
                         label="Release"
                         name="release"
                         style={{ flex: "1" }}
-                        rules={[{ required: true, message: 'Por favor, preencha este campo !' }]}
                     >
                         <Select
                             allowClear
@@ -259,7 +257,6 @@ const FormIteracao = ({ onSubmit, onCancel, selectProject }) => {
                         label="Etapas"
                         name="etapas"
                         style={{ flex: "1" }}
-                        rules={[{ required: true, message: 'Por favor, selecione a etapa!' }]}
                     >
                         <Select 
                             mode="multiple"
@@ -275,7 +272,6 @@ const FormIteracao = ({ onSubmit, onCancel, selectProject }) => {
                     <Form.Item
                         label="Responsável"
                         name="responsavel"
-                        rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
                     >
                         <Select
                             style={{ width: '100%' }}

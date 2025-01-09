@@ -16,6 +16,7 @@ import { optionsStatusIteracoes } from '../../../../services/optionsStatus'
 import { IoMdCreate, IoMdTrash } from 'react-icons/io'
 import { formatDate } from '../../../../services/utils'
 import RenderEtapas from '../../../../components/RenderEtapas/RenderEtapas'
+import { MdFilterAlt } from 'react-icons/md'
 
 const Iteracoes = () => {
 
@@ -251,6 +252,17 @@ const Iteracoes = () => {
                     backgroundColor: '#FFFFFF'
                 }}>
                     <Flex horizontal gap="middle">
+                        <Space>
+                            <div> 
+                                <p 
+                                    style={{
+                                        color: "var(--border-color)", 
+                                        display: 'flex', 
+                                        alignItems: 'center'
+                                    }}
+                                > <MdFilterAlt size={"20px"} /> Filtros </p>
+                            </div>
+                        </Space>
                         <Space>
                             <FormFilterIteracoes onChange={handleFiltrarIteracoes} idMembro={usuario.id}/>
                         </Space>

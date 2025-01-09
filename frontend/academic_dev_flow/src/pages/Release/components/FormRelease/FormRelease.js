@@ -14,7 +14,7 @@ const FormRelease = ({ onSubmit, onCancel, selectProject }) => {
     const { dadosProjeto } = useContextoGlobalProjeto();
     const [form] = useForm();
     const [optionsMembros, setOptionsMembros] = useState([]);
-    const [titulo, setTitulo] = useState("CADASTRAR RELEASE");
+    const [titulo, setTitulo] = useState("Cadastrar Release");
     const [lastRelease, setLastRelease] = useState(null);
     const [releaseAdjacentes, setReleasesAdjacentes] = useState(null);
 
@@ -115,12 +115,12 @@ const FormRelease = ({ onSubmit, onCancel, selectProject }) => {
 
         if (releaseData !== null) {
           form.setFieldsValue(releaseData);
-          setTitulo("ATUALIZAR RELEASE");
+          setTitulo("Atualizar Release");
           await handleGetReleasesAdjacentes();
         } else {
           await handleGetUltimaRelease();
           form.resetFields();
-          setTitulo("CADASTRAR RELEASE");
+          setTitulo("Cadastrar Release");
         }
       } else {
         form.resetFields();
@@ -136,11 +136,9 @@ const FormRelease = ({ onSubmit, onCancel, selectProject }) => {
       <Form.Item>
         <h4 className='global-title'> {titulo} </h4>
       </Form.Item>
-
-      {selectProject}
-
-      <div style={{ display: "flex", gap: "10px" }}>
+      <div style={{ display: "flex", gap: "20px" }}>
         <div style={{ flex: "2" }}>
+        {selectProject}
           <Form.Item
             label="Nome"
             name="nome"
@@ -150,15 +148,7 @@ const FormRelease = ({ onSubmit, onCancel, selectProject }) => {
           </Form.Item>
 
           <Form.Item label="Descrição" name="descricao">
-            <Input.TextArea rows={5} name="descricao" placeholder="descrição ..." />
-          </Form.Item>
-
-          <Form.Item
-            label="Data de Lançamento"
-            name="data_lancamento"
-            rules={[{ validator: validateDataLancamento }]}
-          >
-            <Input type="date" name="data_lancamento" style={{ width: "fit-content" }} />
+            <Input.TextArea rows={8} name="descricao" placeholder="descrição ..." />
           </Form.Item>
         </div>
 
@@ -177,6 +167,13 @@ const FormRelease = ({ onSubmit, onCancel, selectProject }) => {
             rules={[{ required: true, message: "Por favor, selecione uma opção!" }]}
           >
             <Select allowClear options={optionsMembros} defaultValue="Selecione" />
+          </Form.Item>
+          <Form.Item
+            label="Data de Lançamento"
+            name="data_lancamento"
+            rules={[{ validator: validateDataLancamento, required: true, message: 'Por favor, preencha este campo!'}]}
+          >
+            <Input type="date" name="data_lancamento"/>
           </Form.Item>
         </div>
       </div>

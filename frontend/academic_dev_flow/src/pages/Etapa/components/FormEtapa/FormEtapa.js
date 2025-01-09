@@ -6,16 +6,16 @@ const FormEtapa = ({onSubmit, onCancel}) => {
 
     const [form] = Form.useForm();
     const {dadosEtapa} = useContextoEtapa()
-    const [titulo, setTitulo] = useState('CADASTRAR ETAPA')
+    const [titulo, setTitulo] = useState('Cadastrar Etapa')
 
     useEffect(() => {
 
         if (dadosEtapa !== null){
             form.setFieldsValue(dadosEtapa)
-            setTitulo('ATUALIZAR ETAPA')
+            setTitulo('Atualizar Etapa')
         } else {
             form.resetFields()
-            setTitulo('CADASTRAR ETAPA')
+            setTitulo('Cadastrar Etapa')
         }
         
     }, []);

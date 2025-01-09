@@ -46,13 +46,19 @@ const FormFiltrarTarefas = ({idMembro, onChange}) => {
 
     return (
         <Form
-            style={{display: 'flex', gap: '10px'}}
+
+            style={{
+                display: 'flex', 
+                gap: '10px', 
+                alignItems: 'center'}}
             onValuesChange={(changedValues, allValues) => onChange(allValues)}  // Chama o onChange quando qualquer campo muda
         >
             <Form.Item
+                style={{margin: '0'}}
                 name="membroSelect"
             >
                 <Select
+                    style={{minWidth: '150px'}}
                     showSearch
                     allowClear
                     placeholder="Membro"
@@ -64,9 +70,11 @@ const FormFiltrarTarefas = ({idMembro, onChange}) => {
             </Form.Item>
 
             <Form.Item
+                style={{margin: '0'}}
                 name="projetoSelect"
             >
                 <Select
+                    style={{minWidth: '150px'}}
                     showSearch
                     allowClear
                     placeholder="Projeto"

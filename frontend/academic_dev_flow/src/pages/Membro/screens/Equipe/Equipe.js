@@ -14,6 +14,7 @@ import FormFuncaoMembro from "../../components/FormFuncaoMembro/FormFuncaoMembro
 import { useMembroContexto } from "../../context/MembroContexto";
 import GridEquipe from "../../components/GridEquipe/GridEquipe";
 import { IoArrowBackOutline } from "react-icons/io5";
+import { MdArrowBackIosNew } from "react-icons/md";
 
 const {TabPane } = Tabs
 
@@ -164,8 +165,8 @@ const Equipe = () => {
                     <Button
                         onClick={() => navigate(-1)}
                         type="default"
-                        icon={<IoArrowBackOutline />}
-                    > VOLTAR 
+                        icon={<MdArrowBackIosNew />}
+                    > Voltar 
                     </Button>
                 </div>                    
             </div>

@@ -59,6 +59,7 @@ const SelectProject = ({idMembro}) => {
     return (
         <div style={{flex: "1"}}>
             <Form.Item
+                label="Projeto"
                 rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
             >
                 <Select

@@ -9,7 +9,7 @@ import { atualizarFluxoEtapa, desvincularEtapaFluxo, listarEtapasPorFluxo, lista
 import TableFluxoEtapas from "../../../components/TableFluxoEtapas/TableFluxoEtapas";
 import { IoMdCreate, IoMdTrash } from "react-icons/io";
 import { NotificationManager } from "react-notifications";
-import { limitarCaracteres } from "../../../../../services/utils";
+import { filterOption, limitarCaracteres } from "../../../../../services/utils";
 
 const TabVincularEtapas = () => {
 
@@ -203,6 +203,8 @@ const TabVincularEtapas = () => {
                                 allowClear
                                 placeholder="Selecione o fluxo"
                                 popupMatchSelectWidth={false}
+                                showSearch
+                                filterOption={filterOption}
                             />
                         </Form.Item>
 

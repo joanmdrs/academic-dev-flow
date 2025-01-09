@@ -21,6 +21,7 @@ import { LuCalendarDays } from "react-icons/lu";
 import ScreenDrawerComments from "../DrawerComments";
 import SpinLoading from "../../../../components/SpinLoading/SpinLoading";
 import ListTask from "../../components/ListTask/ListTask";
+import { MdFilterAlt, MdViewKanban } from "react-icons/md";
 
 const {Search} = Input 
 
@@ -268,14 +269,17 @@ const Tarefas = () => {
                 </div>
 
                 <div>
-                    <Button
-                        size="large" 
-                        onClick={() => handleAdicionarTarefa()} 
-                        type="primary" 
-                        ghost 
-                        icon={<FaPlus />}> 
-                        Criar Tarefa 
-                    </Button>
+                    {!isFormVisible && (
+                        <Button
+                            size="large" 
+                            onClick={() => handleAdicionarTarefa()} 
+                            type="primary" 
+                            ghost 
+                            
+                            icon={<FaPlus />}> 
+                            Criar Tarefa 
+                        </Button>
+                    )}
                 </div>
 
             </div>
@@ -298,16 +302,35 @@ const Tarefas = () => {
                 <div className="pa-20"> 
                     <Tabs
                         tabBarExtraContent={
-                            <div style={{display: 'flex', gap: '20px'}}> 
-                                <Search
-                                    style={{width: '500px'}}
-                                    placeholder="pesquise pelo nome"
-                                    allowClear
-                                    enterButton="Pesquisar"
-                                    size="middle"
-                                    onSearch={handleFiltrarTarefaPeloNome}
-                                />
+
+                            <div 
+                                style={{
+                                    display: 'flex', 
+                                    gap: '10px', 
+                                    alignItems: 'center',
+                                }}
+                            > 
+                                <div> 
+                                    <p 
+                                        style={{
+                                            color: "var(--border-color)", 
+                                            display: 'flex', 
+                                            alignItems: 'center'
+                                        }}
+                                    > <MdFilterAlt size={"20px"} /> Filtros </p>
+                                </div>
+
+                                <div> 
+                                    <Input
+                                        style={{width: '500px'}}
+                                        placeholder="pesquise pelo nome"
+                                        name="nome"
+                                        onChange={(event) => handleFiltrarTarefaPeloNome(event.target.value)}
+                                    />
+                                </div>
+
                                 <FormFiltrarTarefas idMembro={usuario.id} onChange={handleFiltrarTarefas}/>
+                                
                             </div>
                             
                         }

@@ -8,8 +8,8 @@ const FormFiltrarEtapas = ({onFilter, onCancel}) => {
 
     return (
         <Form form={form} className="global-form" layout="vertical" onFinish={onFilter}>
-            <Form.Item label="Nome" name="nome">
-                <Input name="nome" placeholder="Informe o nome da etapa"/>
+            <Form.Item label="Filtrar Etapas" name="nome">
+                <Input name="nome" placeholder="Pesquise pelo nome da etapa"/>
             </Form.Item>
 
             <Space>

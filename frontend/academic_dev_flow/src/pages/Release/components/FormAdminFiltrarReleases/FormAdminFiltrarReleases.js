@@ -27,7 +27,7 @@ const FormAdminFiltrarReleases = ({onFilter, onCancel}) => {
     return (
         <Form className="global-form" layout="vertical" onFinish={onFilter}>
             <Form.Item label="Nome" name="nome">
-                <Input name="nome" placeholder="Informe o nome da release" />
+                <Input name="nome" placeholder="Pesquise pelo nome da release" />
             </Form.Item>
 
             <Form.Item label="Projeto" name="projeto">

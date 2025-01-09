@@ -15,6 +15,7 @@ import { NotificationManager } from 'react-notifications'
 import RenderStatus from '../../../../components/RenderStatus/RenderStatus'
 import { optionsStatusReleases } from '../../../../services/optionsStatus'
 import { IoMdCreate, IoMdTrash } from 'react-icons/io'
+import { MdFilterAlt } from 'react-icons/md'
 
 
 const Release = () => {
@@ -232,6 +233,17 @@ const Release = () => {
                     backgroundColor: '#FFFFFF'
                 }}>
                     <Flex horizontal gap="middle">
+                        <Space>
+                            <div> 
+                                <p 
+                                    style={{
+                                        color: "var(--border-color)", 
+                                        display: 'flex', 
+                                        alignItems: 'center'
+                                    }}
+                                > <MdFilterAlt size={"20px"} /> Filtros </p>
+                            </div>
+                        </Space>
                         <Space>
                             <FormFilterReleases onChange={handleFiltrarReleases} idMembro={usuario.id}/>
                         </Space>

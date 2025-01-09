@@ -104,10 +104,8 @@ const Projetos = () => {
 
     const handleFiltrarProjetosPeloNome = async (value) => {
 
-        console.log(value)
         if (value){
             const response = await buscarProjetosDoMembro(usuario.id);
-            console.log(response.data)
             const projetosFiltros = response.data.filter(projeto =>
                 projeto.nome_projeto.toLowerCase().includes(value.toLowerCase())
             );
@@ -202,7 +200,7 @@ const Projetos = () => {
             {!isTabsVisible ? (
                 <React.Fragment>
                     <div style={{
-                        borderBottom: '1px solid var(--border-color)',
+                        borderBottom: '1px solid #ddd',
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'baseline',
@@ -227,7 +225,8 @@ const Projetos = () => {
                             padding: '20px',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '20px'
+                            gap: '20px',
+                            borderBottom: '1px solid #ddd'
         
                         }}> 
                         <div> 
@@ -295,7 +294,7 @@ const Projetos = () => {
             
             
 
-            <div>
+            <div style={{padding: '20px'}}>
 
                 {isTableVisible && (
                     <React.Fragment>
@@ -303,15 +302,15 @@ const Projetos = () => {
                         <Tabs
                             style={{paddingTop: '10px'}}
                             size="middle"
-                            tabPosition="right"
+                            tabPosition="top"
                             indicator={{align: "center"}}
                             defaultActiveKey="1"
                         > 
                             <TabPane 
-                                style={{padding: '20px'}} 
+                                style={{paddingTop: '20px'}} 
                                 tab={
                                     <Tooltip title="Lista">
-                                        <TbLayoutListFilled />
+                                        <TbLayoutListFilled /> Lista
                                     </Tooltip>
                                 } 
                                 key="1">
@@ -324,10 +323,10 @@ const Projetos = () => {
                             </TabPane>
                             
                             <TabPane 
-                                style={{padding: '20px'}} 
+                                style={{paddingTop: '20px'}} 
                                 tab={
                                     <Tooltip title="Tabela">
-                                        <FaListUl />
+                                        <FaListUl /> Tabela
                                     </Tooltip>
                                 } 
                                 key="2" 

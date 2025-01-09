@@ -160,8 +160,8 @@ const TabGerenciarFluxos = () => {
             {isFormFilterVisible && (
                 <div className="pa-20" style={{width: '50%'}}> 
                     <Form form={form} className="global-form" onFinish={handleBuscarFluxo} layout="vertical">
-                        <Form.Item name="nome" label="Pesquise pelo nome">
-                            <Input name="nome" placeholder="informe o nome do fluxo" />
+                        <Form.Item name="nome" label="Filtrar fluxo">
+                            <Input name="nome" placeholder="pesquise pelo nome do fluxo" />
                         </Form.Item>
 
                         <Space>

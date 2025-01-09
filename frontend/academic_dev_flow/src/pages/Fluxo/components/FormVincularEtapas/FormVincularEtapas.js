@@ -11,7 +11,7 @@ const FormVincularEtapas = ({onSubmit, onCancel}) => {
     const [optionsEtapas, setOptionsEtapas] = useState([])
     const {dadosFluxoEtapa} = useContextoFluxo()
     const [form] = useForm()
-    const [titleForm, setTitleForm] = useState('VINCULAR ETAPA AO FLUXO')
+    const [titleForm, setTitleForm] = useState('Vincular Etapa ao Fluxo')
 
     const handleListarFluxos = async () => {
         const response = await listarFluxos()
@@ -44,10 +44,10 @@ const FormVincularEtapas = ({onSubmit, onCancel}) => {
 
             if (dadosFluxoEtapa !== null){
                 form.setFieldsValue(dadosFluxoEtapa)
-                setTitleForm('ATUALIZAR ETAPA DO FLUXO')
+                setTitleForm('Atualizar Etapa do Fluxo')
             } else {
                 form.resetFields()
-                setTitleForm('VINCULAR ETAPA AO FLUXO')
+                setTitleForm('Vincular Etapa ao Fluxo')
             }
             
         }
@@ -71,6 +71,8 @@ const FormVincularEtapas = ({onSubmit, onCancel}) => {
                     style={{ width: '100%' }}
                     placeholder="Selecione o fluxo"
                     options={optionsFluxos} 
+                    showSearch
+                    filterOption={filterOption}
                 />
             </Form.Item>
 
