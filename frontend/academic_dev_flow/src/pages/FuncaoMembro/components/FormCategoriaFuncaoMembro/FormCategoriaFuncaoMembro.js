@@ -9,7 +9,7 @@ const FormCategoriaFuncaoMembro = ({onSubmit, onCancel}) => {
     const {dadosCategoriaFuncaoMembro} = useFuncaoMembroContexto()
     const [cor, setCor] = useState('');
     const [form] = Form.useForm()
-    const [titulo, setTitulo] = useState("CADASTRAR CATEGORIA")
+    const [titulo, setTitulo] = useState("CADASTRAR NOVA FUNÇÃO")
 
     useEffect(() => {
         const fetchData = async () => {
@@ -17,12 +17,12 @@ const FormCategoriaFuncaoMembro = ({onSubmit, onCancel}) => {
             if (dadosCategoriaFuncaoMembro !== null) {
                 setCor(dadosCategoriaFuncaoMembro.cor)
                 form.setFieldsValue(dadosCategoriaFuncaoMembro)
-                setTitulo("ATUALIZAR CATEGORIA")
+                setTitulo("ATUALIZAR DADOS DA FUNÇÃO")
 
             } else {
                 handleGerarCor()
                 form.resetFields()
-                setTitulo("CADASTRAR CATEGORIA")
+                setTitulo("CADASTRAR NOVA FUNÇÃO")
             }
         }
 
@@ -59,7 +59,7 @@ const FormCategoriaFuncaoMembro = ({onSubmit, onCancel}) => {
             </Form.Item>
 
             <Form.Item label='Descrição' name='descricao'>
-                <Input type='text' name='descricão' placeholder='descrição (opcional)' />
+                <Input.TextArea rows={4} type='text' name='descricão' placeholder='descrição (opcional)' />
             </Form.Item>
 
             <div style={{display: 'flex', alignItems: 'flex-end', gap: '10px'}}> 

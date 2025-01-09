@@ -79,8 +79,8 @@ const GerenciarCategoriaFuncaoMembro = () => {
     return (
         <div className="content">
             <Titulo 
-                titulo='Categorias'
-                paragrafo='Membro > Função > Categoria'
+                titulo='Funções'
+                paragrafo='Membro > Funções > Gerenciar funções'
             />
 
             { !isFormVisivel && (
@@ -99,7 +99,7 @@ const GerenciarCategoriaFuncaoMembro = () => {
                         onClick={handleAdicionarCategoria}
                         disabled={isPlusBtnEnabled}
                     > 
-                        Criar Nova Categoria 
+                        Criar Nova Função 
                     </Button>
                 </div>
 
@@ -115,7 +115,7 @@ const GerenciarCategoriaFuncaoMembro = () => {
                             <Input 
                                 type="text" 
                                 name="nome_tipo" 
-                                placeholder="informe o nome da categoria"
+                                placeholder="informe o nome da função"
                                 value={nomeCategoria} 
                                 onChange={(e) => setNomeCategoria(e.target.value)}
                             />

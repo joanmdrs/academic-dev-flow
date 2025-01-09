@@ -1,4 +1,4 @@
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, notification } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import "./Login.css"
@@ -8,6 +8,8 @@ import imgLogo from '../../../assets/logo.jpg'
 
 const Login = () => {
     const {loginAction} = useAuth();
+    const [api, contextHolder] = notification.useNotification();
+
 
     const handleLogin = async (values) => {  
 
@@ -20,11 +22,20 @@ const Login = () => {
             console.error('Erro durante o login:', error);
         }
     };
+
+    const openNotificationWithIcon = (type) => {
+        api[type]({
+          message: 'Aviso',
+          description:
+            'No momento, esta funcionalidade ainda não está disponível.',
+        });
+      };
     
 
   return (  
 
     <div className='login-layout'> 
+        {contextHolder}
         <div className='container-form-login'> 
 
             <div className='form-login-header'> 
@@ -83,7 +94,7 @@ const Login = () => {
                         </Form.Item>
 
                         <Form.Item className='link-recovery'> 
-                            <Link> Esqueceu sua senha ? </Link>
+                            <Link onClick={() => openNotificationWithIcon('info')}> Esqueceu sua senha ? </Link>
                         </Form.Item>
                         <Form.Item>
                             <Button type="primary" htmlType="submit">

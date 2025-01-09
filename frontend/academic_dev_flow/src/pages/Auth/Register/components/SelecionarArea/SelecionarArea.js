@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Button, Form, Input, Radio } from "antd";
 import { IoIosArrowRoundForward } from "react-icons/io";
+import { IoIosArrowRoundBack } from "react-icons/io";
 import "./SelecionarArea.css";
 import { useRegisterContexto } from "../../context/RegisterContexto";
 import { NotificationManager } from "react-notifications";
+import { MdOutlineArrowBackIosNew, MdOutlineArrowForward, MdOutlineArrowForwardIos } from "react-icons/md";
 
 const SelecionarArea = () => {
     const [option, setOption] = useState(null);
     const [form] = Form.useForm();
-    const { setInfoGithub, setStep } = useRegisterContexto();
+    const { setInfoGithub, step, setStep } = useRegisterContexto();
 
     useEffect(() => {
         form.validateFields();
@@ -46,7 +48,6 @@ const SelecionarArea = () => {
                 <div className="global-div">
 
                     <Form
-                        className="global-form"
                         form={form}
                         layout="vertical"
                         onFinish={handleProsseguir}
@@ -84,10 +85,21 @@ const SelecionarArea = () => {
                 </div>
                 
             ) : (
-                <Button type="primary" htmlType="submit" onClick={handleProsseguir}>
-                    Prosseguir <IoIosArrowRoundForward />
-                </Button>
+                <div style={{display: 'flex', gap: "10px"}}> 
+                    <Button onClick={() => setStep("1")} icon={<MdOutlineArrowBackIosNew />}>
+                        Voltar
+                    </Button>
+                    <Button type="primary" htmlType="submit" onClick={handleProsseguir}>
+                        Prosseguir  <MdOutlineArrowForwardIos />
+                    </Button>
+                    
+                </div>
+                
+
+                
             )}
+
+        
         </div>
     );
 };
