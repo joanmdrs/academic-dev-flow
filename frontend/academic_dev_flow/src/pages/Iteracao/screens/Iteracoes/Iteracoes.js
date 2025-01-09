@@ -43,8 +43,6 @@ const Iteracoes = () => {
             }
         }
 
-        console.log(iteracoes)
-
         fetchData()
     }, [usuario])
 

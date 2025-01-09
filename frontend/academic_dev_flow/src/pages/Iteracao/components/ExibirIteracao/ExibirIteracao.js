@@ -22,8 +22,6 @@ const ExibirIteracao = () => {
 
             if (!response.error){
 
-
-                console.log(response.data)
                 const promises = await response.data.map( async (item) => {
                     const response2 = await buscarEtapaPeloId(item.etapa)
 

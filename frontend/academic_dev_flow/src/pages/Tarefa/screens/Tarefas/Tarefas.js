@@ -137,9 +137,7 @@ const Tarefas = () => {
         dadosForm.projeto = dadosProjeto.id;
         let dadosIssue = null;
         
-        console.log(dadosForm['sicronizar-github'])
         if (dadosForm['sicronizar-github']) {
-            console.log('estou entrando aqui')
             const resIssue = await handleSaveIssue(dadosForm);
     
             if (resIssue.error) {
@@ -159,7 +157,6 @@ const Tarefas = () => {
             handleReload();
     
         } catch (error) {
-            console.log(error)
             NotificationManager.error('Erro ao salvar a tarefa');
         }
         

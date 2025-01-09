@@ -14,7 +14,6 @@ export const listarGrupos = async () => {
 
 export const criarMembro = async (dados) => {
 
-    console.log(dados)
     const dadosEnviar = {
         usuario : {
             username: dados.username,
@@ -55,7 +54,6 @@ export const buscarMembroPeloNome = async (nomeMembro) => {
         const resposta = await api.get('/membro/buscar-por-nome/', {params: {nome: nomeMembro}})
         return resposta
     } catch (error) {
-        console.log(error)
         NotificationManager.error('Falha ao buscar o membro, contate o suporte!')
         return {error: "Erro durante a operação, contate o suporte!"}
     } 
@@ -68,7 +66,6 @@ export const buscarMembroPorGrupoENome = async (nomeMembro, grupoMembro) => {
             {params: {nome: nomeMembro, grupo: grupoMembro}})
         return resposta
     } catch (error) {
-        console.log(error)
         NotificationManager.error('Falha ao buscar o membro, contate o suporte!')
         return {error: "Erro durante a operação, contate o suporte!"}
     }
@@ -79,7 +76,6 @@ export const buscarMembroPeloId = async (idMembro) => {
         const resposta = await api.get('/membro/buscar-por-id/', {params: {id_membro: idMembro}})
         return resposta
     } catch (error) {
-        console.log(error)
         NotificationManager.error('Falha ao buscar o membro, contate o suporte!')
         return {error: "Erro durante a operação, contate o suporte!"}
     }
@@ -112,7 +108,6 @@ export const excluirMembro = async (idMembro) => {
         NotificationManager.success("Membro excluído com sucesso!")
         return resposta
     } catch (error) {
-        console.log(error)
         NotificationManager.error('Falha ao excluir o membro, contate o suporte!')
         return {error: "Erro durante a operação, contate o suporte!"}
     }
@@ -146,7 +141,6 @@ export const atualizarMembro = async (idMembro, dados) => {
         NotificationManager.success('Membro atualizado com sucesso!');
         return resposta;
     } catch (error) {
-        console.log(error)
         NotificationManager.error('Falha ao atualizar o membro, contate o suporte!')
         return {error: "Erro durante a operação, contate o suporte!"}
     }
@@ -169,7 +163,6 @@ export const buscarMembrosPorListaIds = async (listaIds) => {
         const response = await api.get('/membro/listar/', {params: {ids: listaIds}});
         return response;
     } catch (error) {
-        console.log(error)
         NotificationManager.error("Falha ao buscar os membros, contate o suporte!")
         return {error: "Falha ao buscar os membros"}
     }

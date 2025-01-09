@@ -163,9 +163,7 @@ const Tarefas = () => {
         dadosForm['projeto'] = dadosProjeto.id;
         let dadosIssue = null;
         
-        console.log(dadosForm['sicronizar-github'])
         if (dadosForm['sicronizar-github']) {
-            console.log('estou entrando aqui')
             const resIssue = await handleSaveIssue(dadosForm);
     
             if (resIssue.error) {
@@ -218,11 +216,9 @@ const Tarefas = () => {
                 idProjeto: dadosProjeto.id
             }
 
-            console.log(sendData)
             const response = await buscarMembroProjetoPeloIdMembroEPeloIdProjeto(sendData.idProjeto, sendData.idMembro)
 
             if (!response.error){
-                console.log(response.data)
                 await iniciarContagemTempo({
                     id_membro_projeto: response.data.id,
                     id_tarefa: tarefa.id
@@ -240,11 +236,9 @@ const Tarefas = () => {
                 idMembro: usuario.id,
                 idProjeto: dadosProjeto.id
             }
-            console.log(sendData)
             const response = await buscarMembroProjetoPeloIdMembroEPeloIdProjeto(sendData.idProjeto, sendData.idMembro)
 
             if (!response.error){
-                console.log(response.data)
                 await pararContagemTempo({
                     id_membro_projeto: response.data.id,
                     id_tarefa: tarefa.id
@@ -258,7 +252,6 @@ const Tarefas = () => {
 
     const handleExibirComentarios = (record) => {
         handleShowDrawerComments()
-        console.log(record)
         setDadosTarefa(record)
     }
 

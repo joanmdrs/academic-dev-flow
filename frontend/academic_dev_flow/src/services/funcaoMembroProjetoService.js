@@ -52,7 +52,6 @@ export const listarCategoriaFuncaoMembro = async () => {
 }
 
 export const excluirCategoriaFuncaoMembro = async (idsCategoria) => {
-    console.log(idsCategoria)
     try {
         const response = await api.delete('funcao-membro/categoria/excluir/', { data: { ids_categoria: idsCategoria }} )
         return handleSuccess(response, SUCCESS_MESSAGE_ON_DELETION)

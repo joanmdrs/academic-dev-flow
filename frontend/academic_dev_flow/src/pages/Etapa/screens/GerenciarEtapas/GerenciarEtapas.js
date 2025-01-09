@@ -78,7 +78,6 @@ const GerenciarEtapas = () => {
 
     const handleFiltrarEtapas = async (formData) => {
 
-        console.log(formData)
         const response = await buscarEtapaPeloNome(formData.nome)
         if(!response.error) {
             setEtapas(response.data)

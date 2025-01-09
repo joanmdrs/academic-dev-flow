@@ -57,10 +57,7 @@ const HomeDiscente = () => {
             }
         }
         fetchData()
-        console.log(tarefas)
-        console.log(artefatos)
-        console.log(projetos)
-
+        
     }, [usuario])
 
     const handleAlterarSituacaoTarefa = async (id, status) => {
