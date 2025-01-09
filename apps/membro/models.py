@@ -10,9 +10,9 @@ class Membro(models.Model):
     ]
 
     nome = models.CharField(max_length=200)
-    data_nascimento = models.DateField("Data de nascimento")
-    sexo = models.CharField(max_length=1, choices=SEXO_CHOICES, default='M')  # Novo campo sexo
-    telefone = models.CharField(max_length=20)
+    data_nascimento = models.DateField("Data de nascimento", null=True, blank=True)
+    sexo = models.CharField(max_length=1, choices=SEXO_CHOICES, default='O')  # Novo campo sexo
+    telefone = models.CharField(max_length=20, null=True, blank=True)
     email = models.EmailField(max_length=200)
     linkedin = models.CharField(max_length=200, null=True, blank=True)
     lattes = models.CharField(max_length=200, null=True, blank=True)
