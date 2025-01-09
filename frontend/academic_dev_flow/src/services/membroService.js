@@ -1,6 +1,6 @@
 import { NotificationManager } from "react-notifications";
 import api from "../api/api";
-import { handleError } from "./utils";
+import { handleError, handleSuccess } from "./utils";
 import { ERROR_MESSAGE_ON_DELETION, ERROR_MESSAGE_ON_SEARCHING } from "./messages";
 
 export const listarGrupos = async () => {
@@ -36,14 +36,13 @@ export const criarMembro = async (dados) => {
     }
 
     try {
-        const resposta = await api.post('/membro/cadastrar/', dadosEnviar)
-        NotificationManager.success('Membro criado com sucesso !')
-        return resposta
+        const response = await api.post('/membro/cadastrar/', dadosEnviar)
+        return handleSuccess(response, "Membro criado com sucesso.")
     } catch (error) {
         if (error.response && error.response.status === 409){
-            return handleError(error, 'Já existe um membro cadastrado com este endereço de e-mail!')
+            return handleError(error, 'Já existe um membro cadastrado com este endereço de e-mail.')
         } else {
-            return handleError(error, 'Falha ao tentar criar a conta, contate o suporte!')
+            return handleError(error, 'Falha ao tentar criar a conta, contate o suporte.')
         }
     }
 }
@@ -51,33 +50,30 @@ export const criarMembro = async (dados) => {
 export const buscarMembroPeloNome = async (nomeMembro) => {
 
     try {
-        const resposta = await api.get('/membro/buscar-por-nome/', {params: {nome: nomeMembro}})
-        return resposta
+        const response = await api.get('/membro/buscar-por-nome/', {params: {nome: nomeMembro}})
+        return response
     } catch (error) {
-        NotificationManager.error('Falha ao buscar o membro, contate o suporte!')
-        return {error: "Erro durante a operação, contate o suporte!"}
+        return handleError(error, 'Falha ao tentar buscar os dados !')
     } 
 }
 
 export const buscarMembroPorGrupoENome = async (nomeMembro, grupoMembro) => {
 
     try {
-        const resposta = await api.get(`membro/buscar-por-nome-e-grupo/`, 
+        const response = await api.get(`membro/buscar-por-nome-e-grupo/`, 
             {params: {nome: nomeMembro, grupo: grupoMembro}})
-        return resposta
+        return response
     } catch (error) {
-        NotificationManager.error('Falha ao buscar o membro, contate o suporte!')
-        return {error: "Erro durante a operação, contate o suporte!"}
+        return handleError(error, 'Falha ao tentar buscar os dados.')
     }
 }
 
 export const buscarMembroPeloId = async (idMembro) => {
     try {
-        const resposta = await api.get('/membro/buscar-por-id/', {params: {id_membro: idMembro}})
-        return resposta
+        const response = await api.get('/membro/buscar-por-id/', {params: {id_membro: idMembro}})
+        return response
     } catch (error) {
-        NotificationManager.error('Falha ao buscar o membro, contate o suporte!')
-        return {error: "Erro durante a operação, contate o suporte!"}
+        return handleError(error, 'Falha ao tentar buscar os dados do membro.')
     }
 
 }
@@ -88,7 +84,7 @@ export const buscarMembroPeloUser = async (idUser) => {
         return response
         
     } catch (error) {
-        return {error: 'Falha ao buscar o recurso!'}
+        return handleError(error, 'Falha ao tentar buscar os dados.')
     }
 }
 
@@ -104,12 +100,10 @@ export const buscarUsuarioPeloIdMembroProjeto = async (idMembroProjeto) => {
 
 export const excluirMembro = async (idMembro) => {
     try {
-        const resposta = await api.delete('/membro/excluir/', {params: {id_membro: idMembro}})
-        NotificationManager.success("Membro excluído com sucesso!")
-        return resposta
+        const response = await api.delete('/membro/excluir/', {params: {id_membro: idMembro}})
+        return handleSuccess(response, 'Membro excluído com sucesso.')
     } catch (error) {
-        NotificationManager.error('Falha ao excluir o membro, contate o suporte!')
-        return {error: "Erro durante a operação, contate o suporte!"}
+        return handleError(error, 'Falha ao tentar excluir o membro.')
     }
 }
 
@@ -137,12 +131,10 @@ export const atualizarMembro = async (idMembro, dados) => {
     }
 
     try {
-        const resposta = await api.patch(`/membro/atualizar/?id_membro=${idMembro}`, dadosEnviar);
-        NotificationManager.success('Membro atualizado com sucesso!');
-        return resposta;
+        const response = await api.patch(`/membro/atualizar/?id_membro=${idMembro}`, dadosEnviar);
+        return handleSuccess(response, 'Informações do membro atualizadas com sucesso.')
     } catch (error) {
-        NotificationManager.error('Falha ao atualizar o membro, contate o suporte!')
-        return {error: "Erro durante a operação, contate o suporte!"}
+        return handleError(error, 'Falha ao tentar atualizar as informações do membro.')
     }
 }
 

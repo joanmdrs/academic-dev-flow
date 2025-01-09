@@ -68,7 +68,6 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
                                 <Form.Item 
                                     label="Selecione o fluxo" 
                                     name="fluxo" 
-                                    rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
                                 >
                                     <Select
                                         options={optionsFluxo}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Input, Modal, Select, Tabs, Tooltip } from 'antd';
+import { Button, Form, Input, Modal, Select, Tabs, Tooltip } from 'antd';
 import { buscarProjetosDoMembro, criarMembroProjeto } from "../../../../services/membroProjetoService";
 import { useContextoGlobalUser } from "../../../../context/ContextoGlobalUser/ContextoGlobalUser";
 import TableProjetos from "../../components/TableProjetos/TableProjetos";
@@ -14,6 +14,7 @@ import { optionsStatusProjetos } from '../../../../services/optionsStatus';
 import { listarFluxos } from '../../../../services/fluxoService';
 import { useNavigate } from 'react-router-dom';
 import SpinLoading from '../../../../components/SpinLoading/SpinLoading';
+import { MdFilterAlt } from "react-icons/md";
 
 const { Search } = Input;
 const {TabPane} = Tabs 
@@ -102,12 +103,18 @@ const Projetos = () => {
     }
 
     const handleFiltrarProjetosPeloNome = async (value) => {
+
+        console.log(value)
         if (value){
             const response = await buscarProjetosDoMembro(usuario.id);
+            console.log(response.data)
             const projetosFiltros = response.data.filter(projeto =>
                 projeto.nome_projeto.toLowerCase().includes(value.toLowerCase())
             );
             setProjetos(projetosFiltros)
+            
+        
+
         } else {
             await handleBuscarProjetosDoMembro()
         }
@@ -217,23 +224,33 @@ const Projetos = () => {
                     </div>
         
                     <div style={{
-                            borderBottom: '1px solid var(--border-color)',
                             padding: '20px',
                             display: 'flex',
-                            justifyContent: 'space-between'
+                            alignItems: 'center',
+                            gap: '20px'
         
                         }}> 
-        
-                        <div>
-                            <Search
-                                style={{width: '500px'}}
-                                placeholder="pesquise pelo nome"
-                                allowClear
-                                enterButton="Pesquisar"
-                                size="middle"
-                                onSearch={handleFiltrarProjetosPeloNome}
-                            />
+                        <div> 
+                            <p 
+                                style={{
+                                    color: "var(--border-color)", 
+                                    display: 'flex', 
+                                    alignItems: 'center'
+                                }}
+                            > <MdFilterAlt size={"20px"} /> Filtros </p>
                         </div>
+
+                        <div>
+                            <Form 
+                                style={{display: 'flex', gap: '10px'}}
+                                onValuesChange={(changedValues, allValues) => handleFiltrarProjetosPeloNome(allValues.nome)}
+                            >
+                                <Form.Item style={{margin: '0', width: '400px'}} name="nome">
+                                    <Input name="nome" placeholder="Pesquise pelo nome do projeto" />
+                                </Form.Item>
+                            </Form>
+
+                            </div>
         
                         <div className='df g-10'> 
                             <Select 

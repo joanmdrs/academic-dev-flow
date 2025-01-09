@@ -167,7 +167,6 @@ const FormProjeto = () => {
                             label="Fluxo:" 
                             name="fluxo" 
                             style={{width: "250px"}} 
-                            rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
                         >
                             <Select defaultValue="Selecione" options={optionsFluxos} /> 
                         </Form.Item>
