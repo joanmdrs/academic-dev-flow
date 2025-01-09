@@ -70,16 +70,21 @@ body {
   padding: 20px;
   margin-top: 10px;
   margin-bottom: 10px;
-  border: 1px solid var(--border-color);
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border: 1px solid #ddd;
   background-color: #FFFFFF;
   border-radius: 5px;
 }
 
 .global-title {
   font-family: 'Poppins', sans-serif;
-  text-transform: capitalize;
   font-weight: 500;
+  text-transform: capitalize !important;
   font-size: 15px;
+  color: var(--primary-color);
+  padding: 15px 20px;
+  border-radius: 5px;
+  background-color: #EFF8FB;
 }
 
 .button-menu {
