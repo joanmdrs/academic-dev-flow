@@ -1,6 +1,6 @@
 import { Button, Modal, Tabs } from "antd";
 import React, { useEffect, useState } from "react";
-import { BsGrid3X3GapFill } from "react-icons/bs";
+import { BsGrid3X3GapFill, BsTable } from "react-icons/bs";
 import { FaListUl, FaPlus } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import { buscarMembrosPorProjeto, criarMembroProjeto, excluirMembroProjeto } from "../../../../services/membroProjetoService";
@@ -9,12 +9,13 @@ import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 import ListEquipe from "../../components/ListEquipe/ListEquipe";
 import ModalSelectMembros from "../../components/ModalSelectMembros/ModalSelectMembros";
-import { atualizarFuncaoMembroProjeto, cadastrarFuncaoMembroProjeto, excluirFuncaoMembroProjeto } from "../../../../services/funcaoMembroProjetoService";
+import { atualizarFuncaoMembroProjeto, cadastrarFuncaoMembroProjeto, excluirFuncaoMembroProjeto, listarFuncaoMembro, listarFuncaoMembroProjetoPorProjeto } from "../../../../services/funcaoMembroProjetoService";
 import FormFuncaoMembro from "../../components/FormFuncaoMembro/FormFuncaoMembro";
 import { useMembroContexto } from "../../context/MembroContexto";
 import GridEquipe from "../../components/GridEquipe/GridEquipe";
 import { IoArrowBackOutline } from "react-icons/io5";
 import { MdArrowBackIosNew } from "react-icons/md";
+import TableFuncoes from "../../components/TableFuncoes/TableFuncoes";
 
 const {TabPane } = Tabs
 
@@ -26,6 +27,7 @@ const Equipe = () => {
     const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
     const {dadosMembroProjeto, setDadosMembroProjeto} = useMembroContexto()
     const [membrosEquipe, setMembrosEquipe] = useState([])
+    const [funcoesMembro, setFuncoesMembro] = useState([])
     const [isModalVisible, setIsModalVisible] = useState(false)
     const [isFormFuncaoMembroVisible, setIsFormFuncaoMembroVisible] = useState(false)
 
@@ -42,6 +44,14 @@ const Equipe = () => {
         if (!response.error){
             setMembrosEquipe(response.data)
         }
+    }
+
+    const handleListarFuncoes = async () => {
+        const response = await listarFuncaoMembroProjetoPorProjeto(state.idProjeto)
+        if (!response.error){
+            setFuncoesMembro(response.data)
+        }
+
     }
 
     const handleAtualizarStatusFuncaoMembro = async (id, status) => {
@@ -62,6 +72,7 @@ const Equipe = () => {
                 if (state){
                     await handleBuscarProjeto()
                     await handleBuscarEquipe()
+                    await handleListarFuncoes()
                 }
             } catch (error) {
                 return handleError(error, 'Falha ao tentar buscar os dados da equipe !')
@@ -78,6 +89,7 @@ const Equipe = () => {
 
     const handleReload = async () => {
         await handleBuscarEquipe()
+        await handleListarFuncoes()
         setIsFormFuncaoMembroVisible(false)
         setDadosMembroProjeto(null)
     }
@@ -117,6 +129,7 @@ const Equipe = () => {
             onOk:  async () => {
                 await excluirFuncaoMembroProjeto(id)
                 await handleBuscarEquipe()
+                await handleListarFuncoes()
             }
         });
     }
@@ -186,8 +199,13 @@ const Equipe = () => {
                             indicator={{align: "center"}}
                             defaultActiveKey="2"
                         > 
-                            <TabPane style={{padding: '20px'}} tab={ <BsGrid3X3GapFill /> } key="1"  >
-                                <GridEquipe onAdd={handleAdicionarMembro} onDelete={handleRemoverMembro} data={membrosEquipe} />
+                            <TabPane style={{padding: '20px'}} tab={ <BsTable /> } key="1"  >
+                                <TableFuncoes 
+                                    data={funcoesMembro} 
+                                    onDelete={handleRemoverFuncao}
+                                    onDisable={handleAtualizarStatusFuncaoMembro}
+                                
+                                />
                             </TabPane>
                             <TabPane style={{padding: '20px'}} tab={<FaListUl />} key="2" >
 

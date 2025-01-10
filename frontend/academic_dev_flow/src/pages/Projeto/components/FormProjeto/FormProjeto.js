@@ -9,6 +9,7 @@ import { atualizarProjeto, buscarProjetoPeloId } from "../../../../services/proj
 import SpinLoading from "../../../../components/SpinLoading/SpinLoading";
 import { useContextoVisualizarProjeto } from "../../screens/VisualizarProjeto/context/ContextVisualizarProjeto";
 import { listarIteracoesPorProjeto } from "../../../../services/iteracaoService";
+import { filterOption } from "../../../../services/utils";
 
 const FormProjeto = () => {
 
@@ -80,6 +81,8 @@ const FormProjeto = () => {
             await handleReload()
         }
     }
+      
+      
 
 
 
@@ -101,18 +104,19 @@ const FormProjeto = () => {
                         onFinish={handleAtualizarDados}
                     >
 
-                        <Form.Item name="nome" label="Nome">
+                        <Form.Item name="nome" label="Nome" rules={[
+                            {required: true, message: 'Por favor, preencha este campo'}
+                        ]}>
                             <Input name="nome" />
                         </Form.Item>
                         <Form.Item label="Descrição:" name="descricao">
                             <Input.TextArea id="descricao" name="descricao" rows={6} />
                         </Form.Item>
 
-                        <div className="df g-10">
                             <Form.Item 
                                 label="Data de Início:" 
                                 name="data_inicio" 
-                                style={{width: "250px"}}
+                                style={{width: '250px'}}
                                 rules={[
                                     { required: true, message: 'Por favor, preencha este campo!' },
                                     ({ getFieldValue }) => ({
@@ -132,7 +136,7 @@ const FormProjeto = () => {
                             <Form.Item 
                                 label="Data de Término:" 
                                 name="data_termino" 
-                                style={{width: "250px"}} 
+                                style={{width: '250px'}}
                                 rules={[
                                     { required: true, message: 'Por favor, preencha este campo!' },
                                     ({ getFieldValue }) => ({
@@ -152,7 +156,7 @@ const FormProjeto = () => {
                             <Form.Item 
                                 label="Status:" 
                                 name="status" 
-                                style={{width: "250px"}} 
+                                style={{width: '250px'}}
                                 rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}>
                                 <Select
                                     name="status"
@@ -161,14 +165,13 @@ const FormProjeto = () => {
                                 />
                             </Form.Item>
 
-                        </div>
 
                         <Form.Item
                             label="Fluxo:" 
                             name="fluxo" 
-                            style={{width: "250px"}} 
+                            style={{width: '250px'}}
                         >
-                            <Select defaultValue="Selecione" options={optionsFluxos} /> 
+                            <Select defaultValue="Selecione" options={optionsFluxos} filterOption={filterOption} /> 
                         </Form.Item>
                         
                         { isUpdate && (

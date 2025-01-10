@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ScreenDrawerComments from "../../../../../Tarefa/screens/DrawerComments";
-import { Button, Form, Input, Modal, Select, Tabs } from "antd";
+import { Button, Flex, Form, Input, Modal, Select, Space, Tabs } from "antd";
 import { FaCalendar, FaListUl, FaPlus, FaTasks } from "react-icons/fa";
 import SpinLoading from "../../../../../../components/SpinLoading/SpinLoading";
 import FormTarefa from "../../../../../Tarefa/components/FormTarefa/FormTarefa";
@@ -20,6 +20,7 @@ import { ERROR_MESSAGE_ON_SEARCHING } from "../../../../../../services/messages"
 import { NotificationManager } from "react-notifications";
 import { createIssue, updateIssue } from "../../../../../../services/githubIntegration/issueService";
 import ListTask from "../../../../../Tarefa/components/ListTask/ListTask";
+import { MdFilterAlt } from "react-icons/md";
 const {TabPane} = Tabs
 const {Search} = Input
 
@@ -111,7 +112,7 @@ const Tarefas = () => {
             );
             setTarefas(tarefasFiltradas)
         } else {
-            await listarTarefasPorProjeto()
+            await listarTarefasPorProjeto(dadosProjeto.id)
         }
     }
 
@@ -302,58 +303,6 @@ const Tarefas = () => {
                 closeDrawer={handleCloseDrawerComments} 
             />}
 
-            { !isFormVisible && (
-                <div className="df jc-between pa-t-20 pa-b-20" style={{borderBottom: '1px solid #ddd'}}>  
-                    <div className="df g-20"> 
-                        <Search
-                            style={{width: '500px'}}
-                            placeholder="pesquise pelo nome"
-                            allowClear
-                            enterButton="Pesquisar"
-                            onSearch={handleFiltrarTarefaPeloNome}
-                        />
-
-                        <Form 
-                            style={{display: 'flex', gap: '10px'}} 
-                            onValuesChange={(changedValues, allValues) => handleFiltrarTarefas(allValues)}
-                        > 
-                            <Form.Item name="membroSelect">
-                                <Select
-                                    showSearch
-                                    allowClear
-                                    placeholder="Membro"
-                                    optionFilterProp="children"
-                                    options={optionsMembros}
-                                    popupMatchSelectWidth={false}
-                                />
-                            </Form.Item>
-
-                            <Form.Item name="categoriaSelect">
-                                <Select
-                                    showSearch
-                                    allowClear
-                                    placeholder="Categoria"
-                                    optionFilterProp="children"
-                                    options={optionsCategorias}
-                                    
-                                    popupMatchSelectWidth={false}
-                                />
-                            </Form.Item>                           
-
-                        </Form>
-
-                        
-                    </div>
-                    <Button
-                        onClick={() => handleAdicionarTarefa()} 
-                        type="primary" 
-                        size="large"
-                        icon={<FaPlus />}> 
-                        Criar Tarefa 
-                    </Button>
-
-                </div>  
-            )}
         
             <div>
                  {isFormVisible  && (
@@ -374,6 +323,71 @@ const Tarefas = () => {
                     <Tabs
                         size="middle"
                         indicator={{align: "center"}}
+                        tabBarExtraContent={
+                            <Flex horizontal gap="middle"> 
+                                <Space>
+                                    <p 
+                                        style={{
+                                            color: "var(--border-color)", 
+                                            display: 'flex', 
+                                            alignItems: 'center'
+                                        }}
+                                    > <MdFilterAlt size={"20px"} /> Filtros </p>
+                                </Space>
+                                <Space>
+                                    <Input
+                                        style={{width: '500px'}}
+                                        placeholder="Pesquise pelo nome da tarefa"
+                                        name="nome"
+                                        onChange={(event) => handleFiltrarTarefaPeloNome(event.target.value)}
+    
+                                    />
+                                </Space> 
+
+                                <Space>
+                                    <Form 
+                                        style={{display: 'flex', gap: '20px'}} 
+                                        onValuesChange={(changedValues, allValues) => handleFiltrarTarefas(allValues)}
+                                    > 
+                                        <Form.Item name="membroSelect" style={{margin: '0'}}>
+                                            <Select
+                                                showSearch
+                                                allowClear
+                                                placeholder="Membro"
+                                                optionFilterProp="children"
+                                                options={optionsMembros}
+                                                popupMatchSelectWidth={false}
+                                            />
+                                        </Form.Item>
+
+                                        <Form.Item name="categoriaSelect" style={{margin: '0'}}>
+                                            <Select
+                                                showSearch
+                                                allowClear
+                                                placeholder="Categoria"
+                                                optionFilterProp="children"
+                                                options={optionsCategorias}
+                                                
+                                                popupMatchSelectWidth={false}
+                                            />
+                                        </Form.Item>                           
+
+                                    </Form>
+                                </Space>
+                                 
+                                <Space>
+                                    <Button
+                                        onClick={() => handleAdicionarTarefa()} 
+                                        type="primary" 
+                                        icon={<FaPlus />}> 
+                                        Criar Tarefa 
+                                    </Button>
+                                </Space>
+                                
+
+                            </Flex>
+
+                        }
                     > 
                         <TabPane tab={<span><TbLayoutCards /> Quadro</span>} key="1" >
                             <TaskBoard 
@@ -386,7 +400,7 @@ const Tarefas = () => {
                             />
                         </TabPane>
 
-                        <TabPane tab={<span><TbLayoutList /> Quadro</span>} key="2" >
+                        <TabPane tab={<span><TbLayoutList /> Lista </span>} key="2" >
                             <ListTask  
                                 onUpdate={handleAtualizarTarefa} 
                                 onDelete={handleExcluirTarefa}

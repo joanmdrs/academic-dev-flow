@@ -1,6 +1,5 @@
 import { Space } from "antd";
 import React from "react";
-import { getRandomColor } from "../../services/utils";
 
 const RenderEtapas = ({data}) => {
      

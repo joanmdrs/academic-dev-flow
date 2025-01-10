@@ -149,10 +149,14 @@ const Releases = () => {
 
 
     return (
-        <div>
+        <div style={{height: '100%'}}>
             
             <div className="df jc-end w-100 mt-10 mb-10">
-                <Button onClick={() => handleAdicionarRelease()} size="large" type="primary" icon={<FaPlus />}> Criar Release </Button>
+                <Button 
+                    onClick={() => handleAdicionarRelease()} 
+                    type="primary" 
+                    icon={<FaPlus />}
+                > Criar Release </Button>
             </div>
 
             { isFormReleaseVisible ? (

@@ -7,6 +7,7 @@ class FuncaoMembroSerializer(serializers.ModelSerializer):
     cor_categoria_funcao = serializers.SerializerMethodField()
     nome_membro = serializers.SerializerMethodField()
     nome_grupo = serializers.SerializerMethodField()
+    avatar_membro = serializers.SerializerMethodField()
     nome_projeto = serializers.SerializerMethodField()
     nome_iteracao = serializers.SerializerMethodField()
     
@@ -17,6 +18,7 @@ class FuncaoMembroSerializer(serializers.ModelSerializer):
             'membro_projeto',
             'nome_membro', 
             'nome_grupo',
+            'avatar_membro',
             'categoria_funcao', 
             'nome_categoria_funcao', 
             'cor_categoria_funcao',
@@ -37,6 +39,9 @@ class FuncaoMembroSerializer(serializers.ModelSerializer):
     
     def get_nome_membro(self, obj):
         return obj.membro_projeto.membro.nome
+    
+    def get_avatar_membro(self, obj):
+        return obj.membro_projeto.membro.avatar
     
     def get_nome_grupo(self, obj):
         return obj.membro_projeto.membro.grupo.name
