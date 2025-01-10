@@ -1,13 +1,11 @@
 import { Button, Form, Input, Select, Space, Tag } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import { Switch } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useContextoTarefa } from '../../context/ContextoTarefa';
 import { buscarMembrosPorProjeto } from '../../../../services/membroProjetoService';
 import { listarIteracoesPorProjeto } from '../../../../services/iteracaoService';
-import Loading from '../../../../components/Loading/Loading';
 import { optionsStatusTarefas } from '../../../../services/optionsStatus';
-import { convertHexToRgba, filterOption, handleError } from '../../../../services/utils';
+import { filterOption, handleError } from '../../../../services/utils';
 import { ERROR_MESSAGE_ON_SEARCHING } from '../../../../services/messages';
 import { useContextoGlobalProjeto } from '../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto';
 import { listarCategoriaTarefa } from '../../../../services/categoriaTarefaService';
@@ -28,15 +26,16 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                await handleGetCategorias();
+                await handleGetTags()
                 if (dadosProjeto !== null) {
                     await handleGetMembros();
                     await handleGetIteracoes();
-                    await handleGetCategorias();
-                    await handleGetTags()
+                    
 
                     if (dadosTarefa !== null) {
                         form.setFieldsValue(dadosTarefa);
-                        setTitulo('ATUALIZAR TAREFA');
+                        setTitulo('Atualizar Tarefa');
                     } else {
                         form.resetFields();
                         setTitulo('Cadastrar Tarefa');
@@ -91,8 +90,10 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
 
     const handleGetCategorias = async () => {
         try {
-            const response = await listarCategoriaTarefa();
+            const response = await listarCategoriaTarefa()
+            console.log(response.data)
             if (!response.error && response.data) {
+                
                 const resultados = response.data.map((item) => ({
                     value: item.id,
                     label: renderOptionWithColor(item.nome, item.cor),
@@ -138,12 +139,21 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
     // }
 
     return (
-        <Form form={form} layout='vertical' className='global-form' onFinish={handleSubmitForm}>
+        <Form form={form} 
+            layout='vertical' 
+            onFinish={handleSubmitForm} 
+            className='global-form'
+            style={{
+                padding: "20px", 
+                border: "1px solid #ddd", 
+                borderRadius: '10px'
+            }}
+        >
             <Form.Item>
                 <h4 className='global-title'> {titulo} </h4>
             </Form.Item>
 
-            <div style={{ display: 'flex', gap: "20px", flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: "20px", flexWrap: 'wrap' }} >
                 <div style={{ flex: "2" }}>
 
                     {selectProject && (
@@ -169,42 +179,45 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
 
                     <div style={{display: 'flex', gap: '10px'}}> 
                         <Form.Item
+                            style={{flex: '1'}}
                             label="Data de início"
                             name="data_inicio"
                         >
-                            <Input type='date' name='data_inicio' />
+                            <Input type='date' name='data_inicio' allowClear/>
                         </Form.Item>
 
                         <Form.Item
+                            style={{flex: '1'}}
                             label="Data de término"
                             name="data_termino"
                         >
-                            <Input type='date' name='data_termino' />
+                            <Input type='date' name='data_termino' allowClear/>
                         </Form.Item>
 
                         <Form.Item
+                            style={{flex: '1'}}
                             label="Data de conclusão"
                             name="data_conclusao"
                         >
-                            <Input type='date' name='data_termino'/>
-                        </Form.Item>
-
-                        <Form.Item
-                            label="Atribuir à"
-                            name="membros"
-                            style={{flex: '2'}}
-                        >
-                            <Select
-                                mode="multiple"
-                                allowClear
-                                options={optionsMembros}
-                                showSearch
-                                filterOption={filterOption}
-                                placeholder="Atribuir à (opcional)"
-                            />
+                            <Input type='date' name='data_termino' allowClear/>
                         </Form.Item>
 
                     </div>
+
+                    <Form.Item
+                        label="Atribuir à"
+                        name="membros"
+                        style={{flex: '1'}}
+                    >
+                        <Select
+                            mode="multiple"
+                            allowClear
+                            options={optionsMembros}
+                            showSearch
+                            filterOption={filterOption}
+                            placeholder="Atribuir à (opcional)"
+                        />
+                    </Form.Item>
 
                     {inputsAdmin}
                 </div>

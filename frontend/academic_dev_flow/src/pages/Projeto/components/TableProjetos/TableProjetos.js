@@ -70,7 +70,6 @@ const TableProjetos = ({projetos, onUpdate, onDelete, onOpen}) => {
             title: 'Status',
             dataIndex: 'status_projeto',
             key: 'status_projeto',
-            align: 'center',
             render: (_, record) => (
                 <RenderStatus optionsStatus={optionsStatusProjetos} propStatus={record.status_projeto} />
             )

@@ -55,8 +55,14 @@ const FormVincularEtapas = ({onSubmit, onCancel}) => {
         fetchData()
     }, [dadosFluxoEtapa, form])
     const filterOption = (input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
+
     return (
-        <Form form={form} className="global-form" onFinish={onSubmit}>
+        <Form 
+            form={form} 
+            className="global-form" 
+            onFinish={onSubmit} 
+            layout="vertical"
+        >
             <Form.Item>
                 <h4 className='global-title'> {titleForm} </h4>
             </Form.Item>
@@ -64,6 +70,7 @@ const FormVincularEtapas = ({onSubmit, onCancel}) => {
             <Form.Item 
                 label="Fluxo" 
                 name='fluxo'
+                style={{width: '50%'}}
                 rules={[{ required: true, message: 'Por favor, selecione uma opção !' }]}
             > 
                 <Select 
@@ -76,13 +83,14 @@ const FormVincularEtapas = ({onSubmit, onCancel}) => {
                 />
             </Form.Item>
 
-            <Form.Item label="Ordem" name="ordem_no_fluxo">
+            <Form.Item label="Ordem" name="ordem_no_fluxo"style={{width: '50%'}}>
                 <Input defaultValue={0} type="number" name="ordem_no_fluxo" placeholder="(Opcional)" />
             </Form.Item>
 
             <Form.Item 
                 label="Etapa" 
                 name="etapa"
+                style={{width: '50%'}}
                 rules={[{ required: true, message: 'Por favor, selecione uma opção !' }]}
             >
                 <Select 

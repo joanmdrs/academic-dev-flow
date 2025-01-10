@@ -38,44 +38,19 @@ class AtualizarTarefaView(APIView):
             id_tarefa = request.GET.get('id_tarefa', None)
             data_tarefa = request.data
                         
-            # Verifica se o ID da tarefa foi fornecido
             if not id_tarefa: 
                 return Response({'error': 'O ID da tarefa não foi fornecido'}, status=status.HTTP_400_BAD_REQUEST)
             
             tarefa = Tarefa.objects.get(id=id_tarefa)
             
-            if tarefa: 
-                projeto_id = data_tarefa['projeto']
-                iteracao_id = data_tarefa['iteracao']
-                membros_projeto = data_tarefa['membros']
-
-                # Verifica se a iteração pertence ao projeto
-                iteracao = Iteracao.objects.get(id=iteracao_id)
-                if iteracao.projeto.id != projeto_id:
-                    return Response(
-                        {'error': 'A iteração não está vinculada ao projeto informado.'},
-                        status=status.HTTP_400_BAD_REQUEST
-                    )
-
-                # Verifica se todos os membros estão vinculados ao projeto
-                for id_membro_projeto in membros_projeto:
-                    membro_projeto = MembroProjeto.objects.get(id=id_membro_projeto)
-                    if membro_projeto.projeto.id != projeto_id:
-                        return Response(
-                            {'error': f'O membro {membro_projeto.id} não está vinculado ao projeto informado.'},
-                            status=status.HTTP_400_BAD_REQUEST
-                        )
-                
-                serializer = TarefaSerializer(tarefa, data=request.data, partial=True)
-            
-                if serializer.is_valid(raise_exception=True):
-                    serializer.save()
-                    return Response(serializer.data, status=status.HTTP_200_OK)
-            
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            
-            return Response({'error': 'Tarefa não encontrada'}, status=status.HTTP_404_NOT_FOUND)
+            serializer = TarefaSerializer(tarefa, data=request.data, partial=True)
         
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+        
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                    
         except Tarefa.DoesNotExist:
             return Response({'error': 'Tarefa não encontrada'}, status=status.HTTP_404_NOT_FOUND)
         

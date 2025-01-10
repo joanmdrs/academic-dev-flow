@@ -1,4 +1,4 @@
-import { Button, Form, Input, Select } from "antd";
+import { Button, Form, Input, Select, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { useForm } from "antd/es/form/Form";
 import { useContextoArtefato } from "../../context/ContextoArtefato";
@@ -108,11 +108,11 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto}) => {
                         name="nome"
                         rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
                     >
-                        <Input type="text" name="nome" placeholder="nome do artefato"/>
+                        <Input type="text" name="nome" placeholder="Nome do artefato"/>
                     </Form.Item>
 
                     <Form.Item label="Descrição" name="descricao">
-                        <Input.TextArea rows={6} name="descricao" placeholder="descrição do artefato"/>
+                        <Input.TextArea rows={9} name="descricao" placeholder="Descrição do artefato (opcional)"/>
                     </Form.Item>
 
                     <div style={{display: 'flex', gap: '20px'}}>
@@ -120,8 +120,9 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto}) => {
                         <Form.Item
                             label="Data de Entrega"
                             name="data_entrega"
+                            style={{width: '30%'}}
                         >
-                            <Input type='date' name='data_entrega' style={{ width: 'fit-content' }} />
+                            <Input type='date' name='data_entrega' allowClear />
                         </Form.Item>
                     </div>
                 </div>
@@ -185,15 +186,14 @@ const FormArtefato = ({onSubmit, onCancel, selectProjeto}) => {
                 </Form.Item>
             )}
 
-            <Form.Item>
+            <Space>
                 <Button type="primary" htmlType="submit" > Salvar </Button>
                 <Button 
-                    
                     type="primary" 
                     style={{marginLeft: '10px'}} 
                     danger 
                     onClick={() => onCancel()}> Cancelar </Button>
-            </Form.Item>
+            </Space>
         </Form>
     )
 

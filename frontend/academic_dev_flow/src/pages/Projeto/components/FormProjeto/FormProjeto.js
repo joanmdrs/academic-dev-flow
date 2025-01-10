@@ -82,10 +82,6 @@ const FormProjeto = () => {
         }
     }
       
-      
-
-
-
     return (
         <div> 
             {isLoading ? (
@@ -103,6 +99,9 @@ const FormProjeto = () => {
                         disabled={!isUpdate} 
                         onFinish={handleAtualizarDados}
                     >
+                        <Form.Item> 
+                            <h4>Dados do Projeto</h4>
+                        </Form.Item>
 
                         <Form.Item name="nome" label="Nome" rules={[
                             {required: true, message: 'Por favor, preencha este campo'}
@@ -113,10 +112,11 @@ const FormProjeto = () => {
                             <Input.TextArea id="descricao" name="descricao" rows={6} />
                         </Form.Item>
 
+                        <div style={{display: 'flex', gap: '20px'}}>
                             <Form.Item 
                                 label="Data de Início:" 
                                 name="data_inicio" 
-                                style={{width: '250px'}}
+                                style={{flex: '1'}}
                                 rules={[
                                     { required: true, message: 'Por favor, preencha este campo!' },
                                     ({ getFieldValue }) => ({
@@ -136,7 +136,7 @@ const FormProjeto = () => {
                             <Form.Item 
                                 label="Data de Término:" 
                                 name="data_termino" 
-                                style={{width: '250px'}}
+                                style={{flex: '1'}}
                                 rules={[
                                     { required: true, message: 'Por favor, preencha este campo!' },
                                     ({ getFieldValue }) => ({
@@ -156,7 +156,7 @@ const FormProjeto = () => {
                             <Form.Item 
                                 label="Status:" 
                                 name="status" 
-                                style={{width: '250px'}}
+                                style={{flex: '1'}}
                                 rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}>
                                 <Select
                                     name="status"
@@ -165,14 +165,35 @@ const FormProjeto = () => {
                                 />
                             </Form.Item>
 
+                            <Form.Item
+                                label="Fluxo:" 
+                                name="fluxo" 
+                                style={{flex: '1'}}
+                            >
+                                <Select defaultValue="Selecione" options={optionsFluxos} filterOption={filterOption} /> 
+                            </Form.Item>
+                        </div>
 
-                        <Form.Item
-                            label="Fluxo:" 
-                            name="fluxo" 
-                            style={{width: '250px'}}
-                        >
-                            <Select defaultValue="Selecione" options={optionsFluxos} filterOption={filterOption} /> 
+                        <Form.Item> 
+                            <h4>Dados do GitHub</h4>
                         </Form.Item>
+
+                        <Form.Item style={{width: '750px'}} label="Informe (proprietário/repositório):" name="nome_repo">
+                            <Input name="nome_repo"/>
+                        </Form.Item>
+            
+                        <Form.Item style={{width: '750px'}} label="Link do repositório:" name="link_repo">
+                            <Input name="link_repo" />
+                        </Form.Item>
+            
+                        <Form.Item style={{width: '750px'}} label="Link do MVP:" name="link_site">
+                            <Input name="link_site" />
+                        </Form.Item>
+            
+                        <Form.Item style={{width: '750px'}} label="Token de acesso:" name="token">
+                            <Input name="token" />
+                        </Form.Item>
+                       
                         
                         { isUpdate && (
                             <Space className="df g-10">

@@ -47,7 +47,6 @@ const Releases = () => {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
-            align: 'center',
             render: (_, record) => (
                 <RenderStatus optionsStatus={optionsStatusReleases} propStatus={record.status} /> 
             )

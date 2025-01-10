@@ -1,4 +1,4 @@
-import { Button, Collapse, Form, Input, Select, Space } from "antd"
+import { Button, Collapse, Form, Input, Radio, Select, Space } from "antd"
 import InputMask from 'react-input-mask';
 import { useEffect, useState } from "react";
 import { useMembroContexto } from "../../context/MembroContexto";
@@ -115,14 +115,13 @@ const FormMembro = ({onSubmit, onCancel}) => {
                     }} 
                     header="DADOS DO MEMBRO" key="1"
                 >
-                    <div style={{display: "flex", gap: "20px"}}> 
 
                         <Form.Item name="avatar" hidden>
                             <Input />
                         </Form.Item>
 
                         <Form.Item 
-                            style={{flex: "3"}}
+                            style={{width: "70%"}}
                             label="Nome" 
                             name="nome"
                             rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
@@ -131,43 +130,38 @@ const FormMembro = ({onSubmit, onCancel}) => {
                         </Form.Item>
 
                         <Form.Item 
-                            style={{flex: "1"}}
+                            style={{width: '30%'}}
                             label="Data de Nascimento" 
                             name="data_nascimento"
-                            rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
-                        >
-                            <Input type="date"/>
+                        > 
+                            <Input type="date" placeholder="Data de nascimento" allowClear/>
                             
                         </Form.Item>
 
                         <Form.Item 
-                            style={{flex: "1"}}
-                            label="Sexo"
-                            name="sexo"
-                            rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
+                            label="Sexo" 
+                            name="sexo" 
+                            rules={[{ required: true, message: 'Por favor, marque uma opção!' }]}
                         >
-                            <Select 
-                                options={optionsSexo} 
-                                allowClear 
-                                placeholder="Sexo do membro" 
-                            />
+                            <Radio.Group>
+                                <Radio value="M"> Masculino </Radio>
+                                <Radio value="F"> Feminino </Radio>
+                                <Radio value="O"> Outro </Radio>
+                            </Radio.Group>
                         </Form.Item>
-                    </div>
 
-                    <div style={{display: "flex", gap: "20px"}}>
                         <Form.Item
-                            style={{flex: "1"}}
+                            style={{width: '30%'}}
                             name="telefone"
                             label="Telefone"
-                            rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
                         >
                             <InputMask mask="(99) 99999-9999" maskChar={null}>
-                            {() => <Input placeholder="telefone do membro"/>}
+                            {() => <Input placeholder="Telefone (opcional)"/>}
                             </InputMask>
                         </Form.Item>
 
                         <Form.Item
-                            style={{flex: "2"}}
+                            style={{width: "70%"}}
                             name="email"
                             label="Email"
                             rules={[
@@ -177,7 +171,6 @@ const FormMembro = ({onSubmit, onCancel}) => {
                         >
                             <Input placeholder="email do membro" onChange={handleEmailChange}/>
                         </Form.Item>
-                    </div>
                 </Panel>
 
                 <Panel 
@@ -190,31 +183,29 @@ const FormMembro = ({onSubmit, onCancel}) => {
                     }} 
                     header="USUÁRIO GITHUB" key="2"
                 >   
-                    <div style={{display: "flex", gap: "20px"}}>
-                        <Form.Item 
-                            style={{flex: "1"}}
-                            name="nome_github"
-                            label="Nome do Usuário"
-                        >
-                            <Input name="nome_github" placeholder="nome do usuário do GitHub" />
-                        </Form.Item>
+                    <Form.Item 
+                        style={{width: "70%"}}
+                        name="nome_github"
+                        label="Nome do Usuário"
+                    >
+                        <Input name="nome_github" placeholder="nome do usuário do GitHub" />
+                    </Form.Item>
 
-                        <Form.Item 
-                            style={{flex: "1"}}
-                            name="email_github"
-                            label="Email do GitHub"
-                        >
-                            <Input name="email_github" placeholder="email do usuario do GitHub"/>
-                        </Form.Item>
+                    <Form.Item 
+                        style={{width: "70%"}}
+                        name="email_github"
+                        label="Email do GitHub"
+                    >
+                        <Input name="email_github" placeholder="email do usuario do GitHub"/>
+                    </Form.Item>
 
-                        <Form.Item 
-                            style={{flex: "1"}}
-                            name="usuario_github"
-                            label="Username do GitHub"
-                        >
-                            <Input name="usuario_github" placeholder="username do GitHub" />
-                        </Form.Item>
-                    </div>
+                    <Form.Item 
+                        style={{width: "70%"}}
+                        name="usuario_github"
+                        label="Username do GitHub"
+                    >
+                        <Input name="usuario_github" placeholder="username do GitHub" />
+                    </Form.Item>
 
                 </Panel>
 
@@ -258,6 +249,7 @@ const FormMembro = ({onSubmit, onCancel}) => {
                     <Form.Item
                         name="username"
                         label="Usuário de Acesso"
+                        style={{width: "70%"}}
                         rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
                     >
                         <Input name="username" disabled/> 
@@ -266,6 +258,7 @@ const FormMembro = ({onSubmit, onCancel}) => {
                     <Form.Item
                         name="password"
                         label="Senha de Acesso"
+                        style={{width: "70%"}}
                         rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
                     >
                         <Input.Password name="password" placeholder="senha de acesso"/>
@@ -274,6 +267,7 @@ const FormMembro = ({onSubmit, onCancel}) => {
                     <Form.Item 
                         name="grupo"
                         label="Grupo de Usuário"
+                        style={{width: "70%"}}
                         rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
                     >
                         <Select options={optionsGrupos}/>

@@ -112,7 +112,8 @@ const Tarefas = () => {
             );
             setTarefas(tarefasFiltradas)
         } else {
-            await listarTarefasPorProjeto(dadosProjeto.id)
+            const response = await listarTarefasPorProjeto(dadosProjeto.id)
+            setTarefas(response.data)
         }
     }
 

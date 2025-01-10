@@ -134,8 +134,9 @@ const VisualizarProjeto = () => {
                     size="middle"
                     tabPosition="right"
                     style={{paddingTop: '20px', height: '100%'}}
+                    defaultActiveKey="2"
                 >
-                    <TabPane
+                    {/* <TabPane
                         tab={
                             collapseTabs ? (
                                 <Tooltip placement="right" title="Projeto">
@@ -150,7 +151,7 @@ const VisualizarProjeto = () => {
                         key="1"
                     >
                         <FormProjeto />
-                    </TabPane>
+                    </TabPane> */}
 
                     <TabPane
                         tab={

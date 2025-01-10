@@ -163,17 +163,18 @@ const FormIteracao = ({ onSubmit, onCancel, selectProject }) => {
                         style={{ flex: "1" }}
                         rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
                     >
-                        <Input type='text' name="nome" placeholder="nome" />
+                        <Input type='text' name="nome" placeholder="Nome da iteração" />
                     </Form.Item>
 
                     <Form.Item label="Descrição" name="descricao">
-                        <Input.TextArea rows={8} name="descricao" placeholder="descrição ..." />
+                        <Input.TextArea rows={8} name="descricao" placeholder="Descrição da iteração (opcional)" />
                     </Form.Item>
 
                     <div style={{ display: 'flex', gap: '10px' }}>
                         <Form.Item
                             label="Ordem"
                             name="ordem"
+                            style={{flex: "1"}}
                         >
                             <Input type="number" name="ordem" placeholder="Ordem (opcional)" />
                         </Form.Item>
@@ -181,8 +182,8 @@ const FormIteracao = ({ onSubmit, onCancel, selectProject }) => {
                         <Form.Item
                             label="Data de Início"
                             name="data_inicio"
+                            style={{flex: "1"}}
                             rules={[
-                                { required: true, message: 'Por favor, preencha este campo!' },
                                 ({ getFieldValue }) => ({
                                     validator(_, value) {
                                         const dataTermino = getFieldValue('data_termino');
@@ -199,15 +200,15 @@ const FormIteracao = ({ onSubmit, onCancel, selectProject }) => {
                             <Input 
                                 type="date" 
                                 name="data_inicio" 
-                                style={{ width: 'fit-content' }}
+                                allowClear
                             />
                         </Form.Item>
 
                         <Form.Item
                             label="Data de Término"
                             name="data_termino"
+                            style={{flex: "1"}}
                             rules={[
-                                { required: true, message: 'Por favor, preencha este campo!' },
                                 ({ getFieldValue }) => ({
                                     validator(_, value) {
                                         const dataInicio = getFieldValue('data_inicio');
@@ -224,13 +225,21 @@ const FormIteracao = ({ onSubmit, onCancel, selectProject }) => {
                             <Input 
                                 type="date" 
                                 name="data_termino" 
-                                style={{ width: 'fit-content' }} 
+                                allowClear
                             />
                         </Form.Item>
                     </div>
                 </div>
 
-                <div style={{ flex: '1' }}>
+                <div style={{flex: "1"}}>
+                    <Form.Item
+                        label="Status"
+                        name="status"
+                        style={{ flex: "1" }}
+                        rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
+                    >
+                        <Select options={optionsStatusIteracoes}  placeholder="Selecione o status" />
+                    </Form.Item>
                     <Form.Item
                         label="Release"
                         name="release"
@@ -242,15 +251,6 @@ const FormIteracao = ({ onSubmit, onCancel, selectProject }) => {
                             options={optionsReleases}
                             placeholder="Selecione a release"
                         />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Status"
-                        name="status"
-                        style={{ flex: "1" }}
-                        rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
-                    >
-                        <Select options={optionsStatusIteracoes}  placeholder="Selecione o status" />
                     </Form.Item>
 
                     <Form.Item

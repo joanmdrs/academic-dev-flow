@@ -144,11 +144,11 @@ const FormRelease = ({ onSubmit, onCancel, selectProject }) => {
             name="nome"
             rules={[{ required: true, message: "Por favor, preencha este campo!" }]}
           >
-            <Input type="text" name="nome" placeholder="nome" />
+            <Input type="text" name="nome" placeholder="Nome da release" />
           </Form.Item>
 
           <Form.Item label="Descrição" name="descricao">
-            <Input.TextArea rows={8} name="descricao" placeholder="descrição ..." />
+            <Input.TextArea rows={8} name="descricao" placeholder="Descrição da release (opcional)" />
           </Form.Item>
         </div>
 
@@ -158,22 +158,21 @@ const FormRelease = ({ onSubmit, onCancel, selectProject }) => {
             name="status"
             rules={[{ required: true, message: "Por favor, selecione uma opção!" }]}
           >
-            <Select allowClear options={optionsStatusReleases} defaultValue="Selecione" />
+            <Select allowClear options={optionsStatusReleases} placeholder="Selecione" />
           </Form.Item>
 
           <Form.Item
             label="Responsável"
             name="responsavel"
-            rules={[{ required: true, message: "Por favor, selecione uma opção!" }]}
           >
-            <Select allowClear options={optionsMembros} defaultValue="Selecione" />
+            <Select allowClear options={optionsMembros} placeholder="Selecione"/>
           </Form.Item>
           <Form.Item
             label="Data de Lançamento"
             name="data_lancamento"
             rules={[{ validator: validateDataLancamento, required: true, message: 'Por favor, preencha este campo!'}]}
           >
-            <Input type="date" name="data_lancamento"/>
+            <Input type="date" name="data_lancamento" allowClear/>
           </Form.Item>
         </div>
       </div>

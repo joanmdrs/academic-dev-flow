@@ -16,7 +16,7 @@ import { createIssue, updateIssue } from "../../../../services/githubIntegration
 import FormFiltrarTarefas from "../../components/FormFiltrarTarefas/FormFiltrarTarefas";
 import { buscarMembroProjetoPeloIdMembroEPeloIdProjeto } from "../../../../services/membroProjetoService";
 import { handleError } from "../../../../services/utils";
-import { TbLayoutCards, TbLayoutCardsFilled, TbLayoutList, TbLayoutNavbar } from "react-icons/tb";
+import { TbLayoutCards, TbLayoutCardsFilled, TbLayoutList, TbLayoutNavbar, TbSettingsAutomation } from "react-icons/tb";
 import { LuCalendarDays } from "react-icons/lu";
 import ScreenDrawerComments from "../DrawerComments";
 import SpinLoading from "../../../../components/SpinLoading/SpinLoading";
@@ -80,7 +80,7 @@ const Tarefas = () => {
             );
             setTarefas(tarefasFiltradas)
         } else {
-            await handleBuscarTarefasDosProjetosDoMembro()
+            await handleBuscarTarefasDosProjetosDoMembro(usuario.id)
         }
     }
 
@@ -271,11 +271,8 @@ const Tarefas = () => {
                 <div>
                     {!isFormVisible && (
                         <Button
-                            size="large" 
                             onClick={() => handleAdicionarTarefa()} 
                             type="primary" 
-                            ghost 
-                            
                             icon={<FaPlus />}> 
                             Criar Tarefa 
                         </Button>

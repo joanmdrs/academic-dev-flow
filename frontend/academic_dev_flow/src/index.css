@@ -18,11 +18,12 @@
 body {
   margin: 0;
   overflow-x: hidden;
+  min-height: 100vh;
 }
 
 
 .ant-layout {
-  background-color: #ddd;
+  background-color: #EFF8FB;
 }
 
 .ant-table-thead .ant-table-cell {
@@ -45,12 +46,13 @@ body {
 
 
 .content {
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   margin-top: 10px;
   margin-left: 10px;
   background-color: #FFFFFF;
   border-top-left-radius: 5px;
   height: 100%;
+  border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd;
 }
 
 
@@ -66,11 +68,7 @@ body {
 .global-form {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start !important;
   padding: 20px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   border: 1px solid #ddd;
   background-color: #FFFFFF;
   border-radius: 5px;

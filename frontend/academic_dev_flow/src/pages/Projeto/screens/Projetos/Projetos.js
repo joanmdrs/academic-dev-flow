@@ -26,7 +26,6 @@ const Projetos = () => {
     const { usuario, grupo } = useContextoGlobalUser();
     const [projetos, setProjetos] = useState([]);
     const [isTabsVisible, setIsTabsVisible] = useState(false);
-    const [isTableVisible, setIsTableVisible] = useState(true);
     const [actionForm, setActionForm] = useState('create');
     const [optionsFluxo, setOptionsFluxo] = useState([])
     const [isLoading, setIsLoading] = useState(false)
@@ -128,26 +127,22 @@ const Projetos = () => {
     const handleAdicionarProjeto = () => {
         setActionForm('create')
         setDadosProjeto(null)
-        setIsTableVisible(false)
         setIsTabsVisible(true)
     }
 
     const handleAtualizarProjeto = async (record) => {
         setActionForm('update')
         await handleBuscarProjeto(record.projeto)
-        setIsTableVisible(false)
         setIsTabsVisible(true)
     }
 
     const handleCancelar = async () => {
         setIsTabsVisible(false)
-        setIsTableVisible(true)
         await handleBuscarProjetosDoMembro()
     }
 
     const handleReload = async () => {
         setDadosProjeto(null)
-        setIsTableVisible(true)
         setIsTabsVisible(false)
         await handleBuscarProjetosDoMembro()
     }
@@ -196,88 +191,30 @@ const Projetos = () => {
 
     return (
         <div className='content'>
-            
-            {!isTabsVisible ? (
-                <React.Fragment>
-                    <div style={{
-                        borderBottom: '1px solid #ddd',
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'baseline',
-                        padding: '20px'
-                    }}> 
-                        <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
-                            <h2 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '600'}}> Projetos </h2>
-                        </div>
-        
-                        <div>
-                            <Button 
-                                type="primary" 
-                                ghost
-                                size='large'
-                                icon={<FaPlus />} 
-                                onClick={handleAdicionarProjeto} 
-                            > Criar Projeto </Button>
-                        </div>
-                    </div>
-        
-                    <div style={{
-                            padding: '20px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '20px',
-                            borderBottom: '1px solid #ddd'
-        
-                        }}> 
-                        <div> 
-                            <p 
-                                style={{
-                                    color: "var(--border-color)", 
-                                    display: 'flex', 
-                                    alignItems: 'center'
-                                }}
-                            > <MdFilterAlt size={"20px"} /> Filtros </p>
-                        </div>
+            <div style={{
+                borderBottom: '1px solid #ddd',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'baseline',
+                padding: '20px'
+            }}> 
+                <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
+                    <h2 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '600'}}> Projetos </h2>
+                </div>
 
-                        <div>
-                            <Form 
-                                style={{display: 'flex', gap: '10px'}}
-                                onValuesChange={(changedValues, allValues) => handleFiltrarProjetosPeloNome(allValues.nome)}
-                            >
-                                <Form.Item style={{margin: '0', width: '400px'}} name="nome">
-                                    <Input name="nome" placeholder="Pesquise pelo nome do projeto" />
-                                </Form.Item>
-                            </Form>
-
-                            </div>
-        
-                        <div className='df g-10'> 
-                            <Select 
-                                style={{minWidth: '150px'}}
-                                options={optionsFluxo}
-                                allowClear
-                                placeholder="Fluxo"
-                                showSearch
-                                filterOption={filterOption}
-                                popupMatchSelectWidth={false}
-                                onChange={(value) => handleFiltrarProjetoPorFluxo(value)}
-                        
-                            /> 
-                            <Select 
-                                style={{minWidth: '150px'}}
-                                options={optionsStatusProjetos}
-                                allowClear
-                                placeholder="Status"
-                                popupMatchSelectWidth={false}
-                                onChange={(value) => handleFiltrarProjetoPorStatus(value)}
-                        
-                            /> 
-                        </div>
+                {!isTabsVisible && (
+                    <div>
+                        <Button 
+                            type="primary" 
+                            icon={<FaPlus />} 
+                            onClick={handleAdicionarProjeto} 
+                        > Criar Projeto </Button>
                     </div>
-                </React.Fragment>
-                
-            ) : (
-                <React.Fragment>
+                )} 
+            </div>
+
+            { isTabsVisible && (
+                <div style={{padding: '20px'}}>
                     {isLoading ? (
                         <SpinLoading />
                     ) : (
@@ -286,65 +223,105 @@ const Projetos = () => {
                             onCancel={handleCancelar}
                         />
                     )}
-                </React.Fragment>
-                
-                
-            ) }
+                </div>
+            )} 
 
+            {!isTabsVisible && (
+                <Tabs
+                    style={{padding: '20px'}}
+                    size="middle"
+                    tabPosition="top"
+                    indicator={{align: "center"}}
+                    defaultActiveKey="1"
+                    tabBarExtraContent={
+                        <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '20px',
+                            borderBottom: '1px solid #ddd'
+        
+                        }}> 
+                            <div> 
+                                <p 
+                                    style={{
+                                        color: "var(--border-color)", 
+                                        display: 'flex', 
+                                        alignItems: 'center'
+                                    }}
+                                > <MdFilterAlt size={"20px"} /> Filtros </p>
+                            </div>
+        
+                            <div>
+                                <Form 
+                                    style={{display: 'flex', gap: '10px'}}
+                                    onValuesChange={(changedValues, allValues) => handleFiltrarProjetosPeloNome(allValues.nome)}
+                                >
+                                    <Form.Item style={{margin: '0', width: '400px'}} name="nome">
+                                        <Input name="nome" placeholder="Pesquise pelo nome do projeto" />
+                                    </Form.Item>
+                                </Form>
+        
+                                </div>
             
-            
-
-            <div style={{padding: '20px'}}>
-
-                {isTableVisible && (
-                    <React.Fragment>
-
-                        <Tabs
-                            style={{paddingTop: '10px'}}
-                            size="middle"
-                            tabPosition="top"
-                            indicator={{align: "center"}}
-                            defaultActiveKey="1"
-                        > 
-                            <TabPane 
-                                style={{paddingTop: '20px'}} 
-                                tab={
-                                    <Tooltip title="Lista">
-                                        <TbLayoutListFilled /> Lista
-                                    </Tooltip>
-                                } 
-                                key="1">
-                                    <ListProjetos 
-                                        data={projetos} 
-                                        onUpdate={handleAtualizarProjeto}
-                                        onDelete={handleExcluirProjeto}
-                                        onOpen={handleVisualizarProjeto}
-                                    />
-                            </TabPane>
+                            <div className='df g-10'> 
+                                <Select 
+                                    style={{minWidth: '150px'}}
+                                    options={optionsFluxo}
+                                    allowClear
+                                    placeholder="Fluxo"
+                                    showSearch
+                                    filterOption={filterOption}
+                                    popupMatchSelectWidth={false}
+                                    onChange={(value) => handleFiltrarProjetoPorFluxo(value)}
                             
-                            <TabPane 
-                                style={{paddingTop: '20px'}} 
-                                tab={
-                                    <Tooltip title="Tabela">
-                                        <FaListUl /> Tabela
-                                    </Tooltip>
-                                } 
-                                key="2" 
-                            >
-                                <TableProjetos
-                                    projetos={projetos} 
-                                    onUpdate={handleAtualizarProjeto}
-                                    onDelete={handleExcluirProjeto}
-                                    onOpen={handleVisualizarProjeto}
-                                />
-                            </TabPane>
+                                /> 
+                                <Select 
+                                    style={{minWidth: '150px'}}
+                                    options={optionsStatusProjetos}
+                                    allowClear
+                                    placeholder="Status"
+                                    popupMatchSelectWidth={false}
+                                    onChange={(value) => handleFiltrarProjetoPorStatus(value)}
                             
-                        </Tabs>
-                        
-                    </React.Fragment>
-                )}
-
-            </div>
+                                /> 
+                            </div>
+                        </div>
+                    }
+                > 
+                    <TabPane 
+                        style={{padding: '20px 0'}} 
+                        tab={
+                            <Tooltip title="Lista">
+                                <TbLayoutListFilled /> Lista
+                            </Tooltip>
+                        } 
+                        key="1">
+                            <ListProjetos 
+                                data={projetos} 
+                                onUpdate={handleAtualizarProjeto}
+                                onDelete={handleExcluirProjeto}
+                                onOpen={handleVisualizarProjeto}
+                            />
+                    </TabPane>
+                    
+                    <TabPane 
+                        style={{padding: '20px 0'}} 
+                        tab={
+                            <Tooltip title="Tabela">
+                                <FaListUl /> Tabela
+                            </Tooltip>
+                        } 
+                        key="2" 
+                    >
+                        <TableProjetos
+                            projetos={projetos} 
+                            onUpdate={handleAtualizarProjeto}
+                            onDelete={handleExcluirProjeto}
+                            onOpen={handleVisualizarProjeto}
+                        />
+                    </TabPane>
+                </Tabs>
+            )}
         </div>
     );
 

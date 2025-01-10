@@ -56,7 +56,7 @@ export const atualizarTarefa = async (idTarefa, formData, issueData) => {
     }
     
     try {
-        const response = await api.patch(`tarefa/atualizar/`,sendData, {params: {id_tarefa: idTarefa}})
+        const response = await api.patch('tarefa/atualizar/', sendData, {params: {id_tarefa: idTarefa}})
         if (response.status === 200){
             NotificationManager.success('Tarefa atualizada com sucesso !')
             return response

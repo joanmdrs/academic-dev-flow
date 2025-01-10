@@ -190,7 +190,9 @@ const Artefatos = () => {
             );
             setArtefatos(artefatosFiltrados)
         } else {
-            await listarArtefatosPorProjeto(dadosProjeto.id)
+            const response = await listarArtefatosPorProjeto(dadosProjeto.id)
+            setArtefatos(response.data)
+            
         }
     }
     

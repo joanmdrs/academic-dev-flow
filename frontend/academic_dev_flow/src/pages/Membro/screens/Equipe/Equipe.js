@@ -197,18 +197,9 @@ const Equipe = () => {
                             size="middle"
                             tabPosition="left"
                             indicator={{align: "center"}}
-                            defaultActiveKey="2"
+                            defaultActiveKey="1"
                         > 
-                            <TabPane style={{padding: '20px'}} tab={ <BsTable /> } key="1"  >
-                                <TableFuncoes 
-                                    data={funcoesMembro} 
-                                    onDelete={handleRemoverFuncao}
-                                    onDisable={handleAtualizarStatusFuncaoMembro}
-                                
-                                />
-                            </TabPane>
-                            <TabPane style={{padding: '20px'}} tab={<FaListUl />} key="2" >
-
+                            <TabPane style={{padding: '20px'}} tab={<FaListUl />} key="1" >
                                 <ListEquipe
                                     onAdd={handleAdicionarMembro}
                                     onAddFunction={handleAdicionarFuncao}
@@ -217,6 +208,18 @@ const Equipe = () => {
                                     onDeleteFunction={handleRemoverFuncao}
                                     onDisable={handleAtualizarStatusFuncaoMembro}
                                 />
+                            </TabPane>
+
+                            <TabPane style={{padding: '20px'}} tab={ <BsTable /> } key="2"  >
+                                <TableFuncoes 
+                                    data={funcoesMembro} 
+                                    onDelete={handleRemoverFuncao}
+                                    onDisable={handleAtualizarStatusFuncaoMembro}
+                                />
+                            </TabPane>
+
+                            <TabPane style={{padding: '20px'}} tab={ <BsGrid3X3GapFill /> } key="3"  >
+                                <GridEquipe onAdd={handleAdicionarMembro} onDelete={handleRemoverMembro} data={membrosEquipe} />
                             </TabPane>
                             
                         </Tabs>

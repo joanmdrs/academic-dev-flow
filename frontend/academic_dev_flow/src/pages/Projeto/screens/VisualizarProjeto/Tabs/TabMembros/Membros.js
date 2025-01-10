@@ -1,16 +1,17 @@
 import { Modal, Tabs } from "antd";
 import React, { useEffect, useState } from "react";
-import { BsGrid3X3GapFill } from "react-icons/bs";
+import { BsGrid3X3GapFill, BsTable } from "react-icons/bs";
 import { FaListUl } from "react-icons/fa";
 import { useContextoGlobalProjeto } from "../../../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 import { useMembroContexto } from "../../../../../Membro/context/MembroContexto";
 import { buscarMembrosPorProjeto, criarMembroProjeto, excluirMembroProjeto } from "../../../../../../services/membroProjetoService";
 import { handleError } from "../../../../../../services/utils";
-import { atualizarFuncaoMembroProjeto, cadastrarFuncaoMembroProjeto, excluirFuncaoMembroProjeto } from "../../../../../../services/funcaoMembroProjetoService";
+import { atualizarFuncaoMembroProjeto, cadastrarFuncaoMembroProjeto, excluirFuncaoMembroProjeto, listarFuncaoMembroProjetoPorProjeto } from "../../../../../../services/funcaoMembroProjetoService";
 import FormFuncaoMembro from "../../../../../Membro/components/FormFuncaoMembro/FormFuncaoMembro";
 import GridEquipe from "../../../../../Membro/components/GridEquipe/GridEquipe";
 import ListEquipe from "../../../../../Membro/components/ListEquipe/ListEquipe";
 import ModalSelectMembros from "../../../../../Membro/components/ModalSelectMembros/ModalSelectMembros";
+import TableFuncoes from "../../../../../Membro/components/TableFuncoes/TableFuncoes";
 
 
 const {TabPane } = Tabs
@@ -20,6 +21,7 @@ const Membros = () => {
     const {dadosProjeto} = useContextoGlobalProjeto()
     const {dadosMembroProjeto, setDadosMembroProjeto} = useMembroContexto()
     const [membrosEquipe, setMembrosEquipe] = useState([])
+    const [funcoesMembro, setFuncoesMembro] = useState([])
     const [isModalVisible, setIsModalVisible] = useState(false)
     const [isFormFuncaoMembroVisible, setIsFormFuncaoMembroVisible] = useState(false)
 
@@ -29,6 +31,13 @@ const Membros = () => {
 
         if (!response.error){
             setMembrosEquipe(response.data)
+        }
+    }
+
+    const handleListarFuncoesMembroPorProjeto = async () => {
+        const response = await listarFuncaoMembroProjetoPorProjeto(dadosProjeto.id)
+        if(!response.error){
+            setFuncoesMembro(response.data)
         }
     }
 
@@ -49,6 +58,7 @@ const Membros = () => {
             try {
                 if (dadosProjeto){
                     await handleBuscarMembrosPorProjeto()
+                    await handleListarFuncoesMembroPorProjeto()
                 }
             } catch (error) {
                 return handleError(error, 'Falha ao tentar buscar os dados da equipe !')
@@ -65,6 +75,7 @@ const Membros = () => {
 
     const handleReload = async () => {
         await handleBuscarMembrosPorProjeto()
+        await handleListarFuncoesMembroPorProjeto()
         setIsFormFuncaoMembroVisible(false)
         setDadosMembroProjeto(null)
     }
@@ -144,13 +155,9 @@ const Membros = () => {
                             size="middle"
                             tabPosition="left"
                             indicator={{align: "center"}}
-                            defaultActiveKey="2"
+                            defaultActiveKey="1"
                         > 
-                            <TabPane style={{padding: '20px'}} tab={ <BsGrid3X3GapFill /> } key="1"  >
-                                <GridEquipe onAdd={handleAdicionarMembro} onDelete={handleRemoverMembro} data={membrosEquipe} />
-                            </TabPane>
-                            <TabPane style={{padding: '20px'}} tab={<FaListUl />} key="2" >
-
+                            <TabPane style={{padding: '20px'}} tab={<FaListUl />} key="1" >
                                 <ListEquipe
                                     onAdd={handleAdicionarMembro}
                                     onAddFunction={handleAdicionarFuncao}
@@ -160,6 +167,20 @@ const Membros = () => {
                                     onDisable={handleAtualizarStatusFuncaoMembro}
                                 />
                             </TabPane>
+
+                            <TabPane style={{padding: '20px'}} tab={ <BsTable /> } key="2"  >
+                                <TableFuncoes 
+                                    data={funcoesMembro} 
+                                    onDelete={handleRemoverFuncao}
+                                    onDisable={handleAtualizarStatusFuncaoMembro}
+                                
+                                />
+                            </TabPane>
+
+                            <TabPane style={{padding: '20px'}} tab={ <BsGrid3X3GapFill /> } key="3"  >
+                                <GridEquipe onAdd={handleAdicionarMembro} onDelete={handleRemoverMembro} data={membrosEquipe} />
+                            </TabPane>
+                            
                             
                         </Tabs>
                     </div>

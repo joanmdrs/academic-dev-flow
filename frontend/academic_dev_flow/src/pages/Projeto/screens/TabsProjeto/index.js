@@ -15,8 +15,10 @@ const TabsProjeto = ({onSubmit, onCancel}) => {
 
     return (
 
-        <div>   
-            <Titulo titulo={ dadosProjeto === null ? "Cadastrar Projeto" : "Atualizar Projeto"} />
+        <div className="global-form">   
+            <div>
+                <h4 className='global-title'> { dadosProjeto === null ? "Cadastrar Projeto" : "Atualizar Projeto"} </h4>
+            </div>
             <Tabs
                 style={{marginTop: '20px'}}
                 tabPosition="left"
@@ -24,7 +26,6 @@ const TabsProjeto = ({onSubmit, onCancel}) => {
                 <TabPane 
                     tab="Projeto" 
                     key="1" 
-                    className="global-div" 
                     style={{marginTop: '0'}} 
                     forceRender
                 >

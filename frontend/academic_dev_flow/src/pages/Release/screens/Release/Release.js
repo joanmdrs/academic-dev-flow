@@ -164,7 +164,6 @@ const Release = () => {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
-            align: 'center',
             render: (_, record) => (
                 <RenderStatus optionsStatus={optionsStatusReleases} propStatus={record.status} /> 
             )
@@ -214,10 +213,8 @@ const Release = () => {
 
                 <Space>
                     <Button 
-                        size="large"
                         onClick={handleAdicionarRelease} 
                         type="primary" 
-                        ghost 
                         icon={<FaPlus />}> Criar Release </Button>
                 </Space>
 

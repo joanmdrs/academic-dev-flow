@@ -110,7 +110,7 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
                                         }),
                                     ]}
                                 >
-                                    <Input name="data_inicio" type="date" />
+                                    <Input name="data_inicio" type="date" allowClear/>
                                 </Form.Item>
 
                                 <Form.Item 
@@ -129,7 +129,7 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
                                         }),
                                     ]}
                                 >
-                                    <Input name="data_fim" type="date" />
+                                    <Input name="data_fim" type="date" allowClear/>
                                 </Form.Item>
                             </div>
                         </div>

@@ -62,7 +62,6 @@ const Iteracoes = () => {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
-            align: 'center',
             render: (_, record) => (
                 <RenderStatus optionsStatus={optionsStatusIteracoes} propStatus={record.status} /> 
             )
