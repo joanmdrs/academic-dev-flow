@@ -56,5 +56,7 @@ urlpatterns = [
     path('academicflow-api/', RedirectView.as_view(url='/academicflow-api/admin/')),
 ]
 
+    
+
 
 
