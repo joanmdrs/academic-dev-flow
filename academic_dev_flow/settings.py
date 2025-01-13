@@ -20,7 +20,7 @@ GITHUB_TOKEN = config('GITHUB_TOKEN')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'academic-dev-flow-et5cfgnhn-joanmdrs-projects.vercel.app']
+ALLOWED_HOSTS = ['127.0.0.1', 'labens.dct.ufrn.br']
 DOMAINS_WHITELIST = ALLOWED_HOSTS
 
 CSRF_COOKIE_SECURE=config('CSRF_COOKIE_SECURE', default=False, cast=bool)
