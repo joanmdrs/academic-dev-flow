@@ -19,6 +19,7 @@ from django.contrib.auth.hashers import check_password
 
 class CadastrarMembroView(APIView):
     permission_classes = [AllowAny]
+    authentication_classes = []
 
     def post(self, request):
         try:
@@ -324,6 +325,7 @@ class BuscarMembrosPorListaIdsView(APIView):
 
 class ListarGruposView(APIView): 
     permission_classes = [AllowAny]
+    authentication_classes = []
     
     def get(self, request): 
         try: 

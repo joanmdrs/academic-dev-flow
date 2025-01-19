@@ -46,11 +46,14 @@
 .form-login-title h2 {
   font-size: 30px;
   margin-bottom: 5px;
+  font-family: 'Poppins', sans-serif;
 }
 
 .form-login-title p {
   font-size: 15px;
   margin-bottom: 20px;
+  font-family: 'Poppins', sans-serif;
+
 }
   
 .form-login form {
