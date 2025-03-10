@@ -5,7 +5,7 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 import "./SelecionarArea.css";
 import { useRegisterContexto } from "../../context/RegisterContexto";
 import { NotificationManager } from "react-notifications";
-import { MdOutlineArrowBackIosNew, MdOutlineArrowForward, MdOutlineArrowForwardIos } from "react-icons/md";
+import { MdOutlineArrowBackIosNew, MdOutlineArrowForwardIos } from "react-icons/md";
 
 const SelecionarArea = () => {
     const [option, setOption] = useState(null);
@@ -45,9 +45,10 @@ const SelecionarArea = () => {
 
             {option === "sim" ? (
 
-                <div className="global-div">
+                <div className="global-form">
 
                     <Form
+                        className="globla-div"
                         form={form}
                         layout="vertical"
                         onFinish={handleProsseguir}
@@ -78,7 +79,7 @@ const SelecionarArea = () => {
                         </Form.Item>
 
                         <Button type="primary" htmlType="submit">
-                            Prosseguir <IoIosArrowRoundForward />
+                            Prosseguir <MdOutlineArrowForwardIos />
                         </Button>
                     </Form>
 

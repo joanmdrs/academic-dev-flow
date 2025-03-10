@@ -6,11 +6,13 @@ import { useForm } from "antd/es/form/Form";
 import { useRegisterContexto } from "../../context/RegisterContexto";
 import { criarMembro } from "../../../../../services/membroService";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
+import {useNavigate} from 'react-router-dom'
 
 const FormRegister = () => {
 
     const [form] = useForm();
     const {infoGithub, grupoUsuario, setStep} = useRegisterContexto()
+    const navigate = useNavigate()
 
     const handleVerificarSenhas = (rule, value) => {
         const senha = form.getFieldValue('senha');
@@ -45,12 +47,16 @@ const FormRegister = () => {
         const response = await criarMembro(dadosForm)
 
         if (!response.error){
-            handleVoltar()
+            handleInicio()
         } 
     }
 
     const handleVoltar = () => {
         setStep("2")
+    }
+
+    const handleInicio = () => {
+        navigate(-1)
     }
 
     return (
