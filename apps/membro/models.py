@@ -20,8 +20,7 @@ class Membro(models.Model):
     email_github = models.EmailField(max_length=200, blank=True, null=True)
     usuario_github = models.CharField(max_length=200, blank=True, null=True, unique=True) 
     usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, null=True)
-    grupo = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True) 
-    avatar = models.IntegerField(null=True, blank=True)
+    avatar = models.ImageField(upload_to="avatares/", null=True, blank=True)
 
     def __str__(self):
         return self.nome
