@@ -254,7 +254,7 @@ class ListarFuncaoMembroProjetoPorProjetoView(APIView):
             if objs_funcao_membro.exists():
                 serializer = FuncaoMembroSerializer(objs_funcao_membro, many=True)
                 return Response(serializer.data, status=status.HTTP_200_OK)
-            
+             
             return Response([], status=status.HTTP_200_OK)
         
         except Exception as e:

@@ -15,10 +15,10 @@ class MembroSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Membro
-        fields = ['id', 'nome', 'data_nascimento', 'sexo', 'telefone', 'email', 'linkedin', 'lattes', 'nome_github', 'email_github', 'usuario_github', 'usuario', 'username', 'password', 'grupo', 'nome_grupo', 'avatar']
+        fields = ['id', 'nome', 'data_nascimento', 'sexo', 'telefone', 'email', 'linkedin', 'lattes', 'nome_github', 'email_github', 'usuario_github', 'usuario', 'username', 'password', 'nome_grupo', 'avatar']
 
     def get_nome_grupo(self, obj):
-        return obj.grupo.name 
+        return obj.usuario.groups.first().name if obj.usuario and obj.usuario.groups.exists() else "Sem grupo"
     
     def get_username(self, obj):
         return obj.usuario.username

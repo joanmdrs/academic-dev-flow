@@ -139,20 +139,16 @@ class BuscarMembroPorGrupoView(APIView):
             if not group:
                 return Response({'error': 'Grupo não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
 
-            # Busca todos os membros
-            membros = Membro.objects.all()
+            # Filtra membros cujo usuário pertence ao grupo
+            membros = Membro.objects.filter(usuario__groups=group)
 
             # Filtra por nome, se fornecido
             if nome:
                 membros = membros.filter(nome__icontains=nome)
 
-            # Filtra pelo grupo
-            membros = membros.filter(grupo=group)
-
             # Serializa os resultados
             serializer = MembroSerializer(membros, many=True)
 
-            # O campo nome_grupo já está no serializer, então não precisamos adicionar manualmente
             return Response({'message': 'Membros encontrados com sucesso.', 'results': serializer.data}, status=status.HTTP_200_OK)
         
         except Exception as e:
@@ -171,22 +167,11 @@ class BuscarMembroPorIdUsuarioView(APIView):
 
             # Busca o membro pelo ID do usuário
             membro = Membro.objects.get(usuario_id=id_usuario)
+
             
             if membro:
-                # Obtém o nome do grupo
-                group_name = membro.grupo.name if membro.grupo else None
-                
-                # Serializa o membro
-                serializer = MembroSerializer(membro)
-                
-                # Adiciona o nome do grupo à resposta
-                data = serializer.data
-                data['nome_grupo'] = group_name
-                
-                return Response(data, status=status.HTTP_200_OK)
-            
-            return Response({'error': 'Membro não encontrado'}, status=status.HTTP_404_NOT_FOUND)
-        
+                serializer = MembroSerializer(membro, many=False)
+                    
         except Membro.DoesNotExist:
             return Response({'error': 'Membro não encontrado'}, status=status.HTTP_404_NOT_FOUND)
         
