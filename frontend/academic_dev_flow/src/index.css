@@ -21,14 +21,9 @@ body {
   min-height: 100vh;
 }
 
-
-.ant-layout {
-  background-color: #EFF8FB;
-}
-
 .ant-table-thead .ant-table-cell {
-  background-color: #F1F1F1  !important;
-  color: #585858 !important;
+  background-color: var(--primary-color)  !important;
+  color: #FFFFFF !important;
 }
 .ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector {
   border: 1px solid var(--border-color);
@@ -46,13 +41,13 @@ body {
 
 
 .content {
-  margin-top: 10px;
+  /* margin-top: 10px;
   margin-left: 10px;
   background-color: #FFFFFF;
-  border-top-left-radius: 5px;
+  border-top-left-radius: 5px; */
   height: 100%;
-  border-top: 1px solid #ddd;
-  border-left: 1px solid #ddd;
+  /* border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd; */
 }
 
 
@@ -72,6 +67,7 @@ body {
   border: 1px solid #ddd;
   background-color: #FFFFFF;
   border-radius: 5px;
+  width: 80%;
 }
 
 .global-title {
