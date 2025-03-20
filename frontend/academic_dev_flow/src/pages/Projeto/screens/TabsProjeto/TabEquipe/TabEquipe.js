@@ -107,10 +107,6 @@ const TabEquipe = ({onCancel}) => {
                         {isTableVisible && <TableEquipe onDelete={handleRemoverOneMembro} />}
                     </div>
 
-                    <Space style={{marginTop: '10px'}}>
-                        <Button type="primary" danger onClick={() => onCancel()}> Fechar </Button>
-                    </Space>
-
                 </React.Fragment>
             ) : (
                 <div> 

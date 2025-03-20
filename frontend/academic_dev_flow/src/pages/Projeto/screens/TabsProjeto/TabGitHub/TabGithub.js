@@ -23,7 +23,14 @@ const TabGitHub = ({onSubmit, onCancel}) => {
     return (
         <React.Fragment>
             { dadosProjeto ? (
-                <Form form={form} onFinish={onSubmit} layout="vertical">
+                <Form 
+                    className="global-form" 
+                    form={form} 
+                    onFinish={onSubmit} 
+                    labelCol={{
+                        span: 6,
+                    }}  
+                >
                     <Form.Item label="Informe (proprietário/repositório):" name="nome_repo">
                         <Input name="nome_repo"/>
                     </Form.Item>

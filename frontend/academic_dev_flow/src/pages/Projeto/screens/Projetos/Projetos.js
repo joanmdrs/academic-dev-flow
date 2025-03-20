@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Input, Modal, Select, Tabs, Tooltip } from 'antd';
+import { Button, Modal, Space, Tabs, Tooltip } from 'antd';
 import { buscarProjetosDoMembro, criarMembroProjeto } from "../../../../services/membroProjetoService";
 import { useContextoGlobalUser } from "../../../../context/ContextoGlobalUser/ContextoGlobalUser";
 import TableProjetos from "../../components/TableProjetos/TableProjetos";
 import { FaListUl, FaPlus } from "react-icons/fa";
 import TabsProjeto from '../TabsProjeto';
 import { atualizarProjeto, buscarProjetoPeloId, criarProjeto, excluirProjeto } from '../../../../services/projetoService';
-import { filterOption, handleError } from '../../../../services/utils';
+import { handleError } from '../../../../services/utils';
 import { useContextoProjeto } from '../../context/ContextoProjeto';
 import { TbLayoutListFilled } from "react-icons/tb";
 import ListProjetos from '../../components/ListProjetos/ListProjetos';
-import { optionsStatusProjetos } from '../../../../services/optionsStatus';
-import { listarFluxos } from '../../../../services/fluxoService';
 import { useNavigate } from 'react-router-dom';
 import SpinLoading from '../../../../components/SpinLoading/SpinLoading';
-import { MdFilterAlt } from "react-icons/md";
+import SectionHeader from '../../../../components/SectionHeader/SectionHeader';
+import FilterByName from '../../components/Filters/FilterByName/FilterByName';
+import FilterByStatus from '../../components/Filters/FilterByStatus/FilterByStatus';
+import FilterByFlow from '../../components/Filters/FilterByFlow/FilterByFlow';
+import SectionFilters from '../../../../components/SectionFilters/SectionFilters';
+import Section from '../../../../components/Section/Section';
 
-const { Search } = Input;
 const {TabPane} = Tabs 
 
 const Projetos = () => {
@@ -25,9 +27,8 @@ const Projetos = () => {
     const { dadosProjeto, setDadosProjeto } = useContextoProjeto();
     const { usuario, grupo } = useContextoGlobalUser();
     const [projetos, setProjetos] = useState([]);
-    const [isTabsVisible, setIsTabsVisible] = useState(false);
+    const [isSaveFormVisible, setIsSaveFormVisible] = useState(false) 
     const [actionForm, setActionForm] = useState('create');
-    const [optionsFluxo, setOptionsFluxo] = useState([])
     const [isLoading, setIsLoading] = useState(false)
 
 
@@ -38,15 +39,6 @@ const Projetos = () => {
                 if (!response.error) {
                     setProjetos(response.data)
                 }
-            }
-
-            const response = await listarFluxos()
-            if (!response.error){
-                const resultados = response.data.map(item => ({
-                    value: item.id,
-                    label: item.nome
-                }))
-                setOptionsFluxo(resultados)
             }
         };
         fetchData();
@@ -78,7 +70,7 @@ const Projetos = () => {
         }
     };
 
-    const handleFiltrarProjetoPorFluxo = async (fluxo) => {
+    const handleFiltrarProjetosPorFluxo = async (fluxo) => {
         if (fluxo) {
             const response = await buscarProjetosDoMembro(usuario.id)
             if (!response.error){
@@ -89,7 +81,7 @@ const Projetos = () => {
         }
     }
 
-    const handleFiltrarProjetoPorStatus = async (status) => {
+    const handleFiltrarProjetosPorStatus = async (status) => {
         if (status) {
             const response = await buscarProjetosDoMembro(usuario.id);
             if (!response.error) {
@@ -127,23 +119,23 @@ const Projetos = () => {
     const handleAdicionarProjeto = () => {
         setActionForm('create')
         setDadosProjeto(null)
-        setIsTabsVisible(true)
+        setIsSaveFormVisible(true)
     }
 
     const handleAtualizarProjeto = async (record) => {
         setActionForm('update')
         await handleBuscarProjeto(record.projeto)
-        setIsTabsVisible(true)
+        setIsSaveFormVisible(true)
     }
 
     const handleCancelar = async () => {
-        setIsTabsVisible(false)
+        setIsSaveFormVisible(false)
         await handleBuscarProjetosDoMembro()
     }
 
     const handleReload = async () => {
         setDadosProjeto(null)
-        setIsTabsVisible(false)
+        setIsSaveFormVisible(false)
         await handleBuscarProjetosDoMembro()
     }
 
@@ -190,30 +182,33 @@ const Projetos = () => {
     }
 
     return (
-        <div className='content'>
-            <div style={{
-                borderBottom: '1px solid #ddd',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'baseline',
-                padding: '20px'
-            }}> 
-                <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
-                    <h2 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '600'}}> Projetos </h2>
-                </div>
+        <Section>
+            <SectionHeader>
+                <h2> Projetos </h2>
+                { !isSaveFormVisible && (
+                    <Button 
+                        type="primary" 
+                        icon={<FaPlus/>} 
+                        onClick={handleAdicionarProjeto}
+                    > Criar Projeto</Button>
+                )}
+            </SectionHeader>
 
-                {!isTabsVisible && (
-                    <div>
-                        <Button 
-                            type="primary" 
-                            icon={<FaPlus />} 
-                            onClick={handleAdicionarProjeto} 
-                        > Criar Projeto </Button>
-                    </div>
-                )} 
-            </div>
+            { !isSaveFormVisible && (
+                <SectionFilters>
+                    <Space> 
+                        <FilterByName onFilter={handleFiltrarProjetosPeloNome}/>
+                    </Space>
+                    <Space>
+                        <FilterByStatus onFilter={handleFiltrarProjetosPorStatus} />
+                    </Space>
+                    <Space>
+                        <FilterByFlow onFilter={handleFiltrarProjetosPorFluxo} />
+                    </Space>
+                </SectionFilters>
+            )}
 
-            { isTabsVisible && (
+            { isSaveFormVisible && (
                 <div style={{padding: '20px'}}>
                     {isLoading ? (
                         <SpinLoading />
@@ -226,67 +221,13 @@ const Projetos = () => {
                 </div>
             )} 
 
-            {!isTabsVisible && (
+            {!isSaveFormVisible && (
                 <Tabs
                     style={{padding: '20px'}}
                     size="middle"
                     tabPosition="top"
                     indicator={{align: "center"}}
                     defaultActiveKey="1"
-                    tabBarExtraContent={
-                        <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '20px',
-                            borderBottom: '1px solid #ddd'
-        
-                        }}> 
-                            <div> 
-                                <p 
-                                    style={{
-                                        color: "var(--border-color)", 
-                                        display: 'flex', 
-                                        alignItems: 'center'
-                                    }}
-                                > <MdFilterAlt size={"20px"} /> Filtros </p>
-                            </div>
-        
-                            <div>
-                                <Form 
-                                    style={{display: 'flex', gap: '10px'}}
-                                    onValuesChange={(changedValues, allValues) => handleFiltrarProjetosPeloNome(allValues.nome)}
-                                >
-                                    <Form.Item style={{margin: '0', width: '400px'}} name="nome">
-                                        <Input name="nome" placeholder="Pesquise pelo nome do projeto" />
-                                    </Form.Item>
-                                </Form>
-        
-                                </div>
-            
-                            <div className='df g-10'> 
-                                <Select 
-                                    style={{minWidth: '150px'}}
-                                    options={optionsFluxo}
-                                    allowClear
-                                    placeholder="Fluxo"
-                                    showSearch
-                                    filterOption={filterOption}
-                                    popupMatchSelectWidth={false}
-                                    onChange={(value) => handleFiltrarProjetoPorFluxo(value)}
-                            
-                                /> 
-                                <Select 
-                                    style={{minWidth: '150px'}}
-                                    options={optionsStatusProjetos}
-                                    allowClear
-                                    placeholder="Status"
-                                    popupMatchSelectWidth={false}
-                                    onChange={(value) => handleFiltrarProjetoPorStatus(value)}
-                            
-                                /> 
-                            </div>
-                        </div>
-                    }
                 > 
                     <TabPane 
                         style={{padding: '20px 0'}} 
@@ -322,7 +263,7 @@ const Projetos = () => {
                     </TabPane>
                 </Tabs>
             )}
-        </div>
+        </Section>
     );
 
 };

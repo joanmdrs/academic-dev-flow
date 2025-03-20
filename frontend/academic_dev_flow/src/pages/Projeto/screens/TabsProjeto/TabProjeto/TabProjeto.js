@@ -46,94 +46,91 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
                 ) : 
                 (<React.Fragment>
                     <Form
+                        className="global-form"
                         form={form}
-                        layout="vertical"
                         onFinish={onSubmit}
+                        labelCol={{
+                            span: 4,
+                        }}                       
                     >
-                        <div style={{display: 'flex', gap: '20px'}}> 
-                            <div style={{display: 'flex', flexDirection: 'column', flex: '2'}}>
-                                <Form.Item 
-                                    label="Nome:" 
-                                    name="nome" 
-                                    rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
-                                >
-                                    <Input
-                                        name="nome"
-                                    />
-                                </Form.Item>
+                        <Form.Item 
+                            label="Nome:" 
+                            name="nome" 
+                            rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
+                        >
+                            <Input
+                                name="nome"
+                            />
+                        </Form.Item>
 
-                                <Form.Item label="Descrição:" name="descricao">
-                                    <Input.TextArea id="descricao" name="descricao" rows={5} />
-                                </Form.Item>
-                                <Form.Item 
-                                    label="Selecione o fluxo" 
-                                    name="fluxo" 
-                                >
-                                    <Select
-                                        options={optionsFluxo}
-                                        showSearch
-                                        allowClear
-                                        placeholder="Selecione o fluxo"
-                                        filterOption={
-                                            (input, option) => option?.label.toLowerCase().includes(input.toLowerCase())
+                        <Form.Item label="Descrição:" name="descricao">
+                            <Input.TextArea id="descricao" name="descricao" rows={5} />
+                        </Form.Item>                   
+
+                        <Form.Item 
+                            label="Status:" 
+                            name="status" 
+                            rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}>
+                            <Select
+                                name="status"
+                                defaultValue="Selecione"
+                                options={optionsStatusProjetos}
+                            />
+                        </Form.Item>
+
+                        <Form.Item 
+                            label="Data de Início:" 
+                            name="data_inicio" 
+                            rules={[
+                                { required: true, message: 'Por favor, preencha este campo!' },
+                                ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        const dataTermino = getFieldValue('data_termino');
+                                        if (!value || !dataTermino || value <= dataTermino) {
+                                            return Promise.resolve();
                                         }
-                                    />
-                                </Form.Item>
-                            </div>
-                            
+                                        return Promise.reject(new Error('A data de início não pode ser maior que a data de término!'));
+                                    },
+                                }),
+                            ]}
+                        >
+                            <Input name="data_inicio" type="date" allowClear/>
+                        </Form.Item>
 
-                            <div style={{display: 'flex', flexDirection: 'column', flex:'1'}}>
-                                <Form.Item 
-                                    label="Status:" 
-                                    name="status" 
-                                    rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}>
-                                    <Select
-                                        name="status"
-                                        defaultValue="Selecione"
-                                        options={optionsStatusProjetos}
-                                    />
-                                </Form.Item>
+                        <Form.Item 
+                            label="Data de Término:" 
+                            name="data_termino" 
+                            rules={[
+                                { required: true, message: 'Por favor, preencha este campo!' },
+                                ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        const dataInicio = getFieldValue('data_inicio');
+                                        if (!value || !dataInicio || value >= dataInicio) {
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject(new Error('A data de término não pode ser menor que a data de início!'));
+                                    },
+                                }),
+                            ]}
+                        >
+                            <Input name="data_fim" type="date" allowClear/>
+                        </Form.Item>
 
-                                <Form.Item 
-                                    label="Data de Início:" 
-                                    name="data_inicio" 
-                                    rules={[
-                                        { required: true, message: 'Por favor, preencha este campo!' },
-                                        ({ getFieldValue }) => ({
-                                            validator(_, value) {
-                                                const dataTermino = getFieldValue('data_termino');
-                                                if (!value || !dataTermino || value <= dataTermino) {
-                                                    return Promise.resolve();
-                                                }
-                                                return Promise.reject(new Error('A data de início não pode ser maior que a data de término!'));
-                                            },
-                                        }),
-                                    ]}
-                                >
-                                    <Input name="data_inicio" type="date" allowClear/>
-                                </Form.Item>
+                        <Form.Item 
+                            label="Selecione o fluxo" 
+                            name="fluxo" 
+                        >
+                            <Select
+                                options={optionsFluxo}
+                                showSearch
+                                allowClear
+                                placeholder="Selecione o fluxo"
+                                filterOption={
+                                    (input, option) => option?.label.toLowerCase().includes(input.toLowerCase())
+                                }
+                            />
+                        </Form.Item>
 
-                                <Form.Item 
-                                    label="Data de Término:" 
-                                    name="data_termino" 
-                                    rules={[
-                                        { required: true, message: 'Por favor, preencha este campo!' },
-                                        ({ getFieldValue }) => ({
-                                            validator(_, value) {
-                                                const dataInicio = getFieldValue('data_inicio');
-                                                if (!value || !dataInicio || value >= dataInicio) {
-                                                    return Promise.resolve();
-                                                }
-                                                return Promise.reject(new Error('A data de término não pode ser menor que a data de início!'));
-                                            },
-                                        }),
-                                    ]}
-                                >
-                                    <Input name="data_fim" type="date" allowClear/>
-                                </Form.Item>
-                            </div>
-                        </div>
-                        
                         <Space>
                             <Button type="primary" htmlType="submit"> Salvar </Button>
                             <Button type="primary" danger onClick={() => onCancel()}> Cancelar </Button>
@@ -143,8 +140,6 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
             ) }
         </React.Fragment>      
     ) 
-    
-
 }
 
 export default TabProjeto;

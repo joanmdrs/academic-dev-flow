@@ -9,14 +9,6 @@ const TableEquipe = ({onDelete}) => {
 
     const COLLUMS_TABLE_EQUIPE = [
         {
-            title: "Membro",
-            key: "membro",
-            dataIndex: "membro",
-            render: (_, record) => (
-                <Avatar src={`https://avatar.iran.liara.run/public/${record.avatar}`} /> 
-            )
-        },
-        {
             title: "Nome",
             key: 'nome_membro',
             dataIndex: 'nome_membro'

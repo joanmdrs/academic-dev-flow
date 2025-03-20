@@ -7,6 +7,8 @@ import TabFluxo from "./TabFluxo/TabFluxo";
 import TabGitHub from "./TabGitHub/TabGithub";
 import Titulo from "../../../../components/Titulo/Titulo";
 import { useContextoProjeto } from "../../context/ContextoProjeto";
+import { FaClosedCaptioning } from "react-icons/fa";
+import { IoClose } from "react-icons/io5";
 
 const {TabPane} = Tabs
 
@@ -15,13 +17,22 @@ const TabsProjeto = ({onSubmit, onCancel}) => {
 
     return (
 
-        <div className="global-form">   
-            <div>
-                <h4 className='global-title'> { dadosProjeto === null ? "Cadastrar Projeto" : "Atualizar Projeto"} </h4>
-            </div>
+        <div>   
             <Tabs
                 style={{marginTop: '20px'}}
-                tabPosition="left"
+                tabPosition="top"
+                tabBarExtraContent={
+                    <div> 
+                        <Button 
+                            type="primary" 
+                            onClick={onCancel} 
+                            icon={<IoClose />}
+                            danger
+                        > 
+                            Fechar
+                        </Button>
+                    </div>
+                }
             > 
                 <TabPane 
                     tab="Projeto" 
@@ -35,8 +46,6 @@ const TabsProjeto = ({onSubmit, onCancel}) => {
                 <TabPane 
                     tab="GitHub" 
                     key="2" 
-                    className={dadosProjeto !== null ? "global-div" : null} 
-                    style={{marginTop: '0'}} 
                     forceRender
                 > 
                     <TabGitHub onSubmit={onSubmit} onCancel={onCancel}/>
