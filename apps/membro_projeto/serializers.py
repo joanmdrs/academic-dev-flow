@@ -11,6 +11,7 @@ from apps.membro.models import Membro
 from apps.membro.serializers import MembroSerializer
 
 class MembroProjetoSerializer(serializers.ModelSerializer):
+    grupo = serializers.SerializerMethodField()
     nome_grupo = serializers.SerializerMethodField()
     nome_membro = serializers.SerializerMethodField()
     nome_projeto = serializers.SerializerMethodField()
@@ -37,6 +38,7 @@ class MembroProjetoSerializer(serializers.ModelSerializer):
                   'nome_membro', 
                   'nome_projeto', 
                   'descricao_projeto',
+                  'grupo',
                   'nome_grupo', 
                   'usuario_github', 
                   'status_projeto',
@@ -53,8 +55,15 @@ class MembroProjetoSerializer(serializers.ModelSerializer):
                   'dados_projeto'
                 ] 
         
+    def get_grupo(self, obj):
+        if obj.membro.usuario and obj.membro.usuario.groups.exists():
+            return obj.membro.usuario.groups.first().id
+        return None
+    
     def get_nome_grupo(self, obj):
-        return obj.membro.grupo.name 
+        if obj.membro.usuario and obj.membro.usuario.groups.exists():
+            return obj.membro.usuario.groups.first().name
+        return "Sem grupo"
 
     def get_nome_membro(self, obj):
         return obj.membro.nome
@@ -98,7 +107,10 @@ class MembroProjetoSerializer(serializers.ModelSerializer):
         return quantidade_artefatos
     
     def get_avatar(self, obj): 
-        return obj.membro.avatar
+        if hasattr(obj, "membro") and obj.membro and obj.membro.avatar:
+            return obj.membro.avatar
+        return None  # Substitua por uma URL de avatar padrão ou retorne None
+
     
     def get_funcoes_membro(self, obj):
         funcoes_membro = FuncaoMembro.objects.filter(membro_projeto=obj.id).order_by("id")

@@ -167,10 +167,10 @@ class BuscarMembroPorIdUsuarioView(APIView):
 
             # Busca o membro pelo ID do usuário
             membro = Membro.objects.get(usuario_id=id_usuario)
-
             
-            if membro:
-                serializer = MembroSerializer(membro, many=False)
+            serializer = MembroSerializer(membro)
+                
+            return Response(serializer.data, status=status.HTTP_200_OK)
                     
         except Membro.DoesNotExist:
             return Response({'error': 'Membro não encontrado'}, status=status.HTTP_404_NOT_FOUND)
