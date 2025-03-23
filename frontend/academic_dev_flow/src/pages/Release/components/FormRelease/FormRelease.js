@@ -14,7 +14,6 @@ const FormRelease = ({ onSubmit, onCancel, selectProject }) => {
     const { dadosProjeto } = useContextoGlobalProjeto();
     const [form] = useForm();
     const [optionsMembros, setOptionsMembros] = useState([]);
-    const [titulo, setTitulo] = useState("Cadastrar Release");
     const [lastRelease, setLastRelease] = useState(null);
     const [releaseAdjacentes, setReleasesAdjacentes] = useState(null);
 
@@ -115,12 +114,10 @@ const FormRelease = ({ onSubmit, onCancel, selectProject }) => {
 
         if (releaseData !== null) {
           form.setFieldsValue(releaseData);
-          setTitulo("Atualizar Release");
           await handleGetReleasesAdjacentes();
         } else {
           await handleGetUltimaRelease();
           form.resetFields();
-          setTitulo("Cadastrar Release");
         }
       } else {
         form.resetFields();
@@ -133,49 +130,44 @@ const FormRelease = ({ onSubmit, onCancel, selectProject }) => {
 
   return (
     <Form layout="vertical" className="global-form" form={form} onFinish={onSubmit}>
-      <Form.Item>
-        <h4 className='global-title'> {titulo} </h4>
+      {selectProject}
+      <Form.Item
+        label="Nome"
+        name="nome"
+        rules={[{ required: true, message: "Por favor, preencha este campo!" }]}
+      >
+        <Input type="text" name="nome" placeholder="Nome da release" />
       </Form.Item>
-      <div style={{ display: "flex", gap: "20px" }}>
-        <div style={{ flex: "2" }}>
-        {selectProject}
-          <Form.Item
-            label="Nome"
-            name="nome"
-            rules={[{ required: true, message: "Por favor, preencha este campo!" }]}
-          >
-            <Input type="text" name="nome" placeholder="Nome da release" />
-          </Form.Item>
 
-          <Form.Item label="Descrição" name="descricao">
-            <Input.TextArea rows={8} name="descricao" placeholder="Descrição da release (opcional)" />
-          </Form.Item>
-        </div>
+      <Form.Item label="Descrição" name="descricao">
+        <Input.TextArea rows={8} name="descricao" placeholder="Descrição da release (opcional)" />
+      </Form.Item>
 
-        <div style={{ flex: "1" }}>
-          <Form.Item
-            label="Status"
-            name="status"
-            rules={[{ required: true, message: "Por favor, selecione uma opção!" }]}
-          >
-            <Select allowClear options={optionsStatusReleases} placeholder="Selecione" />
-          </Form.Item>
+      <Form.Item
+        label="Status"
+        name="status"
+        style={{width: '50%'}}
+        rules={[{ required: true, message: "Por favor, selecione uma opção!" }]}
+      >
+        <Select allowClear options={optionsStatusReleases} placeholder="Selecione" />
+      </Form.Item>
 
-          <Form.Item
-            label="Responsável"
-            name="responsavel"
-          >
-            <Select allowClear options={optionsMembros} placeholder="Selecione"/>
-          </Form.Item>
-          <Form.Item
-            label="Data de Lançamento"
-            name="data_lancamento"
-            rules={[{ validator: validateDataLancamento, required: true, message: 'Por favor, preencha este campo!'}]}
-          >
-            <Input type="date" name="data_lancamento" allowClear/>
-          </Form.Item>
-        </div>
-      </div>
+      <Form.Item
+        label="Responsável"
+        name="responsavel"
+        style={{width: '50%'}}
+      >
+        <Select allowClear options={optionsMembros} placeholder="Selecione"/>
+      </Form.Item>
+      <Form.Item
+        label="Data de Lançamento"
+        name="data_lancamento"
+        style={{width: '50%'}}
+        rules={[{ validator: validateDataLancamento, required: true, message: 'Por favor, preencha este campo!'}]}
+      >
+        <Input type="date" name="data_lancamento" allowClear/>
+      </Form.Item>
+        
 
       <Space style={{ display: "flex", gap: "10px" }}>
         <Button type="primary" htmlType="submit">

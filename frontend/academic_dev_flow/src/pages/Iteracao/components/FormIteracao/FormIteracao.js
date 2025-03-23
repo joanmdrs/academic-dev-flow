@@ -52,9 +52,7 @@ const FormIteracao = ({ onSubmit, onCancel, selectProject }) => {
                     }))
                     setOptionsEtapas(resultados)
                 }
-            } else {
-                NotificationManager.info('O projeto selecionado não possui um fluxo associado. Vincule o fluxo ao projeto !');
-            }
+            } 
         } catch (error) {
             return handleError(error, 'Falha ao tentar buscar as etapas do fluxo do projeto !');
         }
@@ -149,138 +147,135 @@ const FormIteracao = ({ onSubmit, onCancel, selectProject }) => {
     
 
     return (
-        <Form layout="vertical" className="global-form" form={form} onFinish={onSubmit}>
-            <Form.Item>
-                <h4 className='global-title'> {titulo} </h4>
+        <Form 
+            className="global-form" 
+            form={form} 
+            onFinish={onSubmit}
+            layout="vertical"
+        >
+            {selectProject}
+            <Form.Item
+                label="Nome"
+                name="nome"
+                rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
+            >
+                <Input type='text' name="nome" placeholder="Nome da iteração" />
             </Form.Item>
 
-            <div style={{ display: 'flex', gap: '20px' }}>
-                <div style={{ flex: '2' }}>
-                    {selectProject}
-                    <Form.Item
-                        label="Nome"
-                        name="nome"
-                        style={{ flex: "1" }}
-                        rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
-                    >
-                        <Input type='text' name="nome" placeholder="Nome da iteração" />
-                    </Form.Item>
+            <Form.Item label="Descrição" name="descricao">
+                <Input.TextArea rows={8} name="descricao" placeholder="Descrição da iteração (opcional)" />
+            </Form.Item>
 
-                    <Form.Item label="Descrição" name="descricao">
-                        <Input.TextArea rows={8} name="descricao" placeholder="Descrição da iteração (opcional)" />
-                    </Form.Item>
+            <Form.Item
+                label="Ordem"
+                name="ordem"
+                style={{width: '50%'}}
+            >
+                <Input type="number" name="ordem" placeholder="Ordem (opcional)" />
+            </Form.Item>
 
-                    <div style={{ display: 'flex', gap: '10px' }}>
-                        <Form.Item
-                            label="Ordem"
-                            name="ordem"
-                            style={{flex: "1"}}
-                        >
-                            <Input type="number" name="ordem" placeholder="Ordem (opcional)" />
-                        </Form.Item>
+            <Form.Item
+                label="Data de Início"
+                name="data_inicio"
+                style={{width: '50%'}}
+                rules={[
+                    ({ getFieldValue }) => ({
+                        validator(_, value) {
+                            const dataTermino = getFieldValue('data_termino');
+                            if (!value || !dataTermino || value <= dataTermino) {
+                                return Promise.resolve();
+                            }
+                            return Promise.reject(new Error('A data de início não pode ser maior que a data de término!'));
+                        },
+                    }),
+                    validateDateWithinProjectRange,
+                    validateDateBeforeRelease
+                ]}
+            >
+                <Input 
+                    type="date" 
+                    name="data_inicio" 
+                    allowClear
+                />
+            </Form.Item>
 
-                        <Form.Item
-                            label="Data de Início"
-                            name="data_inicio"
-                            style={{flex: "1"}}
-                            rules={[
-                                ({ getFieldValue }) => ({
-                                    validator(_, value) {
-                                        const dataTermino = getFieldValue('data_termino');
-                                        if (!value || !dataTermino || value <= dataTermino) {
-                                            return Promise.resolve();
-                                        }
-                                        return Promise.reject(new Error('A data de início não pode ser maior que a data de término!'));
-                                    },
-                                }),
-                                validateDateWithinProjectRange,
-                                validateDateBeforeRelease
-                            ]}
-                        >
-                            <Input 
-                                type="date" 
-                                name="data_inicio" 
-                                allowClear
-                            />
-                        </Form.Item>
+            <Form.Item
+                label="Data de Término"
+                name="data_termino"
+                style={{width: '50%'}}
+                rules={[
+                    ({ getFieldValue }) => ({
+                        validator(_, value) {
+                            const dataInicio = getFieldValue('data_inicio');
+                            if (!value || !dataInicio || value >= dataInicio) {
+                                return Promise.resolve();
+                            }
+                            return Promise.reject(new Error('A data de término não pode ser menor que a data de início!'));
+                        },
+                    }),
+                    validateDateWithinProjectRange,
+                    validateDateBeforeRelease
+                ]}
+            >
+                <Input 
+                    type="date" 
+                    name="data_termino" 
+                    allowClear
+                />
+            </Form.Item>
+            <Form.Item
+                label="Status"
+                name="status"
+                style={{width: '50%'}}
+                rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
+            >
+                <Select options={optionsStatusIteracoes}  placeholder="Selecione o status" />
+            </Form.Item>
+            <Form.Item
+                label="Release"
+                name="release"
+                style={{width: '50%'}}
+            >
+                <Select
+                    onChange={(value) => handleBuscarRelease(value)}
+                    options={optionsReleases}
+                    allowClear
+                    showSearch
+                    filterOption={filterOption}
+                    placeholder="Selecione a release"
+                />
+            </Form.Item>
 
-                        <Form.Item
-                            label="Data de Término"
-                            name="data_termino"
-                            style={{flex: "1"}}
-                            rules={[
-                                ({ getFieldValue }) => ({
-                                    validator(_, value) {
-                                        const dataInicio = getFieldValue('data_inicio');
-                                        if (!value || !dataInicio || value >= dataInicio) {
-                                            return Promise.resolve();
-                                        }
-                                        return Promise.reject(new Error('A data de término não pode ser menor que a data de início!'));
-                                    },
-                                }),
-                                validateDateWithinProjectRange,
-                                validateDateBeforeRelease
-                            ]}
-                        >
-                            <Input 
-                                type="date" 
-                                name="data_termino" 
-                                allowClear
-                            />
-                        </Form.Item>
-                    </div>
-                </div>
+            <Form.Item
+                label="Etapas"
+                name="etapas"
+                style={{width: '50%'}}
+            >
+                <Select 
+                    mode="multiple"
+                    allowClear
+                    showSearch
+                    filterOption={filterOption}
+                    options={optionsEtapas} 
+                    placeholder="Selecione a(s) etapa(s)" 
+                />
+            </Form.Item>
 
-                <div style={{flex: "1"}}>
-                    <Form.Item
-                        label="Status"
-                        name="status"
-                        style={{ flex: "1" }}
-                        rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
-                    >
-                        <Select options={optionsStatusIteracoes}  placeholder="Selecione o status" />
-                    </Form.Item>
-                    <Form.Item
-                        label="Release"
-                        name="release"
-                        style={{ flex: "1" }}
-                    >
-                        <Select
-                            allowClear
-                            onChange={(value) => handleBuscarRelease(value)}
-                            options={optionsReleases}
-                            placeholder="Selecione a release"
-                        />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Etapas"
-                        name="etapas"
-                        style={{ flex: "1" }}
-                    >
-                        <Select 
-                            mode="multiple"
-                            allowClear
-                            showSearch
-                            filterOption={filterOption}
-                            options={optionsEtapas} 
-                            placeholder="Selecione a(s) etapa(s)" 
-                        
-                        />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Responsável"
-                        name="responsavel"
-                    >
-                        <Select
-                            style={{ width: '100%' }}
-                            placeholder="Selecione o responsável"
-                            options={optionsMembros}
-                        />
-                    </Form.Item>
-                </div>
-            </div>
+            <Form.Item
+                label="Responsável"
+                name="responsavel"
+                style={{width: '50%'}}
+            >
+                <Select
+                    style={{ width: '100%' }}
+                    allowClear
+                    showSearch
+                    placeholder="Selecione o responsável"
+                    filterOption={filterOption}
+                    options={optionsMembros}
+                />
+            </Form.Item>
+                
 
             <Space>
                 <Button type="primary" htmlType="submit">Salvar</Button>

@@ -1,5 +1,5 @@
 import { Button, Flex, Modal, Space, Tooltip } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React, { act, useEffect, useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
 import FormRelease from '../../components/FormRelease/FormRelease'
 import { useContextoRelease } from '../../context/ContextoRelease'
@@ -16,6 +16,10 @@ import RenderStatus from '../../../../components/RenderStatus/RenderStatus'
 import { optionsStatusReleases } from '../../../../services/optionsStatus'
 import { IoMdCreate, IoMdTrash } from 'react-icons/io'
 import { MdFilterAlt } from 'react-icons/md'
+import Section from '../../../../components/Section/Section'
+import SectionHeader from '../../../../components/SectionHeader/SectionHeader'
+import SectionFilters from '../../../../components/SectionFilters/SectionFilters'
+import SectionContent from '../../../../components/SectionContent/SectionContent'
 
 
 const Release = () => {
@@ -101,10 +105,27 @@ const Release = () => {
         if (!nome && !projeto){
             await handleBuscarReleasesDosProjetosDoMembro()
         } else {
-            const response = await filtrarReleasesPeloNomeEPeloProjeto(nome, projeto)
-            if (!response.error){
-                setReleases(response.data)
+            const response = await buscarReleasesDosProjetosDoMembro(usuario.id)
+
+            if (!response.error && response.data) {
+                let filteredReleases = response.data;
+        
+                if (nome) {
+                    filteredReleases = filteredReleases.filter(release => 
+                        release.nome.toLowerCase().includes(nome.toLowerCase())
+                    );
+                }
+        
+                if (projeto) {
+                    filteredReleases = filteredReleases.filter(release => 
+                        release.projeto === projeto
+                    );
+                }
+        
+                setReleases(filteredReleases);
             }
+
+
         }
     }
 
@@ -192,64 +213,40 @@ const Release = () => {
                 await handleBuscarReleasesDosProjetosDoMembro()
             }
         }
-
         fetchData()
     }, [usuario])
 
 
     return (
-        <div className='content'> 
-            <div style={{
-                borderBottom: '1px solid #ddd',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'baseline',
-                padding: '20px',
-                backgroundColor: '#FFFFFF'
-            }}> 
-                <Space>
-                    <h2 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '600'}}> Releases </h2>
-                </Space>
+        <Section>
+            <SectionHeader>
+                <h2 className='title'> Releases 
+                    { isFormVisible && actionForm === 'create' && (
+                        <span className='subtitle'> / Cadastrar release</span>
+                    )}
+                    { isFormVisible && actionForm === 'update' && (
+                        <span className='subtitle'> / Atualizar release </span>
+                    )}
+                </h2> 
+                
 
-                <Space>
-                    <Button 
-                        onClick={handleAdicionarRelease} 
-                        type="primary" 
-                        icon={<FaPlus />}> Criar Release </Button>
-                </Space>
+                {!isFormVisible && (
+                    <Space>
+                        <Button 
+                            onClick={handleAdicionarRelease} 
+                            type="primary" 
+                            icon={<FaPlus />}> Criar Release </Button>
+                    </Space>
+                )}
+            </SectionHeader>
 
-            </div>
-
-            { isTableVisible && (
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'baseline',
-                    padding: '20px',
-                    borderBottom: '1px solid #DDD',
-                    backgroundColor: '#FFFFFF'
-                }}>
-                    <Flex horizontal gap="middle">
-                        <Space>
-                            <div> 
-                                <p 
-                                    style={{
-                                        color: "var(--border-color)", 
-                                        display: 'flex', 
-                                        alignItems: 'center'
-                                    }}
-                                > <MdFilterAlt size={"20px"} /> Filtros </p>
-                            </div>
-                        </Space>
-                        <Space>
-                            <FormFilterReleases onChange={handleFiltrarReleases} idMembro={usuario.id}/>
-                        </Space>
-                    </Flex>
-                </div>
+            {!isFormVisible && (
+                <SectionFilters>
+                    <FormFilterReleases onChange={handleFiltrarReleases} idMembro={usuario.id}/>
+                </SectionFilters>
             )}
 
-            <div className='pa-20'>
-
+           <SectionContent>
                 { isFormVisible && 
                     <FormRelease 
                         onSubmit={handleSalvarRelease} 
@@ -257,17 +254,18 @@ const Release = () => {
                         selectProject={<SelectProject idMembro={usuario.id} />}
                     />
                 }
-
                 { isTableVisible && (
                     <div>
                         <TableRelease data={releases} columns={columnsTable}/>
                     </div>
         
-
-                    
                 )}
-            </div>
-        </div>
+
+           </SectionContent>
+
+          
+        </Section>
+
     )
 }
 

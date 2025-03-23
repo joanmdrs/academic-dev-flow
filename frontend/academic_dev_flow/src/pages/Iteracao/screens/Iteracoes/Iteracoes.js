@@ -17,6 +17,10 @@ import { IoMdCreate, IoMdTrash } from 'react-icons/io'
 import { formatDate } from '../../../../services/utils'
 import RenderEtapas from '../../../../components/RenderEtapas/RenderEtapas'
 import { MdFilterAlt } from 'react-icons/md'
+import Section from '../../../../components/Section/Section'
+import SectionHeader from '../../../../components/SectionHeader/SectionHeader'
+import SectionFilters from '../../../../components/SectionFilters/SectionFilters'
+import SectionContent from '../../../../components/SectionContent/SectionContent'
 
 const Iteracoes = () => {
 
@@ -105,9 +109,23 @@ const Iteracoes = () => {
         if (!nome && !projeto){
             await handleBuscarIteracoesDosProjetosDoMembro()
         } else {
-            const response = await filtrarIteracoesPeloNomeEPeloProjeto(nome, projeto)
-            if (!response.error){
-                setIteracoes(response.data)
+            const response = await buscarIteracoesDosProjetosDoMembro(usuario.id)
+            if (!response.error && response.data) {
+                let filteredIterações = response.data;
+        
+                if (nome) {
+                    filteredIterações = filteredIterações.filter(iteracao => 
+                        iteracao.nome.toLowerCase().includes(nome.toLowerCase())
+                    );
+                }
+        
+                if (projeto) {
+                    filteredIterações = filteredIterações.filter(iteracao => 
+                        iteracao.projeto === projeto
+                    );
+                }
+        
+                setIteracoes(filteredIterações);
             }
         }
     }
@@ -215,18 +233,17 @@ const Iteracoes = () => {
 
 
     return (
-        <div className='content'> 
-            <div style={{
-                borderBottom: '1px solid #ddd',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'baseline',
-                padding: '20px',
-                backgroundColor: '#FFFFFF'
-            }}> 
-                <Space>
-                    <h2 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '600'}}> Iterações </h2>
-                </Space>
+        <Section>
+            <SectionHeader>
+                <h2 className='title'> Iteração 
+                    {isFormVisible && actionForm === 'create' && (
+                        <span className='subtitle'> / Cadastrar iteração</span>
+                    )}
+
+                    {isFormVisible && actionForm === 'update' && (
+                        <span className='subtitle'> / Atualizar iteração</span>
+                    )}
+                </h2>
 
                 <Space>
                     <Button 
@@ -236,39 +253,15 @@ const Iteracoes = () => {
                     > Criar Iteração 
                     </Button>
                 </Space>
+            </SectionHeader>
 
-            </div>
-
-            { isTableVisible && (
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'baseline',
-                    padding: '20px',
-                    borderBottom: '1px solid #DDD',
-                    backgroundColor: '#FFFFFF'
-                }}>
-                    <Flex horizontal gap="middle">
-                        <Space>
-                            <div> 
-                                <p 
-                                    style={{
-                                        color: "var(--border-color)", 
-                                        display: 'flex', 
-                                        alignItems: 'center'
-                                    }}
-                                > <MdFilterAlt size={"20px"} /> Filtros </p>
-                            </div>
-                        </Space>
-                        <Space>
-                            <FormFilterIteracoes onChange={handleFiltrarIteracoes} idMembro={usuario.id}/>
-                        </Space>
-                    </Flex>
-                </div>
+            {!isFormVisible && (
+                <SectionFilters>
+                    <FormFilterIteracoes onChange={handleFiltrarIteracoes} idMembro={usuario.id}/>
+                </SectionFilters>
             )}
-
-            <div style={{margin: '20px'}}>
-
+            
+            <SectionContent>
                 { isFormVisible && 
                     <FormIteracao 
                         onSubmit={handleSalvarIteracao} 
@@ -278,18 +271,20 @@ const Iteracoes = () => {
                 }
 
                 {(iteracoes && isTableVisible) && (
-                    <div>
-                        <TableIteracoes 
-                            columns={columnsTable}
-                            data={iteracoes}   
-                        />
-                    </div>
-        
-
-                    
+                    <TableIteracoes 
+                        columns={columnsTable}
+                        data={iteracoes}   
+                    />
                 )}
-            </div>
-        </div>
+
+            </SectionContent>
+
+       
+
+            
+
+            
+        </Section>
     )
 }
 
