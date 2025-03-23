@@ -1,127 +1,67 @@
 import React, {useEffect, useState } from "react"
-import Titulo from "../../../../components/Titulo/Titulo"
-import ModalDeBusca from "../../../../components/Modals/ModalDeBusca/ModalDeBusca"
-import { atualizarMembro, buscarMembroPeloNome, criarMembro, excluirMembro } from "../../../../services/membroService"
+import { atualizarMembro, buscarMembroPeloNome, criarMembro, excluirMembro, listarGrupos, listarMembros } from "../../../../services/membroService"
 import { useMembroContexto } from "../../context/MembroContexto"
 import { buscarUsuarioPeloId } from "../../../../services/usuarioService"
-import Loading from "../../../../components/Loading/Loading"
 import FormMembro from "../../components/FormMembro/FormMembro"
-import { Button, Modal } from "antd"
-import { FaPlus, FaSearch, FaTrash } from "react-icons/fa"
+import { Button, Input, Modal, Space } from "antd"
+import { FaPlus, FaTrash } from "react-icons/fa"
+import Section from "../../../../components/Section/Section"
+import SectionHeader from "../../../../components/SectionHeader/SectionHeader"
+import SectionContent from "../../../../components/SectionContent/SectionContent"
+import TableMembros from "../../components/TableMembros/TableMembros"
+import SectionFilters from "../../../../components/SectionFilters/SectionFilters"
+
+const { Search } = Input;
 
 const GerenciarMembros = () => {
 
-    const COLUNAS_MODAL = [
-        {
-            title: "Código",
-            key: "codigo",
-            dataIndex: "id",
-        },
-        {
-            title: "Nome",
-            dataIndex: "nome",
-            key: "nome",
-            render: (text, record) => (
-                <span
-                    style={{ color: "blue", cursor: "pointer" }}
-                    onClick={() => handleSelecionarMembro(record)}
-                >
-                {text}
-                </span>
-            ),
-        },
-        {
-            title: "Grupo",
-            dataIndex: "nome_grupo",
-            key: "nome_grupo",
-        },
-    ];
-
-    const {dadosMembro, setDadosMembro} = useMembroContexto()
+    const {dadosMembro, setDadosMembro, setMembros, membrosSelecionados} = useMembroContexto()
     const [acaoForm, setAcaoForm] = useState('criar')
-    const [isFormVisivel, setIsFormVisivel] = useState(false)
-    const [isModalVisivel, setIsModalVisivel] = useState(false)
-    const [isPlusBtnEnabled, setIsPlusBtnEnabled] = useState(false)
-    const [isTrashBtnEnabled, setIsTrashBtnEnabled] = useState(true)
-    const [isSearchBtnEnabled, setIsSearchBtnEnabled] = useState(false)
-    const [loading, setLoading] = useState(false)
+    const [isSaveFormVisible, setIsSaveFormVisible] = useState(false)
+    
+    const handleListarMembros = async () => {
+        const response = await listarMembros()
+        if (!response.error){
+            setMembros(response.data)
+        }
+    }
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                setLoading(true);
-                await new Promise((resolve) => setTimeout(resolve, 1000));
-            } catch (error) {
-                
-            } finally {
-                setLoading(false)
-            }
+            await handleListarMembros()
         }
         fetchData()
-    }, [dadosMembro])
 
-    if (loading) {
-        return <Loading />
-    }
-     
-    const handleFecharModal = () => setIsModalVisivel(false)
-    const handleAbrirModal = () => setIsModalVisivel(true)
+    }, [dadosMembro])
 
     const handleCancelar = () => {
         setAcaoForm('criar')
         setDadosMembro(null)
-        setIsFormVisivel(false)
-        setIsModalVisivel(false)
-        setIsPlusBtnEnabled(false)
-        setIsTrashBtnEnabled(true)
-        setIsSearchBtnEnabled(false)
-        setLoading(false)
+        setIsSaveFormVisible(false)
     }
 
-    const handleOrganizarDados = async (dados) => {
-        const response = await buscarUsuarioPeloId(dados.usuario)
-        dados['usuario'] = response.data.username
-        dados['senha'] = response.data.password
-        setDadosMembro(dados)
-    }
     
     const handleReload = async (acao, dadosMembro) => {
-        await handleOrganizarDados(dadosMembro)
         setAcaoForm(acao)
-        setIsPlusBtnEnabled(false)
-        setIsTrashBtnEnabled(true)
-        setIsSearchBtnEnabled(false)
-    }
-
-    const handleSelecionarMembro = async (dados) => {
-        await handleOrganizarDados(dados)
-        setAcaoForm('atualizar')
-        setIsFormVisivel(true)
-        setIsModalVisivel(false)
-        setIsTrashBtnEnabled(false)
+        setIsSaveFormVisible(false)
+        await handleListarMembros()
+        
     }
 
     const handleAdicionarMembro = () => {
         setDadosMembro(null)
-        setIsFormVisivel(true)
-        setIsModalVisivel(false)
+        setIsSaveFormVisible(true)
         setAcaoForm('criar')
-        setIsPlusBtnEnabled(true)
-        setIsTrashBtnEnabled(true)
-        setIsSearchBtnEnabled(true)
+    }
+
+    const handleAtualizarMembro = (record) => {
+        setDadosMembro(record)
+        setIsSaveFormVisible(true)
+        setAcaoForm('atualizar')
     }
 
     const handleSalvarMembro = async (dadosForm) => {
         if (acaoForm === 'criar'){
-            let avatarNumber;
-            if (dadosForm.sexo === 'M') {
-                avatarNumber = Math.floor(Math.random() * 50) + 1;
-            } else if (dadosForm.sexo === 'F') {
-                avatarNumber = Math.floor(Math.random() * 50) + 51;
-            } else if (dadosForm.sexo === 'O') {
-                avatarNumber = Math.floor(Math.random() * 100) + 1;
-            }
-            dadosForm['avatar'] = avatarNumber;
             const response = await criarMembro(dadosForm)
             handleReload('atualizar', response.data)
         } else if (acaoForm === 'atualizar') {
@@ -132,81 +72,103 @@ const GerenciarMembros = () => {
 
     const handleBuscarMembro = async (parametro) => {
         const response = await buscarMembroPeloNome(parametro)
-        return response
+
+        if (!response.error){
+            setMembros(response.data.results)
+        }
     }
 
-    const handleExcluirMembro = async () => {
-
-        Modal.confirm({
-            title: 'Confirmar exclusão',
-            content: 'Você está seguro de que deseja excluir este item ?',
-            okText: 'Sim',
-            cancelText: 'Não',
-            onOk:  async () => {
-                await excluirMembro(dadosMembro.id)
-                handleCancelar()
-            }
-        });
-
+    const handleExcluirMembros = async (ids) => {
+            Modal.confirm({
+                title: 'Confirmar exclusão',
+                content: 'Você está seguro de que deseja excluir este(s) membro(s)?',
+                okText: 'Sim',
+                cancelText: 'Não',
+                onOk: async () => {
+                    await excluirMembro(ids);
+                    handleReload()
+                }
+            });
+        };
+    
+        const handleExcluirMembrosSelecionadas = async () => {
+            const ids = membrosSelecionados.map(item => item.id);
+            await handleExcluirMembros(ids);
+        };
         
-    }
+        const handleExcluirMembroUnico = async (id) => {
+            await handleExcluirMembros([id]);
+        };
 
     return (
-        <div className="content"> 
-            <Titulo 
-                titulo='Membros'
-                paragrafo='Membros > Gerenciar membros'
-            />
+        <Section> 
 
-            <div className="button-menu"> 
-                <Button
-                    type="primary"
-                    icon={<FaSearch />}
-                    onClick={() => handleAbrirModal()}
-                    disabled={isSearchBtnEnabled}
-                >
-                    Buscar
-                </Button>
-                <div className="grouped-buttons">
-                    <Button
-                        type="primary"
-                        icon={<FaPlus />}
-                        onClick={() => handleAdicionarMembro()}
-                        disabled={isPlusBtnEnabled}
-                    >
-                        Criar Membro
-                    </Button>
+            <SectionHeader>
+                <h2> Membros 
+                    {isSaveFormVisible && acaoForm === "criar" && (
+                        <span style={{fontSize: '16px'}}> / Cadastrar membro </span>
+                    )}
 
-                    <Button
-                        type="primary"
-                        danger
-                        icon={<FaTrash />}
-                        onClick={() => handleExcluirMembro()}
-                        disabled={isTrashBtnEnabled}
-                    >
-                        Excluir
-                    </Button>
-                </div>
-            </div>
-    
+                    {isSaveFormVisible && acaoForm === 'atualizar' && (
+                        <span style={{fontSize: '16px'}}> / Atualizar membro </span>
+                    )}
 
-            <ModalDeBusca  
-                titulo="Buscar membro" 
-                label="Nome do membro"
-                name="name-membro"
-                onCancel={handleFecharModal}
-                onOk={handleBuscarMembro}
-                status={isModalVisivel}
-                colunas={COLUNAS_MODAL}
-            />
-                        
-            {isFormVisivel &&  (
 
-                <div className="pa-20"> 
-                    <FormMembro onSubmit={handleSalvarMembro} onCancel={handleCancelar}/>
-                </div>
+                </h2>
+
+                { !isSaveFormVisible && (
+                    <Space>
+                        <Button
+                            type="primary"
+                            icon={<FaPlus />}
+                            onClick={() => handleAdicionarMembro()}
+                        >
+                            Criar Membro
+                        </Button>
+                    </Space>
+                ) }
+                
+            </SectionHeader>
+
+            { !isSaveFormVisible && (
+                <SectionFilters>
+                    <Search
+                        style={{width: '500px'}}
+                        placeholder="pesquise pelo nome"
+                        allowClear
+                        enterButton="Pesquisar"
+                        size="middle"
+                        onSearch={handleBuscarMembro}
+                    />
+
+                    { membrosSelecionados.length !== 0 && (
+                        <Space >
+                            <Button 
+                                danger 
+                                type="primary" 
+                                icon={<FaTrash />}
+                                onClick={handleExcluirMembrosSelecionadas}
+                            > 
+                                Excluir
+                            </Button>
+                        </Space>
+                    )}
+
+                </SectionFilters>
             )}
-        </div>
+
+            <SectionContent>
+                
+                {isSaveFormVisible &&  (
+                    <FormMembro onSubmit={handleSalvarMembro} onCancel={handleCancelar}/>
+                )}
+
+                {!isSaveFormVisible && (
+                    <TableMembros onUpdate={handleAtualizarMembro} onDelete={handleExcluirMembroUnico}/>
+                )}
+
+            </SectionContent>
+        </Section>
     )
  
 }

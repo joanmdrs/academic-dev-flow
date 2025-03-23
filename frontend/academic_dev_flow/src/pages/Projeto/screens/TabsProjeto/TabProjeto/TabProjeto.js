@@ -70,8 +70,10 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
                         <Form.Item 
                             label="Status:" 
                             name="status" 
+                            
                             rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}>
                             <Select
+                                style={{width: '25%'}} 
                                 name="status"
                                 defaultValue="Selecione"
                                 options={optionsStatusProjetos}
@@ -94,7 +96,12 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
                                 }),
                             ]}
                         >
-                            <Input name="data_inicio" type="date" allowClear/>
+                            <Input
+                                style={{width: '25%'}} 
+                                name="data_inicio" 
+                                type="date" 
+                                allowClear
+                            />
                         </Form.Item>
 
                         <Form.Item 
@@ -113,7 +120,12 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
                                 }),
                             ]}
                         >
-                            <Input name="data_fim" type="date" allowClear/>
+                            <Input
+                                style={{width: '25%'}} 
+                                name="data_fim" 
+                                type="date" 
+                                allowClear
+                            />
                         </Form.Item>
 
                         <Form.Item 

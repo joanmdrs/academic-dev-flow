@@ -31,19 +31,6 @@ const FormRegister = () => {
         dadosForm['username'] = dadosForm.email
         dadosForm['password'] = dadosForm.senha
 
-        let avatarNumber
-
-        if (dadosForm.sexo === 'M') {
-            avatarNumber = Math.floor(Math.random() * 50) + 1;
-        } else if (dadosForm.sexo === 'F') {
-            avatarNumber = Math.floor(Math.random() * 50) + 51;
-
-        } else if (dadosForm.sexo === 'O') {
-            avatarNumber = Math.floor(Math.random() * 100) + 1;
-        }
-
-        dadosForm['avatar'] = avatarNumber
-
         const response = await criarMembro(dadosForm)
 
         if (!response.error){

@@ -116,7 +116,7 @@ const FormProjeto = () => {
                             <Form.Item 
                                 label="Data de Início:" 
                                 name="data_inicio" 
-                                style={{flex: '1'}}
+                                style={{width: 'fit-content'}}
                                 rules={[
                                     { required: true, message: 'Por favor, preencha este campo!' },
                                     ({ getFieldValue }) => ({
@@ -136,7 +136,7 @@ const FormProjeto = () => {
                             <Form.Item 
                                 label="Data de Término:" 
                                 name="data_termino" 
-                                style={{flex: '1'}}
+                                style={{width: 'fit-content'}}
                                 rules={[
                                     { required: true, message: 'Por favor, preencha este campo!' },
                                     ({ getFieldValue }) => ({
@@ -156,7 +156,7 @@ const FormProjeto = () => {
                             <Form.Item 
                                 label="Status:" 
                                 name="status" 
-                                style={{flex: '1'}}
+                                style={{width: 'fit-content'}}
                                 rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}>
                                 <Select
                                     name="status"

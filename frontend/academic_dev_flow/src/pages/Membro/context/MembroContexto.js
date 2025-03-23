@@ -6,6 +6,8 @@ export const useMembroContexto = () => useContext(MembroContexto);
 export const MembroProvider = ({ children }) => {
 
     const [dadosMembro, setDadosMembro] = useState(null)
+    const [membros, setMembros] = useState([])
+    const [membrosSelecionados, setMembrosSelecionados] = useState([])
     const [dadosFuncaoMembro, setDadosFuncaoMembro] = useState(null)
     const [dadosMembroProjeto, setDadosMembroProjeto] = useState(null)
     const [objsMembroProjeto, setObjsMembroProjeto] = useState([])
@@ -15,6 +17,8 @@ export const MembroProvider = ({ children }) => {
         <MembroContexto.Provider
             value={{
                 dadosMembro, setDadosMembro,
+                membros, setMembros,
+                membrosSelecionados, setMembrosSelecionados,
                 dadosFuncaoMembro, setDadosFuncaoMembro,
                 dadosMembroProjeto, setDadosMembroProjeto,
                 objsMembroProjeto, setObjsMembroProjeto,

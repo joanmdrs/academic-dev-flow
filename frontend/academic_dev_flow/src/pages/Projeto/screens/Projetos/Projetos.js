@@ -18,6 +18,7 @@ import FilterByStatus from '../../components/Filters/FilterByStatus/FilterByStat
 import FilterByFlow from '../../components/Filters/FilterByFlow/FilterByFlow';
 import SectionFilters from '../../../../components/SectionFilters/SectionFilters';
 import Section from '../../../../components/Section/Section';
+import { MdFilterAlt } from 'react-icons/md';
 
 const {TabPane} = Tabs 
 
@@ -184,7 +185,16 @@ const Projetos = () => {
     return (
         <Section>
             <SectionHeader>
-                <h2> Projetos </h2>
+                <h2> Projetos 
+                    {isSaveFormVisible && actionForm === "create" && (
+                            <span style={{fontSize: '16px'}}> / Cadastrar projeto </span>
+                        )}
+
+                        {isSaveFormVisible && actionForm === 'update' && (
+                            <span style={{fontSize: '16px'}}> / Atualizar projeto </span>
+                        )}
+                </h2> 
+
                 { !isSaveFormVisible && (
                     <Button 
                         type="primary" 

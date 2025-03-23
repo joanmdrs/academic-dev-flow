@@ -14,12 +14,14 @@ export const listarGrupos = async () => {
 
 export const criarMembro = async (dados) => {
 
+    const avatar = dados.avatar && dados.avatar.file ? dados.avatar.file.originFileObj : null;
+
     const dadosEnviar = {
-        usuario : {
+        usuario: {
             username: dados.username,
             password: dados.password
         },
-        membro : {
+        membro: {
             nome: dados.nome,
             data_nascimento: dados.data_nascimento,
             sexo: dados.sexo,
@@ -31,18 +33,30 @@ export const criarMembro = async (dados) => {
             email_github: dados.email_github,
             usuario_github: dados.usuario_github,
             grupo: dados.grupo,
-            avatar: dados.avatar
+            avatar: avatar 
         }
-    }
+    };
 
     try {
-        const response = await api.post('/membro/cadastrar/', dadosEnviar)
-        return handleSuccess(response, "Membro criado com sucesso.")
+        const formData = new FormData();
+        formData.append('usuario', JSON.stringify(dadosEnviar.usuario));  // Convertendo dados.usuario para JSON
+        formData.append('membro', JSON.stringify(dadosEnviar.membro));    // Convertendo dados.membro para JSON
+
+        if (avatar) {
+            formData.append('avatar', avatar);  // Envia o arquivo de avatar se presente
+        }
+        const response = await api.post('/membro/cadastrar/', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+
+        return handleSuccess(response, "Membro criado com sucesso.");
     } catch (error) {
-        if (error.response && error.response.status === 409){
-            return handleError(error, 'Já existe um membro cadastrado com este endereço de e-mail.')
+        if (error.response && error.response.status === 409) {
+            return handleError(error, 'Já existe um membro cadastrado com este endereço de e-mail.');
         } else {
-            return handleError(error, 'Falha ao tentar criar a conta, contate o suporte.')
+            return handleError(error, 'Falha ao tentar realizar o cadastro, contate o suporte.');
         }
     }
 }
@@ -98,9 +112,9 @@ export const buscarUsuarioPeloIdMembroProjeto = async (idMembroProjeto) => {
     }
 }
 
-export const excluirMembro = async (idMembro) => {
+export const excluirMembro = async (idsMembros) => {
     try {
-        const response = await api.delete('/membro/excluir/', {params: {id_membro: idMembro}})
+        const response = await api.delete('/membro/excluir/', {data:{ids_membros: idsMembros}})
         return handleSuccess(response, 'Membro excluído com sucesso.')
     } catch (error) {
         return handleError(error, 'Falha ao tentar excluir o membro.')
