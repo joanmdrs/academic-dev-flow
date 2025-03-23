@@ -22,6 +22,10 @@ import ScreenDrawerComments from "../DrawerComments";
 import SpinLoading from "../../../../components/SpinLoading/SpinLoading";
 import ListTask from "../../components/ListTask/ListTask";
 import { MdFilterAlt, MdViewKanban } from "react-icons/md";
+import Section from "../../../../components/Section/Section";
+import SectionHeader from "../../../../components/SectionHeader/SectionHeader";
+import SectionFilters from "../../../../components/SectionFilters/SectionFilters";
+import SectionContent from "../../../../components/SectionContent/SectionContent";
 
 const {Search} = Input 
 
@@ -250,87 +254,63 @@ const Tarefas = () => {
     }, [usuario])
 
     return (
-        <div className="content"> 
-
+        <Section>
             {isDrawerCommentsVisible && <ScreenDrawerComments 
                 isDrawerVisible={isDrawerCommentsVisible} 
                 closeDrawer={handleCloseDrawerComments} 
             />}
-            
-            <div style={{
-                borderBottom: '1px solid #ddd',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'baseline',
-                padding: '20px'
-            }}> 
-                <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
-                    <h2 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '600'}}> Tarefas </h2>
-                </div>
 
-                <div>
-                    {!isFormVisible && (
-                        <Button
-                            onClick={() => handleAdicionarTarefa()} 
-                            type="primary" 
-                            icon={<FaPlus />}> 
-                            Criar Tarefa 
-                        </Button>
+            <SectionHeader>
+                <h2 className="title"> Tarefas 
+                    {isFormVisible && acaoForm === 'criar' && (
+                        <span className="subtitle"> / Cadastrar tarefa</span>
                     )}
-                </div>
 
-            </div>
-
-            { isFormVisible && (
-                <div className="pa-20"> 
-                    {isLoading && ( 
-                        <SpinLoading />
+                    {isFormVisible && acaoForm === 'atualizar' && (
+                        <span className="subtitle"> / Atualizar tarefa </span>
                     )}
-                    
-                    <FormTarefa 
-                        selectProject={<SelecionarProjeto idMembro={usuario.id}/>} 
-                        onSubmit={handleSalvarTarefa} 
-                        onCancel={handleCancelar} 
+
+                </h2>
+                {!isFormVisible && (
+                    <Button
+                        onClick={() => handleAdicionarTarefa()} 
+                        type="primary" 
+                        icon={<FaPlus />}> 
+                        Criar Tarefa 
+                    </Button>
+                )}
+            </SectionHeader>
+
+            {!isFormVisible && (
+                <SectionFilters>
+                    <Input
+                        style={{width: '500px'}}
+                        placeholder="pesquise pelo nome"
+                        name="nome"
+                        onChange={(event) => handleFiltrarTarefaPeloNome(event.target.value)}
                     />
-                </div>
+                    <FormFiltrarTarefas idMembro={usuario.id} onChange={handleFiltrarTarefas}/>
+                </SectionFilters>
             )}
+            
 
-            { isTabsVisible && (
-                <div className="pa-20"> 
+            <SectionContent>
+                { isFormVisible && (
+                    <div> 
+                        {isLoading && ( 
+                            <SpinLoading />
+                        )}
+                        
+                        <FormTarefa 
+                            selectProject={<SelecionarProjeto idMembro={usuario.id}/>} 
+                            onSubmit={handleSalvarTarefa} 
+                            onCancel={handleCancelar} 
+                        />
+                    </div>
+                )}
+
+                { isTabsVisible && (
                     <Tabs
-                        tabBarExtraContent={
-
-                            <div 
-                                style={{
-                                    display: 'flex', 
-                                    gap: '10px', 
-                                    alignItems: 'center',
-                                }}
-                            > 
-                                <div> 
-                                    <p 
-                                        style={{
-                                            color: "var(--border-color)", 
-                                            display: 'flex', 
-                                            alignItems: 'center'
-                                        }}
-                                    > <MdFilterAlt size={"20px"} /> Filtros </p>
-                                </div>
-
-                                <div> 
-                                    <Input
-                                        style={{width: '500px'}}
-                                        placeholder="pesquise pelo nome"
-                                        name="nome"
-                                        onChange={(event) => handleFiltrarTarefaPeloNome(event.target.value)}
-                                    />
-                                </div>
-
-                                <FormFiltrarTarefas idMembro={usuario.id} onChange={handleFiltrarTarefas}/>
-                                
-                            </div>
-                            
-                        }
                         size="middle"
                         indicator={{align: "center"}}
                     > 
@@ -366,11 +346,9 @@ const Tarefas = () => {
                         
                     </Tabs>
 
-                </div>
-            )}
-
-            
-        </div>
+                )}
+            </SectionContent>
+        </Section>
     )
 }
 

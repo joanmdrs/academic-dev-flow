@@ -143,149 +143,130 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
             layout='vertical' 
             onFinish={handleSubmitForm} 
             className='global-form'
-            style={{
-                padding: "20px", 
-                border: "1px solid #ddd", 
-                borderRadius: '10px'
-            }}
-        >
-            <Form.Item>
-                <h4 className='global-title'> {titulo} </h4>
+        >   
+            {selectProject}
+               
+            <Form.Item
+                label="Nome"
+                name="nome"
+                rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
+            >
+                <Input type='text' name='nome' placeholder='Nome da tarefa'/>
             </Form.Item>
 
-            <div style={{ display: 'flex', gap: "20px", flexWrap: 'wrap' }} >
-                <div style={{ flex: "2" }}>
+            <Form.Item
+                label="Descrição"
+                name="descricao"
+            >
+                <Input.TextArea rows={8} name='descricao' placeholder='Descrição da tarefa'/>
+            </Form.Item>
 
-                    {selectProject && (
-                        <>
-                            {selectProject}
-                        </>
-                    )}
-                    <Form.Item
-                        label="Nome"
-                        name="nome"
-                        rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
-                    >
-                        <Input type='text' name='nome' placeholder='Nome da tarefa'/>
-                    </Form.Item>
+            <Form.Item
+                label='Categoria'
+                name='categoria'
+                rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
+                style={{width: "50%"}}
+            >
+                <Select
+                    allowClear
+                    style={{ width: '100%' }}
+                    placeholder="Selecione"
+                    name="categoria"
+                    options={optionsCategorias}
+                    showSearch
+                    filterOption={filterOption}
+                />
+            </Form.Item>
 
-                    <Form.Item
-                        label="Descrição"
-                        name="descricao"
-                    >
-                        <Input.TextArea rows={5} name='descricao' placeholder='Descrição da tarefa'/>
-                    </Form.Item>
+            <Form.Item
+                label='Status'
+                name='status'
+                rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
+                style={{width: "50%"}}
+            >
+                <Select
+                    allowClear
+                    placeholder='Selecione'
+                    name='status'
+                    options={optionsStatusTarefas}
+                    showSearch
+                    filterOption={filterOption}
+                />
+            </Form.Item>
+
+            <Form.Item
+                label="Atribuir à"
+                name="membros"
+                style={{width: "50%"}}
+            >
+                <Select
+                    mode="multiple"
+                    allowClear
+                    options={optionsMembros}
+                    showSearch
+                    filterOption={filterOption}
+                    placeholder="Atribuir à (opcional)"
+                />
+            </Form.Item>
+
+            <Form.Item
+                label="Iteração"
+                name="iteracao"
+                style={{width: "50%"}}
+            >
+                <Select
+                    allowClear
+                    options={optionsIteracoes}
+                    showSearch
+                    filterOption={filterOption}
+                    placeholder="Iteração (opcional)"
+                />
+            </Form.Item>
+
+            <Form.Item label="Tags" name='tags' style={{width: "50%"}}>
+                <Select 
+                    allowClear
+                    showSearch
+                    mode='tags'
+                    options={optionsTags}
+                    filterOption={filterOption}
+                    placeholder="Tags (opcional)"
+                    
+                /> 
+            </Form.Item>
 
 
-                    <div style={{display: 'flex', gap: '10px'}}> 
-                        <Form.Item
-                            style={{flex: '1'}}
-                            label="Data de início"
-                            name="data_inicio"
-                        >
-                            <Input type='date' name='data_inicio' allowClear/>
-                        </Form.Item>
+            <Form.Item
+                style={{width: "50%"}}
+                label="Data de início"
+                name="data_inicio"
+            >
+                <Input type='date' name='data_inicio' allowClear/>
+            </Form.Item>
 
-                        <Form.Item
-                            style={{flex: '1'}}
-                            label="Data de término"
-                            name="data_termino"
-                        >
-                            <Input type='date' name='data_termino' allowClear/>
-                        </Form.Item>
+            <Form.Item
+                style={{width: "50%"}}
+                label="Data de término"
+                name="data_termino"
+            >
+                <Input type='date' name='data_termino' allowClear/>
+            </Form.Item>
 
-                        <Form.Item
-                            style={{flex: '1'}}
-                            label="Data de conclusão"
-                            name="data_conclusao"
-                        >
-                            <Input type='date' name='data_termino' allowClear/>
-                        </Form.Item>
+            <Form.Item
+                style={{width: "50%"}}
+                label="Data de conclusão"
+                name="data_conclusao"
+            >
+                <Input type='date' name='data_termino' allowClear/>
+            </Form.Item>
 
-                    </div>
+            {inputsAdmin}
+            
+            <Form.Item name="url_issue" label="URL da issue"> 
+                <Input type='url' name='url_issue' placeholder='url da issue (opcional)'/>
+            </Form.Item>
 
-                    <Form.Item
-                        label="Atribuir à"
-                        name="membros"
-                        style={{flex: '1'}}
-                    >
-                        <Select
-                            mode="multiple"
-                            allowClear
-                            options={optionsMembros}
-                            showSearch
-                            filterOption={filterOption}
-                            placeholder="Atribuir à (opcional)"
-                        />
-                    </Form.Item>
-
-                    {inputsAdmin}
-                </div>
-
-                <div style={{ flex: "1" }}>
-
-                    <Form.Item
-                        label='Categoria'
-                        name='categoria'
-                        rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
-                    >
-                        <Select
-                            allowClear
-                            style={{ width: '100%' }}
-                            placeholder="Selecione"
-                            name="categoria"
-                            options={optionsCategorias}
-                            showSearch
-                            filterOption={filterOption}
-                        />
-                    </Form.Item>
-
-                    <Form.Item
-                        label='Status'
-                        name='status'
-                        rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
-                    >
-                        <Select
-                            allowClear
-                            placeholder='Selecione'
-                            name='status'
-                            options={optionsStatusTarefas}
-                            showSearch
-                            filterOption={filterOption}
-                        />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Iteração"
-                        name="iteracao"
-                    >
-                        <Select
-                            allowClear
-                            options={optionsIteracoes}
-                            showSearch
-                            filterOption={filterOption}
-                            placeholder="Iteração (opcional)"
-                        />
-                    </Form.Item>
-
-                    <Form.Item label="Tags" name='tags' style={{flex: '1'}}>
-                        <Select 
-                            allowClear
-                            showSearch
-                            mode='tags'
-                            options={optionsTags}
-                            filterOption={filterOption}
-                            placeholder="Tags (opcional)"
-                            
-                        /> 
-                    </Form.Item>
-
-                    <Form.Item name="url_issue" label="URL da issue"> 
-                        <Input type='url' name='url_issue' placeholder='url da issue (opcional)'/>
-                    </Form.Item>
-
-                </div>
-            </div>
+             
 
             {/* <Form.Item 
                 label="Sicronizar com o GitHub ?"

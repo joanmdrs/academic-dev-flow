@@ -19,6 +19,10 @@ import TableArtefatos from "../../components/TableArtefatos/TableArtefatos";
 import SpinLoading from "../../../../components/SpinLoading/SpinLoading";
 import { LuLayout, LuLayoutGrid, LuLayoutList } from "react-icons/lu";
 import ListArtefatos from "../../components/ListArtefatos/ListArtefatos";
+import Section from "../../../../components/Section/Section";
+import SectionHeader from "../../../../components/SectionHeader/SectionHeader";
+import SectionFilters from "../../../../components/SectionFilters/SectionFilters";
+import SectionContent from "../../../../components/SectionContent/SectionContent";
 
 const {TabPane} = Tabs
 
@@ -134,7 +138,6 @@ const Artefatos = () => {
                 return;
             }
             dadosForm['id_file'] = resContent.data.sha
-    
         }
     
         try {
@@ -213,39 +216,54 @@ const Artefatos = () => {
     
     
     return (
-        <div className="content"> 
+        <Section> 
 
             {isDrawerCommentsVisible && < DrawerComments
                 isDrawerVisible={isDrawerCommentsVisible} 
                 closeDrawer={handleCloseDrawerComments} 
             />}
 
-            <div style={{
-                borderBottom: '1px solid #ddd',
-                padding: '20px',
-                display: 'flex',
-                justifyContent: 'space-between'
-            }}> 
-               <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
-                    <h2 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '600'}}> Artefatos </h2>
-                </div>
-
-                <div>
-                    {!isFormVisible && (
-                        <Button
-                            onClick={() => handleAdicionarArtefato()} 
-                            type="primary" 
-                            icon={<FaPlus />}> 
-                            Criar Artefato 
-                        </Button>
+            <SectionHeader>
+                <h2 className="title"> Artefatos
+                    {isFormVisible && actionForm==="create" && (
+                        <span className="subtitle"> / Cadastrar artefato</span>
                     )}
+                    {isFormVisible && actionForm==="update" && (
+                        <span className="subtitle"> / Atualizar artefato </span>
+                    )}
+                </h2>
+                {!isFormVisible && (
+                    <Button
+                        onClick={() => handleAdicionarArtefato()} 
+                        type="primary" 
+                        icon={<FaPlus />}> 
+                        Criar Artefato 
+                    </Button>
+                )}
+            </SectionHeader>
 
-                </div>
-            </div>
-            
-            {isFormVisible && (
-                <div className="pa-20"> 
-                    {isLoading && ( 
+            {!isFormVisible && (
+                <SectionFilters>
+                    <Space>
+                        <Input 
+                            style={{width: "500px"}}
+                            name="nome"
+                            placeholder="Pesquise pelo nome do artefato"
+                            onChange={(event) => handleBuscarArtefatosPeloNome(event.target.value)}
+                        />
+                    </Space>
+
+                    <Space>
+                        <FormFilterArtefatos idMembro={usuario.id} onChange={handleFiltrarArtefatos} />
+                    </Space>
+
+                </SectionFilters>
+            )}
+
+            <SectionContent>
+                {isFormVisible && (
+                    <>
+                        {isLoading && ( 
                             <SpinLoading />
                         )}
                     
@@ -253,113 +271,57 @@ const Artefatos = () => {
                             onSubmit={handleSalvarArtefato}
                             selectProjeto={<SelecionarProjeto idMembro={usuario.id} />} 
                             onCancel={handleCancelar} 
-                        />            
+                        />  
+                    </>
+                )}
+                
 
-                </div>
-            )}
-
-            {!isFormVisible && (
-                <Tabs
-                    style={{padding: '20px'}}
-                    size="middle"
-                    tabPosition="top"
-                    indicator={{align: "center"}}
-                    defaultActiveKey="1"
-                    tabBarExtraContent={
-                        <div style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'baseline',
-                            borderBottom: '1px solid #DDD'
-                        }}>
-                            <Flex horizontal gap="middle">
-                                <Space>
-                                    <div> 
-                                        <p 
-                                            style={{
-                                                color: "var(--border-color)", 
-                                                display: 'flex', 
-                                                alignItems: 'center'
-                                            }}
-                                        > <MdFilterAlt size={"20px"} /> Filtros </p>
-                                    </div>
-                                </Space>
-                                <Space>
-                                    <Input 
-                                        style={{width: "500px"}}
-                                        name="nome"
-                                        placeholder="Pesquise pelo nome do artefato"
-                                        onChange={(event) => handleBuscarArtefatosPeloNome(event.target.value)}
-                                    />
-                                </Space>
-
-                                <Space>
-                                    <FormFilterArtefatos idMembro={usuario.id} onChange={handleFiltrarArtefatos} />
-                                </Space>
-                                
-                            </Flex>
-
-                        </div>
-                    }
-                > 
-                    <TabPane 
-                        style={{padding: '20px'}} 
-                        tab={<Space> <LuLayout /> Tabela </Space>} 
-                        key="1" 
-                    >
-                        <TableArtefatos 
-                            data={artefatos}
-                            onUpdate={handleAtualizarArtefato}
-                            onDelete={handleExcluirArtefato}
-                            onShowComments={handleExibirComentarios}
-                        />
-                    </TabPane>
-                    <TabPane 
-                        style={{padding: '20px'}} 
-                        tab={<Space> <LuLayoutList /> Lista </Space> } 
-                        key="2"
-                    >
-                        <ListArtefatos 
-                            data={artefatos}
-                            onUpdate={handleAtualizarArtefato}
-                            onDelete={handleExcluirArtefato}
-                            onShowComments={handleExibirComentarios}
-                        />
-                    </TabPane>
-                    <TabPane 
-                        style={{padding: '20px'}} 
-                        tab={<Space> <LuLayoutGrid /> Grid </Space> } 
-                        key="3"
-                    >
-                        <GridArtefatos 
-                            data={artefatos}
-                            onCreate={handleAdicionarArtefato}
-                            onUpdate={handleAtualizarArtefato}
-                            onDelete={handleExcluirArtefato}
-                            onShowComments={handleExibirComentarios}
-                        />
-                    </TabPane>                            
-                </Tabs>
-            )}
-                      
-        </div>         
+                {!isFormVisible && (
+                    <Tabs
+                        size="middle"
+                        tabPosition="top"
+                        indicator={{align: "center"}}
+                        defaultActiveKey="1"
+                    > 
+                        <TabPane 
+                            tab={<Space> <LuLayout /> Tabela </Space>} 
+                            key="1" 
+                        >
+                            <TableArtefatos 
+                                data={artefatos}
+                                onUpdate={handleAtualizarArtefato}
+                                onDelete={handleExcluirArtefato}
+                                onShowComments={handleExibirComentarios}
+                            />
+                        </TabPane>
+                        <TabPane 
+                            tab={<Space> <LuLayoutList /> Lista </Space> } 
+                            key="2"
+                        >
+                            <ListArtefatos 
+                                data={artefatos}
+                                onUpdate={handleAtualizarArtefato}
+                                onDelete={handleExcluirArtefato}
+                                onShowComments={handleExibirComentarios}
+                            />
+                        </TabPane>
+                        <TabPane 
+                            tab={<Space> <LuLayoutGrid /> Grid </Space> } 
+                            key="3"
+                        >
+                            <GridArtefatos 
+                                data={artefatos}
+                                onCreate={handleAdicionarArtefato}
+                                onUpdate={handleAtualizarArtefato}
+                                onDelete={handleExcluirArtefato}
+                                onShowComments={handleExibirComentarios}
+                            />
+                        </TabPane>                            
+                    </Tabs>
+                )}
+            </SectionContent>      
+        </Section>         
     );
 }
 
 export default Artefatos;
-
-{/*                         
-<Flex horizontal gap="middle">
-    <Tooltip title="Ordenar de A a Z">
-        <Button 
-            onClick={() => handleOrdenarArtefatosDeAaZ()}
-        >
-            <MdSortByAlpha />
-        </Button>
-    </Tooltip>
-    <Tooltip title="Ordenar em ordem crescente">
-        <Button onClick={() => handleOrdenarArtefatosPorData()}>
-            <TbCalendarUp />
-        </Button>
-    </Tooltip>
-</Flex> */}
