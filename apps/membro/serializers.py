@@ -13,6 +13,7 @@ class MembroSerializer(serializers.ModelSerializer):
     nome_grupo = serializers.SerializerMethodField()
     username = serializers.SerializerMethodField()
     password = serializers.SerializerMethodField()
+    avatar = serializers.ImageField(required=False)
 
     class Meta:
         model = Membro

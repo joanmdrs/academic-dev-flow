@@ -25,7 +25,7 @@ class MembroProjetoSerializer(serializers.ModelSerializer):
     nome_fluxo = serializers.SerializerMethodField()
     quantidade_tarefas = serializers.SerializerMethodField()
     quantidade_artefatos = serializers.SerializerMethodField()
-    avatar = serializers.SerializerMethodField()
+    avatar = serializers.ImageField(required=False)
     funcoes_membro = serializers.SerializerMethodField()
     equipe = serializers.SerializerMethodField()
     dados_projeto = serializers.SerializerMethodField()
