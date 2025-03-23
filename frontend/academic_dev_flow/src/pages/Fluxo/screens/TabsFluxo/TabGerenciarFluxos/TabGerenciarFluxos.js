@@ -128,9 +128,6 @@ const TabGerenciarFluxos = () => {
         });
     }
 
-    
-
-
     return (
         <div>
             <SectionHeader>
@@ -153,7 +150,8 @@ const TabGerenciarFluxos = () => {
                         justifyContent: 'space-between', 
                         paddingTop: '30px', 
                         paddingBottom: '30px',
-                    }}>
+                    }}
+                >
                     <Search
                         style={{width: '500px'}}
                         placeholder="pesquise pelo nome"
