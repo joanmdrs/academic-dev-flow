@@ -1,5 +1,7 @@
 import { Avatar, Tooltip } from "antd";
 import React from "react";
+import { getRandomColor } from "../../services/utils";
+import { UserOutlined } from "@ant-design/icons";
 
 const RenderMembers = ({membros, quantMembros, maxAvatars}) => {
     
@@ -12,13 +14,16 @@ const RenderMembers = ({membros, quantMembros, maxAvatars}) => {
                             membros.slice(0, maxAvatars).map((item, index) => (
                                 <Tooltip title={`${item.nome}`}>
                                     <Avatar
-                                        src={`https://avatar.iran.liara.run/public/${item.avatar}`}
                                         key={index}
                                         style={{
+                                            backgroundColor: getRandomColor(),
                                             zIndex: quantMembros + index,
                                             marginLeft: index > 0 ? -10 : 0
                                         }}
-                                    />
+                                    >
+                                        {item?.nome ? item.nome.charAt(0).toUpperCase() : <UserOutlined />}
+
+                                    </Avatar>
                                 </Tooltip>
                                 
                             ))

@@ -8,6 +8,7 @@ const SectionFilters = ({children}) => {
             padding: '20px',
             borderBottom: '1px solid #ddd'
         }}> 
+        
             <Flex gap="middle"> 
                 {children}
             </Flex>
