@@ -31,15 +31,9 @@ const FormFluxo = ({onSubmit, onCancel}) => {
                 labelCol={{
                     span: 4,
                 }}
-                wrapperCol={{
-                    span: 14,
-                }}
+                
                 onFinish={onSubmit}
             >
-                <Form.Item>
-                    <h4 className='global-title'> {titulo} </h4>
-                </Form.Item>
-
                 <Form.Item name="nome" label="Nome" rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}>
                     <Input placeholder="Nome do fluxo"/>
                 </Form.Item>

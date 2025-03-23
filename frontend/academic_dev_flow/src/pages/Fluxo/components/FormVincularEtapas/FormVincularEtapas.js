@@ -63,19 +63,13 @@ const FormVincularEtapas = ({onSubmit, onCancel}) => {
             onFinish={onSubmit} 
             layout="vertical"
         >
-            <Form.Item>
-                <h4 className='global-title'> {titleForm} </h4>
-            </Form.Item>
-
             <Form.Item 
                 label="Fluxo" 
                 name='fluxo'
-                style={{width: '50%'}}
                 rules={[{ required: true, message: 'Por favor, selecione uma opção !' }]}
             > 
                 <Select 
                     allowClear
-                    style={{ width: '100%' }}
                     placeholder="Selecione o fluxo"
                     options={optionsFluxos} 
                     showSearch
@@ -83,20 +77,18 @@ const FormVincularEtapas = ({onSubmit, onCancel}) => {
                 />
             </Form.Item>
 
-            <Form.Item label="Ordem" name="ordem_no_fluxo"style={{width: '50%'}}>
+            <Form.Item label="Ordem" name="ordem_no_fluxo" >
                 <Input defaultValue={0} type="number" name="ordem_no_fluxo" placeholder="(Opcional)" />
             </Form.Item>
 
             <Form.Item 
                 label="Etapa" 
                 name="etapa"
-                style={{width: '50%'}}
                 rules={[{ required: true, message: 'Por favor, selecione uma opção !' }]}
             >
                 <Select 
                     allowClear
                     showSearch
-                    style={{ width: '100%' }}
                     placeholder="Selecione a etapa"
                     options={optionsEtapas} 
                     filterOption={filterOption}

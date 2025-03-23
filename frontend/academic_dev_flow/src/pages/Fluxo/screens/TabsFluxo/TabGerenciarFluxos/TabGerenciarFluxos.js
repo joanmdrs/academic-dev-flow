@@ -7,15 +7,17 @@ import { useContextoFluxo } from "../../../context/ContextoFluxo";
 import TableFluxos from "../../../components/TableFluxos/TableFluxos";
 import { IoMdCreate, IoMdTrash } from "react-icons/io";
 import { useForm } from "antd/es/form/Form";
+import SectionFilters from "../../../../../components/SectionFilters/SectionFilters";
+import SectionHeader from "../../../../../components/SectionHeader/SectionHeader";
+import SectionContent from "../../../../../components/SectionContent/SectionContent";
+const { Search } = Input;
 
 const TabGerenciarFluxos = () => {
 
     const {dadosFluxo, setDadosFluxo} = useContextoFluxo()
-    const [acaoForm, setAcaoForm] = useState("criar");
-    const [isFormVisivel, setIsFormVisivel] = useState(false);
-    const [isFormFilterVisible, setIsFormFilterVisible] = useState(false)
+    const [actionForm, setActionForm] = useState("create");
+    const [isSaveFormVisible, setIsSaveFormVisible] = useState(false);
     const [fluxos, setFluxos] = useState([])
-    const [form] = useForm()
 
     const columnsTableFluxos = [
         {
@@ -72,45 +74,41 @@ const TabGerenciarFluxos = () => {
     }, []);
 
     const handleCancelar = async () => {
-        setIsFormVisivel(false)
-        setIsFormFilterVisible(false)
+        setIsSaveFormVisible(false)
         setDadosFluxo(null)
         await handleListarFluxos()
     }
 
     const handleReload = async () => {
-        setIsFormVisivel(false)
-        setIsFormFilterVisible(false)
+        setIsSaveFormVisible(false)
         setDadosFluxo(null)
         await handleListarFluxos()
     }
 
 
     const handleCriarFluxo = () => {
-        setAcaoForm('criar')
-        setIsFormVisivel(true);
-        setIsFormFilterVisible(false)
+        setActionForm('create')
+        setIsSaveFormVisible(true)
         setDadosFluxo(null)
     };
 
     const handleAtualizarFluxo = (record) => {
-        setAcaoForm("atualizar")
-        setIsFormVisivel(true)
-        setIsFormFilterVisible(false)
+        setActionForm('update')
+        setIsSaveFormVisible(true)
         setDadosFluxo(record)
     }
 
     const handleSalvarFluxo = async (dados) => {
-        if (acaoForm === 'criar'){
+        if (actionForm === 'create'){
             await criarFluxo(dados)
-        } else if (acaoForm === 'atualizar'){
+        } else if (actionForm === 'update'){
             await atualizarFluxo(dados, dadosFluxo.id);
         }
         await handleReload()
     }
 
-    const handleBuscarFluxo = async (formData) => {
-        const response = await buscarFluxoPeloNome(formData.nome);
+    const handleBuscarFluxo = async (value) => {
+        const response = await buscarFluxoPeloNome(value);
 
         if (!response.error){
             setFluxos(response.data.results)
@@ -134,49 +132,49 @@ const TabGerenciarFluxos = () => {
 
 
     return (
-        <div >
+        <div>
+            <SectionHeader>
+                <h2 className="title"> Fluxos 
+                    {isSaveFormVisible && actionForm==='create' && (
+                        <span className="subtitle"> / Cadastrar fluxo</span>
+                    )}
 
-            { !isFormVisivel && (
-                <div className="button-menu">
-                     <Button 
-                        type="primary"
-                        icon={<FaFilter />}
-                        onClick={() => setIsFormFilterVisible(!isFormFilterVisible)}
-                    >
-                        Filtrar
-                    </Button>
-                    <div className="grouped-buttons"> 
-                        <Button 
-                            type="primary"
-                            icon={<FaPlus />}
-                            onClick={() => handleCriarFluxo()} 
-                        >
-                                Criar fluxo
-                        </Button>
-                    </div>
-                </div>
-            )}
+                    {isSaveFormVisible && actionForm==='update' && (
+                        <span className="subtitle"> / Atualizar fluxo</span>
+                    )}
 
-            {isFormFilterVisible && (
-                <div className="pa-20" style={{width: '50%'}}> 
-                    <Form form={form} className="global-form" onFinish={handleBuscarFluxo} layout="vertical">
-                        <Form.Item name="nome" label="Filtrar fluxo">
-                            <Input name="nome" placeholder="pesquise pelo nome do fluxo" />
-                        </Form.Item>
-
-                        <Space>
-                            <Button onClick={handleCancelar}> Cancelar </Button>
-                            <Button type="primary" htmlType="submit"> Filtrar </Button>
-                        </Space>
-                    </Form>
-
-                </div>
-
+                </h2>
+            </SectionHeader>
                 
+            {!isSaveFormVisible && (
+                <div 
+                    style={{
+                        display: 'flex', 
+                        justifyContent: 'space-between', 
+                        paddingTop: '30px', 
+                        paddingBottom: '30px',
+                    }}>
+                    <Search
+                        style={{width: '500px'}}
+                        placeholder="pesquise pelo nome"
+                        allowClear
+                        enterButton="Pesquisar"
+                        size="middle"
+                        onSearch={handleBuscarFluxo}
+                    />
+
+                    <Button 
+                        type="primary"
+                        icon={<FaPlus />}
+                        onClick={() => handleCriarFluxo()} 
+                    >
+                        Criar fluxo
+                    </Button>
+                </div>
             )}
 
-            <div className="pa-20"> 
-                { isFormVisivel ? 
+            <SectionContent>
+                { isSaveFormVisible ? 
                     (
                         <FormFluxo 
                             onSubmit={handleSalvarFluxo}
@@ -186,13 +184,10 @@ const TabGerenciarFluxos = () => {
                         <TableFluxos columns={columnsTableFluxos} data={fluxos} />
                     )
                 }
-            </div>
+            </SectionContent>
 
-            
         </div>
-           
-    )
-    
+    ) 
 }
 
 export default TabGerenciarFluxos;

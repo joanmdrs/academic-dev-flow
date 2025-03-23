@@ -1,8 +1,9 @@
-.section-header h2 {
+.section-header .title {
     margin: 0;
     font-family: 'Nunito', sans-serif;
 }
 
-.section-header span {
+.section-header .subtitle {
+    font-size: 16px;
 }
 
