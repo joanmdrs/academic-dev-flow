@@ -79,7 +79,7 @@ const Feedback = ({grupo}) => {
         if (actionForm === 'create'){
             await cadastrarFeedback(dados)
         } else if (actionForm === 'update'){
-            await atualizarFeedback(dados, dadosFeedback.id)
+            await atualizarFeedback(dadosFeedback.id, dados)
         }
         await handleReload()
     }

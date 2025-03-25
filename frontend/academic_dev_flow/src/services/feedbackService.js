@@ -1,5 +1,4 @@
 import api from "../api/api";
-import { ERROR_MESSAGE_ON_CREATION, ERROR_MESSAGE_ON_DELETION, ERROR_MESSAGE_ON_SEARCHING, ERROR_MESSAGE_ON_UPDATE, SUCCESS_MESSAGE_ON_CREATION, SUCCESS_MESSAGE_ON_DELETION, SUCCESS_MESSAGE_ON_UPDATE } from "./messages";
 import { handleError, handleSuccess } from "./utils";
 
 export const cadastrarFeedback = async (formData) => {
@@ -13,7 +12,7 @@ export const cadastrarFeedback = async (formData) => {
 
 export const atualizarFeedback = async (idFeedback, formData) => {
     try {
-        const response = await api.patch('/feedback/atualizar/', formData, {params: {id_feedback: idFeedback}})
+        const response = await api.patch('/feedback/atualizar/', formData,  {params: {id_feedback: idFeedback}})
         return handleSuccess(response, 'Feedback atualizado com sucesso!')
     } catch (error) {
         return handleError(error, 'Falha ao tentar atualizar o feedback!')
