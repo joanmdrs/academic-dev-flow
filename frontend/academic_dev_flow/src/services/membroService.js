@@ -1,7 +1,7 @@
 import { NotificationManager } from "react-notifications";
 import api from "../api/api";
 import { handleError, handleSuccess } from "./utils";
-import { ERROR_MESSAGE_ON_DELETION, ERROR_MESSAGE_ON_SEARCHING } from "./messages";
+import { ERROR_MESSAGE_ON_SEARCHING } from "./messages";
 
 export const listarGrupos = async () => {
     try {
@@ -14,8 +14,6 @@ export const listarGrupos = async () => {
 
 export const criarMembro = async (dados) => {
 
-    const avatar = dados.avatar && dados.avatar.file ? dados.avatar.file.originFileObj : null;
-
     const dadosEnviar = {
         usuario: {
             username: dados.username,
@@ -23,7 +21,7 @@ export const criarMembro = async (dados) => {
         },
         membro: {
             nome: dados.nome,
-            data_nascimento: dados.data_nascimento,
+            data_nascimento: dados.data_nascimento ? dados.data_nascimento : null,
             sexo: dados.sexo,
             telefone: dados.telefone,
             email: dados.email,
@@ -32,25 +30,12 @@ export const criarMembro = async (dados) => {
             nome_github: dados.nome_github,
             email_github: dados.email_github,
             usuario_github: dados.usuario_github,
-            grupo: dados.grupo,
-            avatar: avatar 
+            grupo: dados.grupo
         }
     };
 
-    try {
-        const formData = new FormData();
-        formData.append('usuario', JSON.stringify(dadosEnviar.usuario));  // Convertendo dados.usuario para JSON
-        formData.append('membro', JSON.stringify(dadosEnviar.membro));    // Convertendo dados.membro para JSON
-
-        if (avatar) {
-            formData.append('avatar', avatar);  // Envia o arquivo de avatar se presente
-        }
-        const response = await api.post('/membro/cadastrar/', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        });
-
+    try{
+        const response = await api.post('/membro/cadastrar/', dadosEnviar)
         return handleSuccess(response, "Membro criado com sucesso.");
     } catch (error) {
         if (error.response && error.response.status === 409) {
@@ -130,7 +115,7 @@ export const atualizarMembro = async (idMembro, dados) => {
         },
         membro : {
             nome: dados.nome,
-            data_nascimento: dados.data_nascimento,
+            data_nascimento: dados.data_nascimento ? dados.data_nascimento : null,
             sexo: dados.sexo, 
             telefone: dados.telefone,
             email: dados.email,
