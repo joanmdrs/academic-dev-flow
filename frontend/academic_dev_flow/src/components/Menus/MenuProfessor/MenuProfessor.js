@@ -125,8 +125,8 @@ const MenuProfessor = () => {
                         <Link to="/professor/membros/gerenciar">Membros</Link>
                     </Menu.Item>
 
-                    <Menu.Item key="/professor/membros">
-                        <Link to="/professor/membros">Equipes</Link>
+                    <Menu.Item key="/professor/membros/equipes">
+                        <Link to="/professor/membros/equipes">Equipes</Link>
                     </Menu.Item>
 
                     <Menu.Item key="/professor/membros/funcoes">

@@ -1,11 +1,11 @@
-import { Button, Flex, Modal, Space, Tooltip } from 'antd'
-import React, { act, useEffect, useState } from 'react'
+import { Breadcrumb, Button, Modal, Space, Tooltip } from 'antd'
+import React, { useEffect, useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
 import FormRelease from '../../components/FormRelease/FormRelease'
 import { useContextoRelease } from '../../context/ContextoRelease'
 import TableRelease from '../../components/TableRelease/TableRelease'
 import { formatDate } from '../../../../services/utils'
-import { atualizarRelease, buscarReleasesDosProjetosDoMembro, criarRelease, excluirReleases, filtrarReleasesPeloNomeEPeloProjeto } from '../../../../services/releaseService'
+import { atualizarRelease, buscarReleasesDosProjetosDoMembro, criarRelease, excluirReleases } from '../../../../services/releaseService'
 import { useContextoGlobalUser } from '../../../../context/ContextoGlobalUser/ContextoGlobalUser'
 import FormFilterReleases from '../../components/FormFilterReleases/FormFilterReleases'
 import SelectProject from '../../components/SelectProject/SelectProject'
@@ -15,14 +15,14 @@ import { NotificationManager } from 'react-notifications'
 import RenderStatus from '../../../../components/RenderStatus/RenderStatus'
 import { optionsStatusReleases } from '../../../../services/optionsStatus'
 import { IoMdCreate, IoMdTrash } from 'react-icons/io'
-import { MdFilterAlt } from 'react-icons/md'
 import Section from '../../../../components/Section/Section'
 import SectionHeader from '../../../../components/SectionHeader/SectionHeader'
 import SectionFilters from '../../../../components/SectionFilters/SectionFilters'
 import SectionContent from '../../../../components/SectionContent/SectionContent'
+import { HomeOutlined } from '@ant-design/icons'
 
 
-const Release = () => {
+const Release = ({grupo}) => {
 
     const {usuario} = useContextoGlobalUser()
 
@@ -220,14 +220,24 @@ const Release = () => {
     return (
         <Section>
             <SectionHeader>
-                <h2 className='title'> Releases 
-                    { isFormVisible && actionForm === 'create' && (
-                        <span className='subtitle'> / Cadastrar release</span>
-                    )}
-                    { isFormVisible && actionForm === 'update' && (
-                        <span className='subtitle'> / Atualizar release </span>
-                    )}
-                </h2> 
+                <Breadcrumb
+                    items={[
+                        {
+                            href: `/academicflow/${grupo}/home`,
+                            title: <HomeOutlined />,
+                        },
+                        {
+                            href: `/academicflow/${grupo}/cronograma/releases`,
+                            title: 'Releases',
+                        },
+                        ...(isFormVisible && actionForm === 'create'
+                            ? [{ title: 'Cadastrar' }]
+                            : []),
+                        ...(isFormVisible && actionForm === 'update'
+                            ? [{ title: 'Atualizar' }]
+                            : []),
+                    ]}
+                />
                 
 
                 {!isFormVisible && (

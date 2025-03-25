@@ -149,7 +149,6 @@ const AdminProjetos = () => {
                 name="name-projeto"
             />
 
-
             <Titulo 
                 titulo="Projetos"
                 paragrafo="Administração > Gerenciar projetos"

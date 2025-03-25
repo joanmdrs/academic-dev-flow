@@ -25,7 +25,6 @@ class MembroProjetoSerializer(serializers.ModelSerializer):
     nome_fluxo = serializers.SerializerMethodField()
     quantidade_tarefas = serializers.SerializerMethodField()
     quantidade_artefatos = serializers.SerializerMethodField()
-    avatar = serializers.ImageField(required=False)
     funcoes_membro = serializers.SerializerMethodField()
     equipe = serializers.SerializerMethodField()
     dados_projeto = serializers.SerializerMethodField()
@@ -49,7 +48,6 @@ class MembroProjetoSerializer(serializers.ModelSerializer):
                   'quantidade_tarefas',
                   'id_fluxo',
                   'nome_fluxo',
-                  'avatar',
                   'funcoes_membro',
                   'equipe',
                   'dados_projeto'
@@ -105,12 +103,6 @@ class MembroProjetoSerializer(serializers.ModelSerializer):
     def get_quantidade_artefatos(self, obj):
         quantidade_artefatos = Artefato.objects.filter(projeto=obj.projeto).count()
         return quantidade_artefatos
-    
-    def get_avatar(self, obj): 
-        if hasattr(obj, "membro") and obj.membro and obj.membro.avatar:
-            return obj.membro.avatar
-        return None  # Substitua por uma URL de avatar padrão ou retorne None
-
     
     def get_funcoes_membro(self, obj):
         funcoes_membro = FuncaoMembro.objects.filter(membro_projeto=obj.id).order_by("id")

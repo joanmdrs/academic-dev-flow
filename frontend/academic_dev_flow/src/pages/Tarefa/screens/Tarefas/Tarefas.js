@@ -1,4 +1,4 @@
-import { Button, Input, Modal, Space, Spin, Tabs } from "antd";
+import { Breadcrumb, Button, Input, Modal, Space, Spin, Tabs } from "antd";
 import Item from "antd/es/list/Item";
 import React, { useEffect, useState } from "react";
 import { FaCalendar, FaListUl, FaPlus, FaTasks } from "react-icons/fa";
@@ -26,10 +26,11 @@ import Section from "../../../../components/Section/Section";
 import SectionHeader from "../../../../components/SectionHeader/SectionHeader";
 import SectionFilters from "../../../../components/SectionFilters/SectionFilters";
 import SectionContent from "../../../../components/SectionContent/SectionContent";
+import { HomeOutlined } from "@ant-design/icons";
 
 const {Search} = Input 
 
-const Tarefas = () => {
+const Tarefas = ({grupo}) => {
 
     const [isFormVisible, setIsFormVisible] = useState(false)   
     const [isTabsVisible, setIsTabsVisible] = useState(true)
@@ -261,16 +262,26 @@ const Tarefas = () => {
             />}
 
             <SectionHeader>
-                <h2 className="title"> Tarefas 
-                    {isFormVisible && acaoForm === 'criar' && (
-                        <span className="subtitle"> / Cadastrar tarefa</span>
-                    )}
+                
+                <Breadcrumb
+                    items={[
+                        {
+                            href: `/academicflow/${grupo}/home`,
+                            title: <HomeOutlined />,
+                        },
+                        {
+                            href: `/academicflow/${grupo}/tarefas`,
+                            title: 'Tarefas',
+                        },
+                        ...(isFormVisible && acaoForm === 'criar'
+                            ? [{ title: 'Cadastrar' }]
+                            : []),
+                        ...(isFormVisible && acaoForm === 'atualizar'
+                            ? [{ title: 'Atualizar' }]
+                            : []),
+                    ]}
+                />
 
-                    {isFormVisible && acaoForm === 'atualizar' && (
-                        <span className="subtitle"> / Atualizar tarefa </span>
-                    )}
-
-                </h2>
                 {!isFormVisible && (
                     <Button
                         onClick={() => handleAdicionarTarefa()} 

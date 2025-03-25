@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { act, useEffect, useState } from "react";
 import { atualizarFluxo, buscarFluxoPeloNome, criarFluxo, excluirFluxo, listarFluxos } from "../../../../../services/fluxoService";
 import FormFluxo from "../../../components/FormFluxo/FormFluxo";
-import { Button, Form, Input, Modal, Space, Tooltip } from "antd";
-import { FaFilter, FaPlus, FaTrash } from "react-icons/fa";
+import { Breadcrumb, Button, Input, Modal, Space, Tooltip } from "antd";
+import { FaPlus } from "react-icons/fa";
 import { useContextoFluxo } from "../../../context/ContextoFluxo";
 import TableFluxos from "../../../components/TableFluxos/TableFluxos";
 import { IoMdCreate, IoMdTrash } from "react-icons/io";
-import { useForm } from "antd/es/form/Form";
-import SectionFilters from "../../../../../components/SectionFilters/SectionFilters";
 import SectionHeader from "../../../../../components/SectionHeader/SectionHeader";
 import SectionContent from "../../../../../components/SectionContent/SectionContent";
+import { HomeOutlined } from "@ant-design/icons";
 const { Search } = Input;
 
-const TabGerenciarFluxos = () => {
+const TabGerenciarFluxos = ({grupo}) => {
 
     const {dadosFluxo, setDadosFluxo} = useContextoFluxo()
     const [actionForm, setActionForm] = useState("create");
@@ -131,16 +130,24 @@ const TabGerenciarFluxos = () => {
     return (
         <div>
             <SectionHeader>
-                <h2 className="title"> Fluxos 
-                    {isSaveFormVisible && actionForm==='create' && (
-                        <span className="subtitle"> / Cadastrar fluxo</span>
-                    )}
-
-                    {isSaveFormVisible && actionForm==='update' && (
-                        <span className="subtitle"> / Atualizar fluxo</span>
-                    )}
-
-                </h2>
+                <Breadcrumb
+                    items={[
+                        {
+                            href: `/academicflow/${grupo}/home`,
+                            title: <HomeOutlined />,
+                        },
+                        {
+                            href: `/academicflow/${grupo}/fluxos/gerenciar`,
+                            title: 'Fluxos',
+                        },
+                        ...(isSaveFormVisible && actionForm === 'create'
+                            ? [{ title: 'Cadastrar' }]
+                            : []),
+                        ...(isSaveFormVisible && actionForm === 'update'
+                            ? [{ title: 'Atualizar' }]
+                            : []),
+                    ]}
+                />
             </SectionHeader>
                 
             {!isSaveFormVisible && (

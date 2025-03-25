@@ -11,7 +11,7 @@ import SectionContent from "../../../../components/SectionContent/SectionContent
 
 const { TabPane } = Tabs;
 
-const TabsFluxo = () => {
+const TabsFluxo = ({grupo}) => {
     
     const [current, setCurrent] = useState("1")
 
@@ -25,10 +25,10 @@ const TabsFluxo = () => {
                     onChange={setCurrent} 
                 >
                     <TabPane tab="Fluxos" key="1">
-                        <TabGerenciarFluxos />
+                        <TabGerenciarFluxos grupo={grupo} />
                     </TabPane>
                     <TabPane tab="Etapas" key="2">
-                        <TabVincularEtapas />
+                        <TabVincularEtapas grupo={grupo}/>
                     </TabPane>
                 </Tabs>
             </SectionContent>

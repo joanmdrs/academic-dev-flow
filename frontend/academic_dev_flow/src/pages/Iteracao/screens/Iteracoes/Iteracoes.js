@@ -1,4 +1,4 @@
-import { Button, Flex, Modal, Space, Tooltip } from 'antd'
+import { Breadcrumb, Button, Flex, Modal, Space, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
 import { useContextoGlobalUser } from '../../../../context/ContextoGlobalUser/ContextoGlobalUser'
@@ -21,8 +21,9 @@ import Section from '../../../../components/Section/Section'
 import SectionHeader from '../../../../components/SectionHeader/SectionHeader'
 import SectionFilters from '../../../../components/SectionFilters/SectionFilters'
 import SectionContent from '../../../../components/SectionContent/SectionContent'
+import { HomeOutlined } from '@ant-design/icons'
 
-const Iteracoes = () => {
+const Iteracoes = ({grupo}) => {
 
     const {usuario} = useContextoGlobalUser()
 
@@ -235,15 +236,24 @@ const Iteracoes = () => {
     return (
         <Section>
             <SectionHeader>
-                <h2 className='title'> Iteração 
-                    {isFormVisible && actionForm === 'create' && (
-                        <span className='subtitle'> / Cadastrar iteração</span>
-                    )}
-
-                    {isFormVisible && actionForm === 'update' && (
-                        <span className='subtitle'> / Atualizar iteração</span>
-                    )}
-                </h2>
+                <Breadcrumb
+                    items={[
+                        {
+                            href: `/academicflow/${grupo}/home`,
+                            title: <HomeOutlined />,
+                        },
+                        {
+                            href: `/academicflow/${grupo}/cronograma/iteracoes`,
+                            title: 'Iterações',
+                        },
+                        ...(isFormVisible && actionForm === 'create'
+                            ? [{ title: 'Cadastrar' }]
+                            : []),
+                        ...(isFormVisible && actionForm === 'update'
+                            ? [{ title: 'Atualizar' }]
+                            : []),
+                    ]}
+                />
 
                 <Space>
                     <Button 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { atualizarEtapa, buscarEtapaPeloNome, criarEtapa, excluirEtapas, listarEtapas } from "../../../../services/etapaService";
 import FormEtapa from "../../components/FormEtapa/FormEtapa";
 import { useContextoEtapa } from "../../context/ContextoEtapa";
-import { Button, Input, Modal, Space, Tooltip } from "antd";
+import { Breadcrumb, Button, Input, Modal, Space, Tooltip } from "antd";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import TableEtapas from "../../components/TableEtapas/TableEtapas";
 import Section from "../../../../components/Section/Section";
@@ -10,9 +10,10 @@ import SectionHeader from "../../../../components/SectionHeader/SectionHeader";
 import SectionFilters from "../../../../components/SectionFilters/SectionFilters";
 import SectionContent from "../../../../components/SectionContent/SectionContent";
 import { IoMdCreate, IoMdTrash } from "react-icons/io";
+import { HomeOutlined } from "@ant-design/icons";
 
 const {Search} = Input
-const GerenciarEtapas = () => {
+const GerenciarEtapas = ({grupo}) => {
 
     const {dadosEtapa, setDadosEtapa, etapasSelecionadas, setEtapasSelecionadas} = useContextoEtapa()
     const [etapas, setEtapas] = useState([])
@@ -142,16 +143,24 @@ const GerenciarEtapas = () => {
     return (
         <Section>
             <SectionHeader>
-                <h2 className="title">
-                    Etapas 
-                    {isSaveFormVisible && actionForm === 'create' && (
-                        <span className="subtitle"> / Cadastrar etapa</span>
-                    )}
-
-                    {isSaveFormVisible && actionForm === 'update' && (
-                        <span className="subtitle"> / Atualizar etapa </span>
-                    )}
-                </h2>
+                <Breadcrumb
+                    items={[
+                        {
+                            href: `/academicflow/${grupo}/home`,
+                            title: <HomeOutlined />,
+                        },
+                        {
+                            href: `/academicflow/${grupo}/etapas`,
+                            title: 'Etapas',
+                        },
+                        ...(isSaveFormVisible && actionForm === 'create'
+                            ? [{ title: 'Cadastrar' }]
+                            : []),
+                        ...(isSaveFormVisible && actionForm === 'update'
+                            ? [{ title: 'Atualizar' }]
+                            : []),
+                    ]}
+                />
 
                 <Space>
                     <Button

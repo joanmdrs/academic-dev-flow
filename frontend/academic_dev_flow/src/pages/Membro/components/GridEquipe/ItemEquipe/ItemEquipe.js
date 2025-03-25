@@ -3,6 +3,7 @@ import React from "react";
 import { getRandomColor, limitarCaracteres } from "../../../../../services/utils";
 import { IoMdClose } from "react-icons/io";
 import RenderCategoria from "../../../../../components/RenderCategoria/RenderCategoria";
+import { UserOutlined } from "@ant-design/icons";
 
 const ItemEquipe = ({data, onDelete}) => {
 
@@ -44,9 +45,12 @@ const ItemEquipe = ({data, onDelete}) => {
                 <Avatar 
                     style={{
                         width: '60px', 
-                        height: '60px'
+                        height: '60px',
+                        backgroundColor: getRandomColor()
                     }} 
-                    src={`https://avatar.iran.liara.run/public/${data.avatar}`} />
+                >
+                    {data.nome_membro ? data.nome_membro.charAt(0).toUpperCase() : <UserOutlined />}
+                </Avatar>
             </div>
 
             <div> 

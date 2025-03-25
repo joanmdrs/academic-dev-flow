@@ -10,7 +10,6 @@ const FormTag = ({onSubmit, onCancel}) => {
     const [corClara, setCorClara] = useState('')
     const {dadosTag} = useContextoTag()
     const [form] = Form.useForm()
-    const [titulo, setTitulo] = useState("Cadastrar Tag")
 
     useEffect(() => {
         const fetchData = async () => {
@@ -18,11 +17,9 @@ const FormTag = ({onSubmit, onCancel}) => {
             if (dadosTag !== null) {
                 form.setFieldsValue(dadosTag)
                 setCor(dadosTag.cor)
-                setTitulo("Atualizar Tag")
 
             } else {
                 form.resetFields()
-                setTitulo("Cadastrar Tag")
                 handleGerarCor()
             }
         }
@@ -54,9 +51,6 @@ const FormTag = ({onSubmit, onCancel}) => {
             layout='vertical' 
             onFinish={handleFormSubmit}
         >
-            <Form.Item>
-                <h4 className='global-title'> {titulo} </h4>
-            </Form.Item>
 
             <Form.Item label="Nome" name="nome" rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}>
                 <Input type='text' name='nome' placeholder='nome'/> 

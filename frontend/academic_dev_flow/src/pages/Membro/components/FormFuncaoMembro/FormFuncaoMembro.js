@@ -73,9 +73,6 @@ const FormFuncaoMembro = ({ onCancel, onSubmit }) => {
 
     return (
         <Form className="global-form" layout="vertical" onFinish={onSubmit} form={form}>
-            <Form.Item>
-                <h4 className='global-title'> {titulo} </h4>
-            </Form.Item>
 
             <Form.Item
                 label="Projeto"

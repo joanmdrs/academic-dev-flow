@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, Space, Input, Modal } from 'antd';
+import { Button, Form, Space, Input, Modal, Breadcrumb } from 'antd';
 import Titulo from "../../../../components/Titulo/Titulo";
 import { FaFilter, FaPlus, FaTrash } from "react-icons/fa6";
 import { useContextoTag } from "../../context/ContextoTag";
 import { atualizarTag, buscarTagPeloNome, criarTag, excluirTags, listarTags } from "../../../../services/tagService";
 import FormTag from "../../components/FormTag/FormTag";
 import TableTags from "../../components/TableTags/TableTags";
+import Section from "../../../../components/Section/Section";
+import SectionHeader from "../../../../components/SectionHeader/SectionHeader";
+import { HomeOutlined } from "@ant-design/icons";
+import SectionFilters from "../../../../components/SectionFilters/SectionFilters";
+import SectionContent from "../../../../components/SectionContent/SectionContent";
 
-const GerenciarTags = () => {
+const {Search} = Input 
+
+const GerenciarTags = ({grupo}) => {
     const [isFormVisivel, setIsFormVisivel] = useState(false);
     const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false);
     const [acaoForm, setAcaoForm] = useState('criar');
@@ -61,8 +68,8 @@ const GerenciarTags = () => {
         handleReload();
     };
 
-    const handleBuscarTagPeloNome = async (values) => {
-        const response = await buscarTagPeloNome(values.nome_tag); 
+    const handleBuscarTagPeloNome = async (value) => {
+        const response = await buscarTagPeloNome(value); 
         if (!response.error){
             setTags(response.data);
         }
@@ -98,78 +105,71 @@ const GerenciarTags = () => {
     }, []);
 
     return (
-        <div className="content">
-            <Titulo 
-                titulo='Gerenciar Tags'
-                paragrafo='Tarefas > Tags > Gerenciar tags'
-            />
+        <Section>
+            <SectionHeader>
+                <Breadcrumb
+                    items={[
+                        {
+                            href: `/academicflow/${grupo}/home`,
+                            title: <HomeOutlined />,
+                        },
+                        {
+                            href: `/academicflow/${grupo}/tags`,
+                            title: 'Tags',
+                        },
+                        ...(isFormVisivel && acaoForm === 'criar'
+                            ? [{ title: 'Cadastrar' }]
+                            : []),
+                        ...(isFormVisivel && acaoForm === 'atualizar'
+                            ? [{ title: 'Atualizar' }]
+                            : []),
+                    ]}
+                />
 
-            { !isFormVisivel && (
-                <div className="button-menu">
+                {!isFormVisivel && (
                     <Button 
-                        icon={<FaFilter />}
-                        type="primary"
-                        onClick={() => setIsFormBuscarVisivel(!isFormBuscarVisivel)}
-                    >
-                        Filtrar
+                        icon={<FaPlus />} 
+                        type="primary" 
+                        onClick={handleAdicionarTag}
+                    > 
+                        Criar Nova Tag 
                     </Button>
+                )}
 
-                    <div className="grouped-buttons"> 
-                        <Button 
-                            icon={<FaPlus />} 
-                            type="primary" 
-                            onClick={handleAdicionarTag}
-                            disabled={isPlusBtnEnabled}
-                        > 
-                            Criar Nova Tag 
-                        </Button>
+            </SectionHeader>
 
+            {!isFormVisivel && (
+                <SectionFilters>
+                    <Search
+                        style={{width: '500px'}}
+                        placeholder="pesquise pelo nome"
+                        allowClear
+                        enterButton="Pesquisar"
+                        size="middle"
+                        onSearch={handleBuscarTagPeloNome}
+                    />
+                    {tagsSelect.length !== 0 && (
                         <Button
-                            danger
-                            disabled={tagsSelect.length === 0}
-                            onClick={() => handleExcluirManyTag()}
                             icon={<FaTrash />}
-                        > 
+                            danger
+                            type="primary"
+                            onClick={() => handleExcluirManyTag()}
+                        >
                             Excluir
                         </Button>
-                    </div> 
-                </div>
+                    )}
+                </SectionFilters>
             )}
 
-            { isFormBuscarVisivel && (
-                <div className="pa-20" style={{width: '50%' }}>
-                    <Form className="global-form" layout="vertical" onFinish={handleBuscarTagPeloNome}>
-                        <Form.Item 
-                            name="nome_tag"
-                            label="Nome" 
-                            rules={[{ required: true, message: 'Por favor, insira o nome da tag!' }]}
-                        >
-                            <Input 
-                                type="text" 
-                                name="nome_tag" 
-                                placeholder="informe o nome da tag"
-                            />
-                        </Form.Item>
-
-                        <Space>
-                            <Button htmlType="button" onClick={handleCancelar}> Cancelar </Button>
-                            <Button type="primary" htmlType="submit">
-                                Filtrar
-                            </Button>
-                        </Space>
-                    </Form>
-                </div>
-            )}
-
-            <div className="pa-20">
+            <SectionContent>
                 { isFormVisivel ? (
                     <FormTag onSubmit={handleSalvarTag} onCancel={handleCancelar}/>
                 ) : (
                     <TableTags data={tags} onEdit={handleAtualizarTag} onDelete={handleExcluirOneTag}/>
                 )}
-            </div>
+            </SectionContent>
 
-        </div>
+        </Section>
     );
 };
 

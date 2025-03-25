@@ -126,6 +126,18 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
             return {'error': 'Selecione um projeto'}
         }
         const dadosForm = form.getFieldsValue();
+
+        if (!dadosForm.data_inicio) {
+            dadosForm.data_inicio = null; // ou remova completamente se o backend aceitar sem essa chave
+        }
+
+        if (!dadosForm.data_termino) {
+            dadosForm.data_termino = null; // ou remova completamente se o backend aceitar sem essa chave
+        }
+
+        if (!dadosForm.data_conclusao) {
+            dadosForm.data_conclusao = null
+        }
         // const membrosSelecionados = dadosForm.membros;
         // const usuariosGithub = optionsMembros
         //     .filter((option) => membrosSelecionados.includes(option.value))

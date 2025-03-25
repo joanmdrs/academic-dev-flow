@@ -1,4 +1,4 @@
-import { Button, Space, Input, Modal, Flex, Tabs } from "antd";
+import { Button, Space, Input, Modal, Flex, Tabs, Breadcrumb } from "antd";
 import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import FormFilterArtefatos from "../../components/FormFilterArtefatos/FormFilterArtefatos";
@@ -23,10 +23,11 @@ import Section from "../../../../components/Section/Section";
 import SectionHeader from "../../../../components/SectionHeader/SectionHeader";
 import SectionFilters from "../../../../components/SectionFilters/SectionFilters";
 import SectionContent from "../../../../components/SectionContent/SectionContent";
+import { HomeOutlined } from "@ant-design/icons";
 
 const {TabPane} = Tabs
 
-const Artefatos = () => {
+const Artefatos = ({grupo}) => {
     const {usuario} = useContextoGlobalUser()
     const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
     const {artefatos, setArtefatos, dadosArtefato, setDadosArtefato} = useContextoArtefato()
@@ -224,14 +225,24 @@ const Artefatos = () => {
             />}
 
             <SectionHeader>
-                <h2 className="title"> Artefatos
-                    {isFormVisible && actionForm==="create" && (
-                        <span className="subtitle"> / Cadastrar artefato</span>
-                    )}
-                    {isFormVisible && actionForm==="update" && (
-                        <span className="subtitle"> / Atualizar artefato </span>
-                    )}
-                </h2>
+                <Breadcrumb
+                    items={[
+                        {
+                            href: `/academicflow/${grupo}/home`,
+                            title: <HomeOutlined />,
+                        },
+                        {
+                            href: `/academicflow/${grupo}/artefatos`,
+                            title: 'Artefatos',
+                        },
+                        ...(isFormVisible && actionForm === 'create'
+                            ? [{ title: 'Cadastrar' }]
+                            : []),
+                        ...(isFormVisible && actionForm === 'update'
+                            ? [{ title: 'Atualizar' }]
+                            : []),
+                    ]}
+                />
                 {!isFormVisible && (
                     <Button
                         onClick={() => handleAdicionarArtefato()} 

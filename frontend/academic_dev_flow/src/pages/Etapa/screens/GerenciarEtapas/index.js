@@ -19,7 +19,7 @@ const ScreenGerenciarEtapas = ({grupo}) => {
                 <MyHeader/>
                 <Content>
                     <ProviderEtapa>
-                        <GerenciarEtapas />
+                        <GerenciarEtapas  grupo={grupo}/>
                     </ProviderEtapa>
                 </Content>
             </Layout>

@@ -19,7 +19,7 @@ const ScreenGerenciarMembros = ({grupo}) => {
                 <MyHeader/>
                 <Content>
                     <MembroProvider>
-                        <GerenciarMembros />
+                        <GerenciarMembros grupo={grupo} />
                     </MembroProvider>
                 </Content>
             </Layout>

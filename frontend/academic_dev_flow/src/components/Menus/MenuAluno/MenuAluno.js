@@ -121,8 +121,8 @@ const MenuAluno = () => {
                     icon={<LuUsers size="20px" />}
                     title="Membros"
                 >
-                    <Menu.Item key="/aluno/membros">
-                        <Link to="/aluno/membros">Equipes</Link>
+                    <Menu.Item key="/aluno/membros/equipes">
+                        <Link to="/aluno/membros/equipes">Equipes</Link>
                     </Menu.Item>
 
                     <Menu.Item key="/aluno/membros/funcoes">

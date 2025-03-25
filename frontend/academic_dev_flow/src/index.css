@@ -21,10 +21,15 @@ body {
   min-height: 100vh;
 }
 
-.ant-table-thead .ant-table-cell {
+.ant-table {
+  border: 1px solid #ddd;
+}
+
+/* .ant-table-thead .ant-table-cell {
   background-color: var(--second-color)  !important;
   color: #FFFFFF !important;
-}
+} */
+
 .ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector {
   border: 1px solid var(--border-color);
   color: #585858 !important;

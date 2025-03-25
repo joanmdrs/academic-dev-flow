@@ -13,11 +13,10 @@ class MembroSerializer(serializers.ModelSerializer):
     nome_grupo = serializers.SerializerMethodField()
     username = serializers.SerializerMethodField()
     password = serializers.SerializerMethodField()
-    avatar = serializers.ImageField(required=False)
 
     class Meta:
         model = Membro
-        fields = ['id', 'nome', 'data_nascimento', 'sexo', 'telefone', 'email', 'linkedin', 'lattes', 'nome_github', 'email_github', 'usuario_github', 'usuario', 'username', 'password', 'grupo', 'nome_grupo', 'avatar']
+        fields = ['id', 'nome', 'data_nascimento', 'sexo', 'telefone', 'email', 'linkedin', 'lattes', 'nome_github', 'email_github', 'usuario_github', 'usuario', 'username', 'password', 'grupo', 'nome_grupo']
 
     def get_grupo(self, obj):
         if obj.usuario and obj.usuario.groups.exists():

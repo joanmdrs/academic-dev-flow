@@ -3,6 +3,8 @@ import React from "react";
 import RenderEmpty from "../../../../components/Empty/Empty";
 import RenderCategoria from "../../../../components/RenderCategoria/RenderCategoria";
 import { IoIosCheckmark, IoIosClose, IoMdTrash } from "react-icons/io";
+import { UserOutlined } from "@ant-design/icons";
+import { getRandomColor } from "../../../../services/utils";
 
 const TableFuncoes = ({data, onDelete, onDisable}) => {
 
@@ -24,8 +26,9 @@ const TableFuncoes = ({data, onDelete, onDisable}) => {
             dataIndex: 'membro',
             render: (_, record) => (
                 <Space>
-                     <Avatar src={`https://avatar.iran.liara.run/public/${record.avatar_membro}`} />
-                     <span> {record.nome_membro} </span>
+                    <Avatar style={{backgroundColor: getRandomColor()}}>
+                        {record?.nome_membro ? record.nome_membro.charAt(0).toUpperCase() : <UserOutlined />}
+                    </Avatar>
                 </Space> 
             )
         }, 

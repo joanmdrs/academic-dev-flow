@@ -3,17 +3,18 @@ import { atualizarMembro, buscarMembroPeloNome, criarMembro, excluirMembro, list
 import { useMembroContexto } from "../../context/MembroContexto"
 import { buscarUsuarioPeloId } from "../../../../services/usuarioService"
 import FormMembro from "../../components/FormMembro/FormMembro"
-import { Button, Input, Modal, Space } from "antd"
+import { Breadcrumb, Button, Input, Modal, Space } from "antd"
 import { FaPlus, FaTrash } from "react-icons/fa"
 import Section from "../../../../components/Section/Section"
 import SectionHeader from "../../../../components/SectionHeader/SectionHeader"
 import SectionContent from "../../../../components/SectionContent/SectionContent"
 import TableMembros from "../../components/TableMembros/TableMembros"
 import SectionFilters from "../../../../components/SectionFilters/SectionFilters"
+import { HomeOutlined } from "@ant-design/icons"
 
 const { Search } = Input;
 
-const GerenciarMembros = () => {
+const GerenciarMembros = ({grupo}) => {
 
     const {dadosMembro, setDadosMembro, setMembros, membrosSelecionados} = useMembroContexto()
     const [acaoForm, setAcaoForm] = useState('criar')
@@ -104,17 +105,24 @@ const GerenciarMembros = () => {
         <Section> 
 
             <SectionHeader>
-                <h2> Membros 
-                    {isSaveFormVisible && acaoForm === "criar" && (
-                        <span style={{fontSize: '16px'}}> / Cadastrar membro </span>
-                    )}
-
-                    {isSaveFormVisible && acaoForm === 'atualizar' && (
-                        <span style={{fontSize: '16px'}}> / Atualizar membro </span>
-                    )}
-
-
-                </h2>
+                <Breadcrumb
+                    items={[
+                        {
+                            href: `/academicflow/${grupo}/home`,
+                            title: <HomeOutlined />,
+                        },
+                        {
+                            href: `/academicflow/${grupo}/membros`,
+                            title: 'Membros',
+                        },
+                        ...(isSaveFormVisible && acaoForm === 'criar'
+                            ? [{ title: 'Cadastrar' }]
+                            : []),
+                        ...(isSaveFormVisible && acaoForm === 'atualizar'
+                            ? [{ title: 'Atualizar' }]
+                            : []),
+                    ]}
+                />
 
                 { !isSaveFormVisible && (
                     <Space>

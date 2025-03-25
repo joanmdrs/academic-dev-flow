@@ -18,7 +18,7 @@ const ScreenTarefas = ({grupo}) => {
                 
                 <Content>
                     <ProviderTarefa>
-                        <Tarefas />
+                        <Tarefas grupo={grupo}/>
                     </ProviderTarefa>
                 </Content>
             </Layout>

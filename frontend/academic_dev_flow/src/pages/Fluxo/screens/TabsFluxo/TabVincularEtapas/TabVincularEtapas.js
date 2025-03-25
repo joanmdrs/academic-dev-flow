@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, Modal, Select, Space, Tooltip } from "antd";
+import { Breadcrumb, Button, Form, Modal, Select, Space, Tooltip } from "antd";
 import { listarFluxos } from "../../../../../services/fluxoService"; 
 
 import { useContextoFluxo } from "../../../context/ContextoFluxo";
@@ -12,8 +12,9 @@ import { NotificationManager } from "react-notifications";
 import { filterOption, limitarCaracteres } from "../../../../../services/utils";
 import SectionHeader from "../../../../../components/SectionHeader/SectionHeader";
 import SectionContent from "../../../../../components/SectionContent/SectionContent";
+import { HomeOutlined } from "@ant-design/icons";
 
-const TabVincularEtapas = () => {
+const TabVincularEtapas = ({grupo}) => {
 
     const [isSaveFormVisible, setIsSaveFormVisible] = useState(false)
     const [isTableVisible, setIsTableVisible] = useState(true)
@@ -168,16 +169,24 @@ const TabVincularEtapas = () => {
     return (
         <div>
             <SectionHeader>
-                <h2 className="title"> Etapas 
-                    {isSaveFormVisible && actionForm==='create' && (
-                        <span className="subtitle"> / Vincular etapa </span>
-                    )}
-
-                    {isSaveFormVisible && actionForm==='update' && (
-                        <span className="subtitle"> / Atualizar etapa</span>
-                    )}
-
-                </h2>
+                <Breadcrumb
+                    items={[
+                        {
+                            href: `/academicflow/${grupo}/home`,
+                            title: <HomeOutlined />,
+                        },
+                        {
+                            href: `/academicflow/${grupo}/fluxos/gerenciar`,
+                            title: 'Etapas por fluxo',
+                        },
+                        ...(isSaveFormVisible && actionForm === 'create'
+                            ? [{ title: 'Cadastrar' }]
+                            : []),
+                        ...(isSaveFormVisible && actionForm === 'update'
+                            ? [{ title: 'Atualizar' }]
+                            : []),
+                    ]}
+                />
             </SectionHeader>
 
             {!isSaveFormVisible && (

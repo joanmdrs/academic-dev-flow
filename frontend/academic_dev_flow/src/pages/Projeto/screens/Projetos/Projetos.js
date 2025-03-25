@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, Space, Tabs, Tooltip } from 'antd';
+import { Breadcrumb, Button, Modal, Space, Tabs, Tooltip } from 'antd';
 import { buscarProjetosDoMembro, criarMembroProjeto } from "../../../../services/membroProjetoService";
 import { useContextoGlobalUser } from "../../../../context/ContextoGlobalUser/ContextoGlobalUser";
 import TableProjetos from "../../components/TableProjetos/TableProjetos";
@@ -19,6 +19,7 @@ import FilterByFlow from '../../components/Filters/FilterByFlow/FilterByFlow';
 import SectionFilters from '../../../../components/SectionFilters/SectionFilters';
 import Section from '../../../../components/Section/Section';
 import { MdFilterAlt } from 'react-icons/md';
+import { HomeOutlined } from '@ant-design/icons';
 
 const {TabPane} = Tabs 
 
@@ -185,15 +186,24 @@ const Projetos = () => {
     return (
         <Section>
             <SectionHeader>
-                <h2> Projetos 
-                    {isSaveFormVisible && actionForm === "create" && (
-                            <span style={{fontSize: '16px'}}> / Cadastrar projeto </span>
-                        )}
-
-                        {isSaveFormVisible && actionForm === 'update' && (
-                            <span style={{fontSize: '16px'}}> / Atualizar projeto </span>
-                        )}
-                </h2> 
+                <Breadcrumb
+                    items={[
+                        {
+                            href: `/academicflow/${grupo}/home`,
+                            title: <HomeOutlined />,
+                        },
+                        {
+                            href: `/academicflow/${grupo}/projetos`,
+                            title: 'Projetos',
+                        },
+                        ...(isSaveFormVisible && actionForm === 'create'
+                            ? [{ title: 'Cadastrar' }]
+                            : []),
+                        ...(isSaveFormVisible && actionForm === 'update'
+                            ? [{ title: 'Atualizar' }]
+                            : []),
+                    ]}
+                />
 
                 { !isSaveFormVisible && (
                     <Button 

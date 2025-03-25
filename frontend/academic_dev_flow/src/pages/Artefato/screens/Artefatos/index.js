@@ -25,7 +25,7 @@ const ScreenArtefatos = ({grupo}) => {
                 <Content>
                     <ProviderArtefato>
                         {/* <MeusArtefatos /> */}
-                        <Artefatos />
+                        <Artefatos grupo={grupo} />
                     </ProviderArtefato>
                 </Content>
             </Layout>

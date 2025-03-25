@@ -1,26 +1,27 @@
-import { Button, Modal, Tabs } from "antd";
+import { Breadcrumb, Modal, Tabs } from "antd";
 import React, { useEffect, useState } from "react";
 import { BsGrid3X3GapFill, BsTable } from "react-icons/bs";
-import { FaListUl, FaPlus } from "react-icons/fa";
-import { useLocation, useNavigate } from "react-router-dom";
+import { FaListUl } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 import { buscarMembrosPorProjeto, criarMembroProjeto, excluirMembroProjeto } from "../../../../services/membroProjetoService";
 import { handleError } from "../../../../services/utils";
 import { buscarProjetoPeloId } from "../../../../services/projetoService";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 import ListEquipe from "../../components/ListEquipe/ListEquipe";
 import ModalSelectMembros from "../../components/ModalSelectMembros/ModalSelectMembros";
-import { atualizarFuncaoMembroProjeto, cadastrarFuncaoMembroProjeto, excluirFuncaoMembroProjeto, listarFuncaoMembro, listarFuncaoMembroProjetoPorProjeto } from "../../../../services/funcaoMembroProjetoService";
+import { atualizarFuncaoMembroProjeto, cadastrarFuncaoMembroProjeto, excluirFuncaoMembroProjeto, listarFuncaoMembroProjetoPorProjeto } from "../../../../services/funcaoMembroProjetoService";
 import FormFuncaoMembro from "../../components/FormFuncaoMembro/FormFuncaoMembro";
 import { useMembroContexto } from "../../context/MembroContexto";
 import GridEquipe from "../../components/GridEquipe/GridEquipe";
-import { IoArrowBackOutline } from "react-icons/io5";
-import { MdArrowBackIosNew } from "react-icons/md";
 import TableFuncoes from "../../components/TableFuncoes/TableFuncoes";
+import Section from "../../../../components/Section/Section";
+import SectionHeader from "../../../../components/SectionHeader/SectionHeader";
+import { HomeOutlined } from "@ant-design/icons";
+import SectionContent from "../../../../components/SectionContent/SectionContent";
 
 const {TabPane } = Tabs
 
-const Equipe = () => {
-    const navigate = useNavigate();
+const Equipe = ({grupo}) => {
     const location = useLocation();
     const { state } = location;
 
@@ -157,85 +158,88 @@ const Equipe = () => {
     }
 
     return (
-        <div className="content">
-            <div style={{
-                borderBottom: '1px solid #ddd',
-                display: 'flex',
-                justifyContent: 'space-between',
-                padding: '20px',
-                backgroundColor: '#FFFFFF'
-            }}> 
-                <div style={{}}>
-                    <h3 style={{margin: '0', fontFamily: 'Poppins, sans-serif'}}> Sua Equipe </h3>
-                    <h4 style={{margin: '0', fontFamily: 'Poppins, sans-serif'}}>
-                        {dadosProjeto && dadosProjeto.nome && (
-                            dadosProjeto.nome
-                        )} 
-                    </h4>
-                </div>
 
-                <div>
-                    <Button
-                        onClick={() => navigate(-1)}
-                        type="default"
-                        icon={<MdArrowBackIosNew />}
-                    > Voltar 
-                    </Button>
-                </div>                    
-            </div>
+        <Section>
+            <SectionHeader>
+                <Breadcrumb
+                    items={[
+                        {
+                            href: `/academicflow/${grupo}/home`,
+                            title: <HomeOutlined />,
+                        },
+                        {
+                            href: `/academicflow/${grupo}/membros/gerenciar`,
+                            title: 'Membros',
+                        },
+                        {
+                            href: `/academicflow/${grupo}/membros/equipes`,
+                            title: 'Equipes',
+                        },
+                        {
+                            href: '',
+                            title: <> {dadosProjeto?.nome} </>,
+                        }
+                        ,
+                        ...(isFormFuncaoMembroVisible ? [{ title: 'Vincular função' }]
+                            : [])
+                    ]}
+                />
+            </SectionHeader>
 
-            { isFormFuncaoMembroVisible ? (
+            <SectionContent>
+            
 
-                <div className="pa-20"> 
+                { isFormFuncaoMembroVisible ? (
+
                     <FormFuncaoMembro onSubmit={handleDefinirFuncao} onCancel={handleCancelar} />
-                </div>
-                ) : (
-                    <div>
+                    
+                    ) : (
+                        <div>
 
-                        <Tabs
-                            style={{paddingTop: '10px'}}
-                            size="middle"
-                            tabPosition="left"
-                            indicator={{align: "center"}}
-                            defaultActiveKey="1"
-                        > 
-                            <TabPane style={{padding: '20px'}} tab={<FaListUl />} key="1" >
-                                <ListEquipe
-                                    onAdd={handleAdicionarMembro}
-                                    onAddFunction={handleAdicionarFuncao}
-                                    data={membrosEquipe} 
-                                    onDelete={handleRemoverMembro}
-                                    onDeleteFunction={handleRemoverFuncao}
-                                    onDisable={handleAtualizarStatusFuncaoMembro}
-                                />
-                            </TabPane>
+                            <Tabs
+                                size="middle"
+                                tabPosition="left"
+                                indicator={{align: "center"}}
+                                defaultActiveKey="1"
+                            > 
+                                <TabPane tab={<FaListUl />} key="1" >
+                                    <ListEquipe
+                                        onAdd={handleAdicionarMembro}
+                                        onAddFunction={handleAdicionarFuncao}
+                                        data={membrosEquipe} 
+                                        onDelete={handleRemoverMembro}
+                                        onDeleteFunction={handleRemoverFuncao}
+                                        onDisable={handleAtualizarStatusFuncaoMembro}
+                                    />
+                                </TabPane>
 
-                            <TabPane style={{padding: '20px'}} tab={ <BsTable /> } key="2"  >
-                                <TableFuncoes 
-                                    data={funcoesMembro} 
-                                    onDelete={handleRemoverFuncao}
-                                    onDisable={handleAtualizarStatusFuncaoMembro}
-                                />
-                            </TabPane>
+                                <TabPane tab={ <BsTable /> } key="2"  >
+                                    <TableFuncoes 
+                                        data={funcoesMembro} 
+                                        onDelete={handleRemoverFuncao}
+                                        onDisable={handleAtualizarStatusFuncaoMembro}
+                                    />
+                                </TabPane>
 
-                            <TabPane style={{padding: '20px'}} tab={ <BsGrid3X3GapFill /> } key="3"  >
-                                <GridEquipe onAdd={handleAdicionarMembro} onDelete={handleRemoverMembro} data={membrosEquipe} />
-                            </TabPane>
-                            
-                        </Tabs>
-                    </div>
+                                <TabPane tab={ <BsGrid3X3GapFill /> } key="3"  >
+                                    <GridEquipe onAdd={handleAdicionarMembro} onDelete={handleRemoverMembro} data={membrosEquipe} />
+                                </TabPane>
+                                
+                            </Tabs>
+                        </div>
 
-                )
+                    )
 
-            }
+                }
             
-            
-            <ModalSelectMembros 
-                onSubmit={handleVincularMembros} 
-                onCancel={handleCancelar} 
-                isModalVisible={isModalVisible} 
-            />
-        </div>
+                
+                <ModalSelectMembros 
+                    onSubmit={handleVincularMembros} 
+                    onCancel={handleCancelar} 
+                    isModalVisible={isModalVisible} 
+                />
+            </SectionContent>
+        </Section>
     )
 
 }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Form, Space } from 'antd';
+import { Breadcrumb, Button, Form, Space } from 'antd';
 import { Input } from 'antd';
 import { Modal } from 'antd';
 import Titulo from "../../../../components/Titulo/Titulo";
@@ -8,35 +8,35 @@ import { useContextoCategoriaTarefa } from "../../context/ContextoCategoriaTaref
 import { atualizarCategoriaTarefa, buscarCategoriaTarefaPeloNome, cadastrarCategoriaTarefa, excluirCategoriaTarefa } from "../../../../services/categoriaTarefaService";
 import FormCategoriaTarefa from "../../components/FormCategoriaTarefa/FormCategoriaTarefa";
 import TableCategoriaTarefa from "../../components/TableCategoriaTarefa/TableCategoriaTarefa";
+import Section from "../../../../components/Section/Section";
+import SectionHeader from "../../../../components/SectionHeader/SectionHeader";
+import SectionFilters from "../../../../components/SectionFilters/SectionFilters";
+import SectionContent from "../../../../components/SectionContent/SectionContent";
+import { HomeOutlined, UserOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
+const {Search} = Input
 
-const GerenciarCategoriaTarefa = () => {
+const GerenciarCategoriaTarefa = ({grupo}) => {
     const [isFormVisivel, setIsFormVisivel] = useState(false);
-    const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false);
     const [acaoForm, setAcaoForm] = useState('criar');
-    const [isPlusBtnEnabled, setIsPlusBtnEnabled] = useState(false);
-    const [nomeCategoria, setNomeCategoria] = useState(''); 
     const { dadosCategoria, setDadosCategoria, setCategorias } = useContextoCategoriaTarefa();
+
 
     const handleCancelar = () => {
         setAcaoForm('criar');
-        setIsFormBuscarVisivel(false)
         setDadosCategoria(null);
         setIsFormVisivel(false);
-        setIsPlusBtnEnabled(false);
     };
 
     const handleReload = () => {
         setIsFormVisivel(false);
-        setIsPlusBtnEnabled(false);
         setCategorias([]);
     };
 
     const handleAdicionarCategoria = () => {
         setDadosCategoria(null);
         setIsFormVisivel(true);
-        setIsFormBuscarVisivel(false);
         setAcaoForm('criar');
-        setIsPlusBtnEnabled(true);
     };
 
     const handleAtualizarCategoria = (record) => {
@@ -54,8 +54,8 @@ const GerenciarCategoriaTarefa = () => {
         handleReload();
     };
 
-    const handleBuscarCategoriaPeloNome = async () => {
-        const response = await buscarCategoriaTarefaPeloNome(nomeCategoria); 
+    const handleBuscarCategoriaPeloNome = async (value) => {
+        const response = await buscarCategoriaTarefaPeloNome(value); 
         setCategorias(response.data);
     };
 
@@ -72,70 +72,71 @@ const GerenciarCategoriaTarefa = () => {
         });
     };
 
+
+
     return (
-        <div className="content">
-            <Titulo 
-                titulo='Gerenciar Categorias'
-                paragrafo='Tarefas > Categorias > Gerenciar categorias'
-            />
+        <Section>
+            <SectionHeader>
 
-            { !isFormVisivel && (
-                <div className="button-menu">
-                    <Button 
-                        icon={<FaFilter />}
-                        type="primary"
-                        onClick={() => setIsFormBuscarVisivel(!isFormBuscarVisivel)}
-                    >
-                        Filtrar
-                    </Button>
+                <Breadcrumb
+                    items={[
+                        {
+                            href: `/academicflow/${grupo}/home`,
+                            title: <HomeOutlined />,
+                        },
+                        {
+                            href: `/academicflow/${grupo}/tarefas`,
+                            title: 'Tarefas',
+                        },
+                        {
+                            href: `/academicflow/${grupo}/tarefas/categorias`,
+                            title: 'Categorias',
+                        },
+                        ...(isFormVisivel && acaoForm === 'criar'
+                            ? [{ title: 'Cadastrar' }]
+                            : []),
+                        ...(isFormVisivel && acaoForm === 'atualizar'
+                            ? [{ title: 'Atualizar' }]
+                            : []),
+                    ]}
+                />
 
+
+                {!isFormVisivel && (
                     <Button 
                         icon={<FaPlus />} 
                         type="primary" 
                         onClick={handleAdicionarCategoria}
-                        disabled={isPlusBtnEnabled}
                     > 
                         Criar Nova Categoria 
                     </Button>
-                </div>
-            )}
-
-            { isFormBuscarVisivel && (
-                <div className="pa-20" style={{width: '50%'}}>
-                    <Form className="global-form" layout="vertical" onFinish={handleBuscarCategoriaPeloNome}>
-                        <Form.Item 
-                            name="nome_categoria"
-                            label="Nome" 
-                        >
-                            <Input 
-                                type="text" 
-                                name="nome_categoria" 
-                                placeholder="informe o nome da categoria"
-                                value={nomeCategoria} 
-                                onChange={(e) => setNomeCategoria(e.target.value)}
-                            />
-                        </Form.Item>
-
-                        <Space>
-                            <Button onClick={() => handleCancelar()}> Cancelar </Button>
-                            <Button type="primary">
-                                Filtrar
-                            </Button>
-                        </Space>
-                    </Form>
-                </div>
-            )}
-
-            <div className="pa-20">
-                { isFormVisivel ? (
-                    <FormCategoriaTarefa onSubmit={handleSalvarCategoria} onCancel={handleCancelar}/>
-                ) : (
-                    <TableCategoriaTarefa onEdit={handleAtualizarCategoria} onDelete={handleExcluirCategoria}/>
-
                 )}
-            </div>
+            </SectionHeader>
 
-        </div>
+            {!isFormVisivel && (
+                <SectionFilters>
+                    <Search
+                        style={{width: '500px'}}
+                        placeholder="pesquise pelo nome"
+                        allowClear
+                        enterButton="Pesquisar"
+                        size="middle"
+                        onSearch={handleBuscarCategoriaPeloNome}
+                    />
+                </SectionFilters>
+            )}
+
+            <SectionContent>
+                { isFormVisivel && (
+                    <FormCategoriaTarefa onSubmit={handleSalvarCategoria} onCancel={handleCancelar}/>
+                )}
+
+                {!isFormVisivel && (
+                    <TableCategoriaTarefa onEdit={handleAtualizarCategoria} onDelete={handleExcluirCategoria}/>
+                )}
+            </SectionContent>
+
+        </Section>
     );
 }
 
