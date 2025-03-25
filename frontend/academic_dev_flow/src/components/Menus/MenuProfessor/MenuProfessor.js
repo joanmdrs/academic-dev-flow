@@ -134,13 +134,13 @@ const MenuProfessor = () => {
                     </Menu.Item>
                 </SubMenu>
                                 
-                <Menu.Item 
+                {/* <Menu.Item 
                     className="item-menu" 
                     key="/professor/github-integration" 
                     icon={<LuGithub size="20px" />}
                 >
                     <Link to="/professor/github-integration">GitHub</Link>
-                </Menu.Item>
+                </Menu.Item> */}
             </Menu>
         </Sider>
     );
