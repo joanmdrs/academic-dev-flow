@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'apps.api',
     'apps.github_integration',
     'drf_yasg',
+    'apps.feedback'
 ]
 
 SWAGGER_SETTINGS = {
