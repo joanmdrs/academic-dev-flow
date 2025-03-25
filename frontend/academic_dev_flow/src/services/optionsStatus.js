@@ -200,3 +200,26 @@ export const optionsStatusArtefatos = [
         color: '#fd7e14' // Laranja
     }
 ];
+
+export const optionsStatusFeedback = [
+    {
+        value: 'pendente',
+        name: 'Pendente',
+        label: RenderOption('Pendente', '#dc3545'),
+        color: '#dc3545' // Vermelho
+    },
+    {
+        value: 'em_analise',
+        name: 'Em Análise',
+        label: RenderOption('Em Análise', '#ffc107'),
+        color: '#ffc107' // Amarelo
+    },
+    {
+        value: 'resolvido',
+        name: 'Resolvido',
+        label: RenderOption('Resolvido', '#28a745'),
+        color: '#28a745' // Verde
+    },
+
+
+]

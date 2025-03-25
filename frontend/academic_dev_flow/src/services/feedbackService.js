@@ -46,3 +46,12 @@ export const filtrarFeedbackByCreated = async () => {
         return handleError(error, 'Falha ao tentar listar os feedbacks do usuário!')
     }
 }
+
+export const excluirFeedbacks = async (idsFeedbacks) => {
+    try {
+        const response = await api.delete('/feedback/excluir/', {data: {ids_feedbacks: idsFeedbacks}})
+        return handleSuccess(response, 'Feedback(s) excluído(s) com sucesso!')
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar excluir o(s) feedback(s)!')
+    }
+}
