@@ -3,7 +3,7 @@ import Sider from "antd/es/layout/Sider";
 import React, { useState } from "react";
 import { Link, useLocation } from 'react-router-dom';
 import { FaCoffee } from "react-icons/fa";
-import { LuClipboardList, LuFileCode2, LuFolder, LuLayoutDashboard, LuWorkflow, LuCalendarDays, LuGithub, LuUsers } from "react-icons/lu";
+import { LuClipboardList, LuFileCode2, LuFolder, LuLayoutDashboard, LuWorkflow, LuCalendarDays, LuGithub, LuUsers, LuMessageSquare } from "react-icons/lu";
 import { useContextoGlobalTheme } from "../../../context/ContextoTheme/ContextoTheme";
 
 const { SubMenu } = Menu;
@@ -133,6 +133,14 @@ const MenuProfessor = () => {
                         <Link to="/professor/membros/funcoes">Funções</Link>
                     </Menu.Item>
                 </SubMenu>
+
+                <Menu.Item
+                    className="item-menu"
+                    key='/professor/feedbacks'
+                    icon={<LuMessageSquare size="20px" />}
+                >
+                    <Link to="/professor/feedbacks">Feedbacks</Link>
+                </Menu.Item>
                                 
                 {/* <Menu.Item 
                     className="item-menu" 

@@ -6,7 +6,7 @@ class Membro(models.Model):
     SEXO_CHOICES = [
         ('M', 'Masculino'),
         ('F', 'Feminino'),
-        ('O', 'Outro'),  # Opcional para incluir uma terceira opção
+        ('O', 'Outro'),  
     ]
 
     nome = models.CharField(max_length=200)

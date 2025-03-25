@@ -20,6 +20,7 @@ class CadastrarIteracaoView(APIView):
 
     def post(self, request):
         try:
+            print(request.data)
             serializer = IteracaoSerializer(data=request.data)
             
             if serializer.is_valid(raise_exception=True):

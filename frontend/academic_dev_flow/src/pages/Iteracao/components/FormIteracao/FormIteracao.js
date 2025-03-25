@@ -31,10 +31,6 @@ const FormIteracao = ({ onSubmit, onCancel, selectProject }) => {
                     label: `${item.nome} - ${formatDateIso(item.data_lancamento)}`
                 }));
                 setOptionsReleases(resultados);
-            } else {
-                NotificationManager.info(
-                    'O projeto selecionado não possui releases criadas. Crie as releases antes de criar as iterações !'
-                );
             }
         } catch (error) {
             return handleError(error, 'Falha ao tentar buscar as releases do projeto !');
@@ -144,14 +140,19 @@ const FormIteracao = ({ onSubmit, onCancel, selectProject }) => {
             return Promise.resolve();
         }
     });
+
+    const handleSubmitForm = (formData) => {
+        formData['data_inicio'] = formData.data_inicio ? formData.data_inicio : null
+        formData['data_termino'] = formData.data_termino ? formData.data_termino : null
+        onSubmit(formData)
+    }
     
 
     return (
         <Form 
             className="global-form" 
             form={form} 
-            onFinish={onSubmit}
-            layout="vertical"
+            onFinish={handleSubmitForm}
         >
             {selectProject}
             <Form.Item

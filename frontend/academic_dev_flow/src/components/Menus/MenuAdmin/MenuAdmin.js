@@ -4,7 +4,8 @@ import { Menu } from "antd";
 import Sider from "antd/es/layout/Sider";
 import { FaCoffee } from "react-icons/fa";
 import { useContextoGlobalTheme } from "../../../context/ContextoTheme/ContextoTheme";
-import { LuCalendarDays, LuClipboardList, LuFileCode2, LuFolder, LuGithub, LuLayoutDashboard, LuUsers, LuWorkflow } from "react-icons/lu";
+import { LuCalendarDays, LuClipboardList, LuFileCode2, LuFolder, LuGithub, LuLayoutDashboard, LuUsers, LuWorkflow, LuMessageSquare} from "react-icons/lu";
+
 
 const { SubMenu } = Menu;
 
@@ -150,6 +151,14 @@ const MenuAdmin = () => {
                         <Link to="/admin/tarefas/tags"> Tags </Link>
                     </Menu.Item>
                 </SubMenu>
+
+                <Menu.Item
+                    className="item-menu"
+                    key='/admin/feedbacks'
+                    icon={<LuMessageSquare size="20px" />}
+                >
+                    <Link to="/admin/feedbacks">Feedbacks</Link>
+                </Menu.Item>
 
                 {/* <SubMenu
                     className='item-menu'

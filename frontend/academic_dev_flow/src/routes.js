@@ -38,6 +38,7 @@ import ScreenGerenciarTags from "./pages/Tag";
 // import ScreenPainelGitHub from "./pages/GitHub/screens/PainelGitHub";
 import { ProviderGlobalUser } from "./context/ContextoGlobalUser/ContextoGlobalUser";
 import { ProviderGlobalProjeto } from "./context/ContextoGlobalProjeto/ContextoGlobalProjeto";
+import ScreenFeedbacks from "./pages/Feedback/screens";
 
 function Routes() {
     return (
@@ -126,6 +127,13 @@ function Routes() {
 
                 <Route path="/admin/cronograma/iterations" Component={ScreenAdminIteracoes} exact />
 
+
+                <Route 
+                    path="/admin/feedbacks"
+                    element={<ScreenFeedbacks grupo="admin" />}
+                    exact
+                />
+
                 <Route
                     path="/admin/github-integration/issues"
                     Component={ScreenAdminIssues}
@@ -137,6 +145,8 @@ function Routes() {
                     Component={ScreenAdminContents}
                     exact
                 />
+
+
 
                 <Route 
                     path="/admin/github-integration/commits"
@@ -253,6 +263,12 @@ function Routes() {
                     exact
                 />
 
+                <Route 
+                    path="/aluno/feedbacks"
+                    element={<ScreenFeedbacks grupo="aluno" />}
+                    exact
+                />
+
                 {/* <Route 
                     path="/aluno/github-integration/painel"
                     element={<ScreenPainelGitHub grupo='aluno' />}
@@ -361,6 +377,12 @@ function Routes() {
                 <Route 
                     path="/professor/github-integration"
                     element={<ScreenRepositories grupo="professor" />}
+                    exact
+                />
+
+                <Route 
+                    path="/professor/feedbacks"
+                    element={<ScreenFeedbacks grupo="professor" />}
                     exact
                 />
 

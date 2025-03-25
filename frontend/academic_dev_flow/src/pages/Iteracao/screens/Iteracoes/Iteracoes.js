@@ -175,7 +175,7 @@ const Iteracoes = ({grupo}) => {
             key: 'data_inicio',
             render: (_, record) => (
                 <Space>
-                    {formatDate(record.data_inicio)}
+                    {record.data_inicio ? formatDate(record.data_inicio) : null}
                 </Space>
             )
         },
@@ -185,7 +185,7 @@ const Iteracoes = ({grupo}) => {
             key: 'data_termino',
             render: (_, record) => (
                 <Space>
-                    {formatDate(record.data_termino)}
+                    {record.data_termino ? formatDate(record.termino) : null}
                 </Space>
             )
         },

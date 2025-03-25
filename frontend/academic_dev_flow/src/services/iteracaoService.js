@@ -1,9 +1,12 @@
 import api from "../api/api";
 import { handleError, handleSuccess } from "./utils";
 
-export const criarIteracao = async (data) => {
+export const criarIteracao = async (formData) => {  
+
+    
     try {
-        const response = await api.post('iteracao/cadastrar/', data)
+        
+        const response = await api.post('iteracao/cadastrar/', formData)
         return handleSuccess(response, 'Iteração criada com sucesso !')
         
     } catch (error) {
@@ -29,10 +32,10 @@ export const listarIteracoesPorProjeto = async (idProjeto) => {
     } 
 }
 
-export const atualizarIteracao = async (idIteracao, data) => {
-
+export const atualizarIteracao = async (idIteracao, formData) => {
+    
     try {
-        const response = await api.patch('iteracao/atualizar/', data, {params: {id_iteracao: idIteracao}})
+        const response = await api.patch('iteracao/atualizar/', formData, {params: {id_iteracao: idIteracao}})
         return handleSuccess(response, 'Informações da iteração atualizadas com sucesso !')
 
     } catch (error) {
