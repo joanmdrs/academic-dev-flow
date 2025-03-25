@@ -1,21 +1,18 @@
 import { Button, Form, Input } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useContextoEtapa } from "../../context/ContextoEtapa";
 
 const FormEtapa = ({onSubmit, onCancel}) => {
 
     const [form] = Form.useForm();
     const {dadosEtapa} = useContextoEtapa()
-    const [titulo, setTitulo] = useState('CADASTRAR ETAPA')
 
     useEffect(() => {
 
         if (dadosEtapa !== null){
             form.setFieldsValue(dadosEtapa)
-            setTitulo('ATUALIZAR ETAPA')
         } else {
             form.resetFields()
-            setTitulo('CADASTRAR ETAPA')
         }
         
     }, []);
@@ -29,14 +26,7 @@ const FormEtapa = ({onSubmit, onCancel}) => {
             labelCol={{
                 span: 4,
             }}
-            wrapperCol={{
-                span: 14,
-            }}
         >
-            <Form.Item>
-                <h4 className='global-title'> {titulo} </h4>
-            </Form.Item>
-
             <Form.Item 
                 label="Nome" 
                 name="nome"

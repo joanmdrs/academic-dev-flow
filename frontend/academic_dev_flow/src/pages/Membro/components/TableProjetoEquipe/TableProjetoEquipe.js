@@ -19,7 +19,6 @@ const TableProjetoEquipe = ({data, onOpen}) => {
                         width: '400px',
                         fontWeight: '600',
                         fontSize: '15px', 
-                        fontFamily: 'Poppins, sans-serif'
                 }}> {limitarCaracteres(record.nome_projeto, 100)} </span>
 
                     

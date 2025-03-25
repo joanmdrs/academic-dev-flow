@@ -26,7 +26,7 @@ const TableAdminArtefatos = ({onEdit, onDelete, onUpdateStatus}) => {
             dataIndex: 'data_entrega',
             key: 'data_entrega',
             render: (_, record) => (
-                <RenderDate dateType="inicio" dateValue={record.data_termino} />
+                <RenderDate dateType="inicio" dateValue={record.data_entrega} />
             )
         },
         {

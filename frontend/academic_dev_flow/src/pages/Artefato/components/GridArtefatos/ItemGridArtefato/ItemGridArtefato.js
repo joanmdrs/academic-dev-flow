@@ -11,7 +11,7 @@ import RenderDate from "../../../../../components/RenderDate/RenderDate";
 
 function verificarAtraso(artefato) {
     const dataAtual = new Date().toISOString().split('T')[0]; 
-    const tarefaAtrasada = artefato.data_termino < dataAtual && artefato.status !== 'finalizado'; 
+    const tarefaAtrasada = artefato.data_entrega < dataAtual && artefato.status !== 'finalizado'; 
     return tarefaAtrasada ? true : false;
 }
 
@@ -29,7 +29,7 @@ const ItemGridArtefato = ({ item, onUpdate, onDelete, onShowComments }) => {
             </div>
 
             <div className="artefatos-datas">
-                <RenderDate  dateType="inicio" dateValue={item.data_termino}  />
+                <RenderDate  dateType="inicio" dateValue={item.data_entrega}  />
             </div>
 
             <div className="artefato-footer">

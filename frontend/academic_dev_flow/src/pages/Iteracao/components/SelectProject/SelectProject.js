@@ -57,8 +57,8 @@ const SelectProject = ({idMembro}) => {
 
     const filterOption = (input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
     return (
-        <div style={{flex: "1"}}>
             <Form.Item
+                label="Projeto"
                 rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
             >
                 <Select
@@ -75,7 +75,6 @@ const SelectProject = ({idMembro}) => {
             </Form.Item>
             
        
-        </div>
         
     );
 };

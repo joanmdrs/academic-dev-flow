@@ -19,7 +19,7 @@ const ScreenGerenciarCategoriaTarefa = ({grupo}) => {
                 <MyHeader/>
                 <Content>
                     <ProviderCategoriaTarefa>
-                        <GerenciarCategoriaTarefa />
+                        <GerenciarCategoriaTarefa grupo={grupo}/>
                     </ProviderCategoriaTarefa>
                 </Content>
             </Layout>

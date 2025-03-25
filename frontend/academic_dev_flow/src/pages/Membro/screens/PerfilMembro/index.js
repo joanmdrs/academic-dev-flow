@@ -10,12 +10,6 @@ import MenuProfessor from "../../../../components/Menus/MenuProfessor/MenuProfes
 import CustomBreadcrumb from "../../../../components/Breadcrumb/Breadcrumb";
 
 const ScreenPerfilMembro = ({grupo}) => {
-
-    const breadcrumbRoutes = [
-        { title: 'Home', path: `/${grupo}/home` },
-        { title: 'Perfil', path: `/${grupo}/perfil` },
-    ];
-
     
     return (
         <React.Fragment>
@@ -26,7 +20,7 @@ const ScreenPerfilMembro = ({grupo}) => {
                 <MyHeader/>
                 <ProviderGlobalUser>
                     <MembroProvider>
-                        <PerfilMembro/>
+                        <PerfilMembro group={grupo}/>
                     </MembroProvider>
                 </ProviderGlobalUser>
             </Layout>

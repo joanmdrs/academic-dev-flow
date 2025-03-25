@@ -19,7 +19,7 @@ const ScreenIteracoes = ({grupo}) => {
 
                 <Content>
                     <ProviderIteracao>
-                        <Iteracoes />
+                        <Iteracoes grupo={grupo} />
                     </ProviderIteracao>
                 </Content>
             </Layout>

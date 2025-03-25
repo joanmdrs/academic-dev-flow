@@ -99,7 +99,6 @@ export const buscarArtefatosPeloNomeEPeloProjeto = async (nomeArtefato, idProjet
 }
 
 export const excluirArtefato = async (idsArtefatos) => {
-    console.log(idsArtefatos)
     try {
         const response = await api.delete('/artefato/excluir/', {data: { ids_artefatos: idsArtefatos}})
         return handleSuccess(response, SUCCESS_MESSAGE_ON_DELETION)

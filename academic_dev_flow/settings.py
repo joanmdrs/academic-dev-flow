@@ -65,7 +65,16 @@ INSTALLED_APPS = [
     'apps.tags',
     'apps.api',
     'apps.github_integration',
+    'drf_yasg',
 ]
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Basic': {
+            'type': 'basic'
+        }
+    }
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -2,6 +2,8 @@ import { Avatar, Tooltip } from "antd";
 import React from "react";
 import { getRandomColor, limitarCaracteres } from "../../../../../services/utils";
 import { IoMdClose } from "react-icons/io";
+import RenderCategoria from "../../../../../components/RenderCategoria/RenderCategoria";
+import { UserOutlined } from "@ant-design/icons";
 
 const ItemEquipe = ({data, onDelete}) => {
 
@@ -43,28 +45,40 @@ const ItemEquipe = ({data, onDelete}) => {
                 <Avatar 
                     style={{
                         width: '60px', 
-                        height: '60px'
+                        height: '60px',
+                        backgroundColor: getRandomColor()
                     }} 
-                    src={`https://avatar.iran.liara.run/public/${data.avatar}`} />
+                >
+                    {data.nome_membro ? data.nome_membro.charAt(0).toUpperCase() : <UserOutlined />}
+                </Avatar>
             </div>
 
             <div> 
                 <h4 style={{textAlign: 'center'}}> {data.nome_membro} </h4>
             </div>
 
-            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}> 
-                {data.funcoes_membro.map((item, index) => (
-                    <>
-                        {
-                            item.status && (
-                                <div key={index}> {item.nome_categoria_funcao} </div>
-                            )
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                {(() => {
+                    const funcaoMaisRecente = data.funcoes_membro.reduce((maisRecente, item) => {
+                        if (item.status) {
+                            return !maisRecente || new Date(item.data_atribuicao) > new Date(maisRecente.data_atribuicao)
+                                ? item
+                                : maisRecente;
                         }
-                    </>
-                    
-                    
-                ))}
-                </div>
+                        return maisRecente;
+                    }, null);
+
+                    return funcaoMaisRecente ? (
+                        <div  key={funcaoMaisRecente.nome_categoria_funcao}>
+                            <RenderCategoria 
+                                nome={funcaoMaisRecente.nome_categoria_funcao} 
+                                cor={funcaoMaisRecente.cor_categoria_funcao} 
+                            />
+                        </div>
+                    ) : null;
+                })()}
+            </div>
+
 
         </div>
     )

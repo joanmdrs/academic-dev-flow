@@ -24,7 +24,7 @@ const ScreenEquipe = ({grupo}) => {
                 {/* <CustomBreadcrumb routes={breadcrumbRoutes} /> */}
                 <Content>
                     <MembroProvider>
-                        <Equipe />
+                        <Equipe grupo={grupo}/>
                     </MembroProvider>
                                            
                 </Content>

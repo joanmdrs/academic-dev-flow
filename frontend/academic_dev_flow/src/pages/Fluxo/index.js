@@ -17,7 +17,7 @@ const ScreenGerenciarFluxos = ({grupo}) => {
             <Layout>
                 <MyHeader />
                 <ProviderFluxo>
-                    <TabsFluxo /> 
+                    <TabsFluxo grupo={grupo}/> 
                 </ProviderFluxo>
             </Layout>
         </React.Fragment>

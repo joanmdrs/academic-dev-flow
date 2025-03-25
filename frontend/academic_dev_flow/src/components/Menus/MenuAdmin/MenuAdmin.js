@@ -151,7 +151,7 @@ const MenuAdmin = () => {
                     </Menu.Item>
                 </SubMenu>
 
-                <SubMenu
+                {/* <SubMenu
                     className='item-menu'
                     key='/admin/github-integration/'
                     icon={<LuGithub size="20px" />}
@@ -177,7 +177,7 @@ const MenuAdmin = () => {
                     >
                         <Link to="/admin/github-integration/commits"> Commits </Link>
                     </Menu.Item>
-                </SubMenu>
+                </SubMenu> */}
 
             </Menu>
         </Sider>

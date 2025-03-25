@@ -57,10 +57,7 @@ const HomeDiscente = () => {
             }
         }
         fetchData()
-        console.log(tarefas)
-        console.log(artefatos)
-        console.log(projetos)
-
+        
     }, [usuario])
 
     const handleAlterarSituacaoTarefa = async (id, status) => {
@@ -79,7 +76,7 @@ const HomeDiscente = () => {
     }
 
     return (
-            <div>
+            <div style={{height: "100%", backgroundColor: "#FFFFFF"}}>
                 <Splitter>
                     <Splitter.Panel defaultSize="55%" min="20%" max="70%">
                             <div className="caixa-direita"> 

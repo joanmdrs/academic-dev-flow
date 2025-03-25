@@ -19,7 +19,7 @@ const ScreenGerenciarTags = ({grupo}) => {
                 <MyHeader/>
                 <Content>
                     <ProviderTag>
-                        <GerenciarTags />
+                        <GerenciarTags grupo={grupo} />
                     </ProviderTag>
                 </Content>
             </Layout>

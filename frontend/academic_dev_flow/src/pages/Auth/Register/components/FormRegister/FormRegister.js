@@ -1,20 +1,18 @@
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, Radio } from "antd";
 import "./FormRegister.css"
 import React from "react";
-import InputMask from 'react-input-mask';
 import assetRegister from "../../../../../assets/asset-register.svg"
 import { useForm } from "antd/es/form/Form";
-import { useNavigate } from "react-router-dom";
-
 import { useRegisterContexto } from "../../context/RegisterContexto";
-import { converterData } from "../../../../../services/utils";
 import { criarMembro } from "../../../../../services/membroService";
+import { MdOutlineArrowBackIosNew } from "react-icons/md";
+import {useNavigate} from 'react-router-dom'
+
 const FormRegister = () => {
 
     const [form] = useForm();
-    const navigate = useNavigate();
-
-    const {infoGithub, grupoUsuario} = useRegisterContexto()
+    const {infoGithub, grupoUsuario, setStep} = useRegisterContexto()
+    const navigate = useNavigate()
 
     const handleVerificarSenhas = (rule, value) => {
         const senha = form.getFieldValue('senha');
@@ -25,36 +23,47 @@ const FormRegister = () => {
         }
     }
 
-    const handleCriarConta = async (dados) => {
-        dados['usuario_github'] = infoGithub !== undefined ? infoGithub.usuario_github : null
-        dados['nome_github'] = infoGithub !== undefined ? infoGithub.nome_github : null
-        dados['email_github'] = infoGithub !== undefined ? infoGithub.email_github : null
-        dados['grupo'] = grupoUsuario 
-        dados['username'] = dados.email
-        dados['password'] = dados.senha
-        dados['data_nascimento'] = converterData(dados.data_nascimento)
+    const handleCriarConta = async (dadosForm) => {
+        dadosForm['usuario_github'] = infoGithub !== undefined ? infoGithub.usuario_github : null
+        dadosForm['nome_github'] = infoGithub !== undefined ? infoGithub.nome_github : null
+        dadosForm['email_github'] = infoGithub !== undefined ? infoGithub.email_github : null
+        dadosForm['grupo'] = grupoUsuario 
+        dadosForm['username'] = dadosForm.email
+        dadosForm['password'] = dadosForm.senha
 
-        console.log(dados)
+        const response = await criarMembro(dadosForm)
 
-        await criarMembro(dados)
-        // setInterval(() => {
-        //     navigate("/")
-        // }, 1500);
+        if (!response.error){
+            handleInicio()
+        } 
+    }
 
+    const handleVoltar = () => {
+        setStep("2")
+    }
+
+    const handleInicio = () => {
+        navigate(-1)
     }
 
     return (
-    
         <div className="screen-register"> 
+            <div className="float-button"> 
+                <Button
+                    onClick={() => handleVoltar()} 
+                    icon={<MdOutlineArrowBackIosNew />}>
+                    VOLTAR 
+                </Button>
+            </div>
+
             <div className="screen-register-banner"> 
                 <img src={assetRegister} alt="Imagem da página de cadastro" />
             </div>
 
-            <div className="screen-register-form"> 
+            <div className="screen-register-form">
                 <Form layout="vertical" form={form} onFinish={handleCriarConta}>
-
                     <Form.Item>
-                        <h2> Registre-se para uma nova conta</h2>
+                        <h2> Registre-se para uma nova conta !</h2>
                     </Form.Item>
 
                     <Form.Item 
@@ -65,31 +74,17 @@ const FormRegister = () => {
                         <Input placeholder="Ex.: João "/>
                     </Form.Item>
 
-                    <div style={{display: 'flex', gap: '20px'}}>
-
-                        <Form.Item 
-                            style={{flex: "1"}}
-                            label="Data de Nascimento" 
-                            name="data_nascimento"
-                            rules={[{ required: true, message: 'Por favor, selecione sua data de nascimento!' }]}
-                        >
-                            <InputMask mask="99/99/9999" maskChar={null}>
-                                {() => <Input placeholder="Ex.: 11/12/2000"/>}
-                            </InputMask>
-                        </Form.Item>
-
-                        <Form.Item
-                            style={{flex: "1"}}
-                            name="telefone"
-                            label="Telefone"
-                            rules={[{ required: true, message: 'Por favor, insira seu telefone!' }]}
-                        >
-                            <InputMask mask="(99) 99999-9999" maskChar={null}>
-                                {() => <Input placeholder="Ex.: (84) 99999-9999"/>}
-                            </InputMask>
-                        </Form.Item>
-
-                    </div>
+                    <Form.Item 
+                        label="Sexo" 
+                        name="sexo" 
+                        rules={[{ required: true, message: 'Por favor, marque uma opção!' }]}
+                    >
+                        <Radio.Group>
+                            <Radio value="M"> Masculino </Radio>
+                            <Radio value="F"> Feminino </Radio>
+                            <Radio value="O"> Outro </Radio>
+                        </Radio.Group>
+                    </Form.Item>
 
                     <Form.Item
                         name="email"
@@ -125,7 +120,6 @@ const FormRegister = () => {
                     <Form.Item >
                         <Button type="primary" htmlType="submit"> Cadastre-se</Button>
                     </Form.Item>
-
                 </Form>
             </div>
         </div>

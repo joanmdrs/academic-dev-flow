@@ -11,7 +11,7 @@ import RenderDate from '../../../../../components/RenderDate/RenderDate';
 import { IoChatbubblesOutline } from "react-icons/io5";
 
 function verificarAtraso(task) {
-    const dataAtual = new Date().toISOString().split('T')[0]; // Data atual no formato YYYY-MM-DD
+    const dataAtual = null
     const tarefaAtrasada = task.data_termino < dataAtual && task.status !== 'concluida'; 
     return tarefaAtrasada ? true : false;
 }
@@ -25,7 +25,6 @@ const ItemTaskBoard = ({ task, onUpdate, onDelete, onStartTarefa, onPauseTarefa,
                 <h4 style={{
                     color: `${task.cor_categoria}`,
                     margin: '0',
-                    fontFamily: 'Poppins, sans-serif'
                 }}
                 >{task.nome_categoria} </h4>
                 <span style={{ display: 'flex', gap: '10px' }}>

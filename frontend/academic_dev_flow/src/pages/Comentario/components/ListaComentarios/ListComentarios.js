@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Avatar, Button, Form, Input, Space, Tooltip } from "antd";
 import { IoMdCreate, IoMdTrash } from "react-icons/io";
-import { formatDate, formatDateTime } from "../../../../services/utils";
+import { formatDate, formatDateTime, getRandomColor } from "../../../../services/utils";
+import { UserOutlined } from "@ant-design/icons";
 
 const ListComentarios = ({ data, onUpdate, onDelete, userId }) => {
     const [messageComment, setMessageComment] = useState(null);
@@ -50,7 +51,15 @@ const ListComentarios = ({ data, onUpdate, onDelete, userId }) => {
                                         alignItems: 'center'
                                     }}
                                 >
-                                    <Avatar src={`https://avatar.iran.liara.run/public/${item.avatar_autor}`} />
+                                    <Avatar
+                                        key={index}
+                                        style={{
+                                            backgroundColor: getRandomColor(),
+                                        }}
+                                    >
+                                        {item?.nome_autor ? item.nome_autor.charAt(0).toUpperCase() : <UserOutlined />}
+
+                                    </Avatar>
                                     <span style={{ fontSize: '13px', fontWeight: 'bold' }}> {item.nome_autor} </span>
                                     <span style={{ fontSize: '12px' }}> {formatDateTime(item.data_hora)} </span>
                                 </div>

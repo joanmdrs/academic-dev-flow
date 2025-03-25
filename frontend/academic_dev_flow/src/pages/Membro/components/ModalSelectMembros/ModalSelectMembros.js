@@ -1,4 +1,3 @@
-import "./ModalSelectMembros.css"
 import { Form, Modal, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import { listarMembros } from "../../../../services/membroService";
@@ -29,7 +28,7 @@ const ModalSelectMembros = ({idProjeto, isModalVisible, onSubmit, onCancel}) => 
 
     return (
         <Modal
-            title={"SELECIONE OS MEMBROS"}
+            title={<span style={{fontSize: '18px'}}> Selecione o(s) membro(s)</span>}
             open={isModalVisible}
             onOk={() => onSubmit(form.getFieldsValue())}
             onCancel={() => {

@@ -1,4 +1,4 @@
-import { Button, Input, Modal, Space, Spin, Tabs } from "antd";
+import { Breadcrumb, Button, Input, Modal, Space, Spin, Tabs } from "antd";
 import Item from "antd/es/list/Item";
 import React, { useEffect, useState } from "react";
 import { FaCalendar, FaListUl, FaPlus, FaTasks } from "react-icons/fa";
@@ -16,15 +16,21 @@ import { createIssue, updateIssue } from "../../../../services/githubIntegration
 import FormFiltrarTarefas from "../../components/FormFiltrarTarefas/FormFiltrarTarefas";
 import { buscarMembroProjetoPeloIdMembroEPeloIdProjeto } from "../../../../services/membroProjetoService";
 import { handleError } from "../../../../services/utils";
-import { TbLayoutCards, TbLayoutCardsFilled, TbLayoutList, TbLayoutNavbar } from "react-icons/tb";
+import { TbLayoutCards, TbLayoutCardsFilled, TbLayoutList, TbLayoutNavbar, TbSettingsAutomation } from "react-icons/tb";
 import { LuCalendarDays } from "react-icons/lu";
 import ScreenDrawerComments from "../DrawerComments";
 import SpinLoading from "../../../../components/SpinLoading/SpinLoading";
 import ListTask from "../../components/ListTask/ListTask";
+import { MdFilterAlt, MdViewKanban } from "react-icons/md";
+import Section from "../../../../components/Section/Section";
+import SectionHeader from "../../../../components/SectionHeader/SectionHeader";
+import SectionFilters from "../../../../components/SectionFilters/SectionFilters";
+import SectionContent from "../../../../components/SectionContent/SectionContent";
+import { HomeOutlined } from "@ant-design/icons";
 
 const {Search} = Input 
 
-const Tarefas = () => {
+const Tarefas = ({grupo}) => {
 
     const [isFormVisible, setIsFormVisible] = useState(false)   
     const [isTabsVisible, setIsTabsVisible] = useState(true)
@@ -79,7 +85,7 @@ const Tarefas = () => {
             );
             setTarefas(tarefasFiltradas)
         } else {
-            await handleBuscarTarefasDosProjetosDoMembro()
+            await handleBuscarTarefasDosProjetosDoMembro(usuario.id)
         }
     }
 
@@ -137,9 +143,7 @@ const Tarefas = () => {
         dadosForm.projeto = dadosProjeto.id;
         let dadosIssue = null;
         
-        console.log(dadosForm['sicronizar-github'])
         if (dadosForm['sicronizar-github']) {
-            console.log('estou entrando aqui')
             const resIssue = await handleSaveIssue(dadosForm);
     
             if (resIssue.error) {
@@ -159,7 +163,6 @@ const Tarefas = () => {
             handleReload();
     
         } catch (error) {
-            console.log(error)
             NotificationManager.error('Erro ao salvar a tarefa');
         }
         
@@ -252,72 +255,87 @@ const Tarefas = () => {
     }, [usuario])
 
     return (
-        <div className="content"> 
-
+        <Section>
             {isDrawerCommentsVisible && <ScreenDrawerComments 
                 isDrawerVisible={isDrawerCommentsVisible} 
                 closeDrawer={handleCloseDrawerComments} 
             />}
-            
-            <div style={{
-                borderBottom: '1px solid #ddd',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'baseline',
-                padding: '20px'
-            }}> 
-                <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
-                    <h2 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '600'}}> Tarefas </h2>
-                </div>
 
-                <div>
+            <SectionHeader>
+                
+                <Breadcrumb
+                    items={[
+                        {
+                            href: `/academicflow/${grupo}/home`,
+                            title: <HomeOutlined />,
+                        },
+                        {
+                            href: `/academicflow/${grupo}/tarefas`,
+                            title: 'Tarefas',
+                        },
+                        ...(isFormVisible && acaoForm === 'criar'
+                            ? [{ title: 'Cadastrar' }]
+                            : []),
+                        ...(isFormVisible && acaoForm === 'atualizar'
+                            ? [{ title: 'Atualizar' }]
+                            : []),
+                    ]}
+                />
+
+                {!isFormVisible && (
                     <Button
-                        size="large" 
                         onClick={() => handleAdicionarTarefa()} 
                         type="primary" 
-                        ghost 
                         icon={<FaPlus />}> 
                         Criar Tarefa 
                     </Button>
-                </div>
+                )}
+            </SectionHeader>
 
-            </div>
-
-            { isFormVisible && (
-                <div className="pa-20"> 
-                    {isLoading && ( 
-                        <SpinLoading />
-                    )}
-                    
-                    <FormTarefa 
-                        selectProject={<SelecionarProjeto />} 
-                        onSubmit={handleSalvarTarefa} 
-                        onCancel={handleCancelar} 
+            {!isFormVisible && (
+                <SectionFilters>
+                    <Input
+                        style={{width: '500px'}}
+                        placeholder="pesquise pelo nome"
+                        name="nome"
+                        onChange={(event) => handleFiltrarTarefaPeloNome(event.target.value)}
                     />
-                </div>
+                    <FormFiltrarTarefas idMembro={usuario.id} onChange={handleFiltrarTarefas}/>
+                </SectionFilters>
             )}
+            
 
-            { isTabsVisible && (
-                <div className="pa-20"> 
+            <SectionContent>
+                { isFormVisible && (
+                    <div> 
+                        {isLoading && ( 
+                            <SpinLoading />
+                        )}
+                        
+                        <FormTarefa 
+                            selectProject={<SelecionarProjeto idMembro={usuario.id}/>} 
+                            onSubmit={handleSalvarTarefa} 
+                            onCancel={handleCancelar} 
+                        />
+                    </div>
+                )}
+
+                { isTabsVisible && (
                     <Tabs
-                        tabBarExtraContent={
-                            <div style={{display: 'flex', gap: '20px'}}> 
-                                <Search
-                                    style={{width: '500px'}}
-                                    placeholder="pesquise pelo nome"
-                                    allowClear
-                                    enterButton="Pesquisar"
-                                    size="middle"
-                                    onSearch={handleFiltrarTarefaPeloNome}
-                                />
-                                <FormFiltrarTarefas idMembro={usuario.id} onChange={handleFiltrarTarefas}/>
-                            </div>
-                            
-                        }
                         size="middle"
                         indicator={{align: "center"}}
                     > 
-                        <Item tab={<span><TbLayoutCards /> Quadro</span>} key="1" >
+                        <Item tab={<span> <TbLayoutNavbar /> Tabela </span>} key="1" >
+                            <TableTask 
+                                onUpdate={handleAtualizarTarefa} 
+                                onDelete={handleExcluirTarefa}
+                                onPauseTarefa={handlePararContagemTempoTarefa}
+                                onStartTarefa={handleIniciarContagemTempoTarefa}
+                                onShowComments={handleExibirComentarios}
+                            />
+                        </Item>
+
+                        <Item tab={<span><TbLayoutCards /> Quadro</span>} key="2" >
                             <TaskBoard 
                                 onCreate={handleAdicionarTarefa}
                                 onUpdate={handleAtualizarTarefa} 
@@ -327,18 +345,8 @@ const Tarefas = () => {
                                 onShowComments={handleExibirComentarios}
                             />
                         </Item>
-                        <Item tab={<span> <TbLayoutList /> Lista </span>} key="2" >
+                        <Item tab={<span> <TbLayoutList /> Lista </span>} key="3" >
                             <ListTask 
-                                onUpdate={handleAtualizarTarefa} 
-                                onDelete={handleExcluirTarefa}
-                                onPauseTarefa={handlePararContagemTempoTarefa}
-                                onStartTarefa={handleIniciarContagemTempoTarefa}
-                                onShowComments={handleExibirComentarios}
-                            />
-                        </Item>
-
-                        <Item tab={<span> <TbLayoutNavbar /> Tabela </span>} key="3" >
-                            <TableTask 
                                 onUpdate={handleAtualizarTarefa} 
                                 onDelete={handleExcluirTarefa}
                                 onPauseTarefa={handlePararContagemTempoTarefa}
@@ -349,11 +357,9 @@ const Tarefas = () => {
                         
                     </Tabs>
 
-                </div>
-            )}
-
-            
-        </div>
+                )}
+            </SectionContent>
+        </Section>
     )
 }
 

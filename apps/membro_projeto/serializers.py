@@ -11,6 +11,7 @@ from apps.membro.models import Membro
 from apps.membro.serializers import MembroSerializer
 
 class MembroProjetoSerializer(serializers.ModelSerializer):
+    grupo = serializers.SerializerMethodField()
     nome_grupo = serializers.SerializerMethodField()
     nome_membro = serializers.SerializerMethodField()
     nome_projeto = serializers.SerializerMethodField()
@@ -24,7 +25,6 @@ class MembroProjetoSerializer(serializers.ModelSerializer):
     nome_fluxo = serializers.SerializerMethodField()
     quantidade_tarefas = serializers.SerializerMethodField()
     quantidade_artefatos = serializers.SerializerMethodField()
-    avatar = serializers.SerializerMethodField()
     funcoes_membro = serializers.SerializerMethodField()
     equipe = serializers.SerializerMethodField()
     dados_projeto = serializers.SerializerMethodField()
@@ -37,6 +37,7 @@ class MembroProjetoSerializer(serializers.ModelSerializer):
                   'nome_membro', 
                   'nome_projeto', 
                   'descricao_projeto',
+                  'grupo',
                   'nome_grupo', 
                   'usuario_github', 
                   'status_projeto',
@@ -47,14 +48,20 @@ class MembroProjetoSerializer(serializers.ModelSerializer):
                   'quantidade_tarefas',
                   'id_fluxo',
                   'nome_fluxo',
-                  'avatar',
                   'funcoes_membro',
                   'equipe',
                   'dados_projeto'
                 ] 
         
+    def get_grupo(self, obj):
+        if obj.membro.usuario and obj.membro.usuario.groups.exists():
+            return obj.membro.usuario.groups.first().id
+        return None
+    
     def get_nome_grupo(self, obj):
-        return obj.membro.grupo.name 
+        if obj.membro.usuario and obj.membro.usuario.groups.exists():
+            return obj.membro.usuario.groups.first().name
+        return "Sem grupo"
 
     def get_nome_membro(self, obj):
         return obj.membro.nome
@@ -96,9 +103,6 @@ class MembroProjetoSerializer(serializers.ModelSerializer):
     def get_quantidade_artefatos(self, obj):
         quantidade_artefatos = Artefato.objects.filter(projeto=obj.projeto).count()
         return quantidade_artefatos
-    
-    def get_avatar(self, obj): 
-        return obj.membro.avatar
     
     def get_funcoes_membro(self, obj):
         funcoes_membro = FuncaoMembro.objects.filter(membro_projeto=obj.id).order_by("id")

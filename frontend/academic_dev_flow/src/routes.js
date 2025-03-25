@@ -218,7 +218,7 @@ function Routes() {
                 />
 
                 <Route 
-                    path="/aluno/membros"
+                    path="/aluno/membros/equipes"
                     element={<ScreenQuadroMembros grupo="aluno" />}
                     exact
                 />
@@ -230,7 +230,7 @@ function Routes() {
                 /> 
 
                 <Route
-                    path="/aluno/membros/equipe"
+                    path="/aluno/membros/equipes/sua-equipe"
                     element={<ScreenEquipe grupo="aluno" />}
                     exact
                 />
@@ -334,7 +334,7 @@ function Routes() {
                 />
 
                 <Route 
-                    path="/professor/membros"
+                    path="/professor/membros/equipes"
                     element={<ScreenQuadroMembros grupo="professor" />}
                     exact
                 />
@@ -346,7 +346,7 @@ function Routes() {
                 /> 
 
                 <Route
-                    path="/professor/membros/equipe"
+                    path="/professor/membros/equipes/sua-equipe"
                     element={<ScreenEquipe grupo="professor" />}
                     exact
                 />

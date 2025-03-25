@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { act, useEffect, useState } from "react";
 import { atualizarFluxo, buscarFluxoPeloNome, criarFluxo, excluirFluxo, listarFluxos } from "../../../../../services/fluxoService";
 import FormFluxo from "../../../components/FormFluxo/FormFluxo";
-import { Button, Form, Input, Modal, Space, Tooltip } from "antd";
-import { FaFilter, FaPlus, FaTrash } from "react-icons/fa";
+import { Breadcrumb, Button, Input, Modal, Space, Tooltip } from "antd";
+import { FaPlus } from "react-icons/fa";
 import { useContextoFluxo } from "../../../context/ContextoFluxo";
 import TableFluxos from "../../../components/TableFluxos/TableFluxos";
 import { IoMdCreate, IoMdTrash } from "react-icons/io";
-import { useForm } from "antd/es/form/Form";
+import SectionHeader from "../../../../../components/SectionHeader/SectionHeader";
+import SectionContent from "../../../../../components/SectionContent/SectionContent";
+import { HomeOutlined } from "@ant-design/icons";
+const { Search } = Input;
 
-const TabGerenciarFluxos = () => {
+const TabGerenciarFluxos = ({grupo}) => {
 
     const {dadosFluxo, setDadosFluxo} = useContextoFluxo()
-    const [acaoForm, setAcaoForm] = useState("criar");
-    const [isFormVisivel, setIsFormVisivel] = useState(false);
-    const [isFormFilterVisible, setIsFormFilterVisible] = useState(false)
+    const [actionForm, setActionForm] = useState("create");
+    const [isSaveFormVisible, setIsSaveFormVisible] = useState(false);
     const [fluxos, setFluxos] = useState([])
-    const [form] = useForm()
 
     const columnsTableFluxos = [
         {
@@ -72,45 +73,41 @@ const TabGerenciarFluxos = () => {
     }, []);
 
     const handleCancelar = async () => {
-        setIsFormVisivel(false)
-        setIsFormFilterVisible(false)
+        setIsSaveFormVisible(false)
         setDadosFluxo(null)
         await handleListarFluxos()
     }
 
     const handleReload = async () => {
-        setIsFormVisivel(false)
-        setIsFormFilterVisible(false)
+        setIsSaveFormVisible(false)
         setDadosFluxo(null)
         await handleListarFluxos()
     }
 
 
     const handleCriarFluxo = () => {
-        setAcaoForm('criar')
-        setIsFormVisivel(true);
-        setIsFormFilterVisible(false)
+        setActionForm('create')
+        setIsSaveFormVisible(true)
         setDadosFluxo(null)
     };
 
     const handleAtualizarFluxo = (record) => {
-        setAcaoForm("atualizar")
-        setIsFormVisivel(true)
-        setIsFormFilterVisible(false)
+        setActionForm('update')
+        setIsSaveFormVisible(true)
         setDadosFluxo(record)
     }
 
     const handleSalvarFluxo = async (dados) => {
-        if (acaoForm === 'criar'){
+        if (actionForm === 'create'){
             await criarFluxo(dados)
-        } else if (acaoForm === 'atualizar'){
+        } else if (actionForm === 'update'){
             await atualizarFluxo(dados, dadosFluxo.id);
         }
         await handleReload()
     }
 
-    const handleBuscarFluxo = async (formData) => {
-        const response = await buscarFluxoPeloNome(formData.nome);
+    const handleBuscarFluxo = async (value) => {
+        const response = await buscarFluxoPeloNome(value);
 
         if (!response.error){
             setFluxos(response.data.results)
@@ -130,53 +127,59 @@ const TabGerenciarFluxos = () => {
         });
     }
 
-    
-
-
     return (
-        <div >
-
-            { !isFormVisivel && (
-                <div className="button-menu">
-                     <Button 
-                        type="primary"
-                        icon={<FaFilter />}
-                        onClick={() => setIsFormFilterVisible(!isFormFilterVisible)}
-                    >
-                        Filtrar
-                    </Button>
-                    <div className="grouped-buttons"> 
-                        <Button 
-                            type="primary"
-                            icon={<FaPlus />}
-                            onClick={() => handleCriarFluxo()} 
-                        >
-                                Criar fluxo
-                        </Button>
-                    </div>
-                </div>
-            )}
-
-            {isFormFilterVisible && (
-                <div className="pa-20" style={{width: '50%'}}> 
-                    <Form form={form} className="global-form" onFinish={handleBuscarFluxo} layout="vertical">
-                        <Form.Item name="nome" label="Pesquise pelo nome">
-                            <Input name="nome" placeholder="informe o nome do fluxo" />
-                        </Form.Item>
-
-                        <Space>
-                            <Button onClick={handleCancelar}> Cancelar </Button>
-                            <Button type="primary" htmlType="submit"> Filtrar </Button>
-                        </Space>
-                    </Form>
-
-                </div>
-
+        <div>
+            <SectionHeader>
+                <Breadcrumb
+                    items={[
+                        {
+                            href: `/academicflow/${grupo}/home`,
+                            title: <HomeOutlined />,
+                        },
+                        {
+                            href: `/academicflow/${grupo}/fluxos/gerenciar`,
+                            title: 'Fluxos',
+                        },
+                        ...(isSaveFormVisible && actionForm === 'create'
+                            ? [{ title: 'Cadastrar' }]
+                            : []),
+                        ...(isSaveFormVisible && actionForm === 'update'
+                            ? [{ title: 'Atualizar' }]
+                            : []),
+                    ]}
+                />
+            </SectionHeader>
                 
+            {!isSaveFormVisible && (
+                <div 
+                    style={{
+                        display: 'flex', 
+                        justifyContent: 'space-between', 
+                        paddingTop: '30px', 
+                        paddingBottom: '30px',
+                    }}
+                >
+                    <Search
+                        style={{width: '500px'}}
+                        placeholder="pesquise pelo nome"
+                        allowClear
+                        enterButton="Pesquisar"
+                        size="middle"
+                        onSearch={handleBuscarFluxo}
+                    />
+
+                    <Button 
+                        type="primary"
+                        icon={<FaPlus />}
+                        onClick={() => handleCriarFluxo()} 
+                    >
+                        Criar fluxo
+                    </Button>
+                </div>
             )}
 
-            <div className="pa-20"> 
-                { isFormVisivel ? 
+            <SectionContent>
+                { isSaveFormVisible ? 
                     (
                         <FormFluxo 
                             onSubmit={handleSalvarFluxo}
@@ -186,13 +189,10 @@ const TabGerenciarFluxos = () => {
                         <TableFluxos columns={columnsTableFluxos} data={fluxos} />
                     )
                 }
-            </div>
+            </SectionContent>
 
-            
         </div>
-           
-    )
-    
+    ) 
 }
 
 export default TabGerenciarFluxos;

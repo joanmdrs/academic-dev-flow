@@ -118,7 +118,6 @@ export const handleInfo = (response, infoMessage) => {
 }
 
 export const handleError = (error, errorMessage) => {
-  console.log(error);
   NotificationManager.error(errorMessage);
   return { error: errorMessage };
 };

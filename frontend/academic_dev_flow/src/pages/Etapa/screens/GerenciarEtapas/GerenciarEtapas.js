@@ -1,47 +1,62 @@
 import React, { useEffect, useState } from "react";
-import Titulo from "../../../../components/Titulo/Titulo";
 import { atualizarEtapa, buscarEtapaPeloNome, criarEtapa, excluirEtapas, listarEtapas } from "../../../../services/etapaService";
 import FormEtapa from "../../components/FormEtapa/FormEtapa";
 import { useContextoEtapa } from "../../context/ContextoEtapa";
-import { Button, Modal } from "antd";
-import { FaFilter, FaPlus, FaTrash } from "react-icons/fa";
-import FormFiltrarEtapas from "../../components/FormFiltrarEtapas/FormFiltrarEtapas";
+import { Breadcrumb, Button, Input, Modal, Space, Tooltip } from "antd";
+import { FaPlus, FaTrash } from "react-icons/fa";
 import TableEtapas from "../../components/TableEtapas/TableEtapas";
+import Section from "../../../../components/Section/Section";
+import SectionHeader from "../../../../components/SectionHeader/SectionHeader";
+import SectionFilters from "../../../../components/SectionFilters/SectionFilters";
+import SectionContent from "../../../../components/SectionContent/SectionContent";
+import { IoMdCreate, IoMdTrash } from "react-icons/io";
+import { HomeOutlined } from "@ant-design/icons";
 
-const GerenciarEtapas = () => {
+const {Search} = Input
+const GerenciarEtapas = ({grupo}) => {
 
-    const {dadosEtapa, setDadosEtapa} = useContextoEtapa()
+    const {dadosEtapa, setDadosEtapa, etapasSelecionadas, setEtapasSelecionadas} = useContextoEtapa()
     const [etapas, setEtapas] = useState([])
-    const [etapasSelecionadas, setEtapasSelecionadas] = useState([])
-    const [acaoForm, setAcaoForm] = useState("criar");
-    const [isFormVisivel, setIsFormVisivel] = useState(false);
-    const [isFormFiltrarVisivel, setIsFormFiltrarVisivel] = useState(false);
-    const isBotaoExcluirVisivel = etapasSelecionadas.length !== 0 ? false : true
+    const [actionForm, setActionForm] = useState("create");
+    const [isSaveFormVisible, setIsSaveFormVisible] = useState(false)
 
     const columnsTableEtapas = [
         {
-            title: "Código",
-            key: "codigo",
+            title: "ID",
+            key: "id",
             dataIndex: "id",
         },
         {
             title: "Nome",
             dataIndex: "nome",
-            key: "nome",
-            render: (_, record) => (
-                <span 
-                    style={{cursor: 'pointer', color: 'var(--primary-color)'}} 
-                    onClick={() => handleAtualizarEtapa(record)}
-                >
-                    {record.nome}
-                </span>
-            )
+            key: "nome"
         },
         {
             title: "Descrição",
             dataIndex: "descricao",
             key: "descricao",
         },
+        {
+            title: "Ações",
+            dataIndex: "action",
+            key: 'action',
+            render: (_, record) => (
+                <Space>
+                    <Tooltip title="Editar">
+                        <span 
+                            style={{color: 'var(--primary-color)', cursor: 'pointer'}}  
+                            onClick={() => handleAtualizarEtapa(record)}
+                        ><IoMdCreate /></span>
+                    </Tooltip>
+                    <Tooltip title="Excluir">
+                        <span 
+                            style={{color: 'var(--primary-color)', cursor: 'pointer'}} 
+                            onClick={() => handleExcluirEtapaOne(record.id)}
+                        ><IoMdTrash /></span>
+                    </Tooltip>
+                </Space>
+            )
+        }
     ];
 
     const handleListarEtapas = async () => { 
@@ -58,133 +73,146 @@ const GerenciarEtapas = () => {
     }, []);
 
     const handleCancelar = async () => {
-        setIsFormVisivel(false)
-        setIsFormFiltrarVisivel(false)
+        setIsSaveFormVisible(false)
         setDadosEtapa(null)
         setEtapasSelecionadas([])
         await handleListarEtapas()
     }
 
     const handleReload = async () => {
-        setIsFormVisivel(false)
+        setIsSaveFormVisible(false)
         setDadosEtapa(null)
         setEtapasSelecionadas([])
         await handleListarEtapas()
     }
 
-    const handleCliqueBotaoFiltrar = () => {
-        setIsFormFiltrarVisivel((prevIsFormFiltrarVisivel) => !prevIsFormFiltrarVisivel);
-    }
+    const handleFiltrarEtapas = async (value) => {
 
-    const handleFiltrarEtapas = async (formData) => {
-
-        console.log(formData)
-        const response = await buscarEtapaPeloNome(formData.nome)
+        const response = await buscarEtapaPeloNome(value)
         if(!response.error) {
             setEtapas(response.data)
         }
     }   
 
     const handleCriarEtapa = () => {
-        setAcaoForm('criar')
-        setIsFormVisivel(true);
+        setActionForm('create')
+        setIsSaveFormVisible(true)
         setDadosEtapa(null)
     };
 
     const handleAtualizarEtapa = (record) => {
-        setAcaoForm("atualizar")
-        setIsFormVisivel(true)
+        setActionForm('update')
+        setIsSaveFormVisible(true)
         setDadosEtapa(record)
     }
 
     const handleSalvarEtapa = async (dados) => {
         
-        if (acaoForm === 'criar'){
+        if (actionForm === 'create'){
             await criarEtapa(dados)
-        } else if (acaoForm === 'atualizar'){
+        } else if (actionForm === 'update'){
             await atualizarEtapa(dados, dadosEtapa.id)
         }
         await handleReload()
     }
 
-    const handleExcluirEtapa = async () => {
+    const handleExcluirEtapas = async (ids) => {
         Modal.confirm({
             title: 'Confirmar exclusão',
             content: 'Tem certeza que deseja excluir este(s) item(s) ?',
             okText: 'Sim',
             cancelText: 'Não',
             onOk: async () => {
-                if (etapasSelecionadas !== null) {
-                    const ids = etapasSelecionadas.map((item) => item.id)
-                    await excluirEtapas(ids)
+                const response = await excluirEtapas(ids)
+                if (!response.error){
                     await handleReload() 
-                }
+                }                
             }
         });
     }
 
+    const handleExcluirEtapaOne = async (idEtapa) => {
+        await handleExcluirEtapas([idEtapa])
+    }
+
+    const handleExcluirEtapasMany = async () => {
+        const ids = etapasSelecionadas.map((item) => item.id)
+        await handleExcluirEtapas(ids)
+    }
+
     return (
-        <div className="content">
+        <Section>
+            <SectionHeader>
+                <Breadcrumb
+                    items={[
+                        {
+                            href: `/academicflow/${grupo}/home`,
+                            title: <HomeOutlined />,
+                        },
+                        {
+                            href: `/academicflow/${grupo}/etapas`,
+                            title: 'Etapas',
+                        },
+                        ...(isSaveFormVisible && actionForm === 'create'
+                            ? [{ title: 'Cadastrar' }]
+                            : []),
+                        ...(isSaveFormVisible && actionForm === 'update'
+                            ? [{ title: 'Atualizar' }]
+                            : []),
+                    ]}
+                />
 
-            <Titulo
-                titulo='Etapas'
-                paragrafo='Etapas > Gerenciar etapas'
-            />
-
-
-            {!isFormVisivel && (
-                <div className="button-menu">
-                    <Button 
+                <Space>
+                    <Button
                         type="primary"
-                        icon={<FaFilter />}
-                        onClick={() => handleCliqueBotaoFiltrar()}
+                        onClick={() => handleCriarEtapa()} 
+                        icon={<FaPlus />}
                     >
-                        Filtrar
+                        Criar Etapa
                     </Button>
-                    <div className="grouped-buttons"> 
-                        <Button
-                            type="primary"
-                            onClick={() => handleCriarEtapa()} 
-                            icon={<FaPlus />}
-                        >
-                            Criar Etapa
-                        </Button>
+                </Space>
+            </SectionHeader>
 
+            {!isSaveFormVisible && (
+                <SectionFilters>
+                    <Search
+                        style={{width: '500px'}}
+                        placeholder="pesquise pelo nome"
+                        allowClear
+                        enterButton="Pesquisar"
+                        size="middle"
+                        onSearch={handleFiltrarEtapas}
+                    />
+
+                    {etapasSelecionadas.length !== 0 && (
                         <Button
                             type="primary"
                             danger
                             icon={<FaTrash />}
-                            disabled={isBotaoExcluirVisivel}
-                            onClick={async () => await handleExcluirEtapa()}
-                        
+                            onClick={async () => await handleExcluirEtapasMany()}
                         >
                             Excluir
                         </Button>
-                    </div>
-                </div>
+                    )}
+                </SectionFilters>
             )}
 
-            {isFormFiltrarVisivel && (
-                <div className="pa-20" style={{width: '50%'}}>
-                    <FormFiltrarEtapas onCancel={handleCancelar} onFilter={handleFiltrarEtapas} />
-                </div>
-            )} 
+            
 
-            <div className="pa-20"> 
-                {isFormVisivel ? (
+            <SectionContent>
+                {isSaveFormVisible ? (
                     <FormEtapa 
                         onSubmit={handleSalvarEtapa} 
                         onCancel={handleCancelar}
                     />
 
                 ) : (
-                   <TableEtapas data={etapas}  columns={columnsTableEtapas} />
+                   <TableEtapas data={etapas} columns={columnsTableEtapas} />
                 )}
+            </SectionContent>
+        </Section>
         
-            </div>
            
-        </div>
-
     )
 }
 

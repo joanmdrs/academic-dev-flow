@@ -48,7 +48,6 @@ const TableTask = ({onUpdate, onDelete, onStartTarefa, onPauseTarefa, onShowComm
             title: 'Membros',
             dataIndex: 'nomes_membros',
             key: 'nomes_membros',
-            align: 'center',
             render: (_, record) => (
                 <RenderMembers 
                     maxAvatars={3} 
@@ -61,7 +60,6 @@ const TableTask = ({onUpdate, onDelete, onStartTarefa, onPauseTarefa, onShowComm
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
-            align: 'center',
             filters: optionsStatusTarefas.map(option => ({
                 text: option.label,
                 value: option.value
@@ -75,7 +73,6 @@ const TableTask = ({onUpdate, onDelete, onStartTarefa, onPauseTarefa, onShowComm
             title: 'Início',
             dataIndex: 'data_inicio',
             key: 'data_inicio',
-            align: 'center',
             render: (_, record) => (
                 <RenderDate dateType="inicio" dateValue={record.data_inicio} />
             )
@@ -84,7 +81,6 @@ const TableTask = ({onUpdate, onDelete, onStartTarefa, onPauseTarefa, onShowComm
             title: 'Fim',
             dataIndex: 'data_termino',
             key: 'data_termino',
-            align: 'center',
             render: (_, record) => (
                 <RenderDate dateType="termino" dateValue={record.data_termino} />
             )

@@ -11,7 +11,7 @@ const FormVincularEtapas = ({onSubmit, onCancel}) => {
     const [optionsEtapas, setOptionsEtapas] = useState([])
     const {dadosFluxoEtapa} = useContextoFluxo()
     const [form] = useForm()
-    const [titleForm, setTitleForm] = useState('VINCULAR ETAPA AO FLUXO')
+    const [titleForm, setTitleForm] = useState('Vincular Etapa ao Fluxo')
 
     const handleListarFluxos = async () => {
         const response = await listarFluxos()
@@ -44,10 +44,10 @@ const FormVincularEtapas = ({onSubmit, onCancel}) => {
 
             if (dadosFluxoEtapa !== null){
                 form.setFieldsValue(dadosFluxoEtapa)
-                setTitleForm('ATUALIZAR ETAPA DO FLUXO')
+                setTitleForm('Atualizar Etapa do Fluxo')
             } else {
                 form.resetFields()
-                setTitleForm('VINCULAR ETAPA AO FLUXO')
+                setTitleForm('Vincular Etapa ao Fluxo')
             }
             
         }
@@ -55,12 +55,14 @@ const FormVincularEtapas = ({onSubmit, onCancel}) => {
         fetchData()
     }, [dadosFluxoEtapa, form])
     const filterOption = (input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
-    return (
-        <Form form={form} className="global-form" onFinish={onSubmit}>
-            <Form.Item>
-                <h4 className='global-title'> {titleForm} </h4>
-            </Form.Item>
 
+    return (
+        <Form 
+            form={form} 
+            className="global-form" 
+            onFinish={onSubmit} 
+            layout="vertical"
+        >
             <Form.Item 
                 label="Fluxo" 
                 name='fluxo'
@@ -68,13 +70,14 @@ const FormVincularEtapas = ({onSubmit, onCancel}) => {
             > 
                 <Select 
                     allowClear
-                    style={{ width: '100%' }}
                     placeholder="Selecione o fluxo"
                     options={optionsFluxos} 
+                    showSearch
+                    filterOption={filterOption}
                 />
             </Form.Item>
 
-            <Form.Item label="Ordem" name="ordem_no_fluxo">
+            <Form.Item label="Ordem" name="ordem_no_fluxo" >
                 <Input defaultValue={0} type="number" name="ordem_no_fluxo" placeholder="(Opcional)" />
             </Form.Item>
 
@@ -86,7 +89,6 @@ const FormVincularEtapas = ({onSubmit, onCancel}) => {
                 <Select 
                     allowClear
                     showSearch
-                    style={{ width: '100%' }}
                     placeholder="Selecione a etapa"
                     options={optionsEtapas} 
                     filterOption={filterOption}

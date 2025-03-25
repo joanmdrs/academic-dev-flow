@@ -1,10 +1,8 @@
-import { Button, Input, Tooltip, Modal, Tabs, Space } from "antd";
+import { Button, Input, Tooltip, Modal, Tabs, Space, Flex } from "antd";
 import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { TbCalendarUp } from "react-icons/tb";
-import { BsGrid3X3GapFill } from "react-icons/bs";
-import { FaListUl } from "react-icons/fa6";
-import { MdSortByAlpha } from "react-icons/md";
+import { MdFilterAlt, MdSortByAlpha } from "react-icons/md";
 import { NotificationManager } from "react-notifications";
 import { atualizarArtefato, criarArtefato, excluirArtefato, listarArtefatosPorProjeto } from "../../../../../../services/artefatoService";
 import SpinLoading from "../../../../../../components/SpinLoading/SpinLoading";
@@ -20,7 +18,6 @@ import ListArtefatos from "../../../../../Artefato/components/ListArtefatos/List
 import { LuLayout, LuLayoutGrid, LuLayoutList } from "react-icons/lu";
 
 const {TabPane} = Tabs
-const { Search } = Input
 
 const Artefatos = () => {
 
@@ -193,7 +190,9 @@ const Artefatos = () => {
             );
             setArtefatos(artefatosFiltrados)
         } else {
-            await handleBuscarArtefatosPorProjeto()
+            const response = await listarArtefatosPorProjeto(dadosProjeto.id)
+            setArtefatos(response.data)
+            
         }
     }
     
@@ -203,43 +202,6 @@ const Artefatos = () => {
                 isDrawerVisible={isDrawerCommentsVisible} 
                 closeDrawer={handleCloseDrawerComments} 
             />}
-
-            { !isFormVisible && (
-                <div className="df jc-between pa-t-20 pa-b-20" style={{borderBottom: '1px solid #ddd'}}> 
-                    <div className="df g-10">
-                        <Search
-                            style={{width: '500px'}}
-                            placeholder="pesquise pelo nome"
-                            allowClear
-                            enterButton="Pesquisar"
-                            size="middle"
-                            onSearch={handleBuscarArtefatosPeloNome}
-                        />
-
-                        <Tooltip title="Ordenar de A a Z">
-                            <Button 
-                                onClick={() => handleOrdenarArtefatosDeAaZ()}
-                            >
-                                <MdSortByAlpha />
-                            </Button>
-                        </Tooltip>
-
-                        <Tooltip title="Ordenar em ordem crescente">
-                            <Button onClick={() => handleOrdenarArtefatosPorData()}>
-                                <TbCalendarUp />
-                            </Button>
-                        </Tooltip>
-                    </div>
-
-                    <Button
-                        onClick={() => handleAdicionarArtefato()} 
-                        type="primary" 
-                        size="large"
-                        icon={<FaPlus />}> 
-                        Criar Artefato 
-                    </Button>
-                </div>
-            )}
 
             <div>
 
@@ -269,17 +231,62 @@ const Artefatos = () => {
                                 size="middle"
                                 tabPosition="top"
                                 indicator={{align: "center"}}
-                                defaultActiveKey="2"
+                                defaultActiveKey="1"
+                                tabBarExtraContent={
+                                    <Flex horizontal gap="middle"> 
+                                        <Space>
+                                            <p 
+                                                style={{
+                                                    color: "var(--border-color)", 
+                                                    display: 'flex', 
+                                                    alignItems: 'center'
+                                                }}
+                                            > <MdFilterAlt size={"20px"} /> Filtros </p>
+                                        </Space>
+                                        <Space>
+                                            <Input
+                                                style={{width: '500px'}}
+                                                placeholder="Pesquise pelo nome do artefato"
+                                                name="nome"
+                                                onChange={(event) => handleBuscarArtefatosPeloNome(event.target.value)}
+                                            />
+                                        </Space>
+                                        <Space>
+                                            <Tooltip title="Ordenar de A a Z">
+                                                <Button 
+                                                    onClick={() => handleOrdenarArtefatosDeAaZ()}
+                                                >
+                                                    <MdSortByAlpha />
+                                                </Button>
+                                            </Tooltip>
+
+                                            <Tooltip title="Ordenar em ordem crescente">
+                                                <Button onClick={() => handleOrdenarArtefatosPorData()}>
+                                                    <TbCalendarUp />
+                                                </Button>
+                                            </Tooltip>
+                                        </Space>
+
+                                        <Space>
+                                            <Button
+                                                onClick={() => handleAdicionarArtefato()} 
+                                                type="primary" 
+                                                icon={<FaPlus />}> 
+                                                Criar Artefato 
+                                            </Button>
+                                        </Space>
+                                    </Flex>
+                                }
                             > 
-                                <TabPane style={{padding: '20px'}} tab={<Space> <LuLayoutGrid /> Grid </Space> } key="1"  >
-                                    <GridArtefatos 
+                                <TabPane style={{padding: '20px'}} tab={<Space> <LuLayout /> Tabela </Space>} key="1" >
+                                    <TableArtefatos 
                                         data={artefatos}
-                                        onCreate={handleAdicionarArtefato}
                                         onUpdate={handleAtualizarArtefato}
                                         onDelete={handleExcluirArtefato}
                                         onShowComments={handleExibirComentarios}
                                     />
                                 </TabPane>
+
 
                                 <TabPane style={{padding: '20px'}} tab={<Space> <LuLayoutList /> Lista </Space> } key="2"  >
                                     <ListArtefatos 
@@ -290,15 +297,18 @@ const Artefatos = () => {
                                     />
                                 </TabPane>
 
-
-                                <TabPane style={{padding: '20px'}} tab={<Space> <LuLayout /> Tabela </Space>} key="3" >
-                                    <TableArtefatos 
+                                <TabPane style={{padding: '20px'}} tab={<Space> <LuLayoutGrid /> Grid </Space> } key="3"  >
+                                    <GridArtefatos 
                                         data={artefatos}
+                                        onCreate={handleAdicionarArtefato}
                                         onUpdate={handleAtualizarArtefato}
                                         onDelete={handleExcluirArtefato}
                                         onShowComments={handleExibirComentarios}
                                     />
                                 </TabPane>
+
+
+                                
                                 
                             </Tabs>
                         </div>                        

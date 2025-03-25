@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Button, Form, Input, Radio } from "antd";
 import { IoIosArrowRoundForward } from "react-icons/io";
+import { IoIosArrowRoundBack } from "react-icons/io";
 import "./SelecionarArea.css";
 import { useRegisterContexto } from "../../context/RegisterContexto";
 import { NotificationManager } from "react-notifications";
+import { MdOutlineArrowBackIosNew, MdOutlineArrowForwardIos } from "react-icons/md";
 
 const SelecionarArea = () => {
     const [option, setOption] = useState(null);
     const [form] = Form.useForm();
-    const { setInfoGithub, setStep } = useRegisterContexto();
+    const { setInfoGithub, step, setStep } = useRegisterContexto();
 
     useEffect(() => {
         form.validateFields();
@@ -43,10 +45,10 @@ const SelecionarArea = () => {
 
             {option === "sim" ? (
 
-                <div className="global-div">
+                <div className="global-form">
 
                     <Form
-                        className="global-form"
+                        className="globla-div"
                         form={form}
                         layout="vertical"
                         onFinish={handleProsseguir}
@@ -77,17 +79,28 @@ const SelecionarArea = () => {
                         </Form.Item>
 
                         <Button type="primary" htmlType="submit">
-                            Prosseguir <IoIosArrowRoundForward />
+                            Prosseguir <MdOutlineArrowForwardIos />
                         </Button>
                     </Form>
 
                 </div>
                 
             ) : (
-                <Button type="primary" htmlType="submit" onClick={handleProsseguir}>
-                    Prosseguir <IoIosArrowRoundForward />
-                </Button>
+                <div style={{display: 'flex', gap: "10px"}}> 
+                    <Button onClick={() => setStep("1")} icon={<MdOutlineArrowBackIosNew />}>
+                        Voltar
+                    </Button>
+                    <Button type="primary" htmlType="submit" onClick={handleProsseguir}>
+                        Prosseguir  <MdOutlineArrowForwardIos />
+                    </Button>
+                    
+                </div>
+                
+
+                
             )}
+
+        
         </div>
     );
 };

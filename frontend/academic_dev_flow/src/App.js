@@ -1,5 +1,3 @@
-import './App.css';
-import './App.css';
 import Routes from './routes';
 import { Layout } from 'antd';
 import { NotificationContainer } from 'react-notifications';

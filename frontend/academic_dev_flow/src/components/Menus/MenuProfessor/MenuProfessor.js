@@ -125,8 +125,8 @@ const MenuProfessor = () => {
                         <Link to="/professor/membros/gerenciar">Membros</Link>
                     </Menu.Item>
 
-                    <Menu.Item key="/professor/membros">
-                        <Link to="/professor/membros">Equipes</Link>
+                    <Menu.Item key="/professor/membros/equipes">
+                        <Link to="/professor/membros/equipes">Equipes</Link>
                     </Menu.Item>
 
                     <Menu.Item key="/professor/membros/funcoes">
@@ -134,13 +134,13 @@ const MenuProfessor = () => {
                     </Menu.Item>
                 </SubMenu>
                                 
-                <Menu.Item 
+                {/* <Menu.Item 
                     className="item-menu" 
                     key="/professor/github-integration" 
                     icon={<LuGithub size="20px" />}
                 >
                     <Link to="/professor/github-integration">GitHub</Link>
-                </Menu.Item>
+                </Menu.Item> */}
             </Menu>
         </Sider>
     );

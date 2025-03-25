@@ -64,7 +64,6 @@ const TabFluxo = () => {
 
     const handleVincularFluxo = async (formData) => {
         try {
-            console.log(formData)
             const response = await atualizarFluxoProjeto(formData.fluxo, dadosProjeto.id)
             if (!response.error){
                 NotificationManager.success('Fluxo vinculado ao projeto com sucesso! ')

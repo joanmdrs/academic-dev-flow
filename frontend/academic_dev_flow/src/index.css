@@ -1,34 +1,36 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
+
+
+
 
 :root {
   --primary-color: #1677FF;
-  --second-color: #001529;
+  --second-color: #093066;
   --third-color: #002140;
   --border-color: #BDBDBD;
 }
 
 * {
-  font-family: "Nunito", sans-serif;
+  font-family: "Lexend", sans-serif;
 }
 
 body {
   margin: 0;
   overflow-x: hidden;
+  min-height: 100vh;
 }
 
-
-.ant-layout {
-  background-color: #ddd;
+.ant-table {
+  border: 1px solid #ddd;
 }
 
-.ant-table-thead .ant-table-cell {
-  background-color: #F1F1F1  !important;
-  color: #585858 !important;
-}
+/* .ant-table-thead .ant-table-cell {
+  background-color: var(--second-color)  !important;
+  color: #FFFFFF !important;
+} */
+
 .ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector {
   border: 1px solid var(--border-color);
   color: #585858 !important;
@@ -45,12 +47,13 @@ body {
 
 
 .content {
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  margin-top: 10px;
+  /* margin-top: 10px;
   margin-left: 10px;
   background-color: #FFFFFF;
-  border-top-left-radius: 5px;
+  border-top-left-radius: 5px; */
   height: 100%;
+  /* border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd; */
 }
 
 
@@ -66,20 +69,21 @@ body {
 .global-form {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start !important;
   padding: 20px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border: 1px solid #ddd;
   background-color: #FFFFFF;
   border-radius: 5px;
+  width: 80%;
 }
 
 .global-title {
-  font-family: 'Poppins', sans-serif;
-  text-transform: capitalize;
   font-weight: 500;
+  text-transform: capitalize !important;
   font-size: 15px;
+  color: var(--primary-color);
+  padding: 15px 20px;
+  border-radius: 5px;
+  background-color: #EFF8FB;
 }
 
 .button-menu {
@@ -97,7 +101,6 @@ body {
 
 
 .ff-pop {
-  font-family: 'Poppins', sans-serif;
 }
 
 .fw-400 {

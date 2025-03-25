@@ -4,6 +4,7 @@ import ListFuncoes from "../ListFuncoes/ListFuncoes";
 import { IoMdClose, IoMdTrash } from "react-icons/io";
 import { FaPlus } from "react-icons/fa";
 import { getRandomColor } from "../../../../services/utils";
+import { UserOutlined } from "@ant-design/icons";
 const { Panel } = Collapse;
 
 
@@ -34,7 +35,10 @@ const ListEquipe = ({data, onAddFunction, onDeleteFunction, onAdd, onDelete, onD
                             >
                             <Skeleton avatar title={false} loading={item.loading} active>
                                 <List.Item.Meta
-                                    avatar={<Avatar src={`https://avatar.iran.liara.run/public/${item.avatar}`} />}
+                                    avatar={
+                                        <Avatar style={{backgroundColor: getRandomColor()}}>
+                                            {item.nome_membro ? item.nome_membro.charAt(0).toUpperCase() : <UserOutlined />}
+                                        </Avatar>}
                                     title={
                                         <div style={{display: 'flex', width: '100%', justifyContent: 'space-between'}}>
                                             <div>{item.nome_membro}</div>

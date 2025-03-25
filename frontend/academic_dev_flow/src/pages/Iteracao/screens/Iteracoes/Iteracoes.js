@@ -1,4 +1,4 @@
-import { Button, Flex, Modal, Space, Tooltip } from 'antd'
+import { Breadcrumb, Button, Flex, Modal, Space, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
 import { useContextoGlobalUser } from '../../../../context/ContextoGlobalUser/ContextoGlobalUser'
@@ -16,8 +16,14 @@ import { optionsStatusIteracoes } from '../../../../services/optionsStatus'
 import { IoMdCreate, IoMdTrash } from 'react-icons/io'
 import { formatDate } from '../../../../services/utils'
 import RenderEtapas from '../../../../components/RenderEtapas/RenderEtapas'
+import { MdFilterAlt } from 'react-icons/md'
+import Section from '../../../../components/Section/Section'
+import SectionHeader from '../../../../components/SectionHeader/SectionHeader'
+import SectionFilters from '../../../../components/SectionFilters/SectionFilters'
+import SectionContent from '../../../../components/SectionContent/SectionContent'
+import { HomeOutlined } from '@ant-design/icons'
 
-const Iteracoes = () => {
+const Iteracoes = ({grupo}) => {
 
     const {usuario} = useContextoGlobalUser()
 
@@ -42,8 +48,6 @@ const Iteracoes = () => {
                 await handleBuscarIteracoesDosProjetosDoMembro()
             }
         }
-
-        console.log(iteracoes)
 
         fetchData()
     }, [usuario])
@@ -106,9 +110,23 @@ const Iteracoes = () => {
         if (!nome && !projeto){
             await handleBuscarIteracoesDosProjetosDoMembro()
         } else {
-            const response = await filtrarIteracoesPeloNomeEPeloProjeto(nome, projeto)
-            if (!response.error){
-                setIteracoes(response.data)
+            const response = await buscarIteracoesDosProjetosDoMembro(usuario.id)
+            if (!response.error && response.data) {
+                let filteredIterações = response.data;
+        
+                if (nome) {
+                    filteredIterações = filteredIterações.filter(iteracao => 
+                        iteracao.nome.toLowerCase().includes(nome.toLowerCase())
+                    );
+                }
+        
+                if (projeto) {
+                    filteredIterações = filteredIterações.filter(iteracao => 
+                        iteracao.projeto === projeto
+                    );
+                }
+        
+                setIteracoes(filteredIterações);
             }
         }
     }
@@ -193,7 +211,6 @@ const Iteracoes = () => {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
-            align: 'center',
             render: (_, record) => (
                 <RenderStatus optionsStatus={optionsStatusIteracoes} propStatus={record.status} /> 
             )
@@ -217,51 +234,44 @@ const Iteracoes = () => {
 
 
     return (
-        <div className='content'> 
-            <div style={{
-                borderBottom: '1px solid #ddd',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'baseline',
-                padding: '20px',
-                backgroundColor: '#FFFFFF'
-            }}> 
-                <Space>
-                    <h2 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '600'}}> Iterações </h2>
-                </Space>
+        <Section>
+            <SectionHeader>
+                <Breadcrumb
+                    items={[
+                        {
+                            href: `/academicflow/${grupo}/home`,
+                            title: <HomeOutlined />,
+                        },
+                        {
+                            href: `/academicflow/${grupo}/cronograma/iteracoes`,
+                            title: 'Iterações',
+                        },
+                        ...(isFormVisible && actionForm === 'create'
+                            ? [{ title: 'Cadastrar' }]
+                            : []),
+                        ...(isFormVisible && actionForm === 'update'
+                            ? [{ title: 'Atualizar' }]
+                            : []),
+                    ]}
+                />
 
                 <Space>
                     <Button 
                         onClick={handleAdicionarIteracao} 
                         type="primary" 
-                        ghost 
-                        size="large"
                         icon={<FaPlus />}
                     > Criar Iteração 
                     </Button>
                 </Space>
+            </SectionHeader>
 
-            </div>
-
-            { isTableVisible && (
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'baseline',
-                    padding: '20px',
-                    borderBottom: '1px solid #DDD',
-                    backgroundColor: '#FFFFFF'
-                }}>
-                    <Flex horizontal gap="middle">
-                        <Space>
-                            <FormFilterIteracoes onChange={handleFiltrarIteracoes} idMembro={usuario.id}/>
-                        </Space>
-                    </Flex>
-                </div>
+            {!isFormVisible && (
+                <SectionFilters>
+                    <FormFilterIteracoes onChange={handleFiltrarIteracoes} idMembro={usuario.id}/>
+                </SectionFilters>
             )}
-
-            <div style={{margin: '20px'}}>
-
+            
+            <SectionContent>
                 { isFormVisible && 
                     <FormIteracao 
                         onSubmit={handleSalvarIteracao} 
@@ -271,18 +281,20 @@ const Iteracoes = () => {
                 }
 
                 {(iteracoes && isTableVisible) && (
-                    <div>
-                        <TableIteracoes 
-                            columns={columnsTable}
-                            data={iteracoes}   
-                        />
-                    </div>
-        
-
-                    
+                    <TableIteracoes 
+                        columns={columnsTable}
+                        data={iteracoes}   
+                    />
                 )}
-            </div>
-        </div>
+
+            </SectionContent>
+
+       
+
+            
+
+            
+        </Section>
     )
 }
 

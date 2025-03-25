@@ -9,7 +9,7 @@ const FormCategoriaFuncaoMembro = ({onSubmit, onCancel}) => {
     const {dadosCategoriaFuncaoMembro} = useFuncaoMembroContexto()
     const [cor, setCor] = useState('');
     const [form] = Form.useForm()
-    const [titulo, setTitulo] = useState("CADASTRAR CATEGORIA")
+    const [titulo, setTitulo] = useState("Cadastrar Função")
 
     useEffect(() => {
         const fetchData = async () => {
@@ -17,12 +17,12 @@ const FormCategoriaFuncaoMembro = ({onSubmit, onCancel}) => {
             if (dadosCategoriaFuncaoMembro !== null) {
                 setCor(dadosCategoriaFuncaoMembro.cor)
                 form.setFieldsValue(dadosCategoriaFuncaoMembro)
-                setTitulo("ATUALIZAR CATEGORIA")
+                setTitulo("Atualizar dados da Função")
 
             } else {
                 handleGerarCor()
                 form.resetFields()
-                setTitulo("CADASTRAR CATEGORIA")
+                setTitulo("Cadastrar Função")
             }
         }
 
@@ -50,16 +50,13 @@ const FormCategoriaFuncaoMembro = ({onSubmit, onCancel}) => {
             layout='vertical' 
             onFinish={handleFormSubmit}
         >
-            <Form.Item>
-                <h4 className='global-title'> {titulo} </h4>
-            </Form.Item>
 
             <Form.Item label="Nome" name="nome" rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}>
                 <Input type='text' name='nome' placeholder='nome'/> 
             </Form.Item>
 
             <Form.Item label='Descrição' name='descricao'>
-                <Input type='text' name='descricão' placeholder='descrição (opcional)' />
+                <Input.TextArea rows={4} type='text' name='descricão' placeholder='descrição (opcional)' />
             </Form.Item>
 
             <div style={{display: 'flex', alignItems: 'flex-end', gap: '10px'}}> 

@@ -21,7 +21,7 @@ const ScreenQuadroMembros = ({grupo}) => {
 
                 <Content>
                     <MembroProvider>
-                        <QuadroMembros />
+                        <QuadroMembros group={grupo} />
                     </MembroProvider>
                                            
                 </Content>

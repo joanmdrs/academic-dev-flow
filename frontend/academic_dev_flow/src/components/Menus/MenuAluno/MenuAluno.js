@@ -121,8 +121,8 @@ const MenuAluno = () => {
                     icon={<LuUsers size="20px" />}
                     title="Membros"
                 >
-                    <Menu.Item key="/aluno/membros">
-                        <Link to="/aluno/membros">Equipes</Link>
+                    <Menu.Item key="/aluno/membros/equipes">
+                        <Link to="/aluno/membros/equipes">Equipes</Link>
                     </Menu.Item>
 
                     <Menu.Item key="/aluno/membros/funcoes">
@@ -130,13 +130,13 @@ const MenuAluno = () => {
                     </Menu.Item>
                 </SubMenu>
                                 
-                <Menu.Item 
+                {/* <Menu.Item 
                     className="item-menu" 
                     key="/aluno/github-integration" 
                     icon={<LuGithub size="20px" />}
                 >
                     <Link to="/aluno/github-integration">GitHub</Link>
-                </Menu.Item>
+                </Menu.Item> */}
             </Menu>
         </Sider>
     );

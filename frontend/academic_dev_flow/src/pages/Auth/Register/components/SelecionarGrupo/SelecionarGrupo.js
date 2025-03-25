@@ -7,17 +7,24 @@ import assetTeacher from "../../../../../assets/user-teacher.png";
 import assetStudent from "../../../../../assets/user-student.png";
 import assetColaborator from "../../../../../assets/user-colaborator.png";
 import { listarGrupos } from "../../../../../services/membroService";
+import { MdOutlineArrowForwardIos, MdOutlineArrowBackIosNew } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 const SelecionarGrupo = () => {
     const [itemSelecionado, setItemSelecionado] = useState(null); // Armazena o grupo selecionado pelo usuário
     const [opcoesGrupos, setOpcoesGrupos] = useState([]); // Armazena os grupos carregados da API
-    const { setGrupoUsuario, setStep } = useRegisterContexto();
+    const { grupoUsuario, setGrupoUsuario, setStep } = useRegisterContexto();
+    const navigate = useNavigate()
 
-    // Carrega os grupos da API ao montar o componente
+
     useEffect(() => {
         const carregarGrupos = async () => {
             try {
                 const response = await listarGrupos();
+
+                if (grupoUsuario){
+                    setItemSelecionado(grupoUsuario)
+                }
 
                 if (!response.error) {
                     const grupos = response.data.map(item => ({
@@ -36,7 +43,7 @@ const SelecionarGrupo = () => {
 
     // Trata a seleção de um grupo
     const handleSelecionarGrupo = (nomeGrupo) => {
-        const grupoSelecionado = opcoesGrupos.find(grupo => grupo.label === nomeGrupo); // Busca o grupo correspondente pelo nome
+        const grupoSelecionado = opcoesGrupos.find(grupo => grupo.label === nomeGrupo);
         if (grupoSelecionado) {
             setItemSelecionado(grupoSelecionado.value); // Define o ID do grupo selecionado
         } else {
@@ -83,13 +90,21 @@ const SelecionarGrupo = () => {
                 </div>
             </div>
 
-            {itemSelecionado && (
-                <div>
+            <div style={{display: 'flex', gap: '10px'}}> 
+                <Button 
+                    onClick={() => navigate(-1)} 
+                    icon={<MdOutlineArrowBackIosNew/>}
+                >
+                    Voltar 
+                </Button>
+                {itemSelecionado && (
                     <Button type="primary" onClick={handleProsseguir}>
-                        Prosseguir <IoIosArrowRoundForward />
+                        Prosseguir <MdOutlineArrowForwardIos />
                     </Button>
-                </div>
-            )}
+                )}
+            </div>
+
+           
         </div>
     );
 };

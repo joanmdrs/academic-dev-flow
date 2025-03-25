@@ -50,3 +50,4 @@ Dockerfile.local
 
 # Diretório de migrações de banco de dados (opcional, se preferir não rastreá-las)
 # migrations/
+.vercel

@@ -1,13 +1,15 @@
-import { Button, Space } from "antd";
+import { Breadcrumb, Button, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import TableProjetoEquipe from "../../components/TableProjetoEquipe/TableProjetoEquipe";
 import { useContextoGlobalUser } from "../../../../context/ContextoGlobalUser/ContextoGlobalUser";
 import { handleError } from "../../../../services/utils";
 import { buscarProjetosDoMembro } from "../../../../services/membroProjetoService";
 import { useNavigate } from "react-router-dom";
-import ListProjetoEquipe from "../../components/ListProjetoEquipe/ListProjetoEquipe";
+import Section from "../../../../components/Section/Section";
+import SectionHeader from "../../../../components/SectionHeader/SectionHeader";
+import { HomeOutlined } from "@ant-design/icons";
 
-const QuadroMembros = () => {
+const QuadroMembros = ({group}) => {
 
     const {usuario, grupo} = useContextoGlobalUser()
     const [projetosEquipes, setProjetosEquipes] = useState([])
@@ -26,15 +28,15 @@ const QuadroMembros = () => {
             idProjeto: record.projeto
         }
         if (grupo === 'Docentes') {
-            navigate("/professor/membros/equipe", {
+            navigate("/professor/membros/equipes/sua-equipe", {
                 state: parametros
             });
         } else if (grupo === 'Discentes') {
-            navigate("/aluno/membros/equipe", {
+            navigate("/aluno/membros/equipes/sua-equipe", {
                 state: parametros
             });
         } else if (grupo === 'Administradores') {
-            navigate("/admin/membros/equipe", {
+            navigate("/admin/membros/equipes/sua-equipe", {
                 state: parametros
             });
         }
@@ -55,24 +57,28 @@ const QuadroMembros = () => {
     }, [usuario])
 
     return (
-        <div className="content"> 
-            <div style={{
-                borderBottom: '1px solid #ddd',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'baseline',
-                padding: '20px',
-                backgroundColor: '#FFFFFF'
-            }}> 
-               <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
-                    <h2 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '600'}}> Membros </h2>
-                    <h4 
-                        style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '400'}}> 
-                        Encontre suas equipes 
-                    </h4>
-                </div>
+        <Section>
 
-            </div>
+            <SectionHeader>
+                <Breadcrumb
+                    items={[
+                        {
+                            href: `/academicflow/${group}/home`,
+                            title: <HomeOutlined />,
+                        },
+                        {
+                            href: `/academicflow/${group}/membros/gerenciar`,
+                            title: 'Membros',
+                        },
+                        {
+                            href: `/academicflow/${group}/membros/equipes`,
+                            title: 'Equipes',
+                        }
+                    ]}
+                />
+            </SectionHeader>
+
+           
 
             <div>
 
@@ -81,7 +87,7 @@ const QuadroMembros = () => {
                 </div>
             </div>
 
-        </div>
+        </Section>
     )
     
 }

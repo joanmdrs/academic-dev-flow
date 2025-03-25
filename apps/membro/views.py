@@ -15,23 +15,25 @@ from apps.api.permissions import IsAdminUserOrReadOnly
 from django.contrib.auth.hashers import make_password
 from rest_framework.permissions import AllowAny
 from django.contrib.auth.hashers import check_password
-
+import json
 
 class CadastrarMembroView(APIView):
     permission_classes = [AllowAny]
+    authentication_classes = []
 
     def post(self, request):
         try:
-            user_data = request.data.get('usuario', {}) 
+            # Extrai os dados do FormData (assumindo que os dados JSON foram enviados como strings)
+            user_data = request.data.get('usuario', {})
             member_data = request.data.get('membro', {})
-            print(member_data)
-            
-            # Verifica se o username já existe
+
+            # Verifica se os dados do usuário foram fornecidos
+            if not user_data:
+                return Response({'error': 'Dados do usuário não fornecidos'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Verifica se o nome de usuário já existe
             if Usuario.objects.filter(username=user_data.get('username')).exists():
                 return Response({'error': 'O nome de usuário já está sendo utilizado!'}, status=status.HTTP_409_CONFLICT)
-
-            if not user_data:
-                raise ValueError("Dados do usuário não fornecidos")
 
             # Serializa os dados do usuário
             user_serializer = UsuarioSerializer(data=user_data)
@@ -43,19 +45,19 @@ class CadastrarMembroView(APIView):
                 username=user_serializer.validated_data['username'],
                 password=user_serializer.validated_data['password'],
             )
-            user_created.is_staff = True
+            user_created.is_staff = False
             user_created.is_superuser = False
             user_created.save()
 
-            # Adiciona o usuário ao grupo, se o grupo for fornecido
-            if member_data['grupo']:
-                group = Group.objects.get(id=member_data['grupo'])
-                if not group:
+            # Verifica se o grupo foi fornecido e existe
+            if 'grupo' in member_data and member_data['grupo']:
+                try:
+                    group = Group.objects.get(id=member_data['grupo'])
+                    user_created.groups.add(group)
+                except Group.DoesNotExist:
                     return Response({'error': 'Grupo não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
-                user_created.groups.add(group)
-
-            # Adiciona os dados necessários ao membro
-            member_data['usuario'] = user_created.id  # Relaciona o membro com o usuário criado
+            # Relaciona o membro com o usuário criado
+            member_data['usuario'] = user_created.id
             
             # Serializa e salva o membro
             member_serializer = MembroSerializer(data=member_data)
@@ -66,21 +68,13 @@ class CadastrarMembroView(APIView):
             member_serializer.save()
 
             return Response(member_serializer.data, status=status.HTTP_201_CREATED)
-        
-        except Group.DoesNotExist:
-            user_created.delete()  # Remove o usuário criado em caso de erro
-            return Response({'error': 'Grupo não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
-
-        except ValueError as ve:
-            if user_created:
-                user_created.delete()  # Remove o usuário criado em caso de erro
-            return Response({'error': str(ve)}, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
+            # Se algo der errado, exclui o usuário criado para evitar dados inconsistentes
             if user_created:
-                user_created.delete()  # Remove o usuário criado em caso de erro
+                user_created.delete()
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
+                
 class BuscarMembroPorIdView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
@@ -138,20 +132,16 @@ class BuscarMembroPorGrupoView(APIView):
             if not group:
                 return Response({'error': 'Grupo não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
 
-            # Busca todos os membros
-            membros = Membro.objects.all()
+            # Filtra membros cujo usuário pertence ao grupo
+            membros = Membro.objects.filter(usuario__groups=group)
 
             # Filtra por nome, se fornecido
             if nome:
                 membros = membros.filter(nome__icontains=nome)
 
-            # Filtra pelo grupo
-            membros = membros.filter(grupo=group)
-
             # Serializa os resultados
             serializer = MembroSerializer(membros, many=True)
 
-            # O campo nome_grupo já está no serializer, então não precisamos adicionar manualmente
             return Response({'message': 'Membros encontrados com sucesso.', 'results': serializer.data}, status=status.HTTP_200_OK)
         
         except Exception as e:
@@ -171,21 +161,10 @@ class BuscarMembroPorIdUsuarioView(APIView):
             # Busca o membro pelo ID do usuário
             membro = Membro.objects.get(usuario_id=id_usuario)
             
-            if membro:
-                # Obtém o nome do grupo
-                group_name = membro.grupo.name if membro.grupo else None
+            serializer = MembroSerializer(membro)
                 
-                # Serializa o membro
-                serializer = MembroSerializer(membro)
-                
-                # Adiciona o nome do grupo à resposta
-                data = serializer.data
-                data['nome_grupo'] = group_name
-                
-                return Response(data, status=status.HTTP_200_OK)
-            
-            return Response({'error': 'Membro não encontrado'}, status=status.HTTP_404_NOT_FOUND)
-        
+            return Response(serializer.data, status=status.HTTP_200_OK)
+                    
         except Membro.DoesNotExist:
             return Response({'error': 'Membro não encontrado'}, status=status.HTTP_404_NOT_FOUND)
         
@@ -220,22 +199,25 @@ class ExcluirMembroView(APIView):
     
     def delete(self, request):
         try:
-            id_membro = request.GET.get('id_membro', None)
+            ids_membros = request.data.get('ids_membros', [])
+
+            if not ids_membros:
+                return Response({'error': 'O IDs das membros não foram fornecidos'}, status=status.HTTP_400_BAD_REQUEST)
+                
+            membros = Membro.objects.filter(id__in=ids_membros)
             
-            # Verifica se o ID do membro foi fornecido
-            if not id_membro:
-                return Response({'error': 'ID do membro não fornecido'}, status=status.HTTP_400_BAD_REQUEST)
+            if membros.exists():
+                # Obtendo os usuários associados aos membros
+                ids_usuarios = membros.values_list('usuario_id', flat=True)
+                
+                # Excluindo os usuários antes dos membros
+                Usuario.objects.filter(id__in=ids_usuarios).delete()
+                
+                # Excluindo os membros
+                membros.delete()
+                return Response({"detail": "Membros excluídos com sucesso"}, status=status.HTTP_204_NO_CONTENT)
             
-            obj_membro = Membro.objects.get(pk=id_membro)
-            obj_usuario = Usuario.objects.get(pk=obj_membro.usuario.id)
-            
-            if (obj_membro is not None and obj_usuario is not None):
-                obj_usuario.delete()
-                obj_membro.delete()
-                return Response({"detail": "Membro excluído com sucesso"}, status=status.HTTP_204_NO_CONTENT)
-            
-            else:
-                return JsonResponse({'error': 'Recurso não encontrado'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Um ou mais membros não foram encontrados'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -324,6 +306,7 @@ class BuscarMembrosPorListaIdsView(APIView):
 
 class ListarGruposView(APIView): 
     permission_classes = [AllowAny]
+    authentication_classes = []
     
     def get(self, request): 
         try: 

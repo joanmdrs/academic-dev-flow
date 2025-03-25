@@ -37,9 +37,13 @@ class FuncaoMembroSerializer(serializers.ModelSerializer):
     
     def get_nome_membro(self, obj):
         return obj.membro_projeto.membro.nome
+
     
     def get_nome_grupo(self, obj):
-        return obj.membro_projeto.membro.grupo.name
+        if obj.membro_projeto.membro.usuario and obj.membro_projeto.membro.usuario.groups.exists():
+            return obj.membro_projeto.membro.usuario.groups.first().name
+        return "Sem grupo"
+    
     
     def get_nome_projeto(self, obj):
         return obj.membro_projeto.projeto.nome

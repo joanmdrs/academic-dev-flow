@@ -8,7 +8,7 @@ const StepsRegister = () => {
     const { step } = useRegisterContexto();
 
     return (
-        <div>
+        <div style={{backgroundColor: "#FFFFFF"}}>
             {step === "1" && <SelecionarGrupo key="1" />}
             {step === "2" && <SelecionarArea key="2" />}
             {step === "3" && <FormRegister key="3" />}

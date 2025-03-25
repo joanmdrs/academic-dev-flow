@@ -1,16 +1,20 @@
-import { Avatar, Space } from "antd";
+import { Avatar, Space, Tooltip } from "antd";
 import React from "react";
 import { FaCaretDown } from "react-icons/fa";
 import { useContextoGlobalUser } from "../../context/ContextoGlobalUser/ContextoGlobalUser";
 import { Dropdown } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 
 const MyDropdown = ({ items }) => {
   const { usuario } = useContextoGlobalUser();
 
   return (
     <Space style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-      <Avatar src={`https://avatar.iran.liara.run/public/${usuario?.avatar}`} />
-      <span> {usuario?.nome} </span>
+      <Tooltip placement="left" title={usuario?.nome}>
+        <Avatar style={{backgroundColor: 'var(--primary-color)'}}>
+          {usuario?.nome ? usuario.nome.charAt(0).toUpperCase() : <UserOutlined />}
+        </Avatar>
+      </Tooltip>
       
       {/* Dropdown surrounding only the icon */}
       <Dropdown trigger={['click']} menu={{ items }}>

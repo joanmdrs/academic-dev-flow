@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, Modal, Select, Space, Tooltip } from "antd";
+import { Breadcrumb, Button, Form, Modal, Select, Space, Tooltip } from "antd";
 import { listarFluxos } from "../../../../../services/fluxoService"; 
 
 import { useContextoFluxo } from "../../../context/ContextoFluxo";
@@ -9,12 +9,14 @@ import { atualizarFluxoEtapa, desvincularEtapaFluxo, listarEtapasPorFluxo, lista
 import TableFluxoEtapas from "../../../components/TableFluxoEtapas/TableFluxoEtapas";
 import { IoMdCreate, IoMdTrash } from "react-icons/io";
 import { NotificationManager } from "react-notifications";
-import { limitarCaracteres } from "../../../../../services/utils";
+import { filterOption, limitarCaracteres } from "../../../../../services/utils";
+import SectionHeader from "../../../../../components/SectionHeader/SectionHeader";
+import SectionContent from "../../../../../components/SectionContent/SectionContent";
+import { HomeOutlined } from "@ant-design/icons";
 
-const TabVincularEtapas = () => {
+const TabVincularEtapas = ({grupo}) => {
 
-    const [isFormVisible, setIsFormVisible] = useState(false)
-    const [isFormFiltrarVisible, setIsFormFiltrarVisible] = useState(false)
+    const [isSaveFormVisible, setIsSaveFormVisible] = useState(false)
     const [isTableVisible, setIsTableVisible] = useState(true)
     const [optionsFluxos, setOptionsFluxos] = useState([])
     const {fluxoEtapas, setFluxoEtapas, dadosFluxoEtapa, setDadosFluxoEtapa} = useContextoFluxo()
@@ -26,8 +28,7 @@ const TabVincularEtapas = () => {
 
     const handleReload = async () => {
         await handleListarFluxoEtapas()
-        setIsFormVisible(false)
-        setIsFormFiltrarVisible(false)
+        setIsSaveFormVisible(false)
         setIsTableVisible(true)
     }
 
@@ -56,8 +57,7 @@ const TabVincularEtapas = () => {
     }
 
     const handleVincularEtapaAoFluxo = async () => {
-        setIsFormFiltrarVisible(false)
-        setIsFormVisible(true)
+        setIsSaveFormVisible(true)        
         setIsTableVisible(false)
         setDadosFluxoEtapa(null)
         setActionForm('create')
@@ -65,8 +65,7 @@ const TabVincularEtapas = () => {
 
     const handleAtualizarFluxoEtapa = async (record) => {
         setDadosFluxoEtapa(record)
-        setIsFormFiltrarVisible(false)
-        setIsFormVisible(true)
+        setIsSaveFormVisible(true)
         setIsTableVisible(false)
         setActionForm('update')
     }
@@ -169,17 +168,48 @@ const TabVincularEtapas = () => {
 
     return (
         <div>
-            { !isFormVisible && (
-                <div className="button-menu">
+            <SectionHeader>
+                <Breadcrumb
+                    items={[
+                        {
+                            href: `/academicflow/${grupo}/home`,
+                            title: <HomeOutlined />,
+                        },
+                        {
+                            href: `/academicflow/${grupo}/fluxos/gerenciar`,
+                            title: 'Etapas por fluxo',
+                        },
+                        ...(isSaveFormVisible && actionForm === 'create'
+                            ? [{ title: 'Cadastrar' }]
+                            : []),
+                        ...(isSaveFormVisible && actionForm === 'update'
+                            ? [{ title: 'Atualizar' }]
+                            : []),
+                    ]}
+                />
+            </SectionHeader>
 
-                    <Button 
-                        icon={<FaFilter />} 
-                        type="primary" 
-                        onClick={() => setIsFormFiltrarVisible(!isFormFiltrarVisible)}
-                    > 
-                        Filtrar
-                    </Button>
-                
+            {!isSaveFormVisible && (
+                <div 
+                    style={{
+                        display: 'flex', 
+                        justifyContent: 'space-between', 
+                        paddingTop: '30px', 
+                        paddingBottom: '30px',
+                        paddingLeft: '20px',
+                        paddingRight: '20px'
+                    }}
+                > 
+                    <Select 
+                        style={{width: '250px'}}
+                        options={optionsFluxos} 
+                        allowClear
+                        placeholder="Filtrar pelo fluxo"
+                        popupMatchSelectWidth={false}
+                        showSearch
+                        onChange={handleListarEtapasPorFluxo}
+                        filterOption={filterOption}
+                    />
                     <Button 
                         icon={<FaPlus />} 
                         type="primary" 
@@ -190,45 +220,15 @@ const TabVincularEtapas = () => {
                 </div>
             )}
 
-            { isFormFiltrarVisible && (
-                <div className="pa-20" style={{width: '50%'}} > 
-                    <Form 
-                        layout="vertical"
-                        className="global-form" 
-                        onFinish={(values) => handleListarEtapasPorFluxo(values.fluxo)}
-                    > 
-                        <Form.Item name="fluxo" label="Filtrar por fluxo">
-                            <Select 
-                                options={optionsFluxos} 
-                                allowClear
-                                placeholder="Selecione o fluxo"
-                                popupMatchSelectWidth={false}
-                            />
-                        </Form.Item>
-
-                        <Space>
-                            <Button onClick={() => handleCancelar()}> Cancelar </Button>
-                            <Button type="primary" htmlType="submit"> Filtrar </Button>
-                        </Space>
-                    </Form>
-
-                </div>
-                
-            )}
-
-            { isFormVisible && (
-                <div className="pa-20"> 
+            <SectionContent>
+                {isSaveFormVisible ? (
                     <FormVincularEtapas onCancel={handleCancelar} onSubmit={handleSalvarFluxoEtapa} />
-                </div>
-            )}
 
-            { isTableVisible && (
-                <div className="pa-20" style={{marginTop: '20px'}}>
+                ) : (
                     <TableFluxoEtapas data={fluxoEtapas} columns={columnsTable} />
-                </div>
-            )
-                
-            }
+
+                )}
+            </SectionContent>
         </div>
     );
 };

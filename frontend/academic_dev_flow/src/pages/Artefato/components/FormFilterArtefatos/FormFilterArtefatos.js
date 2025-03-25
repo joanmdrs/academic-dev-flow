@@ -50,10 +50,12 @@ const FormFilterArtefatos = ({idMembro, onChange}) => {
                 onValuesChange={(changedValues, allValues) => onChange(allValues)}
             >
                 <Form.Item
-                    style={{margin: '0'}}
+                    style={{margin: '0', width: '150px'}}
                     name="membroSelect"
+
                 >
                     <Select
+
                         showSearch
                         allowClear
                         placeholder="Membro"
@@ -65,7 +67,7 @@ const FormFilterArtefatos = ({idMembro, onChange}) => {
                 </Form.Item>
 
                 <Form.Item
-                    style={{margin: '0'}}
+                    style={{margin: '0', width: '150px'}}
                     name="projetoSelect"
                 >
                     <Select

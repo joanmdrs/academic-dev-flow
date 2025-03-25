@@ -1,11 +1,11 @@
-import { Button, Flex, Modal, Space, Tooltip } from 'antd'
+import { Breadcrumb, Button, Modal, Space, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
 import FormRelease from '../../components/FormRelease/FormRelease'
 import { useContextoRelease } from '../../context/ContextoRelease'
 import TableRelease from '../../components/TableRelease/TableRelease'
 import { formatDate } from '../../../../services/utils'
-import { atualizarRelease, buscarReleasesDosProjetosDoMembro, criarRelease, excluirReleases, filtrarReleasesPeloNomeEPeloProjeto } from '../../../../services/releaseService'
+import { atualizarRelease, buscarReleasesDosProjetosDoMembro, criarRelease, excluirReleases } from '../../../../services/releaseService'
 import { useContextoGlobalUser } from '../../../../context/ContextoGlobalUser/ContextoGlobalUser'
 import FormFilterReleases from '../../components/FormFilterReleases/FormFilterReleases'
 import SelectProject from '../../components/SelectProject/SelectProject'
@@ -15,9 +15,14 @@ import { NotificationManager } from 'react-notifications'
 import RenderStatus from '../../../../components/RenderStatus/RenderStatus'
 import { optionsStatusReleases } from '../../../../services/optionsStatus'
 import { IoMdCreate, IoMdTrash } from 'react-icons/io'
+import Section from '../../../../components/Section/Section'
+import SectionHeader from '../../../../components/SectionHeader/SectionHeader'
+import SectionFilters from '../../../../components/SectionFilters/SectionFilters'
+import SectionContent from '../../../../components/SectionContent/SectionContent'
+import { HomeOutlined } from '@ant-design/icons'
 
 
-const Release = () => {
+const Release = ({grupo}) => {
 
     const {usuario} = useContextoGlobalUser()
 
@@ -100,10 +105,27 @@ const Release = () => {
         if (!nome && !projeto){
             await handleBuscarReleasesDosProjetosDoMembro()
         } else {
-            const response = await filtrarReleasesPeloNomeEPeloProjeto(nome, projeto)
-            if (!response.error){
-                setReleases(response.data)
+            const response = await buscarReleasesDosProjetosDoMembro(usuario.id)
+
+            if (!response.error && response.data) {
+                let filteredReleases = response.data;
+        
+                if (nome) {
+                    filteredReleases = filteredReleases.filter(release => 
+                        release.nome.toLowerCase().includes(nome.toLowerCase())
+                    );
+                }
+        
+                if (projeto) {
+                    filteredReleases = filteredReleases.filter(release => 
+                        release.projeto === projeto
+                    );
+                }
+        
+                setReleases(filteredReleases);
             }
+
+
         }
     }
 
@@ -163,7 +185,6 @@ const Release = () => {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
-            align: 'center',
             render: (_, record) => (
                 <RenderStatus optionsStatus={optionsStatusReleases} propStatus={record.status} /> 
             )
@@ -192,55 +213,50 @@ const Release = () => {
                 await handleBuscarReleasesDosProjetosDoMembro()
             }
         }
-
         fetchData()
     }, [usuario])
 
 
     return (
-        <div className='content'> 
-            <div style={{
-                borderBottom: '1px solid #ddd',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'baseline',
-                padding: '20px',
-                backgroundColor: '#FFFFFF'
-            }}> 
-                <Space>
-                    <h2 style={{margin: 0, fontFamily: 'Poppins, sans-serif', fontWeight: '600'}}> Releases </h2>
-                </Space>
+        <Section>
+            <SectionHeader>
+                <Breadcrumb
+                    items={[
+                        {
+                            href: `/academicflow/${grupo}/home`,
+                            title: <HomeOutlined />,
+                        },
+                        {
+                            href: `/academicflow/${grupo}/cronograma/releases`,
+                            title: 'Releases',
+                        },
+                        ...(isFormVisible && actionForm === 'create'
+                            ? [{ title: 'Cadastrar' }]
+                            : []),
+                        ...(isFormVisible && actionForm === 'update'
+                            ? [{ title: 'Atualizar' }]
+                            : []),
+                    ]}
+                />
+                
 
-                <Space>
-                    <Button 
-                        size="large"
-                        onClick={handleAdicionarRelease} 
-                        type="primary" 
-                        ghost 
-                        icon={<FaPlus />}> Criar Release </Button>
-                </Space>
+                {!isFormVisible && (
+                    <Space>
+                        <Button 
+                            onClick={handleAdicionarRelease} 
+                            type="primary" 
+                            icon={<FaPlus />}> Criar Release </Button>
+                    </Space>
+                )}
+            </SectionHeader>
 
-            </div>
-
-            { isTableVisible && (
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'baseline',
-                    padding: '20px',
-                    borderBottom: '1px solid #DDD',
-                    backgroundColor: '#FFFFFF'
-                }}>
-                    <Flex horizontal gap="middle">
-                        <Space>
-                            <FormFilterReleases onChange={handleFiltrarReleases} idMembro={usuario.id}/>
-                        </Space>
-                    </Flex>
-                </div>
+            {!isFormVisible && (
+                <SectionFilters>
+                    <FormFilterReleases onChange={handleFiltrarReleases} idMembro={usuario.id}/>
+                </SectionFilters>
             )}
 
-            <div className='pa-20'>
-
+           <SectionContent>
                 { isFormVisible && 
                     <FormRelease 
                         onSubmit={handleSalvarRelease} 
@@ -248,17 +264,18 @@ const Release = () => {
                         selectProject={<SelectProject idMembro={usuario.id} />}
                     />
                 }
-
                 { isTableVisible && (
                     <div>
                         <TableRelease data={releases} columns={columnsTable}/>
                     </div>
         
-
-                    
                 )}
-            </div>
-        </div>
+
+           </SectionContent>
+
+          
+        </Section>
+
     )
 }
 

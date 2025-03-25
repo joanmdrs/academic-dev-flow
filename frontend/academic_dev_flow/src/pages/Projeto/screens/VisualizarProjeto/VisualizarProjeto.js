@@ -10,7 +10,7 @@ import TabTarefas from "./Tabs/TabTarefas";
 import TabArtefatos from "./Tabs/TabArtefatos";
 import { IoIosArrowForward } from "react-icons/io";
 import { IoIosArrowBack } from "react-icons/io";
-import { LuFileCode2, LuGithub } from "react-icons/lu";
+import { LuFileCode2, LuGithub, LuInfo } from "react-icons/lu";
 import { LuFolder } from "react-icons/lu";
 import { LuCalendarDays } from "react-icons/lu";
 import { LuUsers } from "react-icons/lu";
@@ -23,6 +23,9 @@ import { useContextoGlobalUser } from "../../../../context/ContextoGlobalUser/Co
 import { buscarMembroProjetoPeloIdMembroEPeloIdProjeto } from "../../../../services/membroProjetoService";
 import { useContextoVisualizarProjeto } from "./context/ContextVisualizarProjeto";
 import SpinLoading from "../../../../components/SpinLoading/SpinLoading";
+import { MdOutlineArrowBackIosNew } from "react-icons/md";
+import RenderStatus from "../../../../components/RenderStatus/RenderStatus";
+import { optionsStatusProjetos } from "../../../../services/optionsStatus";
 
 const { TabPane } = Tabs;
 
@@ -88,7 +91,7 @@ const VisualizarProjeto = () => {
     }
 
     return (
-        <div className="content">
+        <div style={{backgroundColor: "#FFFFFF", minHeight: '90vh'}}>
 
             <div
                 style={{
@@ -96,95 +99,43 @@ const VisualizarProjeto = () => {
                     justifyContent: "space-between",
                     alignItems: "baseline",
                     padding: "30px 20px",
-                    borderRadius: '5px',
                     borderBottom: '1px solid var(--border-color)'
                 }}
             >
-                    <div style={{display: 'flex', gap: '20px', alignItems: 'baseline', border: 'none'}}>
-                        <Tooltip title="Voltar">
-                            <Button
-                                className="bs-1"
-                                style={{border: 'none'}}
-                                onClick={() => handleVoltar()}
-                                type="default"
-                                icon={<IoArrowBackOutline />}
-                            >
-                            </Button>
-                        </Tooltip>
+                <h2
+                    style={{
+                        margin: 0,
+                        fontWeight: "600",
+                    }}
+                >
+                    {dadosProjeto?.nome} 
+                </h2>                  
 
-                        <h2
-                            style={{
-                                margin: 0,
-                                fontFamily: "Poppins, sans-serif",
-                                fontWeight: "600",
-                            }}
-                        >
-                            {dadosProjeto?.nome} 
-                        </h2>
-                        
-                    </div>  
+                <Button
+                    className="bs-1"
+                    style={{
+                        border: 'none',
+                        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.2)",
+                        padding: "20px",
 
-                    {/* <div style={{display: 'flex', gap: '20px', alignItems: 'baseline'}}>
-
-                        
-                        {iteracaoAtual && (
-                            <div 
-                                className="bs-1" 
-                                style={{
-                                    display: 'flex', 
-                                    gap: '10px', 
-                                    alignItems: 'baseline', 
-                                    borderRadius: '10px',
-                                    padding: '5px',
-                                    backgroundColor: '#FFFFFF'
-                                }}
-                            >
-                                <span style={{padding: '0 10px'}}> Fase: </span>
-                                <div style={{
-                                    color: '#FFFFFF', 
-                                    backgroundColor: "var(--primary-color)",
-                                    padding: '10px',       
-                                    borderRadius: '5px',
-                                }}> 
-                                    {iteracaoAtual?.nome_etapa}
-                                </div>  
-                        </div>                    
-
-                        )}
-                        
-                        {funcoesMembro && funcoesMembro.length > 0 && (
-                            <div 
-                                className="bs-1" 
-                                style={{
-                                    display: 'flex', 
-                                    alignItems: 'baseline', 
-                                    borderRadius: '10px',
-                                    padding: '5px',
-                                    gap: '10px',
-                                    backgroundColor: '#FFFFFF'
-                                }}> 
-                                <span style={{padding: '0 10px'}}> Funções: </span>
-                                {funcoesMembro.map((item, index) => (
-                                    <div style={{
-                                        borderRadius: '5px',
-                                        backgroundColor: `${item.cor_categoria_funcao}`,
-                                        color: '#FFFFFF', 
-                                        padding: '10px',
-                                    }} key={index}>{item.nome_categoria_funcao}</div>
-                                ))}
-                            </div>
-                        )}
-                    </div>                 */}
-
+                    }}
+                    onClick={() => handleVoltar()}
+                    type="default"
+                    icon={<MdOutlineArrowBackIosNew />}
+                >
+                    VOLTAR 
+                </Button>
+                     
             </div>
 
             <div style={{paddingLeft: '20px'}}>
                 <Tabs
                     size="middle"
                     tabPosition="right"
-                    style={{paddingTop: '20px'}}
+                    style={{paddingTop: '20px', height: '100%'}}
+                    defaultActiveKey="2"
                 >
-                    <TabPane
+                    {/* <TabPane
                         tab={
                             collapseTabs ? (
                                 <Tooltip placement="right" title="Projeto">
@@ -192,13 +143,30 @@ const VisualizarProjeto = () => {
                                 </Tooltip>
                             ) : (
                                 <Space>
-                                    <LuFolder /> Projeto
+                                    <LuInfo /> Dados
                                 </Space>
                             )
                         }
                         key="1"
                     >
                         <FormProjeto />
+                    </TabPane> */}
+
+                    <TabPane
+                        tab={
+                            collapseTabs ? (
+                                <Tooltip placement="right" title="Tarefas">
+                                    <LuClipboardList />
+                                </Tooltip>
+                            ) : (
+                                <Space>
+                                    <LuClipboardList /> Tarefas
+                                </Space>
+                            )
+                        }
+                        key="2"
+                    >
+                        <TabTarefas />
                     </TabPane>
 
                     <TabPane
@@ -213,26 +181,9 @@ const VisualizarProjeto = () => {
                                 </Space>
                             )
                         }
-                        key="2"
-                    >
-                        <TabCronograma />
-                    </TabPane>
-
-                    <TabPane
-                        tab={
-                            collapseTabs ? (
-                                <Tooltip placement="right" title="Tarefas">
-                                    <LuClipboardList />
-                                </Tooltip>
-                            ) : (
-                                <Space>
-                                    <LuClipboardList /> Tarefas
-                                </Space>
-                            )
-                        }
                         key="3"
                     >
-                        <TabTarefas />
+                        <TabCronograma />
                     </TabPane>
 
                     <TabPane

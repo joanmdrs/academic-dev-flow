@@ -18,7 +18,7 @@ const ScreenRelease = ({grupo}) => {
                 <MyHeader/>
 
                 <ProviderRelease>
-                    <Release />
+                    <Release grupo={grupo}/>
                 </ProviderRelease>
 
             </Layout>

@@ -16,7 +16,7 @@ const FormFuncaoMembro = ({ onCancel, onSubmit }) => {
     const [optionsIteracao, setOptionsIteracao] = useState([])
     const [optionsCategorias, setOptionsCategoria] = useState([]);
     const [form] = useForm();
-    const [titulo, setTitulo] = useState("ATRIBUIR FUNÇÃO AO MEMBRO");
+    const [titulo, setTitulo] = useState("Atribuir Função ao Membro");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -29,10 +29,10 @@ const FormFuncaoMembro = ({ onCancel, onSubmit }) => {
 
             if (dadosFuncaoMembro !== null) {
                 form.setFieldsValue(dadosFuncaoMembro);
-                setTitulo("EDITAR FUNÇÃO DO MEMBRO");
+                setTitulo("Editar Função do Membro");
             } else {
                 form.resetFields();
-                setTitulo("ATRIBUIR FUNÇÃO AO MEMBRO");
+                setTitulo("Atribuir Função ao Membro");
             }
         };
         fetchData();
@@ -73,9 +73,6 @@ const FormFuncaoMembro = ({ onCancel, onSubmit }) => {
 
     return (
         <Form className="global-form" layout="vertical" onFinish={onSubmit} form={form}>
-            <Form.Item>
-                <h4 className='global-title'> {titulo} </h4>
-            </Form.Item>
 
             <Form.Item
                 label="Projeto"
@@ -97,7 +94,6 @@ const FormFuncaoMembro = ({ onCancel, onSubmit }) => {
             <Form.Item
                 label="Iteracao"
                 name="iteracao"
-                rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
             >
                 <Select
                     name="iteracao"

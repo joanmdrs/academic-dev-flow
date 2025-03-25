@@ -2,10 +2,10 @@ import RenderOption from "../components/RenderOption/RenderOption";
 
 export const optionsStatusProjetos = [
     {
-        value: 'planejado',
-        name: 'Planejado',
-        label: RenderOption('Planejado', "#6f42c1"),
-        color: '#6f42c1' // Roxo
+        value: 'planejamento',
+        name: 'Em planejamento',
+        label: RenderOption('Em Planejamento', '#6f42c1'),
+        color: '#6f42c1'
     },
     {
         value: 'criado', 
@@ -47,6 +47,12 @@ export const optionsStatusTarefas = [
         color: '#007bff' // Azul
     },
     {
+        value: 'planejamento',
+        name: 'Em planejamento',
+        label: RenderOption('Em Planejamento', '#6f42c1'),
+        color: '#6f42c1'
+    },
+    {
         value: 'andamento',
         name: 'Andamento',
         label: RenderOption('Andamento', '#ffc107'),
@@ -86,6 +92,12 @@ export const optionsStatusIteracoes = [
         color: '#007bff' // Azul
     },
     {
+        value: 'planejamento',
+        name: 'Em planejamento',
+        label: RenderOption('Em Planejamento', '#6f42c1'),
+        color: '#6f42c1'
+    },
+    {
         value: 'andamento',
         name: 'Andamento',
         label: RenderOption('Andamento', '#ffc107'),
@@ -94,8 +106,8 @@ export const optionsStatusIteracoes = [
     {
         value: 'bloqueada',
         name: 'Bloqueada',
-        label: RenderOption('Bloqueada', '#6f42c1'),
-        color: '#6f42c1' // Roxo
+        label: RenderOption('Bloqueada', '#dc3545'),
+        color: '#dc3545' // Vermelho
     },
     {
         value: 'concluida',
@@ -119,6 +131,12 @@ export const optionsStatusReleases = [
         color: '#007bff' // Azul
     },
     {
+        value: 'planejamento',
+        name: 'Em planejamento',
+        label: RenderOption('Em Planejamento', '#6f42c1'),
+        color: '#6f42c1'
+    },
+    {
         value: 'andamento',
         name: 'Andamento',
         label: RenderOption('Andamento', '#ffc107'),
@@ -127,8 +145,8 @@ export const optionsStatusReleases = [
     {
         value: 'bloqueada',
         name: 'Bloqueada',
-        label: RenderOption('Bloqueada', '#6f42c1'),
-        color: '#6f42c1' // Roxo
+        label: RenderOption('Bloqueada', '#dc3545'),
+        color: '#dc3545' // Vermelho
     },
     {
         value: 'concluida',

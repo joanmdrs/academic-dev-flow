@@ -18,12 +18,10 @@ const TableProjetos = ({projetos, onUpdate, onDelete, onOpen}) => {
             render: (_, record) => (
                 <Space>
                     <span 
-                        onClick={() => onOpen(record)}
                         style={{
                             width: '400px',
                             fontWeight: '600',
                             fontSize: '13px', 
-                            fontFamily: 'Poppins, sans-serif',
                             cursor: 'pointer'
                         }}
                     > {limitarCaracteres(record.nome_projeto, 100)} </span>
@@ -70,7 +68,6 @@ const TableProjetos = ({projetos, onUpdate, onDelete, onOpen}) => {
             title: 'Status',
             dataIndex: 'status_projeto',
             key: 'status_projeto',
-            align: 'center',
             render: (_, record) => (
                 <RenderStatus optionsStatus={optionsStatusProjetos} propStatus={record.status_projeto} />
             )

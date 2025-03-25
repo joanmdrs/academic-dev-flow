@@ -47,7 +47,6 @@ const Releases = () => {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
-            align: 'center',
             render: (_, record) => (
                 <RenderStatus optionsStatus={optionsStatusReleases} propStatus={record.status} /> 
             )
@@ -149,10 +148,14 @@ const Releases = () => {
 
 
     return (
-        <div>
+        <div style={{height: '100%'}}>
             
             <div className="df jc-end w-100 mt-10 mb-10">
-                <Button onClick={() => handleAdicionarRelease()} size="large" type="primary" icon={<FaPlus />}> Criar Release </Button>
+                <Button 
+                    onClick={() => handleAdicionarRelease()} 
+                    type="primary" 
+                    icon={<FaPlus />}
+                > Criar Release </Button>
             </div>
 
             { isFormReleaseVisible ? (

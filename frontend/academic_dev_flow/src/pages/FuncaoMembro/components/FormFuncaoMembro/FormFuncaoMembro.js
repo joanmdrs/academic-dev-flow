@@ -18,7 +18,7 @@ const FormFuncaoMembro = ({ onCancel, onSubmit }) => {
     const [enableOptionIteracao, setEnableOptionIteracao] = useState(true)
     const { dadosFuncaoMembro, setDadosFuncaoMembro } = useFuncaoMembroContexto();
     const [form] = useForm();
-    const [titulo, setTitulo] = useState("ATRIBUIR FUNÇÃO AO MEMBRO");
+    const [titulo, setTitulo] = useState("Atribuir Função ao Membro");
     const [membroProjetoSelecionado, setMembroProjetoSelecionado] = useState(null);
     const [iteracaoSelecionada, setIteracaoSelecionada] = useState(null)
 
@@ -29,10 +29,10 @@ const FormFuncaoMembro = ({ onCancel, onSubmit }) => {
 
             if (dadosFuncaoMembro !== null) {
                 form.setFieldsValue(dadosFuncaoMembro);
-                setTitulo("EDITAR FUNÇÃO DO MEMBRO");
+                setTitulo("Editar Função do Membro");
             } else {
                 form.resetFields();
-                setTitulo("ATRIBUIR FUNÇÃO AO MEMBRO");
+                setTitulo("Atribuir Função ao Membro");
             }
         };
         fetchData();

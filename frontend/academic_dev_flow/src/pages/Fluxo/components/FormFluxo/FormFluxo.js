@@ -6,16 +6,16 @@ const FormFluxo = ({onSubmit, onCancel}) => {
 
     const [form] = Form.useForm()
     const {dadosFluxo} = useContextoFluxo()
-    const [titulo, setTitulo] = useState('CADASTRAR FLUXO')
+    const [titulo, setTitulo] = useState('Cadastrar Fluxo')
 
     useEffect(() => {
         const fetchData = async () => {
             if (dadosFluxo !== null){
                 form.setFieldsValue(dadosFluxo)
-                setTitulo('ATUALIZAR FLUXO')
+                setTitulo('Atualizar Fluxo')
             } else {
                 form.resetFields()
-                setTitulo('CADASTRAR FLUXO')
+                setTitulo('Cadastrar Fluxo')
             }
         }
 
@@ -31,17 +31,11 @@ const FormFluxo = ({onSubmit, onCancel}) => {
                 labelCol={{
                     span: 4,
                 }}
-                wrapperCol={{
-                    span: 14,
-                }}
+                
                 onFinish={onSubmit}
             >
-                <Form.Item>
-                    <h4 className='global-title'> {titulo} </h4>
-                </Form.Item>
-
                 <Form.Item name="nome" label="Nome" rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}>
-                    <Input placeholder="Ex.: Modelo Scrum"/>
+                    <Input placeholder="Nome do fluxo"/>
                 </Form.Item>
 
                 <Form.Item name="descricao" label="Descrição">

@@ -5,36 +5,34 @@ import "./TabsFluxo.css";
 import Titulo from "../../../../components/Titulo/Titulo";
 import TabGerenciarFluxos from "./TabGerenciarFluxos/TabGerenciarFluxos";
 import TabVincularEtapas from "./TabVincularEtapas/TabVincularEtapas";
+import Section from "../../../../components/Section/Section";
+import SectionHeader from "../../../../components/SectionHeader/SectionHeader";
+import SectionContent from "../../../../components/SectionContent/SectionContent";
 
 const { TabPane } = Tabs;
 
-const TabsFluxo = () => {
+const TabsFluxo = ({grupo}) => {
     
     const [current, setCurrent] = useState("1")
 
     return (    
-        <div className="content">
-            <Titulo 
-                titulo="Fluxos de desenvolvimento"
-                paragrafo="Fluxos > Gerenciar fluxos"
-            />
-            <div className="pa-10"> 
+        <Section>
+
+            <SectionContent>
                 <Tabs
-                    size="large"
-                    indicator={{align: 'center'}}
+                    tabPosition="left"
                     activeKey={current} 
                     onChange={setCurrent} 
-                    className="tabs-fluxo"
                 >
                     <TabPane tab="Fluxos" key="1">
-                        <TabGerenciarFluxos />
+                        <TabGerenciarFluxos grupo={grupo} />
                     </TabPane>
                     <TabPane tab="Etapas" key="2">
-                        <TabVincularEtapas />
+                        <TabVincularEtapas grupo={grupo}/>
                     </TabPane>
                 </Tabs>
-            </div>  
-        </div>
+            </SectionContent>
+        </Section>
         
     );
 }

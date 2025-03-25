@@ -1,14 +1,20 @@
 import React, { useState } from "react";
 import { useFuncaoMembroContexto } from "../../context/FuncaoMembroContexto";
 import { atualizarCategoriaFuncaoMembro, buscarCategoriaFuncaoMembroPeloNome, cadastrarCategoriaFuncaoMembro, excluirCategoriaFuncaoMembro } from "../../../../services/funcaoMembroProjetoService";
-import { Button, Input, Modal, Form, Space } from "antd";
+import { Button, Input, Modal, Form, Space, Breadcrumb } from "antd";
 import Titulo from "../../../../components/Titulo/Titulo";
 import { FaFilter } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
 import FormCategoriaFuncaoMembro from "../../components/FormCategoriaFuncaoMembro/FormCategoriaFuncaoMembro";
 import TableCategoriaFuncaoMembro from "../../components/TableCategoriaFuncaoMembro/TableCategoriaFuncaoMembro";
+import Section from "../../../../components/Section/Section";
+import SectionHeader from "../../../../components/SectionHeader/SectionHeader";
+import { HomeOutlined } from "@ant-design/icons";
+import SectionFilters from "../../../../components/SectionFilters/SectionFilters";
+import SectionContent from "../../../../components/SectionContent/SectionContent";
+const {Search} = Input
 
-const GerenciarCategoriaFuncaoMembro = () => {
+const GerenciarCategoriaFuncaoMembro = ({grupo}) => {
 
     const [isFormVisivel, setIsFormVisivel] = useState(false);
     const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false);
@@ -58,8 +64,8 @@ const GerenciarCategoriaFuncaoMembro = () => {
         handleReload();
     };
 
-    const handleBuscarCategoriaPeloNome = async () => {
-        const response = await buscarCategoriaFuncaoMembroPeloNome(nomeCategoria); 
+    const handleBuscarCategoriaPeloNome = async (value) => {
+        const response = await buscarCategoriaFuncaoMembroPeloNome(value); 
         setItemsCategoriaFuncaoMembro(response.data.results);
     };
 
@@ -77,70 +83,68 @@ const GerenciarCategoriaFuncaoMembro = () => {
     };
 
     return (
-        <div className="content">
-            <Titulo 
-                titulo='Categorias'
-                paragrafo='Membro > Função > Categoria'
-            />
+        <Section>
+            <SectionHeader>
+                <Breadcrumb
+                    items={[
+                        {
+                            href: `/academicflow/${grupo}/home`,
+                            title: <HomeOutlined />,
+                        },
+                        {
+                            href: `/academicflow/${grupo}/membros/gerenciar`,
+                            title: 'Membros',
+                        },
+                        {
+                            href: `/academicflow/${grupo}/membros/funcoes`,
+                            title: 'Funções'
+                        },
 
-            { !isFormVisivel && (
-                <div className="button-menu">
-                    <Button 
-                        icon={<FaFilter />}
-                        type="primary"
-                        onClick={() => setIsFormBuscarVisivel(!isFormBuscarVisivel)}
-                    >
-                        Filtrar
-                    </Button>
+                        ...(isFormVisivel && acaoForm === 'criar'
+                            ? [{ title: 'Cadastrar' }]
+                            : []),
+                        ...(isFormVisivel && acaoForm === 'atualizar'
+                            ? [{ title: 'Atualizar' }]
+                            : []),
+                    ]}
+                />
 
+                {!isFormVisivel && (
                     <Button 
                         icon={<FaPlus />} 
                         type="primary" 
                         onClick={handleAdicionarCategoria}
                         disabled={isPlusBtnEnabled}
                     > 
-                        Criar Nova Categoria 
+                        Criar Nova Função 
                     </Button>
-                </div>
+                )}
+            </SectionHeader>
 
+            {!isFormVisivel && (
+                <SectionFilters>
+                    <Search
+                        style={{width: '500px'}}
+                        placeholder="pesquise pelo nome"
+                        allowClear
+                        enterButton="Pesquisar"
+                        size="middle"
+                        onSearch={handleBuscarCategoriaPeloNome}
+                    />
+                </SectionFilters>
+               
             )}
 
-            { isFormBuscarVisivel && (
-                <div className="pa-20" style={{width: '50%'}}>
-                    <Form layout="vertical" className="global-form">
-                        <Form.Item 
-                            name="nome"
-                            label="Nome" 
-                        >
-                            <Input 
-                                type="text" 
-                                name="nome_tipo" 
-                                placeholder="informe o nome da categoria"
-                                value={nomeCategoria} 
-                                onChange={(e) => setNomeCategoria(e.target.value)}
-                            />
-                        </Form.Item>
-
-                        <Space>
-                            <Button onClick={() => handleCancelar()}> Cancelar </Button>
-                            <Button type="primary" htmlType="submit" onClick={handleBuscarCategoriaPeloNome}>
-                                Filtrar
-                            </Button>
-                        </Space>
-                    </Form>
-                </div>
-            )}
-
-            <div className="pa-20">
+            <SectionContent>
                 { isFormVisivel ? (
                         <FormCategoriaFuncaoMembro onSubmit={handleSalvarCategoria} onCancel={handleCancelar}/>
                 ) : (
                     <TableCategoriaFuncaoMembro onEdit={handleAtualizarCategoria} onDelete={handleExcluirCategoria}/>
 
                 )}
-            </div>
+            </SectionContent>
 
-        </div>
+        </Section>
     );
 }
 

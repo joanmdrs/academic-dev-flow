@@ -5,11 +5,14 @@ import Loading from "../../../../components/Loading/Loading";
 import { atualizarMembro, buscarMembroPeloId, listarGrupos } from "../../../../services/membroService";
 import { useNavigate } from "react-router-dom";
 import Titulo from "../../../../components/Titulo/Titulo";
-import { Avatar, Button, Form, Input, Select, Space, Tabs } from "antd";
+import { Avatar, Breadcrumb, Button, Form, Input, Select, Space, Tabs } from "antd";
 import { useForm } from "antd/es/form/Form";
 import InputMask from 'react-input-mask';
-import { EditOutlined, UserOutlined } from "@ant-design/icons";
+import { EditOutlined, HomeOutlined, UserOutlined } from "@ant-design/icons";
 import ModalAvatars from "../../components/ModalAvatars/ModalAvatars";
+import { getRandomColor } from "../../../../services/utils";
+import Section from "../../../../components/Section/Section";
+import SectionHeader from "../../../../components/SectionHeader/SectionHeader";
 
 const {TabPane} = Tabs
 
@@ -28,7 +31,7 @@ const optionsSexo = [
     }
 ]
 
-const PerfilMembro = () => {
+const PerfilMembro = ({group}) => {
 
     const navigate = useNavigate()
     const {usuario, grupo} = useContextoGlobalUser()
@@ -84,7 +87,6 @@ const PerfilMembro = () => {
     }
 
     const handleAtualizarMembro = async (dadosForm) => {
-        dadosForm['avatar'] = selectedAvatar
         const response = await atualizarMembro(dadosMembro.id, dadosForm)
         if(!response.error){
             setDadosMembro(response.data)
@@ -118,8 +120,22 @@ const PerfilMembro = () => {
 
 
     return (
-        <div className="content">
-            <Titulo titulo="Seu Perfil" paragrafo="Atualize suas informações" />
+        <Section>
+            <SectionHeader>
+                <Breadcrumb
+                    items={[
+                        {
+                            href: `/academicflow/${group}/home`,
+                            title: <HomeOutlined />,
+                        },
+                        {
+                            href: `/academicflow/${group}/perfil`,
+                            title: 'Perfil',
+                        },
+                        
+                    ]}
+                />
+            </SectionHeader>
             
             <Form 
                 layout="vertical"
@@ -130,7 +146,11 @@ const PerfilMembro = () => {
                 <Tabs tabPosition="left">
                     <TabPane className="global-div" style={{marginTop: '0'}} tab="Dados" key="1" forceRender> 
 
-                        <div 
+                        <Avatar size={150} style={{ backgroundColor: getRandomColor() }}>
+                            {dadosMembro?.nome ? dadosMembro.nome.charAt(0).toUpperCase() : <UserOutlined />}
+                        </Avatar>
+
+                        {/* <div 
                             style={{ 
                                 position: "relative", 
                                 width: "250px", 
@@ -159,7 +179,7 @@ const PerfilMembro = () => {
                                 }}
                                 onClick={handleOpenModal}
                             />
-                        </div>
+                        </div> */}
 
                         <Form.Item name="avatar" hidden>
                             <Input />
@@ -293,8 +313,8 @@ const PerfilMembro = () => {
                     </TabPane>
                 </Tabs>
                 <Space style={{width: '100%', display: 'flex', justifyContent: 'flex-end', paddingRight: '20px'}}>
-                    <Button onClick={() => handleCancelar()} size="large" danger type="primary"> Cancelar </Button>
-                    <Button size="large" type="primary" htmlType="submit"> Salvar </Button >
+                    <Button onClick={() => handleCancelar()} danger type="primary"> Cancelar </Button>
+                    <Button type="primary" htmlType="submit"> Salvar </Button >
                 </Space>
             </Form>
     
@@ -304,7 +324,7 @@ const PerfilMembro = () => {
                 onSelect={handleSelectAvatar}
                 gender={dadosMembro.sexo}
             />
-        </div>
+        </Section>
     )
 }
 
