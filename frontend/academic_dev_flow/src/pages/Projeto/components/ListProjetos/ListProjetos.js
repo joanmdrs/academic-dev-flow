@@ -12,15 +12,15 @@ const { Panel } = Collapse;
 
 const ActionDropdown = ({ item, onOpen, onUpdate, onDelete }) => {
     const items = [
-        {
-            key: 'view',
-            label: (
-                <Button style={{border: 'none'}} onClick={() => onOpen(item)}>
-                    Abrir
-                </Button>
-            ),
-            icon: <IoMdFolderOpen size="15px" />
-        },
+        // {
+        //     key: 'view',
+        //     label: (
+        //         <Button style={{border: 'none'}} onClick={() => onOpen(item)}>
+        //             Abrir
+        //         </Button>
+        //     ),
+        //     icon: <IoMdFolderOpen size="15px" />
+        // },
         {
             key: 'edit',
             label: (
@@ -98,7 +98,6 @@ const ListProjetos = ({ data, onUpdate, onDelete, onOpen }) => {
                                                     width: '400px',
                                                     fontWeight: '600',
                                                     fontSize: '15px', 
-                                                    fontFamily: 'Poppins, sans-serif'
                                                 }}> {limitarCaracteres(item.nome_projeto, 100)} </span>
 
                                                     

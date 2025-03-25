@@ -8,7 +8,6 @@ import { UserOutlined } from "@ant-design/icons";
 const MyDropdown = ({ items }) => {
   const { usuario } = useContextoGlobalUser();
 
-  console.log(usuario)
   return (
     <Space style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
       <Tooltip placement="left" title={usuario?.nome}>

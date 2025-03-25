@@ -5,13 +5,14 @@ import Loading from "../../../../components/Loading/Loading";
 import { atualizarMembro, buscarMembroPeloId, listarGrupos } from "../../../../services/membroService";
 import { useNavigate } from "react-router-dom";
 import Titulo from "../../../../components/Titulo/Titulo";
-import { Avatar, Button, Form, Input, Select, Space, Tabs } from "antd";
+import { Avatar, Breadcrumb, Button, Form, Input, Select, Space, Tabs } from "antd";
 import { useForm } from "antd/es/form/Form";
 import InputMask from 'react-input-mask';
-import { EditOutlined, UserOutlined } from "@ant-design/icons";
+import { EditOutlined, HomeOutlined, UserOutlined } from "@ant-design/icons";
 import ModalAvatars from "../../components/ModalAvatars/ModalAvatars";
 import { getRandomColor } from "../../../../services/utils";
 import Section from "../../../../components/Section/Section";
+import SectionHeader from "../../../../components/SectionHeader/SectionHeader";
 
 const {TabPane} = Tabs
 
@@ -30,7 +31,7 @@ const optionsSexo = [
     }
 ]
 
-const PerfilMembro = () => {
+const PerfilMembro = ({group}) => {
 
     const navigate = useNavigate()
     const {usuario, grupo} = useContextoGlobalUser()
@@ -120,7 +121,21 @@ const PerfilMembro = () => {
 
     return (
         <Section>
-            <Titulo titulo="Seu Perfil" paragrafo="Atualize suas informações" />
+            <SectionHeader>
+                <Breadcrumb
+                    items={[
+                        {
+                            href: `/academicflow/${group}/home`,
+                            title: <HomeOutlined />,
+                        },
+                        {
+                            href: `/academicflow/${group}/perfil`,
+                            title: 'Perfil',
+                        },
+                        
+                    ]}
+                />
+            </SectionHeader>
             
             <Form 
                 layout="vertical"

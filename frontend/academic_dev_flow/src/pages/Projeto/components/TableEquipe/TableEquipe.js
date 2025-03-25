@@ -62,15 +62,13 @@ const TableEquipe = ({onDelete}) => {
     return (
         <React.Fragment>
             {membros.length === 0 ? 
-                    <Empty description="Nenhum membro vinculado ao projeto" image={Empty.PRESENTED_IMAGE_SIMPLE}/> :
-                    <div style={{border: '1px solid #ddd', padding: '10px', borderRadius: '10px'}}>
-                        <Table 
-                            columns={COLLUMS_TABLE_EQUIPE}
-                            dataSource={membros}
-                            rowKey="id"
-                            rowSelection={rowSelection}
-                        />
-                    </div>
+                <Empty description="Nenhum membro vinculado ao projeto" image={Empty.PRESENTED_IMAGE_SIMPLE}/> :
+                    <Table 
+                        columns={COLLUMS_TABLE_EQUIPE}
+                        dataSource={membros}
+                        rowKey="id"
+                        rowSelection={rowSelection}
+                    />
             }
         </React.Fragment>
     )

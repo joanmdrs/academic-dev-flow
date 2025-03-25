@@ -105,7 +105,6 @@ const VisualizarProjeto = () => {
                 <h2
                     style={{
                         margin: 0,
-                        fontFamily: "Poppins, sans-serif",
                         fontWeight: "600",
                     }}
                 >

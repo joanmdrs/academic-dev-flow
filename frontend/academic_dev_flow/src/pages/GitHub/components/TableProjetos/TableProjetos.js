@@ -14,7 +14,7 @@ const TableProjetos = ({data, onViewPanel}) => {
                 <Space>
                     <h4 
                         onClick={() => onViewPanel(record)}  
-                        style={{fontFamily: 'Poppins, sans-serif', cursor: 'pointer'}}
+                        style={{ cursor: 'pointer'}}
                     > {record.dados_projeto.nome }
                 </h4>
                 </Space>

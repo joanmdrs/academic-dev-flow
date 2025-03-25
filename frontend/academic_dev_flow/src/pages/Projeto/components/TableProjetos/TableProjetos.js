@@ -18,12 +18,10 @@ const TableProjetos = ({projetos, onUpdate, onDelete, onOpen}) => {
             render: (_, record) => (
                 <Space>
                     <span 
-                        onClick={() => onOpen(record)}
                         style={{
                             width: '400px',
                             fontWeight: '600',
                             fontSize: '13px', 
-                            fontFamily: 'Poppins, sans-serif',
                             cursor: 'pointer'
                         }}
                     > {limitarCaracteres(record.nome_projeto, 100)} </span>

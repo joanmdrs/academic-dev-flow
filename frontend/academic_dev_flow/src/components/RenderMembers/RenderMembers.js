@@ -34,7 +34,6 @@ const RenderMembers = ({membros, quantMembros, maxAvatars}) => {
                                     key={quantMembros - maxAvatars}
                                     style={{
                                         fontSize: '12px',
-                                        fontFamily: 'Poppins, sans-serif',
                                         backgroundColor: "var(--primary-color)",
                                         color: "#FFFFFF",
                                         zIndex: `${quantMembros *2}`,

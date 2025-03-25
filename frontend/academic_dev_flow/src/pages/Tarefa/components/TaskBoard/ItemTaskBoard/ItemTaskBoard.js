@@ -25,7 +25,6 @@ const ItemTaskBoard = ({ task, onUpdate, onDelete, onStartTarefa, onPauseTarefa,
                 <h4 style={{
                     color: `${task.cor_categoria}`,
                     margin: '0',
-                    fontFamily: 'Poppins, sans-serif'
                 }}
                 >{task.nome_categoria} </h4>
                 <span style={{ display: 'flex', gap: '10px' }}>

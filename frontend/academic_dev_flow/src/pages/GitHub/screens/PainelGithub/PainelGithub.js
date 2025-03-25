@@ -24,13 +24,11 @@ const PainelGitHub = () => {
                     <h2 
                         style={{
                             margin: 0, 
-                            fontFamily: 'Poppins, sans-serif', 
                             fontWeight: '600'
                         }}> Integração com o GitHub </h2>
                     <h4 
                         style={{
                             margin: 0, 
-                            fontFamily: 'Poppins, sans-serif', 
                             fontWeight: '400'}}> {dadosProjeto?.nome} </h4>
                 </div>
             </div>

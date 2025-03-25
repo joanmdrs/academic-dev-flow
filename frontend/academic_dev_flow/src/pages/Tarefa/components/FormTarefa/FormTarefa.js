@@ -91,7 +91,6 @@ function FormTarefa({ onCancel, onSubmit, selectProject, inputsAdmin }) {
     const handleGetCategorias = async () => {
         try {
             const response = await listarCategoriaTarefa()
-            console.log(response.data)
             if (!response.error && response.data) {
                 
                 const resultados = response.data.map((item) => ({

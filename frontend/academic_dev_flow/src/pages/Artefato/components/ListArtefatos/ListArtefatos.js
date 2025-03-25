@@ -49,7 +49,6 @@ const ListArtefatos = ({data, onUpdate, onDelete, onShowComments}) => {
                                                         flex: '2', /* 40% */
                                                         fontWeight: '600',
                                                         fontSize: '15px', 
-                                                        fontFamily: 'Poppins, sans-serif'
                                                     }}> 
                                                     {limitarCaracteres(item.nome, 50)} 
                                                 </div>
