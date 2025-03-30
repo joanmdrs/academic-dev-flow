@@ -23,7 +23,7 @@ import { HomeOutlined } from '@ant-design/icons';
 
 const {TabPane} = Tabs 
 
-const Projetos = () => {
+const Projetos = ({group}) => {
     
     const navigate = useNavigate();
     const { dadosProjeto, setDadosProjeto } = useContextoProjeto();
@@ -189,11 +189,11 @@ const Projetos = () => {
                 <Breadcrumb
                     items={[
                         {
-                            href: `/academicflow/${grupo}/home`,
+                            href: `/academicflow/${group}/home`,
                             title: <HomeOutlined />,
                         },
                         {
-                            href: `/academicflow/${grupo}/projetos`,
+                            href: `/academicflow/${group}/projetos`,
                             title: 'Projetos',
                         },
                         ...(isSaveFormVisible && actionForm === 'create'

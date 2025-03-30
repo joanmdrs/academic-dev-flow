@@ -13,7 +13,7 @@ const StudentRoutes = ({ children }) => {
             try {
                 const decoded = await decodeToken(token);
                 setDecodedToken(decoded);
-                setTimeout(() => setShouldRender(true), 2000);
+                setTimeout(() => setShouldRender(true), 1000);
             } catch (error) {
                 console.error('Erro ao decodificar o token:', error);
             }
