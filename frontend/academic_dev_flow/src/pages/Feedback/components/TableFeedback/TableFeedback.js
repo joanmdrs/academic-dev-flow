@@ -1,7 +1,7 @@
 import { Space, Table, Tooltip } from "antd";
 import React from "react";
 import { IoMdCreate, IoMdTrash } from "react-icons/io";
-import { optionsStatusFeedback } from "../../../../services/optionsStatus";
+import { optionsStatusFeedback, optionsTiposFeedbacks } from "../../../../services/optionsStatus";
 import RenderStatus from "../../../../components/RenderStatus/RenderStatus";
 import RenderEmpty from "../../../../components/Empty/Empty";
 import { limitarCaracteres } from "../../../../services/utils";
@@ -19,6 +19,14 @@ const TableFeedbacks = ({data, onUpdate, onDelete}) => {
             title: 'Descrição',
             dataIndex: 'descricao',
             key: 'descricao'
+        },
+        {
+            title: 'Tipo',
+            dataIndex: 'tipo',
+            key: 'tipo',
+            render: (_, record) => (
+                <RenderStatus optionsStatus={optionsTiposFeedbacks} propStatus={record.tipo} />
+            )
         },
         {
             title: 'Status', 
