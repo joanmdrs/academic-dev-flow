@@ -84,12 +84,12 @@ const MenuAdmin = () => {
                     icon={<LuCalendarDays size="20px" />}
                     title="Cronograma"
                 >
-                     <Menu.Item key="gerenciar-releases">
-                        <Link to="/admin/cronograma/releases">Releases</Link>
+                     <Menu.Item key="gerenciar-lancamentos">
+                        <Link to="/admin/cronograma/lancamentos">Lançamentos</Link>
                     </Menu.Item>
 
-                    <Menu.Item key="gerenciar-iterations">
-                        <Link to="/admin/cronograma/iterations">Iterações</Link>
+                    <Menu.Item key="gerenciar-iteracoes">
+                        <Link to="/admin/cronograma/iteracoes">Iterações</Link>
                     </Menu.Item>
 
                 </SubMenu>

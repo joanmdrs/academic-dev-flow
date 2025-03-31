@@ -123,9 +123,9 @@ function Routes() {
 
                 {/* Menu Item Iterações */}
 
-                <Route path="/admin/cronograma/releases" Component={ScreenAdminReleases} exact />
+                <Route path="/admin/cronograma/lancamentos" Component={ScreenAdminReleases} exact />
 
-                <Route path="/admin/cronograma/iterations" Component={ScreenAdminIteracoes} exact />
+                <Route path="/admin/cronograma/iteracoes" Component={ScreenAdminIteracoes} exact />
 
 
                 <Route 
@@ -188,14 +188,14 @@ function Routes() {
                 />
 
                 <Route 
-                    path="/aluno/cronograma/releases"
+                    path="/aluno/cronograma/lancamentos"
                     element={
                         <ScreenRelease grupo="aluno"/>
                     }
                 />
 
                 <Route 
-                    path="/aluno/cronograma/iterations"
+                    path="/aluno/cronograma/iteracoes"
                     element={
                         <ScreenIteracoes grupo="aluno"/>
                     }
@@ -304,14 +304,14 @@ function Routes() {
                 />
 
                 <Route 
-                    path="/professor/cronograma/releases"
+                    path="/professor/cronograma/lancamentos"
                     element={
                         <ScreenRelease grupo="professor"/>
                     }
                 />
 
                 <Route 
-                    path="/professor/cronograma/iterations"
+                    path="/professor/cronograma/iteracoes"
                     element={
                         <ScreenIteracoes grupo="professor"/>
                     }

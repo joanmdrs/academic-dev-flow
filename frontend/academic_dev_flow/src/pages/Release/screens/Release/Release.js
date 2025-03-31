@@ -132,7 +132,7 @@ const Release = ({grupo}) => {
     const handleExcluirRelease = async (id) => {
         Modal.confirm({
             title: 'Confirmar exclusão',
-            content: 'Você está seguro de que deseja excluir esta release ?',
+            content: 'Você está seguro de que deseja excluir este lançamento ?',
             okText: 'Sim',
             cancelText: 'Não',
             onOk: async () => {
@@ -141,7 +141,7 @@ const Release = ({grupo}) => {
                     await handleReload()
 
                 } catch (error) {
-                    NotificationManager.error('Falha ao tentar excluir o artefato');
+                    NotificationManager.error('Falha ao tentar excluir o lançamento');
                 } 
             }
         });
@@ -227,8 +227,8 @@ const Release = ({grupo}) => {
                             title: <HomeOutlined />,
                         },
                         {
-                            href: `/academicflow/${grupo}/cronograma/releases`,
-                            title: 'Releases',
+                            href: `/academicflow/${grupo}/cronograma/lancamentos`,
+                            title: 'Lançamentos',
                         },
                         ...(isFormVisible && actionForm === 'create'
                             ? [{ title: 'Cadastrar' }]
@@ -245,7 +245,7 @@ const Release = ({grupo}) => {
                         <Button 
                             onClick={handleAdicionarRelease} 
                             type="primary" 
-                            icon={<FaPlus />}> Criar Release </Button>
+                            icon={<FaPlus />}> Cadastrar Lançamento </Button>
                     </Space>
                 )}
             </SectionHeader>
