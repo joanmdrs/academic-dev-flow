@@ -28,6 +28,8 @@ class MembroProjetoSerializer(serializers.ModelSerializer):
     funcoes_membro = serializers.SerializerMethodField()
     equipe = serializers.SerializerMethodField()
     dados_projeto = serializers.SerializerMethodField()
+    coordenador = serializers.SerializerMethodField()
+    nome_coordenador = serializers.SerializerMethodField()
     
     class Meta:
         model = MembroProjeto
@@ -39,6 +41,10 @@ class MembroProjetoSerializer(serializers.ModelSerializer):
                   'descricao_projeto',
                   'grupo',
                   'nome_grupo', 
+                  'coordenador',
+                  'nome_coordenador',
+                  'link_repo',
+                  'link_site',
                   'usuario_github', 
                   'status_projeto',
                   'data_inicio_projeto',
@@ -52,6 +58,16 @@ class MembroProjetoSerializer(serializers.ModelSerializer):
                   'equipe',
                   'dados_projeto'
                 ] 
+        
+    def get_coordenador(self, obj):
+        if obj.projeto.coordenador:
+            return obj.projeto.coordenador.id
+        return None
+    
+    def get_nome_coordenador(self, obj):
+        if obj.projeto.coordenador:
+            return obj.projeto.coordenador.nome
+        return None
         
     def get_grupo(self, obj):
         if obj.membro.usuario and obj.membro.usuario.groups.exists():

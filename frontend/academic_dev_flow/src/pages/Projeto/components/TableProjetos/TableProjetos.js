@@ -11,12 +11,14 @@ import { IoOpenOutline } from "react-icons/io5";
 const TableProjetos = ({projetos, onUpdate, onDelete, onOpen}) => {
 
     const columns = [
+
         {
             title: 'Projeto',
             dataIndex: 'nome_projeto',
             key: 'nome_projeto',
             render: (_, record) => (
                 <Space>
+                    <span> #{record.projeto} </span>
                     <span 
                         style={{
                             width: '400px',
@@ -25,6 +27,7 @@ const TableProjetos = ({projetos, onUpdate, onDelete, onOpen}) => {
                             cursor: 'pointer'
                         }}
                     > {limitarCaracteres(record.nome_projeto, 100)} </span>
+                    
                 </Space>
             )
         },
