@@ -79,12 +79,12 @@ const MenuProfessor = () => {
                     icon={<LuCalendarDays size="20px" />}
                     title="Cronograma"
                 >
-                    <Menu.Item key="/professor/cronograma/releases">
-                        <Link to="/professor/cronograma/releases">Releases</Link>
+                    <Menu.Item key="/professor/cronograma/lancamentos">
+                        <Link to="/professor/cronograma/lancamentos">Lançamentos</Link>
                     </Menu.Item>
 
-                    <Menu.Item key="/professor/cronograma/iterations">
-                        <Link to="/professor/cronograma/iterations">Iterações</Link>
+                    <Menu.Item key="/professor/cronograma/iteracoes">
+                        <Link to="/professor/cronograma/iteracoes">Iterações</Link>
                     </Menu.Item>
                 </SubMenu>
 

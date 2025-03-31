@@ -119,7 +119,7 @@ const AdminReleases = () => {
     const handleExcluirRelease = async (id) => {
         Modal.confirm({
             title: 'Confirmar exclusão',
-            content: 'Você está seguro de que deseja excluir esta release ?',
+            content: 'Você está seguro de que deseja excluir este lançamento ?',
             okText: 'Sim',
             cancelText: 'Não',
             onOk: async () => {
@@ -128,7 +128,7 @@ const AdminReleases = () => {
                     await handleReload()
 
                 } catch (error) {
-                    NotificationManager.error('Falha ao tentar excluir o artefato');
+                    NotificationManager.error('Falha ao tentar excluir o lançamento');
                 } 
             }
         });
@@ -205,8 +205,8 @@ const AdminReleases = () => {
     return (
         <div className='content'> 
             <Titulo 
-                titulo="Releases"
-                paragrafo="Administração > Gerenciar releases"
+                titulo="Lançamentos"
+                paragrafo="Administração > Gerenciar lançamentos"
             />
 
             {!isFormVisible && (

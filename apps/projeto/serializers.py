@@ -18,6 +18,7 @@ class ProjetoSerializer(serializers.ModelSerializer):
             'link_repo', 
             'link_site', 
             'token', 
+            'coordenador',
             'fluxo',
             'nome_fluxo']
         
@@ -25,6 +26,11 @@ class ProjetoSerializer(serializers.ModelSerializer):
         if obj.fluxo:
             return obj.fluxo.nome
         return None  
+    
+    def get_nome_coordenador(self, obj):
+        if obj.coordenador:
+            return obj.coordenador.nome
+        return None
 
   
         

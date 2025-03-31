@@ -5,6 +5,7 @@ import "./Login.css"
 import imgPageLogin from "../../../../src/assets/img-page-login.svg"
 import { useAuth } from '../../../hooks/AuthProvider';
 import imgLogo from '../../../assets/logo.jpg'
+import { FaCoffee } from "react-icons/fa";
 
 const Login = () => {
     const {loginAction} = useAuth();
@@ -40,7 +41,7 @@ const Login = () => {
 
             <div className='form-login-header'> 
                 <div className='demo-logo'> 
-                    <img src={imgLogo} alt='Logo do sistema'/>
+                    <FaCoffee color="var(--primary-color)" size={25}/>
                 </div>
 
                 <div className='title-system'> 

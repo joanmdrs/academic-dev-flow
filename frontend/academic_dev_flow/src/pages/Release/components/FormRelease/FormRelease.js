@@ -54,7 +54,7 @@ const FormRelease = ({ onSubmit, onCancel, selectProject }) => {
         setReleasesAdjacentes({ release_anterior, release_posterior });
       }
     } catch (error) {
-      handleError(error, "Falha ao buscar releases adjacentes.");
+      handleError(error, "Falha ao buscar lançamentos adjacentes.");
     }
   };
 
@@ -83,13 +83,13 @@ const FormRelease = ({ onSubmit, onCancel, selectProject }) => {
 
         if (dataReleaseAnterior && dataLancamento < dataReleaseAnterior) {
           return Promise.reject(
-            `A data de lançamento não pode ser anterior à release anterior (${formatDateIso(release_anterior.data_lancamento)})`
+            `A data de lançamento não pode ser anterior ao lançamento anterior (${formatDateIso(release_anterior.data_lancamento)})`
           );
         }
 
         if (dataReleasePosterior && dataLancamento > dataReleasePosterior) {
           return Promise.reject(
-            `A data de lançamento não pode ser posterior à release posterior (${formatDateIso(release_posterior.data_lancamento)})`
+            `A data de lançamento não pode ser posterior ao lançamento posterior (${formatDateIso(release_posterior.data_lancamento)})`
           );
         }
       }
@@ -99,7 +99,7 @@ const FormRelease = ({ onSubmit, onCancel, selectProject }) => {
 
       if (dataLancamento < dataUltimaRelease) {
         return Promise.reject(
-          `A data de lançamento não pode ser anterior à última release (${formatDateIso(lastRelease.data_lancamento)})`
+          `A data de lançamento não pode ser anterior ao último lançamento (${formatDateIso(lastRelease.data_lancamento)})`
         );
       }
     }
@@ -136,11 +136,11 @@ const FormRelease = ({ onSubmit, onCancel, selectProject }) => {
         name="nome"
         rules={[{ required: true, message: "Por favor, preencha este campo!" }]}
       >
-        <Input type="text" name="nome" placeholder="Nome da release" />
+        <Input type="text" name="nome" placeholder="Nome do lançamento" />
       </Form.Item>
 
       <Form.Item label="Descrição" name="descricao">
-        <Input.TextArea rows={8} name="descricao" placeholder="Descrição da release (opcional)" />
+        <Input.TextArea rows={8} name="descricao" placeholder="Descrição do lançamento (opcional)" />
       </Form.Item>
 
       <Form.Item

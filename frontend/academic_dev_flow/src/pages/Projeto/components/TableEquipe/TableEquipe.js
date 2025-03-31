@@ -1,12 +1,15 @@
-import { Avatar, Empty, Table, Tooltip } from "antd";
+import { Avatar, Empty, Space, Table, Tooltip } from "antd";
 import React, { useEffect } from "react";
 import { handleError } from "../../../../services/utils";
 import { useContextoProjeto } from "../../context/ContextoProjeto";
 import { buscarMembrosPorProjeto } from "../../../../services/membroProjetoService";
 import { IoMdTrash } from "react-icons/io";
+import { useContextoGlobalUser } from "../../../../context/ContextoGlobalUser/ContextoGlobalUser";
 
 const TableEquipe = ({onDelete}) => {
 
+    const { usuario, grupo } = useContextoGlobalUser();
+    
     const COLLUMS_TABLE_EQUIPE = [
         {
             title: "Nome",
@@ -23,9 +26,17 @@ const TableEquipe = ({onDelete}) => {
             key: 'actions',
             dataIndex: 'actions',
             render: (_, record) => (
-                <Tooltip title="Excluir">
-                    <a onClick={() => onDelete(record.id)}> <IoMdTrash/> </a>
-                </Tooltip>
+                <Space>
+                    {usuario.id !== record.membro ? (
+                        <Tooltip title="Excluir">
+                            <a onClick={() => onDelete(record.id)}> <IoMdTrash/> </a>
+                        </Tooltip>
+                    ) : (
+                        null
+                    )}
+                </Space>
+                
+                
             )
         }
     ]

@@ -46,7 +46,7 @@ const FormFilterReleases = ({idMembro, onChange}) => {
             onValuesChange={(changedValues, allValues) => onChange(allValues)}
         >
             <Form.Item style={{margin: '0', width: '400px'}} name="nome">
-                <Input name="nome" placeholder="Pesquise pelo nome da release" />
+                <Input name="nome" placeholder="Pesquise pelo nome do lançamento" />
             </Form.Item>
 
             <Form.Item

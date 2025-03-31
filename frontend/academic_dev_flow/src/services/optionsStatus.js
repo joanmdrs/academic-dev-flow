@@ -219,7 +219,60 @@ export const optionsStatusFeedback = [
         name: 'Resolvido',
         label: RenderOption('Resolvido', '#28a745'),
         color: '#28a745' // Verde
-    },
-
-
+    }
 ]
+
+export const optionsTiposFeedbacks = [
+    { 
+        value: 'sugestao', 
+        name: 'Sugestão', 
+        label: RenderOption('Sugestão', '#007bff'), // Azul
+        color: '#007bff' 
+    },
+    { 
+        value: 'reclamacao', 
+        name: 'Reclamação', 
+        label: RenderOption('Reclamação', '#dc3545'), // Vermelho
+        color: '#dc3545' 
+    },
+    { 
+        value: 'bug', 
+        name: 'Bug', 
+        label: RenderOption('Bug', '#ffc107'), // Amarelo
+        color: '#ffc107' 
+    },
+    { 
+        value: 'nova_funcionalidade', 
+        name: 'Nova Funcionalidade', 
+        label: RenderOption('Nova Funcionalidade', '#17a2b8'), // Azul claro
+        color: '#17a2b8' 
+    },
+    { 
+        value: 'melhoria_funcionalidade', 
+        name: 'Melhoria de Funcionalidade', 
+        label: RenderOption('Melhoria de Funcionalidade', '#6610f2'), // Roxo
+        color: '#6610f2' 
+    },
+    { 
+        value: 'experiencia_usuario', 
+        name: 'Experiência do Usuário', 
+        label: RenderOption('Experiência do Usuário', '#6f42c1'), // Roxo escuro
+        color: '#6f42c1' 
+    },
+    { 
+        value: 'duvida_uso', 
+        name: 'Dúvida sobre o uso', 
+        label: RenderOption('Dúvida sobre o uso', '#20c997'), // Verde água
+        color: '#20c997' 
+    },
+    { 
+        value: 'problema_acessibilidade', 
+        name: 'Problemas de Acessibilidade', 
+        label: RenderOption('Problemas de Acessibilidade', '#fd7e14'), // Laranja
+        color: '#fd7e14' 
+    }
+];
+
+
+
+

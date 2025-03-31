@@ -6,6 +6,13 @@ class Feedback(models.Model):
     TIPOS = [
         ('sugestao', 'Sugestão'),
         ('reclamacao', 'Reclamação'),
+        ('bug', 'Bug'),
+        ('nova_funcionalidade', 'Nova Funcionalidade'),
+        ('melhoria_funcionalidade', 'Melhoria de Funcionalidade'),
+        ('experiencia_usuario', 'Experiência do Usuário'),
+        ('duvida_uso', 'Dúvida sobre o uso'),
+        ('problema_acessibilidade', 'Problemas de Acessibilidade')
+        
     ]
     
     STATUS = [
@@ -16,7 +23,7 @@ class Feedback(models.Model):
 
     titulo = models.CharField(max_length=200)
     descricao = models.TextField()
-    tipo = models.CharField(max_length=10, choices=TIPOS)
+    tipo = models.CharField(choices=TIPOS)
     status = models.CharField(max_length=15, choices=STATUS, default='pendente')
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Breadcrumb, Button, Modal, Space, Tabs, Tooltip } from 'antd';
-import { buscarProjetosDoMembro, criarMembroProjeto } from "../../../../services/membroProjetoService";
+import { buscarMembrosPorProjeto, buscarProjetosDoMembro, criarMembroProjeto } from "../../../../services/membroProjetoService";
 import { useContextoGlobalUser } from "../../../../context/ContextoGlobalUser/ContextoGlobalUser";
 import TableProjetos from "../../components/TableProjetos/TableProjetos";
 import { FaListUl, FaPlus } from "react-icons/fa";
@@ -23,7 +23,7 @@ import { HomeOutlined } from '@ant-design/icons';
 
 const {TabPane} = Tabs 
 
-const Projetos = () => {
+const Projetos = ({group}) => {
     
     const navigate = useNavigate();
     const { dadosProjeto, setDadosProjeto } = useContextoProjeto();
@@ -142,33 +142,66 @@ const Projetos = () => {
     }
 
     const handleSalvarProjeto = async (formData) => {    
-        setIsLoading(true)
-    
+        setIsLoading(true);
+        
         try {
-            if (actionForm === 'create' && dadosProjeto == null){
-                const response = await criarProjeto(formData)
-                
-                if (!response.error){
-                    await criarMembroProjeto({
-                        membros: [usuario.id],
-                        projeto: response.data.id
-                    })
-                    setActionForm('update')
-                    setDadosProjeto(response.data)
-    
-                }
-            }else if(actionForm === 'update'){
-                const response = await atualizarProjeto(formData, dadosProjeto.id)
-                if (!response.error){
-                    setDadosProjeto(response.data)
-                }
+            if (actionForm === 'create' && dadosProjeto == null) {
+                await criarNovoProjeto(formData);
+            } else if (actionForm === 'update') {
+                await atualizarProjetoExistente(formData);
             }
         } catch (error) {
-            return handleError(error, 'Falha ao tentar salvar os dados do projeto !')
+            return handleError(error, 'Falha ao tentar salvar os dados do projeto!');
         }
-
-        setIsLoading(false)
+        
+        setIsLoading(false);
     };
+    
+    const criarNovoProjeto = async (formData) => {
+        const response = await criarProjeto(formData);
+        if (!response || !response.data) {
+            throw new Error('Erro ao criar projeto.');
+        }
+    
+        await adicionarMembrosProjeto(response.data.id, [usuario.id, formData.coordenador]);
+        setActionForm('update');
+        setDadosProjeto(response.data);
+    };
+    
+    const atualizarProjetoExistente = async (formData) => {
+        try {
+            const response = await atualizarProjeto(formData, dadosProjeto.id);
+            if (!response || !response.data) {
+                throw new Error('Erro ao atualizar projeto.');
+            }
+    
+            await verificarEAdicionarCoordenador(response.data.id, formData.coordenador);
+            setDadosProjeto(response.data);
+        } catch (error) {
+            console.error('Erro ao atualizar o projeto: ', error);
+            return handleError(error, 'Falha ao tentar atualizar os dados do projeto!');
+        }
+    };
+    
+    const adicionarMembrosProjeto = async (projetoId, membros) => {
+        const membrosFiltrados = membros.filter(Boolean); // Remove valores nulos ou indefinidos
+        if (membrosFiltrados.length > 0) {
+            await criarMembroProjeto({ membros: membrosFiltrados, projeto: projetoId });
+        }
+    };
+    
+    const verificarEAdicionarCoordenador = async (projetoId, coordenadorId) => {
+        if (!coordenadorId) return;
+    
+        const membros = await buscarMembrosPorProjeto(projetoId);
+        const membroCoordenador = membros.data.find(item => item.membro === coordenadorId);
+    
+        if (!membroCoordenador) {
+            await criarMembroProjeto({ membros: [coordenadorId], projeto: projetoId });
+        }
+    };
+    
+    
 
     const handleExcluirProjeto = async (id) => {
         Modal.confirm({
@@ -189,11 +222,11 @@ const Projetos = () => {
                 <Breadcrumb
                     items={[
                         {
-                            href: `/academicflow/${grupo}/home`,
+                            href: `/academicflow/${group}/home`,
                             title: <HomeOutlined />,
                         },
                         {
-                            href: `/academicflow/${grupo}/projetos`,
+                            href: `/academicflow/${group}/projetos`,
                             title: 'Projetos',
                         },
                         ...(isSaveFormVisible && actionForm === 'create'

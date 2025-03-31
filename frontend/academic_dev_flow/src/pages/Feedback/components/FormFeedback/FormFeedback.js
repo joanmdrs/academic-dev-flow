@@ -2,7 +2,8 @@ import { Button, Form, Input, Radio, Select, Space } from "antd";
 import React, { useEffect } from "react";
 import { useContextoFeedback } from "../../context/ContextoFeedback";
 import { useContextoGlobalUser } from "../../../../context/ContextoGlobalUser/ContextoGlobalUser";
-import { optionsStatusFeedback } from "../../../../services/optionsStatus";
+import { optionsStatusFeedback, optionsTiposFeedbacks } from "../../../../services/optionsStatus";
+import { filterOption } from "../../../../services/utils";
 
 const FormFeedback = ({onSubmit, onCancel}) => {
 
@@ -50,10 +51,13 @@ const FormFeedback = ({onSubmit, onCancel}) => {
                 name="tipo"
                 rules={[{ required: true, message: 'Por favor, seleicone um tipo!' }]}
             > 
-                <Radio.Group name="tipo">
-                    <Radio value="sugestao">Sugestão</Radio>
-                    <Radio value="reclamacao">Reclamação</Radio>
-                </Radio.Group>
+                <Select 
+                    style={{width: '50%'}} 
+                    name="tipo" 
+                    placeholder={"Selecione um tipo"} 
+                    options={optionsTiposFeedbacks}
+                    filterOption={filterOption}
+                />
             </Form.Item>
 
             {grupo === "Docentes" || grupo === "Administradores" ? (

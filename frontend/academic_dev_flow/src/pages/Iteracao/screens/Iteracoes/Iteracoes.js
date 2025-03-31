@@ -22,6 +22,8 @@ import SectionHeader from '../../../../components/SectionHeader/SectionHeader'
 import SectionFilters from '../../../../components/SectionFilters/SectionFilters'
 import SectionContent from '../../../../components/SectionContent/SectionContent'
 import { HomeOutlined } from '@ant-design/icons'
+import RenderDate from '../../../../components/RenderDate/RenderDate'
+import RenderMembers from '../../../../components/RenderMembers/RenderMembers'
 
 const Iteracoes = ({grupo}) => {
 
@@ -175,7 +177,7 @@ const Iteracoes = ({grupo}) => {
             key: 'data_inicio',
             render: (_, record) => (
                 <Space>
-                    {record.data_inicio ? formatDate(record.data_inicio) : null}
+                    <RenderDate dateType="inicio" dateValue={record.data_inicio} />
                 </Space>
             )
         },
@@ -185,19 +187,14 @@ const Iteracoes = ({grupo}) => {
             key: 'data_termino',
             render: (_, record) => (
                 <Space>
-                    {record.data_termino ? formatDate(record.termino) : null}
+                    <RenderDate dateType="termino" dateValue={record.data_termino}/>
                 </Space>
             )
         },
         {
             title: 'Responsável',
-            dataIndex: 'responsavel',
-            key: 'responsavel',
-            render: (_, record) => (
-                <Space>
-                    {record.nome_responsavel}
-                </Space>
-            )
+            dataIndex: 'nome_responsavel',
+            key: 'nome_responsavel'
         },
         {
             title: 'Etapas',

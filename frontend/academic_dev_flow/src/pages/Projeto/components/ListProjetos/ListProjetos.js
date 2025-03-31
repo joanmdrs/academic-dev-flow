@@ -1,12 +1,10 @@
-import { Empty, List, Skeleton, Dropdown, Collapse, Button } from "antd";
+import { Empty, List, Skeleton, Dropdown, Collapse, Button, Avatar } from "antd";
 import React from "react";
-import { limitarCaracteres } from "../../../../services/utils";
-import RenderStatus from "../../../../components/RenderStatus/RenderStatus";
 import { optionsStatusProjetos } from "../../../../services/optionsStatus";
-import RenderMembers from "../../../../components/RenderMembers/RenderMembers";
-import RenderDate from "../../../../components/RenderDate/RenderDate";
 import { FaEllipsisH } from "react-icons/fa";
-import { IoMdCreate, IoMdTrash, IoMdFolderOpen } from "react-icons/io";
+import { IoMdCreate, IoMdTrash } from "react-icons/io";
+import ListContent from "./ListContent";
+import ListHeader from "./ListHeader";
 
 const { Panel } = Collapse;
 
@@ -72,6 +70,7 @@ const ListProjetos = ({ data, onUpdate, onDelete, onOpen }) => {
                     renderItem={(item) => (
                         <List.Item
                             style={{
+                                display: 'flex',
                                 padding: '20px',
                                 marginBottom: '20px',
                                 borderLeft: `
@@ -82,47 +81,18 @@ const ListProjetos = ({ data, onUpdate, onDelete, onOpen }) => {
                                 <ActionDropdown item={item} onDelete={onDelete} onUpdate={onUpdate} onOpen={onOpen} />
                             }
                         >
-                            <Skeleton avatar title={false} loading={item.loading} active>
-                                <Collapse bordered={false}>
+                            <Skeleton 
+                                loading={item.loading} 
+                                active
+                            >
+                                <Collapse  bordered={false}>
                                     <Panel
                                         header={
-                                            <div 
-                                                style={{
-                                                    display: 'flex', 
-                                                    alignItems: 'center', 
-                                                    gap: '20px'
-                                                }}
-                                            >
-                                                <span 
-                                                    style={{
-                                                    width: '400px',
-                                                    fontWeight: '600',
-                                                    fontSize: '15px', 
-                                                }}> {limitarCaracteres(item.nome_projeto, 100)} </span>
-
-                                                    
-                                                <RenderStatus optionsStatus={optionsStatusProjetos} propStatus={item.status_projeto} />
-                                            </div>
+                                            <ListHeader item={item} />
                                         }
                                         key={item.nome_projeto}
                                     >
-                                        <div style={{display: 'flex', flexDirection: 'column', gap: '15px'}}>
-                                            <div>{`Fluxo: ${item.nome_fluxo ? item.nome_fluxo : 'Não informado'}`}</div>
-                                            <div>{`Descrição: ${item.descricao_projeto ? item.descricao_projeto : ''}`}</div>
-                                            <div style={{display: 'flex', gap: '10px'}}> 
-                                                <RenderDate dateType="inicio" dateValue={item.data_inicio_projeto} />
-                                                <RenderDate dateType="fim" dateValue={item.data_termino_projeto} />
-                                            </div>
-                                            <div>
-                                                <RenderMembers 
-                                                    membros={item.equipe} 
-                                                    maxAvatars={3} 
-                                                    quantMembros={item.quantidade_membros} 
-                                                /> 
-
-                                            </div>
-                                            
-                                        </div>
+                                        <ListContent item={item}/>
                                     </Panel>
                                 </Collapse>
                             </Skeleton>

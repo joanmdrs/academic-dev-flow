@@ -15,7 +15,7 @@ const TableRelease = ({columns, data}) => {
                 
                 />
             ) : (
-                <RenderEmpty title="Nenhuma release para exibir" />
+                <RenderEmpty title="Nenhum lançamento para exibir" />
             )
         }
         </React.Fragment>

@@ -56,11 +56,11 @@ export const buscarMembroPeloNome = async (nomeMembro) => {
     } 
 }
 
-export const buscarMembroPorGrupoENome = async (nomeMembro, grupoMembro) => {
+export const buscarMembrosPorGrupo = async (idsGrupos) => {
 
     try {
-        const response = await api.get(`membro/buscar-por-nome-e-grupo/`, 
-            {params: {nome: nomeMembro, grupo: grupoMembro}})
+        const response = await api.get(`membro/buscar-por-grupo/`, 
+            {params: {grupos_ids: idsGrupos}})
         return response
     } catch (error) {
         return handleError(error, 'Falha ao tentar buscar os dados.')

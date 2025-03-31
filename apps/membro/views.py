@@ -114,38 +114,44 @@ class BuscarMembrosPorNomeView(APIView):
                 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-            
+        
+
 class BuscarMembroPorGrupoView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         try:
-            nome = request.query_params.get('nome', None)
-            group_member = request.query_params.get('grupo', None)
+            # Obtém os IDs dos grupos como uma string (exemplo: "1,2,3")
+            grupos_ids_str = request.GET.get('grupos_ids', '')
 
-            if not group_member:
-                return Response({'error': 'Parâmetro grupo não fornecido!'}, status=status.HTTP_400_BAD_REQUEST)
+            if not grupos_ids_str:
+                return Response({'error': 'Parâmetro grupos_ids não fornecido!'}, status=status.HTTP_400_BAD_REQUEST)
 
-            # Busca o grupo pelo nome
-            group = Group.objects.filter(name=group_member).first()
+            # Converte a string em uma lista de inteiros
+            try:
+                grupos_ids = [int(id.strip()) for id in grupos_ids_str.split(',') if id.strip().isdigit()]
+            except ValueError:
+                return Response({'error': 'IDs dos grupos devem ser números inteiros!'}, status=status.HTTP_400_BAD_REQUEST)
 
-            if not group:
-                return Response({'error': 'Grupo não encontrado!'}, status=status.HTTP_404_NOT_FOUND)
+            if not grupos_ids:
+                return Response({'error': 'Nenhum ID de grupo válido fornecido!'}, status=status.HTTP_400_BAD_REQUEST)
 
-            # Filtra membros cujo usuário pertence ao grupo
-            membros = Membro.objects.filter(usuario__groups=group)
+            # Filtra os grupos pelos IDs
+            grupos = Group.objects.filter(id__in=grupos_ids)
 
-            # Filtra por nome, se fornecido
-            if nome:
-                membros = membros.filter(nome__icontains=nome)
+            if not grupos.exists():
+                return Response({'error': 'Nenhum grupo encontrado com os IDs fornecidos!'}, status=status.HTTP_404_NOT_FOUND)
 
-            # Serializa os resultados
+            # Busca membros cujos usuários pertencem a esses grupos
+            membros = Membro.objects.filter(usuario__groups__in=grupos).distinct()
+
             serializer = MembroSerializer(membros, many=True)
 
-            return Response({'message': 'Membros encontrados com sucesso.', 'results': serializer.data}, status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         
 class BuscarMembroPorIdUsuarioView(APIView):
     permission_classes = [IsAuthenticated]

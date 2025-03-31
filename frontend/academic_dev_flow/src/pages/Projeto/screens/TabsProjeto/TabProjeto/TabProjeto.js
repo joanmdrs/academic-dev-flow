@@ -4,6 +4,8 @@ import { useContextoProjeto } from "../../../context/ContextoProjeto";
 import { optionsStatusProjetos } from "../../../../../services/optionsStatus";
 import SpinLoading from "../../../../../components/SpinLoading/SpinLoading";
 import { listarFluxos } from "../../../../../services/fluxoService";
+import { buscarMembroPorGrupoENome, buscarMembrosPorGrupo, listarGrupos } from "../../../../../services/membroService";
+import { filterOption, handleError } from "../../../../../services/utils";
 
 const TabProjeto = ({ onSubmit, onCancel }) => {
 
@@ -11,6 +13,7 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
     const [form] = Form.useForm();
     const [isLoading, setIsLoading] = useState(false)
     const [optionsFluxo, setOptionsFluxo] = useState([])
+    const [optionsCoordenador, setOptionsCoordenador] = useState([])
 
     const handleListarFluxos = async () => {
         const response = await listarFluxos()
@@ -25,11 +28,34 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
         }
     }
 
+    const handleListarMembrosProfessor = async () => {
+        try {
+            const response = await listarGrupos()
+            const grupoDocente = response.data.find(grupo => grupo.name === "Docentes");
+
+            if (grupoDocente) {
+                const resMembrosDocente = await buscarMembrosPorGrupo(grupoDocente.id)
+
+                if (!resMembrosDocente.error){
+                    const resultados = resMembrosDocente.data.map((item) => ({
+                        value: item.id,
+                        label: `${item.nome} `,
+                    }));
+                    setOptionsCoordenador(resultados)
+                }
+            }
+        } catch (error) {
+            return handleError(error, 'Falha ao tentar listar os membros do grupo DOCENTES. ')
+        }
+    }
+
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setIsLoading(true);
                 await handleListarFluxos()
+                await handleListarMembrosProfessor()
                 form.setFieldsValue(dadosProjeto)
             } catch (error) {
             } finally {
@@ -38,6 +64,13 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
         };
         fetchData();
     }, [dadosProjeto]);
+
+    const handleSubmitForm = (formData) => {
+        
+        formData['coordenador'] = formData.coordenador ? formData.coordenador : null
+        formData['fluxo'] = formData.fluxo ? formData.fluxo : null
+        onSubmit(formData)
+    }
 
     return (
        <React.Fragment>
@@ -48,7 +81,7 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
                     <Form
                         className="global-form"
                         form={form}
-                        onFinish={onSubmit}
+                        onFinish={handleSubmitForm}
                         labelCol={{
                             span: 4,
                         }}                       
@@ -128,8 +161,21 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
                             />
                         </Form.Item>
 
+                        <Form.Item
+                            label="Coordenador"
+                            name="coordenador"
+                        >
+                            <Select 
+                                options={optionsCoordenador}
+                                showSearch
+                                allowClear
+                                placeholder="Selecione um coordenador"
+                                filterOption={filterOption}
+                            />
+                        </Form.Item>
+
                         <Form.Item 
-                            label="Selecione o fluxo" 
+                            label="Fluxo" 
                             name="fluxo" 
                         >
                             <Select
@@ -137,9 +183,7 @@ const TabProjeto = ({ onSubmit, onCancel }) => {
                                 showSearch
                                 allowClear
                                 placeholder="Selecione o fluxo"
-                                filterOption={
-                                    (input, option) => option?.label.toLowerCase().includes(input.toLowerCase())
-                                }
+                                filterOption={filterOption}
                             />
                         </Form.Item>
 
