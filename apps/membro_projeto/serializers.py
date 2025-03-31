@@ -43,8 +43,6 @@ class MembroProjetoSerializer(serializers.ModelSerializer):
                   'nome_grupo', 
                   'coordenador',
                   'nome_coordenador',
-                  'link_repo',
-                  'link_site',
                   'usuario_github', 
                   'status_projeto',
                   'data_inicio_projeto',

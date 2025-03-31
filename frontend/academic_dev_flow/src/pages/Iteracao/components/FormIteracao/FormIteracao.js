@@ -144,6 +144,7 @@ const FormIteracao = ({ onSubmit, onCancel, selectProject }) => {
     const handleSubmitForm = (formData) => {
         formData['data_inicio'] = formData.data_inicio ? formData.data_inicio : null
         formData['data_termino'] = formData.data_termino ? formData.data_termino : null
+
         onSubmit(formData)
     }
     
