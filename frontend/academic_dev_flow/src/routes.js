@@ -39,12 +39,17 @@ import ScreenGerenciarTags from "./pages/Tag";
 import { ProviderGlobalUser } from "./context/ContextoGlobalUser/ContextoGlobalUser";
 import { ProviderGlobalProjeto } from "./context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 import ScreenFeedbacks from "./pages/Feedback/screens";
+import ScreenResetPassword from "./pages/Auth/ResetPassword/ResetPassword/ResetPassword";
+import ResetPassword from "./pages/Auth/ResetPassword/ResetPassword/ResetPassword";
+import ConfirmResetPassword from "./pages/Auth/ResetPassword/ConfirmResetPassword/ConfirmResetPassword";
 
 function Routes() {
     return (
         <Switch>
             <Route path="/" Component={Login} />
             <Route path="/cadastre-se" Component={Register} />
+            <Route path="/redefinir-senha" Component={ResetPassword} />
+            <Route path='/redefinir-senha/confirmar/:token' Component={ConfirmResetPassword}/>
 
             {/* Admin */}
 
