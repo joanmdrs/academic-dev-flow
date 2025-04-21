@@ -10,7 +10,7 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
     token = reset_password_token.key
 
     # Crie aqui o link de redefinição conforme sua URL
-    link_redefinicao = f"http://localhost:3000/academicflow/redefinir-senha/confirmar/{token}"
+    link_redefinicao = f"{settings.RESET_LINK_BASE}/redefinir-senha/confirmar/{token}"
 
     context = {
         'email': user.email,
