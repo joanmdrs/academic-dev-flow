@@ -57,6 +57,7 @@ urlpatterns = [
     path('academicflow-api/auth/', include('apps.api.urls', namespace='api')),
     path('academicflow-api/github_integration/', include('apps.github_integration.urls', namespace='github_integration')),
     path('academicflow-api/', RedirectView.as_view(url='/academicflow-api/admin/')),
+    path('academicflow-api/api/password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset'))
 ]
 
 if settings.DEBUG:
