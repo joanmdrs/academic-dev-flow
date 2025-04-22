@@ -67,7 +67,8 @@ INSTALLED_APPS = [
     'apps.api',
     'apps.github_integration',
     'drf_yasg',
-    'apps.feedback'
+    'apps.feedback',
+    'apps.chat'
 ]
 
 SWAGGER_SETTINGS = {
