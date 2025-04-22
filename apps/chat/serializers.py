@@ -35,6 +35,11 @@ class MensagemSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['id', 'enviado_em', 'editado_em']
         
+    def create(self, validated_data):
+        user = self.context['request'].user
+        validated_data['autor'] = user
+        return super().create(validated_data)
+        
     def get_nome_autor(self, obj):
         membro = Membro.objects.get(usuario=obj.autor.id)
         return membro.nome if membro else None
