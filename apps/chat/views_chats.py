@@ -66,7 +66,7 @@ class BuscarChatPeloIDView(APIView):
         except Exception as e: 
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-class FiltrarPorProjetoView(APIView):
+class FiltrarChatsPorProjetoView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
         try:
@@ -79,6 +79,18 @@ class FiltrarPorProjetoView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
         
+class ListarChatsView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        try:
+            chats = Chat.objects.all()
+            
+            serializer = ChatSerializer(chats, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
 class ExcluirChatView(APIView):
     permission_classes = [IsAuthenticated]
     def delete(self, request): 
@@ -90,7 +102,7 @@ class ExcluirChatView(APIView):
 
             chat = Chat.objects.get(id=id_chat)
             
-            if chat.exists():
+            if chat:
                 chat.delete()
                 return Response({'message': 'Chat excluído com sucesso !'}, status=status.HTTP_204_NO_CONTENT)
             else:
