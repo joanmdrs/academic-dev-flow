@@ -11,10 +11,10 @@ class ChatSerializer(serializers.ModelSerializer):
             'id',
             'nome',
             'projeto',
-            'projeto_nome',
+            'nome_projeto',
             'data_criacao',
         ]
-        read_only_fields = ['id', 'data_criacao', 'projeto_nome']
+        read_only_fields = ['id', 'data_criacao', 'nome_projeto']
     
     def get_nome_projeto(self, obj):
         return obj.projeto.nome if obj.projeto else None
