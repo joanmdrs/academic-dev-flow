@@ -81,6 +81,17 @@ class FiltrarMensagensPorChatView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
         
+class ListarMensagensView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        try:
+            mensagens = Mensagem.objects.all()
+            serializer = MensagemSerializer(mensagens, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
 class ExcluirMensagemView(APIView):
     permission_classes = [IsAuthenticated]
     def delete(self, request):
@@ -92,7 +103,7 @@ class ExcluirMensagemView(APIView):
             
             mensagem = Mensagem.objects.get(id=id_mensagem)
             
-            if mensagem.exists():
+            if mensagem:
                 mensagem.delete()
                 return Response({'message': 'Mensagem excluída com sucesso !'}, status=status.HTTP_204_NO_CONTENT)
             else:
