@@ -1,0 +1,17 @@
+.painel-chat {
+    display: flex;
+    height: 100%;
+
+}
+
+.coluna-chat {
+    width: auto;
+    border-right: 1px solid var(--border-color);
+    padding: 20px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.coluna-mensagens {
+    width: 80%;
+}
