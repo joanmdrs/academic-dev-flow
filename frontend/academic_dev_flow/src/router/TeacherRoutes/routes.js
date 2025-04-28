@@ -19,6 +19,7 @@ import ScreenEquipe from "../../pages/Membro/screens/Equipe";
 import ScreenVisualizarIteracao from "../../pages/Iteracao/screens/VisualizarIteracao";
 import ScreenRepositories from "../../pages/GitHub/screens/Repositories";
 import ScreenFeedbacks from "../../pages/Feedback/screens";
+import ScreenChats from "../../pages/Chat/screens/PainelChat";
 // import ScreenPainelGitHub from "../../pages/GitHub/screens/PainelGitHub";
 
 function TeacherRoutesDefinition() {
@@ -36,6 +37,7 @@ function TeacherRoutesDefinition() {
             <Route path="tarefas/categorias" element={<ScreenGerenciarCategoriaTarefa grupo="professor" />} exact />
             <Route path="tarefas/tags" element={<ScreenGerenciarTags grupo="professor" />} />
             <Route path="artefatos" element={<ScreenArtefatos grupo="professor" />} exact />
+            <Route path="chats" element={<ScreenChats grupo="professor" />} exact />
             <Route path="membros/gerenciar" element={<ScreenGerenciarMembros grupo="professor" />} exact />
             <Route path="membros/equipes" element={<ScreenQuadroMembros grupo="professor" />} exact />
             <Route path="membros/funcoes" element={<ScreenGerenciarCategoriaFuncaoMembro grupo="professor" />} exact />
