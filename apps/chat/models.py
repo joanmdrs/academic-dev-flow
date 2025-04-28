@@ -4,7 +4,7 @@ from django.conf import settings
 
 class Chat(models.Model):
     nome = models.CharField(max_length=255)
-    projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE)
+    projeto = models.OneToOneField(Projeto, on_delete=models.CASCADE)
     data_criacao = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
