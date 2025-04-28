@@ -1,21 +1,56 @@
-import { List, Typography } from "antd";
-import React from "react";
+import { List, Avatar, Tooltip } from 'antd';
+import { IoMdCreate, IoMdTrash } from 'react-icons/io';
+import { CiChat1 } from "react-icons/ci";
 
-const ListChats = ({data}) => {
-
+const ListChats = ({ data, onEdit, onDelete }) => {
     return (
         <List
-            header={<div>Header</div>}
-            footer={<div>Footer</div>}
-            bordered
+            style={{ marginTop: '10px' }}
             dataSource={data}
-            renderItem={item => (
-                <List.Item>
-                    {item.nome}
+            itemLayout="horizontal"
+            renderItem={(item, index) => (
+                <List.Item 
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        width: '100%',
+                        padding: '10px',
+                        borderRadius: '5px',
+                        backgroundColor: "#FFFFFF",
+                        boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px"
+                    }}
+                >
+                    {/* Área da esquerda: Avatar + Nome */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <CiChat1 size="20px" />
+                        <h4 style={{ margin: 0, cursor: 'pointer'}}>{item.nome}</h4>
+                    </div>
+
+                    {/* Área da direita: Botões */}
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                        <Tooltip title="Editar">
+                            <span 
+                                style={{ color: 'var(--primary-color)', cursor: 'pointer' }}  
+                                onClick={() => onEdit(item)}
+                            >
+                                <IoMdCreate size={20} />
+                            </span>
+                        </Tooltip>
+
+                        <Tooltip title="Excluir">
+                            <span 
+                                style={{ color: 'var(--primary-color)', cursor: 'pointer' }} 
+                                onClick={() => onDelete(item.id)}
+                            >
+                                <IoMdTrash size={20} />
+                            </span>
+                        </Tooltip>
+                    </div>
                 </List.Item>
             )}
         />
-    )
-}
+    );
+};
 
-export default ListChats
+export default ListChats;
