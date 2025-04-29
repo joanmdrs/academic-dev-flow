@@ -57,6 +57,7 @@ const SelectProject = ({idMembro}) => {
     return (
         <Form.Item
             label="Projeto"
+            name="projeto"
             rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
         >
             <Select
