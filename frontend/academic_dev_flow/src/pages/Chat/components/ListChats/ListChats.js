@@ -16,6 +16,7 @@ const ListChats = ({ data, onEdit, onDelete }) => {
                         alignItems: 'center',
                         width: '100%',
                         padding: '10px',
+                        marginTop: '10px',
                         borderRadius: '5px',
                         backgroundColor: "#FFFFFF",
                         boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px"

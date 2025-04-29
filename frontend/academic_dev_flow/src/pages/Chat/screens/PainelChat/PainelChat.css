@@ -5,11 +5,11 @@
 }
 
 .coluna-chat {
-    width: auto;
+    width: 20%;
     border-right: 1px solid var(--border-color);
-    padding: 20px;
+    padding: 10px;
     display: flex;
-    align-items: flex-start;
+    flex-direction: column;
 }
 
 .coluna-mensagens {
