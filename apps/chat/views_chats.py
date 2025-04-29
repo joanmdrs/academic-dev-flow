@@ -5,6 +5,7 @@ from .models import Chat
 from .serializers import ChatSerializer
 from apps.membro_projeto.models import MembroProjeto
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import ValidationError
 
 class CadastrarChatView(APIView):
     permission_classes = [IsAuthenticated]
@@ -15,7 +16,22 @@ class CadastrarChatView(APIView):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)        
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)   
+        
+        except ValidationError as e:
+            # Captura erro de validação
+            detail = e.detail  # Isso é um dict tipo {"projeto": ["chat com este projeto já existe."]}
+            if 'projeto' in detail:
+                return Response(
+                    {
+                        'error': 'Já existe um chat vinculado ao projeto selecionado.',
+                        'code': 'UNIQUE_CHAT_PROJETO'
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            return Response({'error': detail}, status=status.HTTP_400_BAD_REQUEST)
+        
+             
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
@@ -24,6 +40,7 @@ class AtualizarChatView(APIView):
     def patch(self, request):
         try: 
             id_chat = request.GET.get('id_chat', None)
+            print("ID chat: ", id_chat)
             
             if not id_chat:
                 return Response({'error': 'O ID do chat não foi fornecido'}, status=status.HTTP_400_BAD_REQUEST)
@@ -41,6 +58,19 @@ class AtualizarChatView(APIView):
             
         except Chat.DoesNotExist:
             return Response({'error': 'Objeto chat não localizado'}, status=status.HTTP_404_NOT_FOUND)
+        
+        except ValidationError as e:
+            # Captura erro de validação
+            detail = e.detail  # Isso é um dict tipo {"projeto": ["chat com este projeto já existe."]}
+            if 'projeto' in detail:
+                return Response(
+                    {
+                        'error': 'Já existe um chat vinculado ao projeto selecionado.',
+                        'code': 'UNIQUE_CHAT_PROJETO'
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            return Response({'error': detail}, status=status.HTTP_400_BAD_REQUEST)
              
         except Exception as e: 
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -86,7 +116,7 @@ class BuscarChatsDosProjetosDoUsuarioView(APIView):
             projetos_ids = objs_membro_projeto.values_list('projeto_id', flat=True)
             
             # Buscar os chats associados aos projetos
-            chats = Chat.objects.filter(projeto_id__in=projetos_ids)
+            chats = Chat.objects.filter(projeto_id__in=projetos_ids).order_by('id')
 
             # Serializar os dados
             serializer = ChatSerializer(chats, many=True)
