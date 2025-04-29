@@ -1,8 +1,21 @@
 import { Form, Input, Modal } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useContextoChat } from "../../context/ContextoChat";
 
 const FormChatModal = ({ selectProject, visible, onCancel, onOk, action }) => {
     const [form] = Form.useForm();
+    const {dadosChat} = useContextoChat()
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (dadosChat !== null){
+                form.setFieldsValue(dadosChat)
+            } else {
+                form.resetFields()
+            }
+        }
+        fetchData()
+    }, [dadosChat])
 
     return (
         <Modal
