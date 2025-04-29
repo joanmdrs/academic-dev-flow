@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Chat, Mensagem
 
 class ChatAdmin(admin.ModelAdmin):
-    list_display = ('nome', 'projeto', 'data_criacao')
+    list_display = ('id','nome', 'projeto', 'data_criacao')
     list_filter = ('projeto', 'data_criacao')
     search_fields = ('nome',)
 
