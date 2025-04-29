@@ -6,19 +6,31 @@ export const cadastrarChat = async (data) => {
         const response = await api.post('chat/cadastrar/', data)
         return handleSuccess(response, 'Chat criado com sucesso!')
     } catch (error) {
+        if (error.response.data.code === "UNIQUE_CHAT_PROJETO"){
+            return handleError(error, error.response.data.error)
+        }
         return handleError(error, 'Falha ao tentar cadastrar o chat!')        
     }
 }
 
 export const atualizarChat = async (idChat, data) => {
     try {
-        const response = await api.patch('chat/atualizar/', {
-            params: { id_chat: idChat },
-            data: data
-        });
+        const response = await api.patch('chat/atualizar/', data, {params: {id_chat: idChat}});
         return handleSuccess(response, 'As informações do Chat foram atualizadas!')    
     } catch (error) {
+        if (error.response.data.code === "UNIQUE_CHAT_PROJETO"){
+            return handleError(error, error.response.data.error)
+        }
         return handleError(error, 'Falha ao tentar atualizar as informações do chat!')
+    }
+}
+
+export const buscarChatsDoUsuario = async (idUsuario) => {
+    try {
+        const response = await api.get('chat/buscar-pelo-id-usuario/', {params: {id_usuario: idUsuario}})
+        return response
+    } catch (error) {
+        return handleError(error, 'Falha ao tentar buscar os dados!')
     }
 }
 
