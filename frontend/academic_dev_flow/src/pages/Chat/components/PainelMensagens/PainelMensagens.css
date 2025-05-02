@@ -1,0 +1,39 @@
+.component-painel-mensagens {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    /* margin: 10px !important; */
+    height: calc(100%);
+    background-color: white;
+    padding: 10px;
+    /* border-radius: 10px; */
+    /* box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; */
+    overflow: hidden;
+    z-index: 0;
+}
+
+.component-painel-mensagens::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('../../../../assets/wallpaper-chat.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.1; /* ajuste a opacidade como quiser */
+    z-index: -1;
+}
+
+
+.component-painel-mensagens .linha-mensagens {
+    flex: 1; /* ocupa o espaço restante */
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.component-painel-mensagens .form-cadastrar-mensagem-no-chat {
+    margin-top: 10px;
+}

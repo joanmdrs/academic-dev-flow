@@ -12,16 +12,16 @@ import { useContextoChat } from "../../context/ContextoChat";
 import ListChats from "../../components/ListChats/ListChats";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 import SpinLoading from "../../../../components/SpinLoading/SpinLoading";
+import PainelMensagens from "../../components/PainelMensagens/PainelMensagens";
 
 const PainelChat = () => {
 
     const {usuario} = useContextoGlobalUser()
-    const {dadosChat, setDadosChat} = useContextoChat()
+    const {dadosChat, setDadosChat, chatSelecionado, setChatSelecionado} = useContextoChat()
     const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
     const [isFormVisible, setIsFormVisible] = useState(false)
     const [actionForm, setActionForm] = useState('create')
     const [chats, setChats] = useState([])
-    const [selectedChat, setSelectedChat] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
 
     const handleBuscarChats = async () => {
@@ -44,7 +44,7 @@ const PainelChat = () => {
     const handleReload = async () => {
         await handleBuscarChats()
         setIsFormVisible(false)
-        setSelectedChat(null)
+        setChatSelecionado(null)
         setDadosProjeto(null)
         setDadosChat(null)
         setActionForm('create')
@@ -52,7 +52,7 @@ const PainelChat = () => {
     
     const handleAdicionarChat = () => {
         setIsFormVisible(true)
-        setSelectedChat(null)
+        setChatSelecionado(null)
         setDadosProjeto(null)
         setDadosChat(null)
         setActionForm('create')
@@ -62,12 +62,10 @@ const PainelChat = () => {
         setIsFormVisible(true)
         setActionForm('update')
         setDadosChat(record)
-        setSelectedChat(null)
+        setChatSelecionado(null)
     }
 
     const handleSalvarChat = async (data) => {
-        console.log(data)
-        console.log(dadosChat)
 
         if (actionForm === 'create'){
             await cadastrarChat(data)
@@ -90,6 +88,10 @@ const PainelChat = () => {
         });
     }
 
+    const handleSelecionarChat = (chat) => {
+        setChatSelecionado(chat)
+    }
+
     const handleCloseModal = () => setIsFormVisible(false)
 
 
@@ -104,7 +106,12 @@ const PainelChat = () => {
                             Criar Chat
                         </Button> 
 
-                        <ListChats data={chats} onEdit={handleEditarChat} onDelete={handleExcluirChat} />    
+                        <ListChats 
+                            data={chats} 
+                            onEdit={handleEditarChat} 
+                            onDelete={handleExcluirChat} 
+                            onSelect={handleSelecionarChat}
+                        />    
                     </div>
 
 
@@ -113,11 +120,11 @@ const PainelChat = () => {
                             <RenderEmpty title="Você não possui nenhum chat criado." />
                         )}
 
-                        {chats.length !== 0 && selectedChat === null ? (
+                        {chats.length !== 0 && chatSelecionado === null ? (
                             <RenderEmpty title="Selecione um chat para exibir as mensagens" />
                         ) : (
-                            <div>
-                                Suas Mensagens
+                            <div style={{height: "100%"}}>
+                                <PainelMensagens />
                             </div>
                         )}
 

@@ -1,5 +1,5 @@
 import { Form, Input, Modal } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useContextoChat } from "../../context/ContextoChat";
 
 const FormChatModal = ({ selectProject, visible, onCancel, onOk, action }) => {
@@ -19,7 +19,7 @@ const FormChatModal = ({ selectProject, visible, onCancel, onOk, action }) => {
 
     return (
         <Modal
-            title="Criar Chat"
+            title={action === 'create' ? "Criar Chat" : "Atualizar Chat"}
             open={visible}
             onCancel={onCancel}
             onOk={() => {

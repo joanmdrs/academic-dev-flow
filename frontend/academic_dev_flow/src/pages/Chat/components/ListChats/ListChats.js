@@ -1,8 +1,8 @@
-import { List, Avatar, Tooltip } from 'antd';
+import { List, Tooltip } from 'antd';
 import { IoMdCreate, IoMdTrash } from 'react-icons/io';
 import { CiChat1 } from "react-icons/ci";
 
-const ListChats = ({ data, onEdit, onDelete }) => {
+const ListChats = ({ data, onEdit, onDelete, onSelect }) => {
     return (
         <List
             style={{ marginTop: '10px' }}
@@ -18,14 +18,16 @@ const ListChats = ({ data, onEdit, onDelete }) => {
                         padding: '10px',
                         marginTop: '10px',
                         borderRadius: '5px',
+                        cursor: 'pointer',
                         backgroundColor: "#FFFFFF",
                         boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px"
                     }}
+                    onClick={() => onSelect(item)}
                 >
                     {/* Área da esquerda: Avatar + Nome */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <CiChat1 size="20px" />
-                        <h4 style={{ margin: 0, cursor: 'pointer'}}>{item.nome}</h4>
+                        <h4 style={{ margin: 0}}>{item.nome}</h4>
                     </div>
 
                     {/* Área da direita: Botões */}
