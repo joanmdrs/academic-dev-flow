@@ -44,6 +44,7 @@ class CadastrarMembroView(APIView):
             user_created = Usuario.objects.create_user(
                 username=user_serializer.validated_data['username'],
                 password=user_serializer.validated_data['password'],
+                email=user_serializer.validated_data(['email'])
             )
             user_created.is_staff = False
             user_created.is_superuser = False
@@ -259,6 +260,7 @@ class AtualizarMembroView(APIView):
 
             user_validated = user_serializer.validated_data
             user.username = user_validated.get('username', user.username)
+            user.email = user_validated.get('email', user.email)
             new_password = user_validated.get('password')
             
             if new_password != user.password:

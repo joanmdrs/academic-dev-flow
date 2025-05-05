@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'django_rest_passwordreset',
     'apps.projeto',
     'apps.fluxo',
     'apps.etapa',
@@ -66,7 +67,8 @@ INSTALLED_APPS = [
     'apps.api',
     'apps.github_integration',
     'drf_yasg',
-    'apps.feedback'
+    'apps.feedback',
+    'apps.chat'
 ]
 
 SWAGGER_SETTINGS = {
@@ -115,7 +117,7 @@ ROOT_URLCONF = 'academic_dev_flow.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -146,6 +148,14 @@ DATABASES = {
     }
 }
 
+EMAIL_BACKEND = config('EMAIL_BACKEND')
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT', cast=int)
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
+RESET_LINK_BASE = config('RESET_LINK_BASE')
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

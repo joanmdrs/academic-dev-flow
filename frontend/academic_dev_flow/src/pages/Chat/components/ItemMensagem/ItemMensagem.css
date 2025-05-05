@@ -1,0 +1,49 @@
+.mensagem-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.item-mensagem {
+    padding: 10px;
+    border-radius: 8px;
+    max-width: 60%;
+    position: relative;
+    word-break: break-word;
+}
+
+.bg-usuario {
+    background-color: #A9D0F5;
+}
+
+.bg-outro {
+    background-color: #242626;
+    color: #FFFFFF;
+}
+
+.item-mensagem-container {
+    margin: 5px 0;
+    display: flex;
+}
+
+.mensagem-direita {
+    justify-content: flex-end;
+}
+
+.mensagem-esquerda {
+    justify-content: flex-start;
+}
+
+.autor {
+    margin: 0;
+    font-weight: bold;
+}
+
+.conteudo {
+    margin: 5px 0;
+}
+
+.data {
+    font-size: 0.75rem;
+    color: gray;
+}

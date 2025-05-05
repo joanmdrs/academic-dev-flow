@@ -17,7 +17,8 @@ export const criarMembro = async (dados) => {
     const dadosEnviar = {
         usuario: {
             username: dados.username,
-            password: dados.password
+            password: dados.password,
+            email: dados.email
         },
         membro: {
             nome: dados.nome,
@@ -111,7 +112,8 @@ export const atualizarMembro = async (idMembro, dados) => {
     const dadosEnviar = {
         usuario : {
             username: dados.username,
-            password: dados.password
+            password: dados.password,
+            email: dados.email
         },
         membro : {
             nome: dados.nome,

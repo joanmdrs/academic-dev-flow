@@ -1,0 +1,22 @@
+.painel-chat {
+    display: flex;
+    height: calc(100vh - 64px);
+    overflow: hidden;
+}
+
+.coluna-chat {
+    width: 20%;
+    /* margin: 10px;
+    margin-right: 0; */
+    /* border-radius: 10px; */
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    background-color: #FFFFFF;
+    /* box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; */
+    height: calc(100%);
+}
+
+.coluna-mensagens {
+    width: 80%;
+}
