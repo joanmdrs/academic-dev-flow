@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import authentication_classes, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from .authentication import TokenService
 from django.contrib.auth.models import Group
 from apps.membro.models import Membro  # Substitua pelo caminho correto do modelo Membro
@@ -67,3 +67,28 @@ class LoginView(APIView):
                 {'error': str(e)}, 
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+            
+class AlterarSenhaView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            
+            user = request.user
+
+            senha_atual = request.data.get("senha_atual")
+            nova_senha = request.data.get("nova_senha")
+
+            if not user.check_password(senha_atual):
+                return Response(
+                    {"error": "Senha atual incorreta"},
+                    status=400
+                )
+
+            user.set_password(nova_senha)
+            user.save()
+
+            return Response({"success": True}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
