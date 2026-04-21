@@ -18,7 +18,8 @@ export const criarMembro = async (dados) => {
         usuario: {
             username: dados.username,
             password: dados.password,
-            email: dados.email
+            email: dados.email,
+            grupo: dados.grupo
         },
         membro: {
             nome: dados.nome,
@@ -31,7 +32,6 @@ export const criarMembro = async (dados) => {
             nome_github: dados.nome_github,
             email_github: dados.email_github,
             usuario_github: dados.usuario_github,
-            grupo: dados.grupo
         }
     };
 
