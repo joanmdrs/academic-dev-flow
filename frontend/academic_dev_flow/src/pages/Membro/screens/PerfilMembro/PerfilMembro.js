@@ -5,7 +5,7 @@ import Loading from "../../../../components/Loading/Loading";
 import { atualizarMembro, buscarMembroPeloId, listarGrupos } from "../../../../services/membroService";
 import { useNavigate } from "react-router-dom";
 import Titulo from "../../../../components/Titulo/Titulo";
-import { Avatar, Breadcrumb, Button, Form, Input, Select, Space, Tabs } from "antd";
+import { Avatar, Breadcrumb, Button, Form, Input, Modal, Select, Space, Tabs } from "antd";
 import { useForm } from "antd/es/form/Form";
 import InputMask from 'react-input-mask';
 import { EditOutlined, HomeOutlined, UserOutlined } from "@ant-design/icons";
@@ -13,6 +13,7 @@ import ModalAvatars from "../../components/ModalAvatars/ModalAvatars";
 import { getRandomColor } from "../../../../services/utils";
 import Section from "../../../../components/Section/Section";
 import SectionHeader from "../../../../components/SectionHeader/SectionHeader";
+import ChangePassword from "./ChangePassword";
 
 const {TabPane} = Tabs
 
@@ -38,41 +39,12 @@ const PerfilMembro = ({group}) => {
     const {dadosMembro, setDadosMembro} = useMembroContexto()
     const [loading, setLoading] = useState(true)
     const [form] = useForm()
-    const [optionsGrupos, setOptionsGrupos] = useState([])
-    const [inputSelectGroupDisabled, setInputSelectGroupDisabled] = useState(true)
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [selectedAvatar, setSelectedAvatar] = useState(null);
 
-    const handleOpenModal = () => {
-        setIsModalVisible(true);
-    };
-
-    const handleCloseModal = () => {
-        setIsModalVisible(false);
-    };
-
-    const handleSelectAvatar = (id) => {
-        setSelectedAvatar(id);
-    };
+    const [showModal, setShowModal] = useState(false)
 
 
     const handleCancelar = () => {
         navigate(-1)
-    }
-
-    const handleListarGrupos = async () => {
-        const response = await listarGrupos()
-
-        if (!response.error){
-            const promises = await response.data.map( async (item) => {
-                return {
-                    value: item.id,
-                    label: item.name
-                }
-            })
-            const results = (await Promise.all(promises))
-            setOptionsGrupos(results)
-        }
     }
 
     const handleCarregarDadosMembro = async () => {
@@ -100,19 +72,15 @@ const PerfilMembro = ({group}) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            if (grupo === 'Administradores'){
-                setInputSelectGroupDisabled(false)
-            }
-
+            
             if (usuario && usuario.id){
                 await handleCarregarDadosMembro()
-                await handleListarGrupos()
             }
 
         }
 
         fetchData()
-    }, [usuario, grupo])
+    }, [usuario])
 
     if (loading) {
         return <Loading />
@@ -298,17 +266,16 @@ const PerfilMembro = ({group}) => {
                             label="Senha de Acesso"
                             rules={[{ required: true, message: 'Por favor, preencha este campo!' }]}
                         >
-                            <Input.Password name="password" placeholder="senha de acesso"/>
+                            <Button type="default" onClick={() => setShowModal(true)}>
+                                Alterar senha
+                            </Button>
                         </Form.Item>
 
                         <Form.Item 
                             style={{width: '25%'}}
-                            name="grupo"
                             label="Grupo de Usuário"
-                            rules={[{ required: true, message: 'Por favor, selecione uma opção!' }]}
                         >
-                            <Select disabled={inputSelectGroupDisabled} options={optionsGrupos}/>
-                            
+                            <Space>{usuario.nome_grupo}</Space>
                         </Form.Item>
                     </TabPane>
                 </Tabs>
@@ -318,12 +285,14 @@ const PerfilMembro = ({group}) => {
                 </Space>
             </Form>
     
-            <ModalAvatars
-                isVisible={isModalVisible}
-                onClose={handleCloseModal}
-                onSelect={handleSelectAvatar}
-                gender={dadosMembro.sexo}
-            />
+            <Modal
+                title="Alterar senha"
+                open={showModal}
+                onCancel={() => setShowModal(false)}
+                footer={null}
+            >
+                <ChangePassword />
+            </Modal>
         </Section>
     )
 }
