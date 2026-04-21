@@ -23,7 +23,9 @@ class CadastrarMembroView(APIView):
 
     def post(self, request):
         try:
+            
             # Extrai os dados do FormData (assumindo que os dados JSON foram enviados como strings)
+            user_created = None
             user_data = request.data.get('usuario', {})
             member_data = request.data.get('membro', {})
 
@@ -44,16 +46,16 @@ class CadastrarMembroView(APIView):
             user_created = Usuario.objects.create_user(
                 username=user_serializer.validated_data['username'],
                 password=user_serializer.validated_data['password'],
-                email=user_serializer.validated_data(['email'])
             )
             user_created.is_staff = False
             user_created.is_superuser = False
+            user_created.email = user_serializer.validated_data.get('email', '')
             user_created.save()
 
             # Verifica se o grupo foi fornecido e existe
-            if 'grupo' in member_data and member_data['grupo']:
+            if 'grupo' in user_data and user_data['grupo']:
                 try:
-                    group = Group.objects.get(id=member_data['grupo'])
+                    group = Group.objects.get(id=user_data['grupo'])
                     user_created.groups.add(group)
                 except Group.DoesNotExist:
                     return Response({'error': 'Grupo não encontrado!'}, status=status.HTTP_404_NOT_FOUND)

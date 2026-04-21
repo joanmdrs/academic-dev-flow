@@ -59,6 +59,7 @@ urlpatterns = [
     path('academicflow-api/', RedirectView.as_view(url='/academicflow-api/admin/')),
     path('academicflow-api/api/password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
     path('academicflow-api/chat/', include('apps.chat.urls', namespace='chat')),
+
 ]
 
 if settings.DEBUG:
