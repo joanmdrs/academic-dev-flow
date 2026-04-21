@@ -7,7 +7,7 @@ import AdminRoutesDefinition from "./router/AdminRoutes/routes";
 import StudentRoutesDefinition from "./router/StudentRoutes/routes";
 import TeacherRoutesDefinition from "./router/TeacherRoutes/routes";
 import Login from "./pages/Auth/Login/Login";
-import Register from "./pages/Auth/Register";
+import Register from "./pages/Auth/Register/Register";
 import { ProviderGlobalUser } from "./context/ContextoGlobalUser/ContextoGlobalUser";
 import { ProviderGlobalProjeto } from "./context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 import ResetPassword from "./pages/Auth/ResetPassword/ResetPassword/ResetPassword";
