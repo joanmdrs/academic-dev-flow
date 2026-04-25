@@ -108,9 +108,10 @@ const TabGerenciarFluxos = ({grupo}) => {
 
     const handleBuscarFluxo = async (value) => {
         const response = await buscarFluxoPeloNome(value);
+        console.log(response)
 
         if (!response.error){
-            setFluxos(response.data.results)
+            setFluxos(response.data)
         }
     }
 
