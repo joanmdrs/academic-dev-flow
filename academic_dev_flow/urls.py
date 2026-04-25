@@ -38,7 +38,7 @@ urlpatterns = [
     path('academicflow-api/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('academicflow-api/redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('academicflow-api/projeto/', include('apps.projeto.urls', namespace='projeto')),
-    path('academicflow-api/fluxo/', include('apps.fluxo.urls', namespace='fluxo')),
+    path('academicflow-api/', include('apps.fluxo.urls')),
     path('academicflow-api/etapa/', include('apps.etapa.urls', namespace='etapa')),
     path('academicflow-api/fluxo_etapa/', include('apps.fluxo_etapa.urls', namespace='fluxo_etapa')),
     path('academicflow-api/membro/', include('apps.membro.urls', namespace='membro')),
