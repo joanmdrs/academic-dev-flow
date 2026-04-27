@@ -53,10 +53,10 @@ const MenuAluno = () => {
                
                 <Menu.Item
                     className="item-menu"
-                    key="/aluno/projetos"
+                    key="/projetos"
                     icon={<LuFolder size="20px" />}
                 >
-                    <Link to="/aluno/projetos">Projetos</Link>
+                    <Link to="/projetos">Projetos</Link>
                 </Menu.Item>
         
                 <SubMenu

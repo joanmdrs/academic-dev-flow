@@ -19,6 +19,7 @@ import RotasProfessor from "./router/TeacherRoutes/routes";
 import Home from "./pages/Home/Home";
 import ScreenGerenciarFluxos from "./pages/Fluxo";
 import ScreenGerenciarEtapas from "./pages/Etapa/screens/GerenciarEtapas";
+import ScreenProjetos from "./pages/Projeto/screens/Projetos";
 
 function Routes() {
     return (
@@ -58,6 +59,17 @@ function Routes() {
                             element={
                                 <LayoutBase>
                                     <ScreenGerenciarEtapas />
+                                </LayoutBase>
+                            }
+                        />
+                    </Route>
+
+                    <Route element={<ProtectedRoute allowedRoles={['aluno', 'professor']} />}>
+                        <Route
+                            path="/projetos/*"
+                            element={
+                                <LayoutBase>
+                                    <ScreenProjetos />
                                 </LayoutBase>
                             }
                         />

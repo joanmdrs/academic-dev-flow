@@ -24,7 +24,6 @@ function RotasProfessor() {
     return (
         <Switch>
             <Route path="perfil" element={<ScreenPerfilMembro grupo="professor" />} exact/>
-            <Route path="projetos" element={<ScreenProjetos grupo="professor" />} exact />
             <Route path="projetos/visualizar" element={<ScreenVisualizarProjeto grupo="professor" />} exact />
             <Route path="cronograma/lancamentos" element={<ScreenRelease grupo="professor"/>} />
             <Route path="cronograma/iteracoes" element={<ScreenIteracoes grupo="professor"/>} />

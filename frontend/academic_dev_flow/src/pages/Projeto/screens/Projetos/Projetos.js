@@ -18,12 +18,11 @@ import FilterByStatus from '../../components/Filters/FilterByStatus/FilterByStat
 import FilterByFlow from '../../components/Filters/FilterByFlow/FilterByFlow';
 import SectionFilters from '../../../../components/SectionFilters/SectionFilters';
 import Section from '../../../../components/Section/Section';
-import { MdFilterAlt } from 'react-icons/md';
 import { HomeOutlined } from '@ant-design/icons';
 
 const {TabPane} = Tabs 
 
-const Projetos = ({group}) => {
+const Projetos = () => {
     
     const navigate = useNavigate();
     const { dadosProjeto, setDadosProjeto } = useContextoProjeto();
@@ -222,11 +221,11 @@ const Projetos = ({group}) => {
                 <Breadcrumb
                     items={[
                         {
-                            href: `/academicflow/${group}/home`,
+                            href: `/academicflow/home`,
                             title: <HomeOutlined />,
                         },
                         {
-                            href: `/academicflow/${group}/projetos`,
+                            href: `/academicflow/projetos`,
                             title: 'Projetos',
                         },
                         ...(isSaveFormVisible && actionForm === 'create'

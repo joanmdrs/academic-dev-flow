@@ -24,7 +24,6 @@ function StudentRoutesDefinition() {
 
         <Switch>
             <Route path="perfil" element={<ScreenPerfilMembro grupo="aluno" />} exact/>
-            <Route path="projetos" element={<ScreenProjetos grupo="aluno" />} exact />
             <Route path="projetos/visualizar" element={<ScreenVisualizarProjeto grupo="aluno" />} exact />
             <Route path="cronograma/lancamentos" element={<ScreenRelease grupo="aluno"/>} />
             <Route path="cronograma/iteracoes" element={<ScreenIteracoes grupo="aluno"/>} />
