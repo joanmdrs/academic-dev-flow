@@ -13,7 +13,7 @@ import { IoMdCreate, IoMdTrash } from "react-icons/io";
 import { HomeOutlined } from "@ant-design/icons";
 
 const {Search} = Input
-const GerenciarEtapas = ({grupo}) => {
+const GerenciarEtapas = () => {
 
     const {dadosEtapa, setDadosEtapa, etapasSelecionadas, setEtapasSelecionadas} = useContextoEtapa()
     const [etapas, setEtapas] = useState([])
@@ -146,11 +146,11 @@ const GerenciarEtapas = ({grupo}) => {
                 <Breadcrumb
                     items={[
                         {
-                            href: `/academicflow/${grupo}/home`,
+                            href: `/academicflow/home`,
                             title: <HomeOutlined />,
                         },
                         {
-                            href: `/academicflow/${grupo}/etapas`,
+                            href: `/academicflow/etapas`,
                             title: 'Etapas',
                         },
                         ...(isSaveFormVisible && actionForm === 'create'

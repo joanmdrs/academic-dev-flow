@@ -31,8 +31,6 @@ function AdminRoutesDefinition() {
 
             {/* Menu Item Fluxos */}
             
-            <Route path="fluxos/etapas" element={<ScreenGerenciarEtapas  grupo="admin" />} exact />
-
 
             {/* Menu Item Membros */}
             <Route path="membros/gerenciar" element={<ScreenGerenciarMembros grupo="admin" />} exact />

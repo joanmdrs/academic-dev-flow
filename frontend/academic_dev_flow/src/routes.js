@@ -18,6 +18,7 @@ import { ProviderGlobalProjeto } from "./context/ContextoGlobalProjeto/ContextoG
 import RotasProfessor from "./router/TeacherRoutes/routes";
 import Home from "./pages/Home/Home";
 import ScreenGerenciarFluxos from "./pages/Fluxo";
+import ScreenGerenciarEtapas from "./pages/Etapa/screens/GerenciarEtapas";
 
 function Routes() {
     return (
@@ -46,6 +47,17 @@ function Routes() {
                             element={
                                 <LayoutBase>
                                     <ScreenGerenciarFluxos />
+                                </LayoutBase>
+                            }
+                        />
+                    </Route>
+
+                    <Route element={<ProtectedRoute allowedRoles={['admin', 'aluno', 'professor']} />}>
+                        <Route
+                            path="/etapas/*"
+                            element={
+                                <LayoutBase>
+                                    <ScreenGerenciarEtapas />
                                 </LayoutBase>
                             }
                         />

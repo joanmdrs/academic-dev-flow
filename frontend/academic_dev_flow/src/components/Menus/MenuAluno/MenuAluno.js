@@ -66,11 +66,11 @@ const MenuAluno = () => {
                     title="Fluxos"
                 >
                     <Menu.Item key="gerenciar-fluxos">
-                        <Link to="/fluxos/gerenciar">Gerenciar fluxos</Link>
+                        <Link to="/fluxos">Gerenciar fluxos</Link>
                     </Menu.Item>
 
-                    <Menu.Item key="/aluno/etapas">
-                        <Link to="/aluno/etapas">Gerenciar etapas</Link>
+                    <Menu.Item key="gerenciar-etapas">
+                        <Link to="/etapas">Gerenciar etapas</Link>
                     </Menu.Item>
                 </SubMenu>
 
