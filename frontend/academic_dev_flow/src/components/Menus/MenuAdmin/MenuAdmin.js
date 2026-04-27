@@ -64,12 +64,12 @@ const MenuAdmin = () => {
 
                 <SubMenu
                     className="item-menu"
-                    key="/admin/fluxos"
+                    key="/fluxos"
                     icon={<LuWorkflow style={{ fontSize: "20px" }} />}
                     title="Fluxos"
                 >
                     <Menu.Item key="gerenciar-fluxos">
-                        <Link to="/admin/fluxos/gerenciar">Gerenciar fluxos</Link>
+                        <Link to="/fluxos/gerenciar">Gerenciar fluxos</Link>
                     </Menu.Item>
 
                     <Menu.Item key="etapas">

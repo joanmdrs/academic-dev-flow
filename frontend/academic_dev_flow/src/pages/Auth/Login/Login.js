@@ -24,18 +24,6 @@ const Login = () => {
         }
     };
 
-    const openNotificationWithIcon = (type) => {
-        api[type]({
-          message: 'Aviso',
-          description:
-            'No momento, esta funcionalidade ainda não está disponível.',
-        });
-    };
-
-    const handleRedefinirSenha = () => {
-        navigate('/redefinir-senha')
-    }
-
     useEffect(() => {
         if (user) {
             navigate('/home')

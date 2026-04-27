@@ -14,7 +14,7 @@ import SectionHeader from "../../../../../components/SectionHeader/SectionHeader
 import SectionContent from "../../../../../components/SectionContent/SectionContent";
 import { HomeOutlined } from "@ant-design/icons";
 
-const TabVincularEtapas = ({grupo}) => {
+const TabVincularEtapas = () => {
 
     const [isSaveFormVisible, setIsSaveFormVisible] = useState(false)
     const [isTableVisible, setIsTableVisible] = useState(true)
@@ -172,11 +172,11 @@ const TabVincularEtapas = ({grupo}) => {
                 <Breadcrumb
                     items={[
                         {
-                            href: `/academicflow/${grupo}/home`,
+                            href: `/academicflow/home`,
                             title: <HomeOutlined />,
                         },
                         {
-                            href: `/academicflow/${grupo}/fluxos/gerenciar`,
+                            href: `/academicflow/fluxos/gerenciar`,
                             title: 'Etapas por fluxo',
                         },
                         ...(isSaveFormVisible && actionForm === 'create'

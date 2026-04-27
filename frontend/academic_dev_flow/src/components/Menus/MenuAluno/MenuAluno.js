@@ -65,8 +65,8 @@ const MenuAluno = () => {
                     icon={<LuWorkflow style={{ fontSize: "20px" }} />}
                     title="Fluxos"
                 >
-                    <Menu.Item key="/aluno/fluxos/gerenciar">
-                        <Link to="/aluno/fluxos/gerenciar">Gerenciar fluxos</Link>
+                    <Menu.Item key="gerenciar-fluxos">
+                        <Link to="/fluxos/gerenciar">Gerenciar fluxos</Link>
                     </Menu.Item>
 
                     <Menu.Item key="/aluno/etapas">

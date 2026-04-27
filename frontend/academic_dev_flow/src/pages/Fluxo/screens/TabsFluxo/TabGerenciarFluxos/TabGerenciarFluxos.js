@@ -1,4 +1,5 @@
 import React, { act, useEffect, useState } from "react";
+import "./TabGerenciarFluxos.css";
 import { atualizarFluxo, buscarFluxoPeloNome, criarFluxo, excluirFluxo, listarFluxos } from "../../../../../services/fluxoService";
 import FormFluxo from "../../../components/FormFluxo/FormFluxo";
 import { Breadcrumb, Button, Input, Modal, Space, Tooltip } from "antd";
@@ -11,6 +12,19 @@ import SectionContent from "../../../../../components/SectionContent/SectionCont
 import { HomeOutlined } from "@ant-design/icons";
 import { useAuth } from "../../../../../hooks/AuthProvider";
 const { Search } = Input;
+
+const ActionIcon = ({ title, onClick, children, disabled, reason }) => {
+    return (
+        <Tooltip title={disabled ? reason : title}>
+            <span
+                className={`action-icon ${disabled ? 'disabled' : ''}`}
+                onClick={!disabled ? onClick : undefined}
+            >
+                {children}
+            </span>
+        </Tooltip>
+    );
+};
 
 const TabGerenciarFluxos = () => {
 
@@ -41,32 +55,32 @@ const TabGerenciarFluxos = () => {
         },
         {
             title: "Ações",
-            dataIndex: 'actions',
-            key: 'actions',
-            render: (_, record) => (
-                <>
-                    { user.id === record.created_by ? (
-                        <Space>
+            key: "actions",
+            render: (_, record) => {
+                const podeEditar = user.id === record.created_by;
 
-                            <Tooltip title="Editar">
-                                <span 
-                                    style={{color: 'var(--primary-color)', cursor: 'pointer'}}  
-                                    onClick={() => handleAtualizarFluxo(record)}
-                                ><IoMdCreate /></span>
-                            </Tooltip>
-                            <Tooltip title="Excluir">
-                                <span 
-                                    style={{color: 'var(--primary-color)', cursor: 'pointer'}} 
-                                    onClick={() => handleExcluirFluxo(record.id)}
-                                ><IoMdTrash /></span>
-                            </Tooltip>
-                        </Space>
-                    ) : (
-                        null
-                    )} 
-                    
-                </>
-            )
+                return (
+                    <Space>
+                        <ActionIcon
+                            title="Editar"
+                            reason="Você não tem permissão para editar este item"
+                            disabled={!podeEditar}
+                            onClick={() => handleAtualizarFluxo(record)}
+                        >
+                            <IoMdCreate />
+                        </ActionIcon>
+
+                        <ActionIcon
+                            title="Excluir"
+                            reason="Você não tem permissão para excluir este item"
+                            disabled={!podeEditar}
+                            onClick={() => handleExcluirFluxo(record.id)}
+                        >
+                            <IoMdTrash />
+                        </ActionIcon>
+                    </Space>
+                );
+            }
         }
     ];
 

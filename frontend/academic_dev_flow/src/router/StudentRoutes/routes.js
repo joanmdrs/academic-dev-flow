@@ -28,7 +28,7 @@ function StudentRoutesDefinition() {
             <Route path="projetos/visualizar" element={<ScreenVisualizarProjeto grupo="aluno" />} exact />
             <Route path="cronograma/lancamentos" element={<ScreenRelease grupo="aluno"/>} />
             <Route path="cronograma/iteracoes" element={<ScreenIteracoes grupo="aluno"/>} />
-            <Route path="fluxos" element={<ScreenGerenciarFluxos />} exact />
+            
             <Route path="etapas" element={<ScreenGerenciarEtapas  grupo="aluno" />} exact />
             <Route path="tarefas" element={<ScreenTarefas grupo="aluno" />} exact />
             <Route path="tarefas/categorias" element={<ScreenGerenciarCategoriaTarefa grupo="aluno" />} exact />

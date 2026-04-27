@@ -64,8 +64,8 @@ const MenuProfessor = () => {
                     icon={<LuWorkflow style={{ fontSize: "20px" }} />}
                     title="Fluxos"
                 >
-                    <Menu.Item key="/professor/fluxos/gerenciar">
-                        <Link to="/professor/fluxos/gerenciar">Gerenciar fluxos</Link>
+                    <Menu.Item key="gerenciar-fluxos">
+                        <Link to="/fluxos/gerenciar">Gerenciar fluxos</Link>
                     </Menu.Item>
 
                     <Menu.Item key="/professor/etapas">

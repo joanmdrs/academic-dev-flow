@@ -30,7 +30,7 @@ function AdminRoutesDefinition() {
             <Route path="projetos" element={<ScreenAdminProjetos />} exact />
 
             {/* Menu Item Fluxos */}
-            <Route path="fluxos" element={<ScreenGerenciarFluxos />} exact />
+            
             <Route path="fluxos/etapas" element={<ScreenGerenciarEtapas  grupo="admin" />} exact />
 
 

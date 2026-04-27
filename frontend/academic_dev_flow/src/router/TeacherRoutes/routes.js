@@ -28,7 +28,7 @@ function RotasProfessor() {
             <Route path="projetos/visualizar" element={<ScreenVisualizarProjeto grupo="professor" />} exact />
             <Route path="cronograma/lancamentos" element={<ScreenRelease grupo="professor"/>} />
             <Route path="cronograma/iteracoes" element={<ScreenIteracoes grupo="professor"/>} />
-            <Route path="fluxos" element={<ScreenGerenciarFluxos />} exact />
+            
             <Route path="etapas" element={<ScreenGerenciarEtapas  grupo="professor" />} exact />
             <Route path="tarefas" element={<ScreenTarefas grupo="professor" />} exact />
             <Route path="tarefas/categorias" element={<ScreenGerenciarCategoriaTarefa grupo="professor" />} exact />

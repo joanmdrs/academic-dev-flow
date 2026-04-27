@@ -7,19 +7,13 @@ import MenuAluno from "../../components/Menus/MenuAluno/MenuAluno";
 import MenuProfessor from "../../components/Menus/MenuProfessor/MenuProfessor";
 import { ProviderFluxo } from "./context/ContextoFluxo";
 
-const ScreenGerenciarFluxos = ({grupo}) => {
+const ScreenGerenciarFluxos = () => {
 
     return (
         <React.Fragment>
-            { grupo === 'admin' && <MenuAdmin /> }
-            { grupo === 'aluno' && <MenuAluno />}
-            { grupo === 'professor' && <MenuProfessor />}
-            <Layout>
-                <MyHeader />
                 <ProviderFluxo>
-                    <TabsFluxo grupo={grupo}/> 
+                    <TabsFluxo /> 
                 </ProviderFluxo>
-            </Layout>
         </React.Fragment>
     )
 }

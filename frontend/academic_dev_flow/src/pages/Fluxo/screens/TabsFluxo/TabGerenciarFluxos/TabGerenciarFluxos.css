@@ -1,0 +1,12 @@
+.action-icon {
+    color: var(--primary-color);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+}
+
+.action-icon.disabled {
+    color: #BDBDBD;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
