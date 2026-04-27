@@ -1,59 +1,82 @@
 import React from "react";
 import { Routes as Switch, Route } from "react-router-dom";
-import AdminRoutes from "./router/AdminRoutes";
-import StudentRoutes from "./router/StudentRoutes";
-import TeacherRoutes from "./router/TeacherRoutes";
-import AdminRoutesDefinition from "./router/AdminRoutes/routes";
-import StudentRoutesDefinition from "./router/StudentRoutes/routes";
-import TeacherRoutesDefinition from "./router/TeacherRoutes/routes";
+
 import Login from "./pages/Auth/Login/Login";
 import Register from "./pages/Auth/Register/Register";
-import { ProviderGlobalUser } from "./context/ContextoGlobalUser/ContextoGlobalUser";
-import { ProviderGlobalProjeto } from "./context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 import ResetPassword from "./pages/Auth/ResetPassword/ResetPassword/ResetPassword";
 import ConfirmResetPassword from "./pages/Auth/ResetPassword/ConfirmResetPassword/ConfirmResetPassword";
 
+import AdminRoutesDefinition from "./router/AdminRoutes/routes";
+import StudentRoutesDefinition from "./router/StudentRoutes/routes";
+import TeacherRoutesDefinition from "./router/TeacherRoutes/routes";
+
+import LayoutBase from "./layouts/LayoutBase";
+import ProtectedRoute from "./router/ProtectedRoute";
+
+import { ProviderGlobalUser } from "./context/ContextoGlobalUser/ContextoGlobalUser";
+import { ProviderGlobalProjeto } from "./context/ContextoGlobalProjeto/ContextoGlobalProjeto";
+import RotasProfessor from "./router/TeacherRoutes/routes";
+import Home from "./pages/Home/Home";
+
 function Routes() {
     return (
-        <Switch>
-            <Route path="/" Component={Login} />
-            <Route path="/cadastre-se" Component={Register} />
-            <Route path="/redefinir-senha" Component={ResetPassword} />
-            <Route path='/redefinir-senha/confirmar/:token' Component={ConfirmResetPassword}/>
+        <ProviderGlobalUser>
+            <ProviderGlobalProjeto>
 
-            {/* Admin Routes */}
-            <Route path="/admin/*" element={
-                <ProviderGlobalProjeto>
-                    <ProviderGlobalUser>
-                        <AdminRoutes>
-                            <AdminRoutesDefinition />
-                        </AdminRoutes>
-                    </ProviderGlobalUser>
-                </ProviderGlobalProjeto>
-            } />
+                <Switch>
 
-            {/* Student Routes */}
-            <Route path="/aluno/*" element={
-                <ProviderGlobalProjeto>
-                    <ProviderGlobalUser>
-                        <StudentRoutes>
-                            <StudentRoutesDefinition />
-                        </StudentRoutes>
-                    </ProviderGlobalUser>
-                </ProviderGlobalProjeto>
-            } />
+                    <Route path="/" element={<Login />} />
+                    <Route path="/cadastre-se" element={<Register />} />
+                    <Route path="/redefinir-senha" element={<ResetPassword />} />
+                    <Route path="/redefinir-senha/confirmar/:token" element={<ConfirmResetPassword />} />
+                    <Route element={<ProtectedRoute allowedRoles={['admin', 'aluno', 'professor']} />}>
+                        <Route 
+                            path="/home" 
+                            element={
+                                <LayoutBase>
+                                    <Home />
+                                </LayoutBase>
+                            } 
+                        />
+                    </Route>
 
-            {/* Teacher Routes */}
-            <Route path="/professor/*" element={
-                <ProviderGlobalProjeto>
-                    <ProviderGlobalUser>
-                        <TeacherRoutes>
-                            <TeacherRoutesDefinition />
-                        </TeacherRoutes>
-                    </ProviderGlobalUser>
-                </ProviderGlobalProjeto>
-            } />
-        </Switch>
+                    <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+                        <Route
+                            path="/admin/*"
+                            element={
+                                <LayoutBase>
+                                    <AdminRoutesDefinition />
+                                </LayoutBase>
+                            }
+                        />
+                    </Route>
+
+                    <Route element={<ProtectedRoute allowedRoles={['aluno']} />}>
+                        <Route
+                            path="/aluno/*"
+                            element={
+                                <LayoutBase>
+                                    <StudentRoutesDefinition />
+                                </LayoutBase>
+                            }
+                        />
+                    </Route>
+
+                    <Route element={<ProtectedRoute allowedRoles={['professor']} />}>
+                        <Route
+                            path="/professor/*"
+                            element={
+                                <LayoutBase>
+                                    <RotasProfessor />
+                                </LayoutBase>
+                            }
+                        />
+                    </Route>
+
+                </Switch>
+
+            </ProviderGlobalProjeto>
+        </ProviderGlobalUser>
     );
 }
 

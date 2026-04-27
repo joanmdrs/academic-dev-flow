@@ -1,6 +1,5 @@
 import React from "react";
 import { Routes as Switch, Route } from "react-router-dom";
-import ScreenHomeAdmin from "../../pages/Home/Admin";
 import ScreenPerfilMembro from "../../pages/Membro/screens/PerfilMembro";
 import ScreenAdminProjetos from "../../pages/Projeto/admin/AdminProjetos";
 import ScreenGerenciarFluxos from "../../pages/Fluxo";
@@ -25,15 +24,15 @@ function AdminRoutesDefinition() {
     return (
         <Switch>
             {/* Página de Home */}
-            <Route path="home" element={<ScreenHomeAdmin />} exact />
             <Route path="perfil" element={<ScreenPerfilMembro grupo="admin" />} exact/>
 
             {/* Menu Item Projetos */}
             <Route path="projetos" element={<ScreenAdminProjetos />} exact />
 
             {/* Menu Item Fluxos */}
-            <Route path="fluxos/gerenciar" element={<ScreenGerenciarFluxos grupo="admin" />} exact />
+            <Route path="fluxos" element={<ScreenGerenciarFluxos />} exact />
             <Route path="fluxos/etapas" element={<ScreenGerenciarEtapas  grupo="admin" />} exact />
+
 
             {/* Menu Item Membros */}
             <Route path="membros/gerenciar" element={<ScreenGerenciarMembros grupo="admin" />} exact />

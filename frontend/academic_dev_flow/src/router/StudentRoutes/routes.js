@@ -1,6 +1,5 @@
 import React from "react";
 import { Routes as Switch, Route } from "react-router-dom";
-import ScreenHomeDiscente from "../../pages/Home/Discente";
 import ScreenPerfilMembro from "../../pages/Membro/screens/PerfilMembro";
 import ScreenProjetos from "../../pages/Projeto/screens/Projetos";
 import ScreenVisualizarProjeto from "../../pages/Projeto/screens/VisualizarProjeto";
@@ -19,18 +18,17 @@ import ScreenGerenciarRelatorios from "../../pages/Relatorio/screens/GerenciarRe
 import ScreenVisualizarIteracao from "../../pages/Iteracao/screens/VisualizarIteracao";
 import ScreenRepositories from "../../pages/GitHub/screens/Repositories";
 import ScreenFeedbacks from "../../pages/Feedback/screens";
-// import ScreenPainelGitHub from "../../pages/GitHub/screens/PainelGitHub";
 
 function StudentRoutesDefinition() {
     return (
+
         <Switch>
-            <Route path="home" element={<ScreenHomeDiscente grupo="aluno" />} exact />
             <Route path="perfil" element={<ScreenPerfilMembro grupo="aluno" />} exact/>
             <Route path="projetos" element={<ScreenProjetos grupo="aluno" />} exact />
             <Route path="projetos/visualizar" element={<ScreenVisualizarProjeto grupo="aluno" />} exact />
             <Route path="cronograma/lancamentos" element={<ScreenRelease grupo="aluno"/>} />
             <Route path="cronograma/iteracoes" element={<ScreenIteracoes grupo="aluno"/>} />
-            <Route path="fluxos/gerenciar" element={<ScreenGerenciarFluxos grupo="aluno" />} exact />
+            <Route path="fluxos" element={<ScreenGerenciarFluxos />} exact />
             <Route path="etapas" element={<ScreenGerenciarEtapas  grupo="aluno" />} exact />
             <Route path="tarefas" element={<ScreenTarefas grupo="aluno" />} exact />
             <Route path="tarefas/categorias" element={<ScreenGerenciarCategoriaTarefa grupo="aluno" />} exact />

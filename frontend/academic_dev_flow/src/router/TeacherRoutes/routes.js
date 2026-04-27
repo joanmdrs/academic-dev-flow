@@ -1,6 +1,5 @@
 import React from "react";
 import { Routes as Switch, Route } from "react-router-dom";
-import ScreenHomeDiscente from "../../pages/Home/Discente";
 import ScreenPerfilMembro from "../../pages/Membro/screens/PerfilMembro";
 import ScreenProjetos from "../../pages/Projeto/screens/Projetos";
 import ScreenVisualizarProjeto from "../../pages/Projeto/screens/VisualizarProjeto";
@@ -20,18 +19,16 @@ import ScreenVisualizarIteracao from "../../pages/Iteracao/screens/VisualizarIte
 import ScreenRepositories from "../../pages/GitHub/screens/Repositories";
 import ScreenFeedbacks from "../../pages/Feedback/screens";
 import ScreenChats from "../../pages/Chat/screens/PainelChat";
-// import ScreenPainelGitHub from "../../pages/GitHub/screens/PainelGitHub";
 
-function TeacherRoutesDefinition() {
+function RotasProfessor() {
     return (
         <Switch>
-            <Route path="home" element={<ScreenHomeDiscente grupo="professor" />} exact />
             <Route path="perfil" element={<ScreenPerfilMembro grupo="professor" />} exact/>
             <Route path="projetos" element={<ScreenProjetos grupo="professor" />} exact />
             <Route path="projetos/visualizar" element={<ScreenVisualizarProjeto grupo="professor" />} exact />
             <Route path="cronograma/lancamentos" element={<ScreenRelease grupo="professor"/>} />
             <Route path="cronograma/iteracoes" element={<ScreenIteracoes grupo="professor"/>} />
-            <Route path="fluxos/gerenciar" element={<ScreenGerenciarFluxos grupo="professor" />} exact />
+            <Route path="fluxos" element={<ScreenGerenciarFluxos />} exact />
             <Route path="etapas" element={<ScreenGerenciarEtapas  grupo="professor" />} exact />
             <Route path="tarefas" element={<ScreenTarefas grupo="professor" />} exact />
             <Route path="tarefas/categorias" element={<ScreenGerenciarCategoriaTarefa grupo="professor" />} exact />
@@ -50,4 +47,4 @@ function TeacherRoutesDefinition() {
     );
 }
 
-export default TeacherRoutesDefinition;
+export default RotasProfessor;
