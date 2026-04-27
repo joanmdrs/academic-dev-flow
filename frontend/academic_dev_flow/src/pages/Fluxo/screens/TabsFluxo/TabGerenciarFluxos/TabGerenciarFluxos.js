@@ -9,14 +9,16 @@ import { IoMdCreate, IoMdTrash } from "react-icons/io";
 import SectionHeader from "../../../../../components/SectionHeader/SectionHeader";
 import SectionContent from "../../../../../components/SectionContent/SectionContent";
 import { HomeOutlined } from "@ant-design/icons";
+import { useAuth } from "../../../../../hooks/AuthProvider";
 const { Search } = Input;
 
-const TabGerenciarFluxos = ({grupo}) => {
+const TabGerenciarFluxos = () => {
 
     const {dadosFluxo, setDadosFluxo} = useContextoFluxo()
     const [actionForm, setActionForm] = useState("create");
     const [isSaveFormVisible, setIsSaveFormVisible] = useState(false);
     const [fluxos, setFluxos] = useState([])
+    const { user } = useAuth()
 
     const columnsTableFluxos = [
         {
@@ -42,20 +44,28 @@ const TabGerenciarFluxos = ({grupo}) => {
             dataIndex: 'actions',
             key: 'actions',
             render: (_, record) => (
-                <Space>
-                    <Tooltip title="Editar">
-                        <span 
-                            style={{color: 'var(--primary-color)', cursor: 'pointer'}}  
-                            onClick={() => handleAtualizarFluxo(record)}
-                        ><IoMdCreate /></span>
-                    </Tooltip>
-                    <Tooltip title="Excluir">
-                        <span 
-                            style={{color: 'var(--primary-color)', cursor: 'pointer'}} 
-                            onClick={() => handleExcluirFluxo(record.id)}
-                        ><IoMdTrash /></span>
-                    </Tooltip>
-                </Space>
+                <>
+                    { user.id === record.created_by ? (
+                        <Space>
+
+                            <Tooltip title="Editar">
+                                <span 
+                                    style={{color: 'var(--primary-color)', cursor: 'pointer'}}  
+                                    onClick={() => handleAtualizarFluxo(record)}
+                                ><IoMdCreate /></span>
+                            </Tooltip>
+                            <Tooltip title="Excluir">
+                                <span 
+                                    style={{color: 'var(--primary-color)', cursor: 'pointer'}} 
+                                    onClick={() => handleExcluirFluxo(record.id)}
+                                ><IoMdTrash /></span>
+                            </Tooltip>
+                        </Space>
+                    ) : (
+                        null
+                    )} 
+                    
+                </>
             )
         }
     ];
@@ -134,11 +144,11 @@ const TabGerenciarFluxos = ({grupo}) => {
                 <Breadcrumb
                     items={[
                         {
-                            href: `/academicflow/${grupo}/home`,
+                            href: `/academicflow/home`,
                             title: <HomeOutlined />,
                         },
                         {
-                            href: `/academicflow/${grupo}/fluxos/gerenciar`,
+                            href: `/academicflow/fluxos/gerenciar`,
                             title: 'Fluxos',
                         },
                         ...(isSaveFormVisible && actionForm === 'create'
