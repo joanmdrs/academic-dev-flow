@@ -45,10 +45,10 @@ const MenuAluno = () => {
             >
                 <Menu.Item
                     className='item-menu'
-                    key='/aluno/home'
+                    key='/home'
                     icon={<LuLayoutDashboard size="20px" />}
                 >
-                    <Link to="/aluno/home">Home</Link>
+                    <Link to="/home">Home</Link>
                 </Menu.Item>
                
                 <Menu.Item

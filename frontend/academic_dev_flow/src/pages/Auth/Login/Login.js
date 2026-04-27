@@ -1,5 +1,5 @@
 import { Button, Form, Input, notification } from 'antd';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import "./Login.css"
 import imgPageLogin from "../../../../src/assets/img-page-login.svg"
@@ -7,7 +7,7 @@ import { useAuth } from '../../../hooks/AuthProvider';
 import { FaCoffee } from "react-icons/fa";
 
 const Login = () => {
-    const {loginAction} = useAuth();
+    const {loginAction, user} = useAuth();
     const [api, contextHolder] = notification.useNotification();
     const navigate = useNavigate()
 
@@ -36,7 +36,11 @@ const Login = () => {
         navigate('/redefinir-senha')
     }
 
-    
+    useEffect(() => {
+        if (user) {
+            navigate('/home')
+        }   
+    }, [user]);   
 
     return (  
 

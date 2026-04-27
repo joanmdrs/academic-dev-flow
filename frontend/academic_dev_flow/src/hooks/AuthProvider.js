@@ -36,13 +36,13 @@ const AuthProvider = ({ children }) => {
     const redirectToLogin = (role) => {
         switch (role) {
             case "admin":
-                navigate("/admin/home", { replace: true });
+                navigate("/home", { replace: true });
                 break;
             case "aluno":
-                navigate("/aluno/home", { replace: true });
+                navigate("/home", { replace: true });
                 break;
             case "professor":
-                navigate("/professor/home", { replace: true });
+                navigate("/home", { replace: true });
                 break;
             default:
                 NotificationManager.error("Grupo de usuário desconhecido.");

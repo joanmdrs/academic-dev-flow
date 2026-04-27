@@ -6,7 +6,6 @@ import { FaCoffee } from "react-icons/fa";
 import { useContextoGlobalTheme } from "../../../context/ContextoTheme/ContextoTheme";
 import { LuCalendarDays, LuClipboardList, LuFileCode2, LuFolder, LuGithub, LuLayoutDashboard, LuUsers, LuWorkflow, LuMessageSquare} from "react-icons/lu";
 
-
 const { SubMenu } = Menu;
 
 const MenuAdmin = () => {
@@ -49,10 +48,10 @@ const MenuAdmin = () => {
             >
                 <Menu.Item
                     className='item-menu'
-                    key='/aluno/home'
+                    key='/home'
                     icon={<LuLayoutDashboard size="20px"/>}
                 >
-                    <Link to="/admin/home">Home</Link>
+                    <Link to="/home">Home</Link>
                 </Menu.Item>
 
                 <Menu.Item
