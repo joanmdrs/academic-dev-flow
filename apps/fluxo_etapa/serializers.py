@@ -1,6 +1,8 @@
 
 from rest_framework import serializers
 from .models import FluxoEtapa
+from .models import TransicaoFluxo
+
 
 class FluxoEtapaSerializer(serializers.ModelSerializer):
     
@@ -42,3 +44,36 @@ class FluxoEtapaSerializer(serializers.ModelSerializer):
     
     def get_descricao_etapa(self, obj):
         return obj.etapa.descricao if obj.etapa.descricao else None
+    
+class TransicaoFluxoSerializer(serializers.ModelSerializer):
+    origem_nome = serializers.CharField(source='origem.etapa.nome', read_only=True)
+    destino_nome = serializers.CharField(source='destino.etapa.nome', read_only=True)
+
+    class Meta:
+        model = TransicaoFluxo
+        fields = [
+            'id',
+            'fluxo',
+            'origem',
+            'destino',
+            'origem_nome',
+            'destino_nome',
+            'label',
+        ]
+
+    def validate(self, data):
+        fluxo = data.get('fluxo')
+        origem = data.get('origem')
+        destino = data.get('destino')
+
+        if origem.fluxo_id != fluxo.id or destino.fluxo_id != fluxo.id:
+            raise serializers.ValidationError(
+                "Origem e destino devem pertencer ao mesmo fluxo"
+            )
+
+        if origem == destino:
+            raise serializers.ValidationError(
+                "Origem e destino não podem ser iguais"
+            )
+
+        return data
