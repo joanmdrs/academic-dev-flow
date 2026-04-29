@@ -4,45 +4,57 @@ import { handleError, handleSuccess } from "./utils"
 
 export const vincularEtapaFluxo = async (data) => {
     try {
-        const response = await api.post("fluxo_etapa/cadastrar/", data)
-        return handleSuccess(response, "Etapa vinculada ao fluxo com sucesso !")
+        const response = await api.post("fluxo-etapas/", data)
+        return handleSuccess(response, "Etapa vinculada ao fluxo com sucesso!")
     } catch (error) {
-        return handleError(error, 'Falha ao tentar vincular a etapa ao fluxo, contate o suporte!')
+        return handleError(error, 'Falha ao tentar vincular a etapa ao fluxo.')
     } 
 }
 
-export const atualizarFluxoEtapa = async (idFluxoEtapa, data) => {
+export const atualizarFluxoEtapa = async (id, data) => {
     try {
-        const response = await api.patch(`fluxo_etapa/atualizar/${encodeURIComponent(idFluxoEtapa)}/`, data)
-        return handleSuccess(response, 'Os dados foram atualizados com sucesso !')
+        const response = await api.patch(`fluxo-etapas/${id}/`, data)
+        return handleSuccess(response, 'Atualizado com sucesso!')
     } catch (error) {
-        return handleError(error, 'Ocorreu um problema durante a operação, contate o suporte!')
+        return handleError(error, 'Erro ao atualizar.')
     }
 }
 
 export const listarEtapasPorFluxo = async (idFluxo) => {
     try {
-        const response = await api.get(`fluxo_etapa/filtrar-por-fluxo/`, {params: {id_fluxo: idFluxo}})
+        const response = await api.get(`fluxo-etapas/?id_fluxo=${idFluxo}`)
         return response
     } catch (error) {
         return handleError(error, ERROR_MESSAGE_ON_SEARCHING)
     }
 }
 
-export const desvincularEtapaFluxo = async (idsFluxoEtapas) => {
+export const desvincularEtapaFluxoPorId = async (id) => {
     try {
-        const response = await api.delete('fluxo_etapa/excluir/', {data: {ids_fluxo_etapas: idsFluxoEtapas}})
-        return handleSuccess(response, 'O vínculo entre o fluxo e a(s) etapa(s) foi excluído com sucesso!')
+        const response = await api.delete(`fluxo-etapas/${id}/`)
+        return handleSuccess(response, 'Excluído com sucesso!')
     } catch (error) {
-        return handleError(error, 'Falha ao tentar excluir o vínculo entre o fluxo e a(s) etapa(s) !')
+        return handleError(error, 'Erro ao excluir.')
     }
 }
 
 export const listarFluxoEtapas = async () => {
     try {
-        const response = await api.get('fluxo_etapa/listar/')
+        const response = await api.get('fluxo-etapas/')
         return response
     } catch (error) {
-        return handleError(error, 'Falha ao buscar os dados, contate o suporte !')
+        return handleError(error, 'Erro ao buscar dados.')
+    }
+}
+
+export const desvincularEtapaFluxo = async (ids) => {
+    try {
+        const response = await api.delete('fluxo-etapas/bulk-delete/', {
+            data: { ids }
+        })
+
+        return handleSuccess(response, 'Excluído com sucesso!')
+    } catch (error) {
+        return handleError(error, 'Erro ao excluir itens.')
     }
 }
