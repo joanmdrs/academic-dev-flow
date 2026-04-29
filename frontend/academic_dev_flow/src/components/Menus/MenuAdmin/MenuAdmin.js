@@ -75,6 +75,10 @@ const MenuAdmin = () => {
                     <Menu.Item key="gerenciar-etapas">
                         <Link to="/etapas">Gerenciar etapas</Link>
                     </Menu.Item>
+
+                    <Menu.Item key="gerenciar-transicoes">
+                        <Link to="/transicoes">Gerenciar transições</Link>
+                    </Menu.Item>
                 </SubMenu>
 
                 <SubMenu
