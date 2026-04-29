@@ -20,6 +20,7 @@ import Home from "./pages/Home/Home";
 import ScreenGerenciarFluxos from "./pages/Fluxo";
 import ScreenGerenciarEtapas from "./pages/Etapa/screens/GerenciarEtapas";
 import ScreenProjetos from "./pages/Projeto/screens/Projetos";
+import TransicoesPage from "./pages/Fluxo/screens/TransicoesPage";
 
 function Routes() {
     return (
@@ -74,6 +75,17 @@ function Routes() {
                             }
                         />
                     </Route>
+
+                    <Route element={<ProtectedRoute allowedRoles={['admin', 'professor', 'aluno']} />}>
+                        <Route
+                            path="/transicoes/*"
+                            element={
+                                <LayoutBase>
+                                    <TransicoesPage />
+                                </LayoutBase>
+                            }
+                        />
+                    </Route>    
 
                     <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
                         <Route
