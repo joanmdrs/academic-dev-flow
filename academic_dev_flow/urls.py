@@ -40,7 +40,10 @@ urlpatterns = [
     path('academicflow-api/projeto/', include('apps.projeto.urls', namespace='projeto')),
     path('academicflow-api/', include('apps.fluxo.urls')),
     path('academicflow-api/etapa/', include('apps.etapa.urls', namespace='etapa')),
-    path('academicflow-api/fluxo_etapa/', include('apps.fluxo_etapa.urls', namespace='fluxo_etapa')),
+    
+    # URLs do app fluxo_etapa
+    path('academicflow-api/', include('apps.fluxo_etapa.urls')),
+
     path('academicflow-api/membro/', include('apps.membro.urls', namespace='membro')),
     path('academicflow-api/membro-projeto/', include('apps.membro_projeto.urls', namespace='membro-projeto')),
     path('academicflow-api/funcao-membro/', include('apps.funcao_membro.urls', namespace='funcao-membro')),
