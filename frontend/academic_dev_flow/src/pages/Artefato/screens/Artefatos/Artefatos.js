@@ -2,7 +2,6 @@ import { Button, Space, Input, Modal, Flex, Tabs, Breadcrumb } from "antd";
 import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import FormFilterArtefatos from "../../components/FormFilterArtefatos/FormFilterArtefatos";
-import { MdFilterAlt } from "react-icons/md";
 import GridArtefatos from "../../components/GridArtefatos/GridArtefatos";
 import { atualizarArtefato, criarArtefato, excluirArtefato, filtrarArtefatosPorProjetoEPorMembro, listarArtefatosDosProjetosDoMembro } from "../../../../services/artefatoService";
 import { useContextoGlobalUser } from "../../../../context/ContextoGlobalUser/ContextoGlobalUser";
@@ -27,7 +26,7 @@ import { HomeOutlined } from "@ant-design/icons";
 
 const {TabPane} = Tabs
 
-const Artefatos = ({grupo}) => {
+const Artefatos = () => {
     const {usuario} = useContextoGlobalUser()
     const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
     const {artefatos, setArtefatos, dadosArtefato, setDadosArtefato} = useContextoArtefato()
@@ -228,11 +227,11 @@ const Artefatos = ({grupo}) => {
                 <Breadcrumb
                     items={[
                         {
-                            href: `/academicflow/${grupo}/home`,
+                            href: `/academicflow/home`,
                             title: <HomeOutlined />,
                         },
                         {
-                            href: `/academicflow/${grupo}/artefatos`,
+                            href: `/academicflow/artefatos`,
                             title: 'Artefatos',
                         },
                         ...(isFormVisible && actionForm === 'create'

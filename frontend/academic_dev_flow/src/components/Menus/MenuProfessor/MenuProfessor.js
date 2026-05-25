@@ -113,10 +113,10 @@ const MenuProfessor = () => {
 
                 <Menu.Item
                     className="item-menu"
-                    key='/professor/artefatos'
+                    key='/artefatos'
                     icon={<LuFileCode2 size="20px" />}
                 >
-                    <Link to="/professor/artefatos">Artefatos</Link>
+                    <Link to="/artefatos">Artefatos</Link>
                 </Menu.Item>
 
                 <Menu.Item

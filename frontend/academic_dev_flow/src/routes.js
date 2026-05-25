@@ -24,6 +24,7 @@ import TransicoesPage from "./pages/Fluxo/screens/TransicoesPage";
 import ScreenTarefas from "./pages/Tarefa/screens/Tarefas";
 import ScreenGerenciarCategoriaTarefa from "./pages/CategoriaTarefa";
 import ScreenGerenciarTags from "./pages/Tag";
+import ScreenArtefatos from "./pages/Artefato/screens/Artefatos";
 
 function Routes() {
     return (
@@ -107,6 +108,17 @@ function Routes() {
                             element={
                                 <LayoutBase>
                                     <ScreenGerenciarTags />
+                                </LayoutBase>
+                            }
+                        />
+                    </Route>
+
+                    <Route element={<ProtectedRoute allowedRoles={['aluno', 'professor']} />}>
+                        <Route
+                            path="/artefatos*"
+                            element={
+                                <LayoutBase>
+                                    <ScreenArtefatos />
                                 </LayoutBase>
                             }
                         />
