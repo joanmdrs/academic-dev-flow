@@ -75,6 +75,11 @@ const MenuProfessor = () => {
                     <Menu.Item key="gerenciar-transicoes">
                         <Link to="/transicoes">Gerenciar transições</Link>
                     </Menu.Item>
+
+                    <Menu.Item key="visualizar-fluxo">
+                        <Link to="/visualizar-fluxo">Visualizar fluxo</Link>
+                    </Menu.Item>
+
                 </SubMenu>
 
                 <SubMenu

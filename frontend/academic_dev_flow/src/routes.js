@@ -34,6 +34,7 @@ import ScreenGerenciarMembros from "./pages/Membro/screens/GerenciarMembros";
 import ScreenQuadroMembros from "./pages/Membro/screens/QuadroMembros";
 import ScreenEquipe from "./pages/Membro/screens/Equipe";
 import ScreenGerenciarCategoriaFuncaoMembro from "./pages/FuncaoMembro/screens/GerenciarCategoriaFuncaoMembro";
+import VisualizarFluxoPage from "./pages/Fluxo/screens/VisualizarFluxoPage";
 
 function Routes() {
     return (
@@ -143,6 +144,20 @@ function Routes() {
                             }
                         />
                     </Route>   
+
+                    <Route element={<ProtectedRoute allowedRoles={['admin', 'professor', 'aluno']} />}>
+                        <Route
+                            path="/visualizar-fluxo/*"
+                            element={
+                                <LayoutBase>
+                                    <VisualizarFluxoPage />
+                                </LayoutBase>
+                            }
+                        />
+                    </Route>   
+                    
+
+
 
                     <Route element={<ProtectedRoute allowedRoles={['professor', 'aluno']} />}>
                         <Route 
