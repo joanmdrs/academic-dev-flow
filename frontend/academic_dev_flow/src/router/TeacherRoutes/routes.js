@@ -25,17 +25,15 @@ function RotasProfessor() {
         <Switch>
             <Route path="perfil" element={<ScreenPerfilMembro grupo="professor" />} exact/>
             <Route path="projetos/visualizar" element={<ScreenVisualizarProjeto grupo="professor" />} exact />
-            <Route path="cronograma/lancamentos" element={<ScreenRelease grupo="professor"/>} />
-            <Route path="cronograma/iteracoes" element={<ScreenIteracoes grupo="professor"/>} />
+            
             
         
-            <Route path="artefatos" element={<ScreenArtefatos grupo="professor" />} exact />
             <Route path="chats" element={<ScreenChats grupo="professor" />} exact />
             <Route path="membros/gerenciar" element={<ScreenGerenciarMembros grupo="professor" />} exact />
             <Route path="membros/equipes" element={<ScreenQuadroMembros grupo="professor" />} exact />
             <Route path="membros/funcoes" element={<ScreenGerenciarCategoriaFuncaoMembro grupo="professor" />} exact />
             <Route path="membros/equipes/sua-equipe" element={<ScreenEquipe grupo="professor" />} exact />
-            <Route path="iteracoes/visualizar" element={<ScreenVisualizarIteracao grupo="professor" /> } exact />
+            
             <Route path="github-integration" element={<ScreenRepositories grupo="professor" />} exact />
             <Route path="feedbacks" element={<ScreenFeedbacks grupo="professor" />} exact />
             {/* <Route path="github-integration/painel" element={<ScreenPainelGitHub grupo='professor' />} exact /> */}

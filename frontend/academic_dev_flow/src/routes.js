@@ -25,6 +25,9 @@ import ScreenTarefas from "./pages/Tarefa/screens/Tarefas";
 import ScreenGerenciarCategoriaTarefa from "./pages/CategoriaTarefa";
 import ScreenGerenciarTags from "./pages/Tag";
 import ScreenArtefatos from "./pages/Artefato/screens/Artefatos";
+import ScreenIteracoes from "./pages/Iteracao/screens/Iteracoes";
+import ScreenRelease from "./pages/Release/screens/Release";
+import ScreenVisualizarIteracao from "./pages/Iteracao/screens/VisualizarIteracao";
 
 function Routes() {
     return (
@@ -133,7 +136,60 @@ function Routes() {
                                 </LayoutBase>
                             }
                         />
-                    </Route>    
+                    </Route>   
+
+                    <Route element={<ProtectedRoute allowedRoles={['professor', 'aluno']} />}>
+                        <Route 
+                            path="cronograma/lancamentos" 
+                            element={
+                                <LayoutBase>
+                                    <ScreenRelease />
+                                </LayoutBase>
+                            } 
+                        />
+                    </Route>
+
+                    <Route element={<ProtectedRoute allowedRoles={['professor', 'aluno']} />}>
+                        <Route 
+                            path="cronograma/iteracoes" 
+                            element={
+                                <LayoutBase>
+                                    <ScreenIteracoes />
+                                </LayoutBase>
+                            } 
+                        />
+                    </Route>
+
+                    <Route element={<ProtectedRoute allowedRoles={['professor', 'aluno']} />}>
+                        <Route 
+                            path="iteracoes/visualizar" 
+                            element={
+                                <LayoutBase>
+                                    <ScreenVisualizarIteracao />
+                                </LayoutBase>
+                            } 
+                        />
+                    </Route>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            
+                        
 
                     <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
                         <Route

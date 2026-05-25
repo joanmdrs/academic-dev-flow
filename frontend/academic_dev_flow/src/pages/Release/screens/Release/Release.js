@@ -22,7 +22,7 @@ import SectionContent from '../../../../components/SectionContent/SectionContent
 import { HomeOutlined } from '@ant-design/icons'
 
 
-const Release = ({grupo}) => {
+const Release = () => {
 
     const {usuario} = useContextoGlobalUser()
 
@@ -223,11 +223,11 @@ const Release = ({grupo}) => {
                 <Breadcrumb
                     items={[
                         {
-                            href: `/academicflow/${grupo}/home`,
+                            href: `/academicflow/home`,
                             title: <HomeOutlined />,
                         },
                         {
-                            href: `/academicflow/${grupo}/cronograma/lancamentos`,
+                            href: `/academicflow/cronograma/lancamentos`,
                             title: 'Lançamentos',
                         },
                         ...(isFormVisible && actionForm === 'create'

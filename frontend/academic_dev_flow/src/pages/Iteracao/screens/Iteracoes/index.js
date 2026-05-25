@@ -7,22 +7,14 @@ import { Content } from "antd/es/layout/layout";
 import { ProviderIteracao } from "../../context/contextoIteracao";
 import Iteracoes from "./Iteracoes";
 
-const ScreenIteracoes = ({grupo}) => {
+const ScreenIteracoes = () => {
 
 
     return (
         <React.Fragment>
-            { grupo === 'aluno' && <MenuAluno />}
-            { grupo === 'professor' && <MenuProfessor />}
-            <Layout>
-                <MyHeader/>
-
-                <Content>
-                    <ProviderIteracao>
-                        <Iteracoes grupo={grupo} />
-                    </ProviderIteracao>
-                </Content>
-            </Layout>
+            <ProviderIteracao>
+                <Iteracoes />
+            </ProviderIteracao>
         </React.Fragment>   
     )
 }

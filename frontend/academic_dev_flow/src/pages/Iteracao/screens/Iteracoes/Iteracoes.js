@@ -25,7 +25,7 @@ import { HomeOutlined } from '@ant-design/icons'
 import RenderDate from '../../../../components/RenderDate/RenderDate'
 import RenderMembers from '../../../../components/RenderMembers/RenderMembers'
 
-const Iteracoes = ({grupo}) => {
+const Iteracoes = () => {
 
     const {usuario} = useContextoGlobalUser()
 
@@ -236,11 +236,11 @@ const Iteracoes = ({grupo}) => {
                 <Breadcrumb
                     items={[
                         {
-                            href: `/academicflow/${grupo}/home`,
+                            href: `/academicflow/home`,
                             title: <HomeOutlined />,
                         },
                         {
-                            href: `/academicflow/${grupo}/cronograma/iteracoes`,
+                            href: `/academicflow/cronograma/iteracoes`,
                             title: 'Iterações',
                         },
                         ...(isFormVisible && actionForm === 'create'

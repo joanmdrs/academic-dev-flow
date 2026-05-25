@@ -17,6 +17,7 @@ const CronogramaIteracoes = () => {
     const [iteracoes, setIteracoes] = useState(null)
     const [loading, setLoading] = useState(true)
 
+    
     useEffect(() => {
         const fetchData = async () => {
             if (dadosProjeto !== null) {
