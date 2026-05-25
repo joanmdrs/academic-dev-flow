@@ -1,59 +1,70 @@
-import { List, Tooltip } from "antd";
-import React, { useState } from "react";
+import { List, Tooltip, Button, Typography, Tag } from "antd";
+import React from "react";
 import { CiFolderOn } from "react-icons/ci";
 import { IoIosArrowForward } from "react-icons/io";
-import { useContextoGlobalUser } from "../../../context/ContextoGlobalUser/ContextoGlobalUser";
 import { Link } from "react-router-dom";
+import { LuFolderKanban } from "react-icons/lu";
 
-const MeusProjetos = ({projetos}) => {
+const { Text } = Typography;
 
-    const {grupo} = useContextoGlobalUser()
-
-
+const MeusProjetos = ({ projetos = [] }) => {
     return (
-        <div className="meus-projetos box-model">
-            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'baseline'}}> 
-                <h3 className="ff-pop">Projetos</h3>
-                { grupo === 'Administradores' && <Link to={`/admin/projetos`}> Visualize todos </Link> }
-                { grupo === 'Discentes' && <Link to={`/aluno/projetos`}> Visualize todos </Link> }
-                { grupo === 'Docentes' && <Link to={`/professor/projetos`}> Visualize todos </Link> }
+        <div className="home-card">
+            <div className="home-card-header">
+                <div className="home-card-title-area">
+                    <div className="home-card-icon">
+                        <LuFolderKanban />
+                    </div>
 
+                    <div>
+                        <h3 className="home-card-title">Projetos</h3>
+                        <Text type="secondary">
+                            {projetos.length} projeto(s) vinculado(s)
+                        </Text>
+                    </div>
+                </div>
+
+                <Link className="home-card-link" to="/projetos">
+                    Ver todos
+                </Link>
             </div>
 
-            <div> 
-                <List
-                    className="demo-loadmore-list"
-                    itemLayout="horizontal"
-                    dataSource={projetos.slice(0, 4)}
-                    pagination={false}
-                    renderItem={(item, index) => (
-                        <List.Item
-                            key={index}
-                            className="item-model"
-                            actions={[
-                                <span  style={{color: '#000000', cursor: 'pointer'}}>
-                                    <Tooltip title="Visualizar">
-                                        <IoIosArrowForward size="15px" />
-                                    </Tooltip>
+            <List
+                itemLayout="horizontal"
+                dataSource={projetos.slice(0, 4)}
+                pagination={false}
+                renderItem={(item) => (
+                    <List.Item className="home-list-item">
+                        <List.Item.Meta
+                            avatar={
+                                <div className="home-project-avatar">
+                                    <CiFolderOn size={22} />
+                                </div>
+                            }
+                            title={
+                                <span className="home-item-title">
+                                    {item.nome_projeto || item.nome || "Projeto sem nome"}
                                 </span>
-                            ]}
-                        >
-                                <List.Item.Meta
-                                    avatar={<CiFolderOn />}
-                                    title={<span className="ff-pop fw-500"> {item.nome_projeto ? item.nome_projeto : item.nome} </span>}
-                                />
-                        </List.Item>
-                    )}
-                />
-            </div>
+                            }
+                            description={
+                                <Tag color="blue">
+                                    {item.status_projeto || item.status || "Sem status"}
+                                </Tag>
+                            }
+                        />
 
-            {/* <div className="df "> 
-                <ChartStatusProjeto projetos={projetos} width={400} heigth={400} />
-            </div> */}
-
-
+                        <Tooltip title="Visualizar projeto">
+                            <Button
+                                type="text"
+                                shape="circle"
+                                icon={<IoIosArrowForward />}
+                            />
+                        </Tooltip>
+                    </List.Item>
+                )}
+            />
         </div>
-    )
-}
+    );
+};
 
-export default MeusProjetos
+export default MeusProjetos;

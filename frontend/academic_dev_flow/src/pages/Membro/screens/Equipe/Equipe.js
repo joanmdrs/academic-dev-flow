@@ -21,7 +21,7 @@ import SectionContent from "../../../../components/SectionContent/SectionContent
 
 const {TabPane } = Tabs
 
-const Equipe = ({grupo}) => {
+const Equipe = () => {
     const location = useLocation();
     const { state } = location;
 
@@ -164,15 +164,15 @@ const Equipe = ({grupo}) => {
                 <Breadcrumb
                     items={[
                         {
-                            href: `/academicflow/${grupo}/home`,
+                            href: `/academicflow/home`,
                             title: <HomeOutlined />,
                         },
                         {
-                            href: `/academicflow/${grupo}/membros/gerenciar`,
+                            href: `/academicflow/membros/gerenciar`,
                             title: 'Membros',
                         },
                         {
-                            href: `/academicflow/${grupo}/membros/equipes`,
+                            href: `/academicflow/membros/equipes`,
                             title: 'Equipes',
                         },
                         {

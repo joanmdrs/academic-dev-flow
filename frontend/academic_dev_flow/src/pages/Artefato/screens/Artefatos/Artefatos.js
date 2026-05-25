@@ -23,17 +23,20 @@ import SectionHeader from "../../../../components/SectionHeader/SectionHeader";
 import SectionFilters from "../../../../components/SectionFilters/SectionFilters";
 import SectionContent from "../../../../components/SectionContent/SectionContent";
 import { HomeOutlined } from "@ant-design/icons";
+import { useAuth } from "../../../../hooks/AuthProvider";
+import { buscarMembroPeloUser } from "../../../../services/membroService";
 
 const {TabPane} = Tabs
 
 const Artefatos = () => {
-    const {usuario} = useContextoGlobalUser()
     const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
     const {artefatos, setArtefatos, dadosArtefato, setDadosArtefato} = useContextoArtefato()
     const [isFormVisible, setIsFormVisible] = useState(false)
     const [actionForm, setActionForm] = useState('create')
     const [isLoading, setIsLoading] = useState(false)
     const [isDrawerCommentsVisible, setIsDrawerCommentsVisible] = useState(false)
+    const {user} = useAuth()
+    const [membro, setMembro] = useState(null)
 
     const handleShowDrawerComments = () => {
         setIsDrawerCommentsVisible(true)
@@ -48,33 +51,42 @@ const Artefatos = () => {
         setDadosArtefato(record)
     }
 
-    const handleBuscarArtefatosDosProjetosDoMembro = async () => {
-        const response = await listarArtefatosDosProjetosDoMembro(usuario.id)
+    const handleBuscarArtefatosDosProjetosDoMembro = async (idMembro) => {
+        if (!idMembro) return;
 
-        if (!response.error && !response.empty){
-            setArtefatos(response.data)
+        const response = await listarArtefatosDosProjetosDoMembro(idMembro);
+
+        if (!response.error && !response.empty) {
+            setArtefatos(response.data);
         }
-    }
+    };
 
     useEffect(() => {
-
         const fetchData = async () => {
             try {
-                if (usuario && usuario.id){
-                    await handleBuscarArtefatosDosProjetosDoMembro(usuario.id)
+                if (user?.id) {
+                    const resMembro = await buscarMembroPeloUser(user.id);
+                    const membroData = resMembro.data;
+
+                    setMembro(membroData);
+
+                    await handleBuscarArtefatosDosProjetosDoMembro(membroData.id);
                 }
             } catch (error) {
-                return handleError('Falha ao tentar buscar os artefatos !')
+                handleError(error, "Falha ao tentar buscar os artefatos!");
             }
-        }
+        };
 
-        fetchData()
-    }, [usuario])
+        fetchData();
+    }, [user]);
 
     const handleReload = async () => {
-        setIsFormVisible(false)
-        await handleBuscarArtefatosDosProjetosDoMembro()
-    }
+        setIsFormVisible(false);
+
+        if (membro?.id) {
+            await handleBuscarArtefatosDosProjetosDoMembro(membro.id);
+        }
+    };
 
     const handleCancelar = () => {
         setIsFormVisible(false)
@@ -204,13 +216,13 @@ const Artefatos = () => {
 
     const handleBuscarArtefatosPeloNome = async (value) => {
         if (value){
-            const response = await listarArtefatosDosProjetosDoMembro(usuario.id);
+            const response = await listarArtefatosDosProjetosDoMembro(membro.id);
             const artefatosFiltrados = response.data.filter(artefato =>
                 artefato.nome.toLowerCase().includes(value.toLowerCase())
             );
             setArtefatos(artefatosFiltrados)
         } else {
-            handleBuscarArtefatosDosProjetosDoMembro(usuario.id)
+            handleBuscarArtefatosDosProjetosDoMembro(membro.id)
         }
     }
     
@@ -264,7 +276,12 @@ const Artefatos = () => {
                     </Space>
 
                     <Space>
-                        <FormFilterArtefatos idMembro={usuario.id} onChange={handleFiltrarArtefatos} />
+                        {membro && (
+                            <FormFilterArtefatos
+                                idMembro={membro.id}
+                                onChange={handleFiltrarArtefatos}
+                            />
+                        )}
                     </Space>
 
                 </SectionFilters>
@@ -277,11 +294,13 @@ const Artefatos = () => {
                             <SpinLoading />
                         )}
                     
-                        <FormArtefato 
-                            onSubmit={handleSalvarArtefato}
-                            selectProjeto={<SelecionarProjeto idMembro={usuario.id} />} 
-                            onCancel={handleCancelar} 
-                        />  
+                        {membro && (
+                            <FormArtefato
+                                onSubmit={handleSalvarArtefato}
+                                selectProjeto={<SelecionarProjeto idMembro={membro.id} />}
+                                onCancel={handleCancelar}
+                            />
+                        )}
                     </>
                 )}
                 

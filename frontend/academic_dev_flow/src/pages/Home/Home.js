@@ -1,10 +1,12 @@
 import "./Home.css";
-import React, { useEffect, useState } from "react";
-import { Empty, Splitter } from "antd";
+import React, { useEffect, useState, useCallback } from "react";
+import { Empty, Splitter, message } from "antd";
 import { useAuth } from "../../hooks/AuthProvider";
 import { homeServiceAdapter } from "../../services/homeServiceAdapter";
 import { atualizarStatusTarefa } from "../../services/tarefaService";
 import { getDataHoraNow, handleError } from "../../services/utils";
+import { buscarMembroPeloUser } from "../../services/membroService";
+
 import MinhasTarefas from "./components/MinhasTarefas";
 import MeusArtefatos from "./components/MeusArtefatos";
 import MeusProjetos from "./components/MeusProjetos";
@@ -12,77 +14,75 @@ import MeusProjetos from "./components/MeusProjetos";
 const Home = () => {
     const { user } = useAuth();
 
+    const [membro, setMembro] = useState(null);
     const [tarefas, setTarefas] = useState([]);
     const [artefatos, setArtefatos] = useState([]);
     const [projetos, setProjetos] = useState([]);
 
     const services = user ? homeServiceAdapter[user.role] : null;
 
-    const callService = async (fn) => {
+    const callService = async (fn, idMembro) => {
+        if (!fn) return { error: true };
+
         try {
-            return fn.length > 0 ? await fn(user.id) : await fn();
-        } catch (error) {
+            return fn.length > 0 ? await fn(idMembro) : await fn();
+        } catch {
             return { error: true };
         }
     };
 
-    const handleGetTarefas = async () => {
-        const response = await callService(services.tarefas);
-        if (response?.error) {
-            setTarefas([]);
-            return;
-        }
+    const handleGetTarefas = useCallback(async (idMembro) => {
+        const response = await callService(services?.tarefas, idMembro);
+        setTarefas(Array.isArray(response?.data) ? response.data : []);
+    }, [services]);
 
-        if (Array.isArray(response.data)) {
-            setTarefas(response.data);
-        } else if (response.empty) {
-            setTarefas([]);
-        } else {
-            setTarefas([]);
-        }
-    };
+    const handleGetArtefatos = useCallback(async (idMembro) => {
+        const response = await callService(services?.artefatos, idMembro);
+        setArtefatos(Array.isArray(response?.data) ? response.data : []);
+    }, [services]);
 
-    const handleGetArtefatos = async () => {
-        const response = await callService(services.artefatos);
-        if (Array.isArray(response?.data)) {
-            setArtefatos(response.data);
-        } else {
-            setArtefatos([]);
-        }
-    };
-
-    const handleGetProjetos = async () => {
-        const response = await callService(services.projetos);
-        if (Array.isArray(response?.data)) {
-            setProjetos(response.data);
-        } else {
-            setProjetos([]);
-        }
-
-    };
+    const handleGetProjetos = useCallback(async (idMembro) => {
+        const response = await callService(services?.projetos, idMembro);
+        setProjetos(Array.isArray(response?.data) ? response.data : []);
+    }, [services]);
 
     useEffect(() => {
-        if (!user || !services) return;
-        console.log("Serviços disponíveis:", services);
-
-        console.log("Dados do user:", user);
         const fetchData = async () => {
-            await Promise.all([
-                handleGetTarefas(),
-                handleGetArtefatos(),
-                handleGetProjetos()
-            ]);
+            if (!user?.id || !services) return;
+
+            try {
+                const responseMembro = await buscarMembroPeloUser(user.id);
+
+                if (!responseMembro.error && responseMembro.data) {
+                    const membroEncontrado = responseMembro.data;
+                    setMembro(membroEncontrado);
+
+                    await Promise.all([
+                        handleGetTarefas(membroEncontrado.id),
+                        handleGetArtefatos(membroEncontrado.id),
+                        handleGetProjetos(membroEncontrado.id),
+                    ]);
+                } else {
+                    setMembro(null);
+                    setTarefas([]);
+                    setArtefatos([]);
+                    setProjetos([]);
+                    message.warning("Nenhum membro vinculado ao usuário foi encontrado.");
+                }
+            } catch {
+                message.error("Falha ao carregar dados da página inicial.");
+            }
         };
 
         fetchData();
-    }, [user]);
+    }, [user?.id, services, handleGetTarefas, handleGetArtefatos, handleGetProjetos]);
 
     const handleAlterarSituacaoTarefa = async (id, status) => {
         try {
             const response = await atualizarStatusTarefa(id, { status });
 
-            if (!response.error) {
-                await handleGetTarefas();
+            if (!response.error && membro?.id) {
+                await handleGetTarefas(membro.id);
             }
         } catch (error) {
             handleError(error, "Falha ao atualizar o status da tarefa!");
@@ -90,11 +90,9 @@ const Home = () => {
     };
 
     return (
-
         <div style={{ height: "100%", backgroundColor: "#FFFFFF" }}>
-
             <Splitter>
-                <Splitter.Panel defaultSize="55%" min="20%" max="70%">
+                <Splitter.Panel defaultSize="50%" min="20%" max="70%">
                     <div className="caixa-direita">
                         <div>
                             <h2 className="ff-pop">Hoje</h2>
@@ -107,55 +105,27 @@ const Home = () => {
                                 atualizarStatus={handleAlterarSituacaoTarefa}
                             />
                         ) : (
-                            <Empty
-                                description="Nenhuma tarefa para exibir"
-                                style={{
-                                    display: "flex",
-                                    width: "100%",
-                                    height: "100%",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                }}
-                            />
+                            <Empty description="Nenhuma tarefa para exibir" />
                         )}
 
                         {artefatos.length > 0 ? (
                             <MeusArtefatos artefatos={artefatos} />
                         ) : (
-                            <Empty
-                                description="Nenhum artefato para exibir"
-                                style={{
-                                    display: "flex",
-                                    width: "100%",
-                                    height: "100%",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                }}
-                            />
+                            <Empty description="Nenhum artefato para exibir" />
                         )}
                     </div>
                 </Splitter.Panel>
 
                 <Splitter.Panel>
                     <div className="caixa-esquerda">
-                        {projetos.length ? (
+                        {projetos.length > 0 ? (
                             <MeusProjetos projetos={projetos} />
                         ) : (
-                            <Empty
-                                description="Nenhum projeto para exibir"
-                                style={{
-                                    display: "flex",
-                                    width: "100%",
-                                    height: "100%",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                }}
-                            />
+                            <Empty description="Nenhum projeto para exibir" />
                         )}
                     </div>
                 </Splitter.Panel>
             </Splitter>
-            
         </div>
     );
 };

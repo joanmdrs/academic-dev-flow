@@ -1,57 +1,103 @@
 import { Breadcrumb, Button, Modal, Space, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
+import { IoMdCreate, IoMdTrash } from 'react-icons/io'
+import { HomeOutlined } from '@ant-design/icons'
+import { NotificationManager } from 'react-notifications'
+
 import FormRelease from '../../components/FormRelease/FormRelease'
-import { useContextoRelease } from '../../context/ContextoRelease'
 import TableRelease from '../../components/TableRelease/TableRelease'
-import { formatDate } from '../../../../services/utils'
-import { atualizarRelease, buscarReleasesDosProjetosDoMembro, criarRelease, excluirReleases } from '../../../../services/releaseService'
-import { useContextoGlobalUser } from '../../../../context/ContextoGlobalUser/ContextoGlobalUser'
 import FormFilterReleases from '../../components/FormFilterReleases/FormFilterReleases'
 import SelectProject from '../../components/SelectProject/SelectProject'
+
+import { useContextoRelease } from '../../context/ContextoRelease'
 import { useContextoGlobalProjeto } from '../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto'
+
+import { useAuth } from '../../../../hooks/AuthProvider'
+
+import {
+    atualizarRelease,
+    buscarReleasesDosProjetosDoMembro,
+    criarRelease,
+    excluirReleases
+} from '../../../../services/releaseService'
+
 import { buscarProjetoPeloId } from '../../../../services/projetoService'
-import { NotificationManager } from 'react-notifications'
+import { buscarMembroPeloUser } from '../../../../services/membroService'
+import { formatDate } from '../../../../services/utils'
+
 import RenderStatus from '../../../../components/RenderStatus/RenderStatus'
 import { optionsStatusReleases } from '../../../../services/optionsStatus'
-import { IoMdCreate, IoMdTrash } from 'react-icons/io'
+
 import Section from '../../../../components/Section/Section'
 import SectionHeader from '../../../../components/SectionHeader/SectionHeader'
 import SectionFilters from '../../../../components/SectionFilters/SectionFilters'
 import SectionContent from '../../../../components/SectionContent/SectionContent'
-import { HomeOutlined } from '@ant-design/icons'
 
 
 const Release = () => {
+    const { dadosProjeto, setDadosProjeto } = useContextoGlobalProjeto()
 
-    const {usuario} = useContextoGlobalUser()
+    const {
+        actionForm,
+        setActionForm,
+        releaseData,
+        setReleaseData,
+        releases,
+        setReleases
+    } = useContextoRelease()
 
-    const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
+    const { user } = useAuth()
+
+    const [membro, setMembro] = useState(null)
     const [isFormVisible, setIsFormVisible] = useState(false)
     const [isTableVisible, setIsTableVisible] = useState(true)
-    const {
-        actionForm, 
-        setActionForm,
-        releaseData, 
-        setReleaseData, 
-        releases, 
-        setReleases} = useContextoRelease()
 
+    const handleBuscarReleasesDosProjetosDoMembro = async (idMembro) => {
+        if (!idMembro) return
 
-    const handleBuscarReleasesDosProjetosDoMembro = async () => {
-        const response = await buscarReleasesDosProjetosDoMembro(usuario.id)
+        const response = await buscarReleasesDosProjetosDoMembro(idMembro)
 
-        if (!response.error && !response.empty){
+        if (!response.error && !response.empty) {
             setReleases(response.data)
+        } else {
+            setReleases([])
         }
     }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                if (user?.id) {
+                    const responseMembro = await buscarMembroPeloUser(user.id)
+
+                    if (!responseMembro.error && responseMembro.data) {
+                        const membroEncontrado = responseMembro.data
+
+                        setMembro(membroEncontrado)
+
+                        await handleBuscarReleasesDosProjetosDoMembro(
+                            membroEncontrado.id
+                        )
+                    }
+                }
+            } catch (error) {
+                NotificationManager.error('Falha ao buscar os lançamentos')
+            }
+        }
+
+        fetchData()
+    }, [user])
 
     const handleReload = async () => {
         setIsFormVisible(false)
         setIsTableVisible(true)
         setDadosProjeto(null)
         setReleaseData(null)
-        await handleBuscarReleasesDosProjetosDoMembro()
+
+        if (membro?.id) {
+            await handleBuscarReleasesDosProjetosDoMembro(membro.id)
+        }
     }
 
     const handleCancelar = () => {
@@ -71,81 +117,91 @@ const Release = () => {
         setIsTableVisible(false)
         setReleaseData(null)
         setActionForm('create')
-        setReleaseData(null)
         setDadosProjeto(null)
     }
 
     const handleAtualizarRelease = async (record) => {
         await handleBuscarProjeto(record.projeto)
+
         setIsFormVisible(true)
         setIsTableVisible(false)
         setActionForm('update')
         setReleaseData(record)
     }
-    
-    const handleSalvarRelease = async (formData) => {
 
-        formData['projeto'] = dadosProjeto.id
+    const handleSalvarRelease = async (formData) => {
+        if (!dadosProjeto?.id) {
+            NotificationManager.warning('Selecione um projeto antes de salvar.')
+            return
+        }
+
+        const dadosEnviar = {
+            ...formData,
+            projeto: dadosProjeto.id
+        }
+
         if (actionForm === 'create') {
-            const response = await criarRelease(formData)
-            if (!response.error){
+            const response = await criarRelease(dadosEnviar)
+
+            if (!response.error) {
                 await handleReload()
             }
-        } else if (actionForm === 'update'){
-            const response = await atualizarRelease(releaseData.id, formData)
-            if (!response.error){
+        } else if (actionForm === 'update') {
+            const response = await atualizarRelease(releaseData.id, dadosEnviar)
+
+            if (!response.error) {
                 await handleReload()
             }
         }
     }
 
     const handleFiltrarReleases = async (formData) => {
-        const { nome, projeto } = formData;
+        if (!membro?.id) return
 
-        if (!nome && !projeto){
-            await handleBuscarReleasesDosProjetosDoMembro()
-        } else {
-            const response = await buscarReleasesDosProjetosDoMembro(usuario.id)
+        const { nome, projeto } = formData
 
-            if (!response.error && response.data) {
-                let filteredReleases = response.data;
-        
-                if (nome) {
-                    filteredReleases = filteredReleases.filter(release => 
-                        release.nome.toLowerCase().includes(nome.toLowerCase())
-                    );
-                }
-        
-                if (projeto) {
-                    filteredReleases = filteredReleases.filter(release => 
-                        release.projeto === projeto
-                    );
-                }
-        
-                setReleases(filteredReleases);
+        if (!nome && !projeto) {
+            await handleBuscarReleasesDosProjetosDoMembro(membro.id)
+            return
+        }
+
+        const response = await buscarReleasesDosProjetosDoMembro(membro.id)
+
+        if (!response.error && response.data) {
+            let filteredReleases = response.data
+
+            if (nome) {
+                filteredReleases = filteredReleases.filter(release =>
+                    release.nome?.toLowerCase().includes(nome.toLowerCase())
+                )
             }
 
+            if (projeto) {
+                filteredReleases = filteredReleases.filter(release =>
+                    release.projeto === projeto
+                )
+            }
 
+            setReleases(filteredReleases)
         }
     }
 
     const handleExcluirRelease = async (id) => {
         Modal.confirm({
             title: 'Confirmar exclusão',
-            content: 'Você está seguro de que deseja excluir este lançamento ?',
+            content: 'Você está seguro de que deseja excluir este lançamento?',
             okText: 'Sim',
             cancelText: 'Não',
             onOk: async () => {
                 try {
-                    await excluirReleases([id]);
+                    await excluirReleases([id])
                     await handleReload()
-
                 } catch (error) {
-                    NotificationManager.error('Falha ao tentar excluir o lançamento');
-                } 
+                    NotificationManager.error('Falha ao tentar excluir o lançamento')
+                }
             }
-        });
-    };
+        })
+    }
 
     const columnsTable = [
         {
@@ -158,8 +214,8 @@ const Release = () => {
             dataIndex: 'projeto',
             key: 'projeto',
             render: (_, record) => (
-                <Space> {record.nome_projeto} </Space>
-            ),
+                <Space>{record.nome_projeto || 'Não informado'}</Space>
+            )
         },
         {
             title: 'Lançamento',
@@ -167,7 +223,9 @@ const Release = () => {
             key: 'data_lancamento',
             render: (_, record) => (
                 <Space>
-                    {formatDate(record.data_lancamento)}
+                    {record.data_lancamento
+                        ? formatDate(record.data_lancamento)
+                        : 'Não informado'}
                 </Space>
             )
         },
@@ -176,9 +234,7 @@ const Release = () => {
             dataIndex: 'responsavel',
             key: 'responsavel',
             render: (_, record) => (
-                <Space>
-                    {record.nome_responsavel}
-                </Space>
+                <Space>{record.nome_responsavel || 'Não definido'}</Space>
             )
         },
         {
@@ -186,7 +242,10 @@ const Release = () => {
             dataIndex: 'status',
             key: 'status',
             render: (_, record) => (
-                <RenderStatus optionsStatus={optionsStatusReleases} propStatus={record.status} /> 
+                <RenderStatus
+                    optionsStatus={optionsStatusReleases}
+                    propStatus={record.status}
+                />
             )
         },
         {
@@ -196,26 +255,20 @@ const Release = () => {
             render: (_, record) => (
                 <Space>
                     <Tooltip title="Editar">
-                        <a onClick={() => handleAtualizarRelease(record)}><IoMdCreate /></a>
+                        <a onClick={() => handleAtualizarRelease(record)}>
+                            <IoMdCreate />
+                        </a>
                     </Tooltip>
+
                     <Tooltip title="Excluir">
-                        <a onClick={() => handleExcluirRelease(record.id)}><IoMdTrash /></a>
+                        <a onClick={() => handleExcluirRelease(record.id)}>
+                            <IoMdTrash />
+                        </a>
                     </Tooltip>
                 </Space>
             )
         }
     ]
-
-    useEffect(() => {
-        const fetchData = async () => {
-
-            if (usuario && usuario.id) {
-                await handleBuscarReleasesDosProjetosDoMembro()
-            }
-        }
-        fetchData()
-    }, [usuario])
-
 
     return (
         <Section>
@@ -224,58 +277,63 @@ const Release = () => {
                     items={[
                         {
                             href: `/academicflow/home`,
-                            title: <HomeOutlined />,
+                            title: <HomeOutlined />
                         },
                         {
                             href: `/academicflow/cronograma/lancamentos`,
-                            title: 'Lançamentos',
+                            title: 'Lançamentos'
                         },
                         ...(isFormVisible && actionForm === 'create'
                             ? [{ title: 'Cadastrar' }]
                             : []),
                         ...(isFormVisible && actionForm === 'update'
                             ? [{ title: 'Atualizar' }]
-                            : []),
+                            : [])
                     ]}
                 />
-                
 
                 {!isFormVisible && (
                     <Space>
-                        <Button 
-                            onClick={handleAdicionarRelease} 
-                            type="primary" 
-                            icon={<FaPlus />}> Cadastrar Lançamento </Button>
+                        <Button
+                            onClick={handleAdicionarRelease}
+                            type="primary"
+                            icon={<FaPlus />}
+                            disabled={!membro}
+                        >
+                            Cadastrar Lançamento
+                        </Button>
                     </Space>
                 )}
             </SectionHeader>
 
-            {!isFormVisible && (
+            {!isFormVisible && membro && (
                 <SectionFilters>
-                    <FormFilterReleases onChange={handleFiltrarReleases} idMembro={usuario.id}/>
+                    <FormFilterReleases
+                        onChange={handleFiltrarReleases}
+                        idMembro={membro.id}
+                    />
                 </SectionFilters>
             )}
 
-           <SectionContent>
-                { isFormVisible && 
-                    <FormRelease 
-                        onSubmit={handleSalvarRelease} 
-                        onCancel={handleCancelar} 
-                        selectProject={<SelectProject idMembro={usuario.id} />}
+            <SectionContent>
+                {isFormVisible && membro && (
+                    <FormRelease
+                        onSubmit={handleSalvarRelease}
+                        onCancel={handleCancelar}
+                        selectProject={
+                            <SelectProject idMembro={membro.id} />
+                        }
                     />
-                }
-                { isTableVisible && (
-                    <div>
-                        <TableRelease data={releases} columns={columnsTable}/>
-                    </div>
-        
                 )}
 
-           </SectionContent>
-
-          
+                {isTableVisible && (
+                    <TableRelease
+                        data={releases}
+                        columns={columnsTable}
+                    />
+                )}
+            </SectionContent>
         </Section>
-
     )
 }
 

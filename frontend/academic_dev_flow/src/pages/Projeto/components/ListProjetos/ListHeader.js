@@ -2,30 +2,45 @@ import React from "react";
 import { limitarCaracteres } from "../../../../services/utils";
 import RenderStatus from "../../../../components/RenderStatus/RenderStatus";
 import { optionsStatusProjetos } from "../../../../services/optionsStatus";
-import { Flex, Space } from "antd";
+import { Flex, Space, Typography, Tag } from "antd";
 
-const ListHeader = ({item}) => {
+const { Title, Text } = Typography;
 
+const ListHeader = ({ item }) => {
     return (
-        <Flex align="center" justify="space-between">
-            <Space>
-                <h3 style={{textTransform: 'capitalize', margin: '0'}}> {limitarCaracteres(item.nome_projeto, 100)} </h3>
-                
-            </Space>
+        <Flex
+            align="flex-start"
+            justify="space-between"
+            gap={16}
+            wrap="wrap"
+        >
+            <div>
+                <Title
+                    level={4}
+                    style={{
+                        margin: 0,
+                        textTransform: "capitalize",
+                        lineHeight: 1.3,
+                    }}
+                >
+                    {limitarCaracteres(item.nome_projeto || "Projeto sem nome", 100)}
+                </Title>
 
-            <Space>
-                <RenderStatus optionsStatus={optionsStatusProjetos} propStatus={item.status_projeto} />
-            </Space>
+                <Space size={8} wrap style={{ marginTop: 8 }}>
+                    <Tag color="blue">#{item.projeto}</Tag>
 
-            <Space> 
-                <h4> Coordenador: {item.nome_coordenador ? item.nome_coordenador : 'Não definido'} </h4>
-            </Space>
-{/* 
-            <Space>
-                <h4> Líder Técnico </h4>
-            </Space> */}
+                    <Text type="secondary">
+                        Coordenador: {item.nome_coordenador || "Não definido"}
+                    </Text>
+                </Space>
+            </div>
+
+            <RenderStatus
+                optionsStatus={optionsStatusProjetos}
+                propStatus={item.status_projeto}
+            />
         </Flex>
-    )
-}
+    );
+};
 
-export default ListHeader
+export default ListHeader;

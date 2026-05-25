@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback, useState } from "react";
 import "./PainelChat.css";
 
-import { Button, Modal, message } from "antd";
+import { Breadcrumb, Button, Modal, message } from "antd";
 import { FaPlus } from "react-icons/fa6";
 
 import SelectProject from "../../../../components/SelectProject/SelectProject";
@@ -19,9 +19,14 @@ import {
     excluirChat
 } from "../../../../services/chatService";
 
+import { buscarMembroPeloUser } from "../../../../services/membroService";
+
 import { useContextoChat } from "../../context/ContextoChat";
 import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 import { useAuth } from "../../../../hooks/AuthProvider";
+import Section from "../../../../components/Section/Section";
+import SectionHeader from "../../../../components/SectionHeader/SectionHeader";
+import { HomeOutlined } from "@ant-design/icons";
 
 const PainelChat = () => {
     const {
@@ -33,6 +38,7 @@ const PainelChat = () => {
 
     const { setDadosProjeto } = useContextoGlobalProjeto();
 
+    const [membro, setMembro] = useState(null);
     const [isFormVisible, setIsFormVisible] = useState(false);
     const [actionForm, setActionForm] = useState("create");
     const [chats, setChats] = useState([]);
@@ -48,32 +54,65 @@ const PainelChat = () => {
         setActionForm("create");
     };
 
-    const handleBuscarChats = useCallback(async () => {
-        if (!user?.id) return;
+    const handleBuscarChats = useCallback(async (idMembro) => {
+        if (!idMembro) return;
 
         setIsLoading(true);
 
         try {
-            const response = await buscarChatsDoUsuario(user.id);
+            const response = await buscarChatsDoUsuario(idMembro);
 
             if (!response.error) {
                 setChats(response.data || []);
             } else {
+                setChats([]);
                 message.error("Não foi possível carregar os chats.");
             }
         } catch (error) {
+            setChats([]);
             message.error("Erro ao buscar os chats do usuário.");
         } finally {
             setIsLoading(false);
         }
-    }, [user?.id]);
+    }, []);
 
     useEffect(() => {
-        handleBuscarChats();
-    }, [handleBuscarChats]);
+        const fetchData = async () => {
+            if (!user?.id) return;
+
+            setIsLoading(true);
+
+            try {
+                const responseMembro = await buscarMembroPeloUser(user.id);
+
+                if (!responseMembro.error && responseMembro.data) {
+                    const membroEncontrado = responseMembro.data;
+
+                    setMembro(membroEncontrado);
+
+                    await handleBuscarChats(membroEncontrado.id);
+                } else {
+                    setMembro(null);
+                    setChats([]);
+                    message.warning("Não foi encontrado membro vinculado ao usuário.");
+                }
+            } catch (error) {
+                setMembro(null);
+                setChats([]);
+                message.error("Erro ao buscar membro do usuário.");
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [user?.id, handleBuscarChats]);
 
     const handleReload = async () => {
-        await handleBuscarChats();
+        if (membro?.id) {
+            await handleBuscarChats(membro.id);
+        }
+
         limparFormulario();
     };
 
@@ -149,28 +188,30 @@ const PainelChat = () => {
     };
 
     return (
+
         <div className="painel-chat">
             {isLoading ? (
                 <SpinLoading />
             ) : (
                 <>
                     <div className="coluna-chat">
-
                         <div className="cabecalho-chat">
                             <h2>Chats</h2>
                             <p>Gerencie suas conversas</p>
                         </div>
-                        
+
                         <Button
                             type="primary"
                             icon={<FaPlus />}
                             onClick={handleAdicionarChat}
+                            disabled={!membro}
                         >
                             Criar Chat
                         </Button>
 
                         <ListChats
                             data={chats}
+                            selectedChatId={chatSelecionado?.id}
                             onEdit={handleEditarChat}
                             onDelete={handleExcluirChat}
                             onSelect={handleSelecionarChat}
@@ -186,7 +227,9 @@ const PainelChat = () => {
                         action={actionForm}
                         onOk={handleSalvarChat}
                         onCancel={handleCloseModal}
-                        selectProject={<SelectProject idMembro={user?.id} />}
+                        selectProject={
+                            <SelectProject idMembro={membro?.id} />
+                        }
                     />
                 </>
             )}

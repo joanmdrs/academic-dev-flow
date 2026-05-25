@@ -28,15 +28,15 @@ const QuadroMembros = ({group}) => {
             idProjeto: record.projeto
         }
         if (grupo === 'Docentes') {
-            navigate("/professor/membros/equipes/sua-equipe", {
+            navigate("/membros/equipes/sua-equipe", {
                 state: parametros
             });
         } else if (grupo === 'Discentes') {
-            navigate("/aluno/membros/equipes/sua-equipe", {
+            navigate("/membros/equipes/sua-equipe", {
                 state: parametros
             });
         } else if (grupo === 'Administradores') {
-            navigate("/admin/membros/equipes/sua-equipe", {
+            navigate("/membros/equipes/sua-equipe", {
                 state: parametros
             });
         }
@@ -63,15 +63,15 @@ const QuadroMembros = ({group}) => {
                 <Breadcrumb
                     items={[
                         {
-                            href: `/academicflow/${group}/home`,
+                            href: `/academicflow/home`,
                             title: <HomeOutlined />,
                         },
                         {
-                            href: `/academicflow/${group}/membros/gerenciar`,
+                            href: `/academicflow/membros/gerenciar`,
                             title: 'Membros',
                         },
                         {
-                            href: `/academicflow/${group}/membros/equipes`,
+                            href: `/academicflow/membros/equipes`,
                             title: 'Equipes',
                         }
                     ]}

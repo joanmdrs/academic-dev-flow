@@ -137,9 +137,9 @@ const MenuProfessor = () => {
                     icon={<LuUsers size="20px" />}
                     title="Membros"
                 >
-                    {/* <Menu.Item key="/membros/gerenciar">
+                    <Menu.Item key="/membros/gerenciar">
                         <Link to="/membros/gerenciar">Membros</Link>
-                    </Menu.Item> */}
+                    </Menu.Item>
 
                     <Menu.Item key="/membros/equipes">
                         <Link to="/membros/equipes">Equipes</Link>

@@ -21,7 +21,7 @@ const Feedback = () => {
 
     const handleListarFeedbacks = async () => { 
 
-        if (user.grupo === 'professor' || user.grupo === 'admin'){
+        if (user.role === 'professor' || user.role === 'admin'){
             const response = await listarFeedback()
 
             if(!response.error) {

@@ -7,6 +7,7 @@ import RenderDate from "../../../../components/RenderDate/RenderDate";
 import RenderStatus from "../../../../components/RenderStatus/RenderStatus";
 import RenderEmpty from "../../../../components/Empty/Empty";
 import { IoChatbubblesOutline } from "react-icons/io5";
+import { FaExternalLinkAlt } from "react-icons/fa";
 
 const TableArtefatos = ({data, onUpdate, onDelete, onShowComments}) => {
     
@@ -62,7 +63,34 @@ const TableArtefatos = ({data, onUpdate, onDelete, onShowComments}) => {
                     </Tooltip>
                 </Space>
             )
-        }
+        },
+        {
+            title: 'Documento',
+            dataIndex: 'url',
+            key: 'url',
+            align: 'center',
+            render: (_, record) => (
+                record.url ? (
+                    <Tooltip title="Abrir documento">
+                        <a
+                            href={record.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                                color: '#1677ff',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}
+                        >
+                            <FaExternalLinkAlt size={16} />
+                        </a>
+                    </Tooltip>
+                ) : (
+                    '-'
+                )
+            )
+        },
     ]
 
 

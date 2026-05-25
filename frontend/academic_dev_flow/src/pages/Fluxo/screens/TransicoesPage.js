@@ -19,16 +19,35 @@ import { IoMdCreate, IoMdTrash } from "react-icons/io";
 
 const { Option } = Select;
 
-const LABEL_OPTIONS = [
-    { value: 'iniciar', label: 'Iniciar' },
-    { value: 'aprovar', label: 'Aprovar' },
-    { value: 'reprovar', label: 'Reprovar' },
-    { value: 'corrigir', label: 'Correção necessária' },
-    { value: 'enviar_review', label: 'Enviar para review' },
-    { value: 'concluir', label: 'Concluir' },
-    { value: 'cancelar', label: 'Cancelar' },
-    { value: 'publicar', label: 'Publicar' },
-    { value: 'arquivar', label: 'Arquivar' },
+export const LABEL_OPTIONS = [
+    { value: "iniciar", label: "Iniciar" },
+    { value: "desenvolver", label: "Desenvolver" },
+    { value: "revisar", label: "Revisar" },
+    { value: "validar", label: "Validar" },
+    { value: "planejar", label: "Planejar" },
+
+    { value: "testar", label: "Testar" },
+    { value: "corrigir", label: "Corrigir" },
+
+    { value: "aprovar", label: "Aprovar" },
+    { value: "reprovar", label: "Reprovar" },
+
+    { value: "concluir", label: "Concluir" },
+    { value: "finalizar", label: "Finalizar" },
+
+    { value: "publicar", label: "Publicar" },
+    { value: "implantar", label: "Implantar" },
+
+    { value: "retornar", label: "Retornar" },
+    { value: "reabrir", label: "Reabrir" },
+
+    { value: "bloquear", label: "Bloquear" },
+    { value: "desbloquear", label: "Desbloquear" },
+
+    {value: "revisar", label: "Revisar"},
+    {value: "melhorar", label: "Melhorar"},
+    {value: "avaliar", label: "Avaliar"},
+    {value: "atualizar", label: "Atualizar"},
 ];
 
 export default function TransicoesPage() {
@@ -275,8 +294,15 @@ export default function TransicoesPage() {
                             rules={[{ required: true }]}
                         >
                             <Select
+                                showSearch
                                 placeholder="Selecione o tipo da transição"
+                                optionFilterProp="label"
                                 options={LABEL_OPTIONS}
+                                filterOption={(input, option) =>
+                                    option?.label
+                                        ?.toLowerCase()
+                                        ?.includes(input.toLowerCase())
+                                }
                             />
                         </Form.Item>
                     </Form>
