@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useContextoGlobalUser } from "../../../../context/ContextoGlobalUser/ContextoGlobalUser";
 import { useMembroContexto } from "../../context/MembroContexto";
 import Loading from "../../../../components/Loading/Loading";
-import { atualizarMembro, buscarMembroPeloId, listarGrupos } from "../../../../services/membroService";
+import { atualizarMembro, buscarMembroPeloId, buscarMembroPeloUser, listarGrupos } from "../../../../services/membroService";
 import { useNavigate } from "react-router-dom";
 import Titulo from "../../../../components/Titulo/Titulo";
 import { Avatar, Breadcrumb, Button, Form, Input, Modal, Select, Space, Tabs } from "antd";
@@ -49,8 +49,8 @@ const PerfilMembro = () => {
     }
 
     const handleCarregarDadosMembro = async () => {
-        const response = await buscarMembroPeloId(user.id)
-        
+        const response = await buscarMembroPeloUser(user.id)
+                
         if (!response.error){
             setDadosMembro(response.data)
             form.setFieldsValue(response.data)
