@@ -17,7 +17,7 @@ const MenuAluno = () => {
     return (
         <Sider 
             style={{ borderRight: '1px solid #ddd' }}
-            theme={theme}
+            theme="dark"
             width={250} 
             collapsible 
             collapsed={collapsed} 
@@ -38,7 +38,7 @@ const MenuAluno = () => {
                 {!collapsed && <span>AcademicDevFlow</span>}
             </div>
             <Menu
-                theme={theme}
+                theme="dark"
                 mode="inline"
                 style={{ marginTop: "20px" }}
                 selectedKeys={[location.pathname]}
@@ -65,17 +65,22 @@ const MenuAluno = () => {
                     icon={<LuWorkflow style={{ fontSize: "20px" }} />}
                     title="Fluxos"
                 >
-                    <Menu.Item key="gerenciar-fluxos">
-                        <Link to="/fluxos">Gerenciar fluxos</Link>
+                    <Menu.Item key="/fluxos">
+                        <Link to="/fluxos">Fluxos</Link>
                     </Menu.Item>
 
-                    <Menu.Item key="gerenciar-etapas">
-                        <Link to="/etapas">Gerenciar etapas</Link>
+                    <Menu.Item key="/etapas">
+                        <Link to="/etapas">Etapas</Link>
                     </Menu.Item>
-                    
-                    <Menu.Item key="gerenciar-transicoes">
-                        <Link to="/transicoes">Gerenciar transições</Link>
+
+                    <Menu.Item key="/transicoes">
+                        <Link to="/transicoes">Transições</Link>
                     </Menu.Item>
+
+                    <Menu.Item key="/visualizar-fluxo">
+                        <Link to="/visualizar-fluxo">Visualizar</Link>
+                    </Menu.Item>
+
                 </SubMenu>
 
                 <SubMenu
@@ -151,13 +156,13 @@ const MenuAluno = () => {
                     <Link to="/feedbacks">Feedbacks</Link>
                 </Menu.Item>
                                 
-                {/* <Menu.Item 
+                <Menu.Item 
                     className="item-menu" 
-                    key="/aluno/github-integration" 
+                    key="github-integration" 
                     icon={<LuGithub size="20px" />}
                 >
-                    <Link to="/aluno/github-integration">GitHub</Link>
-                </Menu.Item> */}
+                    <Link to="/github-integration">GitHub</Link>
+                </Menu.Item>
             </Menu>
         </Sider>
     );

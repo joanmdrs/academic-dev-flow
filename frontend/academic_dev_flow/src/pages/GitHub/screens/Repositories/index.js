@@ -15,7 +15,7 @@ const ScreenRepositories = ({grupo}) => {
             <Layout>
                 <MyHeader/>
                 <Content>
-                    <Repositories />
+                    <Repositories /> 
                 </Content>
             </Layout>
         </React.Fragment>   

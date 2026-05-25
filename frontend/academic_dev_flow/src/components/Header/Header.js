@@ -48,8 +48,8 @@ const MyHeader = () => {
         <Header 
             className="header" 
             style={{
-                backgroundColor: '#FFFFFF',
-                color: '#000000',
+                backgroundColor: "#001529",
+                color: '#FFFFFF',
                 borderBottom: '1px solid #ddd'
             }}> 
             <div className='logo-ufrn'>

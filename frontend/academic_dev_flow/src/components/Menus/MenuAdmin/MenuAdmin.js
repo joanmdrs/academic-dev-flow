@@ -17,7 +17,7 @@ const MenuAdmin = () => {
     return (
         <Sider
             style={{borderRight: '1px solid #ddd'}}
-            theme={theme}
+            theme="dark"
             width={250} 
             collapsible 
             collapsed={collapsed} 
@@ -39,7 +39,7 @@ const MenuAdmin = () => {
                 {!collapsed && <span>AcademicDevFlow</span>}
             </div>
             <Menu
-                theme={theme}
+                theme="dark"
                 mode="inline"
                 style={{
                     marginTop: "20px",
