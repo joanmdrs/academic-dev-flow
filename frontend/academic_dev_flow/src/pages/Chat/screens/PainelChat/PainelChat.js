@@ -1,148 +1,197 @@
-import React, { useEffect, useState } from "react";
-import "./PainelChat.css"
-import { Button, Modal } from "antd";
+import React, { useEffect, useCallback, useState } from "react";
+import "./PainelChat.css";
+
+import { Button, Modal, message } from "antd";
 import { FaPlus } from "react-icons/fa6";
-import FormChat from "../../components/FormChat/FormChat";
+
 import SelectProject from "../../../../components/SelectProject/SelectProject";
 import FormChatModal from "../../components/FormChat/FormChat";
-import { useContextoGlobalUser } from "../../../../context/ContextoGlobalUser/ContextoGlobalUser";
 import RenderEmpty from "../../../../components/Empty/Empty";
-import { atualizarChat, buscarChatsDoUsuario, cadastrarChat, excluirChat } from "../../../../services/chatService";
-import { useContextoChat } from "../../context/ContextoChat";
-import ListChats from "../../components/ListChats/ListChats";
-import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
 import SpinLoading from "../../../../components/SpinLoading/SpinLoading";
+
+import ListChats from "../../components/ListChats/ListChats";
 import PainelMensagens from "../../components/PainelMensagens/PainelMensagens";
 
+import {
+    atualizarChat,
+    buscarChatsDoUsuario,
+    cadastrarChat,
+    excluirChat
+} from "../../../../services/chatService";
+
+import { useContextoChat } from "../../context/ContextoChat";
+import { useContextoGlobalProjeto } from "../../../../context/ContextoGlobalProjeto/ContextoGlobalProjeto";
+import { useAuth } from "../../../../hooks/AuthProvider";
+
 const PainelChat = () => {
+    const {
+        dadosChat,
+        setDadosChat,
+        chatSelecionado,
+        setChatSelecionado
+    } = useContextoChat();
 
-    const {usuario} = useContextoGlobalUser()
-    const {dadosChat, setDadosChat, chatSelecionado, setChatSelecionado} = useContextoChat()
-    const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
-    const [isFormVisible, setIsFormVisible] = useState(false)
-    const [actionForm, setActionForm] = useState('create')
-    const [chats, setChats] = useState([])
-    const [isLoading, setIsLoading] = useState(false)
+    const { setDadosProjeto } = useContextoGlobalProjeto();
 
-    const handleBuscarChats = async () => {
-        const response = await buscarChatsDoUsuario(usuario.id)
-        if(!response.error){
-            setChats(response.data)
+    const [isFormVisible, setIsFormVisible] = useState(false);
+    const [actionForm, setActionForm] = useState("create");
+    const [chats, setChats] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const { user } = useAuth();
+
+    const limparFormulario = () => {
+        setIsFormVisible(false);
+        setChatSelecionado(null);
+        setDadosProjeto(null);
+        setDadosChat(null);
+        setActionForm("create");
+    };
+
+    const handleBuscarChats = useCallback(async () => {
+        if (!user?.id) return;
+
+        setIsLoading(true);
+
+        try {
+            const response = await buscarChatsDoUsuario(user.id);
+
+            if (!response.error) {
+                setChats(response.data || []);
+            } else {
+                message.error("Não foi possível carregar os chats.");
+            }
+        } catch (error) {
+            message.error("Erro ao buscar os chats do usuário.");
+        } finally {
+            setIsLoading(false);
         }
-    }
+    }, [user?.id]);
 
     useEffect(() => {
-        const fetchData = async () => {
-            if (usuario.id){
-                await handleBuscarChats()
-            }
-        }
-
-        fetchData()
-    }, [])
+        handleBuscarChats();
+    }, [handleBuscarChats]);
 
     const handleReload = async () => {
-        await handleBuscarChats()
-        setIsFormVisible(false)
-        setChatSelecionado(null)
-        setDadosProjeto(null)
-        setDadosChat(null)
-        setActionForm('create')
-    }
-    
+        await handleBuscarChats();
+        limparFormulario();
+    };
+
     const handleAdicionarChat = () => {
-        setIsFormVisible(true)
-        setChatSelecionado(null)
-        setDadosProjeto(null)
-        setDadosChat(null)
-        setActionForm('create')
-    }
+        setIsFormVisible(true);
+        setChatSelecionado(null);
+        setDadosProjeto(null);
+        setDadosChat(null);
+        setActionForm("create");
+    };
 
     const handleEditarChat = (record) => {
-        setIsFormVisible(true)
-        setActionForm('update')
-        setDadosChat(record)
-        setChatSelecionado(null)
-    }
+        setIsFormVisible(true);
+        setActionForm("update");
+        setDadosChat(record);
+        setChatSelecionado(null);
+    };
 
     const handleSalvarChat = async (data) => {
+        try {
+            if (actionForm === "create") {
+                await cadastrarChat(data);
+                message.success("Chat criado com sucesso.");
+            } else if (actionForm === "update" && dadosChat?.id) {
+                await atualizarChat(dadosChat.id, data);
+                message.success("Chat atualizado com sucesso.");
+            }
 
-        if (actionForm === 'create'){
-            await cadastrarChat(data)
-        } else if (actionForm === 'update'){
-            await atualizarChat(dadosChat.id, data)
+            await handleReload();
+        } catch (error) {
+            message.error("Não foi possível salvar o chat.");
         }
-        await handleReload()
-    }
+    };
 
     const handleExcluirChat = async (idChat) => {
         Modal.confirm({
-            title: 'Confirmar exclusão',
-            content: 'Você está seguro de que deseja excluir o chat ? Esta ação implicará na exclusão de todas as mensagens relacionados ao chat. ',
-            okText: 'Sim',
-            cancelText: 'Não',
+            title: "Confirmar exclusão",
+            content:
+                "Você tem certeza de que deseja excluir este chat? Esta ação também excluirá todas as mensagens relacionadas a ele.",
+            okText: "Sim",
+            cancelText: "Não",
+            okType: "danger",
             onOk: async () => {
-                await excluirChat(idChat)
-                await handleReload()
+                try {
+                    await excluirChat(idChat);
+                    message.success("Chat excluído com sucesso.");
+                    await handleReload();
+                } catch (error) {
+                    message.error("Não foi possível excluir o chat.");
+                }
             }
         });
-    }
+    };
 
     const handleSelecionarChat = (chat) => {
-        setChatSelecionado(chat)
-    }
+        setChatSelecionado(chat);
+    };
 
-    const handleCloseModal = () => setIsFormVisible(false)
+    const handleCloseModal = () => {
+        setIsFormVisible(false);
+    };
 
+    const renderConteudoMensagens = () => {
+        if (chats.length === 0) {
+            return <RenderEmpty title="Você não possui nenhum chat criado." />;
+        }
+
+        if (!chatSelecionado) {
+            return <RenderEmpty title="Selecione um chat para exibir as mensagens." />;
+        }
+
+        return <PainelMensagens />;
+    };
 
     return (
-        <div className="painel-chat"> 
+        <div className="painel-chat">
             {isLoading ? (
                 <SpinLoading />
             ) : (
-                <React.Fragment>
-                    <div className="coluna-chat"> 
-                        <Button type="primary" icon={<FaPlus />} onClick={handleAdicionarChat}> 
+                <>
+                    <div className="coluna-chat">
+
+                        <div className="cabecalho-chat">
+                            <h2>Chats</h2>
+                            <p>Gerencie suas conversas</p>
+                        </div>
+                        
+                        <Button
+                            type="primary"
+                            icon={<FaPlus />}
+                            onClick={handleAdicionarChat}
+                        >
                             Criar Chat
-                        </Button> 
+                        </Button>
 
-                        <ListChats 
-                            data={chats} 
-                            onEdit={handleEditarChat} 
-                            onDelete={handleExcluirChat} 
+                        <ListChats
+                            data={chats}
+                            onEdit={handleEditarChat}
+                            onDelete={handleExcluirChat}
                             onSelect={handleSelecionarChat}
-                        />    
+                        />
                     </div>
 
-
-                    <div className="coluna-mensagens"> 
-                        { chats.length === 0 && (
-                            <RenderEmpty title="Você não possui nenhum chat criado." />
-                        )}
-
-                        {chats.length !== 0 && chatSelecionado === null ? (
-                            <RenderEmpty title="Selecione um chat para exibir as mensagens" />
-                        ) : (
-                            <div style={{height: "100%"}}>
-                                <PainelMensagens />
-                            </div>
-                        )}
-
+                    <div className="coluna-mensagens">
+                        {renderConteudoMensagens()}
                     </div>
 
-                    <FormChatModal 
+                    <FormChatModal
                         visible={isFormVisible}
                         action={actionForm}
                         onOk={handleSalvarChat}
                         onCancel={handleCloseModal}
-                        selectProject={<SelectProject idMembro={usuario.id} />}
+                        selectProject={<SelectProject idMembro={user?.id} />}
                     />
-                </React.Fragment>
+                </>
             )}
-            
-
         </div>
-    )
-}
+    );
+};
 
-export default PainelChat
+export default PainelChat;

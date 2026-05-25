@@ -14,6 +14,7 @@ import { getRandomColor } from "../../../../services/utils";
 import Section from "../../../../components/Section/Section";
 import SectionHeader from "../../../../components/SectionHeader/SectionHeader";
 import ChangePassword from "./ChangePassword";
+import { useAuth } from "../../../../hooks/AuthProvider";
 
 const {TabPane} = Tabs
 
@@ -32,12 +33,12 @@ const optionsSexo = [
     }
 ]
 
-const PerfilMembro = ({group}) => {
+const PerfilMembro = () => {
 
     const navigate = useNavigate()
-    const {usuario, grupo} = useContextoGlobalUser()
     const {dadosMembro, setDadosMembro} = useMembroContexto()
     const [loading, setLoading] = useState(true)
+    const {user} = useAuth()
     const [form] = useForm()
 
     const [showModal, setShowModal] = useState(false)
@@ -48,7 +49,7 @@ const PerfilMembro = ({group}) => {
     }
 
     const handleCarregarDadosMembro = async () => {
-        const response = await buscarMembroPeloId(usuario.id)
+        const response = await buscarMembroPeloId(user.id)
         
         if (!response.error){
             setDadosMembro(response.data)
@@ -73,14 +74,14 @@ const PerfilMembro = ({group}) => {
     useEffect(() => {
         const fetchData = async () => {
             
-            if (usuario && usuario.id){
+            if (user && user.id){
                 await handleCarregarDadosMembro()
             }
 
         }
 
         fetchData()
-    }, [usuario])
+    }, [user])
 
     if (loading) {
         return <Loading />
@@ -93,11 +94,11 @@ const PerfilMembro = ({group}) => {
                 <Breadcrumb
                     items={[
                         {
-                            href: `/academicflow/${group}/home`,
+                            href: `/academicflow/home`,
                             title: <HomeOutlined />,
                         },
                         {
-                            href: `/academicflow/${group}/perfil`,
+                            href: `/academicflow/perfil`,
                             title: 'Perfil',
                         },
                         
@@ -275,7 +276,7 @@ const PerfilMembro = ({group}) => {
                             style={{width: '25%'}}
                             label="Grupo de Usuário"
                         >
-                            <Space>{usuario.nome_grupo}</Space>
+                            <Space>{user.role}</Space>
                         </Form.Item>
                     </TabPane>
                 </Tabs>

@@ -8,7 +8,6 @@ import ConfirmResetPassword from "./pages/Auth/ResetPassword/ConfirmResetPasswor
 
 import AdminRoutesDefinition from "./router/AdminRoutes/routes";
 import StudentRoutesDefinition from "./router/StudentRoutes/routes";
-import TeacherRoutesDefinition from "./router/TeacherRoutes/routes";
 
 import LayoutBase from "./layouts/LayoutBase";
 import ProtectedRoute from "./router/ProtectedRoute";
@@ -28,6 +27,13 @@ import ScreenArtefatos from "./pages/Artefato/screens/Artefatos";
 import ScreenIteracoes from "./pages/Iteracao/screens/Iteracoes";
 import ScreenRelease from "./pages/Release/screens/Release";
 import ScreenVisualizarIteracao from "./pages/Iteracao/screens/VisualizarIteracao";
+import ScreenChats from "./pages/Chat/screens/PainelChat";
+import ScreenFeedbacks from "./pages/Feedback/screens";
+import ScreenPerfilMembro from "./pages/Membro/screens/PerfilMembro";
+import ScreenGerenciarMembros from "./pages/Membro/screens/GerenciarMembros";
+import ScreenQuadroMembros from "./pages/Membro/screens/QuadroMembros";
+import ScreenEquipe from "./pages/Membro/screens/Equipe";
+import ScreenGerenciarCategoriaFuncaoMembro from "./pages/FuncaoMembro/screens/GerenciarCategoriaFuncaoMembro";
 
 function Routes() {
     return (
@@ -171,6 +177,85 @@ function Routes() {
                         />
                     </Route>
 
+                    <Route element={<ProtectedRoute allowedRoles={['aluno', 'professor']} />}>
+                        <Route 
+                            path="/chats/*" 
+                            element={
+                                <LayoutBase>
+                                    <ScreenChats />
+                                </LayoutBase>
+                            } 
+                        />
+                    </Route>
+
+                    <Route element={<ProtectedRoute allowedRoles={['admin', 'aluno', 'professor']} />}>
+                        <Route
+                            path="/feedbacks/*"
+                            element={
+                                <LayoutBase>
+                                    <ScreenFeedbacks />
+                                </LayoutBase>
+                            }
+                        />
+                    </Route>
+
+                    <Route element={<ProtectedRoute allowedRoles={['aluno', 'professor', 'admin']} />}>
+                        <Route
+                            path="/perfil/*"
+                            element={
+                                <LayoutBase>
+                                    <ScreenPerfilMembro />
+                                </LayoutBase>
+                            }
+                        />
+                    </Route>
+
+                    <Route element={<ProtectedRoute allowedRoles={['admin', 'professor']} />}>   
+                        <Route
+                            path="/membros/gerenciar/"
+                            element={
+                                <LayoutBase>
+                                    <ScreenGerenciarMembros />
+                                </LayoutBase>
+                            }
+                        />
+                    </Route>
+
+                    <Route element={<ProtectedRoute allowedRoles={['professor']} />}>   
+                        <Route
+                            path="/membros/equipes/"
+                            element={
+                                <LayoutBase>
+                                    <ScreenQuadroMembros />
+                                </LayoutBase>
+                            }
+                        />
+                    </Route>
+
+                    <Route element={<ProtectedRoute allowedRoles={['professor', 'aluno']} />}>   
+                        <Route
+                            path="/membros/equipes/sua-equipe/"
+                            element={
+                                <LayoutBase>
+                                    <ScreenEquipe />
+                                </LayoutBase>
+                            }
+                        />
+                    </Route>
+
+                    <Route element={<ProtectedRoute allowedRoles={['professor', 'admin']} />}>
+                        <Route
+                            path="/membros/funcoes"
+                            element={
+                                <LayoutBase>
+                                    <ScreenGerenciarCategoriaFuncaoMembro />
+                                </LayoutBase>
+                            }
+                        />
+                    </Route>
+
+
+                
 
 
 

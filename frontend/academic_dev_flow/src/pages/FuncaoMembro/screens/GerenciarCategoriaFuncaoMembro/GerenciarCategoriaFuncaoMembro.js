@@ -14,7 +14,7 @@ import SectionFilters from "../../../../components/SectionFilters/SectionFilters
 import SectionContent from "../../../../components/SectionContent/SectionContent";
 const {Search} = Input
 
-const GerenciarCategoriaFuncaoMembro = ({grupo}) => {
+const GerenciarCategoriaFuncaoMembro = () => {
 
     const [isFormVisivel, setIsFormVisivel] = useState(false);
     const [isFormBuscarVisivel, setIsFormBuscarVisivel] = useState(false);
@@ -88,15 +88,15 @@ const GerenciarCategoriaFuncaoMembro = ({grupo}) => {
                 <Breadcrumb
                     items={[
                         {
-                            href: `/academicflow/${grupo}/home`,
+                            href: `/academicflow/home`,
                             title: <HomeOutlined />,
                         },
                         {
-                            href: `/academicflow/${grupo}/membros/gerenciar`,
+                            href: `/academicflow/membros/gerenciar`,
                             title: 'Membros',
                         },
                         {
-                            href: `/academicflow/${grupo}/membros/funcoes`,
+                            href: `/academicflow/membros/funcoes`,
                             title: 'Funções'
                         },
 

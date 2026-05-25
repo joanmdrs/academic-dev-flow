@@ -13,7 +13,6 @@ function StudentRoutesDefinition() {
     return (
 
         <Switch>
-            <Route path="perfil" element={<ScreenPerfilMembro grupo="aluno" />} exact/>
             <Route path="projetos/visualizar" element={<ScreenVisualizarProjeto grupo="aluno" />} exact />
             
             <Route path="membros/equipes" element={<ScreenQuadroMembros grupo="aluno" />} exact />
@@ -21,7 +20,7 @@ function StudentRoutesDefinition() {
             <Route path="membros/equipes/sua-equipe" element={<ScreenEquipe grupo="aluno" />} exact />
             <Route path="relatorios" element={<ScreenGerenciarRelatorios  grupo="aluno" />} exact />
             <Route path="github-integration" element={<ScreenRepositories grupo="aluno" />} exact />
-            <Route path="feedbacks" element={<ScreenFeedbacks grupo="aluno" />} exact />
+
             {/* <Route path="github-integration/painel" element={<ScreenPainelGitHub grupo='aluno' />} exact /> */}
         </Switch>
     );

@@ -6,25 +6,17 @@ import MyDropdown from '../Dropdown/Dropdown';
 import { useAuth } from '../../hooks/AuthProvider';
 import { useNavigate } from 'react-router-dom';
 import { CiUser, CiLogout} from "react-icons/ci";
-import { useContextoGlobalTheme } from '../../context/ContextoTheme/ContextoTheme';
-import { useContextoGlobalUser } from '../../context/ContextoGlobalUser/ContextoGlobalUser';
 
 const { Header } = Layout;
 
 const MyHeader = () => {
     const { logOut } = useAuth();
     const navigate = useNavigate();
-    const { grupo } = useContextoGlobalUser()
-    const { theme } = useContextoGlobalTheme();
 
     const handleAcessarPerfil = async () => {
-        if (grupo === 'Docentes') {
-            navigate("/professor/perfil");
-        } else if (grupo === 'Discentes') {
-            navigate("/aluno/perfil");
-        } else if (grupo === 'Administradores') {
-            navigate("/admin/perfil");
-        }
+        
+        navigate("/perfil");
+        
     };
 
     // const toggleTheme = () => {
@@ -56,8 +48,8 @@ const MyHeader = () => {
         <Header 
             className="header" 
             style={{
-                backgroundColor: theme === 'light' ? '#FFFFFF' : '#001529',
-                color: theme === 'light' ? '#000000' : '#FFFFFF',
+                backgroundColor: '#FFFFFF',
+                color: '#000000',
                 borderBottom: '1px solid #ddd'
             }}> 
             <div className='logo-ufrn'>

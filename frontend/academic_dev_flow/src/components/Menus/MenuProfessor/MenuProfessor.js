@@ -121,10 +121,10 @@ const MenuProfessor = () => {
 
                 <Menu.Item
                     className="item-menu"
-                    key="/professor/chats"
+                    key="/chats"
                     icon={<LuMessagesSquare size="20px"/> }
                 >
-                    <Link to="/professor/chats">Chats</Link>
+                    <Link to="/chats">Chats</Link>
                 </Menu.Item>
 
                 <SubMenu
@@ -133,16 +133,16 @@ const MenuProfessor = () => {
                     icon={<LuUsers size="20px" />}
                     title="Membros"
                 >
-                    <Menu.Item key="/professor/membros/gerenciar">
-                        <Link to="/professor/membros/gerenciar">Membros</Link>
+                    {/* <Menu.Item key="/membros/gerenciar">
+                        <Link to="/membros/gerenciar">Membros</Link>
+                    </Menu.Item> */}
+
+                    <Menu.Item key="/membros/equipes">
+                        <Link to="/membros/equipes">Equipes</Link>
                     </Menu.Item>
 
-                    <Menu.Item key="/professor/membros/equipes">
-                        <Link to="/professor/membros/equipes">Equipes</Link>
-                    </Menu.Item>
-
-                    <Menu.Item key="/professor/membros/funcoes">
-                        <Link to="/professor/membros/funcoes">Funções</Link>
+                    <Menu.Item key="/membros/funcoes">
+                        <Link to="/membros/funcoes">Funções</Link>
                     </Menu.Item>
                 </SubMenu>
 
@@ -151,7 +151,7 @@ const MenuProfessor = () => {
                     key='/professor/feedbacks'
                     icon={<LuMessageSquare size="20px" />}
                 >
-                    <Link to="/professor/feedbacks">Feedbacks</Link>
+                    <Link to="/feedbacks">Feedbacks</Link>
                 </Menu.Item>
                                 
                 {/* <Menu.Item 

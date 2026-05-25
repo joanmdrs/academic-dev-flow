@@ -7,22 +7,14 @@ import PainelChat from "./PainelChat";
 import { ProviderChat } from "../../context/ContextoChat";
 const { Content } = Layout
 
-const ScreenChats = ({grupo}) => {
+const ScreenChats = () => {
     
     return (
         <React.Fragment>
-            { grupo === 'aluno' && <MenuAluno />}
-            { grupo === 'professor' && <MenuProfessor />}
-            <Layout>
-                <MyHeader/>
-                {/* <CustomBreadcrumb routes={breadcrumbRoutes} /> */}
-                <Content>
-                    <ProviderChat>
-                        <PainelChat />
-
-                    </ProviderChat>
-                </Content>
-            </Layout>
+         
+            <ProviderChat>
+                <PainelChat />
+            </ProviderChat>
         </React.Fragment>   
     )
 }

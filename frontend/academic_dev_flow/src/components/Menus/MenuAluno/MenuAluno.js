@@ -3,7 +3,7 @@ import Sider from "antd/es/layout/Sider";
 import React, { useState } from "react";
 import { Link, useLocation } from 'react-router-dom';
 import { FaCoffee } from "react-icons/fa";
-import { LuClipboardList, LuFileCode2, LuFolder, LuLayoutDashboard, LuWorkflow, LuCalendarDays, LuGithub, LuUsers, LuMessageSquare } from "react-icons/lu";
+import { LuClipboardList, LuFileCode2, LuFolder, LuLayoutDashboard, LuWorkflow, LuCalendarDays, LuGithub, LuUsers, LuMessageSquare, LuMessagesSquare } from "react-icons/lu";
 
 import { useContextoGlobalTheme } from "../../../context/ContextoTheme/ContextoTheme";
 
@@ -120,27 +120,35 @@ const MenuAluno = () => {
                     <Link to="/artefatos">Artefatos</Link>
                 </Menu.Item>
 
+                <Menu.Item
+                    className="item-menu"
+                    key="/chats"
+                    icon={<LuMessagesSquare size="20px"/> }
+                >
+                    <Link to="/chats">Chats</Link>
+                </Menu.Item>
+
                 <SubMenu
                     className="item-menu"
                     key="membros"
                     icon={<LuUsers size="20px" />}
                     title="Membros"
                 >
-                    <Menu.Item key="/aluno/membros/equipes">
-                        <Link to="/aluno/membros/equipes">Equipes</Link>
+                    <Menu.Item key="/membros/equipes">
+                        <Link to="/membros/equipes">Equipes</Link>
                     </Menu.Item>
 
-                    <Menu.Item key="/aluno/membros/funcoes">
-                        <Link to="/aluno/membros/funcoes">Funções</Link>
+                    <Menu.Item key="/membros/funcoes">
+                        <Link to="/membros/funcoes">Funções</Link>
                     </Menu.Item>
                 </SubMenu>
 
                 <Menu.Item
                     className="item-menu"
-                    key='/aluno/feedbacks'
+                    key='/feedbacks'
                     icon={<LuMessageSquare size="20px" />}
                 >
-                    <Link to="/aluno/feedbacks">Feedbacks</Link>
+                    <Link to="/feedbacks">Feedbacks</Link>
                 </Menu.Item>
                                 
                 {/* <Menu.Item 

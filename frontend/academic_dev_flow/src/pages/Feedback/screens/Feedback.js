@@ -9,17 +9,19 @@ import FormFeedback from "../components/FormFeedback/FormFeedback";
 import TableFeedbacks from "../components/TableFeedback/TableFeedback";
 import { atualizarFeedback, cadastrarFeedback, excluirFeedbacks, filtrarFeedbackByCreated, listarFeedback } from "../../../services/feedbackService";
 import { useContextoFeedback } from "../context/ContextoFeedback";
+import { useAuth } from "../../../hooks/AuthProvider";
 
-const Feedback = ({grupo}) => {
+const Feedback = () => {
 
     const [isSaveFormVisible, setIsSaveFormVisible] = useState(false)
     const [actionForm, setActionForm] = useState('create')
     const [feedbacks, setFeedbacks] = useState([])
     const {dadosFeedback, setDadosFeedback, feedbacksSelecionados, setFeedbacksSelecionados} = useContextoFeedback()
+    const { user} = useAuth()
 
     const handleListarFeedbacks = async () => { 
 
-        if (grupo === 'professor' || grupo === 'admin'){
+        if (user.grupo === 'professor' || user.grupo === 'admin'){
             const response = await listarFeedback()
 
             if(!response.error) {
@@ -114,11 +116,11 @@ const Feedback = ({grupo}) => {
                 <Breadcrumb
                     items={[
                         {
-                            href: `/academicflow/${grupo}/home`,
+                            href: `/academicflow/home`,
                             title: <HomeOutlined />,
                         },
                         {
-                            href: `/academicflow/${grupo}/feedbacks`,
+                            href: `/academicflow/feedbacks`,
                             title: 'Feedbacks',
                         },
                         ...(isSaveFormVisible && actionForm === 'create'
