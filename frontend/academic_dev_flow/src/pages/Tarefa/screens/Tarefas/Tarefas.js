@@ -1,7 +1,7 @@
-import { Breadcrumb, Button, Input, Modal, Space, Spin, Tabs } from "antd";
+import { Breadcrumb, Button, Input, Modal, Tabs } from "antd";
 import Item from "antd/es/list/Item";
 import React, { useEffect, useState } from "react";
-import { FaCalendar, FaListUl, FaPlus, FaTasks } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import TableTask from "../../components/TableTask/TableTask";
 import TaskBoard from "../../components/TaskBoard/TaskBoard";
 import { useContextoTarefa } from "../../context/ContextoTarefa";
@@ -16,26 +16,22 @@ import { createIssue, updateIssue } from "../../../../services/githubIntegration
 import FormFiltrarTarefas from "../../components/FormFiltrarTarefas/FormFiltrarTarefas";
 import { buscarMembroProjetoPeloIdMembroEPeloIdProjeto } from "../../../../services/membroProjetoService";
 import { handleError } from "../../../../services/utils";
-import { TbLayoutCards, TbLayoutCardsFilled, TbLayoutList, TbLayoutNavbar, TbSettingsAutomation } from "react-icons/tb";
-import { LuCalendarDays } from "react-icons/lu";
+import { TbLayoutCards, TbLayoutList, TbLayoutNavbar } from "react-icons/tb";
 import ScreenDrawerComments from "../DrawerComments";
 import SpinLoading from "../../../../components/SpinLoading/SpinLoading";
 import ListTask from "../../components/ListTask/ListTask";
-import { MdFilterAlt, MdViewKanban } from "react-icons/md";
 import Section from "../../../../components/Section/Section";
 import SectionHeader from "../../../../components/SectionHeader/SectionHeader";
 import SectionFilters from "../../../../components/SectionFilters/SectionFilters";
 import SectionContent from "../../../../components/SectionContent/SectionContent";
 import { HomeOutlined } from "@ant-design/icons";
 
-const {Search} = Input 
-
-const Tarefas = ({grupo}) => {
+const Tarefas = () => {
 
     const [isFormVisible, setIsFormVisible] = useState(false)   
     const [isTabsVisible, setIsTabsVisible] = useState(true)
     const [isLoading, setIsLoading] = useState(false)
-    const {dadosTarefa, setDadosTarefa, tarefas, setTarefas, acaoForm, setAcaoForm} = useContextoTarefa()
+    const {dadosTarefa, setDadosTarefa, setTarefas, acaoForm, setAcaoForm} = useContextoTarefa()
     const {usuario} = useContextoGlobalUser()
     const {dadosProjeto, setDadosProjeto} = useContextoGlobalProjeto()
     const [isDrawerCommentsVisible, setIsDrawerCommentsVisible] = useState(false)
@@ -266,11 +262,11 @@ const Tarefas = ({grupo}) => {
                 <Breadcrumb
                     items={[
                         {
-                            href: `/academicflow/${grupo}/home`,
+                            href: `/academicflow/home`,
                             title: <HomeOutlined />,
                         },
                         {
-                            href: `/academicflow/${grupo}/tarefas`,
+                            href: `/academicflow/tarefas`,
                             title: 'Tarefas',
                         },
                         ...(isFormVisible && acaoForm === 'criar'

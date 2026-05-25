@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { Breadcrumb, Button, Form, Space } from 'antd';
+import { Breadcrumb, Button } from 'antd';
 import { Input } from 'antd';
 import { Modal } from 'antd';
-import Titulo from "../../../../components/Titulo/Titulo";
-import { FaFilter, FaPlus } from "react-icons/fa6";
+import { FaPlus } from "react-icons/fa6";
 import { useContextoCategoriaTarefa } from "../../context/ContextoCategoriaTarefa";
 import { atualizarCategoriaTarefa, buscarCategoriaTarefaPeloNome, cadastrarCategoriaTarefa, excluirCategoriaTarefa } from "../../../../services/categoriaTarefaService";
 import FormCategoriaTarefa from "../../components/FormCategoriaTarefa/FormCategoriaTarefa";
@@ -12,15 +11,13 @@ import Section from "../../../../components/Section/Section";
 import SectionHeader from "../../../../components/SectionHeader/SectionHeader";
 import SectionFilters from "../../../../components/SectionFilters/SectionFilters";
 import SectionContent from "../../../../components/SectionContent/SectionContent";
-import { HomeOutlined, UserOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { HomeOutlined } from "@ant-design/icons";
 const {Search} = Input
 
-const GerenciarCategoriaTarefa = ({grupo}) => {
+const GerenciarCategoriaTarefa = () => {
     const [isFormVisivel, setIsFormVisivel] = useState(false);
     const [acaoForm, setAcaoForm] = useState('criar');
     const { dadosCategoria, setDadosCategoria, setCategorias } = useContextoCategoriaTarefa();
-
 
     const handleCancelar = () => {
         setAcaoForm('criar');
@@ -81,15 +78,15 @@ const GerenciarCategoriaTarefa = ({grupo}) => {
                 <Breadcrumb
                     items={[
                         {
-                            href: `/academicflow/${grupo}/home`,
+                            href: `/academicflow/home`,
                             title: <HomeOutlined />,
                         },
                         {
-                            href: `/academicflow/${grupo}/tarefas`,
+                            href: `/academicflow/tarefas`,
                             title: 'Tarefas',
                         },
                         {
-                            href: `/academicflow/${grupo}/tarefas/categorias`,
+                            href: `/academicflow/tarefas/categorias`,
                             title: 'Categorias',
                         },
                         ...(isFormVisivel && acaoForm === 'criar'

@@ -61,7 +61,7 @@ const MyHeader = () => {
                 borderBottom: '1px solid #ddd'
             }}> 
             <div className='logo-ufrn'>
-                <img src={logo_ufrn} alt="Logo da UFRN" className='logo-image' />
+                {/* <img src={logo_ufrn} alt="Logo da UFRN" className='logo-image' /> */}
             </div>
 
             <div style={{display:'flex', gap: '20px'}}>

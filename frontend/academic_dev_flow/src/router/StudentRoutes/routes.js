@@ -28,9 +28,6 @@ function StudentRoutesDefinition() {
             <Route path="cronograma/lancamentos" element={<ScreenRelease grupo="aluno"/>} />
             <Route path="cronograma/iteracoes" element={<ScreenIteracoes grupo="aluno"/>} />
             
-            <Route path="tarefas" element={<ScreenTarefas grupo="aluno" />} exact />
-            <Route path="tarefas/categorias" element={<ScreenGerenciarCategoriaTarefa grupo="aluno" />} exact />
-            <Route path="tarefas/tags" element={<ScreenGerenciarTags grupo="aluno" />} />
             <Route path="artefatos" element={<ScreenArtefatos grupo="aluno" />} exact />
             <Route path="membros/equipes" element={<ScreenQuadroMembros grupo="aluno" />} exact />
             <Route path="membros/funcoes" element={<ScreenGerenciarCategoriaFuncaoMembro grupo="aluno" />} exact />

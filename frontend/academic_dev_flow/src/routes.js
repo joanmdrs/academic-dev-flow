@@ -21,6 +21,9 @@ import ScreenGerenciarFluxos from "./pages/Fluxo";
 import ScreenGerenciarEtapas from "./pages/Etapa/screens/GerenciarEtapas";
 import ScreenProjetos from "./pages/Projeto/screens/Projetos";
 import TransicoesPage from "./pages/Fluxo/screens/TransicoesPage";
+import ScreenTarefas from "./pages/Tarefa/screens/Tarefas";
+import ScreenGerenciarCategoriaTarefa from "./pages/CategoriaTarefa";
+import ScreenGerenciarTags from "./pages/Tag";
 
 function Routes() {
     return (
@@ -71,6 +74,39 @@ function Routes() {
                             element={
                                 <LayoutBase>
                                     <ScreenProjetos />
+                                </LayoutBase>
+                            }
+                        />
+                    </Route>
+
+                    <Route element={<ProtectedRoute allowedRoles={['aluno', 'professor']} />}>
+                        <Route
+                            path="/tarefas/*"
+                            element={
+                                <LayoutBase>
+                                    <ScreenTarefas />
+                                </LayoutBase>
+                            }
+                        />
+                    </Route>
+
+                    <Route element={<ProtectedRoute allowedRoles={['aluno', 'professor']} />}>
+                        <Route
+                            path="/tarefas/categorias*"
+                            element={
+                                <LayoutBase>
+                                    <ScreenGerenciarCategoriaTarefa />
+                                </LayoutBase>
+                            }
+                        />
+                    </Route>
+
+                    <Route element={<ProtectedRoute allowedRoles={['aluno', 'professor']} />}>
+                        <Route
+                            path="/tarefas/tags*"
+                            element={
+                                <LayoutBase>
+                                    <ScreenGerenciarTags />
                                 </LayoutBase>
                             }
                         />

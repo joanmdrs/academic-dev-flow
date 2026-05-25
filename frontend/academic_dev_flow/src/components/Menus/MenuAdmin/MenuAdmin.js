@@ -36,7 +36,7 @@ const MenuAdmin = () => {
             >
                 <span> <FaCoffee size="25px" /> </span>
             
-                {!collapsed && <span>Academic Dev Flow</span>}
+                {!collapsed && <span>AcademicDevFlow</span>}
             </div>
             <Menu
                 theme={theme}

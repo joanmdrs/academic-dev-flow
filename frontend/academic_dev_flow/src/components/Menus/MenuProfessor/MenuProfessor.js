@@ -34,7 +34,7 @@ const MenuProfessor = () => {
                 }} 
             >
                 <span><FaCoffee size="25px" /></span>
-                {!collapsed && <span>Academic Dev Flow</span>}
+                {!collapsed && <span>AcademicDevFlow</span>}
             </div>
             <Menu
                 theme={theme}
@@ -98,16 +98,16 @@ const MenuProfessor = () => {
                     icon={<LuClipboardList size="20px" />}
                     title="Tarefas"
                 >
-                    <Menu.Item key="/professor/tarefas">
-                        <Link to="/professor/tarefas">Tarefas</Link>
+                    <Menu.Item key="tarefas">
+                        <Link to="/tarefas">Tarefas</Link>
                     </Menu.Item>
 
-                    <Menu.Item key="/professor/tarefas/categorias">
-                        <Link to="/professor/tarefas/categorias">Categorias</Link>
+                    <Menu.Item key="tarefas/categorias">
+                        <Link to="/tarefas/categorias">Categorias</Link>
                     </Menu.Item>
 
-                    <Menu.Item key="/professor/tarefas/tags"> 
-                        <Link to="/professor/tarefas/tags">Tags</Link>
+                    <Menu.Item key="tarefas/tags"> 
+                        <Link to="/tarefas/tags">Tags</Link>
                     </Menu.Item>
                 </SubMenu>
 
